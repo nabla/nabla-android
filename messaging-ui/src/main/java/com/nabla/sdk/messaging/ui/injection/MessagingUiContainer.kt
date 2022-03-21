@@ -1,7 +1,7 @@
-package com.nabla.health.sdk.messaging.ui.injection
+package com.nabla.sdk.messaging.ui.injection
 
-import com.nabla.health.sdk.messaging.core.injection.MessagingContainer
-import com.nabla.health.sdk.messaging.ui.scene.ConversationListViewModel
+import com.nabla.sdk.messaging.core.injection.MessagingContainer
+import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel
 
 class MessagingUiContainer(
     private val messageContainer: MessagingContainer

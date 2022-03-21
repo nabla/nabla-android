@@ -1,6 +1,6 @@
-package com.nabla.health.sdk.messaging.core.data
+package com.nabla.sdk.messaging.core.data
 
-import com.nabla.health.sdk.messaging.core.domain.boundary.ConversationRepository
+import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 
 internal class ConversationRepositoryImpl(): ConversationRepository {
     override suspend fun createConversation() {

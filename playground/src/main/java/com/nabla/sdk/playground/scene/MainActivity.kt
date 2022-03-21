@@ -1,12 +1,12 @@
-package com.nabla.health.sdk.playground.scene
+package com.nabla.sdk.playground.scene
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.nabla.health.sdk.messaging.ui.helper.createWithFactory
-import com.nabla.health.sdk.messaging.ui.scene.ConversationListViewModel
-import com.nabla.health.sdk.playground.databinding.ActivityMainBinding
-import com.nabla.health.sdk.playground.injection.appContainer
+import com.nabla.sdk.messaging.ui.helper.createWithFactory
+import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel
+import com.nabla.sdk.playground.databinding.ActivityMainBinding
+import com.nabla.sdk.playground.injection.appContainer
 
 class MainActivity : AppCompatActivity() {
 

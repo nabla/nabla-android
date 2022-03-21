@@ -1,4 +1,4 @@
-package com.nabla.health.sdk.messaging.ui.helper
+package com.nabla.sdk.messaging.ui.helper
 
 import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory

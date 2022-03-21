@@ -1,4 +1,4 @@
-package com.nabla.health.sdk.messaging.core.kotlin
+package com.nabla.sdk.messaging.core.kotlin
 
 import kotlin.coroutines.cancellation.CancellationException
 
