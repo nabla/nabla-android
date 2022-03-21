@@ -1,0 +1,32 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.buildConfig = [
+            'compileSdk': 32,
+            'minSdk'    : 23,
+            'targetSdk' : 32,
+            'jvmTarget' : JavaVersion.VERSION_11,
+    ]
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath libs.android.pluginGradle
+        classpath libs.kotlin.pluginGradle
+    }
+}
+
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            allWarningsAsErrors = true
+            jvmTarget = buildConfig.jvmTarget
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
