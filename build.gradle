@@ -15,6 +15,7 @@ buildscript {
     dependencies {
         classpath libs.android.pluginGradle
         classpath libs.kotlin.pluginGradle
+        classpath libs.kotlin.pluginSerialization
     }
 }
 
@@ -23,6 +24,7 @@ subprojects {
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = buildConfig.jvmTarget
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
         }
     }
 }
