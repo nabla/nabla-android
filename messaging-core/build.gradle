@@ -35,4 +35,5 @@ dependencies {
     implementation libs.androidx.security.crypto
     implementation libs.kotlin.coroutines.android
     implementation libs.kotlin.serialization.json
+    implementation libs.kotlin.datetime
 }
