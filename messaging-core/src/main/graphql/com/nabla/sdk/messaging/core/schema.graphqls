@@ -1,0 +1,11 @@
+type Query {
+  me: User
+}
+
+type User {
+  id: ID!
+}
+
+schema {
+  query: Query
+}

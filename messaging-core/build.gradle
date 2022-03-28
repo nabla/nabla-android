@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'com.apollographql.apollo3'
 }
 
 android {
@@ -27,6 +28,10 @@ android {
     }
 }
 
+apollo {
+    packageName.set("com.nabla.sdk.messaging.core")
+}
+
 dependencies {
     implementation libs.okhttp
     implementation libs.okhttp.logging
@@ -37,4 +42,5 @@ dependencies {
     implementation libs.kotlin.coroutines.android
     implementation libs.kotlin.serialization.json
     implementation libs.kotlin.datetime
+    implementation libs.apollo.runtime
 }

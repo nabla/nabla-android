@@ -15,7 +15,8 @@ buildscript {
     dependencies {
         classpath libs.android.pluginGradle
         classpath libs.kotlin.pluginGradle
-        classpath libs.kotlin.pluginSerialization
+        classpath libs.kotlin.serialization.pluginGradle
+        classpath libs.apollo.pluginGradle
     }
 }
 
