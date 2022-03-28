@@ -20,8 +20,8 @@ data class Attachment(
 )
 
 sealed class MimeType {
-    abstract val textValue: String
-    data class Generic(override val textValue: String): MimeType()
+    abstract val rawValue: String
+    data class Generic(override val rawValue: String): MimeType()
 }
 
 typealias PatientId = String
@@ -31,6 +31,10 @@ data class Patient(
 )
 
 sealed class UserId {
+    val rawValue: String = when (this) {
+        is Patient -> id
+        is Provider -> id
+    }
     data class Patient(val id: PatientId): UserId()
     data class Provider(val id: ProviderId): UserId()
 }

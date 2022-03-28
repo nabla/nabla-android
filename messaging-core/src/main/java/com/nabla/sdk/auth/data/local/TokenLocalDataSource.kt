@@ -36,6 +36,13 @@ internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStora
         }
     }
 
+    fun clear() {
+        with (securedKVStorage.edit()) {
+            clear()
+            apply()
+        }
+    }
+
     companion object {
         private const val KEY_REFRESH_TOKEN = "refresh-token"
         private const val KEY_ACCESS_TOKEN = "access-token"

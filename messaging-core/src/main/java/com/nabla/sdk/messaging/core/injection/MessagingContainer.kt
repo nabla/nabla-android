@@ -10,7 +10,11 @@ import com.nabla.sdk.auth.data.remote.NablaService
 import com.nabla.sdk.auth.data.remote.TokenRemoteDataSource
 import com.nabla.sdk.auth.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.auth.domain.boundary.TokenRepository
+import com.nabla.sdk.auth.domain.interactor.LoginInteractor
+import com.nabla.sdk.core.data.LocalPatientDataSource
+import com.nabla.sdk.core.data.PatientRepositoryImpl
 import com.nabla.sdk.core.data.SecuredKVStorage
+import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.messaging.core.data.ConversationRepositoryImpl
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -45,8 +49,13 @@ class MessagingContainer(context: Context, sessionTokenProvider: SessionTokenPro
         TokenRepositoryImpl(
             tokenLocalDataSource,
             tokenRemoteDataSource,
-            sessionTokenProvider
+            sessionTokenProvider,
+            patientRepository,
         )
     }
     val conversationRepository: ConversationRepository = ConversationRepositoryImpl()
+    private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
+    private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
+
+    fun loginInteractor() = LoginInteractor(patientRepository, tokenRepository)
 }
