@@ -14,6 +14,10 @@ import com.nabla.sdk.auth.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.data.LocalPatientDataSource
 import com.nabla.sdk.core.data.PatientRepositoryImpl
 import com.nabla.sdk.core.data.SecuredKVStorage
+import com.nabla.sdk.core.data.logger.AndroidLogger
+import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
+import com.nabla.sdk.core.data.logger.LoggerImpl
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.messaging.core.data.ConversationRepositoryImpl
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
@@ -25,10 +29,12 @@ import retrofit2.Retrofit
 
 class MessagingContainer(context: Context, sessionTokenProvider: SessionTokenProvider) {
     private val securedKVStorage = SecuredKVStorage(context)
+    private val logger: Logger = LoggerImpl(AndroidLogger())
 
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor(tokenRepository))
+            .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
             .authenticator(ApiAuthenticator(tokenRepository))
             .build()
     }
@@ -51,6 +57,7 @@ class MessagingContainer(context: Context, sessionTokenProvider: SessionTokenPro
             tokenRemoteDataSource,
             sessionTokenProvider,
             patientRepository,
+            logger
         )
     }
     val conversationRepository: ConversationRepository = ConversationRepositoryImpl()

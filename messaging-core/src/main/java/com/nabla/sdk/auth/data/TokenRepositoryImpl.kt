@@ -6,6 +6,7 @@ import com.nabla.sdk.auth.data.remote.TokenRemoteDataSource
 import com.nabla.sdk.auth.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.auth.domain.boundary.TokenRepository
 import com.nabla.sdk.auth.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.messaging.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
@@ -16,6 +17,7 @@ internal class TokenRepositoryImpl(
     private val tokenRemoteDataSource: TokenRemoteDataSource,
     private val sessionTokenProvider: SessionTokenProvider,
     private val patientRepository: PatientRepository,
+    private val logger: Logger,
 ) : TokenRepository {
 
     private val refreshLock = Mutex()
@@ -34,6 +36,7 @@ internal class TokenRepositoryImpl(
     private suspend fun getFreshAccessTokenUnsafe(
         forceRefreshAccessToken: Boolean
     ): Result<String> {
+        logger.debug("get fresh access token...")
         val accessToken = tokenLocalDataSource.getAccessToken()
         if (accessToken.isValid() && !forceRefreshAccessToken) {
             return Result.success(accessToken.toString())
