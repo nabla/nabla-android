@@ -1,7 +1,7 @@
-package com.nabla.sdk.auth.domain.interactor
+package com.nabla.sdk.core.domain.interactor
 
-import com.nabla.sdk.auth.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.PatientId
 import com.nabla.sdk.messaging.core.kotlin.runCatchingCancellable
 

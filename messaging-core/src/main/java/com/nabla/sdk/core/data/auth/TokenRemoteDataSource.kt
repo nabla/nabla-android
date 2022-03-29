@@ -1,6 +1,6 @@
-package com.nabla.sdk.auth.data.remote
+package com.nabla.sdk.core.data.auth
 
-import com.nabla.sdk.auth.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.entity.AuthTokens
 
 internal class TokenRemoteDataSource(private val nablaService: NablaService) {
 

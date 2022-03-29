@@ -1,4 +1,4 @@
-package com.nabla.sdk.auth.domain.boundary
+package com.nabla.sdk.core.domain.boundary
 
 interface TokenRepository {
     fun initSession(refreshToken: String, accessToken: String?)

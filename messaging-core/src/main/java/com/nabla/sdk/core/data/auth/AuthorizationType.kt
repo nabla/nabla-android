@@ -1,4 +1,4 @@
-package com.nabla.sdk.auth.data.remote
+package com.nabla.sdk.core.data.auth
 
 import okhttp3.Request
 

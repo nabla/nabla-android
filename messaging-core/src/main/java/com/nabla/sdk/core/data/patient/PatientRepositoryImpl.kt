@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.data
+package com.nabla.sdk.core.data.patient
 
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.entity.PatientId

@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.ui.injection
 
-import com.nabla.sdk.messaging.core.injection.MessagingContainer
+import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel
 
 class MessagingUiContainer(
-    private val messageContainer: MessagingContainer
+    private val conversationRepository: ConversationRepository
 ) {
     fun createConversationListViewModel(): ConversationListViewModel {
-        return ConversationListViewModel(messageContainer.conversationRepository)
+        return ConversationListViewModel(conversationRepository)
     }
 }

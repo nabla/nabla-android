@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.data
+package com.nabla.sdk.core.data.local
 
 import android.content.Context
 import android.content.SharedPreferences

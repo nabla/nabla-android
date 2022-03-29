@@ -1,13 +1,11 @@
-package com.nabla.sdk.auth.data
+package com.nabla.sdk.core.data.auth
 
 import com.auth0.android.jwt.JWT
-import com.nabla.sdk.auth.data.local.TokenLocalDataSource
-import com.nabla.sdk.auth.data.remote.TokenRemoteDataSource
-import com.nabla.sdk.auth.domain.boundary.SessionTokenProvider
-import com.nabla.sdk.auth.domain.boundary.TokenRepository
-import com.nabla.sdk.auth.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
+import com.nabla.sdk.core.domain.boundary.TokenRepository
+import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.messaging.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

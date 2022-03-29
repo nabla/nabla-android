@@ -1,8 +1,8 @@
-package com.nabla.sdk.auth.data.local
+package com.nabla.sdk.core.data.auth
 
 import com.auth0.android.jwt.JWT
-import com.nabla.sdk.auth.domain.entity.AuthTokens
-import com.nabla.sdk.core.data.SecuredKVStorage
+import com.nabla.sdk.core.data.local.SecuredKVStorage
+import com.nabla.sdk.core.domain.entity.AuthTokens
 
 internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStorage) {
 

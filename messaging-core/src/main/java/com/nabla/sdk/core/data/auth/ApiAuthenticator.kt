@@ -1,8 +1,6 @@
-package com.nabla.sdk.auth.data.remote
+package com.nabla.sdk.core.data.auth
 
-import com.nabla.sdk.auth.domain.boundary.TokenRepository
-import com.nabla.sdk.auth.domain.data.auth.HEADER_AUTH_NAME
-import com.nabla.sdk.auth.domain.data.auth.makeHeaderAuthValue
+import com.nabla.sdk.core.domain.boundary.TokenRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
