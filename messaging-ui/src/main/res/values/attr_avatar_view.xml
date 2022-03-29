@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="avatarViewStyle" format="reference" />
+
+    <attr name="clipShape" format="enum">
+        <enum name="none" value="0" />
+        <enum name="oval" value="1" />
+        <enum name="roundRect" value="2" />
+    </attr>
+    <declare-styleable name="AvatarView">
+        <attr name="clipShape" />
+        <attr name="useSingleLetterInPlaceHolder" format="boolean" />
+    </declare-styleable>
+
+    <style name="Widget.Nabla.AvatarView" parent="">
+        <item name="clipShape">oval</item>
+        <item name="useSingleLetterInPlaceHolder">true</item>
+    </style>
+</resources>

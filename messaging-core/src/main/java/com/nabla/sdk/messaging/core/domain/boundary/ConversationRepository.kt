@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ConversationRepository {
     suspend fun createConversation()
-    fun getConversations(): Flow<List<Conversation>>
+    fun watchConversations(): Flow<List<Conversation>>
 }

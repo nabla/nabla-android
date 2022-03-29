@@ -4,14 +4,13 @@ import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
 
-class NablaMessaging {
-
+class NablaMessaging private constructor() {
     private val messagingContainer = MessagingContainer()
 
     val conversationRepository = messagingContainer.conversationRepository
 
-    fun getConversations(): Flow<List<Conversation>> {
-        return messagingContainer.conversationRepository.getConversations()
+    fun watchConversations(): Flow<List<Conversation>> {
+        return messagingContainer.conversationRepository.watchConversations()
     }
 
     companion object {

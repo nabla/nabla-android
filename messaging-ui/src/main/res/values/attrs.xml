@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="primaryButtonStyle" format="reference" />
+    <attr name="secondaryButtonStyle" format="reference" />
+    <attr name="colorSurfaceStroke" format="color" />
+    <!-- Drawable to use for avatar of automated actions (e.g. auto-response) author. This is usually your brand logo. -->
+    <attr name="systemAvatar" format="reference" />
+</resources>

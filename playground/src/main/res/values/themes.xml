@@ -1,16 +1,34 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Theme.Nabla.Sdk.Playground" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+    <style name="Theme.Nabla.Sdk.Playground" parent="Theme.AppCompat">
+        <item name="colorPrimary">#FF018786</item>
+        <item name="colorPrimaryDark">#025353</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+        <item name="colorSecondary">@color/turbo</item>
+        <item name="colorSecondaryVariant">@color/pale_blue_green</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorSurface">@color/pale_blue_green</item>
+        <item name="colorOnSurface">@color/stone</item>
+
+        <item name="android:colorBackground">@color/silver</item>
+        <item name="colorOnBackground">@color/stone</item>
+
+        <item name="android:textColorPrimary">#2046B8</item>
+        <item name="android:textColorSecondary">#8B9BD1</item>
+
+        <item name="colorAccent">?colorSecondary</item>
+        <item name="colorPrimaryVariant">?attr/colorPrimaryDark</item>
+        <item name="android:windowBackground">?android:attr/colorBackground</item>
+
+        <!-- ripple & scroll edges -->
+        <item name="android:colorEdgeEffect">?colorSecondary</item>
+        <!-- this color is used by material library as background drawable, which is not supported on Android < 29 if the color is a selector -->
+        <item name="colorControlHighlight">@color/stone_alpha_12</item>
+    </style>
+
+    <style name="ThemeOverlay.Nabla.Sdk.Messaging.Playground" parent="ThemeOverlay.Nabla.Messaging">
+        <item name="systemAvatar">@drawable/avatar_system</item>
     </style>
 </resources>

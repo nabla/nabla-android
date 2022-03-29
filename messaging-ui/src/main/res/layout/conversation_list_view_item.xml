@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:clipToPadding="false"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="1dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="18dp"
+        >
+
+        <com.nabla.sdk.core.ui.components.AvatarView
+            android:id="@+id/avatarView"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/conversationInboxTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/conversationInboxSubtitle"
+            app:layout_constraintEnd_toStartOf="@id/lastMessageDate"
+            app:layout_constraintStart_toEndOf="@id/avatarView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Dr. Willerval Willerval Willerval Willerval Willerval Willerval"
+            />
+
+        <TextView
+            android:id="@+id/conversationInboxSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/conversationInboxTitle"
+            app:layout_constraintStart_toStartOf="@id/conversationInboxTitle"
+            app:layout_constraintTop_toBottomOf="@id/conversationInboxTitle"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Medecin du sommeil du sommeil du sommeil du sommeil du sommeil du sommeil"
+            />
+
+        <TextView
+            android:id="@+id/lastMessageDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/conversationInboxTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/conversationInboxTitle"
+            tools:text="8:10"
+            />
+
+        <ImageView
+            android:id="@+id/unreadDot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:contentDescription="@string/conversation_list_view_unread_indicator_content_description"
+            android:src="@drawable/ic_nabla_unread_dot"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/conversationInboxSubtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/conversationInboxSubtitle"
+            tools:visibility="visible"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

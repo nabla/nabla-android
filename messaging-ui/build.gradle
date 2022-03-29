@@ -24,6 +24,10 @@ android {
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -31,4 +35,9 @@ dependencies {
 
     implementation libs.androidx.lifecycle.viewmodel
     implementation libs.androidx.lifecycle.viewmodel.savedstate
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.google.material
+    implementation libs.coilCore
 }

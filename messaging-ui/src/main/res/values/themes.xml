@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Theme overlay adding Nabla UI customization attrs with their defaults, see attrs.xml -->
+    <style name="ThemeOverlay.Nabla.Messaging" parent="">
+
+        <item name="primaryButtonStyle">?buttonStyle</item>
+        <item name="secondaryButtonStyle">?buttonStyleSmall</item>
+
+        <item name="colorSurfaceStroke">@color/grey</item>
+
+        <item name="colorError">@color/red</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- TODO add a proper default for systemAvatar -->
+        <item name="systemAvatar">@android:drawable/ic_secure</item>
+
+        <item name="cardViewStyle">@style/Widget.Nabla.CardView</item>
+        <item name="avatarViewStyle">@style/Widget.Nabla.AvatarView</item>
+    </style>
+</resources>

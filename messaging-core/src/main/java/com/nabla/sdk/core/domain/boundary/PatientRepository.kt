@@ -1,8 +1,8 @@
 package com.nabla.sdk.core.domain.boundary
 
-import com.nabla.sdk.core.domain.entity.PatientId
+import com.nabla.sdk.core.domain.entity.Id
 
 interface PatientRepository {
-    fun setPatientId(patientId: PatientId?)
-    fun getPatientId(): PatientId?
+    fun setPatientId(patientId: Id?)
+    fun getPatientId(): Id?
 }

@@ -1,24 +1,23 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
-import com.nabla.sdk.core.domain.entity.AttachmentId
-import com.nabla.sdk.core.domain.entity.PatientId
-import com.nabla.sdk.core.domain.entity.ProviderId
-import com.nabla.sdk.core.domain.entity.UserId
+import com.nabla.sdk.core.domain.entity.Attachment
+import com.nabla.sdk.core.domain.entity.Id
+import com.nabla.sdk.core.domain.entity.User
 import kotlinx.datetime.Instant
 
-typealias ConversationId = String
 data class Conversation(
-    val id: ConversationId,
-    val title: String,
-    val patientId: PatientId,
-    val providerIds: List<ProviderId>,
+    val id: Id,
+    val inboxPreviewTitle: String,
+    val inboxPreviewSubtitle: String,
+    val lastModified: Instant,
+    val patientUnreadMessageCount: Int,
+    val providers: List<User.Provider>,
 )
 
-typealias MessageId = String
 data class Message(
-    val id: MessageId,
-    val userId: UserId,
+    val id: Id,
+    val author: User,
     val text: String,
-    val attachment: AttachmentId?,
+    val attachment: Attachment?,
     val createdAt: Instant,
 )

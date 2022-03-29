@@ -4,7 +4,7 @@ import android.content.Context
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.injection.CoreContainer
 
-class NablaCore {
+class NablaCore private constructor() {
 
     private lateinit var appContext: Context
     private lateinit var sessionTokenProvider: SessionTokenProvider

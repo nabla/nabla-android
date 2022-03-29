@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#F84082</color>
+    <color name="grey">#DFE2E8</color>
+
+    <!-- AvatarView placeholder backgrounds -->
+    <color name="turquoise">#21DBD1</color>
+    <color name="orange">#FF9577</color>
+    <color name="indigo">#6716FB</color>
+    <color name="stone">#6F787E</color>
+    <color name="blue">#0052FF</color>
+</resources>
