@@ -1,7 +1,12 @@
 package com.nabla.sdk.core.injection
 
 import android.content.Context
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.cache.normalized.normalizedCache
+import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
+import com.apollographql.apollo3.network.okHttpClient
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.nabla.sdk.core.NablaCoreConfig
 import com.nabla.sdk.core.data.auth.*
 import com.nabla.sdk.core.data.local.SecuredKVStorage
 import com.nabla.sdk.core.data.logger.AndroidLogger
@@ -22,9 +27,13 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class CoreContainer(context: Context, sessionTokenProvider: SessionTokenProvider) {
+internal class CoreContainer(
+    context: Context,
+    sessionTokenProvider: SessionTokenProvider,
+    config: NablaCoreConfig
+) {
     private val securedKVStorage = SecuredKVStorage(context)
-    private val logger: Logger = LoggerImpl(AndroidLogger())
+    private val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnable)
 
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
@@ -34,11 +43,19 @@ class CoreContainer(context: Context, sessionTokenProvider: SessionTokenProvider
             .build()
     }
 
+    private val apolloClient by lazy {
+        ApolloClient.Builder()
+            .serverUrl(config.baseUrl + "graphql")
+            .normalizedCache(SqlNormalizedCacheFactory(context, "nabla-cache-apollo.db"))
+            .okHttpClient(okHttpClient)
+            .build()
+    }
+
     @OptIn(ExperimentalSerializationApi::class)
     private val retrofit by lazy {
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://api.nabla.com/")
+            .baseUrl(config.baseUrl)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
@@ -55,7 +72,7 @@ class CoreContainer(context: Context, sessionTokenProvider: SessionTokenProvider
             logger
         )
     }
-    val conversationRepository: ConversationRepository = ConversationRepositoryImpl()
+    val conversationRepository: ConversationRepository = ConversationRepositoryImpl(logger)
     private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
 

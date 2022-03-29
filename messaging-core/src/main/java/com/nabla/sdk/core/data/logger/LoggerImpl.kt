@@ -1,11 +1,11 @@
 package com.nabla.sdk.core.data.logger
 
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.messaging.core.BuildConfig
 
-internal class LoggerImpl(private val androidLogger: AndroidLogger): Logger {
-
-    private val isLoggingEnable = BuildConfig.DEBUG
+internal class LoggerImpl(
+    private val androidLogger: AndroidLogger,
+    private val isLoggingEnable: Boolean,
+): Logger {
 
     override fun debug(message: String, error: Throwable?, tag: String) {
         if (!isLoggingEnable) return

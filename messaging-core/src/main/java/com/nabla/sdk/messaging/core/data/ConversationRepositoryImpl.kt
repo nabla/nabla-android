@@ -3,6 +3,7 @@ package com.nabla.sdk.messaging.core.data
 import com.nabla.sdk.core.domain.entity.Attachment
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import kotlinx.coroutines.delay
@@ -13,9 +14,10 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-internal class ConversationRepositoryImpl() : ConversationRepository {
+internal class ConversationRepositoryImpl(private val logger: Logger): ConversationRepository {
     override suspend fun createConversation() {
         // Stub
+        logger.debug("createConversation")
     }
 
     override fun watchConversations(): Flow<List<Conversation>> {

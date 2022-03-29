@@ -43,4 +43,7 @@ dependencies {
     implementation libs.kotlin.serialization.json
     api libs.kotlin.datetime
     implementation libs.apollo.runtime
+    implementation libs.apollo.cache
+    implementation libs.apollo.cache.sqlite
+    implementation libs.androidx.startup
 }
