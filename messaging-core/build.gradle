@@ -29,7 +29,8 @@ android {
 }
 
 apollo {
-    packageName.set("com.nabla.sdk.messaging.core")
+    packageName.set("com.nabla.sdk.graphql")
+    mapScalarToKotlinString("UUID")
 }
 
 dependencies {

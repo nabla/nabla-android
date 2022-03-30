@@ -19,7 +19,7 @@ import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
-import com.nabla.sdk.messaging.core.data.ConversationRepositoryImpl
+import com.nabla.sdk.messaging.core.data.ConversationRepositoryMock
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -72,7 +72,7 @@ internal class CoreContainer(
             logger
         )
     }
-    val conversationRepository: ConversationRepository = ConversationRepositoryImpl(logger)
+    val conversationRepository: ConversationRepository = ConversationRepositoryMock(logger)
     private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
 

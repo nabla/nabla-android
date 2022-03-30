@@ -35,3 +35,8 @@ sealed class MimeType {
     abstract val rawValue: String
     data class Generic(override val rawValue: String): MimeType()
 }
+
+data class PaginatedResult<T>(
+    val items: List<T>,
+    val nextCursor: String?
+)
