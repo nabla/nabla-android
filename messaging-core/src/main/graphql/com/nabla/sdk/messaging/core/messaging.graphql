@@ -1,40 +1,40 @@
 query ConversationList($cursor: OpaqueCursorPage!) {
     conversations(page: $cursor) {
         conversations {
-            ...conversationListItemFragment
+            ...ConversationListItemFragment
         }
         nextCursor
     }
 }
 
-fragment conversationListItemFragment on Conversation {
+fragment ConversationListItemFragment on Conversation {
     id
     title
     description
     lastMessagePreview
     unreadMessageCount
     providers {
-        ...conversationProviderFragment
+        ...ConversationProviderFragment
     }
 }
 
-fragment conversationProviderFragment on ConversationProvider {
+fragment ConversationProviderFragment on ConversationProvider {
     id
     provider {
-        ...providerFragment
+        ...ProviderFragment
     }
     isTyping
     seenUntil
 }
 
-fragment providerFragment on Provider {
+fragment ProviderFragment on Provider {
     id
     avatarURL {
-        ...ephemeralUrlFragment
+        ...EphemeralUrlFragment
     }
 }
 
-fragment ephemeralUrlFragment on EphemeralUrl {
+fragment EphemeralUrlFragment on EphemeralUrl {
     expiresAt
     url
 }

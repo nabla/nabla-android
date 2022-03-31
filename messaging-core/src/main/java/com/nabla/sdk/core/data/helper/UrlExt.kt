@@ -1,14 +1,14 @@
-package com.nabla.sdk.core.data
+package com.nabla.sdk.core.data.helper
 
-import com.nabla.sdk.core.domain.entity.Url
+import com.nabla.sdk.core.domain.entity.Uri
 import java.net.MalformedURLException
-import java.net.URL
+import java.net.URI
 
 @Throws(MalformedURLException::class)
-fun Url.toJvmUrl(): URL {
-    return URL(this)
+fun Uri.toJvmUri(): URI {
+    return URI(uri)
 }
 
-fun URL.toKtUrl(): Url {
-    return this.toString()
+fun URI.toKtUri(): Uri {
+    return Uri(toString())
 }

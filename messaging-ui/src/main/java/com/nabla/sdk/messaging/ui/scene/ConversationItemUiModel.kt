@@ -37,5 +37,5 @@ fun Conversation.toUiModel() = ConversationItemUiModel(
     subtitle = inboxPreviewSubtitle,
     lastModified = Date(lastModified.toEpochMilliseconds()),
     hasUnreadMessages = patientUnreadMessageCount > 0,
-    providers = providers,
+    providers = providersInConversation.map { it.provider },
 )

@@ -18,6 +18,7 @@ import coil.clear
 import coil.load
 import coil.size.Scale
 import com.nabla.sdk.core.domain.entity.Id
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.core.domain.entity.User.Patient
 import com.nabla.sdk.core.domain.entity.User.Provider
@@ -86,12 +87,12 @@ class AvatarView : ConstraintLayout {
         }
     }
 
-    fun loadAvatar(avatarURL: String?, placeholderText: String?, userUuid: Id?, grayOut: Boolean = false) {
+    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userUuid: Id?, grayOut: Boolean = false) {
         val placeholderTextComputed = placeholderText ?: ""
         val indexBackground = userUuid?.let { (it.hashCode() % backgroundColors.size).absoluteValue } ?: 0
         val placeholderBackgroundColor = if (grayOut) deactivatedBackground else backgroundColors[indexBackground]
         val placeholderBackground = ColorDrawable(context.getColor(placeholderBackgroundColor))
-        if (avatarURL == null) {
+        if (avatarUrl == null) {
             showPlaceholder(placeholderTextComputed, placeholderBackground, grayOut)
             binding.componentAvatarImageView.clear()
             return
@@ -104,7 +105,7 @@ class AvatarView : ConstraintLayout {
         }
 
         hidePlaceholder(grayOut)
-        binding.componentAvatarImageView.load(avatarURL) {
+        binding.componentAvatarImageView.load(avatarUrl.toString()) {
             scale(Scale.FIT)
             listener(
                 onSuccess = { _, _ ->

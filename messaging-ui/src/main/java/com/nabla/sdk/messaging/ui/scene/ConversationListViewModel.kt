@@ -21,7 +21,7 @@ class ConversationListViewModel(
     val stateFlow: StateFlow<State> =
         conversationRepository.watchConversations()
             .map { conversations ->
-                State.Loaded(conversations.map { it.toUiModel() }).eraseType()
+                State.Loaded(conversations.items.map { it.toUiModel() }).eraseType()
             }
             .retryWhen { cause, attempt ->
                 onErrorRetryWhen(cause, attempt).also { retry ->

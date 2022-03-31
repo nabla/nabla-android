@@ -7,13 +7,13 @@ internal class LocalPatientDataSource(private val securedKVStorage: SecuredKVSto
 
     fun setPatient(patientId: Id?) {
         with(securedKVStorage.edit()) {
-            putString(KEY_PATIENT_ID, patientId)
+            putString(KEY_PATIENT_ID, patientId.toString())
             apply()
         }
     }
 
     fun getPatient(): Id? {
-        return securedKVStorage.getString(KEY_PATIENT_ID, null)
+        return securedKVStorage.getString(KEY_PATIENT_ID, null)?.let { Id(it) }
     }
 
     companion object {

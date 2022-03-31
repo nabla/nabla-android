@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.core.data
 
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.entity.Attachment
-import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.PaginatedResult
+import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
+import com.nabla.sdk.messaging.core.domain.entity.fake
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,70 +15,38 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-internal class ConversationRepositoryMock(private val logger: Logger): ConversationRepository {
+internal class ConversationRepositoryMock(private val logger: Logger) : ConversationRepository {
     override suspend fun createConversation() {
         // Stub
         logger.debug("createConversation")
     }
 
-    override suspend fun getConversationsPage(cursor: String?): PaginatedResult<Conversation> {
-        TODO("Not yet implemented")
-    }
-
-    override fun watchConversations(): Flow<List<Conversation>> {
+    override fun watchConversations(): Flow<PaginatedList<Conversation>> {
         return flow {
             delay(1.seconds)
             emit(
-                listOf(
-                    Conversation(
-                        "id1",
-                        "title 1",
-                        "subtitle 1",
-                        lastModified = Clock.System.now().minus(20.minutes),
-                        patientUnreadMessageCount = 0,
-                        providers = listOf(
-                            User.Provider(
-                                "id_provider1",
-                                avatar = null,
-                                "Véronique",
-                                "Cayol",
-                                "Gynécologue",
-                                "Dr",
-                            )
-                        )
+                PaginatedList(
+                    items = listOf(
+                        Conversation.fake(
+                            lastModified = Clock.System.now().minus(20.minutes),
+                            providersInConversation = listOf(ProviderInConversation.fake(provider = User.Provider.fake(avatar = null)))
+                        ),
+                        Conversation.fake(
+                            lastModified = Clock.System.now().minus(1.days),
+                            providersInConversation = emptyList(),
+                        ),
+                        Conversation.fake(
+                            lastModified = Clock.System.now().minus(20.days),
+                            patientUnreadMessageCount = 3,
+                        ),
                     ),
-                    Conversation(
-                        "id2",
-                        "title 2",
-                        "subtitle 2",
-                        lastModified = Clock.System.now().minus(1.days),
-                        patientUnreadMessageCount = 0,
-                        providers = emptyList()
-                    ),
-                    Conversation(
-                        "id3",
-                        "title 3",
-                        "subtitle 3",
-                        lastModified = Clock.System.now().minus(20.days),
-                        patientUnreadMessageCount = 3,
-                        providers = listOf(
-                            User.Provider(
-                                "id_provider2",
-                                avatar = Attachment(
-                                    "attachement1",
-                                    url = "https://i.pravatar.cc/300",
-                                    mimeType = MimeType.Generic("image/png"),
-                                    thumbnailUrl = "",
-                                ),
-                                "John",
-                                "Doe",
-                                "Généraliste",
-                                "Dr",
-                            ),
-                        )
-                    ),
+                    hasMore = true
                 )
             )
         }
+    }
+
+    override suspend fun loadMoreConversations() {
+        TODO("Not yet implemented")
     }
 }
