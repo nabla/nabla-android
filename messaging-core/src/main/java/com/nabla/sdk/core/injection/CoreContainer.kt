@@ -7,6 +7,7 @@ import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.NablaCoreConfig
+import com.nabla.sdk.core.data.apollo.TypeAndUuidCacheKeyGenerator
 import com.nabla.sdk.core.data.auth.*
 import com.nabla.sdk.core.data.local.SecuredKVStorage
 import com.nabla.sdk.core.data.logger.AndroidLogger
@@ -46,8 +47,10 @@ internal class CoreContainer(
     private val apolloClient by lazy {
         ApolloClient.Builder()
             .serverUrl(config.baseUrl + "graphql")
-            .normalizedCache(SqlNormalizedCacheFactory(context, "nabla-cache-apollo.db"))
-            .okHttpClient(okHttpClient)
+            .normalizedCache(
+                normalizedCacheFactory = SqlNormalizedCacheFactory(context, "nabla-cache-apollo.db"),
+                cacheKeyGenerator = TypeAndUuidCacheKeyGenerator
+            ).okHttpClient(okHttpClient)
             .build()
     }
 
