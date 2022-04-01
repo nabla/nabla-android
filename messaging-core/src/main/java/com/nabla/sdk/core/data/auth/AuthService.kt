@@ -4,7 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Tag
 
-internal interface NablaService {
+internal interface AuthService {
     @POST("v1/jwt/user/refresh")
     suspend fun refresh(
         @Body refreshToken: String,
