@@ -32,11 +32,11 @@ fragment ConversationFragment on Conversation {
     lastMessagePreview
     unreadMessageCount
     providers {
-        ...ConversationProviderFragment
+        ...ProviderInConversationFragment
     }
 }
 
-fragment ConversationProviderFragment on ConversationProvider {
+fragment ProviderInConversationFragment on ProviderInConversation {
     id
     provider {
         ...ProviderFragment
@@ -47,7 +47,7 @@ fragment ConversationProviderFragment on ConversationProvider {
 
 fragment ProviderFragment on Provider {
     id
-    avatarURL {
+    avatarUrl {
         ...EphemeralUrlFragment
     }
 }
