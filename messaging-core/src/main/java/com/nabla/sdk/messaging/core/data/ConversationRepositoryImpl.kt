@@ -9,15 +9,19 @@ import com.apollographql.apollo3.cache.normalized.watch
 import com.apollographql.apollo3.exception.CacheMissException
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.kotlin.SharedSingle
+import com.nabla.sdk.core.kotlin.asSharedSingleIn
 import com.nabla.sdk.graphql.ConversationListQuery
+import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.mapper.Mapper
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.*
 
 internal class ConversationRepositoryImpl(
     private val logger: Logger,
@@ -25,33 +29,69 @@ internal class ConversationRepositoryImpl(
     private val mapper: Mapper,
 ) : ConversationRepository {
 
-    private val loadMoreConversationsMutex = Mutex()
+    private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val loadMoreConversationSharedSingle: SharedSingle<Unit> =
+        ::loadMoreConversationOperation.asSharedSingleIn(repoScope)
+    private val conversationsEventsFlow = apolloClient.subscription(ConversationsEventsSubscription())
+        .toFlow()
+        .onEach {
+            onConversationsEvent(it.dataAssertNoErrors)
+        }.shareIn(
+            scope = repoScope,
+            replay = 0,
+            started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
+        )
+
+    private suspend fun onConversationsEvent(data: ConversationsEventsSubscription.Data) {
+        data.conversations.onConversationCreatedEvent?.conversation?.let {
+            insertConversationToConversationsListCache(it)
+        }
+    }
+
+    private suspend fun insertConversationToConversationsListCache(
+        conversation: ConversationsEventsSubscription.Conversation
+    ) {
+        val firstPageQuery = firstConversationsPageQuery()
+        val cachedQueryData = try {
+            apolloClient.apolloStore.readOperation(firstPageQuery)
+        } catch (cacheMissException: CacheMissException) {
+            null
+        } ?: return
+        val newItem = ConversationListQuery.Conversation(
+            conversation.__typename,
+            conversation.conversationFragment
+        )
+        val mergedConversations = listOf(newItem) + cachedQueryData.conversations.conversations
+        val mergedQueryData = cachedQueryData.copy(
+            conversations = cachedQueryData.conversations.copy(
+                conversations = mergedConversations
+            )
+        )
+        apolloClient.apolloStore.writeOperation(firstPageQuery, mergedQueryData)
+    }
 
     override suspend fun createConversation() {
         // Stub
         logger.debug("createConversation")
     }
 
+    @OptIn(FlowPreview::class)
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
         val query = firstConversationsPageQuery()
-        return apolloClient.query(query)
+        val dataFlow = apolloClient.query(query)
             .watch()
             .map { response -> response.dataAssertNoErrors }
             .map { queryData ->
                 val items = queryData.conversations.conversations.map {
-                    mapper.mapToConversation(it.conversationListItemFragment)
+                    mapper.mapToConversation(it.conversationFragment)
                 }
                 return@map PaginatedList(items, queryData.hasNextPage())
             }
+        return flowOf(conversationsEventsFlow, dataFlow).flattenMerge().filterIsInstance()
     }
 
     override suspend fun loadMoreConversations() {
-        loadMoreConversationsMutex.withLock {
-            // Avoid concurrent updates.
-            // More complex policy could involve checking last update time, or re attach somehow
-            // concurrent loadMoreConversations().
-            loadMoreConversationOperation()
-        }
+        loadMoreConversationSharedSingle.await()
     }
 
     private suspend fun loadMoreConversationOperation() {
@@ -73,7 +113,7 @@ internal class ConversationRepositoryImpl(
             .dataAssertNoErrors
         val mergedConversations =
             (cachedQueryData.conversations.conversations + freshQueryData.conversations.conversations)
-                .distinctBy { it.conversationListItemFragment.id }
+                .distinctBy { it.conversationFragment.id }
         val mergedQueryData = freshQueryData.copy(
             conversations = freshQueryData.conversations.copy(
                 conversations = mergedConversations

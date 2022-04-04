@@ -2,14 +2,14 @@ package com.nabla.sdk.messaging.core.data.mapper
 
 import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.User
-import com.nabla.sdk.graphql.fragment.ConversationListItemFragment
+import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.fragment.ConversationProviderFragment
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import kotlinx.datetime.Clock
 
 internal class Mapper {
-    fun mapToConversation(fragment: ConversationListItemFragment): Conversation {
+    fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
             id = Id(fragment.id),
             inboxPreviewTitle = "",

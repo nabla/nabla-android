@@ -3,8 +3,8 @@ package com.nabla.sdk.messaging.ui.scene
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.domain.entity.Id
+import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
-import com.nabla.sdk.messaging.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

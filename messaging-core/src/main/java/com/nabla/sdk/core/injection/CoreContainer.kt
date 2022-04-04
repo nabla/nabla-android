@@ -46,6 +46,7 @@ internal class CoreContainer(
     private val apolloClient by lazy {
         ApolloClient.Builder()
             .serverUrl(config.baseUrl + "graphql")
+            .webSocketServerUrl(config.baseUrl + "graphql/ws")
             .normalizedCache(
                 normalizedCacheFactory = SqlNormalizedCacheFactory(context, "nabla-cache-apollo.db"),
                 cacheKeyGenerator = TypeAndUuidCacheKeyGenerator

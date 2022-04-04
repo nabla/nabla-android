@@ -1,13 +1,31 @@
 query ConversationList($cursor: OpaqueCursorPage!) {
     conversations(page: $cursor) {
         conversations {
-            ...ConversationListItemFragment
+            ...ConversationFragment
         }
         nextCursor
     }
 }
 
-fragment ConversationListItemFragment on Conversation {
+subscription ConversationsEvents {
+    conversations {
+        ... on ConversationCreatedEvent {
+            conversation {
+                ...ConversationFragment
+            }
+        }
+        ... on ConversationUpdatedEvent {
+            conversation {
+                ...ConversationFragment
+            }
+        }
+        ... on ConversationDeletedEvent {
+            conversationID
+        }
+    }
+}
+
+fragment ConversationFragment on Conversation {
     id
     title
     description

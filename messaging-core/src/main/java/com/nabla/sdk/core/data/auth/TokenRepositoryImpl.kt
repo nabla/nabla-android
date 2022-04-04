@@ -6,7 +6,7 @@ import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.AuthTokens
-import com.nabla.sdk.messaging.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 

@@ -3,7 +3,7 @@ package com.nabla.sdk.core.domain.interactor
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.Id
-import com.nabla.sdk.messaging.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.runCatchingCancellable
 
 class LoginInteractor(
     private val patientRepository: PatientRepository,
