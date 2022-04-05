@@ -1,69 +1,42 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.Id
-import com.nabla.sdk.core.domain.entity.Uri
 import kotlinx.datetime.Instant
 
-sealed interface Message {
-    val localId: Id?
-    val remoteId: Id?
-    val sentAt: Instant
-    val sender: MessageSender
-    val status: MessageStatus
+data class BaseMessage(
+    val localId: Id?,
+    val remoteId: Id?,
+    val sentAt: Instant?,
+    val sender: MessageSender,
+    val status: MessageStatus?
+)
 
-    sealed interface Media : Message {
-        val uri: Uri
-        val mimeType: String
-        val fileName: String
-    }
+sealed class Message {
+    abstract val message: BaseMessage
 
-    data class Text(
-        override val localId: Id?,
-        override val remoteId: Id?,
-        override val sentAt: Instant,
-        override val sender: MessageSender,
-        override val status: MessageStatus,
-        val text: String,
-    ) : Message {
+    data class Text(override val message: BaseMessage, val text: String) : Message() {
         companion object
     }
 
-    data class Image(
-        override val localId: Id?,
-        override val remoteId: Id?,
-        override val sentAt: Instant,
-        override val sender: MessageSender,
-        override val status: MessageStatus,
-        override val uri: Uri,
-        override val mimeType: String,
-        override val fileName: String,
-    ) : Media {
-        companion object
+    sealed class Media : Message() {
+
+        data class Image(
+            override val message: BaseMessage,
+            val image: FileUpload.Image,
+        ) : Media() {
+            companion object
+        }
+
+        data class Document(
+            override val message: BaseMessage,
+            val document: FileUpload.Document
+        ) : Media() {
+            companion object
+        }
     }
 
-    data class File(
-        override val localId: Id?,
-        override val remoteId: Id?,
-        override val sentAt: Instant,
-        override val sender: MessageSender,
-        override val status: MessageStatus,
-        override val uri: Uri,
-        override val mimeType: String,
-        override val fileName: String,
-        val fileId: Id?, // null in case of a not yet uploaded file
-        val isPrescription: Boolean,
-        val thumbnailUri: Uri?,
-    ) : Media {
-        companion object
-    }
-
-    data class Deleted(
-        override val localId: Id?,
-        override val remoteId: Id?,
-        override val sentAt: Instant,
-        override val sender: MessageSender,
-        override val status: MessageStatus,
-    ) : Message {
+    data class Deleted(override val message: BaseMessage) : Message() {
         companion object
     }
 }

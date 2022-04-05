@@ -5,7 +5,7 @@ import com.nabla.sdk.core.domain.boundary.Logger
 internal class LoggerImpl(
     private val androidLogger: AndroidLogger,
     private val isLoggingEnable: Boolean,
-): Logger {
+) : Logger {
 
     override fun debug(message: String, error: Throwable?, tag: String) {
         if (!isLoggingEnable) return

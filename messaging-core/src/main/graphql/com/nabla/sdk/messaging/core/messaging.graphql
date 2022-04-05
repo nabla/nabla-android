@@ -1,5 +1,14 @@
-query ConversationList($cursor: OpaqueCursorPage!) {
-    conversations(page: $cursor) {
+query Conversation($id: UUID!, $pageInfo: OpaqueCursorPage!) {
+    conversation(id: $id) {
+        conversation {
+            ...ConversationFragment
+            ...ConversationMessagesPageFragment
+        }
+    }
+}
+
+query ConversationList($pageInfo: OpaqueCursorPage!) {
+    conversations(page: $pageInfo) {
         conversations {
             ...ConversationFragment
         }
@@ -36,6 +45,43 @@ fragment ConversationFragment on Conversation {
     }
 }
 
+fragment ConversationMessagesPageFragment on Conversation {
+    items(page: $pageInfo) {
+        data {
+            ...MessageFragment
+        }
+        hasMore
+        nextCursor
+    }
+}
+
+fragment MessageFragment on Message {
+    id
+    author {
+        ... on Provider {
+            ...ProviderFragment
+        }
+        ... on Patient {
+            ...PatientFragment
+        }
+    }
+    content {
+        ... on TextMessageContent {
+            ...TextMessageContentFragment
+        }
+        ... on ImageMessageContent {
+            ...ImageMessageContentFragment
+        }
+        ... on DocumentMessageContent {
+            ...DocumentMessageContentFragment
+        }
+        ... on DeletedMessageContent {
+            ...DeletedMessageContentFragment
+        }
+    }
+    clientId
+}
+
 fragment ProviderInConversationFragment on ProviderInConversation {
     id
     provider {
@@ -52,7 +98,55 @@ fragment ProviderFragment on Provider {
     }
 }
 
+fragment PatientFragment on Patient {
+    id
+}
+
 fragment EphemeralUrlFragment on EphemeralUrl {
     expiresAt
     url
+}
+
+fragment TextMessageContentFragment on TextMessageContent {
+    text
+}
+
+fragment ImageMessageContentFragment on ImageMessageContent {
+    fileUpload {
+        ...ImageFileUploadFragment
+    }
+}
+
+fragment DocumentMessageContentFragment on DocumentMessageContent {
+    title
+    fileUpload {
+        ...DocumentFileUploadFragment
+    }
+}
+
+fragment DeletedMessageContentFragment on DeletedMessageContent {
+    empty: _
+}
+
+fragment ImageFileUploadFragment on ImageFileUpload {
+    uuid
+    url {
+        ...EphemeralUrlFragment
+    }
+    fileName
+    mimeType
+    width
+    height
+}
+
+fragment DocumentFileUploadFragment on DocumentFileUpload {
+    uuid
+    url {
+        ...EphemeralUrlFragment
+    }
+    fileName
+    mimeType
+    thumbnail {
+        ...ImageFileUploadFragment
+    }
 }

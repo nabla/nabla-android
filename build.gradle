@@ -8,6 +8,7 @@ buildscript {
     ]
 
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
     }
@@ -17,10 +18,17 @@ buildscript {
         classpath libs.kotlin.pluginGradle
         classpath libs.kotlin.serialization.pluginGradle
         classpath libs.apollo.pluginGradle
+        classpath libs.ktlint.pluginGradle
     }
 }
 
 subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+
+    ktlint {
+        setVersion(libs.versions.ktlint.get())
+    }
+
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         kotlinOptions {
             allWarningsAsErrors = true

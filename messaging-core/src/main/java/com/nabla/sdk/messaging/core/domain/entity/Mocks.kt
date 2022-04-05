@@ -32,11 +32,13 @@ internal fun Message.Text.Companion.fake(
     status: MessageStatus = MessageStatus.Sent,
     text: String = "message content",
 ) = Message.Text(
-    localId = localId,
-    remoteId = remoteId,
-    sentAt = sentAt,
-    sender = sender,
-    status = status,
+    BaseMessage(
+        localId = localId,
+        remoteId = remoteId,
+        sentAt = sentAt,
+        sender = sender,
+        status = status,
+    ),
     text = text,
 )
 
@@ -89,4 +91,3 @@ internal fun Conversation.Companion.fake(
 
 private fun randomId(): Id = Id(Random.nextInt().toString())
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)
-

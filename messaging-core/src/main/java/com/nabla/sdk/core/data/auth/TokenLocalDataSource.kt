@@ -7,7 +7,7 @@ import com.nabla.sdk.core.domain.entity.AuthTokens
 internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStorage) {
 
     fun setRefreshToken(refreshToken: String?) {
-        with (securedKVStorage.edit()) {
+        with(securedKVStorage.edit()) {
             putString(KEY_REFRESH_TOKEN, refreshToken)
             apply()
         }
@@ -18,7 +18,7 @@ internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStora
     }
 
     fun setAccessToken(accessToken: String?) {
-        with (securedKVStorage.edit()) {
+        with(securedKVStorage.edit()) {
             putString(KEY_ACCESS_TOKEN, accessToken)
             apply()
         }
@@ -29,7 +29,7 @@ internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStora
     }
 
     fun setAuthTokens(authTokens: AuthTokens) {
-        with (securedKVStorage.edit()) {
+        with(securedKVStorage.edit()) {
             putString(KEY_REFRESH_TOKEN, authTokens.refreshToken)
             putString(KEY_ACCESS_TOKEN, authTokens.accessToken)
             apply()
@@ -37,7 +37,7 @@ internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStora
     }
 
     fun clear() {
-        with (securedKVStorage.edit()) {
+        with(securedKVStorage.edit()) {
             clear()
             apply()
         }

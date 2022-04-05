@@ -10,4 +10,3 @@ object HttpLoggingInterceptorFactory {
         return logging
     }
 }
-

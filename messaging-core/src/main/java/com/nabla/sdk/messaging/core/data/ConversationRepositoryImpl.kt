@@ -8,15 +8,18 @@ import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
 import com.apollographql.apollo3.exception.CacheMissException
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.asSharedSingleIn
 import com.nabla.sdk.graphql.ConversationListQuery
+import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.mapper.Mapper
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.Message
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -94,6 +97,21 @@ internal class ConversationRepositoryImpl(
         loadMoreConversationSharedSingle.await()
     }
 
+    override fun watchConversation(id: Id): Flow<PaginatedList<Message>> {
+        val query = firstMessagePageQuery(id)
+        val dataFlow = apolloClient.query(query)
+            .watch()
+            .map { response -> response.dataAssertNoErrors }
+            .map { queryData ->
+                val page = queryData.conversation.conversation.conversationMessagesPageFragment.items
+                val items = page.data.mapNotNull { it?.messageFragment }.map {
+                    mapper.mapToMessage(it)
+                }
+                return@map PaginatedList(items, page.hasMore)
+            }
+        return dataFlow
+    }
+
     private suspend fun loadMoreConversationOperation() {
         val firstPageQuery = firstConversationsPageQuery()
         val cachedQueryData = try {
@@ -103,7 +121,7 @@ internal class ConversationRepositoryImpl(
         } ?: return
         if (!cachedQueryData.hasNextPage()) return
         val updatedQuery = firstPageQuery.copy(
-            cursor = OpaqueCursorPage(
+            pageInfo = OpaqueCursorPage(
                 cursor = Optional.presentIfNotNull(cachedQueryData.conversations.nextCursor)
             )
         )
@@ -130,4 +148,6 @@ internal class ConversationRepositoryImpl(
     private fun firstConversationsPageQuery() =
         ConversationListQuery(OpaqueCursorPage(cursor = Optional.Absent))
 
+    private fun firstMessagePageQuery(id: Id) =
+        ConversationQuery(id.id, OpaqueCursorPage(cursor = Optional.Absent))
 }

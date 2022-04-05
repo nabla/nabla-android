@@ -3,7 +3,7 @@ package com.nabla.sdk.core.data.logger
 import android.util.Log
 import com.nabla.sdk.core.domain.boundary.Logger
 
-internal class AndroidLogger: Logger {
+internal class AndroidLogger : Logger {
     override fun debug(message: String, error: Throwable?, tag: String) {
         Log.d(tag, message, error)
     }

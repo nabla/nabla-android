@@ -48,4 +48,3 @@ class ConversationListViewModel(
         fun eraseType() = this
     }
 }
-

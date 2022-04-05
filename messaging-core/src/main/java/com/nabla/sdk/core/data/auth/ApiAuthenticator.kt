@@ -7,7 +7,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 
-internal class ApiAuthenticator(private val tokenRepository: TokenRepository): Authenticator {
+internal class ApiAuthenticator(private val tokenRepository: TokenRepository) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         return if (hasBearerToken(response)) {
             // Authenticated call, refresh if apply auth

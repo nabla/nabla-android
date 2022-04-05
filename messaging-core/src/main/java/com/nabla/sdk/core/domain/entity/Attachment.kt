@@ -8,7 +8,7 @@ data class Attachment(
 )
 
 sealed class MimeType {
-    abstract val rawValue: String
+    abstract val value: String
 
-    data class Generic(override val rawValue: String) : MimeType()
+    data class Generic(override val value: String) : MimeType()
 }

@@ -4,7 +4,7 @@ import android.app.Application
 import com.nabla.sdk.core.NablaCore
 import com.nabla.sdk.core.NablaCoreConfig
 
-class PlaygroundApp: Application() {
+class PlaygroundApp : Application() {
     override fun onCreate() {
         super.onCreate()
         NablaCore.instance.setConfig(NablaCoreConfig(isLoggingEnable = true))

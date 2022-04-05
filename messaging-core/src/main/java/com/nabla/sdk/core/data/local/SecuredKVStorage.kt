@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
-class SecuredKVStorage(context: Context): SharedPreferences {
+class SecuredKVStorage(context: Context) : SharedPreferences {
 
     private val sharedPreferences = EncryptedSharedPreferences.create(
         "nabla_kv_sec.sp", // This name needs to be in sync with the one of the backup_rules.xml of the app

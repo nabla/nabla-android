@@ -9,5 +9,4 @@ internal class TokenRemoteDataSource(private val authService: AuthService) {
             AuthTokens(response.refreshToken, response.accessToken)
         }
     }
-
 }
