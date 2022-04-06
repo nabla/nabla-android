@@ -17,12 +17,13 @@ inline fun <R> runCatchingCancellable(block: () -> R): Result<R> {
     }
 }
 
-fun <R> (suspend () -> R).asSharedSingleIn(
-    coroutineScope: CoroutineScope
+fun <R> sharedSingleIn(
+    coroutineScope: CoroutineScope,
+    block: suspend () -> R,
 ): SharedSingle<R> {
     return object : SharedSingle<R> {
         val sharedFlow = flow {
-            val result = this@asSharedSingleIn.invoke()
+            val result = block()
             emit(result)
         }.shareIn(
             scope = coroutineScope,

@@ -37,9 +37,10 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
 retrofit-kotlin-serialization = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
 jwtdecode = "com.auth0.android:jwtdecode:2.0.1"
-apollo-pluginGradle = { group = "com.apollographql.apollo3", name="apollo-gradle-plugin", version.ref = "apollo" }
-apollo-runtime = { group = "com.apollographql.apollo3", name="apollo-runtime", version.ref = "apollo" }
-apollo-cache = { group = "com.apollographql.apollo3", name="apollo-normalized-cache", version.ref = "apollo" }
-apollo-cache-sqlite = { group = "com.apollographql.apollo3", name="apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-pluginGradle = { group = "com.apollographql.apollo3", name = "apollo-gradle-plugin", version.ref = "apollo" }
+apollo-runtime = { group = "com.apollographql.apollo3", name = "apollo-runtime", version.ref = "apollo" }
+apollo-cache = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache", version.ref = "apollo" }
+apollo-cache-sqlite = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-adapters = { group = "com.apollographql.apollo3", name = "apollo-adapters", version.ref = "apollo" }
 
 coilCore = { group = "io.coil-kt", name = "coil", version.ref = "coil" }

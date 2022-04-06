@@ -2,6 +2,7 @@ package com.nabla.sdk.core.data.patient
 
 import com.nabla.sdk.core.data.local.SecuredKVStorage
 import com.nabla.sdk.core.domain.entity.Id
+import com.nabla.sdk.core.domain.entity.toId
 
 internal class LocalPatientDataSource(private val securedKVStorage: SecuredKVStorage) {
 
@@ -13,7 +14,7 @@ internal class LocalPatientDataSource(private val securedKVStorage: SecuredKVSto
     }
 
     fun getPatient(): Id? {
-        return securedKVStorage.getString(KEY_PATIENT_ID, null)?.let { Id(it) }
+        return securedKVStorage.getString(KEY_PATIENT_ID, null)?.toId()
     }
 
     companion object {

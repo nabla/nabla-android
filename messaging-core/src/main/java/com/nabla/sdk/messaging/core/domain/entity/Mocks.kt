@@ -6,6 +6,7 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.toId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.random.Random
@@ -49,7 +50,7 @@ internal fun User.Provider.Companion.fake(
     title: String? = "Gynécologue",
     prefix: String? = "Dr",
     avatar: Attachment? = Attachment(
-        Id("attachement1"),
+        "attachement1".toId(),
         url = Uri("https://i.pravatar.cc/300"),
         mimeType = MimeType.Generic("image/png"),
         thumbnailUrl = Uri(""),
@@ -89,5 +90,5 @@ internal fun Conversation.Companion.fake(
     providersInConversation = providersInConversation,
 )
 
-private fun randomId(): Id = Id(Random.nextInt().toString())
+private fun randomId(): Id = Random.nextInt().toString().toId()
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)

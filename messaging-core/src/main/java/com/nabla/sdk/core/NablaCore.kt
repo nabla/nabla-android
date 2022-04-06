@@ -14,9 +14,7 @@ class NablaCore private constructor() {
     private val coreContainerDelegate = lazy {
         CoreContainer(appContext, sessionTokenProvider, nablaCoreConfig)
     }
-    private val coreContainer by coreContainerDelegate
-
-    val conversationRepository by lazy { coreContainer.conversationRepository }
+    internal val coreContainer by coreContainerDelegate
 
     // Private init, done by app startup
     internal fun init(appContext: Context) {

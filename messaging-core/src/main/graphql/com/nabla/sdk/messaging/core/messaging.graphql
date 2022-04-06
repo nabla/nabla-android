@@ -12,6 +12,7 @@ query ConversationList($pageInfo: OpaqueCursorPage!) {
         conversations {
             ...ConversationFragment
         }
+        hasMore
         nextCursor
     }
 }
@@ -34,7 +35,23 @@ subscription ConversationsEvents {
     }
 }
 
+subscription ConversationEvents($conversationId: UUID!) {
+    conversation(id: $conversationId) {
+        ... on MessageCreatedEvent {
+            message {
+                ...MessageFragment
+            }
+        }
+        ... on MessageUpdatedEvent {
+            message {
+                ...MessageFragment
+            }
+        }
+    }
+}
+
 fragment ConversationFragment on Conversation {
+    __typename
     id
     title
     description
@@ -56,6 +73,7 @@ fragment ConversationMessagesPageFragment on Conversation {
 }
 
 fragment MessageFragment on Message {
+    __typename
     id
     author {
         ... on Provider {
@@ -80,6 +98,9 @@ fragment MessageFragment on Message {
         }
     }
     clientId
+    conversation {
+        id
+    }
 }
 
 fragment ProviderInConversationFragment on ProviderInConversation {

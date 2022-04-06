@@ -9,3 +9,5 @@ value class Uri(val uri: String)
 
 @JvmInline
 value class Id(val id: String)
+
+fun String.toId() = Id(this)

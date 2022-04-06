@@ -5,6 +5,7 @@ import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.domain.entity.toId
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -33,7 +34,7 @@ internal class FileUploadRepositoryImpl constructor(
                     buildUploadRequestBody(inputStream, mimeType)
                 ),
             )
-            return Id(response.first())
+            return response.first().toId()
         }
     }
 

@@ -1,12 +1,12 @@
-package com.nabla.sdk.messaging.core.data.mapper
+package com.nabla.sdk.messaging.core.data.apollo
 
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.fragment.DocumentFileUploadFragment
 import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
@@ -22,10 +22,10 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.days
 
-internal class Mapper {
+internal class MessagingGqlMapper {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
-            id = Id(fragment.id),
+            id = fragment.id.toId(),
             inboxPreviewTitle = "",
             inboxPreviewSubtitle = "",
             lastModified = Clock.System.now(),
@@ -49,8 +49,8 @@ internal class Mapper {
     fun mapToMessage(messageFragment: MessageFragment): Message {
         val sender = mapToMessageSender(messageFragment.author)
         val baseMessage = BaseMessage(
-            localId = Id(messageFragment.clientId),
-            remoteId = Id(messageFragment.id),
+            localId = messageFragment.clientId.toId(),
+            remoteId = messageFragment.id.toId(),
             sentAt = null,
             sender = sender,
             status = null,
@@ -88,7 +88,7 @@ internal class Mapper {
 
     private fun mapToProvider(providerFragment: ProviderFragment): User.Provider {
         return User.Provider(
-            id = Id(providerFragment.id),
+            id = providerFragment.id.toId(),
             avatar = null,
             firstName = "",
             lastName = "",
@@ -116,7 +116,7 @@ internal class Mapper {
             width = imageFileUploadFragment.width,
             height = imageFileUploadFragment.height,
             fileUpload = BaseFileUpload(
-                id = Id(imageFileUploadFragment.uuid),
+                id = imageFileUploadFragment.uuid.toId(),
                 url = mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = imageFileUploadFragment.fileName,
                 mimeType = mapToMimeType(imageFileUploadFragment.mimeType)
@@ -132,7 +132,7 @@ internal class Mapper {
                 mapToFileUploadImage(it)
             },
             fileUpload = BaseFileUpload(
-                id = Id(documentFileUploadFragment.uuid),
+                id = documentFileUploadFragment.uuid.toId(),
                 url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
