@@ -6,13 +6,13 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.databinding.ConversationListViewItemBinding
 
 class ConversationListAdapter(
-    private val onConversationClicked: (conversationId: Id) -> Unit,
+    private val onConversationClicked: (conversationId: ConversationId) -> Unit,
 ) : ListAdapter<ConversationItemUiModel, ConversationListAdapter.ConversationViewHolder>(
     object : DiffUtil.ItemCallback<ConversationItemUiModel>() {
         override fun areItemsTheSame(
@@ -37,7 +37,7 @@ class ConversationListAdapter(
 
     class ConversationViewHolder(
         private val binding: ConversationListViewItemBinding,
-        private val onConversationClicked: (conversationId: Id) -> Unit,
+        private val onConversationClicked: (conversationId: ConversationId) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(uiModel: ConversationItemUiModel) {
             val context = binding.context
@@ -66,7 +66,7 @@ class ConversationListAdapter(
         }
 
         companion object {
-            fun create(parent: ViewGroup, onConversationClicked: (conversationId: Id) -> Unit): ConversationViewHolder {
+            fun create(parent: ViewGroup, onConversationClicked: (conversationId: ConversationId) -> Unit): ConversationViewHolder {
                 val binding = ConversationListViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return ConversationViewHolder(binding, onConversationClicked)
             }

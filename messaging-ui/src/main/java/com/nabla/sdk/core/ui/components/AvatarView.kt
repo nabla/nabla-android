@@ -17,7 +17,7 @@ import androidx.core.view.ViewCompat
 import coil.clear
 import coil.load
 import coil.size.Scale
-import com.nabla.sdk.core.domain.entity.Id
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.core.domain.entity.User.Patient
@@ -87,7 +87,7 @@ class AvatarView : ConstraintLayout {
         }
     }
 
-    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userUuid: Id?, grayOut: Boolean = false) {
+    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userUuid: Uuid?, grayOut: Boolean = false) {
         val placeholderTextComputed = placeholderText ?: ""
         val indexBackground = userUuid?.let { (it.hashCode() % backgroundColors.size).absoluteValue } ?: 0
         val placeholderBackgroundColor = if (grayOut) deactivatedBackground else backgroundColors[indexBackground]

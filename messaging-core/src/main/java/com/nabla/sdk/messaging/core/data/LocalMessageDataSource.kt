@@ -1,21 +1,22 @@
 package com.nabla.sdk.messaging.core.data
 
-import com.nabla.sdk.core.domain.entity.Id
+import com.benasher44.uuid.Uuid
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 internal class LocalMessageDataSource {
-    private val conversationToLocalMessagesFlows = mutableMapOf<Id, MutableStateFlow<Map<Id, Message>>>()
+    private val conversationToLocalMessagesFlows = mutableMapOf<ConversationId, MutableStateFlow<Map<Uuid, Message>>>()
 
-    fun watchLocalMessages(conversationId: Id): Flow<Collection<Message>> {
+    fun watchLocalMessages(conversationId: ConversationId): Flow<Collection<Message>> {
         return getLocalMessagesMutableFlow(conversationId).map { it.values }
     }
 
     private fun getLocalMessagesMutableFlow(
-        conversationId: Id
-    ): MutableStateFlow<Map<Id, Message>> {
+        conversationId: ConversationId
+    ): MutableStateFlow<Map<Uuid, Message>> {
         return synchronized(this) {
             conversationToLocalMessagesFlows.getOrPut(conversationId) {
                 MutableStateFlow(emptyMap())
@@ -23,17 +24,17 @@ internal class LocalMessageDataSource {
         }
     }
 
-    fun putMessage(conversationId: Id, message: Message) {
-        val stateFlow = getLocalMessagesMutableFlow(conversationId)
+    fun putMessage(message: Message) {
+        val stateFlow = getLocalMessagesMutableFlow(message.message.conversationId)
         stateFlow.value = stateFlow.value.toMutableMap().apply {
             put(message.message.id.stableId, message)
         }
     }
 
-    fun remove(conversationId: Id, messageId: Id) {
+    fun remove(conversationId: ConversationId, messageClientId: Uuid) {
         val stateFlow = getLocalMessagesMutableFlow(conversationId)
         stateFlow.value = stateFlow.value.toMutableMap().apply {
-            remove(messageId)
+            remove(messageClientId)
         }
     }
 }

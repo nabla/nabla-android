@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.core.data
 
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.GqlMessageDataSource
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlOperationHelper
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
@@ -24,9 +24,9 @@ internal class MessageRepositoryImpl(
 ) : MessageRepository {
 
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
-    private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<Id, SharedSingle<Unit>>()
+    private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit>>()
 
-    override fun watchConversationMessages(conversationId: Id): Flow<ConversationWithMessages> {
+    override fun watchConversationMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
         val gqlConversationAndMessagesFlow = gqlMessageDataSource.watchRemoteConversationWithMessages(conversationId)
         val localMessagesFlow = localMessageDataSource.watchLocalMessages(conversationId)
         val messageFlow = gqlConversationAndMessagesFlow.combine(localMessagesFlow) { gqlConversationAndMessages, localMessages ->
@@ -51,7 +51,7 @@ internal class MessageRepositoryImpl(
         )
     }
 
-    override suspend fun loadMoreMessages(conversationId: Id) {
+    override suspend fun loadMoreMessages(conversationId: ConversationId) {
         val loadMoreConversationMessagesSharedSingle = loadMoreConversationMessagesSharedSingleLock.withLock {
             loadMoreConversationMessagesSharedSingleMap.getOrPut(conversationId) {
                 sharedSingleIn(repoScope) {
@@ -62,13 +62,12 @@ internal class MessageRepositoryImpl(
         loadMoreConversationMessagesSharedSingle.await()
     }
 
-    override suspend fun sendMessage(conversationId: Id, message: Message) {
-        localMessageDataSource.putMessage(conversationId, message)
+    override suspend fun sendMessage(message: Message) {
+        localMessageDataSource.putMessage(message)
         runCatchingCancellable {
-            gqlMessageDataSource.sendMessage(conversationId, message)
+            gqlMessageDataSource.sendMessage(message)
         }.onFailure {
             localMessageDataSource.putMessage(
-                conversationId,
                 message.modify(MessageStatus.ErrorSending)
             )
         }

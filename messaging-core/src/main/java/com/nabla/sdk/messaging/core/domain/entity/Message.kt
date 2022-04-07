@@ -1,27 +1,28 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.FileUpload
-import com.nabla.sdk.core.domain.entity.Id
 import kotlinx.datetime.Instant
 
 data class BaseMessage(
     val id: MessageId,
     val sentAt: Instant?,
     val sender: MessageSender,
-    val status: MessageStatus
+    val status: MessageStatus,
+    val conversationId: ConversationId,
 )
 
 sealed class MessageId {
-    abstract val stableId: Id
-    abstract val clientId: Id?
-    abstract val remoteId: Id?
+    abstract val stableId: Uuid
+    abstract val clientId: Uuid?
+    abstract val remoteId: Uuid?
 
-    data class Local(override val clientId: Id) : MessageId() {
-        override val stableId: Id = clientId
-        override val remoteId: Id? = null
+    data class Local(override val clientId: Uuid) : MessageId() {
+        override val stableId: Uuid = clientId
+        override val remoteId: Uuid? = null
     }
-    data class Remote(override val clientId: Id?, override val remoteId: Id) : MessageId() {
-        override val stableId: Id = clientId ?: remoteId
+    data class Remote(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId() {
+        override val stableId: Uuid = clientId ?: remoteId
     }
 }
 

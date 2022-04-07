@@ -1,19 +1,19 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
 import com.apollographql.apollo3.api.Optional
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 
 internal object MessagingGqlHelper {
 
     fun firstConversationsPageQuery() =
         ConversationListQuery(OpaqueCursorPage(cursor = Optional.Absent))
 
-    fun firstMessagePageQuery(id: Id) =
-        ConversationQuery(id.id, OpaqueCursorPage(cursor = Optional.Absent))
+    fun firstMessagePageQuery(id: ConversationId) =
+        ConversationQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
 
     fun ConversationListQuery.Data.modify(
         conversations: List<ConversationListQuery.Conversation> = this.conversations.conversations

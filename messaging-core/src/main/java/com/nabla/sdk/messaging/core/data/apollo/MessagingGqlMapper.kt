@@ -7,7 +7,7 @@ import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
-import com.nabla.sdk.core.domain.entity.toId
+import com.nabla.sdk.core.domain.entity.asUuid
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.fragment.DocumentFileUploadFragment
 import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
@@ -24,13 +24,14 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
+import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.days
 
 internal class MessagingGqlMapper {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
-            id = fragment.id.toId(),
+            id = fragment.id.toConversationId(),
             inboxPreviewTitle = "",
             inboxPreviewSubtitle = "",
             lastModified = Clock.System.now(),
@@ -55,12 +56,13 @@ internal class MessagingGqlMapper {
         val sender = mapToMessageSender(messageFragment.author)
         val baseMessage = BaseMessage(
             id = MessageId.Remote(
-                clientId = messageFragment.clientId.toId(),
-                remoteId = messageFragment.id.toId()
+                clientId = messageFragment.clientId,
+                remoteId = messageFragment.id
             ),
             sentAt = null,
             sender = sender,
             status = MessageStatus.Sent,
+            conversationId = messageFragment.conversation.id.toConversationId()
         )
         messageFragment.content?.onTextMessageContent?.textMessageContentFragment?.let {
             return@let Message.Text(
@@ -95,7 +97,7 @@ internal class MessagingGqlMapper {
 
     private fun mapToProvider(providerFragment: ProviderFragment): User.Provider {
         return User.Provider(
-            id = providerFragment.id.toId(),
+            id = providerFragment.id,
             avatar = null,
             firstName = "",
             lastName = "",
@@ -123,7 +125,7 @@ internal class MessagingGqlMapper {
             width = imageFileUploadFragment.width,
             height = imageFileUploadFragment.height,
             fileUpload = BaseFileUpload(
-                id = imageFileUploadFragment.uuid.toId(),
+                id = imageFileUploadFragment.uuid.asUuid(),
                 url = mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = imageFileUploadFragment.fileName,
                 mimeType = mapToMimeType(imageFileUploadFragment.mimeType)
@@ -139,7 +141,7 @@ internal class MessagingGqlMapper {
                 mapToFileUploadImage(it)
             },
             fileUpload = BaseFileUpload(
-                id = documentFileUploadFragment.uuid.toId(),
+                id = documentFileUploadFragment.uuid.asUuid(),
                 url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)

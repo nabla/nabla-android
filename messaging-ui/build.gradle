@@ -40,4 +40,5 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.google.material
     implementation libs.coilCore
+    implementation libs.uuid
 }

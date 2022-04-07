@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.Attachment
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
-import com.nabla.sdk.core.domain.entity.toId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.random.Random
@@ -26,8 +26,8 @@ internal fun ConversationWithMessages.Companion.fake(
 )
 
 internal fun Message.Text.Companion.fake(
-    localId: Id = randomId(),
-    remoteId: Id = randomId(),
+    localId: Uuid = uuid4(),
+    remoteId: Uuid = uuid4(),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
     status: MessageStatus = MessageStatus.Sent,
@@ -38,18 +38,19 @@ internal fun Message.Text.Companion.fake(
         sentAt = sentAt,
         sender = sender,
         status = status,
+        conversationId = uuid4().toConversationId(),
     ),
     text = text,
 )
 
 internal fun User.Provider.Companion.fake(
-    id: Id = randomId(),
+    id: Uuid = uuid4(),
     firstName: String = "Véronique",
     lastName: String = "Cayol",
     title: String? = "Gynécologue",
     prefix: String? = "Dr",
     avatar: Attachment? = Attachment(
-        "attachement1".toId(),
+        uuid4(),
         url = Uri("https://i.pravatar.cc/300"),
         mimeType = MimeType.Generic("image/png"),
         thumbnailUrl = Uri(""),
@@ -74,14 +75,14 @@ internal fun ProviderInConversation.Companion.fake(
 )
 
 internal fun Conversation.Companion.fake(
-    id: Id = randomId(),
+    id: Uuid = uuid4(),
     inboxPreviewTitle: String = "title ${Random.nextInt()}",
     inboxPreviewSubtitle: String = "subtitle",
     lastModified: Instant = Clock.System.now().minus(2.minutes),
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
 ) = Conversation(
-    id = id,
+    id = id.toConversationId(),
     inboxPreviewTitle = inboxPreviewTitle,
     inboxPreviewSubtitle = inboxPreviewSubtitle,
     lastModified = lastModified,
@@ -89,5 +90,4 @@ internal fun Conversation.Companion.fake(
     providersInConversation = providersInConversation,
 )
 
-private fun randomId(): Id = Random.nextInt().toString().toId()
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)

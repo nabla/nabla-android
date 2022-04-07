@@ -1,11 +1,11 @@
 package com.nabla.sdk.core.data.file
 
 import android.content.Context
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.domain.entity.toId
+import com.nabla.sdk.core.domain.entity.asUuid
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -22,7 +22,7 @@ internal class FileUploadRepositoryImpl constructor(
 
     private val contentResolver = appContext.contentResolver
 
-    override suspend fun uploadFile(localPath: Uri): Id {
+    override suspend fun uploadFile(localPath: Uri): Uuid {
         val fileInputStream = contentResolver.openInputStream(localPath.toAndroidUri())
             ?: throw IOException("Unable to open input stream from uri: $localPath")
         val mimeType = contentResolver.getType(localPath.toAndroidUri())
@@ -34,7 +34,7 @@ internal class FileUploadRepositoryImpl constructor(
                     buildUploadRequestBody(inputStream, mimeType)
                 ),
             )
-            return response.first().toId()
+            return response.first().asUuid()
         }
     }
 

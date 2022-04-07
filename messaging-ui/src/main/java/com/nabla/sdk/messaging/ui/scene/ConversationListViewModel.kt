@@ -2,9 +2,9 @@ package com.nabla.sdk.messaging.ui.scene
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ConversationListViewModel(
     private val conversationRepository: ConversationRepository,
-    internal val onConversationClicked: (conversationId: Id) -> Unit,
+    internal val onConversationClicked: (conversationId: ConversationId) -> Unit,
     internal val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean,
 ) : ViewModel() {
 

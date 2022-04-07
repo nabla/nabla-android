@@ -6,14 +6,14 @@ import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.updateCache
-import com.nabla.sdk.core.domain.entity.Id
-import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlHelper.modify
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 
 internal class MessagingGqlOperationHelper constructor(private val apolloClient: ApolloClient) {
 
@@ -36,7 +36,7 @@ internal class MessagingGqlOperationHelper constructor(private val apolloClient:
     suspend fun insertMessageToConversationCache(
         message: MessageFragment,
     ) {
-        val query = MessagingGqlHelper.firstMessagePageQuery(message.id.toId())
+        val query = MessagingGqlHelper.firstMessagePageQuery(message.conversation.id.toConversationId())
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
             val newItem = ConversationMessagesPageFragment.Data(
@@ -49,7 +49,7 @@ internal class MessagingGqlOperationHelper constructor(private val apolloClient:
         }
     }
 
-    suspend fun loadMoreConversationMessagesInCache(conversationId: Id) {
+    suspend fun loadMoreConversationMessagesInCache(conversationId: ConversationId) {
         val query = MessagingGqlHelper.firstMessagePageQuery(conversationId)
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.hasMore) {

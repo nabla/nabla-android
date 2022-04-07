@@ -2,7 +2,7 @@ package com.nabla.sdk.core
 
 import android.content.Context
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
-import com.nabla.sdk.core.domain.entity.Id
+import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
 
 class NablaCore private constructor() {
@@ -34,8 +34,8 @@ class NablaCore private constructor() {
         this.nablaCoreConfig = nablaCoreConfig
     }
 
-    suspend fun authenticate(userId: Id) {
-        coreContainer.loginInteractor().invoke(userId)
+    suspend fun authenticate(userId: String) {
+        coreContainer.loginInteractor().invoke(userId.toId())
     }
 
     companion object {

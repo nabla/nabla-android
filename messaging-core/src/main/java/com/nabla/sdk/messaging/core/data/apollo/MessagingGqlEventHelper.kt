@@ -1,11 +1,10 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
 import com.apollographql.apollo3.ApolloClient
-import com.nabla.sdk.core.domain.entity.Id
-import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.messaging.core.data.LocalMessageDataSource
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,9 +33,9 @@ internal class MessagingGqlEventHelper constructor(
             replay = 0,
             started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
         )
-    private val conversationEventsFlowMap = mutableMapOf<Id, Flow<Unit>>()
+    private val conversationEventsFlowMap = mutableMapOf<ConversationId, Flow<Unit>>()
 
-    fun conversationEventsFlow(conversationId: Id): Flow<Unit> {
+    fun conversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
         return synchronized(this) {
             return@synchronized conversationEventsFlowMap.getOrPut(conversationId) {
                 createConversationEventsFlow(conversationId)
@@ -44,14 +43,14 @@ internal class MessagingGqlEventHelper constructor(
         }
     }
 
-    private fun createConversationEventsFlow(conversationId: Id): Flow<Unit> {
-        return apolloClient.subscription(ConversationEventsSubscription(conversationId.id))
+    private fun createConversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
+        return apolloClient.subscription(ConversationEventsSubscription(conversationId.value))
             .toFlow()
             .map { it.dataAssertNoErrors }
             .onEach {
                 it.conversation.onMessageCreatedEvent?.message?.messageFragment?.let {
                     gqlOperationHelper.insertMessageToConversationCache(it)
-                    localMessageDataSource.remove(conversationId, it.clientId.toId())
+                    localMessageDataSource.remove(conversationId, it.clientId)
                 }
             }.shareIn(
                 scope = coroutineScope,

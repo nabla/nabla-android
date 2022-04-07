@@ -1,5 +1,7 @@
 package com.nabla.sdk.core.domain.entity
 
+import com.benasher44.uuid.Uuid
+
 sealed class FileUpload {
     abstract val fileUpload: BaseFileUpload
     data class Image(
@@ -14,7 +16,7 @@ sealed class FileUpload {
 }
 
 data class BaseFileUpload(
-    val id: Id,
+    val id: Uuid,
     val url: EphemeralUrl,
     val fileName: String,
     val mimeType: MimeType,

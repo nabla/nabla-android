@@ -30,7 +30,7 @@ android {
 
 apollo {
     packageName.set("com.nabla.sdk.graphql")
-    mapScalarToKotlinString("UUID")
+    mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
     mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
 }
 
@@ -49,4 +49,5 @@ dependencies {
     implementation libs.apollo.cache.sqlite
     implementation libs.apollo.adapters
     implementation libs.androidx.startup
+    implementation libs.uuid
 }

@@ -5,15 +5,15 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.messaging.core.NablaMessaging
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.injection.NablaMessagingUi
 import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel
 
 class ConversationListViewModelFactory(
     owner: SavedStateRegistryOwner,
     defaultArgs: Bundle? = null,
-    private val onConversationClicked: (conversationId: Id) -> Unit = { _ ->
+    private val onConversationClicked: (conversationId: ConversationId) -> Unit = { _ ->
         // TODO default behavior
     },
     private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean = { _, _ -> false },

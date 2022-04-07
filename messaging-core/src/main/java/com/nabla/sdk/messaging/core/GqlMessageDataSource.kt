@@ -2,12 +2,12 @@ package com.nabla.sdk.messaging.core
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.watch
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.SendMessageMutation
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlEventHelper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlHelper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlMapper
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,8 @@ internal class GqlMessageDataSource(
     private val gqlEventHelper: MessagingGqlEventHelper,
     private val mapper: MessagingGqlMapper,
 ) {
-    fun watchRemoteConversationWithMessages(conversationId: Id): Flow<ConversationWithMessages> {
+
+    fun watchRemoteConversationWithMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
         val query = MessagingGqlHelper.firstMessagePageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .watch()
@@ -43,12 +44,12 @@ internal class GqlMessageDataSource(
         ).flattenMerge().filterIsInstance()
     }
 
-    suspend fun sendMessage(conversationId: Id, message: Message) {
+    suspend fun sendMessage(message: Message) {
         val input = mapper.mapToSendMessageContentInput(message)
         val mutation = SendMessageMutation(
-            conversationId.id,
+            message.message.conversationId.value,
             input,
-            requireNotNull(message.message.id.clientId?.id)
+            requireNotNull(message.message.id.clientId)
         )
         apolloClient.mutation(mutation).execute()
     }

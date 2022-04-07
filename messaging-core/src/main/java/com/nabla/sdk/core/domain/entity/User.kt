@@ -1,8 +1,10 @@
 package com.nabla.sdk.core.domain.entity
 
+import com.benasher44.uuid.Uuid
+
 sealed interface User {
     data class Provider(
-        val id: Id,
+        val id: Uuid,
         val avatar: Attachment?,
         val firstName: String,
         val lastName: String,
@@ -13,7 +15,7 @@ sealed interface User {
     }
 
     data class Patient(
-        val id: Id,
+        val id: Uuid,
         val avatar: Attachment?,
         val username: String,
         val labels: List<String>,

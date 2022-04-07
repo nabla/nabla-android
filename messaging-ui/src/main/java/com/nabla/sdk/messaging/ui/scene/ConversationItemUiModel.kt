@@ -1,7 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene
 
 import android.content.Context
-import com.nabla.sdk.core.domain.entity.Id
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.core.ui.helpers.isThisWeek
 import com.nabla.sdk.core.ui.helpers.isThisYear
@@ -11,10 +10,11 @@ import com.nabla.sdk.core.ui.helpers.toFormattedNumericDate
 import com.nabla.sdk.core.ui.helpers.toFormattedShortWeekDay
 import com.nabla.sdk.core.ui.helpers.toFormattedTime
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import java.util.Date
 
 data class ConversationItemUiModel(
-    val id: Id,
+    val id: ConversationId,
     val title: String,
     val subtitle: String,
     val lastModified: Date,
