@@ -6,6 +6,7 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
+import com.nabla.sdk.graphql.CreateConversationMutation
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlEventHelper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlHelper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlMapper
@@ -34,8 +35,7 @@ internal class ConversationRepositoryImpl(
     }
 
     override suspend fun createConversation() {
-        // Stub
-        logger.debug("createConversation")
+        apolloClient.mutation(CreateConversationMutation()).execute().dataAssertNoErrors
     }
 
     @OptIn(FlowPreview::class)

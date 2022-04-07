@@ -1,3 +1,11 @@
+mutation CreateConversation {
+    createConversation {
+        conversation {
+            ...ConversationFragment
+        }
+    }
+}
+
 query Conversation($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {
