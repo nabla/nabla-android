@@ -6,6 +6,14 @@ mutation CreateConversation {
     }
 }
 
+mutation SendMessage($conversationId: UUID!, $content: SendMessageContentInput!, $clientId: UUID!) {
+    sendMessage(conversationID: $conversationId, content: $content, clientId: $clientId) {
+        message {
+            ...MessageFragment
+        }
+    }
+}
+
 query Conversation($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {

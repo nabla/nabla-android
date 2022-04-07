@@ -1,1 +1,219 @@
-../../../../../../../../../../../graphql/sdk/patient.graphql
+scalar DateTime
+scalar UUID
+
+type Query {
+  conversations(page: OpaqueCursorPage!): ConversationsOutput!
+
+  conversation(id: UUID!): ConversationOutput!
+}
+
+type Mutation {
+  createConversation: CreateConversationOutput!
+
+  sendMessage(conversationID: UUID!, content: SendMessageContentInput!, clientId: UUID!): SendMessageOutput!
+
+  deleteMessage(id: UUID!): DeleteMessageOutput!
+
+  markAsSeen(conversationID: UUID!): MarkConversationAsSeenOutput!
+
+  setTyping(conversationID: UUID!, isTyping: Boolean!): SetTypingOutput!
+}
+
+type Subscription {
+  conversations: ConversationsEvent!
+  conversation(id: UUID!): ConversationEvent!
+}
+
+type Patient {
+  id: UUID!
+}
+
+type EphemeralUrl {
+  url: String!
+  expiresAt: DateTime!
+}
+
+type Provider {
+  id: UUID!
+  avatarUrl: EphemeralUrl
+}
+
+union MessageAuthor = Patient | Provider
+
+type Message {
+  id: UUID!
+
+  author: MessageAuthor!
+  conversation: Conversation!
+
+  content: MessageContent
+
+  clientId: UUID!
+}
+
+type Conversation {
+  id: UUID!
+
+  title: String
+  description: String
+  lastMessagePreview: String
+  unreadMessageCount: Int!
+
+  providers: [ProviderInConversation!]!
+  items(page: OpaqueCursorPage!): ConversationItemsPage!
+}
+
+type ProviderInConversation {
+  id: UUID!
+
+  provider: Provider!
+
+  isTyping: Boolean!
+  seenUntil: DateTime
+}
+
+union ConversationItem = Message
+
+type ConversationItemsPage {
+  data: [ConversationItem]!
+  hasMore: Boolean!
+  nextCursor: DateTime
+}
+
+union MessageContent = TextMessageContent | ImageMessageContent | DocumentMessageContent | DeletedMessageContent
+
+type TextMessageContent {
+  text: String!
+}
+
+interface FileUpload {
+  uuid: String!
+
+  url: EphemeralUrl!
+  fileName: String!
+  mimeType: String!
+}
+
+type ImageFileUpload implements FileUpload {
+  uuid: String!
+
+  url: EphemeralUrl!
+  fileName: String!
+  mimeType: String!
+
+  width: Int!
+  height: Int!
+}
+
+type DocumentFileUpload implements FileUpload {
+  uuid: String!
+
+  url: EphemeralUrl!
+  fileName: String!
+  mimeType: String!
+
+  thumbnail: ImageFileUpload
+}
+
+type ImageMessageContent {
+  fileUpload: ImageFileUpload!
+}
+
+type DocumentMessageContent {
+  fileUpload: DocumentFileUpload!
+
+  title: String
+}
+
+enum EmptyObject {
+  EMPTY
+}
+
+type DeletedMessageContent {
+  _: EmptyObject!
+}
+
+input OpaqueCursorPage {
+  cursor: String
+  # Leave null to let the backend pick a default value.
+  # Max number you can ask is <some_big_but_not_too_big_number>.
+  numberOfItems: Int
+}
+
+type ConversationsOutput {
+  conversations: [Conversation!]!
+
+  nextCursor: String
+  hasMore: Boolean!
+}
+
+type ConversationOutput {
+  conversation: Conversation!
+}
+
+# This is a oneOf input, i.e. there is _exactly one_ non null attribute.
+input SendMessageContentInput {
+  textInput: SendTextMessageInput
+  imageInput: SendImageMessageInput
+  documentInput: SendDocumentMessageInput
+}
+
+input SendTextMessageInput {
+  text: String!
+}
+
+input UploadInput {
+  uuid: UUID!
+}
+
+input SendImageMessageInput {
+  upload: UploadInput!
+}
+
+input SendDocumentMessageInput {
+  upload: UploadInput!
+}
+
+type SendMessageOutput {
+  message: Message!
+}
+
+type DeleteMessageOutput {
+  message: Message!
+}
+
+type MarkConversationAsSeenOutput {
+  conversation: Conversation!
+}
+
+type SetTypingOutput {
+  conversation: Conversation!
+}
+
+type CreateConversationOutput {
+  conversation: Conversation!
+}
+
+union ConversationsEvent = ConversationCreatedEvent | ConversationUpdatedEvent | ConversationDeletedEvent
+
+type ConversationCreatedEvent {
+  conversation: Conversation!
+}
+
+type ConversationUpdatedEvent {
+  conversation: Conversation!
+}
+
+type ConversationDeletedEvent {
+  conversationID: UUID!
+}
+
+union ConversationEvent = MessageCreatedEvent | MessageUpdatedEvent
+
+type MessageCreatedEvent {
+  message: Message!
+}
+
+type MessageUpdatedEvent {
+  message: Message!
+}

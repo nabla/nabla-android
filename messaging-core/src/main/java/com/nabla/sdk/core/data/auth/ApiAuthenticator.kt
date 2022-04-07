@@ -1,13 +1,12 @@
 package com.nabla.sdk.core.data.auth
 
-import com.nabla.sdk.core.domain.boundary.TokenRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 
-internal class ApiAuthenticator(private val tokenRepository: TokenRepository) : Authenticator {
+internal class ApiAuthenticator(private val tokenRepository: Lazy<TokenRepositoryImpl>) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         return if (hasBearerToken(response)) {
             // Authenticated call, refresh if apply auth
@@ -25,7 +24,7 @@ internal class ApiAuthenticator(private val tokenRepository: TokenRepository) : 
     private fun reAuthenticateRequest(staleResponse: Response): Request? {
         if (responseCount(staleResponse) > AUTH_RETRY_COUNT) return null
         val freshAccessToken = runBlocking {
-            tokenRepository.getFreshAccessToken(forceRefreshAccessToken = true).getOrNull()
+            tokenRepository.value.getFreshAccessToken(forceRefreshAccessToken = true).getOrNull()
         } ?: return null
         return staleResponse.request.newBuilder()
             .header(HEADER_AUTH_NAME, makeHeaderAuthValue(freshAccessToken))

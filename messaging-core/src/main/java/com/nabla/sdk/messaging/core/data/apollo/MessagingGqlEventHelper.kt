@@ -2,8 +2,10 @@ package com.nabla.sdk.messaging.core.data.apollo
 
 import com.apollographql.apollo3.ApolloClient
 import com.nabla.sdk.core.domain.entity.Id
+import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.messaging.core.data.LocalMessageDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,6 +18,7 @@ internal class MessagingGqlEventHelper constructor(
     private val apolloClient: ApolloClient,
     private val coroutineScope: CoroutineScope,
     private val gqlOperationHelper: MessagingGqlOperationHelper,
+    private val localMessageDataSource: LocalMessageDataSource,
 ) {
 
     val conversationsEventsFlow = apolloClient.subscription(ConversationsEventsSubscription())
@@ -48,6 +51,7 @@ internal class MessagingGqlEventHelper constructor(
             .onEach {
                 it.conversation.onMessageCreatedEvent?.message?.messageFragment?.let {
                     gqlOperationHelper.insertMessageToConversationCache(it)
+                    localMessageDataSource.remove(conversationId, it.clientId.toId())
                 }
             }.shareIn(
                 scope = coroutineScope,

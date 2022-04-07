@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
+import com.apollographql.apollo3.api.Optional
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
@@ -14,10 +15,14 @@ import com.nabla.sdk.graphql.fragment.ImageFileUploadFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
+import com.nabla.sdk.graphql.type.SendMessageContentInput
+import com.nabla.sdk.graphql.type.SendTextMessageInput
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.days
@@ -49,11 +54,13 @@ internal class MessagingGqlMapper {
     fun mapToMessage(messageFragment: MessageFragment): Message {
         val sender = mapToMessageSender(messageFragment.author)
         val baseMessage = BaseMessage(
-            localId = messageFragment.clientId.toId(),
-            remoteId = messageFragment.id.toId(),
+            id = MessageId.Remote(
+                clientId = messageFragment.clientId.toId(),
+                remoteId = messageFragment.id.toId()
+            ),
             sentAt = null,
             sender = sender,
-            status = null,
+            status = MessageStatus.Sent,
         )
         messageFragment.content?.onTextMessageContent?.textMessageContentFragment?.let {
             return@let Message.Text(
@@ -136,6 +143,25 @@ internal class MessagingGqlMapper {
                 url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
+            )
+        )
+    }
+
+    fun mapToSendMessageContentInput(message: Message): SendMessageContentInput {
+        return when (message) {
+            is Message.Deleted -> TODO()
+            is Message.Media.Document -> TODO()
+            is Message.Media.Image -> TODO()
+            is Message.Text -> mapToSendMessageContentInput(message)
+        }
+    }
+
+    private fun mapToSendMessageContentInput(textMessage: Message.Text): SendMessageContentInput {
+        return SendMessageContentInput(
+            textInput = Optional.presentIfNotNull(
+                SendTextMessageInput(
+                    text = textMessage.text
+                )
             )
         )
     }

@@ -42,11 +42,21 @@ internal class CoreContainer(
     private val securedKVStorage = SecuredKVStorage(context)
     val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnable)
 
+    private val tokenRepositoryLazy = lazy {
+        TokenRepositoryImpl(
+            tokenLocalDataSource,
+            tokenRemoteDataSource,
+            sessionTokenProvider,
+            patientRepository,
+            logger
+        )
+    }
+
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(AuthorizationInterceptor(tokenRepository))
+            .addInterceptor(AuthorizationInterceptor(tokenRepositoryLazy))
             .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
-            .authenticator(ApiAuthenticator(tokenRepository))
+            .authenticator(ApiAuthenticator(tokenRepositoryLazy))
             .build()
     }
 
@@ -74,15 +84,8 @@ internal class CoreContainer(
 
     private val tokenLocalDataSource = TokenLocalDataSource(securedKVStorage)
     private val tokenRemoteDataSource by lazy { TokenRemoteDataSource(authService) }
-    private val tokenRepository: TokenRepository by lazy {
-        TokenRepositoryImpl(
-            tokenLocalDataSource,
-            tokenRemoteDataSource,
-            sessionTokenProvider,
-            patientRepository,
-            logger
-        )
-    }
+
+    private val tokenRepository: TokenRepository by tokenRepositoryLazy
     private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     private val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, context)

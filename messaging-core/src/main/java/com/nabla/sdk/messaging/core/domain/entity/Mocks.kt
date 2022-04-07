@@ -26,16 +26,15 @@ internal fun ConversationWithMessages.Companion.fake(
 )
 
 internal fun Message.Text.Companion.fake(
-    localId: Id? = randomId(),
-    remoteId: Id? = randomId(),
+    localId: Id = randomId(),
+    remoteId: Id = randomId(),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
     status: MessageStatus = MessageStatus.Sent,
     text: String = "message content",
 ) = Message.Text(
     BaseMessage(
-        localId = localId,
-        remoteId = remoteId,
+        id = MessageId.Remote(localId, remoteId),
         sentAt = sentAt,
         sender = sender,
         status = status,

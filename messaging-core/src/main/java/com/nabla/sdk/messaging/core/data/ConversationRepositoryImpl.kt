@@ -14,7 +14,6 @@ import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlOperationHelper
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
@@ -38,7 +37,6 @@ internal class ConversationRepositoryImpl(
         apolloClient.mutation(CreateConversationMutation()).execute().dataAssertNoErrors
     }
 
-    @OptIn(FlowPreview::class)
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
         val query = MessagingGqlHelper.firstConversationsPageQuery()
         val dataFlow = apolloClient.query(query)
