@@ -8,9 +8,3 @@ data class Attachment(
     val mimeType: MimeType,
     val thumbnailUrl: Uri,
 )
-
-sealed class MimeType {
-    abstract val value: String
-
-    data class Generic(override val value: String) : MimeType()
-}

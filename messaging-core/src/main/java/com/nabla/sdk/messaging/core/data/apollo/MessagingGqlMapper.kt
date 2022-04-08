@@ -59,10 +59,10 @@ internal class MessagingGqlMapper {
                 clientId = messageFragment.clientId,
                 remoteId = messageFragment.id
             ),
-            sentAt = null,
+            sentAt = Clock.System.now(), // TODO add sentAt field to schema then to fragment
             sender = sender,
-            status = MessageStatus.Sent,
-            conversationId = messageFragment.conversation.id.toConversationId()
+            status = MessageStatus.Read, // TODO add necessary mapper arg and compute sent/read status
+            conversationId = messageFragment.conversation.id.toConversationId(),
         )
         messageFragment.content?.onTextMessageContent?.textMessageContentFragment?.let {
             return@let Message.Text(
@@ -114,8 +114,7 @@ internal class MessagingGqlMapper {
     }
 
     private fun mapToMimeType(value: String): MimeType {
-        // TODO Add common mimetypes
-        return MimeType.Generic(value)
+        return MimeType.fromStringRepresentation(value)
     }
 
     private fun mapToFileUploadImage(

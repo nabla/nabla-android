@@ -4,4 +4,12 @@
     <string name="avatar_state_description_no_placeholder">Avatar avec photo (%1$s)</string>
     <string name="avatar_state_description_gray_out">désactivé</string>
     <string name="conversation_list_view_unread_indicator_content_description">Messages non lus</string>
+
+    <string name="display_name_unknown_user">Unknown user</string>
+    <string name="chat_message_copy_label">Nabla’s message</string>
+
+    <string name="chat_message_read_status">Message lu</string>
+    <string name="chat_message_sending_status">Envoi en cours…</string>
+    <string name="chat_message_sent_status">Pas encore lu</string>
+    <string name="chat_message_error_status">L’envoi a échoué, tapez pour réessayer</string>
 </resources>

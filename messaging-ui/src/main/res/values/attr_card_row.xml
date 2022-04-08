@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CardRow">
+        <!-- Those values should be in sync with values in CardRow.kt -->
+        <attr name="title" format="string" />
+        <attr name="trailingTitle" format="string" />
+        <attr name="subtitle" format="string" />
+        <attr name="noLeftView" format="boolean" />
+    </declare-styleable>
+
+    <style name="CardRowStyle" parent="">
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:minHeight">63dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+</resources>

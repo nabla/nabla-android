@@ -3,6 +3,9 @@ package com.nabla.sdk.messaging.core.domain.entity
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.Attachment
+import com.nabla.sdk.core.domain.entity.BaseFileUpload
+import com.nabla.sdk.core.domain.entity.EphemeralUrl
+import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Uri
@@ -26,21 +29,79 @@ internal fun ConversationWithMessages.Companion.fake(
 )
 
 internal fun Message.Text.Companion.fake(
-    localId: Uuid = uuid4(),
-    remoteId: Uuid = uuid4(),
+    id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
     status: MessageStatus = MessageStatus.Sent,
     text: String = "message content",
 ) = Message.Text(
     BaseMessage(
-        id = MessageId.Remote(localId, remoteId),
+        id = id,
         sentAt = sentAt,
         sender = sender,
         status = status,
         conversationId = uuid4().toConversationId(),
     ),
     text = text,
+)
+
+internal fun Message.Media.Image.Companion.fake(
+    id: MessageId = MessageId.Remote(uuid4(), uuid4()),
+    sentAt: Instant = Clock.System.now().minus(20.minutes),
+    sender: MessageSender = MessageSender.Patient,
+    status: MessageStatus = MessageStatus.Sent,
+    conversationId: ConversationId = ConversationId(uuid4()),
+    ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://i.pravatar.cc/900")),
+    mimeType: MimeType = MimeType.Image.JPEG,
+    fileName: String = "filename.jpg",
+) = Message.Media.Image(
+    message = BaseMessage(
+        id = id,
+        sentAt = sentAt,
+        sender = sender,
+        status = status,
+        conversationId = conversationId,
+    ),
+    image = FileUpload.Image(
+        fileUpload = BaseFileUpload(
+            id = uuid4(),
+            url = ephemeralUrl,
+            mimeType = mimeType,
+            fileName = fileName,
+        ),
+        width = 300,
+        height = 300,
+    ),
+)
+
+internal fun Message.Media.Document.Companion.fake(
+    id: MessageId = MessageId.Remote(uuid4(), uuid4()),
+    sentAt: Instant = Clock.System.now().minus(20.minutes),
+    sender: MessageSender = MessageSender.Patient,
+    status: MessageStatus = MessageStatus.Sent,
+    conversationId: ConversationId = ConversationId(uuid4()),
+    ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
+    mimeType: MimeType = MimeType.Application.PDF,
+    fileName: String = "filename.jpg",
+    fileId: Uuid = uuid4(),
+    thumbnail: FileUpload.Image? = null,
+) = Message.Media.Document(
+    message = BaseMessage(
+        id = id,
+        sentAt = sentAt,
+        sender = sender,
+        status = status,
+        conversationId = conversationId,
+    ),
+    document = FileUpload.Document(
+        fileUpload = BaseFileUpload(
+            id = fileId,
+            url = ephemeralUrl,
+            mimeType = mimeType,
+            fileName = fileName,
+        ),
+        thumbnail = thumbnail,
+    ),
 )
 
 internal fun User.Provider.Companion.fake(
@@ -52,8 +113,8 @@ internal fun User.Provider.Companion.fake(
     avatar: Attachment? = Attachment(
         uuid4(),
         url = Uri("https://i.pravatar.cc/300"),
-        mimeType = MimeType.Generic("image/png"),
-        thumbnailUrl = Uri(""),
+        mimeType = MimeType.Image.JPEG,
+        thumbnailUrl = Uri("https://i.pravatar.cc/300"),
     ),
 ) = User.Provider(
     id = id,
@@ -88,6 +149,14 @@ internal fun Conversation.Companion.fake(
     lastModified = lastModified,
     patientUnreadMessageCount = patientUnreadMessageCount,
     providersInConversation = providersInConversation,
+)
+
+internal fun EphemeralUrl.Companion.fake(
+    expiresAt: Instant = Instant.DISTANT_FUTURE,
+    url: Uri,
+) = EphemeralUrl(
+    expiresAt = expiresAt,
+    url = url,
 )
 
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)

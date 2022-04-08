@@ -1,0 +1,66 @@
+package com.nabla.sdk.messaging.ui.scene.messages.adapter
+
+import android.view.Gravity
+import android.view.View
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.isVisible
+import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.getThemeColor
+import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
+import com.nabla.sdk.messaging.ui.R
+import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemPatientMessageBinding
+import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.MessageContentBinder
+import com.google.android.material.R as MaterialR
+
+internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>>(
+    private val binding: NablaConversationTimelineItemPatientMessageBinding,
+    contentBinder: BinderType,
+) : MessageViewHolder<ContentType, MessageSender.Patient, BinderType>(contentBinder, binding.root),
+    ClickableItemHolder,
+    PopUpMenuHolder {
+    override val clickableView: View
+        get() = binding.chatPatientMessageContentContainer
+
+    override val popUpMenu: PopupMenu = PopupMenu(
+        binding.context,
+        binding.chatPatientMessageContentContainer,
+        Gravity.BOTTOM
+    ).apply {
+        menuInflater.inflate(R.menu.message_actions, menu)
+    }
+
+    override fun bind(message: TimelineItem.Message, sender: MessageSender.Patient, content: ContentType) {
+        super.bind(message, sender, content)
+        val showStatus = message.showStatus
+        val status = message.status
+        bindStatus(status, showStatus)
+    }
+
+    fun bindStatus(status: MessageStatus, showStatus: Boolean) {
+        if (showStatus) {
+            binding.chatPatientMessageContentStatusTextView.text = binding.context.getString(
+                when (status) {
+                    MessageStatus.Sending -> R.string.chat_message_sending_status
+                    MessageStatus.Sent -> R.string.chat_message_sent_status
+                    MessageStatus.Read -> R.string.chat_message_read_status
+                    MessageStatus.ErrorSending -> R.string.chat_message_error_status
+                }
+            )
+            binding.chatPatientMessageContentStatusTextView.setTextColor(
+                binding.context.getThemeColor(
+                    when (status) {
+                        MessageStatus.ErrorSending -> MaterialR.attr.colorError
+                        else -> MaterialR.attr.colorOnSurface
+                    }
+                )
+            )
+        }
+        showStatus(showStatus)
+    }
+
+    fun showStatus(showStatus: Boolean) {
+        binding.chatPatientMessageContentStatusTextView.isVisible = showStatus
+    }
+}

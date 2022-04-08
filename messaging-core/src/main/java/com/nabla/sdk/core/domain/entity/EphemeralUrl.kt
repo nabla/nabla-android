@@ -4,5 +4,7 @@ import kotlinx.datetime.Instant
 
 data class EphemeralUrl(
     val expiresAt: Instant,
-    val url: Uri
-)
+    val url: Uri,
+) {
+    companion object
+}

@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="display_name_initials_format" translatable="false">%1$.1s%2$.1s</string>
-    <string name="display_lastname_initials_format" translatable="false">%1$.1s</string>
-    <string name="display_username_initials_format" translatable="false">%1$.1s</string>
-    <string name="display_name_unknown_user_initials" translatable="false">\?</string>
+
     <string name="avatar_state_description_placeholder">Avatar without picture (%1$s)</string>
     <string name="avatar_state_description_gray_out">deactivated</string>
     <string name="avatar_state_description_no_placeholder">Avatar with picture (%1$s)</string>
     <string name="conversation_list_view_unread_indicator_content_description">Unread messages</string>
+
+    <string name="display_name_initials_format" translatable="false">%1$.1s%2$.1s</string>
+    <string name="display_lastname_initials_format" translatable="false">%1$.1s</string>
+    <string name="display_username_initials_format" translatable="false">%1$.1s</string>
+    <string name="display_name_unknown_user_initials" translatable="false">\?</string>
+    <string name="display_name_full_name_format" translatable="false">%1$s %2$s</string>
+    <string name="display_name_unknown_provider_initials" translatable="false">\?</string>
+    <string name="display_name_with_title" translatable="false">%1$s (%2$s)</string>
+    <string name="display_name_full_name_and_prefix" translatable="false">%1$s %2$s</string>
+
+    <string name="display_name_unknown_user">Unknown user</string>
+    <string name="chat_message_copy_label">Copied message</string>
+
+    <string name="chat_message_read_status">Message read</string>
+    <string name="chat_message_sending_status">Sending…</string>
+    <string name="chat_message_sent_status">Not read yet</string>
+    <string name="chat_message_error_status">Failed to send, tap to try again… </string>
 </resources>

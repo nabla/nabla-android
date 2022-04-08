@@ -16,3 +16,11 @@ fun Uri.toAndroidUri(): android.net.Uri {
 fun URI.toKtUri(): Uri {
     return Uri(toString())
 }
+
+fun URI.toAndroidUri(): android.net.Uri {
+    return android.net.Uri.parse(toString())
+}
+
+fun android.net.Uri.toJvmURI(): URI {
+    return URI.create(toString())
+}

@@ -7,10 +7,14 @@ import com.benasher44.uuid.Uuid
  */
 
 @JvmInline
-value class Uri(val uri: String)
+value class Uri(val uri: String) {
+    override fun toString(): String = uri
+}
 
 @JvmInline
-value class StringId(val value: String)
+value class StringId(val value: String) {
+    override fun toString(): String = value
+}
 
 fun String.toId() = StringId(this)
 fun String.asUuid(): Uuid = Uuid.fromString(this)

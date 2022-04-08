@@ -22,4 +22,6 @@ sealed interface User {
     ) : User {
         companion object
     }
+
+    object Unknown : User
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="20dp"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <com.nabla.sdk.core.ui.components.CardRow
+                android:id="@+id/chatMediaSourcePickerOptionCameraPicture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="Camera"
+                >
+
+                <com.nabla.sdk.core.ui.components.IconBadge
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:badgeIcon="@drawable/ic_nabla_camera"
+                    />
+
+            </com.nabla.sdk.core.ui.components.CardRow>
+
+            <com.nabla.sdk.core.ui.components.CardRow
+                android:id="@+id/chatMediaSourcePickerOptionLibrary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="Choose from gallery"
+                >
+
+                <com.nabla.sdk.core.ui.components.IconBadge
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:badgeIcon="@drawable/ic_nabla_photo"
+                    />
+
+            </com.nabla.sdk.core.ui.components.CardRow>
+
+            <com.nabla.sdk.core.ui.components.CardRow
+                android:id="@+id/chatMediaSourcePickerOptionFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="Choose file"
+                >
+
+                <com.nabla.sdk.core.ui.components.IconBadge
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    app:badgeIcon="@drawable/ic_nabla_pick_file"
+                    />
+
+            </com.nabla.sdk.core.ui.components.CardRow>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

@@ -4,7 +4,7 @@ import android.content.Context
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.ui.R
 
-fun User?.initials(context: Context, singleLetter: Boolean = false): String {
+fun User.initials(context: Context, singleLetter: Boolean = false): String {
     return when (this) {
         is User.Patient -> context.getString(R.string.display_username_initials_format, username)
         is User.Provider -> {
@@ -14,8 +14,61 @@ fun User?.initials(context: Context, singleLetter: Boolean = false): String {
                 context.getString(R.string.display_name_initials_format, firstName, lastName)
             }
         }
-        null -> {
+        User.Unknown -> {
             context.getString(R.string.display_name_unknown_user_initials)
         }
     }
 }
+
+fun User.fullName(context: Context): String = when (this) {
+    is User.Provider -> context.getString(R.string.display_name_full_name_format, firstName, lastName)
+    is User.Patient -> username
+    is User.Unknown -> context.getString(R.string.display_name_unknown_user)
+}
+
+fun User.lastNameOrUserName(context: Context): String = when (this) {
+    is User.Provider -> lastName
+    is User.Patient -> username
+    is User.Unknown -> context.getString(R.string.display_name_unknown_user)
+}
+
+fun User.fullNameWithPrefix(context: Context): String = when (this) {
+    is User.Provider -> {
+        val fullName = fullName(context)
+        val prefix = prefix
+        if (prefix != null && prefix.isNotBlank()) {
+            context.getString(R.string.display_name_full_name_and_prefix, prefix, fullName)
+        } else fullName
+    }
+    else -> fullName(context)
+}
+
+// For a doctor with prefix it's Prefix + Last Name (ie: Dr Cayol)
+// For a doctor without prefix it's First Name + Last Name (ie: Véronique Cayol)
+// Else full name
+fun User.abbreviatedNameWithPrefix(context: Context): String = when (this) {
+    is User.Provider -> {
+        val prefix = prefix
+        if (prefix != null && prefix.isNotBlank()) {
+            context.getString(R.string.display_name_full_name_and_prefix, prefix, lastNameOrUserName(context))
+        } else {
+            fullName(context)
+        }
+    }
+    else -> fullName(context)
+}
+
+fun User.fullNameWithPrefixAndTitle(context: Context): String = when (this) {
+    is User.Provider -> {
+        val fullNameWithPrefix = fullNameWithPrefix(context)
+        if (title.isNullOrBlank()) {
+            fullNameWithPrefix
+        } else {
+            context.getString(R.string.display_name_with_title, fullNameWithPrefix, title)
+        }
+    }
+    else -> fullNameWithPrefix(context)
+}
+
+val User.prefix: String?
+    get() = (this as? User.Provider)?.prefix

@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Nabla.Sdk.Playground" parent="Theme.AppCompat">
+    <style name="Theme.Nabla.Sdk.Playground" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">#FF018786</item>
         <item name="colorPrimaryDark">#025353</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -26,6 +26,8 @@
         <item name="android:colorEdgeEffect">?colorSecondary</item>
         <!-- this color is used by material library as background drawable, which is not supported on Android < 29 if the color is a selector -->
         <item name="colorControlHighlight">@color/stone_alpha_12</item>
+
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Nabla.Sdk.Messaging.Playground</item>
     </style>
 
     <style name="ThemeOverlay.Nabla.Sdk.Messaging.Playground" parent="ThemeOverlay.Nabla.Messaging">

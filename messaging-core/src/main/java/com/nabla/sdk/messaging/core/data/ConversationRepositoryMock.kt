@@ -1,10 +1,10 @@
 package com.nabla.sdk.messaging.core.data
 
-import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.fake
 import kotlinx.coroutines.delay
@@ -15,10 +15,10 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-internal class ConversationRepositoryMock(private val logger: Logger) : ConversationRepository {
+class ConversationRepositoryMock : ConversationRepository {
     override suspend fun createConversation() {
         // Stub
-        logger.debug("createConversation")
+        println("createConversation")
     }
 
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
@@ -47,6 +47,10 @@ internal class ConversationRepositoryMock(private val logger: Logger) : Conversa
     }
 
     override suspend fun loadMoreConversations() {
-        TODO("Not yet implemented")
+        println("loadMoreConversations")
+    }
+
+    override fun markConversationAsRead(conversationId: ConversationId) {
+        println("markConversationAsRead")
     }
 }

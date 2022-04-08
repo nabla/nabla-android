@@ -1,13 +1,18 @@
 package com.nabla.sdk.playground.scene
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.nabla.sdk.core.NablaCore
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
-import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel
-import com.nabla.sdk.messaging.ui.scene.bindViewModel
+import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
+import com.nabla.sdk.messaging.ui.scene.conversations.bindViewModel
 import com.nabla.sdk.playground.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +22,9 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: ConversationListViewModel by viewModels {
         ConversationListViewModelFactory(
             owner = this,
-            onConversationClicked = { println("conversation clicked!") },
+            onConversationClicked = { id ->
+                startActivity(Intent(this, ConversationActivity::class.java).apply { putExtra("conversationId", id.value) })
+            },
             onErrorRetryWhen = { cause, attempt ->
                 println("Error loading conversations - ${cause.stackTraceToString()}")
                 if (attempt < 3) {
@@ -36,9 +43,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.createConversation.setOnClickListener {
-            viewModel.createConversation()
+
+        lifecycleScope.launch {
+            NablaCore.instance.authenticate(UUID.randomUUID().toString())
+
+            binding.createConversation.setOnClickListener {
+                viewModel.createConversation()
+            }
+            binding.conversationListView.bindViewModel(viewModel)
         }
-        binding.conversationListView.bindViewModel(viewModel)
     }
 }

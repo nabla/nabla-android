@@ -6,7 +6,7 @@ import kotlinx.datetime.Instant
 
 data class BaseMessage(
     val id: MessageId,
-    val sentAt: Instant?,
+    val sentAt: Instant,
     val sender: MessageSender,
     val status: MessageStatus,
     val conversationId: ConversationId,

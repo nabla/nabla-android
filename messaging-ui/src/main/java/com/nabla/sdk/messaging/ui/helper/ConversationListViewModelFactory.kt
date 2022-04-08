@@ -8,7 +8,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.injection.NablaMessagingUi
-import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel
+import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
 class ConversationListViewModelFactory(
     owner: SavedStateRegistryOwner,

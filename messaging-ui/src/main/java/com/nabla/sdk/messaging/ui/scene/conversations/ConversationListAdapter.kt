@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene
+package com.nabla.sdk.messaging.ui.scene.conversations
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.ui.databinding.ConversationListViewItemBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewItemBinding
 
 class ConversationListAdapter(
     private val onConversationClicked: (conversationId: ConversationId) -> Unit,
@@ -36,7 +36,7 @@ class ConversationListAdapter(
     }
 
     class ConversationViewHolder(
-        private val binding: ConversationListViewItemBinding,
+        private val binding: NablaConversationListViewItemBinding,
         private val onConversationClicked: (conversationId: ConversationId) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(uiModel: ConversationItemUiModel) {
@@ -67,7 +67,7 @@ class ConversationListAdapter(
 
         companion object {
             fun create(parent: ViewGroup, onConversationClicked: (conversationId: ConversationId) -> Unit): ConversationViewHolder {
-                val binding = ConversationListViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = NablaConversationListViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return ConversationViewHolder(binding, onConversationClicked)
             }
         }

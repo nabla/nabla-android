@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    >
+    <aapt:attr name="android:drawable">
+        <vector
+            android:height="15dp"
+            android:viewportHeight="15"
+            android:viewportWidth="31"
+            android:width="31dp"
+            >
+            <group android:name="dot0">
+                <path
+                    android:fillColor="#C4C4C4"
+                    android:pathData="M2.5,12.5m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+                    />
+            </group>
+            <group android:name="dot1">
+                <path
+                    android:fillColor="#C4C4C4"
+                    android:pathData="M15.5,12.5m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+                    />
+            </group>
+            <group android:name="dot2">
+                <path
+                    android:fillColor="#C4C4C4"
+                    android:pathData="M28.5,12.5m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0"
+                    />
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="dot0">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="400"
+                android:propertyName="translateY"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:valueFrom="0"
+                android:valueTo="-10"
+                />
+        </aapt:attr>
+    </target>
+    <target android:name="dot1">
+        <aapt:attr name="android:animation">
+
+            <objectAnimator
+                android:duration="400"
+                android:propertyName="translateY"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:startOffset="250"
+                android:valueFrom="0"
+                android:valueTo="-10"
+                />
+        </aapt:attr>
+    </target>
+    <target android:name="dot2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="400"
+                android:propertyName="translateY"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:startOffset="500"
+                android:valueFrom="0"
+                android:valueTo="-10"
+                />
+        </aapt:attr>
+    </target>
+</animated-vector>

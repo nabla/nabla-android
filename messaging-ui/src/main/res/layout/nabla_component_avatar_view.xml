@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/componentAvatarRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <ImageView
         android:id="@+id/componentAvatarImageView"
@@ -16,35 +18,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:background="#FFF"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/componentAvatarPlaceholderTextViewStartMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".12" />
+        app:layout_constraintGuide_percent=".12"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/componentAvatarPlaceholderTextViewEndMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".88" />
+        app:layout_constraintGuide_percent=".88"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/componentAvatarPlaceholderTextViewTopMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".07" />
+        app:layout_constraintGuide_percent=".07"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/componentAvatarPlaceholderTextViewBottomMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".93" />
+        app:layout_constraintGuide_percent=".93"
+        />
 
     <TextView
         android:id="@+id/componentAvatarPlaceholderTextView"
@@ -66,6 +73,7 @@
         app:layout_constraintStart_toEndOf="@id/componentAvatarPlaceholderTextViewStartMargin"
         app:layout_constraintTop_toBottomOf="@id/componentAvatarPlaceholderTextViewTopMargin"
         tools:text="ML"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

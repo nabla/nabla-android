@@ -37,7 +37,7 @@ import retrofit2.Retrofit
 internal class CoreContainer(
     context: Context,
     sessionTokenProvider: SessionTokenProvider,
-    config: NablaCoreConfig
+    config: NablaCoreConfig,
 ) {
     private val securedKVStorage = SecuredKVStorage(context)
     val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnable)

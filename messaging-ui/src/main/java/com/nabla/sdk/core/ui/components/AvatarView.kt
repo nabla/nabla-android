@@ -28,12 +28,12 @@ import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
 import com.nabla.sdk.core.ui.helpers.getThemeDrawable
 import com.nabla.sdk.core.ui.helpers.initials
 import com.nabla.sdk.messaging.ui.R
-import com.nabla.sdk.messaging.ui.databinding.ComponentAvatarViewBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
 import kotlin.math.absoluteValue
 import kotlin.math.min
 
 class AvatarView : ConstraintLayout {
-    private lateinit var binding: ComponentAvatarViewBinding
+    private lateinit var binding: NablaComponentAvatarViewBinding
 
     private var useSingleLetterInPlaceHolder: Boolean = false
 
@@ -59,7 +59,7 @@ class AvatarView : ConstraintLayout {
         @StyleRes defStyleRes: Int = R.style.Widget_Nabla_AvatarView,
         @AttrRes defAttrRes: Int = R.attr.avatarViewStyle,
     ) {
-        binding = ComponentAvatarViewBinding.inflate(LayoutInflater.from(context), this, true)
+        binding = NablaComponentAvatarViewBinding.inflate(LayoutInflater.from(context), this, true)
 
         context.obtainStyledAttributes(attrs, R.styleable.AvatarView, defAttrRes, defStyleRes).use { typedArray ->
             val shape = typedArray.getInt(R.styleable.AvatarView_clipShape, CLIP_SHAPE_NONE)
@@ -82,14 +82,15 @@ class AvatarView : ConstraintLayout {
     fun loadAvatar(user: User) {
         val initials = user.initials(context = context, singleLetter = useSingleLetterInPlaceHolder)
         when (user) {
-            is Provider -> user.apply { loadAvatar(avatar?.url, initials, id) }
-            is Patient -> user.apply { loadAvatar(avatar?.url, initials, id) }
+            is Provider -> loadAvatar(user.avatar?.url, initials, user.id)
+            is Patient -> loadAvatar(user.avatar?.url, initials, user.id)
+            is User.Unknown -> loadAvatar(null, null, null)
         }
     }
 
-    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userUuid: Uuid?, grayOut: Boolean = false) {
+    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userId: Uuid?, grayOut: Boolean = false) {
         val placeholderTextComputed = placeholderText ?: ""
-        val indexBackground = userUuid?.let { (it.hashCode() % backgroundColors.size).absoluteValue } ?: 0
+        val indexBackground = userId?.let { (it.hashCode() % backgroundColors.size).absoluteValue } ?: 0
         val placeholderBackgroundColor = if (grayOut) deactivatedBackground else backgroundColors[indexBackground]
         val placeholderBackground = ColorDrawable(context.getColor(placeholderBackgroundColor))
         if (avatarUrl == null) {
@@ -105,7 +106,7 @@ class AvatarView : ConstraintLayout {
         }
 
         hidePlaceholder(grayOut)
-        binding.componentAvatarImageView.load(avatarUrl.toString()) {
+        binding.componentAvatarImageView.load(avatarUrl.uri) {
             scale(Scale.FIT)
             listener(
                 onSuccess = { _, _ ->

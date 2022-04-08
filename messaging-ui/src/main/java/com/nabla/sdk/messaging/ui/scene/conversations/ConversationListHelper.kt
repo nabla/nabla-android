@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene
+package com.nabla.sdk.messaging.ui.scene.conversations
 
 import android.graphics.Typeface
 import android.widget.TextView

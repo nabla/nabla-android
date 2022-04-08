@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene
+package com.nabla.sdk.messaging.ui.scene.conversations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

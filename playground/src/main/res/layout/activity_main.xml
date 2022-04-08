@@ -6,9 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".scene.MainActivity"
+    android:theme="@style/ThemeOverlay.Nabla.Sdk.Messaging.Playground"
     >
 
-    <com.nabla.sdk.messaging.ui.scene.ConversationListView
+    <com.nabla.sdk.messaging.ui.scene.conversations.ConversationListView
         android:id="@+id/conversationListView"
         android:layout_width="0dp"
         android:layout_height="0dp"

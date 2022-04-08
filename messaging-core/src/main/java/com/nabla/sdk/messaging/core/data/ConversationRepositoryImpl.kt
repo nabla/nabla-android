@@ -13,6 +13,7 @@ import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlOperationHelper
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -55,5 +56,9 @@ internal class ConversationRepositoryImpl(
 
     override suspend fun loadMoreConversations() {
         loadMoreConversationSharedSingle.await()
+    }
+
+    override fun markConversationAsRead(conversationId: ConversationId) {
+        TODO("Not yet implemented")
     }
 }

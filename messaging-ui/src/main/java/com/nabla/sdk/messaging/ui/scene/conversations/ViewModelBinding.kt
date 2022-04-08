@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene
+package com.nabla.sdk.messaging.ui.scene.conversations
 
 import android.graphics.Rect
 import android.view.View
@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.dpToPx
-import com.nabla.sdk.messaging.ui.scene.ConversationListViewModel.State
+import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch
 
 fun ConversationListView.bindViewModel(viewModel: ConversationListViewModel) {

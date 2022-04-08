@@ -49,5 +49,5 @@ dependencies {
     implementation libs.apollo.cache.sqlite
     implementation libs.apollo.adapters
     implementation libs.androidx.startup
-    implementation libs.uuid
+    api libs.uuid
 }

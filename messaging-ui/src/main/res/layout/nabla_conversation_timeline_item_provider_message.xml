@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:paddingBottom="6dp"
+    android:paddingHorizontal="20dp"
+    >
+
+    <TextView
+        android:id="@+id/chatProviderMessageAuthorTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/chatProviderMessageContentContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Dr. Arthas Menethil"
+        />
+
+    <FrameLayout
+        android:id="@+id/chatProviderMessageAvatarViewContainer"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="4dp"
+        android:foreground="?selectableItemBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chatProviderMessageAuthorTextView"
+        >
+
+        <com.nabla.sdk.core.ui.components.AvatarView
+            android:id="@+id/chatProviderMessageAvatarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/chatProviderMessageContentContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="1dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/chatProviderMessageAvatarViewContainer"
+        app:layout_constraintTop_toBottomOf="@id/chatProviderMessageAuthorTextView"
+        app:layout_goneMarginTop="0dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

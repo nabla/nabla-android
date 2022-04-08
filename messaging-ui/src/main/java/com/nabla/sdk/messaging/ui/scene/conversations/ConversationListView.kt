@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene
+package com.nabla.sdk.messaging.ui.scene.conversations
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,10 +8,10 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.messaging.ui.databinding.ConversationListViewBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewBinding
 
 class ConversationListView : FrameLayout {
-    private lateinit var binding: ConversationListViewBinding
+    private lateinit var binding: NablaConversationListViewBinding
     val recyclerView: RecyclerView
         get() = binding.conversationsRecyclerView
     val loadingView: View
@@ -40,6 +40,6 @@ class ConversationListView : FrameLayout {
         @AttrRes defAttrRes: Int? = null,
         @StyleRes defStyleRes: Int? = null,
     ) {
-        binding = ConversationListViewBinding.inflate(LayoutInflater.from(context), this)
+        binding = NablaConversationListViewBinding.inflate(LayoutInflater.from(context), this)
     }
 }

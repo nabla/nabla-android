@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -40,5 +41,8 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.google.material
     implementation libs.coilCore
-    implementation libs.uuid
+    implementation libs.androidx.fragment.ktx
+    implementation libs.recyclerview
+
+    implementation libs.mimeTypeDetector
 }

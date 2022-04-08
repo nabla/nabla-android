@@ -9,6 +9,7 @@ import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -71,5 +72,17 @@ internal class MessageRepositoryImpl(
                 message.modify(MessageStatus.ErrorSending)
             )
         }
+    }
+
+    override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteMessage(conversationId: ConversationId, messsageId: MessageId) {
+        TODO("Not yet implemented")
     }
 }
