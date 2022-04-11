@@ -23,7 +23,7 @@ internal class MessagingGqlEventHelper constructor(
         .map {
             it.dataAssertNoErrors
         }.onEach {
-            it.conversations.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
+            it.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
                 gqlOperationHelper.insertConversationToConversationsListCache(it)
             }
         }.shareIn(
@@ -46,7 +46,7 @@ internal class MessagingGqlEventHelper constructor(
             .toFlow()
             .map { it.dataAssertNoErrors }
             .onEach {
-                it.conversation.onMessageCreatedEvent?.message?.messageFragment?.let {
+                it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let {
                     gqlOperationHelper.insertMessageToConversationCache(it)
                 }
             }.shareIn(

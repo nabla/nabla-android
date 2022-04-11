@@ -10,18 +10,18 @@ type Query {
 type Mutation {
   createConversation: CreateConversationOutput!
 
-  sendMessage(conversationID: UUID!, content: SendMessageContentInput!, clientId: UUID!): SendMessageOutput!
+  sendMessage(conversationId: UUID!, content: SendMessageContentInput!, clientId: UUID!): SendMessageOutput!
 
   deleteMessage(id: UUID!): DeleteMessageOutput!
 
-  markAsSeen(conversationID: UUID!): MarkConversationAsSeenOutput!
+  markAsSeen(conversationId: UUID!): MarkConversationAsSeenOutput!
 
-  setTyping(conversationID: UUID!, isTyping: Boolean!): SetTypingOutput!
+  setTyping(conversationId: UUID!, isTyping: Boolean!): SetTypingOutput!
 }
 
 type Subscription {
-  conversations: ConversationsEvent!
-  conversation(id: UUID!): ConversationEvent!
+  conversations: ConversationsEventOutput
+  conversation(id: UUID!): ConversationEventOutput
 }
 
 type Patient {
@@ -45,6 +45,7 @@ type Message {
 
   author: MessageAuthor!
   conversation: Conversation!
+  createdAt: DateTime!
 
   content: MessageContent
 
@@ -86,16 +87,16 @@ type TextMessageContent {
   text: String!
 }
 
-interface FileUpload {
-  uuid: String!
+interface IFileUpload {
+  id: UUID!
 
   url: EphemeralUrl!
   fileName: String!
   mimeType: String!
 }
 
-type ImageFileUpload implements FileUpload {
-  uuid: String!
+type ImageFileUpload implements IFileUpload {
+  id: UUID!
 
   url: EphemeralUrl!
   fileName: String!
@@ -105,8 +106,8 @@ type ImageFileUpload implements FileUpload {
   height: Int!
 }
 
-type DocumentFileUpload implements FileUpload {
-  uuid: String!
+type DocumentFileUpload implements IFileUpload {
+  id: UUID!
 
   url: EphemeralUrl!
   fileName: String!
@@ -116,11 +117,11 @@ type DocumentFileUpload implements FileUpload {
 }
 
 type ImageMessageContent {
-  fileUpload: ImageFileUpload!
+  imageFileUpload: ImageFileUpload!
 }
 
 type DocumentMessageContent {
-  fileUpload: DocumentFileUpload!
+  documentFileUpload: DocumentFileUpload!
 
   title: String
 }
@@ -196,6 +197,10 @@ type CreateConversationOutput {
 
 union ConversationsEvent = ConversationCreatedEvent | ConversationUpdatedEvent | ConversationDeletedEvent
 
+type ConversationsEventOutput {
+  event: ConversationsEvent!
+}
+
 type ConversationCreatedEvent {
   conversation: Conversation!
 }
@@ -205,10 +210,14 @@ type ConversationUpdatedEvent {
 }
 
 type ConversationDeletedEvent {
-  conversationID: UUID!
+  conversationId: UUID!
 }
 
 union ConversationEvent = MessageCreatedEvent | MessageUpdatedEvent
+
+type ConversationEventOutput {
+  event: ConversationEvent!
+}
 
 type MessageCreatedEvent {
   message: Message!

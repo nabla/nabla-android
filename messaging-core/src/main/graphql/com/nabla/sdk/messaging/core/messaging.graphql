@@ -7,7 +7,7 @@ mutation CreateConversation {
 }
 
 mutation SendMessage($conversationId: UUID!, $content: SendMessageContentInput!, $clientId: UUID!) {
-    sendMessage(conversationID: $conversationId, content: $content, clientId: $clientId) {
+    sendMessage(conversationId: $conversationId, content: $content, clientId: $clientId) {
         message {
             ...MessageFragment
         }
@@ -45,32 +45,36 @@ query ConversationList($pageInfo: OpaqueCursorPage!) {
 
 subscription ConversationsEvents {
     conversations {
-        ... on ConversationCreatedEvent {
-            conversation {
-                ...ConversationFragment
+        event {
+            ... on ConversationCreatedEvent {
+                conversation {
+                    ...ConversationFragment
+                }
             }
-        }
-        ... on ConversationUpdatedEvent {
-            conversation {
-                ...ConversationFragment
+            ... on ConversationUpdatedEvent {
+                conversation {
+                    ...ConversationFragment
+                }
             }
-        }
-        ... on ConversationDeletedEvent {
-            conversationID
+            ... on ConversationDeletedEvent {
+                conversationId
+            }
         }
     }
 }
 
 subscription ConversationEvents($conversationId: UUID!) {
     conversation(id: $conversationId) {
-        ... on MessageCreatedEvent {
-            message {
-                ...MessageFragment
+        event {
+            ... on MessageCreatedEvent {
+                message {
+                    ...MessageFragment
+                }
             }
-        }
-        ... on MessageUpdatedEvent {
-            message {
-                ...MessageFragment
+            ... on MessageUpdatedEvent {
+                message {
+                    ...MessageFragment
+                }
             }
         }
     }
@@ -163,14 +167,14 @@ fragment TextMessageContentFragment on TextMessageContent {
 }
 
 fragment ImageMessageContentFragment on ImageMessageContent {
-    fileUpload {
+    imageFileUpload {
         ...ImageFileUploadFragment
     }
 }
 
 fragment DocumentMessageContentFragment on DocumentMessageContent {
     title
-    fileUpload {
+    documentFileUpload {
         ...DocumentFileUploadFragment
     }
 }
@@ -180,7 +184,7 @@ fragment DeletedMessageContentFragment on DeletedMessageContent {
 }
 
 fragment ImageFileUploadFragment on ImageFileUpload {
-    uuid
+    id
     url {
         ...EphemeralUrlFragment
     }
@@ -191,7 +195,7 @@ fragment ImageFileUploadFragment on ImageFileUpload {
 }
 
 fragment DocumentFileUploadFragment on DocumentFileUpload {
-    uuid
+    id
     url {
         ...EphemeralUrlFragment
     }

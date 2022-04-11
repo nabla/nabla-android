@@ -6,7 +6,6 @@ import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
-import com.nabla.sdk.core.domain.entity.asUuid
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.fragment.DocumentFileUploadFragment
 import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
@@ -73,7 +72,7 @@ internal class MessagingGqlMapper {
                 message = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
-                    fileUpload = mapToFileUploadImage(it.fileUpload.imageFileUploadFragment)
+                    fileUpload = mapToFileUploadImage(it.imageFileUpload.imageFileUploadFragment)
                 ),
             )
         }
@@ -82,7 +81,7 @@ internal class MessagingGqlMapper {
                 message = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
-                    fileUpload = mapToFileUploadDocument(it.fileUpload.documentFileUploadFragment)
+                    fileUpload = mapToFileUploadDocument(it.documentFileUpload.documentFileUploadFragment)
                 )
             )
         }
@@ -128,7 +127,7 @@ internal class MessagingGqlMapper {
             width = imageFileUploadFragment.width,
             height = imageFileUploadFragment.height,
             fileUpload = BaseFileUpload(
-                id = imageFileUploadFragment.uuid.asUuid(),
+                id = imageFileUploadFragment.id,
                 url = mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = imageFileUploadFragment.fileName,
                 mimeType = mapToMimeType(imageFileUploadFragment.mimeType)
@@ -144,7 +143,7 @@ internal class MessagingGqlMapper {
                 mapToFileUploadImage(it)
             },
             fileUpload = BaseFileUpload(
-                id = documentFileUploadFragment.uuid.asUuid(),
+                id = documentFileUploadFragment.id,
                 url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
