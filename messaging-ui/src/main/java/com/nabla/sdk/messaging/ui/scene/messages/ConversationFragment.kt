@@ -69,7 +69,7 @@ class ConversationFragment : Fragment() {
     private lateinit var captureCameraPictureLauncher: ActivityResultLauncher<Unit>
     private lateinit var captureCameraPicturePermissionsLauncher: PermissionRequestLauncher
     private lateinit var mediasToSendAdapter: MediasToSendAdapter
-    private lateinit var binding: NablaFragmentConversationBinding
+    private var binding: NablaFragmentConversationBinding? = null
 
     private val chatAdapter = ChatAdapter(makeChatAdapterCallbacks())
 
@@ -89,17 +89,31 @@ class ConversationFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = NablaFragmentConversationBinding.inflate(layoutInflater, container, false)
+        val binding = NablaFragmentConversationBinding.inflate(layoutInflater, container, false)
+        this.binding = binding
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = binding ?: return
+        setupToolbarNav(binding)
         setupMediasToSendRecyclerView(binding)
         wireViewEvents(binding)
         setupChatRecyclerView(binding)
         collectNavigationEvents(binding)
         collectState(binding)
         collectEditorState(binding)
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
+    }
+
+    private fun setupToolbarNav(binding: NablaFragmentConversationBinding) {
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     private fun setupPermissionsLaunchers() {

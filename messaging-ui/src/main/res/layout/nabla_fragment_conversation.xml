@@ -27,6 +27,7 @@
             app:contentInsetLeft="16dp"
             app:contentInsetStart="16dp"
             app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="?attr/homeAsUpIndicator"
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
