@@ -8,6 +8,7 @@
     <string name="display_name_unknown_user">Unknown user</string>
     <string name="chat_message_copy_label">Nabla’s message</string>
 
+    <string name="chat_message_local_status">Non envoyé</string>
     <string name="chat_message_read_status">Message lu</string>
     <string name="chat_message_sending_status">Envoi en cours…</string>
     <string name="chat_message_sent_status">Pas encore lu</string>

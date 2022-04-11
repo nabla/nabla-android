@@ -1,15 +1,22 @@
 package com.nabla.sdk.messaging.core
 
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.watch
+import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.SendMessageMutation
+import com.nabla.sdk.graphql.type.SendDocumentMessageInput
+import com.nabla.sdk.graphql.type.SendImageMessageInput
+import com.nabla.sdk.graphql.type.SendMessageContentInput
+import com.nabla.sdk.graphql.type.SendTextMessageInput
+import com.nabla.sdk.graphql.type.UploadInput
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlEventHelper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlHelper
 import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlMapper
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
-import com.nabla.sdk.messaging.core.domain.entity.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
@@ -20,6 +27,7 @@ internal class GqlMessageDataSource(
     private val apolloClient: ApolloClient,
     private val gqlEventHelper: MessagingGqlEventHelper,
     private val mapper: MessagingGqlMapper,
+    private val fileUploadRepository: FileUploadRepository,
 ) {
 
     fun watchRemoteConversationWithMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
@@ -44,13 +52,57 @@ internal class GqlMessageDataSource(
         ).flattenMerge().filterIsInstance()
     }
 
-    suspend fun sendMessage(message: Message) {
-        val input = mapper.mapToSendMessageContentInput(message)
-        val mutation = SendMessageMutation(
-            message.message.conversationId.value,
-            input,
-            requireNotNull(message.message.id.clientId)
+    suspend fun sendDocumentMessage(
+        conversationId: ConversationId,
+        clientId: Uuid,
+        fileUploadId: Uuid
+    ) {
+        sendMediaMessage(conversationId, clientId) {
+            SendMessageContentInput(
+                documentInput = Optional.presentIfNotNull(
+                    SendDocumentMessageInput(
+                        UploadInput(fileUploadId)
+                    )
+                ),
+            )
+        }
+    }
+
+    suspend fun sendImageMessage(
+        conversationId: ConversationId,
+        clientId: Uuid,
+        fileUploadId: Uuid
+    ) {
+        sendMediaMessage(conversationId, clientId) {
+            SendMessageContentInput(
+                imageInput = Optional.presentIfNotNull(
+                    SendImageMessageInput(
+                        UploadInput(fileUploadId)
+                    )
+                ),
+            )
+        }
+    }
+
+    private suspend fun sendMediaMessage(
+        conversationId: ConversationId,
+        clientId: Uuid,
+        inputFactoryBlock: () -> SendMessageContentInput
+    ) {
+        val input = inputFactoryBlock()
+        val mutation = SendMessageMutation(conversationId.value, input, clientId)
+        apolloClient.mutation(mutation).execute()
+    }
+
+    suspend fun sendTextMessage(conversationId: ConversationId, clientId: Uuid, text: String) {
+        val input = SendMessageContentInput(
+            textInput = Optional.presentIfNotNull(
+                SendTextMessageInput(
+                    text = text
+                )
+            )
         )
+        val mutation = SendMessageMutation(conversationId.value, input, clientId)
         apolloClient.mutation(mutation).execute()
     }
 }

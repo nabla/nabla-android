@@ -7,7 +7,7 @@ import androidx.core.view.isVisible
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
-import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemPatientMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
@@ -38,20 +38,20 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
         bindStatus(status, showStatus)
     }
 
-    fun bindStatus(status: MessageStatus, showStatus: Boolean) {
+    fun bindStatus(status: SendStatus, showStatus: Boolean) {
         if (showStatus) {
             binding.chatPatientMessageContentStatusTextView.text = binding.context.getString(
                 when (status) {
-                    MessageStatus.Sending -> R.string.chat_message_sending_status
-                    MessageStatus.Sent -> R.string.chat_message_sent_status
-                    MessageStatus.Read -> R.string.chat_message_read_status
-                    MessageStatus.ErrorSending -> R.string.chat_message_error_status
+                    SendStatus.ToBeSent -> R.string.chat_message_local_status
+                    SendStatus.Sending -> R.string.chat_message_sending_status
+                    SendStatus.Sent -> R.string.chat_message_sent_status
+                    SendStatus.ErrorSending -> R.string.chat_message_error_status
                 }
             )
             binding.chatPatientMessageContentStatusTextView.setTextColor(
                 binding.context.getThemeColor(
                     when (status) {
-                        MessageStatus.ErrorSending -> MaterialR.attr.colorError
+                        SendStatus.ErrorSending -> MaterialR.attr.colorError
                         else -> MaterialR.attr.colorOnSurface
                     }
                 )

@@ -21,7 +21,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
-import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -212,7 +212,7 @@ internal class ConversationViewModel(
                             id = MessageId.Local(uuid4()),
                             sentAt = Clock.System.now(),
                             sender = MessageSender.Patient,
-                            status = MessageStatus.Sending,
+                            sendStatus = SendStatus.Sending,
                             conversationId = conversationId,
                         ),
                         text = textMessage,
@@ -263,7 +263,7 @@ internal class ConversationViewModel(
         val item = clickedItem as? TimelineItem.Message ?: return
 
         // Retry sending a message that previously failed
-        if (item.status == MessageStatus.ErrorSending) {
+        if (item.status == SendStatus.ErrorSending) {
             viewModelScope.launch {
                 messageRepository.retrySendingMessage(conversationId, clickedItem.id as MessageId.Local)
             }

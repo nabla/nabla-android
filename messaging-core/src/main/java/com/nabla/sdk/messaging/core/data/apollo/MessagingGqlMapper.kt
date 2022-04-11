@@ -1,6 +1,5 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
-import com.apollographql.apollo3.api.Optional
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
@@ -15,15 +14,14 @@ import com.nabla.sdk.graphql.fragment.ImageFileUploadFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
-import com.nabla.sdk.graphql.type.SendMessageContentInput
-import com.nabla.sdk.graphql.type.SendTextMessageInput
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
-import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.days
@@ -61,7 +59,7 @@ internal class MessagingGqlMapper {
             ),
             sentAt = Clock.System.now(), // TODO add sentAt field to schema then to fragment
             sender = sender,
-            status = MessageStatus.Read, // TODO add necessary mapper arg and compute sent/read status
+            sendStatus = SendStatus.Sent, // TODO add necessary mapper arg and compute sent/read status
             conversationId = messageFragment.conversation.id.toConversationId(),
         )
         messageFragment.content?.onTextMessageContent?.textMessageContentFragment?.let {
@@ -73,13 +71,19 @@ internal class MessagingGqlMapper {
         messageFragment.content?.onImageMessageContent?.imageMessageContentFragment?.let {
             return@let Message.Media.Image(
                 message = baseMessage,
-                image = mapToFileUploadImage(it.fileUpload.imageFileUploadFragment),
+                mediaSource = FileSource.Uploaded(
+                    fileLocal = null,
+                    fileUpload = mapToFileUploadImage(it.fileUpload.imageFileUploadFragment)
+                ),
             )
         }
         messageFragment.content?.onDocumentMessageContent?.documentMessageContentFragment?.let {
             return@let Message.Media.Document(
                 message = baseMessage,
-                document = mapToFileUploadDocument(it.fileUpload.documentFileUploadFragment)
+                mediaSource = FileSource.Uploaded(
+                    fileLocal = null,
+                    fileUpload = mapToFileUploadDocument(it.fileUpload.documentFileUploadFragment)
+                )
             )
         }
         error {
@@ -144,25 +148,6 @@ internal class MessagingGqlMapper {
                 url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
-            )
-        )
-    }
-
-    fun mapToSendMessageContentInput(message: Message): SendMessageContentInput {
-        return when (message) {
-            is Message.Deleted -> TODO()
-            is Message.Media.Document -> TODO()
-            is Message.Media.Image -> TODO()
-            is Message.Text -> mapToSendMessageContentInput(message)
-        }
-    }
-
-    private fun mapToSendMessageContentInput(textMessage: Message.Text): SendMessageContentInput {
-        return SendMessageContentInput(
-            textInput = Optional.presentIfNotNull(
-                SendTextMessageInput(
-                    text = textMessage.text
-                )
             )
         )
     }

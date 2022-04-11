@@ -32,14 +32,14 @@ internal fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
-    status: MessageStatus = MessageStatus.Sent,
+    status: SendStatus = SendStatus.Sent,
     text: String = "message content",
 ) = Message.Text(
     BaseMessage(
         id = id,
         sentAt = sentAt,
         sender = sender,
-        status = status,
+        sendStatus = status,
         conversationId = uuid4().toConversationId(),
     ),
     text = text,
@@ -49,7 +49,7 @@ internal fun Message.Media.Image.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
-    status: MessageStatus = MessageStatus.Sent,
+    status: SendStatus = SendStatus.Sent,
     conversationId: ConversationId = ConversationId(uuid4()),
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://i.pravatar.cc/900")),
     mimeType: MimeType = MimeType.Image.JPEG,
@@ -59,18 +59,21 @@ internal fun Message.Media.Image.Companion.fake(
         id = id,
         sentAt = sentAt,
         sender = sender,
-        status = status,
+        sendStatus = status,
         conversationId = conversationId,
     ),
-    image = FileUpload.Image(
-        fileUpload = BaseFileUpload(
-            id = uuid4(),
-            url = ephemeralUrl,
-            mimeType = mimeType,
-            fileName = fileName,
+    mediaSource = FileSource.Uploaded(
+        fileLocal = null,
+        fileUpload = FileUpload.Image(
+            width = 300,
+            height = 300,
+            fileUpload = BaseFileUpload(
+                id = uuid4(),
+                url = ephemeralUrl,
+                mimeType = mimeType,
+                fileName = fileName,
+            )
         ),
-        width = 300,
-        height = 300,
     ),
 )
 
@@ -78,29 +81,31 @@ internal fun Message.Media.Document.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
-    status: MessageStatus = MessageStatus.Sent,
+    status: SendStatus = SendStatus.Sent,
     conversationId: ConversationId = ConversationId(uuid4()),
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
     mimeType: MimeType = MimeType.Application.PDF,
     fileName: String = "filename.jpg",
-    fileId: Uuid = uuid4(),
     thumbnail: FileUpload.Image? = null,
 ) = Message.Media.Document(
     message = BaseMessage(
         id = id,
         sentAt = sentAt,
         sender = sender,
-        status = status,
+        sendStatus = status,
         conversationId = conversationId,
     ),
-    document = FileUpload.Document(
-        fileUpload = BaseFileUpload(
-            id = fileId,
-            url = ephemeralUrl,
-            mimeType = mimeType,
-            fileName = fileName,
+    mediaSource = FileSource.Uploaded(
+        fileLocal = null,
+        fileUpload = FileUpload.Document(
+            fileUpload = BaseFileUpload(
+                id = uuid4(),
+                url = ephemeralUrl,
+                mimeType = mimeType,
+                fileName = fileName,
+            ),
+            thumbnail = thumbnail
         ),
-        thumbnail = thumbnail,
     ),
 )
 

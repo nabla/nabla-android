@@ -88,7 +88,7 @@ internal class CoreContainer(
     private val tokenRepository: TokenRepository by tokenRepositoryLazy
     private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
-    private val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, context)
+    val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, context)
 
     fun loginInteractor() = LoginInteractor(patientRepository, tokenRepository)
 }

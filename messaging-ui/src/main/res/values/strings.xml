@@ -18,6 +18,7 @@
     <string name="display_name_unknown_user">Unknown user</string>
     <string name="chat_message_copy_label">Copied message</string>
 
+    <string name="chat_message_local_status">Not send yet</string>
     <string name="chat_message_read_status">Message read</string>
     <string name="chat_message_sending_status">Sending…</string>
     <string name="chat_message_sent_status">Not read yet</string>

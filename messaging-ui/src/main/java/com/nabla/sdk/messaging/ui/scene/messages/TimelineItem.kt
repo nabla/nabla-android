@@ -1,12 +1,11 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
-import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
-import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.datetime.Instant
 
 internal enum class MessageAction { Delete, Copy }
@@ -19,7 +18,7 @@ internal sealed interface TimelineItem {
         val sender: MessageSender,
         val showSenderAvatar: Boolean,
         val showSenderName: Boolean,
-        val status: MessageStatus,
+        val status: SendStatus,
         val showStatus: Boolean,
         val time: Instant,
         val actions: Set<MessageAction>,
@@ -35,13 +34,10 @@ internal sealed interface TimelineItem {
 
         data class Image(
             val uri: Uri,
-            val mimeType: MimeType,
-            val fileName: String,
         ) : Content
 
         data class File(
             val uri: Uri,
-            val fileId: Uuid?,
             val fileName: String,
             val mimeType: MimeType,
             val thumbnailUri: Uri?,

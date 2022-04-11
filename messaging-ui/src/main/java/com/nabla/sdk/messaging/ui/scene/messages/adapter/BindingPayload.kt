@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages.adapter
 
 import android.net.Uri
-import com.nabla.sdk.messaging.core.domain.entity.MessageStatus
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.ui.scene.messages.MessageAction
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
@@ -22,7 +22,7 @@ internal sealed class BindingPayload {
     }
 
     data class PatientMessageStatus(
-        val status: MessageStatus,
+        val status: SendStatus,
         override val showStatus: Boolean,
         override val actions: Set<MessageAction>,
         override val itemForCallback: TimelineItem.Message,
@@ -31,7 +31,7 @@ internal sealed class BindingPayload {
     data class Image(
         val itemId: String,
         val uri: Uri,
-        val status: MessageStatus,
+        val status: SendStatus,
         override val showStatus: Boolean,
         override val actions: Set<MessageAction>,
         override val itemForCallback: TimelineItem.Message,

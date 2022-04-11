@@ -8,12 +8,11 @@ import com.nabla.sdk.messaging.core.injection.MessagingContainer
 
 class NablaMessaging private constructor(coreContainer: CoreContainer) {
 
-    private val messagingContainer by lazy {
-        MessagingContainer(
-            coreContainer.logger,
-            coreContainer.apolloClient
-        )
-    }
+    private val messagingContainer = MessagingContainer(
+        coreContainer.logger,
+        coreContainer.apolloClient,
+        coreContainer.fileUploadRepository
+    )
 
     val conversationRepository: ConversationRepository by lazy { messagingContainer.conversationRepository }
     val messageRepository: MessageRepository by lazy { messagingContainer.messageRepository }

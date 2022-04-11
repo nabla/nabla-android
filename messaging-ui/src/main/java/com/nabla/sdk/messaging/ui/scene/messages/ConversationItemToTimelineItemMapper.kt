@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.ui.scene.messages
 
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 
 internal fun Message.toTimelineItem(
     showSenderAvatar: Boolean,
@@ -12,7 +13,7 @@ internal fun Message.toTimelineItem(
     val actions: Set<MessageAction> = when {
         message.sender is MessageSender.Provider -> setOfNotNull(copyActionOrNull)
         message.sender is MessageSender.System -> setOfNotNull(copyActionOrNull)
-        message.sender is MessageSender.Patient && message.status.isSent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
+        message.sender is MessageSender.Patient && message.sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
         else -> emptySet()
     }
     return TimelineItem.Message(
@@ -20,7 +21,7 @@ internal fun Message.toTimelineItem(
         sender = message.sender,
         showSenderAvatar = showSenderAvatar,
         showSenderName = showSenderName,
-        status = message.status,
+        status = message.sendStatus,
         showStatus = showStatus,
         time = message.sentAt,
         actions = actions,
@@ -31,16 +32,13 @@ internal fun Message.toTimelineItem(
 private fun Message.toMessageContent() = when (this) {
     is Message.Deleted -> TimelineItem.Message.Deleted
     is Message.Media.Document -> TimelineItem.Message.File(
-        uri = document.fileUpload.url.url,
-        fileId = document.fileUpload.id,
-        fileName = document.fileUpload.fileName,
-        mimeType = document.fileUpload.mimeType,
-        thumbnailUri = document.thumbnail?.fileUpload?.url?.url,
+        uri = uri,
+        fileName = documentName ?: "",
+        mimeType = mimeType,
+        thumbnailUri = thumbnailUri,
     )
     is Message.Media.Image -> TimelineItem.Message.Image(
-        uri = image.fileUpload.url.url,
-        fileName = image.fileUpload.fileName,
-        mimeType = image.fileUpload.mimeType,
+        uri = stableUri,
     )
     is Message.Text -> TimelineItem.Message.Text(
         text = text,

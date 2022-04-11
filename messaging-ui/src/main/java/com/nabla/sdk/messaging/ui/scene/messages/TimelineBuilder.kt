@@ -5,6 +5,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.datetime.Instant
 
 internal class TimelineBuilder {
@@ -36,7 +37,7 @@ internal class TimelineBuilder {
                     item.sender is MessageSender.System
 
                 val showStatus = (index == 0 && item.sender is MessageSender.Patient) ||
-                    !item.status.isSent ||
+                    item.status != SendStatus.Sent ||
                     item.id == selectedMessageId
                 item.copy(showStatus = showStatus, showSenderAvatar = showSenderAvatarAndName, showSenderName = showSenderAvatarAndName)
             } else {
