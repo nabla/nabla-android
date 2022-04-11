@@ -21,7 +21,7 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
     ClickableItemHolder,
     PopUpMenuHolder {
     override val clickableView: View
-        get() = binding.chatPatientMessageContentContainer
+        get() = binding.root
 
     override val popUpMenu: PopupMenu = PopupMenu(
         binding.context,

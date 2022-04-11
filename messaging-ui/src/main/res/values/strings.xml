@@ -23,4 +23,9 @@
     <string name="chat_message_sending_status">Sending…</string>
     <string name="chat_message_sent_status">Not read yet</string>
     <string name="chat_message_error_status">Failed to send, tap to try again… </string>
+
+    <string name="no_pdf_third_party_app_info_title">No PDF viewer found</string>
+    <string name="no_pdf_third_party_app_info_message">Do you want to install Google Drive to open PDF files?</string>
+    <string name="no_pdf_third_party_app_info_positive">Install</string>
+    <string name="no_pdf_third_party_app_info_negative">No</string>
 </resources>

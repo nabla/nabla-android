@@ -31,10 +31,12 @@ internal class TimelineBuilder {
         val allMessageItemsWithStatus = allMessageItems.mapIndexed { index, item ->
             if (item is TimelineItem.Message) {
                 val nextMessage = allMessageItems.getOrNull(index + 1)
-                val showSenderAvatarAndName = nextMessage == null ||
-                    (nextMessage is TimelineItem.Message && nextMessage.sender != item.sender) ||
-                    nextMessage !is TimelineItem.Message ||
-                    item.sender is MessageSender.System
+                val showSenderAvatarAndName = item.sender != MessageSender.Patient && (
+                    nextMessage == null ||
+                        nextMessage !is TimelineItem.Message ||
+                        nextMessage.sender != item.sender ||
+                        item.sender is MessageSender.System
+                    )
 
                 val showStatus = (index == 0 && item.sender is MessageSender.Patient) ||
                     item.status != SendStatus.Sent ||

@@ -319,7 +319,11 @@ internal class ConversationViewModel(
     }
 
     fun onUrlClicked(url: String, isFromPatient: Boolean) {
-        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenWebBrowser(url))
+        runCatching {
+            navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenWebBrowser(URI.create(url)))
+        }.onFailure {
+            // TODO
+        }
     }
 
     sealed interface State {
@@ -341,7 +345,7 @@ internal class ConversationViewModel(
         data class OpenFullScreenImage(val imageUri: URI) : NavigationEvent()
         data class OpenFullScreenPdf(val fileUri: URI) : NavigationEvent()
         data class OpenUriExternally(val uri: URI) : NavigationEvent()
-        data class OpenWebBrowser(val url: String) : NavigationEvent()
+        data class OpenWebBrowser(val url: URI) : NavigationEvent()
         object OpenCameraPictureCapture : NavigationEvent()
         data class OpenMediaLibrary(val mimeTypes: List<MimeType>) : NavigationEvent()
     }

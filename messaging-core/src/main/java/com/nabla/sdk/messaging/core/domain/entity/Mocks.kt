@@ -33,7 +33,7 @@ internal fun Message.Text.Companion.fake(
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
     status: SendStatus = SendStatus.Sent,
-    text: String = "message content",
+    text: String = "message content ${Random.nextInt() % 1000}",
 ) = Message.Text(
     BaseMessage(
         id = id,

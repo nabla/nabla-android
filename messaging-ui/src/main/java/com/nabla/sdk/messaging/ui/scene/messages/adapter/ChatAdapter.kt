@@ -11,7 +11,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemLoadi
 import com.nabla.sdk.messaging.ui.scene.messages.MessageAction
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
-internal class ChatAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ChatDiffCallback) {
+internal class ChatAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ConversationDiffCallback) {
 
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {
@@ -105,7 +105,7 @@ internal class ChatAdapter(private val callbacks: Callbacks) : ListAdapter<Timel
             holder.showStatus(payload.showStatus)
         }
         when (payload) {
-            is BindingPayload.PatientMessageStatus -> (holder as PatientMessageViewHolder<*, *>).bindStatus(payload.status, payload.showStatus)
+            is BindingPayload.PatientSendStatus -> (holder as PatientMessageViewHolder<*, *>).bindStatus(payload.status, payload.showStatus)
             is BindingPayload.Image -> {
                 (holder as? ProviderImageMessageViewHolder ?: holder as? PatientImageMessageViewHolder)?.contentBinder
                     ?.loadImage(

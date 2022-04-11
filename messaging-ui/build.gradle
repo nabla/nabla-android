@@ -43,6 +43,7 @@ dependencies {
     implementation libs.coilCore
     implementation libs.androidx.fragment.ktx
     implementation libs.recyclerview
+    implementation libs.touchImageView
 
     implementation libs.mimeTypeDetector
 }

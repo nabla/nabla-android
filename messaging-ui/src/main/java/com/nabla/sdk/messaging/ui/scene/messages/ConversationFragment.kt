@@ -1,6 +1,8 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import android.Manifest
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,8 +21,10 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.canScrollUp
 import com.nabla.sdk.core.ui.helpers.context
@@ -28,6 +32,7 @@ import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.mediapicker.CaptureImageFromCameraActivityContract
 import com.nabla.sdk.core.ui.helpers.mediapicker.MediaPickingResult
 import com.nabla.sdk.core.ui.helpers.mediapicker.PickMediasFromLibraryActivityContract
+import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
@@ -35,6 +40,7 @@ import com.nabla.sdk.messaging.core.data.ConversationRepositoryMock
 import com.nabla.sdk.messaging.core.data.MessageRepositoryMock
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
+import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity
 import com.nabla.sdk.messaging.ui.helper.PermissionRational
 import com.nabla.sdk.messaging.ui.helper.PermissionRequestLauncher
 import com.nabla.sdk.messaging.ui.helper.copyNewPlainText
@@ -132,7 +138,38 @@ class ConversationFragment : Fragment() {
 
     private fun collectNavigationEvents(binding: NablaFragmentConversationBinding) {
         viewLifecycleOwner.launchCollect(viewModel.navigationEventFlow) { event ->
-            // TODO
+            when (event) {
+                ConversationViewModel.NavigationEvent.OpenCameraPictureCapture -> TODO()
+                is ConversationViewModel.NavigationEvent.OpenMediaLibrary -> TODO()
+                ConversationViewModel.NavigationEvent.OpenMediaSourcePicker -> TODO()
+                is ConversationViewModel.NavigationEvent.OpenWebBrowser -> {
+                    openUri(event.url.toAndroidUri())
+                }
+                is ConversationViewModel.NavigationEvent.OpenUriExternally -> {
+                    openUri(event.uri.toAndroidUri())
+                }
+                is ConversationViewModel.NavigationEvent.OpenFullScreenPdf -> {
+                    when (val openPdfResult = openPdfReader(requireActivity(), event.fileUri)) {
+                        is OpenPdfReaderResult.NoPdfReader.ErrorOpeningPlayStoreToInstallReaderApp -> {
+                            viewModel.onErrorOpeningLink(openPdfResult.error)
+                        }
+                        else -> Unit /* no-op */
+                    }
+                }
+                is ConversationViewModel.NavigationEvent.OpenFullScreenImage -> {
+                    startActivity(FullScreenImageActivity.newIntent(requireActivity(), event.imageUri))
+                }
+            }
+        }
+    }
+
+    private fun openUri(uri: Uri) {
+        try {
+            val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+                .apply { addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+            startActivity(browserIntent)
+        } catch (t: Throwable) {
+            viewModel.onErrorOpeningLink(t)
         }
     }
 

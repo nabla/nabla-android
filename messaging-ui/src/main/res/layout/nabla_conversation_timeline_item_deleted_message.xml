@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:alpha="0.38"
-    android:background="@drawable/chat_deleted_message_border"
+    android:background="@drawable/nabla_conversation_deleted_message_border"
     android:paddingHorizontal="12dp"
     android:paddingVertical="12dp"
     android:text="deleted message"

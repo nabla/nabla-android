@@ -21,7 +21,7 @@ internal sealed class BindingPayload {
         val showStatus: Boolean
     }
 
-    data class PatientMessageStatus(
+    data class PatientSendStatus(
         val status: SendStatus,
         override val showStatus: Boolean,
         override val actions: Set<MessageAction>,

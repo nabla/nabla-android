@@ -13,4 +13,9 @@
     <string name="chat_message_sending_status">Envoi en cours…</string>
     <string name="chat_message_sent_status">Pas encore lu</string>
     <string name="chat_message_error_status">L’envoi a échoué, tapez pour réessayer</string>
+
+    <string name="no_pdf_third_party_app_info_title">Pas d’application PDF</string>
+    <string name="no_pdf_third_party_app_info_message">Voullez vous installer l’application Google Drive pour ouvrir des fichiers PDF ?</string>
+    <string name="no_pdf_third_party_app_info_positive">Installer</string>
+    <string name="no_pdf_third_party_app_info_negative">Non</string>
 </resources>

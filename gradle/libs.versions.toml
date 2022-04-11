@@ -24,6 +24,7 @@ androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", ve
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.2.1" }
 
 mimeTypeDetector = { group = "org.overviewproject", name = "mime-types", version = "1.0.2" }
+touchImageView = { group = "com.github.MikeOrtiz", name = "TouchImageView", version = "3.1.1" }
 
 google-material = { group = "com.google.android.material", name = "material", version = "1.5.0" }
 

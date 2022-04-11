@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nabla.sdk.messaging.ui">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nabla.sdk.messaging.ui"
+    >
 
+    <application>
+        <activity
+            android:name="com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity"
+            android:theme="@style/FullScreenImageActivityTheme"
+            />
+
+        <provider
+            android:name=".fullscreenmedia.provider.SharingProvider"
+            android:authorities="${applicationId}.fullscreenmedia.sharefileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/share_file_paths"
+                />
+        </provider>
+    </application>
 </manifest>

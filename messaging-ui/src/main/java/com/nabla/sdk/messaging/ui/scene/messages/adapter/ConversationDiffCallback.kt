@@ -5,14 +5,14 @@ import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
-internal object ChatDiffCallback : DiffUtil.ItemCallback<TimelineItem>() {
+internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>() {
     override fun areItemsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
         return oldItem.listItemId == newItem.listItemId
     }
 
     override fun areContentsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
         return when {
-            oldItem is TimelineItem.DateSeparator && newItem is TimelineItem.DateSeparator && oldItem.listItemId == newItem.listItemId -> true
+            oldItem is TimelineItem.DateSeparator && newItem is TimelineItem.DateSeparator -> true
             else -> oldItem == newItem
         }
     }
@@ -47,7 +47,7 @@ internal object ChatDiffCallback : DiffUtil.ItemCallback<TimelineItem>() {
         )
         return when {
             onlyCallbacksChanged -> BindingPayload.Callbacks(newItem.actions, newItem)
-            sentByPatient && onlyStatusChanged -> BindingPayload.PatientMessageStatus(
+            sentByPatient && onlyStatusChanged -> BindingPayload.PatientSendStatus(
                 status = newItem.status,
                 showStatus = newItem.showStatus,
                 actions = newItem.actions,
