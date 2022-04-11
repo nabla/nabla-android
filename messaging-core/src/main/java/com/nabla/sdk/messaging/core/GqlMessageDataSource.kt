@@ -2,11 +2,19 @@ package com.nabla.sdk.messaging.core
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
+import com.apollographql.apollo3.cache.normalized.optimisticUpdates
 import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
+import com.nabla.sdk.graphql.fragment.DeletedMessageContentFragment
+import com.nabla.sdk.graphql.fragment.MessageContentFragment
+import com.nabla.sdk.graphql.type.DeleteMessageOutput
+import com.nabla.sdk.graphql.type.DeletedMessageContent
+import com.nabla.sdk.graphql.type.EmptyObject
+import com.nabla.sdk.graphql.type.MessageContent
 import com.nabla.sdk.graphql.type.SendDocumentMessageInput
 import com.nabla.sdk.graphql.type.SendImageMessageInput
 import com.nabla.sdk.graphql.type.SendMessageContentInput
@@ -104,5 +112,34 @@ internal class GqlMessageDataSource(
         )
         val mutation = SendMessageMutation(conversationId.value, input, clientId)
         apolloClient.mutation(mutation).execute()
+    }
+
+    suspend fun deleteMessage(remoteMessageId: Uuid) {
+        val mutation = DeleteMessageMutation(remoteMessageId)
+        val optimisticData = DeleteMessageMutation.Data(
+            deleteMessage = DeleteMessageMutation.DeleteMessage(
+                message = DeleteMessageMutation.Message(
+                    content = DeleteMessageMutation.Content(
+                        __typename = DeleteMessageOutput.type.name, // TODO : Double check expected type with mutation real execution
+                        messageContentFragment = MessageContentFragment(
+                            __typename = MessageContent.type.name,
+                            onTextMessageContent = null,
+                            onImageMessageContent = null,
+                            onDocumentMessageContent = null,
+                            onDeletedMessageContent = MessageContentFragment.OnDeletedMessageContent(
+                                __typename = DeletedMessageContent.type.name,
+                                deletedMessageContentFragment = DeletedMessageContentFragment(
+                                    EmptyObject.EMPTY
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        apolloClient.mutation(mutation)
+            .optimisticUpdates(optimisticData)
+            .execute()
     }
 }

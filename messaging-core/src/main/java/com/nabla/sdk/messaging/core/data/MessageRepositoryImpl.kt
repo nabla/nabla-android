@@ -92,7 +92,7 @@ internal class MessageRepositoryImpl(
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
         runCatchingCancellable {
             when (message) {
-                is Message.Deleted -> TODO()
+                is Message.Deleted -> { /* no-op */ }
                 is Message.Media.Document -> sendMediaMessageImpl(message, messageId)
                 is Message.Media.Image -> sendMediaMessageImpl(message, messageId)
                 is Message.Text -> sendTextMessageImpl(message, messageId)
@@ -112,8 +112,11 @@ internal class MessageRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteMessage(conversationId: ConversationId, messsageId: MessageId) {
-        TODO("Not yet implemented")
+    override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
+        when (messageId) {
+            is MessageId.Local -> localMessageDataSource.remove(conversationId, messageId.clientId)
+            is MessageId.Remote -> gqlMessageDataSource.deleteMessage(messageId.remoteId)
+        }
     }
 
     private suspend fun sendMediaMessageImpl(

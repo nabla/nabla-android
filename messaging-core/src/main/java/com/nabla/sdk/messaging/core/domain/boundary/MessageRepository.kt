@@ -12,5 +12,5 @@ interface MessageRepository {
     suspend fun sendMessage(message: Message)
     suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local)
     suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean)
-    suspend fun deleteMessage(conversationId: ConversationId, messsageId: MessageId)
+    suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId)
 }

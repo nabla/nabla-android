@@ -92,9 +92,9 @@ class MessageRepositoryMock : MessageRepository {
         // TODO
     }
 
-    override suspend fun deleteMessage(conversationId: ConversationId, messsageId: MessageId) {
+    override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         messagesListFlow.value = messagesListFlow.value.map {
-            if (it.message.id == messsageId) {
+            if (it.message.id == messageId) {
                 Message.Deleted(it.message)
             } else it
         }

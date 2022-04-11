@@ -62,13 +62,13 @@ internal class MessagingGqlMapper {
             sendStatus = SendStatus.Sent, // TODO add necessary mapper arg and compute sent/read status
             conversationId = messageFragment.conversation.id.toConversationId(),
         )
-        messageFragment.content?.onTextMessageContent?.textMessageContentFragment?.let {
+        messageFragment.content?.messageContentFragment?.onTextMessageContent?.textMessageContentFragment?.let {
             return@let Message.Text(
                 message = baseMessage,
                 text = it.text
             )
         }
-        messageFragment.content?.onImageMessageContent?.imageMessageContentFragment?.let {
+        messageFragment.content?.messageContentFragment?.onImageMessageContent?.imageMessageContentFragment?.let {
             return@let Message.Media.Image(
                 message = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -77,7 +77,7 @@ internal class MessagingGqlMapper {
                 ),
             )
         }
-        messageFragment.content?.onDocumentMessageContent?.documentMessageContentFragment?.let {
+        messageFragment.content?.messageContentFragment?.onDocumentMessageContent?.documentMessageContentFragment?.let {
             return@let Message.Media.Document(
                 message = baseMessage,
                 mediaSource = FileSource.Uploaded(

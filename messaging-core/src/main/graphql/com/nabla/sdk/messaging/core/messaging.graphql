@@ -14,6 +14,16 @@ mutation SendMessage($conversationId: UUID!, $content: SendMessageContentInput!,
     }
 }
 
+mutation DeleteMessage($messageId: UUID!) {
+    deleteMessage(id: $messageId) {
+        message {
+            content {
+                ...MessageContentFragment
+            }
+        }
+    }
+}
+
 query Conversation($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {
@@ -100,22 +110,26 @@ fragment MessageFragment on Message {
         }
     }
     content {
-        ... on TextMessageContent {
-            ...TextMessageContentFragment
-        }
-        ... on ImageMessageContent {
-            ...ImageMessageContentFragment
-        }
-        ... on DocumentMessageContent {
-            ...DocumentMessageContentFragment
-        }
-        ... on DeletedMessageContent {
-            ...DeletedMessageContentFragment
-        }
+        ...MessageContentFragment
     }
     clientId
     conversation {
         id
+    }
+}
+
+fragment MessageContentFragment on MessageContent {
+    ... on TextMessageContent {
+        ...TextMessageContentFragment
+    }
+    ... on ImageMessageContent {
+        ...ImageMessageContentFragment
+    }
+    ... on DocumentMessageContent {
+        ...DocumentMessageContentFragment
+    }
+    ... on DeletedMessageContent {
+        ...DeletedMessageContentFragment
     }
 }
 
