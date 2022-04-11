@@ -13,6 +13,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
 import coil.clear
 import coil.load
