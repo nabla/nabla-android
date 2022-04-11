@@ -21,7 +21,10 @@ class ConversationListViewModel(
     val stateFlow: StateFlow<State> =
         conversationRepository.watchConversations()
             .map { conversations ->
-                State.Loaded(conversations.items.map { it.toUiModel() }).eraseType()
+                State.Loaded(
+                    conversations.items.map { it.toUiModel() } +
+                        if (conversations.hasMore) listOf(ItemUiModel.Loading) else emptyList()
+                ).eraseType()
             }
             .retryWhen { cause, attempt ->
                 onErrorRetryWhen(cause, attempt).also { retry ->
@@ -34,6 +37,18 @@ class ConversationListViewModel(
         viewModelScope.launch {
             runCatchingCancellable {
                 conversationRepository.createConversation()
+            }.onFailure {
+                // TODO
+            }
+        }
+    }
+
+    fun onListReachedBottom() {
+        viewModelScope.launch {
+            runCatchingCancellable {
+                conversationRepository.loadMoreConversations()
+            }.onFailure {
+                // TODO
             }
         }
     }
@@ -42,7 +57,7 @@ class ConversationListViewModel(
         object Loading : State
         object Hidden : State
         data class Loaded(
-            val conversations: List<ConversationItemUiModel>,
+            val items: List<ItemUiModel>,
         ) : State
 
         fun eraseType() = this

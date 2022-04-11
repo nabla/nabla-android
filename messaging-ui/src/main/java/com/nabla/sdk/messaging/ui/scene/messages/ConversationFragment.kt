@@ -215,7 +215,6 @@ class ConversationFragment : Fragment() {
             addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        // -1 because negative value == top, positive value == bottom
                         if (!recyclerView.canScrollUp()) {
                             viewModel.onTimelineReachedTop()
                         }

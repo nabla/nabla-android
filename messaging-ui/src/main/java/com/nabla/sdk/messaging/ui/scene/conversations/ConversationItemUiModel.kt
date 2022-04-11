@@ -14,26 +14,32 @@ import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.datetime.Instant
 
-data class ConversationItemUiModel(
-    val id: ConversationId,
-    val title: String,
-    val subtitle: String,
-    val lastModified: Instant,
-    val hasUnreadMessages: Boolean,
-    val providers: List<User.Provider>,
-) {
-    fun formatLastModified(context: Context): String {
-        val date = lastModified.toJavaDate()
-        return when {
-            date.isToday() -> date.toFormattedTime(context)
-            date.isThisWeek() -> date.toFormattedShortWeekDay(context)
-            date.isThisYear() -> date.toFormattedDayOfMonth(context)
-            else -> date.toFormattedNumericDate(context)
+sealed class ItemUiModel(val listId: String) {
+
+    object Loading : ItemUiModel("loading")
+
+    data class Conversation(
+        val id: ConversationId,
+        val title: String,
+        val subtitle: String,
+        val lastModified: Instant,
+        val hasUnreadMessages: Boolean,
+        val providers: List<User.Provider>,
+    ) : ItemUiModel(listId = id.value.toString()) {
+
+        fun formatLastModified(context: Context): String {
+            val date = lastModified.toJavaDate()
+            return when {
+                date.isToday() -> date.toFormattedTime(context)
+                date.isThisWeek() -> date.toFormattedShortWeekDay(context)
+                date.isThisYear() -> date.toFormattedDayOfMonth(context)
+                else -> date.toFormattedNumericDate(context)
+            }
         }
     }
 }
 
-fun Conversation.toUiModel() = ConversationItemUiModel(
+fun Conversation.toUiModel() = ItemUiModel.Conversation(
     id = id,
     title = inboxPreviewTitle,
     subtitle = inboxPreviewSubtitle,

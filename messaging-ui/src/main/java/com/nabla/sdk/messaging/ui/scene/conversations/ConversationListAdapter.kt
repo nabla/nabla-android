@@ -1,75 +1,50 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewItemBinding
 
 class ConversationListAdapter(
     private val onConversationClicked: (conversationId: ConversationId) -> Unit,
-) : ListAdapter<ConversationItemUiModel, ConversationListAdapter.ConversationViewHolder>(
-    object : DiffUtil.ItemCallback<ConversationItemUiModel>() {
+) : ListAdapter<ItemUiModel, RecyclerView.ViewHolder>(
+    object : DiffUtil.ItemCallback<ItemUiModel>() {
         override fun areItemsTheSame(
-            oldItem: ConversationItemUiModel,
-            newItem: ConversationItemUiModel,
-        ) = oldItem.id == newItem.id
+            oldItem: ItemUiModel,
+            newItem: ItemUiModel,
+        ) = oldItem.listId == newItem.listId
 
         override fun areContentsTheSame(
-            oldItem: ConversationItemUiModel,
-            newItem: ConversationItemUiModel,
+            oldItem: ItemUiModel,
+            newItem: ItemUiModel,
         ) = oldItem == newItem
     }
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationViewHolder {
-        return ConversationViewHolder.create(parent, onConversationClicked)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (ViewType.values()[viewType]) {
+            ViewType.LOADING_MORE -> LoadingMoreViewHolder.create(parent)
+            ViewType.CONVERSATION_ITEM -> ConversationViewHolder.create(parent, onConversationClicked)
+        }
     }
 
-    override fun onBindViewHolder(holder: ConversationViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is ItemUiModel.Conversation -> ViewType.CONVERSATION_ITEM.ordinal
+            is ItemUiModel.Loading -> ViewType.LOADING_MORE.ordinal
+        }
     }
 
-    class ConversationViewHolder(
-        private val binding: NablaConversationListViewItemBinding,
-        private val onConversationClicked: (conversationId: ConversationId) -> Unit,
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(uiModel: ConversationItemUiModel) {
-            val context = binding.context
-
-            with(binding.conversationInboxTitle) {
-                text = uiModel.title
-                applyConversationListTitleStyle(this, uiModel.hasUnreadMessages)
-            }
-            with(binding.conversationInboxSubtitle) {
-                setTextOrHide(uiModel.subtitle)
-                applyConversationListSubtitleStyle(this, uiModel.hasUnreadMessages)
-            }
-
-            val firstProvider = uiModel.providers.firstOrNull()
-            if (firstProvider != null) {
-                binding.avatarView.loadAvatar(firstProvider)
-            } else {
-                binding.avatarView.displaySystemAvatar()
-            }
-
-            binding.unreadDot.isVisible = uiModel.hasUnreadMessages
-            binding.lastMessageDate.text = uiModel.formatLastModified(context)
-            applyLastMessageTimeStyle(binding.lastMessageDate, uiModel.hasUnreadMessages)
-
-            binding.root.setOnClickListener { onConversationClicked(uiModel.id) }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is ItemUiModel.Conversation -> (holder as ConversationViewHolder).bind(item)
+            is ItemUiModel.Loading -> Unit /* no-op */
         }
+    }
 
-        companion object {
-            fun create(parent: ViewGroup, onConversationClicked: (conversationId: ConversationId) -> Unit): ConversationViewHolder {
-                val binding = NablaConversationListViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return ConversationViewHolder(binding, onConversationClicked)
-            }
-        }
+    private enum class ViewType {
+        LOADING_MORE,
+        CONVERSATION_ITEM,
     }
 }

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
+import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch
@@ -14,6 +15,15 @@ fun ConversationListView.bindViewModel(viewModel: ConversationListViewModel) {
     recyclerView.apply {
         adapter = conversationAdapter
         addItemDecoration(OffsetsItemDecoration())
+        addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (!recyclerView.canScrollDown()) {
+                        viewModel.onListReachedBottom()
+                    }
+                }
+            }
+        )
     }
 
     viewModel.viewModelScope.launch {
@@ -22,7 +32,7 @@ fun ConversationListView.bindViewModel(viewModel: ConversationListViewModel) {
             recyclerView.isVisible = state is State.Loaded
 
             if (state is State.Loaded) {
-                conversationAdapter.submitList(state.conversations)
+                conversationAdapter.submitList(state.items)
             }
         }
     }
