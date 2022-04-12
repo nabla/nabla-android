@@ -53,7 +53,7 @@ class ConversationRepositoryMock : ConversationRepository {
         )
     }
 
-    override fun markConversationAsRead(conversationId: ConversationId) {
+    override suspend fun markConversationAsRead(conversationId: ConversationId) {
         println("markConversationAsRead")
     }
 }

@@ -14,6 +14,7 @@ import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
+import com.nabla.sdk.graphql.SetTypingMutation
 import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
 import com.nabla.sdk.graphql.fragment.DeletedMessageContentFragment
 import com.nabla.sdk.graphql.fragment.MessageContentFragment
@@ -221,4 +222,8 @@ internal class GqlMessageDataSource(
 
     private fun firstMessagePageQuery(id: ConversationId) =
         ConversationQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
+
+    suspend fun setTyping(conversationId: ConversationId, typing: Boolean) {
+        apolloClient.mutation(SetTypingMutation(conversationId.value, typing)).execute()
+    }
 }

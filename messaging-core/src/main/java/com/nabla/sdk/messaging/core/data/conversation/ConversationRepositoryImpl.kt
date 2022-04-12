@@ -35,7 +35,7 @@ internal class ConversationRepositoryImpl(
         loadMoreConversationSharedSingle.await()
     }
 
-    override fun markConversationAsRead(conversationId: ConversationId) {
-        TODO("Not yet implemented")
+    override suspend fun markConversationAsRead(conversationId: ConversationId) {
+        gqlConversationDataSource.markConversationAsRead(conversationId)
     }
 }

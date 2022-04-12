@@ -327,7 +327,13 @@ internal class ConversationViewModel(
 
     private fun Conversation.markConversationAsReadIfNeeded() {
         if (patientUnreadMessageCount > 0 && isViewForeground) {
-            conversationRepository.markConversationAsRead(conversationId)
+            viewModelScope.launch {
+                runCatchingCancellable {
+                    conversationRepository.markConversationAsRead(conversationId)
+                }.onFailure {
+                    // TODO We might want to ignore error for this ATM
+                }
+            }
         }
     }
 

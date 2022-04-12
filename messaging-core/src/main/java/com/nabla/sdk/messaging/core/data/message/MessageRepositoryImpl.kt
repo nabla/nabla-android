@@ -106,7 +106,7 @@ internal class MessageRepositoryImpl(
     }
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
-        TODO("Not yet implemented")
+        gqlMessageDataSource.setTyping(conversationId, isTyping)
     }
 
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {

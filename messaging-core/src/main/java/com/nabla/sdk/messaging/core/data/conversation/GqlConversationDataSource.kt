@@ -10,11 +10,13 @@ import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.graphql.MaskAsSeenMutation
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -97,6 +99,10 @@ internal class GqlConversationDataSource constructor(
         return flowOf(conversationsEventsFlow, dataFlow)
             .flattenMerge()
             .filterIsInstance()
+    }
+
+    suspend fun markConversationAsRead(conversationId: ConversationId) {
+        apolloClient.mutation(MaskAsSeenMutation(conversationId.value)).execute()
     }
 
     companion object {

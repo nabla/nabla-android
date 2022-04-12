@@ -9,5 +9,5 @@ interface ConversationRepository {
     suspend fun createConversation()
     fun watchConversations(): Flow<PaginatedList<Conversation>>
     suspend fun loadMoreConversations()
-    fun markConversationAsRead(conversationId: ConversationId)
+    suspend fun markConversationAsRead(conversationId: ConversationId)
 }

@@ -24,6 +24,18 @@ mutation DeleteMessage($messageId: UUID!) {
     }
 }
 
+mutation MaskAsSeen($conversationId: UUID!) {
+    markAsSeen(conversationId: $conversationId) {
+        __typename
+    }
+}
+
+mutation SetTyping($conversationId: UUID!, $isTyping: Boolean!) {
+    setTyping(conversationId: $conversationId, isTyping: $isTyping) {
+        __typename
+    }
+}
+
 query Conversation($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {
