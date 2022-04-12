@@ -5,7 +5,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.flow.Flow
 
-interface ConversationRepository {
+internal interface ConversationRepository {
     suspend fun createConversation()
     fun watchConversations(): Flow<PaginatedList<Conversation>>
     suspend fun loadMoreConversations()

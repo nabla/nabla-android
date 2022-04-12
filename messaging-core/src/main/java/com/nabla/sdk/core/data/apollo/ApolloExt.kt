@@ -5,7 +5,7 @@ import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.cache.normalized.apolloStore
 import com.apollographql.apollo3.exception.CacheMissException
 
-suspend fun <D : Operation.Data> ApolloClient.updateCache(
+internal suspend fun <D : Operation.Data> ApolloClient.updateCache(
     operation: Operation<D>,
     update: suspend (D?) -> CacheUpdateOperation<D>,
 ) {
@@ -17,7 +17,7 @@ suspend fun <D : Operation.Data> ApolloClient.updateCache(
     }
 }
 
-suspend fun <D : Operation.Data> ApolloClient.readFromCache(
+internal suspend fun <D : Operation.Data> ApolloClient.readFromCache(
     operation: Operation<D>,
 ): D? = try {
     apolloStore.readOperation(operation)
@@ -25,14 +25,14 @@ suspend fun <D : Operation.Data> ApolloClient.readFromCache(
     null
 }
 
-suspend fun <D : Operation.Data> ApolloClient.writeToCache(
+internal suspend fun <D : Operation.Data> ApolloClient.writeToCache(
     operation: Operation<D>,
     operationData: D,
 ) {
     apolloStore.writeOperation(operation, operationData)
 }
 
-sealed class CacheUpdateOperation<D> {
+internal sealed class CacheUpdateOperation<D> {
     data class Write<D>(val data: D) : CacheUpdateOperation<D>()
     class Ignore<D> : CacheUpdateOperation<D>()
 }

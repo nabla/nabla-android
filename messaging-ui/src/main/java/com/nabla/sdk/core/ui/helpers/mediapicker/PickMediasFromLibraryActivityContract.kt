@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.nabla.sdk.core.data.helper.toJvmURI
 import com.nabla.sdk.core.domain.entity.MimeType
 
-class PickMediasFromLibraryActivityContract(private val context: Context) :
+internal class PickMediasFromLibraryActivityContract(private val context: Context) :
     ActivityResultContract<Array<MimeType>, MediaPickingResult<List<LocalMedia>>>() {
 
     override fun createIntent(context: Context, mimeTypes: Array<MimeType>): Intent {

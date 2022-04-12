@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
  * NB: If multiple subscribers are collecting this flow at the same time, only the first one will get
  * the events buffered while there was nobody subscribed
  */
-interface LiveFlow<T> {
+internal interface LiveFlow<T> {
     suspend fun collect(liveCollector: BaseLiveFlowCollector<T>)
 
     abstract class BaseLiveFlowCollector<T> : FlowCollector<T>
@@ -57,7 +57,7 @@ interface LiveFlow<T> {
 /**
  * Mutable implementation of [LiveFlow]
  */
-class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
+internal class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
     private val wrapped = Channel<T>(Channel.BUFFERED)
 
     @OptIn(InternalCoroutinesApi::class)
@@ -70,7 +70,7 @@ class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
     }
 }
 
-fun <T> Flow<T>.liveFlowIn(scope: CoroutineScope): LiveFlow<T> {
+internal fun <T> Flow<T>.liveFlowIn(scope: CoroutineScope): LiveFlow<T> {
     val upstream = this
     val downstream = MutableLiveFlow<T>()
     scope.launch { upstream.collect { downstream.emit(it) } }

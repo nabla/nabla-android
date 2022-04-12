@@ -6,7 +6,7 @@ import com.apollographql.apollo3.api.json.JsonReader
 import com.apollographql.apollo3.api.json.JsonWriter
 import com.benasher44.uuid.Uuid
 
-val uuidAdapter = object : Adapter<Uuid> {
+internal val uuidAdapter = object : Adapter<Uuid> {
     override fun fromJson(reader: JsonReader, customScalarAdapters: CustomScalarAdapters): Uuid {
         return Uuid.fromString(reader.nextString())
     }

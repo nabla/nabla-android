@@ -11,7 +11,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import java.net.URI
 import kotlin.coroutines.resume
 
-suspend fun openPdfReader(context: Context, pdfUri: URI): OpenPdfReaderResult {
+internal suspend fun openPdfReader(context: Context, pdfUri: URI): OpenPdfReaderResult {
     val pdfIntent = makePdfIntent(pdfUri)
     return try {
         context.startActivity(pdfIntent)
@@ -53,7 +53,7 @@ private fun makeWebPlayStoreGooglePdfReaderIntent(): Intent {
     return Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.docs"))
 }
 
-sealed class OpenPdfReaderResult {
+internal sealed class OpenPdfReaderResult {
     object Success : OpenPdfReaderResult()
     sealed class NoPdfReader : OpenPdfReaderResult() {
         object UserRefusedToInstallReaderApp : NoPdfReader()

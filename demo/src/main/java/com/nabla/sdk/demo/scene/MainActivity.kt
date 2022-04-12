@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.nabla.sdk.core.NablaCore
 import com.nabla.sdk.demo.databinding.ActivityMainBinding
+import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 import com.nabla.sdk.messaging.ui.scene.conversations.bindViewModel
@@ -48,7 +49,9 @@ class MainActivity : AppCompatActivity() {
             NablaCore.instance.authenticate(UUID.randomUUID().toString())
 
             binding.createConversation.setOnClickListener {
-                viewModel.createConversation()
+                launch {
+                    NablaMessaging.instance.createConversation()
+                }
             }
             binding.conversationListView.bindViewModel(viewModel)
         }

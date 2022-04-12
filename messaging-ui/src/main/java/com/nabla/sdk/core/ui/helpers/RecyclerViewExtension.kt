@@ -3,7 +3,7 @@ package com.nabla.sdk.core.ui.helpers
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 
-fun RecyclerView.scrollToTop() {
+internal fun RecyclerView.scrollToTop() {
     if ((adapter?.itemCount ?: 0) > 0) {
         scrollToPosition(0)
     }
@@ -12,10 +12,10 @@ fun RecyclerView.scrollToTop() {
 private const val SCROLL_DIRECTION_TOP = -1
 private const val SCROLL_DIRECTION_BOTTOM = 1
 
-fun RecyclerView.canScrollUp(): Boolean = canScrollVertically(SCROLL_DIRECTION_TOP)
-fun RecyclerView.canScrollDown(): Boolean = canScrollVertically(SCROLL_DIRECTION_BOTTOM)
+internal fun RecyclerView.canScrollUp(): Boolean = canScrollVertically(SCROLL_DIRECTION_TOP)
+internal fun RecyclerView.canScrollDown(): Boolean = canScrollVertically(SCROLL_DIRECTION_BOTTOM)
 
-fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
+internal fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoothScroller.SNAP_TO_START) {
     val smoothScroller = object : LinearSmoothScroller(this.context) {
         override fun getVerticalSnapPreference(): Int = snapMode
         override fun getHorizontalSnapPreference(): Int = snapMode
@@ -25,7 +25,7 @@ fun RecyclerView.smoothSnapToPosition(position: Int, snapMode: Int = LinearSmoot
     layoutManager?.startSmoothScroll(smoothScroller)
 }
 
-fun RecyclerView.maintainBottomPositionOnLayoutShrink() {
+internal fun RecyclerView.maintainBottomPositionOnLayoutShrink() {
     this.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
         if (oldBottom > bottom) {
             this.scrollBy(0, oldBottom - bottom)

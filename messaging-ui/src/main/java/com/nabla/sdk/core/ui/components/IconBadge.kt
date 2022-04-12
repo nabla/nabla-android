@@ -12,7 +12,7 @@ import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaComponentIconBadgeBinding
 import com.google.android.material.R as MaterialR
 
-class IconBadge : FrameLayout {
+internal class IconBadge : FrameLayout {
     private lateinit var binding: NablaComponentIconBadgeBinding
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {

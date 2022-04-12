@@ -23,7 +23,7 @@ import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 
-class MessageRepositoryMock : MessageRepository {
+internal class MessageRepositoryMock : MessageRepository {
     private val provider = User.Provider.fake()
     private val flowMutex = Mutex()
     private val messagesListFlow = MutableStateFlow(

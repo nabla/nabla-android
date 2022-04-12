@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 
-class ConversationListAdapter(
+internal class ConversationListAdapter(
     private val onConversationClicked: (conversationId: ConversationId) -> Unit,
 ) : ListAdapter<ItemUiModel, RecyclerView.ViewHolder>(
     object : DiffUtil.ItemCallback<ItemUiModel>() {

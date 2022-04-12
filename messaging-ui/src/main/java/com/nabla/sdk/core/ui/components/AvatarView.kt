@@ -33,7 +33,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
 import kotlin.math.absoluteValue
 import kotlin.math.min
 
-class AvatarView : ConstraintLayout {
+internal class AvatarView : ConstraintLayout {
     private lateinit var binding: NablaComponentAvatarViewBinding
 
     private var useSingleLetterInPlaceHolder: Boolean = false

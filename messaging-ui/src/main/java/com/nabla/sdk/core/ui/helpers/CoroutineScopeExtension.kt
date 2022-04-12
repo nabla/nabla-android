@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-fun <T> CoroutineScope.launchCollect(
+internal fun <T> CoroutineScope.launchCollect(
     flowToCollect: Flow<T>,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,
@@ -22,7 +22,7 @@ fun <T> CoroutineScope.launchCollect(
     }
 }
 
-fun <T> LifecycleOwner.launchCollect(
+internal fun <T> LifecycleOwner.launchCollect(
     liveFlowToCollect: LiveFlow<T>,
     context: CoroutineContext = EmptyCoroutineContext,
     start: CoroutineStart = CoroutineStart.DEFAULT,

@@ -43,7 +43,7 @@ sealed interface MessageId {
         override val stableId: Uuid = clientId
         override val remoteId: Uuid? = null
     }
-    data class Remote(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
+    data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
 }

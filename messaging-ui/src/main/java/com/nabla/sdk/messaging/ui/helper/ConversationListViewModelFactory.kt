@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.ui.injection.NablaMessagingUi
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
 class ConversationListViewModelFactory(
@@ -17,9 +16,9 @@ class ConversationListViewModelFactory(
         // TODO default behavior
     },
     private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean = { _, _ -> false },
-    private val nablaMessagingUi: NablaMessagingUi = NablaMessagingUi(NablaMessaging.instance),
+    private val nablaMessaging: NablaMessaging = NablaMessaging.instance,
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-    override fun <T : ViewModel?> create(
+    override fun <T : ViewModel> create(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle,
@@ -29,7 +28,8 @@ class ConversationListViewModelFactory(
         }
 
         @Suppress("UNCHECKED_CAST")
-        return nablaMessagingUi.createConversationListViewModel(
+        return ConversationListViewModel(
+            nablaMessaging,
             onConversationClicked,
             onErrorRetryWhen,
         ) as T

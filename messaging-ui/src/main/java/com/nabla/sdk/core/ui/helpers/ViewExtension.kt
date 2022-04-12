@@ -12,12 +12,12 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
  *
  * @see View.setOnClickListener
  */
-fun View.removeOnClickListener() {
+internal fun View.removeOnClickListener() {
     setOnClickListener(null)
     isClickable = false
 }
 
-fun View.setOnClickLabel(@StringRes stringRes: Int, vararg args: Any) {
+internal fun View.setOnClickLabel(@StringRes stringRes: Int, vararg args: Any) {
     ViewCompat.setAccessibilityDelegate(
         this,
         object : AccessibilityDelegateCompat() {

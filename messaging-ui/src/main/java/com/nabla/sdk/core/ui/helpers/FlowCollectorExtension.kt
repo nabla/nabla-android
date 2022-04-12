@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-fun <T> FlowCollector<T>.emitIn(
+internal fun <T> FlowCollector<T>.emitIn(
     scope: CoroutineScope,
     value: T,
     context: CoroutineContext = EmptyCoroutineContext,

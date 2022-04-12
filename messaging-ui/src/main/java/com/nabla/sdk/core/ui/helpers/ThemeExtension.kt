@@ -8,7 +8,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 
 @ColorInt
-fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
+internal fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
     val typedValue = TypedValue()
     return if (theme.resolveAttribute(themeAttr, typedValue, true)) {
         typedValue.data
@@ -19,7 +19,7 @@ fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
 }
 
 @DrawableRes
-fun Context.getThemeDrawable(@AttrRes themeAttr: Int): Int? {
+internal fun Context.getThemeDrawable(@AttrRes themeAttr: Int): Int? {
     val typedValue = TypedValue()
     return if (theme.resolveAttribute(themeAttr, typedValue, true)) {
         typedValue.resourceId

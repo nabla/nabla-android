@@ -17,7 +17,7 @@ inline fun <R> runCatchingCancellable(block: () -> R): Result<R> {
     }
 }
 
-fun <R> sharedSingleIn(
+internal fun <R> sharedSingleIn(
     coroutineScope: CoroutineScope,
     block: suspend () -> R,
 ): SharedSingle<R> {
@@ -37,6 +37,6 @@ fun <R> sharedSingleIn(
     }
 }
 
-interface SharedSingle<R> {
+internal interface SharedSingle<R> {
     suspend fun await(): R
 }

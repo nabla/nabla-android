@@ -3,7 +3,7 @@ package com.nabla.sdk.messaging.ui.scene.conversations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
-import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
+import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ConversationListViewModel(
-    private val conversationRepository: ConversationRepository,
+    private val nablaMessaging: NablaMessaging,
     internal val onConversationClicked: (conversationId: ConversationId) -> Unit,
-    internal val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean,
+    private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean,
 ) : ViewModel() {
 
-    val stateFlow: StateFlow<State> =
-        conversationRepository.watchConversations()
+    internal val stateFlow: StateFlow<State> =
+        nablaMessaging.watchConversations()
             .map { conversations ->
                 State.Loaded(
                     conversations.items.map { it.toUiModel() } +
@@ -33,27 +33,17 @@ class ConversationListViewModel(
             }
             .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = State.Loading)
 
-    fun createConversation() {
+    internal fun onListReachedBottom() {
         viewModelScope.launch {
             runCatchingCancellable {
-                conversationRepository.createConversation()
+                nablaMessaging.loadMoreConversations()
             }.onFailure {
                 // TODO
             }
         }
     }
 
-    fun onListReachedBottom() {
-        viewModelScope.launch {
-            runCatchingCancellable {
-                conversationRepository.loadMoreConversations()
-            }.onFailure {
-                // TODO
-            }
-        }
-    }
-
-    sealed interface State {
+    internal sealed interface State {
         object Loading : State
         object Hidden : State
         data class Loaded(

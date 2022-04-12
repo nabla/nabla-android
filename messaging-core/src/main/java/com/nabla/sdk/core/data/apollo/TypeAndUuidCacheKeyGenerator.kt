@@ -5,7 +5,7 @@ import com.apollographql.apollo3.cache.normalized.api.CacheKeyGenerator
 import com.apollographql.apollo3.cache.normalized.api.CacheKeyGeneratorContext
 import com.benasher44.uuid.Uuid
 
-object TypeAndUuidCacheKeyGenerator : CacheKeyGenerator {
+internal object TypeAndUuidCacheKeyGenerator : CacheKeyGenerator {
     override fun cacheKeyForObject(
         obj: Map<String, Any?>,
         context: CacheKeyGeneratorContext

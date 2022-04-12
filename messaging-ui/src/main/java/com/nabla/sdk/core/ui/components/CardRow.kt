@@ -11,7 +11,7 @@ import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaComponentCardRowBinding
 
-class CardRow : ConstraintLayout {
+internal class CardRow : ConstraintLayout {
     private lateinit var binding: NablaComponentCardRowBinding
     private var noLeftView: Boolean = false
 

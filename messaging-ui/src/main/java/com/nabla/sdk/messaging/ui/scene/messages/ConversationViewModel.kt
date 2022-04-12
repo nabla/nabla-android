@@ -13,8 +13,7 @@ import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
-import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
-import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
+import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -47,8 +46,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Suppress("UNUSED_PARAMETER", "UNUSED_ANONYMOUS_PARAMETER")
 internal class ConversationViewModel(
-    private val messageRepository: MessageRepository,
-    private val conversationRepository: ConversationRepository,
+    private val nablaMessaging: NablaMessaging,
     private val onErrorCallback: (message: String, Throwable) -> Unit,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -78,7 +76,7 @@ internal class ConversationViewModel(
 
     init {
         stateFlow = makeStateFlow(
-            messageRepository
+            nablaMessaging
                 .watchConversationMessages(conversationId)
                 .handleConversationDataSideEffects()
         )
@@ -210,7 +208,7 @@ internal class ConversationViewModel(
 
             mediaMessages.map { mediaToSend ->
                 async {
-                    messageRepository.sendMessage(
+                    nablaMessaging.sendMessage(
                         when (mediaToSend) {
                             is LocalMedia.Image -> Message.Media.Image(
                                 message = baseMessage,
@@ -235,7 +233,7 @@ internal class ConversationViewModel(
                 currentMessageStateFlow.value = ""
 
                 // TODO improve sending API to not specify irrelevant args like status, sender & sentAt
-                messageRepository.sendMessage(
+                nablaMessaging.sendMessage(
                     Message.Text(
                         message = baseMessage,
                         text = textMessage,
@@ -259,7 +257,7 @@ internal class ConversationViewModel(
             lastTypingEventSentAt = Clock.System.now()
             viewModelScope.launch {
                 runCatchingCancellable {
-                    messageRepository.setTyping(
+                    nablaMessaging.setTyping(
                         isTyping = currentMessage.isNotEmpty(),
                         conversationId = conversationId,
                     )
@@ -275,7 +273,7 @@ internal class ConversationViewModel(
     fun onTimelineReachedTop() {
         viewModelScope.launch(Dispatchers.Default) {
             runCatchingCancellable {
-                messageRepository.loadMoreMessages(conversationId)
+                nablaMessaging.loadMoreMessages(conversationId)
             }.onFailure {
                 onErrorCallback("Error while loading more items in conversation", it)
             }
@@ -288,7 +286,7 @@ internal class ConversationViewModel(
         // Retry sending a message that previously failed
         if (item.status == SendStatus.ErrorSending) {
             viewModelScope.launch {
-                messageRepository.retrySendingMessage(conversationId, clickedItem.id as MessageId.Local)
+                nablaMessaging.retrySendingMessage(conversationId, clickedItem.id as MessageId.Local)
             }
             return
         }
@@ -329,7 +327,7 @@ internal class ConversationViewModel(
         if (patientUnreadMessageCount > 0 && isViewForeground) {
             viewModelScope.launch {
                 runCatchingCancellable {
-                    conversationRepository.markConversationAsRead(conversationId)
+                    nablaMessaging.markConversationAsRead(conversationId)
                 }.onFailure {
                     // TODO We might want to ignore error for this ATM
                 }
@@ -340,7 +338,7 @@ internal class ConversationViewModel(
     fun onDeleteMessage(item: TimelineItem.Message) {
         viewModelScope.launch(Dispatchers.Default) {
             runCatchingCancellable {
-                messageRepository.deleteMessage(conversationId, item.id)
+                nablaMessaging.deleteMessage(conversationId, item.id)
             }.onFailure { error ->
                 // TODO handle error
             }

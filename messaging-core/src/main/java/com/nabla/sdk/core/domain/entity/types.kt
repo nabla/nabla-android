@@ -16,5 +16,5 @@ value class StringId(val value: String) {
     override fun toString(): String = value
 }
 
-fun String.toId() = StringId(this)
-fun String.asUuid(): Uuid = Uuid.fromString(this)
+internal fun String.toId() = StringId(this)
+internal fun String.asUuid(): Uuid = Uuid.fromString(this)

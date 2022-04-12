@@ -5,7 +5,7 @@ import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.StringId
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 
-class LoginInteractor(
+internal class LoginInteractor(
     private val patientRepository: PatientRepository,
     private val tokenRepository: TokenRepository,
 ) {

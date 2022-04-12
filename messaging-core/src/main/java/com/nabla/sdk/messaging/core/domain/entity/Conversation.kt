@@ -4,7 +4,7 @@ import com.benasher44.uuid.Uuid
 import kotlinx.datetime.Instant
 
 @JvmInline
-value class ConversationId(val value: Uuid)
+value class ConversationId internal constructor(val value: Uuid)
 
 fun Uuid.toConversationId() = ConversationId(this)
 

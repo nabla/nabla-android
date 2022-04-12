@@ -10,7 +10,7 @@ import kotlin.math.abs
 /**
  * 24 févr., 15:32
  */
-fun Date.toFormattedRelativeWeekDayAndShortTimeString(context: Context): String {
+internal fun Date.toFormattedRelativeWeekDayAndShortTimeString(context: Context): String {
     return if (abs(Date().time - time) > DAY_IN_MILLIS * 2) {
         DateUtils.formatDateTime(
             context,
@@ -35,7 +35,7 @@ fun Date.toFormattedRelativeWeekDayAndShortTimeString(context: Context): String 
 /**
  * 24/02/2022
  */
-fun Date.toFormattedNumericDate(context: Context): String {
+internal fun Date.toFormattedNumericDate(context: Context): String {
     return DateUtils.formatDateTime(
         context,
         time,
@@ -46,7 +46,7 @@ fun Date.toFormattedNumericDate(context: Context): String {
 /**
  * 24 févr.
  */
-fun Date.toFormattedDayOfMonth(context: Context): String {
+internal fun Date.toFormattedDayOfMonth(context: Context): String {
     return DateUtils.formatDateTime(
         context,
         time,
@@ -59,7 +59,7 @@ fun Date.toFormattedDayOfMonth(context: Context): String {
 /**
  * 15:32 or 03:32
  */
-fun Date.toFormattedTime(context: Context): String {
+internal fun Date.toFormattedTime(context: Context): String {
     return DateUtils.formatDateTime(
         context,
         time,
@@ -70,7 +70,7 @@ fun Date.toFormattedTime(context: Context): String {
 /**
  * lun.
  */
-fun Date.toFormattedShortWeekDay(context: Context): String {
+internal fun Date.toFormattedShortWeekDay(context: Context): String {
     return DateUtils.formatDateTime(
         context,
         time,

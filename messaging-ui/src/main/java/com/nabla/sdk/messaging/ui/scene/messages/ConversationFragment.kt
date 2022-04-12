@@ -37,8 +37,7 @@ import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
-import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
-import com.nabla.sdk.messaging.core.data.message.MessageRepositoryMock
+import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity
@@ -56,8 +55,7 @@ class ConversationFragment : Fragment() {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
                 return ConversationViewModel(
-                    messageRepository = MessageRepositoryMock(),
-                    conversationRepository = ConversationRepositoryMock(),
+                    nablaMessaging = NablaMessaging.instance,
                     // TODO forward to library user's own impl
                     onErrorCallback = { msg, throwable -> Log.e("ConversationViewModel", msg, throwable) },
                     savedStateHandle = handle,

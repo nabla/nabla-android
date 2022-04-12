@@ -3,7 +3,7 @@ package com.nabla.sdk.core.ui.helpers.mediapicker
 import com.nabla.sdk.core.domain.entity.MimeType
 import java.net.URI
 
-sealed class LocalMedia {
+internal sealed class LocalMedia {
     abstract val uri: URI
     abstract val mimeType: MimeType
     abstract val name: String?

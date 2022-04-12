@@ -15,7 +15,7 @@ import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-class ConversationRepositoryMock : ConversationRepository {
+internal class ConversationRepositoryMock : ConversationRepository {
     private val conversationsFlow = MutableStateFlow(
         PaginatedList(
             items = (0..10).map { Conversation.randomFake() },

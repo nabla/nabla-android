@@ -14,7 +14,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.datetime.Instant
 
-sealed class ItemUiModel(val listId: String) {
+internal sealed class ItemUiModel(val listId: String) {
 
     object Loading : ItemUiModel("loading")
 
@@ -39,7 +39,7 @@ sealed class ItemUiModel(val listId: String) {
     }
 }
 
-fun Conversation.toUiModel() = ItemUiModel.Conversation(
+internal fun Conversation.toUiModel() = ItemUiModel.Conversation(
     id = id,
     title = inboxPreviewTitle,
     subtitle = inboxPreviewSubtitle,

@@ -11,17 +11,17 @@ import androidx.annotation.StringRes
 import androidx.core.animation.doOnEnd
 import androidx.core.text.toSpannable
 
-fun TextView.setTextOrHide(charSequence: CharSequence?, hiddenVisibility: Int = GONE) {
+internal fun TextView.setTextOrHide(charSequence: CharSequence?, hiddenVisibility: Int = GONE) {
     text = charSequence
     visibility = if (charSequence.isNullOrEmpty()) hiddenVisibility else VISIBLE
 }
 
-fun TextView.setTextOrHide(@StringRes res: Int?, hiddenVisibility: Int = GONE) {
+internal fun TextView.setTextOrHide(@StringRes res: Int?, hiddenVisibility: Int = GONE) {
     res?.let(::setText)
     visibility = if (res == null) hiddenVisibility else VISIBLE
 }
 
-fun TextView.strikeThrough(shouldStrike: Boolean) {
+internal fun TextView.strikeThrough(shouldStrike: Boolean) {
     paintFlags = if (shouldStrike) {
         paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
     } else {
@@ -29,7 +29,7 @@ fun TextView.strikeThrough(shouldStrike: Boolean) {
     }
 }
 
-fun TextView.animateStrikeThrough(shouldStrikeThrough: Boolean, duration: Long) {
+internal fun TextView.animateStrikeThrough(shouldStrikeThrough: Boolean, duration: Long) {
     if (isStrikeThrough() == shouldStrikeThrough) {
         return
     }
