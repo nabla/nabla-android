@@ -36,8 +36,8 @@ import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
-import com.nabla.sdk.messaging.core.data.ConversationRepositoryMock
-import com.nabla.sdk.messaging.core.data.MessageRepositoryMock
+import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
+import com.nabla.sdk.messaging.core.data.message.MessageRepositoryMock
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity

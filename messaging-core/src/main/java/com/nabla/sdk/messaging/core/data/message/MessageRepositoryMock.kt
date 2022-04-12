@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.core.data
+package com.nabla.sdk.messaging.core.data.message
 
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.User

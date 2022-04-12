@@ -1,11 +1,9 @@
-package com.nabla.sdk.messaging.core.data
+package com.nabla.sdk.messaging.core.data.message
 
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.kotlin.sharedSingleIn
-import com.nabla.sdk.messaging.core.GqlMessageDataSource
-import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlOperationHelper
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
@@ -21,7 +19,6 @@ import kotlinx.coroutines.sync.withLock
 
 internal class MessageRepositoryImpl(
     private val repoScope: CoroutineScope,
-    private val gqlOperationHelper: MessagingGqlOperationHelper,
     private val localMessageDataSource: LocalMessageDataSource,
     private val gqlMessageDataSource: GqlMessageDataSource,
     private val fileUploadRepository: FileUploadRepository,
@@ -77,7 +74,7 @@ internal class MessageRepositoryImpl(
         val loadMoreConversationMessagesSharedSingle = loadMoreConversationMessagesSharedSingleLock.withLock {
             loadMoreConversationMessagesSharedSingleMap.getOrPut(conversationId) {
                 sharedSingleIn(repoScope) {
-                    gqlOperationHelper.loadMoreConversationMessagesInCache(conversationId)
+                    gqlMessageDataSource.loadMoreConversationMessagesInCache(conversationId)
                 }
             }
         }

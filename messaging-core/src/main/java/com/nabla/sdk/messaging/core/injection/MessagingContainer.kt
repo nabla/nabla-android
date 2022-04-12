@@ -3,13 +3,12 @@ package com.nabla.sdk.messaging.core.injection
 import com.apollographql.apollo3.ApolloClient
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.messaging.core.GqlMessageDataSource
-import com.nabla.sdk.messaging.core.data.ConversationRepositoryImpl
-import com.nabla.sdk.messaging.core.data.LocalMessageDataSource
-import com.nabla.sdk.messaging.core.data.MessageRepositoryImpl
-import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlEventHelper
-import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlMapper
-import com.nabla.sdk.messaging.core.data.apollo.MessagingGqlOperationHelper
+import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
+import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryImpl
+import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
+import com.nabla.sdk.messaging.core.data.message.GqlMessageDataSource
+import com.nabla.sdk.messaging.core.data.message.LocalMessageDataSource
+import com.nabla.sdk.messaging.core.data.message.MessageRepositoryImpl
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import kotlinx.coroutines.CoroutineScope
@@ -23,33 +22,28 @@ internal class MessagingContainer(
 ) {
 
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val messagingGqlMapper = MessagingGqlMapper()
-    private val messagingGqlOperationHelper = MessagingGqlOperationHelper(apolloClient)
+    private val gqlMapper = GqlMapper()
     private val localMessageDataSource = LocalMessageDataSource()
-    private val messagingGqlEventHelper = MessagingGqlEventHelper(
-        apolloClient,
-        repoScope,
-        messagingGqlOperationHelper,
-    )
     private val gqlMessageDataSource = GqlMessageDataSource(
         apolloClient = apolloClient,
-        gqlEventHelper = messagingGqlEventHelper,
-        mapper = messagingGqlMapper,
-        fileUploadRepository = fileUploadRepository,
+        mapper = gqlMapper,
+        coroutineScope = repoScope
+    )
+    private val gqlConversationDataSource = GqlConversationDataSource(
+        coroutineScope = repoScope,
+        apolloClient = apolloClient,
+        mapper = gqlMapper
     )
 
     private val conversationRepositoryImpl = ConversationRepositoryImpl(
         logger = logger,
         repoScope = repoScope,
         apolloClient = apolloClient,
-        mapper = messagingGqlMapper,
-        gqlEventHelper = messagingGqlEventHelper,
-        gqlOperationHelper = messagingGqlOperationHelper
+        gqlConversationDataSource = gqlConversationDataSource,
     )
 
     private val messageRepositoryImpl = MessageRepositoryImpl(
         repoScope = repoScope,
-        gqlOperationHelper = messagingGqlOperationHelper,
         localMessageDataSource = localMessageDataSource,
         gqlMessageDataSource = gqlMessageDataSource,
         fileUploadRepository = fileUploadRepository,

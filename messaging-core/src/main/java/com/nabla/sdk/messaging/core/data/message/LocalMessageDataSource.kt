@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.core.data
+package com.nabla.sdk.messaging.core.data.message
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId

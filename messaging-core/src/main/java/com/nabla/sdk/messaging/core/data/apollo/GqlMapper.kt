@@ -25,7 +25,7 @@ import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.days
 
-internal class MessagingGqlMapper {
+internal class GqlMapper {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
             id = fragment.id.toConversationId(),

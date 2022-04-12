@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging.ui.injection
 
 import com.nabla.sdk.messaging.core.NablaMessaging
-import com.nabla.sdk.messaging.core.data.ConversationRepositoryMock
+import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
