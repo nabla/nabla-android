@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Nabla.MediaPickerBottomSheetDialogFragmentTheme" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Nabla.MediaPickerBottomSheetStyle</item>
+    </style>
+
+    <style name="Nabla.MediaPickerBottomSheetStyle" parent="@style/Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearance">@null</item>
+        <item name="behavior_draggable">false</item>
+        <item name="behavior_fitToContents">true</item>
+    </style>
+</resources>

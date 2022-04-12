@@ -13,6 +13,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -153,9 +154,25 @@ class ConversationFragment : Fragment() {
     private fun collectNavigationEvents(binding: NablaFragmentConversationBinding) {
         viewLifecycleOwner.launchCollect(viewModel.navigationEventFlow) { event ->
             when (event) {
-                ConversationViewModel.NavigationEvent.OpenCameraPictureCapture -> TODO()
-                is ConversationViewModel.NavigationEvent.OpenMediaLibrary -> TODO()
-                ConversationViewModel.NavigationEvent.OpenMediaSourcePicker -> TODO()
+                ConversationViewModel.NavigationEvent.OpenCameraPictureCapture -> {
+                    try {
+                        captureCameraPictureLauncher.launch(Unit)
+                    } catch (t: Throwable) {
+                        viewModel.onErrorLaunchingCameraForImageCapture(t)
+                    }
+                }
+                is ConversationViewModel.NavigationEvent.OpenMediaLibrary -> {
+                    try {
+                        pickMediaFromGalleryLauncher.launch(event.mimeTypes.toTypedArray())
+                    } catch (t: Throwable) {
+                        viewModel.onErrorLaunchingLibrary(t)
+                    }
+                }
+                ConversationViewModel.NavigationEvent.OpenMediaSourcePicker -> {
+                    parentFragmentManager.commit {
+                        add(MediaSourcePickerBottomSheetFragment(), "MediaSourcePicker")
+                    }
+                }
                 is ConversationViewModel.NavigationEvent.OpenWebBrowser -> {
                     openUri(event.url.toAndroidUri())
                 }

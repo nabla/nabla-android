@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.ui.helpers.mediapicker
+package com.nabla.sdk.messaging.ui.helper
 
 import android.content.Context
 import android.net.Uri

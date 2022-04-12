@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaSourcePickerBinding
 
 internal class MediaSourcePickerBottomSheetFragment : BottomSheetDialogFragment() {
+    override fun getTheme(): Int = R.style.Nabla_MediaPickerBottomSheetDialogFragmentTheme
+
     lateinit var binding: NablaConversationTimelineItemMediaSourcePickerBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

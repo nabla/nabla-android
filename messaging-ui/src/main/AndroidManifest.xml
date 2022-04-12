@@ -4,6 +4,9 @@
     package="com.nabla.sdk.messaging.ui"
     >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application>
         <activity
             android:name="com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity"
@@ -19,6 +22,18 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/share_file_paths"
+                />
+        </provider>
+
+        <provider
+            android:name=".helper.CameraFileProvider"
+            android:authorities="${applicationId}.nabla.messaging.camerafileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/media_picker_file_paths"
                 />
         </provider>
     </application>

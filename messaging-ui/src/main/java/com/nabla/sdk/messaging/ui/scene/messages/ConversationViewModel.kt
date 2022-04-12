@@ -7,6 +7,7 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.helper.toJvmUri
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -18,12 +19,15 @@ import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
+import com.nabla.sdk.messaging.core.domain.entity.FileLocal
+import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -178,6 +182,7 @@ internal class ConversationViewModel(
 
     fun onErrorLaunchingCameraForImageCapture(error: Throwable) {
         // TODO
+        println("error launching camera ${error.stackTraceToString()}")
     }
 
     fun onErrorLaunchingLibrary(error: Throwable) {
@@ -189,32 +194,50 @@ internal class ConversationViewModel(
     }
 
     fun onSendButtonClicked() {
-
         viewModelScope.launch(Dispatchers.Default) {
             val mediaMessages = mediasToSendMutableFlow.value
             val textMessage = currentMessageStateFlow.value
 
             mediasToSendMutableFlow.value = emptyList()
 
-            mediaMessages.forEach { mediaToSend ->
-                // TODO delete LocalMessage
-                // messageRepository.sendMessage(..)
+            val baseMessage = BaseMessage(
+                id = MessageId.Local(uuid4()),
+                sentAt = Clock.System.now(),
+                sender = MessageSender.Patient,
+                sendStatus = SendStatus.Sending,
+                conversationId = conversationId,
+            )
 
-                mediasToSendMutableFlow.value = emptyList()
-            }
+            mediaMessages.map { mediaToSend ->
+                async {
+                    messageRepository.sendMessage(
+                        when (mediaToSend) {
+                            is LocalMedia.Image -> Message.Media.Image(
+                                message = baseMessage,
+                                mediaSource = FileSource.Local(FileLocal.Image(Uri(mediaToSend.uri.toString())))
+                            )
+                            is LocalMedia.Document -> Message.Media.Document(
+                                message = baseMessage,
+                                mediaSource = FileSource.Local(
+                                    FileLocal.Document(
+                                        Uri(mediaToSend.uri.toString()),
+                                        mediaToSend.name,
+                                        mediaToSend.mimeType
+                                    )
+                                )
+                            )
+                        }
+                    )
+                }
+            }.forEach { it.join() }
+
             if (textMessage.isNotBlank()) {
                 currentMessageStateFlow.value = ""
 
                 // TODO improve sending API to not specify irrelevant args like status, sender & sentAt
                 messageRepository.sendMessage(
                     Message.Text(
-                        message = BaseMessage(
-                            id = MessageId.Local(uuid4()),
-                            sentAt = Clock.System.now(),
-                            sender = MessageSender.Patient,
-                            sendStatus = SendStatus.Sending,
-                            conversationId = conversationId,
-                        ),
+                        message = baseMessage,
                         text = textMessage,
                     )
                 )

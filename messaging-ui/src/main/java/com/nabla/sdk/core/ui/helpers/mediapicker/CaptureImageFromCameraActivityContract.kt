@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.messaging.ui.helper.CameraFileProvider
 import java.io.File
 
 class CaptureImageFromCameraActivityContract : ActivityResultContract<Unit, MediaPickingResult<LocalMedia.Image>>() {
