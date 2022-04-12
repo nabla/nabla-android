@@ -1,4 +1,4 @@
-package com.nabla.sdk.playground
+package com.nabla.sdk.demo
 
 import android.app.Application
 import com.nabla.sdk.core.NablaCore

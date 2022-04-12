@@ -1,4 +1,4 @@
-package com.nabla.sdk.playground.scene
+package com.nabla.sdk.demo.scene
 
 import android.content.Context
 import android.os.Bundle
@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import com.nabla.sdk.demo.R
+import com.nabla.sdk.demo.databinding.ActivityConversationBinding
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment
-import com.nabla.sdk.playground.R
-import com.nabla.sdk.playground.databinding.ActivityConversationBinding
 
 class ConversationActivity : AppCompatActivity() {
 

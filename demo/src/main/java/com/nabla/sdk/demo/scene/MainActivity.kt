@@ -1,4 +1,4 @@
-package com.nabla.sdk.playground.scene
+package com.nabla.sdk.demo.scene
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.nabla.sdk.core.NablaCore
+import com.nabla.sdk.demo.databinding.ActivityMainBinding
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 import com.nabla.sdk.messaging.ui.scene.conversations.bindViewModel
-import com.nabla.sdk.playground.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID

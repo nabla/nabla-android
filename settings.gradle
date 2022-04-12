@@ -15,6 +15,6 @@ dependencyResolutionManagement {
 }
 enableFeaturePreview("VERSION_CATALOGS")
 rootProject.name = "nabla-sdk-android"
-include ':playground'
+include ':demo'
 include ':messaging-core'
 include ':messaging-ui'

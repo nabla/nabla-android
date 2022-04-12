@@ -7,7 +7,7 @@ android {
     compileSdk buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "com.nabla.sdk"
+        applicationId "com.nabla.sdk.demo"
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
         versionCode 1
