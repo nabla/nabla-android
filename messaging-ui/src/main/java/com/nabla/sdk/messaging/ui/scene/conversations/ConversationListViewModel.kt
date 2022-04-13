@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
+import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -13,17 +14,19 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ConversationListViewModel(
-    private val nablaMessaging: NablaMessaging,
+    nablaMessaging: NablaMessaging,
     internal val onConversationClicked: (conversationId: ConversationId) -> Unit,
     private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean,
 ) : ViewModel() {
+    private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
 
     internal val stateFlow: StateFlow<State> =
         nablaMessaging.watchConversations()
-            .map { conversations ->
+            .map { result ->
+                latestLoadMoreCallback = result.loadMore
+
                 State.Loaded(
-                    conversations.items.map { it.toUiModel() } +
-                        if (conversations.hasMore) listOf(ItemUiModel.Loading) else emptyList()
+                    items = result.items.map { it.toUiModel() } + if (result.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
                 ).eraseType()
             }
             .retryWhen { cause, attempt ->
@@ -34,9 +37,11 @@ class ConversationListViewModel(
             .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = State.Loading)
 
     internal fun onListReachedBottom() {
+        val loadMore = latestLoadMoreCallback ?: return
+
         viewModelScope.launch {
             runCatchingCancellable {
-                nablaMessaging.loadMoreConversations()
+                loadMore().getOrThrow()
             }.onFailure {
                 // TODO
             }

@@ -1,6 +1,5 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
-import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
@@ -11,14 +10,15 @@ import kotlinx.datetime.Instant
 internal class TimelineBuilder {
 
     fun buildTimeline(
-        paginatedMessages: PaginatedList<Message>,
+        messages: List<Message>,
+        hasMore: Boolean,
         providersInConversation: List<ProviderInConversation>,
         selectedMessageId: MessageId? = null,
     ): List<TimelineItem> {
 
         // First generates items containing messages, conversation event and action request.
         // In this first pass, we don't show the status and the author (will do in a second pass)
-        val allMessageItems = paginatedMessages.items.map { message ->
+        val allMessageItems = messages.map { message ->
             message.toTimelineItem(
                 showSenderAvatar = false,
                 showSenderName = false,
@@ -51,7 +51,7 @@ internal class TimelineBuilder {
         val allItemsWithDates = allMessageItemsWithStatus.flatMapIndexed { index, item ->
             val nextItem = if (index < allMessageItemsWithStatus.size - 1) allMessageItemsWithStatus[index + 1] else null
             val itemDate = item.getDate()
-            val shouldShowDate = (nextItem == null && !paginatedMessages.hasMore) || // First item of timeline
+            val shouldShowDate = (nextItem == null && !hasMore) || // First item of timeline
                 (item is TimelineItem.Message && selectedMessageId != null && item.id == selectedMessageId) || // Selected message
                 shouldShowDate(itemDate, nextItem?.getDate()) // Too much time difference
             if (shouldShowDate && itemDate != null) {
@@ -75,7 +75,7 @@ internal class TimelineBuilder {
                 )
             }
 
-        val loadMoreItems = if (paginatedMessages.hasMore) listOf(
+        val loadMoreItems = if (hasMore) listOf(
             TimelineItem.LoadingMore
         ) else emptyList()
 

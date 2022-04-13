@@ -6,7 +6,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.flow.Flow
 
 internal interface ConversationRepository {
-    suspend fun createConversation()
+    suspend fun createConversation(): Conversation
     fun watchConversations(): Flow<PaginatedList<Conversation>>
     suspend fun loadMoreConversations()
     suspend fun markConversationAsRead(conversationId: ConversationId)

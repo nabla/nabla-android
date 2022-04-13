@@ -23,13 +23,15 @@ internal class ConversationRepositoryMock : ConversationRepository {
         )
     )
 
-    override suspend fun createConversation() {
-        // Stub
-        println("createConversation")
+    override suspend fun createConversation(): Conversation {
+        return Conversation.randomFake()
     }
 
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
-        return conversationsFlow.onStart { delay(1.seconds) }
+        return conversationsFlow
+            .onStart {
+                delay(1.seconds)
+            }
     }
 
     private fun Conversation.Companion.randomFake() = Conversation.fake(

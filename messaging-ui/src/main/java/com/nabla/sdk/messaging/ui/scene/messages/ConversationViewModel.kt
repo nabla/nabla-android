@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import androidx.annotation.CheckResult
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,6 +25,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -50,6 +52,8 @@ internal class ConversationViewModel(
     private val onErrorCallback: (message: String, Throwable) -> Unit,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
+
     private val retryAfterErrorTriggerFlow = MutableSharedFlow<Unit>()
     private val selectedMessageIdFlow = MutableStateFlow<MessageId?>(null)
 
@@ -91,7 +95,7 @@ internal class ConversationViewModel(
         }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = EditorState(canSubmit = false))
     }
 
-    private fun makeStateFlow(conversationDataFlow: Flow<ConversationWithMessages>): StateFlow<State> {
+    private fun makeStateFlow(conversationDataFlow: Flow<WatchPaginatedResponse<ConversationWithMessages>>): StateFlow<State> {
         return combine(
             conversationDataFlow,
             selectedMessageIdFlow,
@@ -108,8 +112,11 @@ internal class ConversationViewModel(
             .stateIn(viewModelScope + Dispatchers.Default, SharingStarted.Eagerly, initialValue = State.Loading)
     }
 
-    private fun Flow<ConversationWithMessages>.handleConversationDataSideEffects() =
-        onEach { it.conversation.markConversationAsReadIfNeeded() }
+    private fun Flow<WatchPaginatedResponse<ConversationWithMessages>>.handleConversationDataSideEffects() =
+        onEach { response ->
+            response.items.conversation.markConversationAsReadIfNeeded()
+            latestLoadMoreCallback = response.loadMore
+        }
 
     fun onViewStart() {
         isViewForeground = true
@@ -271,9 +278,11 @@ internal class ConversationViewModel(
     }
 
     fun onTimelineReachedTop() {
+        val loadMore = latestLoadMoreCallback ?: return
+
         viewModelScope.launch(Dispatchers.Default) {
             runCatchingCancellable {
-                nablaMessaging.loadMoreMessages(conversationId)
+                loadMore().getOrThrow()
             }.onFailure {
                 onErrorCallback("Error while loading more items in conversation", it)
             }
@@ -381,14 +390,15 @@ internal class ConversationViewModel(
         private val timelineBuilder = TimelineBuilder()
 
         fun mapToState(
-            conversationWithMessages: ConversationWithMessages,
+            conversationWithMessagesResponse: WatchPaginatedResponse<ConversationWithMessages>,
             selectedMessageId: MessageId?,
         ): State {
             return State.ConversationLoaded(
-                conversation = conversationWithMessages.conversation,
+                conversation = conversationWithMessagesResponse.items.conversation,
                 items = timelineBuilder.buildTimeline(
-                    paginatedMessages = conversationWithMessages.messages,
-                    providersInConversation = conversationWithMessages.conversation.providersInConversation,
+                    messages = conversationWithMessagesResponse.items.messages,
+                    hasMore = conversationWithMessagesResponse.loadMore != null,
+                    providersInConversation = conversationWithMessagesResponse.items.conversation.providersInConversation,
                     selectedMessageId = selectedMessageId,
                 ),
             )

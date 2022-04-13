@@ -7,7 +7,6 @@ import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import kotlinx.datetime.Clock
@@ -22,7 +21,7 @@ import kotlin.time.Duration.Companion.minutes
 
 internal fun ConversationWithMessages.Companion.fake(
     conversation: Conversation = Conversation.fake(),
-    messages: PaginatedList<Message> = PaginatedList((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }, hasMore = true),
+    messages: List<Message> = ((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }),
 ) = ConversationWithMessages(
     conversation = conversation,
     messages = messages,

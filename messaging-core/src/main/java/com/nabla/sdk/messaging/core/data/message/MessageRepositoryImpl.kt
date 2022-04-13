@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
+import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -27,7 +27,7 @@ internal class MessageRepositoryImpl(
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
     private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit>>()
 
-    override fun watchConversationMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
+    override fun watchConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages> {
         val gqlConversationAndMessagesFlow = gqlMessageDataSource.watchRemoteConversationWithMessages(conversationId)
         val localMessagesFlow = localMessageDataSource.watchLocalMessages(conversationId)
         val messageFlow = gqlConversationAndMessagesFlow.combine(localMessagesFlow) { gqlConversationAndMessages, localMessages ->
@@ -38,19 +38,19 @@ internal class MessageRepositoryImpl(
 
     private fun combineGqlAndLocalInfo(
         localMessages: Collection<Message>,
-        gqlConversationAndMessages: ConversationWithMessages
-    ): ConversationWithMessages {
+        gqlPaginatedConversationAndMessages: PaginatedConversationWithMessages
+    ): PaginatedConversationWithMessages {
         val (localMessagesToMerge, localMessagesToAdd) = localMessages.partition {
-            it.message.id.stableId in gqlConversationAndMessages.messages.items.map { it.message.id.stableId }
+            it.message.id.stableId in gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map { it.message.id.stableId }
         }.let { Pair(it.first.associateBy { it.message.id.stableId }, it.second) }
-        val mergedMessages = gqlConversationAndMessages.messages.items.map {
+        val mergedMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map {
             mergeMessage(it, localMessagesToMerge.getValue(it.message.id.stableId)) ?: it
         }
         val allMessages = (mergedMessages + localMessagesToAdd).sortedBy { it.message.sentAt }
-        return gqlConversationAndMessages.copy(
-            messages = gqlConversationAndMessages.messages.copy(
-                items = allMessages
-            )
+        return gqlPaginatedConversationAndMessages.copy(
+            conversationWithMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.copy(
+                messages = allMessages,
+            ),
         )
     }
 

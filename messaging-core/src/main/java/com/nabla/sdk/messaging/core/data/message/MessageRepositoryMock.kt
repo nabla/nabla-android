@@ -1,6 +1,6 @@
 package com.nabla.sdk.messaging.core.data.message
 
-import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -48,14 +48,14 @@ internal class MessageRepositoryMock : MessageRepository {
         }
     )
 
-    override fun watchConversationMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
+    override fun watchConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages> {
         return messagesListFlow.map { messages ->
-            ConversationWithMessages.fake(
-                conversation = Conversation.fake(providersInConversation = listOf(ProviderInConversation.fake(provider))),
-                messages = PaginatedList(
-                    hasMore = true,
-                    items = messages.sortedByDescending { it.message.sentAt }
-                )
+            PaginatedConversationWithMessages(
+                conversationWithMessages = ConversationWithMessages.fake(
+                    conversation = Conversation.fake(providersInConversation = listOf(ProviderInConversation.fake(provider))),
+                    messages = messages.sortedByDescending { it.message.sentAt }
+                ),
+                hasMore = true,
             )
         }
             .onStart { delay(1_000) }

@@ -1,8 +1,9 @@
 package com.nabla.sdk.messaging.core
 
+import androidx.annotation.CheckResult
 import com.nabla.sdk.core.NablaCore
-import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.injection.CoreContainer
+import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
 import com.nabla.sdk.messaging.core.data.message.MessageRepositoryMock
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
@@ -12,14 +13,15 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class NablaMessaging private constructor(coreContainer: CoreContainer) {
     constructor(core: NablaCore) : this(core.coreContainer)
 
     private val messagingContainer = MessagingContainer(
-        coreContainer.logger,
         coreContainer.apolloClient,
         coreContainer.fileUploadRepository
     )
@@ -29,42 +31,66 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     private val messageRepository: MessageRepository by lazy { messagingContainer.messageRepository }
     private val mockMessageRepository = MessageRepositoryMock()
 
-    fun watchConversations(): Flow<PaginatedList<Conversation>> {
+    fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
+        val loadMoreCallback = suspend {
+            runCatchingCancellable {
+                mockConversationRepository.loadMoreConversations()
+            }
+        }
+
         return mockConversationRepository.watchConversations()
+            .map { paginatedConversations ->
+                WatchPaginatedResponse(
+                    items = paginatedConversations.items,
+                    loadMore = if (paginatedConversations.hasMore) { loadMoreCallback } else { null },
+                )
+            }
     }
 
-    suspend fun createConversation() {
-        mockConversationRepository.createConversation()
+    @CheckResult
+    suspend fun createConversation(): Result<Conversation> {
+        return runCatchingCancellable {
+            mockConversationRepository.createConversation()
+        }
     }
 
-    suspend fun loadMoreConversations() {
-        mockConversationRepository.loadMoreConversations()
-    }
+    fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationWithMessages>> {
+        val loadMoreCallback = suspend {
+            runCatchingCancellable {
+                mockMessageRepository.loadMoreMessages(conversationId)
+            }
+        }
 
-    fun watchConversationMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
         return mockMessageRepository.watchConversationMessages(conversationId)
+            .map { paginatedConversationWithMessages ->
+                WatchPaginatedResponse(
+                    items = paginatedConversationWithMessages.conversationWithMessages,
+                    loadMore = if (paginatedConversationWithMessages.hasMore) { loadMoreCallback } else null
+                )
+            }
     }
 
+    @CheckResult
     suspend fun sendMessage(message: Message) {
         mockMessageRepository.sendMessage(message)
     }
 
+    @CheckResult
     suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
         mockMessageRepository.setTyping(conversationId, isTyping)
     }
 
-    suspend fun loadMoreMessages(conversationId: ConversationId) {
-        mockMessageRepository.loadMoreMessages(conversationId)
-    }
-
+    @CheckResult
     suspend fun retrySendingMessage(conversationId: ConversationId, local: MessageId.Local) {
         mockMessageRepository.retrySendingMessage(conversationId, local)
     }
 
+    @CheckResult
     suspend fun markConversationAsRead(conversationId: ConversationId) {
         mockConversationRepository.markConversationAsRead(conversationId)
     }
 
+    @CheckResult
     suspend fun deleteMessage(conversationId: ConversationId, id: MessageId) {
         mockMessageRepository.deleteMessage(conversationId, id)
     }

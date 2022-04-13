@@ -10,6 +10,7 @@ import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.graphql.CreateConversationMutation
 import com.nabla.sdk.graphql.MaskAsSeenMutation
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
@@ -103,6 +104,16 @@ internal class GqlConversationDataSource constructor(
 
     suspend fun markConversationAsRead(conversationId: ConversationId) {
         apolloClient.mutation(MaskAsSeenMutation(conversationId.value)).execute()
+    }
+
+    suspend fun createConversation(): Conversation {
+        return mapper.mapToConversation(
+            apolloClient.mutation(CreateConversationMutation()).execute()
+                .dataAssertNoErrors
+                .createConversation
+                .conversation
+                .conversationFragment
+        )
     }
 
     companion object {

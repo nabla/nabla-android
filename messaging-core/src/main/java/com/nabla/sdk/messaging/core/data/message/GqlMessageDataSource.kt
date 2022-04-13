@@ -9,7 +9,7 @@ import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.updateCache
-import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
@@ -65,8 +65,8 @@ internal class GqlMessageDataSource(
             .toFlow()
             .map { it.dataAssertNoErrors }
             .onEach {
-                it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let {
-                    insertMessageToConversationCache(it)
+                it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
+                    insertMessageToConversationCache(messageFragment)
                 }
             }.shareIn(
                 scope = coroutineScope,
@@ -115,7 +115,7 @@ internal class GqlMessageDataSource(
         }
     }
 
-    fun watchRemoteConversationWithMessages(conversationId: ConversationId): Flow<ConversationWithMessages> {
+    fun watchRemoteConversationWithMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages> {
         val query = firstMessagePageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .watch()
@@ -126,9 +126,12 @@ internal class GqlMessageDataSource(
                 val items = page.data.mapNotNull { it?.messageFragment }.map {
                     mapper.mapToMessage(it)
                 }
-                return@map ConversationWithMessages(
-                    conversation = mapper.mapToConversation(queryData.conversation.conversation.conversationFragment),
-                    messages = PaginatedList(items, page.hasMore)
+                return@map PaginatedConversationWithMessages(
+                    conversationWithMessages = ConversationWithMessages(
+                        conversation = mapper.mapToConversation(queryData.conversation.conversation.conversationFragment),
+                        messages = items,
+                    ),
+                    hasMore = page.hasMore,
                 )
             }
         return flowOf(
