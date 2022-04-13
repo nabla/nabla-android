@@ -5,7 +5,11 @@ plugins {
     id 'com.apollographql.apollo3'
 }
 
+group buildConfig.groupId
+
 android {
+    namespace = 'com.nabla.sdk.messaging.core'
+
     compileSdk buildConfig.compileSdk
 
     defaultConfig {

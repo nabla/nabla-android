@@ -4,7 +4,11 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+group buildConfig.groupId
+
 android {
+    namespace = 'com.nabla.sdk.messaging.ui'
+
     compileSdk buildConfig.compileSdk
 
     defaultConfig {

@@ -5,6 +5,7 @@ buildscript {
             'minSdk'    : 23,
             'targetSdk' : 32,
             'jvmTarget' : JavaVersion.VERSION_11,
+            'groupId'   : 'com.nabla.sdk',
     ]
 
     repositories {
