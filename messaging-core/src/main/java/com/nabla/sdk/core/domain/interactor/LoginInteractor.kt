@@ -14,7 +14,7 @@ internal class LoginInteractor(
         return runCatchingCancellable {
             patientRepository.setPatientId(patientId)
             tokenRepository.clearSession()
-            tokenRepository.getFreshAccessToken(forceRefreshAccessToken = true)
+            tokenRepository.getFreshAccessToken(forceRefreshAccessToken = true).getOrThrow()
         }
     }
 }

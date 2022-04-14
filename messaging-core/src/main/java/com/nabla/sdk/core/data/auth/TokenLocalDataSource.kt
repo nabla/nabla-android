@@ -38,7 +38,8 @@ internal class TokenLocalDataSource(private val securedKVStorage: SecuredKVStora
 
     fun clear() {
         with(securedKVStorage.edit()) {
-            clear()
+            remove(KEY_REFRESH_TOKEN)
+            remove(KEY_ACCESS_TOKEN)
             apply()
         }
     }

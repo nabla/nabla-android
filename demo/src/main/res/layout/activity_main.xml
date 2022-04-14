@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".scene.MainActivity"
-    android:theme="@style/ThemeOverlay.Nabla.Sdk.Messaging.Playground"
+    android:theme="@style/ThemeOverlay.Nabla.Sdk.Messaging.Demo"
     >
 
     <com.nabla.sdk.messaging.ui.scene.conversations.ConversationListView
         android:id="@+id/conversationListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:theme="@style/ThemeOverlay.Nabla.Sdk.Messaging.Playground"
+        android:theme="@style/ThemeOverlay.Nabla.Sdk.Messaging.Demo"
         app:layout_constraintBottom_toTopOf="@id/createConversation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

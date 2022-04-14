@@ -34,8 +34,8 @@ class NablaCore private constructor() {
         this.nablaCoreConfig = nablaCoreConfig
     }
 
-    suspend fun authenticate(userId: String) {
-        coreContainer.loginInteractor().invoke(userId.toId())
+    suspend fun authenticate(userId: String): Result<Unit> {
+        return coreContainer.loginInteractor().invoke(userId.toId())
     }
 
     companion object {

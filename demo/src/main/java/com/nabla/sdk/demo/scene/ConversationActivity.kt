@@ -17,8 +17,8 @@ class ConversationActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(
             ContextThemeWrapper(
-                ContextThemeWrapper(newBase, R.style.Theme_Nabla_Sdk_Playground),
-                R.style.ThemeOverlay_Nabla_Sdk_Messaging_Playground
+                ContextThemeWrapper(newBase, R.style.Theme_Nabla_Sdk_Demo),
+                R.style.ThemeOverlay_Nabla_Sdk_Messaging_Demo
             )
         )
     }
