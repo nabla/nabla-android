@@ -63,13 +63,13 @@ internal class GqlMapper {
         )
         messageFragment.content?.messageContentFragment?.onTextMessageContent?.textMessageContentFragment?.let {
             return@let Message.Text(
-                message = baseMessage,
+                baseMessage = baseMessage,
                 text = it.text
             )
         }
         messageFragment.content?.messageContentFragment?.onImageMessageContent?.imageMessageContentFragment?.let {
             return@let Message.Media.Image(
-                message = baseMessage,
+                baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
                     fileUpload = mapToFileUploadImage(it.imageFileUpload.imageFileUploadFragment)
@@ -78,7 +78,7 @@ internal class GqlMapper {
         }
         messageFragment.content?.messageContentFragment?.onDocumentMessageContent?.documentMessageContentFragment?.let {
             return@let Message.Media.Document(
-                message = baseMessage,
+                baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
                     fileUpload = mapToFileUploadDocument(it.documentFileUpload.documentFileUploadFragment)

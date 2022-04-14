@@ -11,19 +11,19 @@ internal fun Message.toTimelineItem(
 ): TimelineItem.Message {
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
     val actions: Set<MessageAction> = when {
-        message.sender is MessageSender.Provider -> setOfNotNull(copyActionOrNull)
-        message.sender is MessageSender.System -> setOfNotNull(copyActionOrNull)
-        message.sender is MessageSender.Patient && message.sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
+        sender is MessageSender.Provider -> setOfNotNull(copyActionOrNull)
+        sender is MessageSender.System -> setOfNotNull(copyActionOrNull)
+        sender is MessageSender.Patient && sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
         else -> emptySet()
     }
     return TimelineItem.Message(
-        id = message.id,
-        sender = message.sender,
+        id = id,
+        sender = sender,
         showSenderAvatar = showSenderAvatar,
         showSenderName = showSenderName,
-        status = message.sendStatus,
+        status = sendStatus,
         showStatus = showStatus,
-        time = message.sentAt,
+        time = sentAt,
         actions = actions,
         content = toMessageContent(),
     )

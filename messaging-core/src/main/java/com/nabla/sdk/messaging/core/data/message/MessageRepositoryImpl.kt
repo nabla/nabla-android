@@ -41,12 +41,12 @@ internal class MessageRepositoryImpl(
         gqlPaginatedConversationAndMessages: PaginatedConversationWithMessages
     ): PaginatedConversationWithMessages {
         val (localMessagesToMerge, localMessagesToAdd) = localMessages.partition {
-            it.message.id.stableId in gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map { it.message.id.stableId }
-        }.let { Pair(it.first.associateBy { it.message.id.stableId }, it.second) }
+            it.baseMessage.id.stableId in gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map { it.baseMessage.id.stableId }
+        }.let { Pair(it.first.associateBy { it.baseMessage.id.stableId }, it.second) }
         val mergedMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map {
-            mergeMessage(it, localMessagesToMerge.getValue(it.message.id.stableId)) ?: it
+            mergeMessage(it, localMessagesToMerge.getValue(it.baseMessage.id.stableId)) ?: it
         }
-        val allMessages = (mergedMessages + localMessagesToAdd).sortedBy { it.message.sentAt }
+        val allMessages = (mergedMessages + localMessagesToAdd).sortedBy { it.baseMessage.sentAt }
         return gqlPaginatedConversationAndMessages.copy(
             conversationWithMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.copy(
                 messages = allMessages,
@@ -81,23 +81,31 @@ internal class MessageRepositoryImpl(
         loadMoreConversationMessagesSharedSingle.await()
     }
 
-    override suspend fun sendMessage(message: Message) {
-        val messageId = message.message.id
+    override suspend fun sendMessage(message: Message): Message {
+        val messageId = message.baseMessage.id
         if (messageId !is MessageId.Local) {
-            return
+            error("Can't send a message that is not an unsent local one")
         }
+
+        if (message.sendStatus !in setOf(SendStatus.ToBeSent, SendStatus.ErrorSending)) {
+            error("Can't send a message with status: ${message.sendStatus}")
+        }
+
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
-        runCatchingCancellable {
-            when (message) {
-                is Message.Deleted -> { /* no-op */ }
+
+        return runCatchingCancellable {
+            return when (message) {
+                is Message.Deleted -> error("Can't send a deleted message")
                 is Message.Media.Document -> sendMediaMessageImpl(message, messageId)
                 is Message.Media.Image -> sendMediaMessageImpl(message, messageId)
                 is Message.Text -> sendTextMessageImpl(message, messageId)
             }
-        }.onFailure {
+        }.getOrElse {
+            val erredMessage = message.modify(SendStatus.ErrorSending)
             localMessageDataSource.putMessage(
-                message.modify(SendStatus.ErrorSending)
+                erredMessage
             )
+            erredMessage
         }
     }
 
@@ -119,23 +127,23 @@ internal class MessageRepositoryImpl(
     private suspend fun sendMediaMessageImpl(
         mediaMessage: Message.Media<*, *>,
         messageId: MessageId.Local
-    ) {
+    ): Message {
         val mediaSource = mediaMessage.mediaSource
         if (mediaSource !is FileSource.Local) {
-            return
+            error("Can't send a media message with a media source that is not local")
         }
         val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri)
-        when (mediaMessage) {
+        return when (mediaMessage) {
             is Message.Media.Document -> {
                 gqlMessageDataSource.sendDocumentMessage(
-                    mediaMessage.message.conversationId,
+                    mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
                     fileUploadId
                 )
             }
             is Message.Media.Image -> {
                 gqlMessageDataSource.sendImageMessage(
-                    mediaMessage.message.conversationId,
+                    mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
                     fileUploadId
                 )
@@ -143,9 +151,9 @@ internal class MessageRepositoryImpl(
         }
     }
 
-    private suspend fun sendTextMessageImpl(message: Message.Text, messageId: MessageId.Local) {
-        gqlMessageDataSource.sendTextMessage(
-            message.message.conversationId,
+    private suspend fun sendTextMessageImpl(message: Message.Text, messageId: MessageId.Local): Message {
+        return gqlMessageDataSource.sendTextMessage(
+            message.baseMessage.conversationId,
             messageId.clientId,
             message.text
         )

@@ -53,7 +53,7 @@ internal class MessageRepositoryMock : MessageRepository {
             PaginatedConversationWithMessages(
                 conversationWithMessages = ConversationWithMessages.fake(
                     conversation = Conversation.fake(providersInConversation = listOf(ProviderInConversation.fake(provider))),
-                    messages = messages.sortedByDescending { it.message.sentAt }
+                    messages = messages.sortedByDescending { it.baseMessage.sentAt }
                 ),
                 hasMore = true,
             )
@@ -65,26 +65,28 @@ internal class MessageRepositoryMock : MessageRepository {
         println("load more messages")
         delay(1_000)
         flowMutex.withLock {
-            val oldestInstant = messagesListFlow.value.minOf { it.message.sentAt }
+            val oldestInstant = messagesListFlow.value.minOf { it.baseMessage.sentAt }
             messagesListFlow.value =
                 messagesListFlow.value + (1..10).map { Message.Text.fake(sentAt = oldestInstant.minus(it.minutes), text = "page item n°$it") }
         }
     }
 
-    override suspend fun sendMessage(message: Message) {
+    override suspend fun sendMessage(message: Message): Message {
         flowMutex.withLock { messagesListFlow.value = messagesListFlow.value + listOf(message) }
         delay(1_000)
-        flowMutex.withLock {
+        return flowMutex.withLock {
+            val newMessage = message.modify(if ((message as? Message.Text)?.text?.contains("fail") == true) SendStatus.ErrorSending else SendStatus.Sent)
             messagesListFlow.value = messagesListFlow.value - listOf(message) + listOf(
-                message.modify(if ((message as? Message.Text)?.text?.contains("fail") == true) SendStatus.ErrorSending else SendStatus.Sent)
+                newMessage
             )
+            newMessage
         }
     }
 
     override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
         flowMutex.withLock {
             messagesListFlow.value = messagesListFlow.value.map {
-                if (it.message.id == localMessageId && it.message.sendStatus == SendStatus.ErrorSending) {
+                if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.ErrorSending) {
                     it.modify(SendStatus.Sending)
                 } else it
             }
@@ -92,7 +94,7 @@ internal class MessageRepositoryMock : MessageRepository {
         delay(1_000)
         flowMutex.withLock {
             messagesListFlow.value = messagesListFlow.value.map {
-                if (it.message.id == localMessageId && it.message.sendStatus == SendStatus.Sending) {
+                if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.Sending) {
                     it.modify(SendStatus.Sent)
                 } else it
             }
@@ -106,8 +108,8 @@ internal class MessageRepositoryMock : MessageRepository {
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         flowMutex.withLock {
             messagesListFlow.value = messagesListFlow.value.map {
-                if (it.message.id == messageId) {
-                    Message.Deleted(it.message)
+                if (it.baseMessage.id == messageId) {
+                    Message.Deleted(it.baseMessage)
                 } else it
             }
         }

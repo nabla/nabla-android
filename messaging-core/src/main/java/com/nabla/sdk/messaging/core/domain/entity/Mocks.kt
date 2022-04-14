@@ -54,7 +54,7 @@ internal fun Message.Media.Image.Companion.fake(
     mimeType: MimeType = MimeType.Image.JPEG,
     fileName: String = "filename.jpg",
 ) = Message.Media.Image(
-    message = BaseMessage(
+    baseMessage = BaseMessage(
         id = id,
         sentAt = sentAt,
         sender = sender,
@@ -87,7 +87,7 @@ internal fun Message.Media.Document.Companion.fake(
     fileName: String = "filename.jpg",
     thumbnail: FileUpload.Image? = null,
 ) = Message.Media.Document(
-    message = BaseMessage(
+    baseMessage = BaseMessage(
         id = id,
         sentAt = sentAt,
         sender = sender,

@@ -71,18 +71,22 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     }
 
     @CheckResult
-    suspend fun sendMessage(message: Message) {
-        mockMessageRepository.sendMessage(message)
+    suspend fun sendMessage(message: Message): Result<Unit> {
+        return runCatchingCancellable {
+            mockMessageRepository.sendMessage(message)
+        }
+    }
+
+    @CheckResult
+    suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
+        return runCatchingCancellable {
+            mockMessageRepository.retrySendingMessage(conversationId, localMessageId)
+        }
     }
 
     @CheckResult
     suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
         mockMessageRepository.setTyping(conversationId, isTyping)
-    }
-
-    @CheckResult
-    suspend fun retrySendingMessage(conversationId: ConversationId, local: MessageId.Local) {
-        mockMessageRepository.retrySendingMessage(conversationId, local)
     }
 
     @CheckResult

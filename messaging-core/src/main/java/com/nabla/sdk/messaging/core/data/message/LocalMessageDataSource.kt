@@ -25,9 +25,9 @@ internal class LocalMessageDataSource {
     }
 
     fun putMessage(message: Message) {
-        val stateFlow = getLocalMessagesMutableFlow(message.message.conversationId)
+        val stateFlow = getLocalMessagesMutableFlow(message.baseMessage.conversationId)
         stateFlow.value = stateFlow.value.toMutableMap().apply {
-            put(message.message.id.stableId, message)
+            put(message.baseMessage.id.stableId, message)
         }
     }
 

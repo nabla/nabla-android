@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.helper.toJvmUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
@@ -15,7 +14,6 @@ import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.messaging.core.NablaMessaging
-import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
@@ -23,7 +21,6 @@ import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
@@ -205,24 +202,16 @@ internal class ConversationViewModel(
 
             mediasToSendMutableFlow.value = emptyList()
 
-            val baseMessage = BaseMessage(
-                id = MessageId.Local(uuid4()),
-                sentAt = Clock.System.now(),
-                sender = MessageSender.Patient,
-                sendStatus = SendStatus.Sending,
-                conversationId = conversationId,
-            )
-
             mediaMessages.map { mediaToSend ->
                 async {
                     nablaMessaging.sendMessage(
                         when (mediaToSend) {
-                            is LocalMedia.Image -> Message.Media.Image(
-                                message = baseMessage,
+                            is LocalMedia.Image -> Message.Media.Image.new(
+                                conversationId = conversationId,
                                 mediaSource = FileSource.Local(FileLocal.Image(Uri(mediaToSend.uri.toString())))
                             )
-                            is LocalMedia.Document -> Message.Media.Document(
-                                message = baseMessage,
+                            is LocalMedia.Document -> Message.Media.Document.new(
+                                conversationId = conversationId,
                                 mediaSource = FileSource.Local(
                                     FileLocal.Document(
                                         Uri(mediaToSend.uri.toString()),
@@ -232,20 +221,19 @@ internal class ConversationViewModel(
                                 )
                             )
                         }
-                    )
+                    ).getOrNull()
                 }
             }.forEach { it.join() }
 
             if (textMessage.isNotBlank()) {
                 currentMessageStateFlow.value = ""
 
-                // TODO improve sending API to not specify irrelevant args like status, sender & sentAt
                 nablaMessaging.sendMessage(
-                    Message.Text(
-                        message = baseMessage,
+                    Message.Text.new(
+                        conversationId = conversationId,
                         text = textMessage,
                     )
-                )
+                ).getOrNull()
             }
 
             scrollToBottomAfterNextUpdateMutableFlow.value = true
@@ -293,9 +281,9 @@ internal class ConversationViewModel(
         val item = clickedItem as? TimelineItem.Message ?: return
 
         // Retry sending a message that previously failed
-        if (item.status == SendStatus.ErrorSending) {
+        if (item.status == SendStatus.ErrorSending && item.id is MessageId.Local) {
             viewModelScope.launch {
-                nablaMessaging.retrySendingMessage(conversationId, clickedItem.id as MessageId.Local)
+                nablaMessaging.retrySendingMessage(item.id, conversationId)
             }
             return
         }

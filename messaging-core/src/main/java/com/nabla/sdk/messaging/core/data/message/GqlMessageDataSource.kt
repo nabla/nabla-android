@@ -33,6 +33,7 @@ import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
+import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -144,8 +145,8 @@ internal class GqlMessageDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid
-    ) {
-        sendMediaMessage(conversationId, clientId) {
+    ): Message {
+        return sendMediaMessage(conversationId, clientId) {
             SendMessageContentInput(
                 documentInput = Optional.presentIfNotNull(
                     SendDocumentMessageInput(
@@ -160,8 +161,8 @@ internal class GqlMessageDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid
-    ) {
-        sendMediaMessage(conversationId, clientId) {
+    ): Message {
+        return sendMediaMessage(conversationId, clientId) {
             SendMessageContentInput(
                 imageInput = Optional.presentIfNotNull(
                     SendImageMessageInput(
@@ -176,13 +177,21 @@ internal class GqlMessageDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         inputFactoryBlock: () -> SendMessageContentInput
-    ) {
+    ): Message {
         val input = inputFactoryBlock()
         val mutation = SendMessageMutation(conversationId.value, input, clientId)
-        apolloClient.mutation(mutation).execute()
+
+        return mapper.mapToMessage(
+            apolloClient.mutation(mutation)
+                .execute()
+                .dataAssertNoErrors
+                .sendMessage
+                .message
+                .messageFragment
+        )
     }
 
-    suspend fun sendTextMessage(conversationId: ConversationId, clientId: Uuid, text: String) {
+    suspend fun sendTextMessage(conversationId: ConversationId, clientId: Uuid, text: String): Message {
         val input = SendMessageContentInput(
             textInput = Optional.presentIfNotNull(
                 SendTextMessageInput(
@@ -191,7 +200,15 @@ internal class GqlMessageDataSource(
             )
         )
         val mutation = SendMessageMutation(conversationId.value, input, clientId)
-        apolloClient.mutation(mutation).execute()
+
+        return mapper.mapToMessage(
+            apolloClient.mutation(mutation)
+                .execute()
+                .dataAssertNoErrors
+                .sendMessage
+                .message
+                .messageFragment
+        )
     }
 
     suspend fun deleteMessage(remoteMessageId: Uuid) {
