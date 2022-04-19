@@ -10,8 +10,7 @@ internal object TypeAndUuidCacheKeyGenerator : CacheKeyGenerator {
         obj: Map<String, Any?>,
         context: CacheKeyGeneratorContext
     ): CacheKey? {
-        // TODO : Align with GQL ids scalar and name
-        val typeName = obj["__typename"] as String
+        val typeName = obj["__typename"]
         val remoteId = obj["id"]
         val localId = obj["clientId"]
         if (localId is Uuid) {

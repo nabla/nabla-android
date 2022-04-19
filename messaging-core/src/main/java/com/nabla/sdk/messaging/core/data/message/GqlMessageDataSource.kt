@@ -10,6 +10,7 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
+import com.nabla.sdk.core.kotlin.shareInWithMaterializedErrors
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
@@ -43,7 +44,6 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 
 internal class GqlMessageDataSource(
     private val coroutineScope: CoroutineScope,
@@ -69,7 +69,7 @@ internal class GqlMessageDataSource(
                 it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
                     insertMessageToConversationCache(messageFragment)
                 }
-            }.shareIn(
+            }.shareInWithMaterializedErrors(
                 scope = coroutineScope,
                 replay = 0,
                 started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)

@@ -8,7 +8,7 @@ import com.nabla.sdk.core.domain.entity.AuthTokens
 class PlaygroundApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        NablaCore.instance.setConfig(NablaCoreConfig(isLoggingEnable = true))
+        NablaCore.instance.setConfig(NablaCoreConfig(isLoggingEnabled = true))
         NablaCore.instance.init {
             // Call to authenticate the app on client server
 

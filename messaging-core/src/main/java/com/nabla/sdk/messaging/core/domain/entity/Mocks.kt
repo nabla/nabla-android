@@ -7,6 +7,7 @@ import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import kotlinx.datetime.Clock
@@ -64,8 +65,7 @@ internal fun Message.Media.Image.Companion.fake(
     mediaSource = FileSource.Uploaded(
         fileLocal = null,
         fileUpload = FileUpload.Image(
-            width = 300,
-            height = 300,
+            size = Size(300, 300),
             fileUpload = BaseFileUpload(
                 id = uuid4(),
                 url = ephemeralUrl,

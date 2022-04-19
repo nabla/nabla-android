@@ -1,6 +1,12 @@
 scalar DateTime
 scalar UUID
 
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
 type Query {
   conversations(page: OpaqueCursorPage!): ConversationsOutput!
 
@@ -43,7 +49,7 @@ union MessageAuthor = Patient | Provider
 type Message {
   id: UUID!
 
-  author: MessageAuthor!
+  author: MessageAuthor
   conversation: Conversation!
   createdAt: DateTime!
 
@@ -102,8 +108,8 @@ type ImageFileUpload implements IFileUpload {
   fileName: String!
   mimeType: String!
 
-  width: Int!
-  height: Int!
+  width: Int
+  height: Int
 }
 
 type DocumentFileUpload implements IFileUpload {
@@ -195,7 +201,15 @@ type CreateConversationOutput {
   conversation: Conversation!
 }
 
-union ConversationsEvent = ConversationCreatedEvent | ConversationUpdatedEvent | ConversationDeletedEvent
+type SubscriptionReadinessEvent {
+  isReady: Boolean!
+}
+
+union ConversationsEvent =
+  SubscriptionReadinessEvent
+  | ConversationCreatedEvent
+  | ConversationUpdatedEvent
+  | ConversationDeletedEvent
 
 type ConversationsEventOutput {
   event: ConversationsEvent!
@@ -213,7 +227,7 @@ type ConversationDeletedEvent {
   conversationId: UUID!
 }
 
-union ConversationEvent = MessageCreatedEvent | MessageUpdatedEvent
+union ConversationEvent = SubscriptionReadinessEvent | MessageCreatedEvent | MessageUpdatedEvent
 
 type ConversationEventOutput {
   event: ConversationEvent!

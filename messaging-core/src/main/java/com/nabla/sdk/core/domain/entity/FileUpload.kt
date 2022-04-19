@@ -6,8 +6,7 @@ sealed class FileUpload {
     abstract val fileUpload: BaseFileUpload
 
     data class Image(
-        val width: Int,
-        val height: Int,
+        val size: Size?,
         override val fileUpload: BaseFileUpload,
     ) : FileUpload()
 
@@ -16,6 +15,11 @@ sealed class FileUpload {
         override val fileUpload: BaseFileUpload,
     ) : FileUpload()
 }
+
+data class Size(
+    val width: Int,
+    val height: Int
+)
 
 data class BaseFileUpload(
     val id: Uuid,

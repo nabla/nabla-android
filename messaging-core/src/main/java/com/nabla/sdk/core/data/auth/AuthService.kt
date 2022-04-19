@@ -5,9 +5,9 @@ import retrofit2.http.POST
 import retrofit2.http.Tag
 
 internal interface AuthService {
-    @POST("v1/jwt/user/refresh")
+    @POST("v1/patient/jwt/refresh")
     suspend fun refresh(
-        @Body refreshToken: String,
+        @Body refreshToken: RestRefreshToken,
         @Tag authorizationType: AuthorizationType = AuthorizationType.NONE,
     ): RestSessionTokens
 }

@@ -22,6 +22,7 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     constructor(core: NablaCore) : this(core.coreContainer)
 
     private val messagingContainer = MessagingContainer(
+        coreContainer.logger,
         coreContainer.apolloClient,
         coreContainer.fileUploadRepository
     )

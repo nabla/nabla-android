@@ -34,24 +34,44 @@ internal class TokenRepositoryImpl(
     private suspend fun getFreshAccessTokenUnsafe(
         forceRefreshAccessToken: Boolean
     ): Result<String> {
-        logger.debug("get fresh access token...")
+        logger.debug(
+            message = "get fresh access token with forceRefreshAccessToken=$forceRefreshAccessToken...",
+            tag = Logger.AUTH_TAG
+        )
         val accessToken = tokenLocalDataSource.getAccessToken()
         if (accessToken.isValid() && !forceRefreshAccessToken) {
+            logger.debug(
+                message = "using still valid access token",
+                tag = Logger.AUTH_TAG
+            )
             return Result.success(accessToken.toString())
         }
-        // access token expired or not present, try refresh token
         val refreshToken = tokenLocalDataSource.getRefreshToken()
         if (refreshToken.isValid()) {
+            logger.debug(
+                message = "using still valid refresh token to refresh tokens",
+                tag = Logger.AUTH_TAG
+            )
             runCatchingCancellable {
                 val freshTokens = tokenRemoteDataSource.refresh(refreshToken.toString())
                 tokenLocalDataSource.setAuthTokens(freshTokens)
+                logger.debug(
+                    message = "tokens refreshed, using refreshed access token",
+                    tag = Logger.AUTH_TAG
+                )
                 return Result.success(freshTokens.accessToken)
             }.onFailure { refreshTokenError ->
                 // Fallback to refreshing session
+                logger.debug(
+                    message = "fail refresh tokens, fallback to refresh session",
+                    tag = Logger.AUTH_TAG
+                )
                 return renewSessionAuthTokens().map {
+                    logger.debug(message = "success refresh session", tag = Logger.AUTH_TAG)
                     it.accessToken
                 }.onFailure { renewSessionError ->
                     // Ensure no exception is suppressed
+                    logger.debug(message = "fail refreshing session", tag = Logger.AUTH_TAG)
                     return Result.failure(renewSessionError.apply { addSuppressed(refreshTokenError) })
                 }
             }

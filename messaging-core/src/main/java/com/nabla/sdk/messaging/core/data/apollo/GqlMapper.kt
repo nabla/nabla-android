@@ -4,6 +4,7 @@ import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.graphql.fragment.ConversationFragment
@@ -90,7 +91,8 @@ internal class GqlMapper {
         }
     }
 
-    private fun mapToMessageSender(author: MessageFragment.Author): MessageSender {
+    private fun mapToMessageSender(author: MessageFragment.Author?): MessageSender {
+        if (author == null) return MessageSender.Unknown
         author.onPatient?.let { return@let MessageSender.Patient }
         author.onProvider?.providerFragment?.let { return@let mapToProvider(it) }
         error {
@@ -124,8 +126,7 @@ internal class GqlMapper {
         imageFileUploadFragment: ImageFileUploadFragment
     ): FileUpload.Image {
         return FileUpload.Image(
-            width = imageFileUploadFragment.width,
-            height = imageFileUploadFragment.height,
+            size = imageFileUploadFragment.size(),
             fileUpload = BaseFileUpload(
                 id = imageFileUploadFragment.id,
                 url = mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
@@ -133,6 +134,10 @@ internal class GqlMapper {
                 mimeType = mapToMimeType(imageFileUploadFragment.mimeType)
             )
         )
+    }
+
+    private fun ImageFileUploadFragment.size(): Size? {
+        return if (width != null && height != null) Size(width, height) else null
     }
 
     private fun mapToFileUploadDocument(

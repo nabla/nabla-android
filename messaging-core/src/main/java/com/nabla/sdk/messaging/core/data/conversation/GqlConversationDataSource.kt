@@ -7,7 +7,9 @@ import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.updateCache
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.kotlin.shareInWithMaterializedErrors
 import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.graphql.CreateConversationMutation
@@ -26,9 +28,9 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 
 internal class GqlConversationDataSource constructor(
+    private val logger: Logger,
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
@@ -37,11 +39,23 @@ internal class GqlConversationDataSource constructor(
         .toFlow()
         .map {
             it.dataAssertNoErrors
-        }.onEach {
+        }
+        .onEach {
+            it.conversations?.event?.apply {
+                onConversationCreatedEvent?.let {
+                    logger.debug("onConversationCreatedEvent")
+                }
+                onConversationDeletedEvent?.let {
+                    logger.debug("onConversationDeletedEvent")
+                }
+                onConversationUpdatedEvent?.let {
+                    logger.debug("onConversationUpdatedEvent")
+                }
+            }
             it.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
                 insertConversationToConversationsListCache(it)
             }
-        }.shareIn(
+        }.shareInWithMaterializedErrors(
             scope = coroutineScope,
             replay = 0,
             started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
@@ -89,7 +103,8 @@ internal class GqlConversationDataSource constructor(
     fun watchConversations(): Flow<PaginatedList<Conversation>> {
         val query = FIRST_CONVERSATIONS_PAGE_QUERY
         val dataFlow = apolloClient.query(query)
-            .watch()
+            .fetchPolicy(FetchPolicy.CacheAndNetwork)
+            .watch(fetchThrows = true, refetchThrows = true)
             .map { response -> response.dataAssertNoErrors }
             .map { queryData ->
                 val items = queryData.conversations.conversations.map {

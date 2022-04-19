@@ -14,6 +14,7 @@ import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
 import com.nabla.sdk.core.data.auth.TokenLocalDataSource
 import com.nabla.sdk.core.data.auth.TokenRemoteDataSource
 import com.nabla.sdk.core.data.auth.TokenRepositoryImpl
+import com.nabla.sdk.core.data.auth.UserHeaderInterceptor
 import com.nabla.sdk.core.data.file.FileService
 import com.nabla.sdk.core.data.file.FileUploadRepositoryImpl
 import com.nabla.sdk.core.data.local.SecuredKVStorage
@@ -40,7 +41,7 @@ internal class CoreContainer(
     config: NablaCoreConfig,
 ) {
     private val securedKVStorage = SecuredKVStorage(context)
-    val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnable)
+    val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnabled)
 
     private val tokenRepositoryLazy = lazy {
         TokenRepositoryImpl(
@@ -54,16 +55,16 @@ internal class CoreContainer(
 
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(AuthorizationInterceptor(tokenRepositoryLazy))
+            .apply { config.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
+            .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
-            .authenticator(ApiAuthenticator(tokenRepositoryLazy))
+            .authenticator(ApiAuthenticator(logger, tokenRepositoryLazy))
             .build()
     }
 
     val apolloClient by lazy {
         ApolloClient.Builder()
-            .serverUrl(config.baseUrl + "graphql")
-            .webSocketServerUrl(config.baseUrl + "graphql/ws")
+            .serverUrl(config.baseUrl + "v1/patient/graphql/sdk/authenticated")
             .normalizedCache(
                 normalizedCacheFactory = SqlNormalizedCacheFactory(context, "nabla-cache-apollo.db"),
                 cacheKeyGenerator = TypeAndUuidCacheKeyGenerator

@@ -3,7 +3,7 @@ kotlin = "1.6.10"
 coroutines = "1.6.0"
 androidxlifecycle = "2.4.1"
 okhttp = "4.9.3"
-apollo = "3.2.0"
+apollo = "3.2.1"
 coil = "1.4.0"
 ktlint = "0.45.1"
 
