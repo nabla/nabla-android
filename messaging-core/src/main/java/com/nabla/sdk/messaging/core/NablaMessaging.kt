@@ -85,18 +85,24 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     }
 
     @CheckResult
-    suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
-        mockMessageRepository.setTyping(conversationId, isTyping)
+    suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
+        return runCatchingCancellable {
+            mockMessageRepository.setTyping(conversationId, isTyping)
+        }
     }
 
     @CheckResult
-    suspend fun markConversationAsRead(conversationId: ConversationId) {
-        mockConversationRepository.markConversationAsRead(conversationId)
+    suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
+        return runCatchingCancellable {
+            mockConversationRepository.markConversationAsRead(conversationId)
+        }
     }
 
     @CheckResult
-    suspend fun deleteMessage(conversationId: ConversationId, id: MessageId) {
-        mockMessageRepository.deleteMessage(conversationId, id)
+    suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
+        return runCatchingCancellable {
+            mockMessageRepository.deleteMessage(conversationId, id)
+        }
     }
 
     companion object {
