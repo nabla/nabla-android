@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.injection
 
 import com.apollographql.apollo3.ApolloClient
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
@@ -19,6 +20,7 @@ internal class MessagingContainer(
     logger: Logger,
     apolloClient: ApolloClient,
     fileUploadRepository: FileUploadRepository,
+    val nablaExceptionMapper: NablaExceptionMapper,
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val gqlMapper = GqlMapper()

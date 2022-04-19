@@ -15,6 +15,8 @@ import com.nabla.sdk.core.data.auth.TokenLocalDataSource
 import com.nabla.sdk.core.data.auth.TokenRemoteDataSource
 import com.nabla.sdk.core.data.auth.TokenRepositoryImpl
 import com.nabla.sdk.core.data.auth.UserHeaderInterceptor
+import com.nabla.sdk.core.data.exception.BaseExceptionMapper
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.file.FileService
 import com.nabla.sdk.core.data.file.FileUploadRepositoryImpl
 import com.nabla.sdk.core.data.local.SecuredKVStorage
@@ -70,6 +72,10 @@ internal class CoreContainer(
                 cacheKeyGenerator = TypeAndUuidCacheKeyGenerator
             ).okHttpClient(okHttpClient)
             .build()
+    }
+
+    val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {
+        registerMapper(BaseExceptionMapper())
     }
 
     @OptIn(ExperimentalSerializationApi::class)
