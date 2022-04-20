@@ -10,11 +10,14 @@ import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch
 
-fun ConversationListView.bindViewModel(viewModel: ConversationListViewModel) {
+fun ConversationListView.bindViewModel(
+    viewModel: ConversationListViewModel,
+    itemDecoration: RecyclerView.ItemDecoration? = DefaultOffsetsItemDecoration(),
+) {
     val conversationAdapter = ConversationListAdapter(viewModel.onConversationClicked)
     recyclerView.apply {
         adapter = conversationAdapter
-        addItemDecoration(OffsetsItemDecoration())
+        itemDecoration?.let { addItemDecoration(it) }
         addOnScrollListener(
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -38,12 +41,12 @@ fun ConversationListView.bindViewModel(viewModel: ConversationListViewModel) {
     }
 }
 
-private class OffsetsItemDecoration : RecyclerView.ItemDecoration() {
+class DefaultOffsetsItemDecoration : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val adapterPosition = parent.getChildAdapterPosition(view)
 
         val topOffset = if (adapterPosition > 0) parent.context.dpToPx(12) else 0
-        val horizontalOffset = 0
+        val horizontalOffset = parent.context.dpToPx(16)
         val bottomOffset = 0
 
         outRect.set(

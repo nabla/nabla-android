@@ -20,7 +20,10 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 internal class MessageRepositoryMock : MessageRepository {
@@ -67,7 +70,16 @@ internal class MessageRepositoryMock : MessageRepository {
         flowMutex.withLock {
             val oldestInstant = messagesListFlow.value.minOf { it.baseMessage.sentAt }
             messagesListFlow.value =
-                messagesListFlow.value + (1..10).map { Message.Text.fake(sentAt = oldestInstant.minus(it.minutes), text = "page item n°$it") }
+                messagesListFlow.value + (1..10).map { Message.randomFake(sentAt = oldestInstant.minus(12.hours).minus(it.minutes)) }
+        }
+    }
+
+    private fun Message.Companion.randomFake(sentAt: Instant): Message {
+        val sender = if (Random.nextBoolean()) MessageSender.Patient else MessageSender.Provider(User.Provider.fake())
+        return when (Random.nextInt() % 100) {
+            in 0..70 -> Message.Text.fake(sender = sender, sentAt = sentAt)
+            in 71..85 -> Message.Media.Image.fake(sender = sender, sentAt = sentAt)
+            else -> Message.Media.Document.fake(sender = sender, sentAt = sentAt)
         }
     }
 

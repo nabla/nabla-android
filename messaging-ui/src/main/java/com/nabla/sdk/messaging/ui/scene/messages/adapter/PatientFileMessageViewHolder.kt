@@ -2,7 +2,7 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.google.android.material.R
+import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemPatientMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.FileMessageContentBinder
@@ -17,7 +17,12 @@ internal class PatientFileMessageViewHolder(
             return PatientFileMessageViewHolder(
                 binding,
                 inflatePatientMessageContentCard(inflater, binding.chatPatientMessageContentContainer) { contentParent ->
-                    FileMessageContentBinder.create(R.attr.colorOnPrimary, R.attr.colorPrimaryDark, inflater, contentParent)
+                    FileMessageContentBinder.create(
+                        contentTextAppearanceAttr = R.attr.nablaMessaging_conversationPatientMessageAppearance,
+                        surfaceColorAttr = R.attr.nablaMessaging_patientMessageBackgroundColor,
+                        inflater,
+                        contentParent
+                    )
                 }
             )
         }

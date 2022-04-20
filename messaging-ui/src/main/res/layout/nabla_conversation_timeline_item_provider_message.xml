@@ -14,7 +14,7 @@
         android:id="@+id/chatProviderMessageAuthorTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:textAppearance="?nablaMessaging_conversationMessageAuthorAppearance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/chatProviderMessageContentContainer"
         app:layout_constraintTop_toTopOf="parent"

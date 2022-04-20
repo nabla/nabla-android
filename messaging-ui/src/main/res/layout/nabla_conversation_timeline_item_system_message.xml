@@ -27,12 +27,10 @@
         android:layout_height="28dp"
         android:layout_gravity="center"
         android:layout_marginTop="3dp"
-        android:src="?systemAvatar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatSystemMessageAuthorTextView"
         tools:ignore="ContentDescription"
         />
-
 
     <FrameLayout
         android:id="@+id/chatSystemMessageContentContainer"

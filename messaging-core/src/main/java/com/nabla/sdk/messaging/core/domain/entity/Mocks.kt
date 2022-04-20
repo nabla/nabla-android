@@ -12,6 +12,7 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlin.math.absoluteValue
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -33,7 +34,7 @@ internal fun Message.Text.Companion.fake(
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
     status: SendStatus = SendStatus.Sent,
-    text: String = "message content ${Random.nextInt() % 1000}",
+    text: String = randomText(),
 ) = Message.Text(
     BaseMessage(
         id = id,
@@ -84,7 +85,7 @@ internal fun Message.Media.Document.Companion.fake(
     conversationId: ConversationId = ConversationId(uuid4()),
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
     mimeType: MimeType = MimeType.Application.PDF,
-    fileName: String = "filename.jpg",
+    fileName: String = "filename.pdf",
     thumbnail: FileUpload.Image? = null,
 ) = Message.Media.Document(
     baseMessage = BaseMessage(
@@ -131,7 +132,7 @@ internal fun User.Provider.Companion.fake(
 
 internal fun ProviderInConversation.Companion.fake(
     provider: User.Provider = User.Provider.fake(),
-    isTyping: Boolean = true,
+    isTyping: Boolean = Random.nextBoolean(),
     seenUntil: Instant = Clock.System.now(),
 ) = ProviderInConversation(
     provider = provider,
@@ -141,8 +142,8 @@ internal fun ProviderInConversation.Companion.fake(
 
 internal fun Conversation.Companion.fake(
     id: Uuid = uuid4(),
-    inboxPreviewTitle: String = "title ${Random.nextInt()}",
-    inboxPreviewSubtitle: String = "subtitle",
+    inboxPreviewTitle: String = randomText(maxWords = 10),
+    inboxPreviewSubtitle: String = listOf("", "You: oh great!", "You: image", "Doctor is typing...").random(),
     lastModified: Instant = Clock.System.now().minus(2.minutes),
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
@@ -164,3 +165,10 @@ internal fun EphemeralUrl.Companion.fake(
 )
 
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)
+
+private fun randomText(maxWords: Int? = null) =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        .split(" ")
+        .shuffled()
+        .let { it.take(Random.nextInt().absoluteValue % it.size.coerceAtMost(maxWords ?: Int.MAX_VALUE) + 1) }
+        .joinToString(separator = " ")

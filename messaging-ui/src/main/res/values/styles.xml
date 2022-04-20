@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.Nabla.CardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">?colorSurface</item>
+    <style name="Widget.Nabla.Messaging.ComposerEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">?textAppearanceBodyLarge</item>
+        <item name="android:textColor">?colorPrimaryDark</item>
+        <item name="android:textColorHint">?colorOnSurface</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+        <item name="android:hint">@string/nabla_messaging_composer_placeholder_default</item>
+        <item name="android:inputType">textMultiLine|textCapSentences</item>
+        <item name="android:maxHeight">200dp</item>
     </style>
 </resources>

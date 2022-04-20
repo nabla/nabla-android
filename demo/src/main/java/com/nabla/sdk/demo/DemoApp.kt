@@ -5,7 +5,7 @@ import com.nabla.sdk.core.NablaCore
 import com.nabla.sdk.core.NablaCoreConfig
 import com.nabla.sdk.core.domain.entity.AuthTokens
 
-class PlaygroundApp : Application() {
+class DemoApp : Application() {
     override fun onCreate() {
         super.onCreate()
         NablaCore.instance.setConfig(NablaCoreConfig(isLoggingEnabled = true))

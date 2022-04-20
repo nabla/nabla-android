@@ -8,55 +8,55 @@
     <group>
         <clip-path android:pathData="M0,0h233v166h-233z" />
         <path
-            android:fillColor="#ffffff"
+            android:fillColor="?colorSurface"
             android:pathData="M0,0h233v166h-233z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,28h53v2h-53z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,37h53v2h-53z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,66h85v2h-85z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,77h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,88h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,99h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,110h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,121h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,132h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,143h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,154h177v2h-177z"
             />
         <path
-            android:fillColor="#C4C4C4"
+            android:fillColor="?colorOnSurface"
             android:pathData="M28,165h177v2h-177z"
             />
     </group>

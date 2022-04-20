@@ -20,7 +20,7 @@
         android:id="@+id/fullScreenImageProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="?colorOnPrimary"
+        android:indeterminateTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,6 @@
         android:src="@drawable/ic_nabla_fullscreen_media_view_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white"
         />
 
     <ImageView
@@ -56,7 +55,6 @@
         android:src="@drawable/ic_nabla_share"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

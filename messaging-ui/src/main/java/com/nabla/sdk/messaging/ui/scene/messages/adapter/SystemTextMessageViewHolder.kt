@@ -2,7 +2,7 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.google.android.material.R
+import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemSystemMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.TextMessageContentBinder
@@ -21,7 +21,8 @@ internal class SystemTextMessageViewHolder(
             return SystemTextMessageViewHolder(
                 binding,
                 inflateSystemMessageContentCard(inflater, binding.chatSystemMessageContentContainer) { contentParent ->
-                    TextMessageContentBinder.create(R.attr.colorPrimaryDark, inflater, contentParent, onUrlClicked)
+                    TextMessageContentBinder
+                        .create(R.attr.nablaMessaging_conversationProviderMessageAppearance, inflater, contentParent, onUrlClicked)
                 }
             )
         }

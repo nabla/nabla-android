@@ -9,21 +9,21 @@ import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.core.text.getSpans
 import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeColor
+import com.nabla.sdk.core.ui.helpers.getThemeStyle
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemTextMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
 internal class TextMessageContentBinder(
-    @AttrRes contentColorAttr: Int,
+    @AttrRes contentAppearanceAttr: Int,
     private val binding: NablaConversationTimelineItemTextMessageBinding,
     private val onUrlClicked: (url: String) -> Unit,
-) : MessageContentBinder<TimelineItem.Message.Text>(contentColorAttr) {
+) : MessageContentBinder<TimelineItem.Message.Text>() {
 
-    private val contentColor: Int = binding.context.getThemeColor(contentColorAttr)
+    private val contentAppearance: Int = binding.context.getThemeStyle(contentAppearanceAttr)
 
     override fun bind(messageId: String, item: TimelineItem.Message.Text) {
         bindTextAndSpans(item)
-        binding.chatTextMessageTextView.setTextColor(contentColor)
+        binding.chatTextMessageTextView.setTextAppearance(contentAppearance)
     }
 
     private fun bindTextAndSpans(item: TimelineItem.Message.Text) {
@@ -59,13 +59,13 @@ internal class TextMessageContentBinder(
 
     companion object {
         fun create(
-            @AttrRes contentColorAttr: Int,
+            @AttrRes contentAppearanceAttr: Int,
             inflater: LayoutInflater,
             parent: ViewGroup,
             onUrlClicked: (url: String) -> Unit,
         ): TextMessageContentBinder {
             return TextMessageContentBinder(
-                contentColorAttr = contentColorAttr,
+                contentAppearanceAttr = contentAppearanceAttr,
                 binding = NablaConversationTimelineItemTextMessageBinding.inflate(inflater, parent, true),
                 onUrlClicked,
             )

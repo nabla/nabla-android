@@ -1,8 +1,10 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.LayoutInflater
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
@@ -22,6 +24,10 @@ internal class ConversationViewHolder(
     private val binding: NablaConversationListViewItemBinding,
     private val onConversationClicked: (conversationId: ConversationId) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
+    init {
+        (binding.unreadDot.drawable as? AnimatedVectorDrawable)?.start()
+    }
+
     fun bind(uiModel: ItemUiModel.Conversation) {
         val context = binding.context
 
@@ -36,12 +42,12 @@ internal class ConversationViewHolder(
 
         val firstProvider = uiModel.providers.firstOrNull()
         if (firstProvider != null) {
-            binding.avatarView.loadAvatar(firstProvider)
+            binding.conversationAvatarView.loadAvatar(firstProvider)
         } else {
-            binding.avatarView.displaySystemAvatar()
+            binding.conversationAvatarView.displaySystemAvatar()
         }
 
-        binding.unreadDot.isVisible = uiModel.hasUnreadMessages
+        binding.unreadDot.visibility = if (uiModel.hasUnreadMessages) VISIBLE else INVISIBLE
         binding.lastMessageDate.text = uiModel.formatLastModified(context)
         applyLastMessageTimeStyle(binding.lastMessageDate, uiModel.hasUnreadMessages)
 

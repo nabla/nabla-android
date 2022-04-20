@@ -44,19 +44,20 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <Button
+        <ImageView
             android:id="@+id/chatMediaToSendRemoveButton"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginEnd="6dp"
             android:layout_marginTop="6dp"
-            style="@style/Nabla.IconButton"
+            android:background="@drawable/nabla_circle_ripple_background"
             app:backgroundTint="@color/on_surface_alpha_38"
             app:icon="@drawable/ic_nabla_close"
             app:iconSize="8dp"
             app:iconTint="?colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Remove draft media"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

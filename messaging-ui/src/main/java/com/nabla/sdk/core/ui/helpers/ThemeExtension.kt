@@ -6,6 +6,7 @@ import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.StyleRes
 
 @ColorInt
 internal fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
@@ -20,6 +21,15 @@ internal fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
 
 @DrawableRes
 internal fun Context.getThemeDrawable(@AttrRes themeAttr: Int): Int? {
+    return resolveThemeResourceId(themeAttr)
+}
+
+@StyleRes
+internal fun Context.getThemeStyle(@AttrRes themeAttr: Int): Int {
+    return resolveThemeResourceId(themeAttr) ?: error("theme style attribute not found $themeAttr")
+}
+
+private fun Context.resolveThemeResourceId(themeAttr: Int): Int? {
     val typedValue = TypedValue()
     return if (theme.resolveAttribute(themeAttr, typedValue, true)) {
         typedValue.resourceId

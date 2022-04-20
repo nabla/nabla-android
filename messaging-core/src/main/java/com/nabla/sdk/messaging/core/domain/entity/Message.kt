@@ -127,6 +127,7 @@ sealed class Message {
             override fun modify(status: SendStatus): Message {
                 return copy(baseMessage = baseMessage.copy(sendStatus = status))
             }
+
             companion object {
                 fun new(
                     conversationId: ConversationId,
@@ -143,6 +144,9 @@ sealed class Message {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
+
         companion object
     }
+
+    companion object
 }

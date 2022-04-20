@@ -1,26 +1,29 @@
 package com.nabla.sdk.messaging.ui.scene.messages.adapter.content
 
-import android.content.res.ColorStateList
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import coil.load
+import com.google.android.material.resources.TextAppearance
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeColor
+import com.nabla.sdk.core.ui.helpers.getThemeStyle
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemImageMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
+@SuppressLint("RestrictedApi")
 internal class ImageMessageContentBinder(
-    @AttrRes contentColorAttr: Int,
+    @AttrRes private val contentTextAppearanceAttr: Int,
     private val binding: NablaConversationTimelineItemImageMessageBinding,
-) : MessageContentBinder<TimelineItem.Message.Image>(contentColorAttr) {
+) : MessageContentBinder<TimelineItem.Message.Image>() {
+    private val contentAppearance = TextAppearance(binding.context, binding.context.getThemeStyle(contentTextAppearanceAttr))
 
     override fun bind(messageId: String, item: TimelineItem.Message.Image) {
         binding.chatImageMessageLoadingProgressBar.visibility = View.VISIBLE
-        binding.chatImageMessageLoadingProgressBar.indeterminateTintList = ColorStateList.valueOf(binding.context.getThemeColor(contentColorAttr))
+        binding.chatImageMessageLoadingProgressBar.indeterminateTintList = contentAppearance.textColor
 
         loadImage(uri = item.uri.toAndroidUri(), itemId = messageId)
     }
@@ -35,12 +38,12 @@ internal class ImageMessageContentBinder(
 
     companion object {
         fun create(
-            @AttrRes contentColorAttr: Int,
+            @AttrRes contentTextAppearanceAttr: Int,
             inflater: LayoutInflater,
             parent: ViewGroup,
         ): ImageMessageContentBinder {
             return ImageMessageContentBinder(
-                contentColorAttr = contentColorAttr,
+                contentTextAppearanceAttr = contentTextAppearanceAttr,
                 binding = NablaConversationTimelineItemImageMessageBinding.inflate(inflater, parent, true)
             )
         }

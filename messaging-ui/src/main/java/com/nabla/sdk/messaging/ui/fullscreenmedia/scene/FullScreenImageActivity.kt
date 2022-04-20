@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.view.View
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -18,10 +18,12 @@ import com.nabla.sdk.messaging.ui.databinding.NablaActivityFullScreenImageBindin
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.createSharableJpegImage
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.createSharingIntent
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.sanitize
+import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import java.net.URI
 
+// This activity currently does not support theme attributes customization
 internal class FullScreenImageActivity : AppCompatActivity() {
-    private lateinit var binding: NablaActivityFullScreenImageBinding
+    private var binding: NablaActivityFullScreenImageBinding? = null
 
     private val imageUri by lazy {
         (intent.extras?.get(IMAGE_URI_ARG) as? URI ?: error("missing image uri"))
@@ -31,7 +33,10 @@ internal class FullScreenImageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = NablaActivityFullScreenImageBinding.inflate(layoutInflater)
+        val binding = NablaActivityFullScreenImageBinding.inflate(
+            LayoutInflater.from(applicationContext?.withNablaMessagingThemeOverlays())
+        )
+        this.binding = binding
         setContentView(binding.root)
 
         binding.fullScreenImageBackButton.setOnClickListener {
@@ -73,7 +78,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
                         binding.fullScreenImageProgressBar.isVisible = false
                         binding.fullScreenImageTouchImageView.isVisible = true
                         binding.fullScreenImageTouchImageView.setImageDrawable(drawable)
-                        binding.fullScreenImageShareButton.visibility = View.VISIBLE
+                        binding.fullScreenImageShareButton.isVisible = true
                         binding.fullScreenImageShareButton.setOnClickListener {
                             try {
                                 startActivity(
@@ -105,6 +110,11 @@ internal class FullScreenImageActivity : AppCompatActivity() {
                 )
                 .build()
         )
+    }
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 
     companion object {

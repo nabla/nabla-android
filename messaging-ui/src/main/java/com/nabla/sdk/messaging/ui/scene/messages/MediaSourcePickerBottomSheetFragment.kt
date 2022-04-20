@@ -8,19 +8,27 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nabla.sdk.messaging.ui.R
-import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaSourcePickerBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaConversationMediaSourcePickerBinding
+import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 
 internal class MediaSourcePickerBottomSheetFragment : BottomSheetDialogFragment() {
     override fun getTheme(): Int = R.style.Nabla_MediaPickerBottomSheetDialogFragmentTheme
 
-    lateinit var binding: NablaConversationTimelineItemMediaSourcePickerBinding
+    private var binding: NablaConversationMediaSourcePickerBinding? = null
+
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater =
+        super.onGetLayoutInflater(savedInstanceState)
+            .cloneInContext(context?.withNablaMessagingThemeOverlays())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = NablaConversationTimelineItemMediaSourcePickerBinding.inflate(inflater, container, false)
-        return binding.root
+        return NablaConversationMediaSourcePickerBinding.inflate(inflater, container, false)
+            .also { binding = it }
+            .root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = binding ?: return
+
         binding.chatMediaSourcePickerOptionCameraPicture.setOnClickListener {
             setFragmentResult(REQUEST_KEY, generateResultBundle(MediaSource.CAMERA_PICTURE))
             dismiss()
@@ -35,6 +43,11 @@ internal class MediaSourcePickerBottomSheetFragment : BottomSheetDialogFragment(
             setFragmentResult(REQUEST_KEY, generateResultBundle(MediaSource.DOCUMENT))
             dismiss()
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        super.onDestroyView()
     }
 
     companion object {

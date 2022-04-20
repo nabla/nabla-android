@@ -6,7 +6,7 @@
     android:id="@+id/chatSystemMessageContent"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="?nablaRoundedCornersRadius"
     app:cardElevation=".5dp"
     tools:layout_height="80dp"
     tools:layout_width="200dp"

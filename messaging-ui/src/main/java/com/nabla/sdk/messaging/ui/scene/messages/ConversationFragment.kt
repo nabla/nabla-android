@@ -40,6 +40,7 @@ import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
+import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity
 import com.nabla.sdk.messaging.ui.helper.PermissionRational
 import com.nabla.sdk.messaging.ui.helper.PermissionRequestLauncher
@@ -87,8 +88,12 @@ class ConversationFragment : Fragment() {
         setupPermissionsLaunchers()
     }
 
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater =
+        super.onGetLayoutInflater(savedInstanceState)
+            .cloneInContext(context?.withNablaMessagingThemeOverlays())
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = NablaFragmentConversationBinding.inflate(layoutInflater, container, false)
+        val binding = NablaFragmentConversationBinding.inflate(inflater, container, false)
         this.binding = binding
         return binding.root
     }
@@ -255,6 +260,8 @@ class ConversationFragment : Fragment() {
     }
 
     private fun wireViewEvents(binding: NablaFragmentConversationBinding) {
+        binding.chatTextInputLayoutContainer.clipToOutline = true
+
         binding.chatToolbarContentContainer.setOnClickListener {
             viewModel.onParticipantsHeaderClicked()
         }

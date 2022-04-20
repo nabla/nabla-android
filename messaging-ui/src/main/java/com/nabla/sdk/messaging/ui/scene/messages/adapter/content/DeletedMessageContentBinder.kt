@@ -3,13 +3,19 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.content
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
+import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.getThemeStyle
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemDeletedMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
 internal class DeletedMessageContentBinder(
-    @AttrRes contentColorAttr: Int,
+    @AttrRes contentTextAppearanceAttr: Int,
     @Suppress("UNUSED_PARAMETER") binding: NablaConversationTimelineItemDeletedMessageBinding,
-) : MessageContentBinder<TimelineItem.Message.Deleted>(contentColorAttr) {
+) : MessageContentBinder<TimelineItem.Message.Deleted>() {
+
+    init {
+        binding.chatDeletedMessageTextView.setTextAppearance(binding.context.getThemeStyle(contentTextAppearanceAttr))
+    }
 
     override fun bind(messageId: String, item: TimelineItem.Message.Deleted) {
         /* no-op */
@@ -17,12 +23,12 @@ internal class DeletedMessageContentBinder(
 
     companion object {
         fun create(
-            @AttrRes contentColorAttr: Int,
+            @AttrRes contentTextAppearanceAttr: Int,
             inflater: LayoutInflater,
             parent: ViewGroup,
         ): DeletedMessageContentBinder {
             return DeletedMessageContentBinder(
-                contentColorAttr = contentColorAttr,
+                contentTextAppearanceAttr = contentTextAppearanceAttr,
                 binding = NablaConversationTimelineItemDeletedMessageBinding.inflate(inflater, parent, true)
             )
         }

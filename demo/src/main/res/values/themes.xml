@@ -1,6 +1,5 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.Nabla.Sdk.Demo" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.Nabla.Sdk.Demo" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#FF018786</item>
         <item name="colorPrimaryDark">#025353</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -15,8 +14,8 @@
         <item name="android:colorBackground">@color/silver</item>
         <item name="colorOnBackground">@color/stone</item>
 
-        <item name="android:textColorPrimary">#2046B8</item>
-        <item name="android:textColorSecondary">#8B9BD1</item>
+        <item name="android:textColorPrimary">?colorPrimaryDark</item>
+        <item name="android:textColorSecondary">?colorOnSurface</item>
 
         <item name="colorAccent">?colorSecondary</item>
         <item name="colorPrimaryVariant">?attr/colorPrimaryDark</item>
@@ -27,10 +26,10 @@
         <!-- this color is used by material library as background drawable, which is not supported on Android < 29 if the color is a selector -->
         <item name="colorControlHighlight">@color/stone_alpha_12</item>
 
-        <item name="materialThemeOverlay">@style/ThemeOverlay.Nabla.Sdk.Messaging.Demo</item>
+        <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.Demo</item>
     </style>
 
-    <style name="ThemeOverlay.Nabla.Sdk.Messaging.Demo" parent="ThemeOverlay.Nabla.Messaging">
-        <item name="systemAvatar">@drawable/avatar_system</item>
+    <style name="NablaOverlay.Demo" parent="ThemeOverlay.Nabla.Messaging">
+        <!-- keeping defaults for this one, check other demo themes for extensive customization -->
     </style>
 </resources>

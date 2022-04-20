@@ -7,11 +7,11 @@ import com.nabla.sdk.core.ui.helpers.getThemeColor
 // TODO we'll want a better granularity than just bold/notBold, i.e. something like regular/medium/semi/etc.
 
 internal fun applyConversationListTitleStyle(textView: TextView, hasUnreadMessage: Boolean) {
-    textView.setTypeface(null, if (hasUnreadMessage) Typeface.BOLD else Typeface.NORMAL)
+    textView.setTypeface(textView.typeface, if (hasUnreadMessage) Typeface.BOLD else Typeface.NORMAL)
 }
 
 internal fun applyConversationListSubtitleStyle(textView: TextView, hasUnreadMessage: Boolean) {
-    textView.setTypeface(null, if (hasUnreadMessage) Typeface.BOLD else Typeface.NORMAL)
+    textView.setTypeface(textView.typeface, if (hasUnreadMessage) Typeface.BOLD else Typeface.NORMAL)
     textView.setTextColor(textView.context.getThemeColor(if (hasUnreadMessage) android.R.attr.textColorPrimary else android.R.attr.textColorSecondary))
 }
 

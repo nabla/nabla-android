@@ -26,7 +26,6 @@ import com.nabla.sdk.core.domain.entity.User.Provider
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
-import com.nabla.sdk.core.ui.helpers.getThemeDrawable
 import com.nabla.sdk.core.ui.helpers.initials
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
@@ -37,10 +36,6 @@ internal class AvatarView : ConstraintLayout {
     private lateinit var binding: NablaComponentAvatarViewBinding
 
     private var useSingleLetterInPlaceHolder: Boolean = false
-
-    constructor(context: Context, attrs: AttributeSet, defStyleRes: Int, defAttrRes: Int) : super(context, attrs, defStyleRes, defAttrRes) {
-        init(context, attrs, defStyleRes, defAttrRes)
-    }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         init(context, attrs, defStyle)
@@ -58,7 +53,7 @@ internal class AvatarView : ConstraintLayout {
         context: Context,
         attrs: AttributeSet?,
         @StyleRes defStyleRes: Int = R.style.Widget_Nabla_AvatarView,
-        @AttrRes defAttrRes: Int = R.attr.avatarViewStyle,
+        @AttrRes defAttrRes: Int = R.attr.nablaAvatarViewStyle,
     ) {
         binding = NablaComponentAvatarViewBinding.inflate(LayoutInflater.from(context), this, true)
 
@@ -147,7 +142,8 @@ internal class AvatarView : ConstraintLayout {
     }
 
     fun displaySystemAvatar() {
-        binding.componentAvatarImageView.setImageResource(requireNotNull(context.getThemeDrawable(R.attr.systemAvatar)))
+        // System avatar not supported for now
+        loadAvatar(null, null, null)
     }
 
     @ColorRes

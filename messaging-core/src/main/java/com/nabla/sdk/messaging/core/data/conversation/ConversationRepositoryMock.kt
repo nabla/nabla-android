@@ -40,7 +40,7 @@ internal class ConversationRepositoryMock : ConversationRepository {
             ProviderInConversation.fake(),
             ProviderInConversation.fake(provider = User.Provider.fake(avatar = null)),
             ProviderInConversation.fake(provider = User.Provider.fake(avatar = null, lastName = "Doe")),
-        ).shuffled().take((0..2).random()),
+        ).shuffled().take((0..3).random()),
         patientUnreadMessageCount = (0..3).random(),
     )
 

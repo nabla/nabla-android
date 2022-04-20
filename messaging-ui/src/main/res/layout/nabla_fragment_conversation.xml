@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
+    android:background="?nablaMessaging_conversationBackgroundColor"
     tools:context=".scene.messages.ConversationFragment"
     >
 
@@ -22,8 +22,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="?nablaMessaging_conversationHeaderColor"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:elevation="0.5dp"
             app:contentInsetLeft="16dp"
             app:contentInsetStart="16dp"
             app:contentInsetStartWithNavigation="0dp"
@@ -54,11 +56,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?attr/colorPrimaryDark"
-                    android:textSize="15sp"
+                    android:textAppearance="?nablaMessaging_conversationHeaderTitleAppearance"
                     app:layout_constraintBottom_toTopOf="@id/chatToolbarSubtitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/chatToolbarAvatarView"
@@ -72,8 +72,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="14sp"
+                    android:textAppearance="?nablaMessaging_conversationHeaderSubtitleAppearance"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/chatToolbarTitle"
@@ -115,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Apparently, there was a little problem"
-            android:textAppearance="?textAppearanceBody1"
+            android:textAppearance="?textAppearanceBodyLarge"
             />
 
         <Button
@@ -178,91 +177,76 @@
                 android:id="@+id/chatComposerTopDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="?colorSurfaceStroke"
+                android:layout_marginBottom="6dp"
+                android:background="@color/on_surface_alpha_12"
                 app:layout_constraintBottom_toTopOf="@id/chatTextInputLayoutContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_goneMarginBottom="12dp"
                 />
 
-            <Button
+            <ImageView
                 android:id="@+id/chatAddMediaButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="10dp"
-                style="@style/Nabla.IconButton"
-                app:icon="@drawable/ic_nabla_add"
-                app:iconTint="?colorOnBackground"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/nabla_circle_ripple_background"
+                android:contentDescription="Send media"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
                 app:layout_constraintEnd_toStartOf="@id/chatTextInputLayoutContainer"
                 app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="?nablaMessaging_addMediaIcon"
                 />
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:id="@+id/chatTextInputLayoutContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                app:cardCornerRadius="25dp"
-                app:cardElevation="0.5dp"
-                app:contentPaddingLeft="5dp"
-                app:contentPaddingRight="5dp"
+                android:background="?nablaMessaging_conversationComposerBackground"
+                android:elevation="0.5dp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
                 app:layout_constraintEnd_toStartOf="@id/chatSendButton"
                 app:layout_constraintStart_toEndOf="@id/chatAddMediaButton"
                 >
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/chatMediasToSendRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:paddingTop="10dp"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/nabla_conversation_timeline_item_media_to_send"
+                    />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/chatMediasToSendRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        tools:itemCount="1"
-                        tools:listitem="@layout/nabla_conversation_timeline_item_media_to_send"
-                        />
+                <EditText
+                    android:id="@+id/chatEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="?nablaMessaging_conversationComposerEditTextStyle"
+                    android:background="@null"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:paddingVertical="12dp"
+                    tools:ignore="LabelFor"
+                    />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/chatTextInputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/Nabla.Chat.ChatTextInputLayoutStyle"
-                        app:placeholderText="placeholder"
-                        >
+            </LinearLayout>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/chatEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/Nabla.Chat.ChatTextInputEditTextStyle"
-                            android:hint="placeholder"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:maxHeight="200dp"
-                            android:paddingVertical="12dp"
-                            />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <Button
+            <ImageView
                 android:id="@+id/chatSendButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginEnd="10dp"
-                style="@style/Nabla.IconButton"
+                android:background="@drawable/nabla_circle_ripple_background"
                 android:contentDescription="send"
-                app:icon="@drawable/ic_nabla_send"
-                app:iconTint="@color/chat_message_cta_color"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="?nablaMessaging_sendMessageIcon"
+                app:tint="?nablaMessaging_sendMessageIconTint"
+                app:tintMode="src_in"
                 />
 
             <androidx.constraintlayout.widget.Guideline

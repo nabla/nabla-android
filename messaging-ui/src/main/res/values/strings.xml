@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="nabla_messaging_composer_placeholder_default">Type your message</string>
 
     <string name="avatar_state_description_placeholder">Avatar without picture (%1$s)</string>
     <string name="avatar_state_description_gray_out">deactivated</string>
