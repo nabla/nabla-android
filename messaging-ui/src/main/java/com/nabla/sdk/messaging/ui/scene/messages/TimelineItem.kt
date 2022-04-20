@@ -13,7 +13,7 @@ internal enum class MessageAction { Delete, Copy }
 internal sealed interface TimelineItem {
     val listItemId: String
 
-    data class Message constructor(
+    data class Message(
         val id: MessageId,
         val sender: MessageSender,
         val showSenderAvatar: Boolean,
