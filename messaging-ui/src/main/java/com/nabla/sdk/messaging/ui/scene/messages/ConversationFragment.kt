@@ -16,9 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
@@ -38,6 +36,8 @@ import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.messaging.core.NablaMessaging
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
@@ -49,20 +49,21 @@ import com.nabla.sdk.messaging.ui.helper.registerForPermissionResult
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.ChatAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
 
-@Suppress("UNUSED_PARAMETER", "UNUSED_ANONYMOUS_PARAMETER")
-class ConversationFragment : Fragment() {
+class ConversationFragment private constructor(
+    viewModelFactory: ConversationViewModelFactory?,
+) : Fragment() {
+
+    internal constructor() : this(
+        viewModelFactory = null,
+    )
+
     private val viewModel: ConversationViewModel by viewModels {
-        object : AbstractSavedStateViewModelFactory(this, arguments) {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
-                return ConversationViewModel(
-                    nablaMessaging = NablaMessaging.instance,
-                    // TODO forward to library user's own impl
-                    onErrorCallback = { msg, throwable -> Log.e("ConversationViewModel", msg, throwable) },
-                    savedStateHandle = handle,
-                ) as T
-            }
-        }
+        viewModelFactory ?: ConversationViewModelFactory(
+            owner = this,
+            conversationId = conversationIdFromBundleOrThrow(arguments),
+            nablaMessaging = NablaMessaging.instance,
+            onErrorCallback = { message, error -> Log.e("ConversationViewModel", message, error) }
+        )
     }
 
     private lateinit var pickMediaFromGalleryLauncher: ActivityResultLauncher<Array<MimeType>>
@@ -104,7 +105,7 @@ class ConversationFragment : Fragment() {
         setupMediasToSendRecyclerView(binding)
         wireViewEvents(binding)
         setupChatRecyclerView(binding)
-        collectNavigationEvents(binding)
+        collectNavigationEvents()
         collectState(binding)
         collectEditorState(binding)
     }
@@ -154,7 +155,7 @@ class ConversationFragment : Fragment() {
         }
     }
 
-    private fun collectNavigationEvents(binding: NablaFragmentConversationBinding) {
+    private fun collectNavigationEvents() {
         viewLifecycleOwner.launchCollect(viewModel.navigationEventFlow) { event ->
             when (event) {
                 ConversationViewModel.NavigationEvent.OpenCameraPictureCapture -> {
@@ -398,5 +399,25 @@ class ConversationFragment : Fragment() {
             chatToolbarAvatarView.displaySystemAvatar()
         }
         chatToolbarAvatarView.isVisible = displayAvatar
+    }
+
+    companion object {
+        private const val CONVERSATION_ID_ARG_KEY = "nablaMessaging:conversationId"
+
+        fun newInstance(conversationId: ConversationId) = ConversationFragment().apply {
+            arguments = newArgsBundle(conversationId)
+        }
+
+        fun newInstance(factory: ConversationViewModelFactory) = ConversationFragment(viewModelFactory = factory)
+
+        internal fun newArgsBundle(conversationId: ConversationId): Bundle = Bundle().apply {
+            putSerializable(CONVERSATION_ID_ARG_KEY, conversationId.value)
+        }
+
+        private fun conversationIdFromBundleOrThrow(bundle: Bundle?) = (bundle?.getSerializable(CONVERSATION_ID_ARG_KEY) as? Uuid)?.toConversationId()
+            ?: error("Missing conversationId parameter. Make sure to use ConversationFragment.newInstance method to create the ConversationFragment")
+
+        internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle) = savedStateHandle.get<Uuid>(CONVERSATION_ID_ARG_KEY)?.toConversationId()
+            ?: error("Missing conversationId parameter. Make sure to use ConversationFragment.newInstance method to create the ConversationFragment")
     }
 }

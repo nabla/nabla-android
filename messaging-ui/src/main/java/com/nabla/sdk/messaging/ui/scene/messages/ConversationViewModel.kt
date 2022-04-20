@@ -23,7 +23,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
-import com.nabla.sdk.messaging.core.domain.entity.toConversationId
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Companion.conversationIdFromSavedStateHandleOrThrow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -73,7 +73,7 @@ internal class ConversationViewModel(
     private var lastTypingEventSentAt: Instant = Instant.DISTANT_PAST
     private var isViewForeground = false
 
-    private val conversationId: ConversationId = savedStateHandle.get<Uuid>("conversationId")?.toConversationId() ?: error("no conversationId")
+    private val conversationId: ConversationId = conversationIdFromSavedStateHandleOrThrow(savedStateHandle)
 
     init {
         stateFlow = makeStateFlow(

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.nabla.sdk.core.NablaCore
 import com.nabla.sdk.demo.databinding.ActivityMainBinding
+import com.nabla.sdk.demo.scene.ConversationActivity.Companion.CONVERSATION_ID_EXTRA
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         ConversationListViewModelFactory(
             owner = this,
             onConversationClicked = { id ->
-                startActivity(Intent(this, ConversationActivity::class.java).apply { putExtra("conversationId", id.value) })
+                startActivity(Intent(this, ConversationActivity::class.java).apply { putExtra(CONVERSATION_ID_EXTRA, id.value) })
             },
             onErrorRetryWhen = { cause, attempt ->
                 println("Error loading conversations - ${cause.stackTraceToString()}")

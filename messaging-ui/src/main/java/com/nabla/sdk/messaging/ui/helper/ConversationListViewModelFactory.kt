@@ -1,6 +1,5 @@
 package com.nabla.sdk.messaging.ui.helper
 
-import android.os.Bundle
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,13 +10,12 @@ import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
 class ConversationListViewModelFactory(
     owner: SavedStateRegistryOwner,
-    defaultArgs: Bundle? = null,
     private val onConversationClicked: (conversationId: ConversationId) -> Unit = { _ ->
         // TODO default behavior
     },
     private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean = { _, _ -> false },
     private val nablaMessaging: NablaMessaging = NablaMessaging.instance,
-) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+) : AbstractSavedStateViewModelFactory(owner, null) {
     override fun <T : ViewModel> create(
         key: String,
         modelClass: Class<T>,
