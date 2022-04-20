@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class NablaMessaging private constructor(coreContainer: CoreContainer) {
-    constructor(core: NablaCore) : this(core.coreContainer)
 
     private val messagingContainer = MessagingContainer(
         coreContainer.logger,
@@ -30,19 +29,23 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
         coreContainer.exceptionMapper,
     )
 
-    private val conversationRepository: ConversationRepository by lazy { messagingContainer.conversationRepository }
-    private val mockConversationRepository = ConversationRepositoryMock()
-    private val messageRepository: MessageRepository by lazy { messagingContainer.messageRepository }
-    private val mockMessageRepository = MessageRepositoryMock()
+    private val useMock = true // TODO remove when everything is plugged in
+
+    private val conversationRepository: ConversationRepository by lazy {
+        if (useMock) ConversationRepositoryMock() else messagingContainer.conversationRepository
+    }
+    private val messageRepository: MessageRepository by lazy {
+        if (useMock) MessageRepositoryMock() else messagingContainer.messageRepository
+    }
 
     fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
-                mockConversationRepository.loadMoreConversations()
+                conversationRepository.loadMoreConversations()
             }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
         }
 
-        return mockConversationRepository.watchConversations()
+        return conversationRepository.watchConversations()
             .map { paginatedConversations ->
                 WatchPaginatedResponse(
                     items = paginatedConversations.items,
@@ -55,18 +58,18 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     @CheckResult
     suspend fun createConversation(): Result<Conversation> {
         return runCatchingCancellable {
-            mockConversationRepository.createConversation()
+            conversationRepository.createConversation()
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
     fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationWithMessages>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
-                mockMessageRepository.loadMoreMessages(conversationId)
+                messageRepository.loadMoreMessages(conversationId)
             }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
         }
 
-        return mockMessageRepository.watchConversationMessages(conversationId)
+        return messageRepository.watchConversationMessages(conversationId)
             .map { paginatedConversationWithMessages ->
                 WatchPaginatedResponse(
                     items = paginatedConversationWithMessages.conversationWithMessages,
@@ -79,7 +82,7 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     @CheckResult
     suspend fun sendMessage(message: Message): Result<Unit> {
         return runCatchingCancellable {
-            mockMessageRepository.sendMessage(message)
+            messageRepository.sendMessage(message)
         }
             .mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
             .map { } // Just result Unit
@@ -88,28 +91,28 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     @CheckResult
     suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
-            mockMessageRepository.retrySendingMessage(conversationId, localMessageId)
+            messageRepository.retrySendingMessage(conversationId, localMessageId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
     @CheckResult
     suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
         return runCatchingCancellable {
-            mockMessageRepository.setTyping(conversationId, isTyping)
+            messageRepository.setTyping(conversationId, isTyping)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
     @CheckResult
     suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
-            mockConversationRepository.markConversationAsRead(conversationId)
+            conversationRepository.markConversationAsRead(conversationId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
     @CheckResult
     suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
         return runCatchingCancellable {
-            mockMessageRepository.deleteMessage(conversationId, id)
+            messageRepository.deleteMessage(conversationId, id)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
