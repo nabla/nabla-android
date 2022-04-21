@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -77,7 +78,8 @@ open class ConversationFragment private constructor() : Fragment() {
 
     private val chatAdapter = ChatAdapter(makeChatAdapterCallbacks())
 
-    final override fun onCreate(savedInstanceState: Bundle?) {
+    @CallSuper
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListener(MediaSourcePickerBottomSheetFragment.REQUEST_KEY) { _, result ->
@@ -102,7 +104,8 @@ open class ConversationFragment private constructor() : Fragment() {
         return binding.root
     }
 
-    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @CallSuper
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = binding ?: return
         setupToolbarNav(binding)
         setupMediasToSendRecyclerView(binding)
@@ -113,7 +116,22 @@ open class ConversationFragment private constructor() : Fragment() {
         collectEditorState(binding)
     }
 
-    final override fun onDestroyView() {
+    @CallSuper
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.onViewStart()
+    }
+
+    @CallSuper
+    override fun onStop() {
+        viewModel.onViewStop()
+
+        super.onStop()
+    }
+
+    @CallSuper
+    override fun onDestroyView() {
         binding = null
         super.onDestroyView()
     }
@@ -353,18 +371,6 @@ open class ConversationFragment private constructor() : Fragment() {
         override fun onUrlClicked(url: String, isFromPatient: Boolean) {
             viewModel.onUrlClicked(url, isFromPatient)
         }
-    }
-
-    final override fun onStart() {
-        super.onStart()
-
-        viewModel.onViewStart()
-    }
-
-    final override fun onStop() {
-        viewModel.onViewStop()
-
-        super.onStop()
     }
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
