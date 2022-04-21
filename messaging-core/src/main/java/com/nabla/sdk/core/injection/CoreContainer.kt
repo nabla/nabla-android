@@ -11,6 +11,7 @@ import com.nabla.sdk.core.data.apollo.TypeAndUuidCacheKeyGenerator
 import com.nabla.sdk.core.data.auth.ApiAuthenticator
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
+import com.nabla.sdk.core.data.auth.PublicApiKeyInterceptor
 import com.nabla.sdk.core.data.auth.TokenLocalDataSource
 import com.nabla.sdk.core.data.auth.TokenRemoteDataSource
 import com.nabla.sdk.core.data.auth.TokenRepositoryImpl
@@ -59,6 +60,7 @@ internal class CoreContainer(
         OkHttpClient.Builder()
             .apply { config.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
+            .addInterceptor(PublicApiKeyInterceptor(config.publicApiKey))
             .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
             .authenticator(ApiAuthenticator(logger, tokenRepositoryLazy))
             .build()
