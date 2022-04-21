@@ -20,7 +20,9 @@ import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class NablaMessaging private constructor(coreContainer: CoreContainer) {
+class NablaMessaging private constructor(
+    coreContainer: CoreContainer
+) {
 
     private val messagingContainer = MessagingContainer(
         coreContainer.logger,
@@ -117,6 +119,26 @@ class NablaMessaging private constructor(coreContainer: CoreContainer) {
     }
 
     companion object {
-        val instance = NablaMessaging(NablaCore.instance.coreContainer)
+        private const val DEFAULT_NAMESPACE = "nabla-messaging"
+
+        private val instances = mutableMapOf<String, NablaMessaging>()
+
+        fun getInstance(): NablaMessaging {
+            return initialize(NablaCore.getInstance(), DEFAULT_NAMESPACE)
+        }
+
+        fun getInstance(name: String): NablaMessaging {
+            return synchronized(this) {
+                instances.getValue(name)
+            }
+        }
+
+        fun initialize(nablaCore: NablaCore, name: String): NablaMessaging {
+            return synchronized(this) {
+                instances.getOrPut(name) {
+                    NablaMessaging(nablaCore.coreContainer)
+                }
+            }
+        }
     }
 }

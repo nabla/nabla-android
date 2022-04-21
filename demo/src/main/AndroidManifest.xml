@@ -25,6 +25,10 @@
         </activity>
 
         <activity android:name=".scene.ConversationActivity" />
+
+        <meta-data
+            android:name="com.nabla.sdk.PUBLIC_API_KEY"
+            android:value="dummy-public-api-key" />
     </application>
 
 </manifest>

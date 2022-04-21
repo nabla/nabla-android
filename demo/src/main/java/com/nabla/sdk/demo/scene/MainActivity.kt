@@ -47,11 +47,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            NablaCore.instance.authenticate(UUID.randomUUID().toString())
+            NablaCore.getInstance().authenticate(UUID.randomUUID().toString())
 
             binding.createConversation.setOnClickListener {
                 launch {
-                    NablaMessaging.instance.createConversation()
+                    NablaMessaging.getInstance().createConversation()
                 }
             }
             binding.conversationListView.bindViewModel(viewModel)

@@ -28,7 +28,6 @@ import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
-import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -38,18 +37,19 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
 internal class CoreContainer(
+    name: String,
     context: Context,
-    sessionTokenProvider: SessionTokenProvider,
     config: NablaCoreConfig,
 ) {
-    private val securedKVStorage = SecuredKVStorage(context)
     val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnabled)
+
+    private val securedKVStorage = SecuredKVStorage(context, name, logger)
 
     private val tokenRepositoryLazy = lazy {
         TokenRepositoryImpl(
             tokenLocalDataSource,
             tokenRemoteDataSource,
-            sessionTokenProvider,
+            config.sessionTokenProvider,
             patientRepository,
             logger
         )

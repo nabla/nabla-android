@@ -4,11 +4,22 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.nabla.sdk.core.domain.boundary.Logger
 
-internal class SecuredKVStorage(context: Context) : SharedPreferences {
+internal class SecuredKVStorage(
+    context: Context,
+    nameSpace: String,
+    logger: Logger,
+) : SharedPreferences {
+
+    private val fileName = "nabla_kv_${nameSpace}_sec.sp"
+
+    init {
+        logger.info("Add $fileName to your backup_rules.xml of the app")
+    }
 
     private val sharedPreferences = EncryptedSharedPreferences.create(
-        "nabla_kv_sec.sp", // This name needs to be in sync with the one of the backup_rules.xml of the app
+        fileName,
         MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
         context,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,

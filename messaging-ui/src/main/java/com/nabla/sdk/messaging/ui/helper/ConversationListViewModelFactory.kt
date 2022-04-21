@@ -14,7 +14,7 @@ class ConversationListViewModelFactory(
         // TODO default behavior
     },
     private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean = { _, _ -> false },
-    private val nablaMessaging: NablaMessaging = NablaMessaging.instance,
+    private val nablaMessaging: NablaMessaging = NablaMessaging.getInstance(),
 ) : AbstractSavedStateViewModelFactory(owner, null) {
     override fun <T : ViewModel> create(
         key: String,

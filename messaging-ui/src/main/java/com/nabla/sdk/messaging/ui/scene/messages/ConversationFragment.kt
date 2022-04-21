@@ -52,7 +52,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.ChatAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
 
 open class ConversationFragment private constructor() : Fragment() {
-    open val nablaMessaging: NablaMessaging = NablaMessaging.instance
+    open val nablaMessaging: NablaMessaging = NablaMessaging.getInstance()
 
     private val viewModel: ConversationViewModel by viewModels {
         object : AbstractSavedStateViewModelFactory(this, arguments) {
