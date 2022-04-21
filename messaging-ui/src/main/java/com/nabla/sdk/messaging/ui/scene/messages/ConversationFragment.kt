@@ -366,8 +366,8 @@ class ConversationFragment private constructor(
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
         binding.updateToolbar(
-            title = state.conversation.inboxPreviewTitle, // TODO
-            subtitle = state.conversation.inboxPreviewSubtitle, // TODO
+            title = state.conversation.title,
+            subtitle = state.conversation.lastMessagePreview,
             providers = state.conversation.providersInConversation.map { it.provider },
             displayAvatar = true,
         )

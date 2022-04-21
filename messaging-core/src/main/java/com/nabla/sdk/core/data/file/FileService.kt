@@ -7,6 +7,13 @@ import retrofit2.http.Part
 
 internal interface FileService {
     @Multipart
-    @POST("file")
-    suspend fun upload(@Part file: MultipartBody.Part): List<String>
+    @POST(UPLOAD_FILE_PATH)
+    suspend fun upload(
+        @Part purpose: MultipartBody.Part,
+        @Part file: MultipartBody.Part
+    ): List<String>
+
+    companion object {
+        const val UPLOAD_FILE_PATH = "v1/upload/patient"
+    }
 }

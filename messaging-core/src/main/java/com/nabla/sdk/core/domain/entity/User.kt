@@ -5,7 +5,7 @@ import com.benasher44.uuid.Uuid
 sealed interface User {
     data class Provider(
         val id: Uuid,
-        val avatar: Attachment?,
+        val avatar: EphemeralUrl?,
         val firstName: String,
         val lastName: String,
         val title: String?,

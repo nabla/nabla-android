@@ -6,7 +6,7 @@ import kotlinx.datetime.Instant
 data class ProviderInConversation(
     val provider: User.Provider,
     val isTyping: Boolean,
-    val seenUntil: Instant,
+    val seenUntil: Instant?,
 ) {
     companion object
 }

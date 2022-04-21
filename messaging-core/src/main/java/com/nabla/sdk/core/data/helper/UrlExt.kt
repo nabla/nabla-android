@@ -24,3 +24,7 @@ fun URI.toAndroidUri(): android.net.Uri {
 fun android.net.Uri.toJvmURI(): URI {
     return URI.create(toString())
 }
+
+fun android.net.Uri.toKtUri(): Uri {
+    return toJvmURI().toKtUri()
+}

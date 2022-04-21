@@ -24,15 +24,15 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.datetime.Clock
-import kotlin.time.Duration.Companion.days
 
 internal class GqlMapper {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
             id = fragment.id.toConversationId(),
-            inboxPreviewTitle = "",
-            inboxPreviewSubtitle = "",
-            lastModified = Clock.System.now(),
+            title = fragment.title,
+            description = fragment.description,
+            lastMessagePreview = fragment.lastMessagePreview,
+            lastModified = Clock.System.now(), // TODO : Add to GQL
             patientUnreadMessageCount = fragment.unreadMessageCount,
             providersInConversation = fragment.providers.map {
                 mapToProviderInConversation(it.providerInConversationFragment)
@@ -46,30 +46,30 @@ internal class GqlMapper {
         return ProviderInConversation(
             provider = mapToProvider(fragment.provider.providerFragment),
             isTyping = fragment.isTyping,
-            seenUntil = Clock.System.now(), // TODO we need Date custom-scalar config
+            seenUntil = fragment.seenUntil,
         )
     }
 
-    fun mapToMessage(messageFragment: MessageFragment): Message {
+    fun mapToMessage(messageFragment: MessageFragment, sendStatus: SendStatus): Message {
         val sender = mapToMessageSender(messageFragment.author)
         val baseMessage = BaseMessage(
             id = MessageId.Remote(
                 clientId = messageFragment.clientId,
                 remoteId = messageFragment.id
             ),
-            sentAt = Clock.System.now(), // TODO add sentAt field to schema then to fragment
+            sentAt = messageFragment.createdAt,
             sender = sender,
-            sendStatus = SendStatus.Sent, // TODO add necessary mapper arg and compute sent/read status
+            sendStatus = sendStatus,
             conversationId = messageFragment.conversation.id.toConversationId(),
         )
         messageFragment.content?.messageContentFragment?.onTextMessageContent?.textMessageContentFragment?.let {
-            return@let Message.Text(
+            return Message.Text(
                 baseMessage = baseMessage,
                 text = it.text
             )
         }
         messageFragment.content?.messageContentFragment?.onImageMessageContent?.imageMessageContentFragment?.let {
-            return@let Message.Media.Image(
+            return Message.Media.Image(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
@@ -78,7 +78,7 @@ internal class GqlMapper {
             )
         }
         messageFragment.content?.messageContentFragment?.onDocumentMessageContent?.documentMessageContentFragment?.let {
-            return@let Message.Media.Document(
+            return Message.Media.Document(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
@@ -92,28 +92,26 @@ internal class GqlMapper {
     }
 
     private fun mapToMessageSender(author: MessageFragment.Author?): MessageSender {
-        if (author == null) return MessageSender.Unknown
-        author.onPatient?.let { return@let MessageSender.Patient }
-        author.onProvider?.providerFragment?.let { return@let mapToProvider(it) }
-        error {
-            "Unknown author mapping for $author"
-        }
+        author?.onPatient?.let { return MessageSender.Patient }
+        author?.onProvider?.providerFragment?.let { return MessageSender.Provider(mapToProvider(it)) }
+        return MessageSender.Unknown
     }
 
     private fun mapToProvider(providerFragment: ProviderFragment): User.Provider {
+        val avatarUrl = providerFragment.avatarUrl?.ephemeralUrlFragment?.let { mapToEphemeralUrl(it) }
         return User.Provider(
             id = providerFragment.id,
-            avatar = null,
-            firstName = "",
-            lastName = "",
-            title = null,
-            prefix = null,
+            avatar = avatarUrl,
+            firstName = "", // TODO : Add to GQL
+            lastName = "", // TODO : Add to GQL
+            title = null, // TODO : Add to GQL
+            prefix = null, // TODO : Add to GQL
         )
     }
 
     private fun mapToEphemeralUrl(ephemeralUrlFragment: EphemeralUrlFragment): EphemeralUrl {
         return EphemeralUrl(
-            expiresAt = Clock.System.now().plus(5.days), // TODO we need Date custom-scalar config,
+            expiresAt = ephemeralUrlFragment.expiresAt,
             url = Uri(ephemeralUrlFragment.url)
         )
     }

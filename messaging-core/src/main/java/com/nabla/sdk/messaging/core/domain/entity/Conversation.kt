@@ -10,8 +10,9 @@ fun Uuid.toConversationId() = ConversationId(this)
 
 data class Conversation(
     val id: ConversationId,
-    val inboxPreviewTitle: String,
-    val inboxPreviewSubtitle: String,
+    val title: String?,
+    val description: String?,
+    val lastMessagePreview: String?,
     val lastModified: Instant,
     val patientUnreadMessageCount: Int,
     val providersInConversation: List<ProviderInConversation>,

@@ -22,7 +22,7 @@ internal class FileUploadRepositoryImpl constructor(
 
     private val contentResolver = appContext.contentResolver
 
-    override suspend fun uploadFile(localPath: Uri): Uuid {
+    override suspend fun uploadFile(localPath: Uri, fileName: String?): Uuid {
         val fileInputStream = contentResolver.openInputStream(localPath.toAndroidUri())
             ?: throw IOException("Unable to open input stream from uri: $localPath")
         val mimeType = contentResolver.getType(localPath.toAndroidUri())
@@ -30,9 +30,10 @@ internal class FileUploadRepositoryImpl constructor(
             val response = fileService.upload(
                 file = MultipartBody.Part.createFormData(
                     "file",
-                    localPath.toAndroidUri().lastPathSegment,
+                    fileName ?: Uuid.randomUUID().toString(),
                     buildUploadRequestBody(inputStream, mimeType)
                 ),
+                purpose = MultipartBody.Part.createFormData("purpose", "MESSAGE")
             )
             return response.first().asUuid()
         }

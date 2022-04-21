@@ -26,6 +26,7 @@ internal class MessagingContainer(
     private val gqlMapper = GqlMapper()
     private val localMessageDataSource = LocalMessageDataSource()
     private val gqlMessageDataSource = GqlMessageDataSource(
+        logger = logger,
         apolloClient = apolloClient,
         mapper = gqlMapper,
         coroutineScope = repoScope

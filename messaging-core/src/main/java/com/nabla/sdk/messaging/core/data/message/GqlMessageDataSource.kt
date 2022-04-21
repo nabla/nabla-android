@@ -9,6 +9,7 @@ import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.updateCache
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.kotlin.shareInWithMaterializedErrors
 import com.nabla.sdk.graphql.ConversationEventsSubscription
@@ -35,6 +36,7 @@ import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -46,6 +48,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 internal class GqlMessageDataSource(
+    private val logger: Logger,
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
@@ -66,6 +69,12 @@ internal class GqlMessageDataSource(
             .toFlow()
             .map { it.dataAssertNoErrors }
             .onEach {
+                it.conversation?.event?.onMessageCreatedEvent?.let {
+                    logger.debug("onMessageCreatedEvent")
+                }
+                it.conversation?.event?.onMessageUpdatedEvent?.let {
+                    logger.debug("onMessageUpdatedEvent")
+                }
                 it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
                     insertMessageToConversationCache(messageFragment)
                 }
@@ -119,13 +128,14 @@ internal class GqlMessageDataSource(
     fun watchRemoteConversationWithMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages> {
         val query = firstMessagePageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
-            .watch()
-            .map { response -> response.dataAssertNoErrors }
+            .fetchPolicy(FetchPolicy.CacheAndNetwork)
+            .watch(fetchThrows = true, refetchThrows = true)
+            .map { response -> requireNotNull(response.data) }
             .map { queryData ->
                 val page =
                     queryData.conversation.conversation.conversationMessagesPageFragment.items
                 val items = page.data.mapNotNull { it?.messageFragment }.map {
-                    mapper.mapToMessage(it)
+                    mapper.mapToMessage(it, SendStatus.Sent)
                 }
                 return@map PaginatedConversationWithMessages(
                     conversationWithMessages = ConversationWithMessages(
@@ -187,7 +197,8 @@ internal class GqlMessageDataSource(
                 .dataAssertNoErrors
                 .sendMessage
                 .message
-                .messageFragment
+                .messageFragment,
+            SendStatus.Sent
         )
     }
 
@@ -207,7 +218,8 @@ internal class GqlMessageDataSource(
                 .dataAssertNoErrors
                 .sendMessage
                 .message
-                .messageFragment
+                .messageFragment,
+            SendStatus.Sent
         )
     }
 

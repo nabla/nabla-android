@@ -4,5 +4,5 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Uri
 
 internal interface FileUploadRepository {
-    suspend fun uploadFile(localPath: Uri): Uuid
+    suspend fun uploadFile(localPath: Uri, fileName: String?): Uuid
 }

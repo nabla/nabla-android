@@ -2,7 +2,6 @@ package com.nabla.sdk.messaging.core.domain.entity
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
-import com.nabla.sdk.core.domain.entity.Attachment
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
@@ -115,11 +114,9 @@ internal fun User.Provider.Companion.fake(
     lastName: String = "Cayol",
     title: String? = "Gynécologue",
     prefix: String? = "Dr",
-    avatar: Attachment? = Attachment(
-        uuid4(),
+    avatar: EphemeralUrl? = EphemeralUrl(
+        expiresAt = Instant.DISTANT_FUTURE,
         url = Uri("https://i.pravatar.cc/300"),
-        mimeType = MimeType.Image.JPEG,
-        thumbnailUrl = Uri("https://i.pravatar.cc/300"),
     ),
 ) = User.Provider(
     id = id,
@@ -145,13 +142,15 @@ internal fun Conversation.Companion.fake(
     inboxPreviewTitle: String = randomText(maxWords = 10),
     inboxPreviewSubtitle: String = listOf("", "You: oh great!", "You: image", "Doctor is typing...").random(),
     lastModified: Instant = Clock.System.now().minus(2.minutes),
+    lastMessagePreview: String = "Bonjour:",
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
 ) = Conversation(
     id = id.toConversationId(),
-    inboxPreviewTitle = inboxPreviewTitle,
-    inboxPreviewSubtitle = inboxPreviewSubtitle,
     lastModified = lastModified,
+    title = inboxPreviewTitle,
+    description = inboxPreviewSubtitle,
+    lastMessagePreview = lastMessagePreview,
     patientUnreadMessageCount = patientUnreadMessageCount,
     providersInConversation = providersInConversation,
 )

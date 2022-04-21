@@ -38,15 +38,18 @@ sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileUpload> 
 }
 
 sealed interface MessageId {
-    val clientId: Uuid
+    val clientId: Uuid?
     val remoteId: Uuid?
 
-    val stableId get() = clientId
+    val stableId: Uuid
 
     data class Local internal constructor(override val clientId: Uuid) : MessageId {
         override val remoteId: Uuid? = null
+        override val stableId: Uuid = clientId
     }
-    data class Remote internal constructor(override val clientId: Uuid, override val remoteId: Uuid) : MessageId
+    data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
+        override val stableId: Uuid = clientId ?: remoteId
+    }
 
     companion object {
         internal fun new(): MessageId = Local(uuid4())

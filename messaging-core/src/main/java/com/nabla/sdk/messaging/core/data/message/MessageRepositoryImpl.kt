@@ -43,8 +43,11 @@ internal class MessageRepositoryImpl(
         val (localMessagesToMerge, localMessagesToAdd) = localMessages.partition {
             it.baseMessage.id.stableId in gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map { it.baseMessage.id.stableId }
         }.let { Pair(it.first.associateBy { it.baseMessage.id.stableId }, it.second) }
-        val mergedMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map {
-            mergeMessage(it, localMessagesToMerge.getValue(it.baseMessage.id.stableId)) ?: it
+        val mergedMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.messages.map { gqlMessage ->
+            val mergeResult = localMessagesToMerge[gqlMessage.baseMessage.id.stableId]?.let { localMessage ->
+                mergeMessage(gqlMessage, localMessage)
+            }
+            mergeResult ?: gqlMessage
         }
         val allMessages = (mergedMessages + localMessagesToAdd).sortedBy { it.baseMessage.sentAt }
         return gqlPaginatedConversationAndMessages.copy(
@@ -132,7 +135,10 @@ internal class MessageRepositoryImpl(
         if (mediaSource !is FileSource.Local) {
             error("Can't send a media message with a media source that is not local")
         }
-        val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri)
+        val fileName = if (mediaMessage is Message.Media.Document) {
+            mediaMessage.documentName
+        } else null
+        val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, fileName)
         return when (mediaMessage) {
             is Message.Media.Document -> {
                 gqlMessageDataSource.sendDocumentMessage(

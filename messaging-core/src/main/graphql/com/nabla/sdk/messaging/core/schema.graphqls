@@ -55,7 +55,7 @@ type Message {
 
   content: MessageContent
 
-  clientId: UUID!
+  clientId: UUID
 }
 
 type Conversation {

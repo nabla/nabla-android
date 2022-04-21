@@ -132,6 +132,7 @@ fragment MessageFragment on Message {
     conversation {
         id
     }
+    createdAt
 }
 
 fragment MessageContentFragment on MessageContent {
