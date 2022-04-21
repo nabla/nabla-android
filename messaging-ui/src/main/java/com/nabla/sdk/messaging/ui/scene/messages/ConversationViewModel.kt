@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import android.util.Log
 import androidx.annotation.CheckResult
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
-import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Companion.conversationIdFromSavedStateHandleOrThrow
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +47,6 @@ import kotlin.time.Duration.Companion.seconds
 @Suppress("UNUSED_PARAMETER", "UNUSED_ANONYMOUS_PARAMETER")
 internal class ConversationViewModel(
     private val nablaMessaging: NablaMessaging,
-    private val onErrorCallback: (message: String, Throwable) -> Unit,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
@@ -99,7 +99,8 @@ internal class ConversationViewModel(
             StateMapper()::mapToState,
         )
             .retryWhen { throwable, _ ->
-                onErrorCallback("Failed to fetch conversation messages", throwable)
+                // TODO replace by logger
+                Log.e("ConversationViewModel", "Failed to fetch conversation messages", throwable)
                 emit(State.Error)
 
                 retryAfterErrorTriggerFlow.first()
@@ -272,7 +273,8 @@ internal class ConversationViewModel(
             runCatchingCancellable {
                 loadMore().getOrThrow()
             }.onFailure {
-                onErrorCallback("Error while loading more items in conversation", it)
+                // TODO replace by logger
+                Log.e("ConversationViewModel", "Error while loading more items in conversation", it)
             }
         }
     }
