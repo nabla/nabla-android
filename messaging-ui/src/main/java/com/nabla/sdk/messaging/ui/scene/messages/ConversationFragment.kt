@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
@@ -37,6 +39,7 @@ import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
+import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
@@ -48,10 +51,11 @@ import com.nabla.sdk.messaging.ui.helper.PermissionRational
 import com.nabla.sdk.messaging.ui.helper.PermissionRequestLauncher
 import com.nabla.sdk.messaging.ui.helper.copyNewPlainText
 import com.nabla.sdk.messaging.ui.helper.registerForPermissionResult
-import com.nabla.sdk.messaging.ui.scene.messages.adapter.ChatAdapter
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.ErrorAlert
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
 
-open class ConversationFragment private constructor() : Fragment() {
+open class ConversationFragment : Fragment() {
     open val nablaMessaging: NablaMessaging = NablaMessaging.getInstance()
 
     private val viewModel: ConversationViewModel by viewModels {
@@ -76,7 +80,7 @@ open class ConversationFragment private constructor() : Fragment() {
     private lateinit var mediasToSendAdapter: MediasToSendAdapter
     private var binding: NablaFragmentConversationBinding? = null
 
-    private val chatAdapter = ChatAdapter(makeChatAdapterCallbacks())
+    private val conversationAdapter = ConversationAdapter(makeConversationAdapterCallbacks())
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,7 +114,8 @@ open class ConversationFragment private constructor() : Fragment() {
         setupToolbarNav(binding)
         setupMediasToSendRecyclerView(binding)
         wireViewEvents(binding)
-        setupChatRecyclerView(binding)
+        setupConversationRecyclerView(binding)
+        collectAlertEvents()
         collectNavigationEvents()
         collectState(binding)
         collectEditorState(binding)
@@ -146,8 +151,8 @@ open class ConversationFragment private constructor() : Fragment() {
         captureCameraPicturePermissionsLauncher = registerForPermissionResult(
             permission = Manifest.permission.CAMERA,
             rational = PermissionRational(
-                title = R.string.chat_message_copy_label, // R.string.media_camera_picture_permission_rational_title,
-                description = R.string.chat_message_copy_label, // R.string.media_camera_picture_permission_rational_description
+                title = R.string.nabla_conversation_message_copy_label, // R.string.media_camera_picture_permission_rational_title,
+                description = R.string.nabla_conversation_message_copy_label, // R.string.media_camera_picture_permission_rational_description
             )
         ) { isGranted ->
             if (isGranted) {
@@ -173,6 +178,12 @@ open class ConversationFragment private constructor() : Fragment() {
                 is MediaPickingResult.Failure -> viewModel.onErrorWithPictureCapture(result.exception)
                 is MediaPickingResult.Cancelled -> Unit // no-op
             }
+        }
+    }
+
+    private fun collectAlertEvents() {
+        viewLifecycleOwner.launchCollect(viewModel.errorAlertEventFlow) { errorAlert ->
+            showErrorAlert(errorAlert)
         }
     }
 
@@ -231,14 +242,14 @@ open class ConversationFragment private constructor() : Fragment() {
 
     private fun collectEditorState(binding: NablaFragmentConversationBinding) {
         viewLifeCycleScope.launchCollect(viewModel.editorStateFlow) { editorState ->
-            binding.chatSendButton.isEnabled = editorState.canSubmit
+            binding.conversationSendButton.isEnabled = editorState.canSubmit
         }
 
         viewLifeCycleScope.launchCollect(viewModel.currentMessageFlow) { currentMessage ->
-            if (binding.chatEditText.text?.toString() != currentMessage) {
-                binding.chatEditText.setText(currentMessage, TextView.BufferType.EDITABLE)
+            if (binding.conversationEditText.text?.toString() != currentMessage) {
+                binding.conversationEditText.setText(currentMessage, TextView.BufferType.EDITABLE)
                 if (currentMessage != "") {
-                    binding.chatEditText.requestFocus()
+                    binding.conversationEditText.requestFocus()
                 }
             }
         }
@@ -246,13 +257,12 @@ open class ConversationFragment private constructor() : Fragment() {
 
     private fun collectState(binding: NablaFragmentConversationBinding) {
         viewLifeCycleScope.launchCollect(viewModel.stateFlow) { state ->
-            binding.errorContainer.isVisible = state is ConversationViewModel.State.Error
-            binding.chatLoading.isVisible = state is ConversationViewModel.State.Loading
-            binding.chatLoaded.isVisible = state is ConversationViewModel.State.ConversationLoaded
+            binding.nablaIncludedErrorLayout.root.isVisible = state is ConversationViewModel.State.Error
+            binding.conversationLoading.isVisible = state is ConversationViewModel.State.Loading
+            binding.conversationLoaded.isVisible = state is ConversationViewModel.State.ConversationLoaded
 
             when (state) {
                 is ConversationViewModel.State.ConversationLoaded -> {
-                    binding.chatLoaded.visibility = View.VISIBLE
 
                     updateLoadedDisplay(binding, state)
                 }
@@ -265,7 +275,6 @@ open class ConversationFragment private constructor() : Fragment() {
                     )
                 }
                 is ConversationViewModel.State.Error -> {
-                    binding.chatLoaded.visibility = View.GONE
                     binding.updateToolbar(
                         title = "error",
                         subtitle = null,
@@ -273,40 +282,34 @@ open class ConversationFragment private constructor() : Fragment() {
                         displayAvatar = false,
                     )
 
-                    binding.errorRetryButton.setOnClickListener {
-                        viewModel.onRetryClicked()
-                    }
+                    binding.nablaIncludedErrorLayout.bind(state.error, viewModel::onRetryClicked)
                 }
             }
         }
     }
 
     private fun wireViewEvents(binding: NablaFragmentConversationBinding) {
-        binding.chatTextInputLayoutContainer.clipToOutline = true
+        binding.conversationTextInputLayoutContainer.clipToOutline = true
 
-        binding.chatToolbarContentContainer.setOnClickListener {
-            viewModel.onParticipantsHeaderClicked()
-        }
-
-        binding.chatAddMediaButton.setOnClickListener {
+        binding.conversationAddMediaButton.setOnClickListener {
             viewModel.onAddMediaButtonClicked()
         }
 
-        binding.chatSendButton.setOnClickListener {
+        binding.conversationSendButton.setOnClickListener {
             viewModel.onSendButtonClicked()
         }
 
-        binding.chatEditText.doOnTextChanged { text, _, _, _ ->
+        binding.conversationEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.onCurrentMessageChanged(text?.toString() ?: "")
         }
     }
 
-    private fun setupChatRecyclerView(binding: NablaFragmentConversationBinding) {
-        binding.chatRecyclerView.apply {
+    private fun setupConversationRecyclerView(binding: NablaFragmentConversationBinding) {
+        binding.conversationRecyclerView.apply {
             layoutManager = LinearLayoutManager(binding.context).apply {
                 reverseLayout = true
             }
-            adapter = chatAdapter
+            adapter = conversationAdapter
             addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -329,7 +332,7 @@ open class ConversationFragment private constructor() : Fragment() {
             },
         )
 
-        binding.chatMediasToSendRecyclerView.apply {
+        binding.conversationMediasToSendRecyclerView.apply {
             layoutManager = LinearLayoutManager(binding.context, LinearLayoutManager.HORIZONTAL, false)
             adapter = mediasToSendAdapter
         }
@@ -337,7 +340,7 @@ open class ConversationFragment private constructor() : Fragment() {
         viewLifeCycleScope.launchCollect(viewModel.mediasToSendFlow) { mediasToSend ->
             mediasToSendAdapter.submitList(mediasToSend)
 
-            binding.chatMediasToSendRecyclerView.visibility =
+            binding.conversationMediasToSendRecyclerView.visibility =
                 if (mediasToSend.isEmpty()) {
                     View.GONE
                 } else {
@@ -346,13 +349,13 @@ open class ConversationFragment private constructor() : Fragment() {
         }
     }
 
-    private fun makeChatAdapterCallbacks() = object : ChatAdapter.Callbacks {
+    private fun makeConversationAdapterCallbacks() = object : ConversationAdapter.Callbacks {
         override fun onItemClicked(item: TimelineItem) {
             viewModel.onItemClicked(item)
         }
 
         override fun onProviderClicked(providerId: Uuid) {
-            viewModel.onProviderClicked(providerId)
+            /* not supported for the moment */
         }
 
         override fun onDeleteMessage(item: TimelineItem.Message) {
@@ -362,14 +365,14 @@ open class ConversationFragment private constructor() : Fragment() {
         override fun onCopyMessage(item: TimelineItem.Message.Text) {
             context?.apply {
                 copyNewPlainText(
-                    label = getString(R.string.chat_message_copy_label),
+                    label = getString(R.string.nabla_conversation_message_copy_label),
                     text = item.text
                 )
             }
         }
 
         override fun onUrlClicked(url: String, isFromPatient: Boolean) {
-            viewModel.onUrlClicked(url, isFromPatient)
+            viewModel.onUrlClicked(url)
         }
     }
 
@@ -381,13 +384,14 @@ open class ConversationFragment private constructor() : Fragment() {
             displayAvatar = true,
         )
 
-        // Only scroll down automatically if we're at the bottom of the chat && there are new items OR if the view model tells us to
-        val shouldScrollToBottomAfterSubmit = (!binding.chatRecyclerView.canScrollDown() && chatAdapter.itemCount < state.items.size) ||
-            viewModel.shouldScrollToBottomAfterNextUpdate
+        // Only scroll down automatically if we're at the bottom of the conversation && there are new items OR if the view model tells us to
+        val shouldScrollToBottomAfterSubmit =
+            (!binding.conversationRecyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size) ||
+                viewModel.shouldScrollToBottomAfterNextUpdate
 
-        chatAdapter.submitList(state.items) {
+        conversationAdapter.submitList(state.items) {
             if (shouldScrollToBottomAfterSubmit) {
-                binding.chatRecyclerView.scrollToTop()
+                binding.conversationRecyclerView.scrollToTop()
             }
         }
     }
@@ -398,16 +402,37 @@ open class ConversationFragment private constructor() : Fragment() {
         providers: List<User.Provider>?,
         displayAvatar: Boolean,
     ) {
-        chatToolbarTitle.setTextOrHide(title)
-        chatToolbarSubtitle.setTextOrHide(subtitle)
+        conversationToolbarTitle.setTextOrHide(title)
+        conversationToolbarSubtitle.setTextOrHide(subtitle)
 
         val firstProvider = providers?.firstOrNull()
         if (firstProvider != null) {
-            chatToolbarAvatarView.loadAvatar(firstProvider)
+            conversationToolbarAvatarView.loadAvatar(firstProvider)
         } else {
-            chatToolbarAvatarView.displaySystemAvatar()
+            conversationToolbarAvatarView.displaySystemAvatar()
         }
-        chatToolbarAvatarView.isVisible = displayAvatar
+        conversationToolbarAvatarView.isVisible = displayAvatar
+    }
+
+    private fun showErrorAlert(errorAlert: ErrorAlert) {
+        context?.let { context ->
+            Toast.makeText(context, errorAlert.defaultMessage(context), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun ErrorAlert.defaultMessage(context: Context): String {
+        val resId = when (this) {
+            is ErrorAlert.LoadingMoreItems -> R.string.nabla_error_message_conversation_loading_more
+            is ErrorAlert.AttachmentMediaPicker -> R.string.nabla_error_message_conversation_attachment_media_picker
+            is ErrorAlert.AttachmentCameraCapturing -> R.string.nabla_error_message_conversation_attachment_camera_capturing
+            is ErrorAlert.AttachmentCameraOpening -> R.string.nabla_error_message_conversation_attachment_camera_opening
+            is ErrorAlert.AttachmentLibraryOpening -> R.string.nabla_error_message_conversation_attachment_library_opening
+            is ErrorAlert.LinkOpening -> R.string.nabla_error_message_conversation_link_opening
+            is ErrorAlert.DeletingMessage -> R.string.nabla_error_message_conversation_deleting_message
+            is ErrorAlert.ClickedUrlParsing -> R.string.nabla_error_message_conversation_clicked_url_parsing
+        }
+
+        return context.getString(resId)
     }
 
     @Suppress("UNUSED")

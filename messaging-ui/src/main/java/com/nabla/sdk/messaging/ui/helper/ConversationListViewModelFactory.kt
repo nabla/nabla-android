@@ -13,7 +13,6 @@ class ConversationListViewModelFactory(
     private val onConversationClicked: (conversationId: ConversationId) -> Unit = { _ ->
         // TODO default behavior
     },
-    private val onErrorRetryWhen: suspend (error: Throwable, attempt: Long) -> Boolean = { _, _ -> false },
     private val nablaMessaging: NablaMessaging = NablaMessaging.getInstance(),
 ) : AbstractSavedStateViewModelFactory(owner, null) {
     override fun <T : ViewModel> create(
@@ -29,7 +28,6 @@ class ConversationListViewModelFactory(
         return ConversationListViewModel(
             nablaMessaging,
             onConversationClicked,
-            onErrorRetryWhen,
         ) as T
     }
 }

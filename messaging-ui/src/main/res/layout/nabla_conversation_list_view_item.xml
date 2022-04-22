@@ -76,7 +76,7 @@
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginTop="8dp"
-        android:contentDescription="@string/conversation_list_view_unread_indicator_content_description"
+        android:contentDescription="@string/nabla_conversation_list_view_unread_indicator_content_description"
         android:src="?nablaMessaging_unreadMessagesIndicatorDrawable"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/conversationAvatarView"

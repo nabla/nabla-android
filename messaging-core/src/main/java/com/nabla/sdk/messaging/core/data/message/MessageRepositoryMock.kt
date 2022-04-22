@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.message
 
+import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
@@ -61,12 +62,16 @@ internal class MessageRepositoryMock : MessageRepository {
                 hasMore = true,
             )
         }
-            .onStart { delay(1_000) }
+            .onStart {
+                delay(1_000)
+                if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
+            }
     }
 
     override suspend fun loadMoreMessages(conversationId: ConversationId) {
         println("load more messages")
         delay(1_000)
+        if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
         flowMutex.withLock {
             val oldestInstant = messagesListFlow.value.minOf { it.baseMessage.sentAt }
             messagesListFlow.value =
@@ -125,5 +130,9 @@ internal class MessageRepositoryMock : MessageRepository {
                 } else it
             }
         }
+    }
+
+    companion object {
+        private const val MOCK_ERRORS = true
     }
 }

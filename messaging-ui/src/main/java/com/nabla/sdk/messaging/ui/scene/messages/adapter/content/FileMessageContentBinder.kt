@@ -15,7 +15,7 @@ import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemFileMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
-@SuppressLint("RestrictedApi")
+@SuppressLint("RestrictedApi") // TextAppearance class
 internal class FileMessageContentBinder(
     @AttrRes contentTextAppearanceAttr: Int,
     @AttrRes surfaceColorAttr: Int,

@@ -24,4 +24,18 @@
         android:layout_gravity="center"
         />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <include
+            android:id="@+id/nablaIncludedErrorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/nabla_error_layout"
+            android:gravity="center"
+            />
+    </FrameLayout>
+
 </merge>

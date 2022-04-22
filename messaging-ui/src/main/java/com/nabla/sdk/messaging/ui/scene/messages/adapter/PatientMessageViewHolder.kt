@@ -42,10 +42,9 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
         if (showStatus) {
             binding.chatPatientMessageContentStatusTextView.text = binding.context.getString(
                 when (status) {
-                    SendStatus.ToBeSent -> R.string.chat_message_local_status
-                    SendStatus.Sending -> R.string.chat_message_sending_status
-                    SendStatus.Sent -> R.string.chat_message_sent_status
-                    SendStatus.ErrorSending -> R.string.chat_message_error_status
+                    SendStatus.ToBeSent, SendStatus.Sending -> R.string.nabla_conversation_message_sending_status
+                    SendStatus.Sent -> R.string.nabla_conversation_message_sent_status
+                    SendStatus.ErrorSending -> R.string.nabla_conversation_message_error_status
                 }
             )
             binding.chatPatientMessageContentStatusTextView.setTextColor(

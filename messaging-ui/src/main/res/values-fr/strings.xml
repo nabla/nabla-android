@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="nabla_messaging_composer_placeholder_default">Tapez votre message</string>
+    <string name="nabla_conversation_composer_placeholder_default">Tapez votre message</string>
 
-    <string name="avatar_state_description_placeholder">Avatar sans photo (%1$s)</string>
-    <string name="avatar_state_description_no_placeholder">Avatar avec photo (%1$s)</string>
-    <string name="avatar_state_description_gray_out">désactivé</string>
-    <string name="conversation_list_view_unread_indicator_content_description">Messages non lus</string>
+    <string name="nabla_avatar_state_description_placeholder">Avatar sans photo (%1$s)</string>
+    <string name="nabla_avatar_state_description_no_placeholder">Avatar avec photo (%1$s)</string>
+    <string name="nabla_avatar_state_description_gray_out">désactivé</string>
 
-    <string name="display_name_unknown_user">Unknown user</string>
-    <string name="chat_message_copy_label">Nabla’s message</string>
+    <string name="nabla_conversation_list_view_unread_indicator_content_description">Messages non lus</string>
 
-    <string name="chat_message_local_status">Non envoyé</string>
-    <string name="chat_message_read_status">Message lu</string>
-    <string name="chat_message_sending_status">Envoi en cours…</string>
-    <string name="chat_message_sent_status">Pas encore lu</string>
-    <string name="chat_message_error_status">L’envoi a échoué, tapez pour réessayer</string>
+    <string name="nabla_display_name_unknown_user">Unknown user</string>
+    <string name="nabla_conversation_message_copy_label">Nabla’s message</string>
 
-    <string name="no_pdf_third_party_app_info_title">Pas d’application PDF</string>
-    <string name="no_pdf_third_party_app_info_message">Voullez vous installer l’application Google Drive pour ouvrir des fichiers PDF ?</string>
-    <string name="no_pdf_third_party_app_info_positive">Installer</string>
-    <string name="no_pdf_third_party_app_info_negative">Non</string>
+    <string name="nabla_conversation_message_sending_status">Envoi en cours…</string>
+    <string name="nabla_conversation_message_sent_status">Pas encore lu</string>
+    <string name="nabla_conversation_message_error_status">L’envoi a échoué, tapez pour réessayer</string>
+
+    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Pas d’application PDF</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_message">Voulez-vous installer l’application Google Drive pour ouvrir des fichiers PDF ?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Installer</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Non</string>
+
+    <string name="nabla_error_message_network_title">Une erreur réseau est survenue</string>
+    <string name="nabla_error_message_network_body">Veuillez vérifier votre connexion internet et réessayer.</string>
+    <string name="nabla_error_message_generic_title">Une erreur est survenue</string>
+    <string name="nabla_error_message_generic_body">Veuillez réessayer.</string>
+    <string name="nabla_error_retry_cta">Réessayer</string>
+
+    <string name="nabla_error_message_conversations_loading_more">Une erreur est survenue lors du chargement des conversations, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_loading_more">Une erreur est survenue lors du chargement des messages, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_media_picker">Une erreur est survenue lors de l’ouverture du selecteur, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_capturing">Une erreur est survenue lors de la capture de photo, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_opening">Une erreur est survenue lors de l’ouverture de la caméra, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_library_opening">Une erreur est survenue lors de l’ouverture de la bibliothèque, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_link_opening">Une erreur est survenue lors de l’ouverture du lien, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du message, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_clicked_url_parsing">Une erreur est survenue lors du traitement du lien, veuillez réessayer.</string>
 </resources>

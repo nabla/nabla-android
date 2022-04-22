@@ -14,7 +14,7 @@ import com.nabla.sdk.core.ui.helpers.getThemeStyle
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemImageMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
-@SuppressLint("RestrictedApi")
+@SuppressLint("RestrictedApi") // TextAppearance class
 internal class ImageMessageContentBinder(
     @AttrRes private val contentTextAppearanceAttr: Int,
     private val binding: NablaConversationTimelineItemImageMessageBinding,

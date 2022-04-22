@@ -10,7 +10,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
 internal class DeletedMessageContentBinder(
     @AttrRes contentTextAppearanceAttr: Int,
-    @Suppress("UNUSED_PARAMETER") binding: NablaConversationTimelineItemDeletedMessageBinding,
+    binding: NablaConversationTimelineItemDeletedMessageBinding,
 ) : MessageContentBinder<TimelineItem.Message.Deleted>() {
 
     init {

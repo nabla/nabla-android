@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.conversation
 
+import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.Clock
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -31,6 +33,7 @@ internal class ConversationRepositoryMock : ConversationRepository {
         return conversationsFlow
             .onStart {
                 delay(1.seconds)
+                if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
             }
     }
 
@@ -48,6 +51,7 @@ internal class ConversationRepositoryMock : ConversationRepository {
         if (!conversationsFlow.value.hasMore) return
 
         delay(1.seconds)
+        if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
         val newItems = conversationsFlow.value.items + (0..10).map { Conversation.randomFake() }
         conversationsFlow.value = conversationsFlow.value.copy(
             items = newItems,
@@ -57,5 +61,9 @@ internal class ConversationRepositoryMock : ConversationRepository {
 
     override suspend fun markConversationAsRead(conversationId: ConversationId) {
         println("markConversationAsRead")
+    }
+
+    companion object {
+        private const val MOCK_ERRORS = true
     }
 }

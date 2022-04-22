@@ -4,6 +4,7 @@ import androidx.annotation.CheckResult
 import com.nabla.sdk.core.NablaCore
 import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
@@ -39,6 +40,8 @@ class NablaMessaging private constructor(
     private val messageRepository: MessageRepository by lazy {
         if (useMock) MessageRepositoryMock() else messagingContainer.messageRepository
     }
+
+    val logger: Logger = coreContainer.logger
 
     fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
         val loadMoreCallback = suspend {

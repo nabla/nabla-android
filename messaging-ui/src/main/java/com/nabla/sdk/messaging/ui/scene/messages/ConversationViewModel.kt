@@ -1,19 +1,19 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
-import android.util.Log
 import androidx.annotation.CheckResult
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.helper.toJvmUri
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
+import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -44,7 +44,6 @@ import kotlinx.datetime.Instant
 import java.net.URI
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("UNUSED_PARAMETER", "UNUSED_ANONYMOUS_PARAMETER")
 internal class ConversationViewModel(
     private val nablaMessaging: NablaMessaging,
     savedStateHandle: SavedStateHandle,
@@ -63,6 +62,9 @@ internal class ConversationViewModel(
 
     private val navigationEventMutableFlow = MutableLiveFlow<NavigationEvent>()
     val navigationEventFlow: LiveFlow<NavigationEvent> = navigationEventMutableFlow
+
+    private val errorAlertMutableFlow = MutableLiveFlow<ErrorAlert>()
+    val errorAlertEventFlow: LiveFlow<ErrorAlert> = errorAlertMutableFlow
 
     private val mediasToSendMutableFlow = MutableStateFlow<List<LocalMedia>>(emptyList())
     val mediasToSendFlow: Flow<List<LocalMedia>> = mediasToSendMutableFlow
@@ -99,9 +101,12 @@ internal class ConversationViewModel(
             StateMapper()::mapToState,
         )
             .retryWhen { throwable, _ ->
-                // TODO replace by logger
-                Log.e("ConversationViewModel", "Failed to fetch conversation messages", throwable)
-                emit(State.Error)
+                nablaMessaging.logger.error("Failed to fetch conversation messages", throwable, tag = LOGGING_TAG)
+                emit(
+                    State.Error(
+                        if (throwable is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic
+                    )
+                )
 
                 retryAfterErrorTriggerFlow.first()
                 emit(State.Loading)
@@ -125,10 +130,6 @@ internal class ConversationViewModel(
 
     fun onViewStop() {
         isViewForeground = false
-    }
-
-    fun onParticipantsHeaderClicked() {
-        // TODO
     }
 
     fun onAddMediaButtonClicked() {
@@ -176,24 +177,28 @@ internal class ConversationViewModel(
     }
 
     fun onErrorWithMediaPicker(error: Exception) {
-        // TODO
+        nablaMessaging.logger.error("Error in new media attachment picker", error, tag = LOGGING_TAG)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentMediaPicker(error))
     }
 
     fun onErrorWithPictureCapture(error: Exception) {
-        // TODO
+        nablaMessaging.logger.error("Error in camera for new attachment", error, tag = LOGGING_TAG)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraCapturing(error))
     }
 
     fun onErrorLaunchingCameraForImageCapture(error: Throwable) {
-        // TODO
-        println("error launching camera ${error.stackTraceToString()}")
+        nablaMessaging.logger.error("Failed open camera for new attachment", error, tag = LOGGING_TAG)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraOpening(error))
     }
 
     fun onErrorLaunchingLibrary(error: Throwable) {
-        // TODO
+        nablaMessaging.logger.error("Failed open media gallery for new attachment", error, tag = LOGGING_TAG)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentLibraryOpening(error))
     }
 
     fun onErrorOpeningLink(error: Throwable) {
-        // TODO
+        nablaMessaging.logger.error("Failed to open link", error, tag = LOGGING_TAG)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LinkOpening(error))
     }
 
     fun onSendButtonClicked() {
@@ -252,14 +257,12 @@ internal class ConversationViewModel(
         ) {
             lastTypingEventSentAt = Clock.System.now()
             viewModelScope.launch {
-                runCatchingCancellable {
-                    nablaMessaging.setTyping(
-                        isTyping = currentMessage.isNotEmpty(),
-                        conversationId = conversationId,
-                    )
-                }.onFailure {
-                    // TODO handle errors
-                    println("failed to set typing")
+                nablaMessaging.setTyping(
+                    isTyping = currentMessage.isNotEmpty(),
+                    conversationId = conversationId,
+                ).onFailure {
+                    nablaMessaging.logger.error("failed to set patient as typing", it, tag = LOGGING_TAG)
+                    // no UI alert on purpose
                 }
             }
         }
@@ -270,12 +273,11 @@ internal class ConversationViewModel(
         val loadMore = latestLoadMoreCallback ?: return
 
         viewModelScope.launch(Dispatchers.Default) {
-            runCatchingCancellable {
-                loadMore().getOrThrow()
-            }.onFailure {
-                // TODO replace by logger
-                Log.e("ConversationViewModel", "Error while loading more items in conversation", it)
-            }
+            loadMore()
+                .onFailure {
+                    nablaMessaging.logger.error("Error while loading more items in conversation", it, tag = LOGGING_TAG)
+                    errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LoadingMoreItems(it))
+                }
         }
     }
 
@@ -314,10 +316,6 @@ internal class ConversationViewModel(
         }
     }
 
-    fun onProviderClicked(providerId: Uuid) {
-        // TODO
-    }
-
     fun onRetryClicked() {
         retryAfterErrorTriggerFlow.emitIn(viewModelScope, Unit)
     }
@@ -325,36 +323,39 @@ internal class ConversationViewModel(
     private fun Conversation.markConversationAsReadIfNeeded() {
         if (patientUnreadMessageCount > 0 && isViewForeground) {
             viewModelScope.launch {
-                runCatchingCancellable {
-                    nablaMessaging.markConversationAsRead(conversationId)
-                }.onFailure {
-                    // TODO We might want to ignore error for this ATM
-                }
+                nablaMessaging.markConversationAsRead(conversationId)
+                    .onFailure {
+                        nablaMessaging.logger.error("Failed to mark conversation as read", it, tag = LOGGING_TAG)
+                        // no UI alert on purpose
+                    }
             }
         }
     }
 
     fun onDeleteMessage(item: TimelineItem.Message) {
         viewModelScope.launch(Dispatchers.Default) {
-            runCatchingCancellable {
-                nablaMessaging.deleteMessage(conversationId, item.id)
-            }.onFailure { error ->
-                // TODO handle error
-            }
+            nablaMessaging.deleteMessage(conversationId, item.id)
+                .onFailure { error ->
+                    nablaMessaging.logger.error("Failed to delete message", error, tag = LOGGING_TAG)
+                    errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.DeletingMessage(error))
+                }
         }
     }
 
-    fun onUrlClicked(url: String, isFromPatient: Boolean) {
-        runCatching {
-            navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenWebBrowser(URI.create(url)))
-        }.onFailure {
-            // TODO
-        }
+    fun onUrlClicked(stringUrl: String) {
+        runCatching { URI.create(stringUrl) }
+            .onFailure {
+                nablaMessaging.logger.error("Failed to parse clicked URL", it, tag = LOGGING_TAG)
+                errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.ClickedUrlParsing(it))
+            }
+            .onSuccess { url ->
+                navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenWebBrowser(url))
+            }
     }
 
     sealed interface State {
         object Loading : State
-        object Error : State
+        data class Error(val error: ErrorUiModel) : State
 
         data class ConversationLoaded(
             val conversation: Conversation,
@@ -376,6 +377,17 @@ internal class ConversationViewModel(
         data class OpenMediaLibrary(val mimeTypes: List<MimeType>) : NavigationEvent()
     }
 
+    sealed interface ErrorAlert {
+        data class LoadingMoreItems(val throwable: Throwable) : ErrorAlert
+        data class AttachmentMediaPicker(val throwable: Throwable) : ErrorAlert
+        data class AttachmentCameraCapturing(val throwable: Throwable) : ErrorAlert
+        data class AttachmentCameraOpening(val throwable: Throwable) : ErrorAlert
+        data class AttachmentLibraryOpening(val throwable: Throwable) : ErrorAlert
+        data class LinkOpening(val throwable: Throwable) : ErrorAlert
+        data class DeletingMessage(val throwable: Throwable) : ErrorAlert
+        data class ClickedUrlParsing(val throwable: Throwable) : ErrorAlert
+    }
+
     private class StateMapper {
         private val timelineBuilder = TimelineBuilder()
 
@@ -393,5 +405,9 @@ internal class ConversationViewModel(
                 ),
             )
         }
+    }
+
+    companion object {
+        private val LOGGING_TAG = Logger.tag("UI-Conversation")
     }
 }

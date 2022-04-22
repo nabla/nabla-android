@@ -33,17 +33,14 @@
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/chatToolbarContentContainer"
+                android:id="@+id/conversationToolbarContentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:paddingEnd="16dp"
                 >
 
                 <com.nabla.sdk.core.ui.components.AvatarView
-                    android:id="@+id/chatToolbarAvatarView"
+                    android:id="@+id/conversationToolbarAvatarView"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -52,22 +49,22 @@
                     />
 
                 <TextView
-                    android:id="@+id/chatToolbarTitle"
+                    android:id="@+id/conversationToolbarTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="?nablaMessaging_conversationHeaderTitleAppearance"
-                    app:layout_constraintBottom_toTopOf="@id/chatToolbarSubtitle"
+                    app:layout_constraintBottom_toTopOf="@id/conversationToolbarSubtitle"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/chatToolbarAvatarView"
+                    app:layout_constraintStart_toEndOf="@id/conversationToolbarAvatarView"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Here is a title"
                     />
 
                 <TextView
-                    android:id="@+id/chatToolbarSubtitle"
+                    android:id="@+id/conversationToolbarSubtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -75,8 +72,8 @@
                     android:textAppearance="?nablaMessaging_conversationHeaderSubtitleAppearance"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/chatToolbarTitle"
-                    app:layout_constraintTop_toBottomOf="@id/chatToolbarTitle"
+                    app:layout_constraintStart_toStartOf="@id/conversationToolbarTitle"
+                    app:layout_constraintTop_toBottomOf="@id/conversationToolbarTitle"
                     tools:text="And a subtitle right here"
                     />
 
@@ -88,7 +85,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ProgressBar
-        android:id="@+id/chatLoading"
+        android:id="@+id/conversationLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,39 +95,20 @@
         tools:visibility="visible"
         />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/errorContainer"
+    <include
+        android:id="@+id/nablaIncludedErrorLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        layout="@layout/nabla_error_layout"
         android:gravity="center"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appbar"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Apparently, there was a little problem"
-            android:textAppearance="?textAppearanceBodyLarge"
-            />
-
-        <Button
-            android:id="@+id/errorRetryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clipToPadding="false"
-            android:paddingHorizontal="16dp"
-            android:text="Retry"
-            />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/chatLoaded"
+        android:id="@+id/conversationLoaded"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -143,12 +121,12 @@
         >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chatRecyclerView"
+            android:id="@+id/conversationRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingBottom="12dp"
-            app:layout_constraintBottom_toTopOf="@id/chatRecyclerBottomBarrier"
+            app:layout_constraintBottom_toTopOf="@id/conversationRecyclerBottomBarrier"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -156,15 +134,15 @@
             />
 
         <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/chatRecyclerBottomBarrier"
+            android:id="@+id/conversationRecyclerBottomBarrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="top"
-            app:constraint_referenced_ids="chatComposerLayout"
+            app:constraint_referenced_ids="conversationComposerLayout"
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/chatComposerLayout"
+            android:id="@+id/conversationComposerLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?android:colorBackground"
@@ -174,19 +152,19 @@
             >
 
             <View
-                android:id="@+id/chatComposerTopDivider"
+                android:id="@+id/conversationComposerTopDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginBottom="6dp"
                 android:background="@color/on_surface_alpha_12"
-                app:layout_constraintBottom_toTopOf="@id/chatTextInputLayoutContainer"
+                app:layout_constraintBottom_toTopOf="@id/conversationTextInputLayoutContainer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_goneMarginBottom="12dp"
                 />
 
             <ImageView
-                android:id="@+id/chatAddMediaButton"
+                android:id="@+id/conversationAddMediaButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="10dp"
@@ -194,13 +172,13 @@
                 android:background="@drawable/nabla_circle_ripple_background"
                 android:contentDescription="Send media"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
-                app:layout_constraintEnd_toStartOf="@id/chatTextInputLayoutContainer"
+                app:layout_constraintEnd_toStartOf="@id/conversationTextInputLayoutContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="?nablaMessaging_addMediaIcon"
                 />
 
             <LinearLayout
-                android:id="@+id/chatTextInputLayoutContainer"
+                android:id="@+id/conversationTextInputLayoutContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -208,12 +186,12 @@
                 android:elevation="0.5dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
-                app:layout_constraintEnd_toStartOf="@id/chatSendButton"
-                app:layout_constraintStart_toEndOf="@id/chatAddMediaButton"
+                app:layout_constraintEnd_toStartOf="@id/conversationSendButton"
+                app:layout_constraintStart_toEndOf="@id/conversationAddMediaButton"
                 >
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/chatMediasToSendRecyclerView"
+                    android:id="@+id/conversationMediasToSendRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
@@ -222,7 +200,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/chatEditText"
+                    android:id="@+id/conversationEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="?nablaMessaging_conversationComposerEditTextStyle"
@@ -236,7 +214,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/chatSendButton"
+                android:id="@+id/conversationSendButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginEnd="10dp"

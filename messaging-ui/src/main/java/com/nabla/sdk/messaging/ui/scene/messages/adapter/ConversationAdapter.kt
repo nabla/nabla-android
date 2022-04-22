@@ -11,7 +11,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemLoadi
 import com.nabla.sdk.messaging.ui.scene.messages.MessageAction
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
-internal class ChatAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ConversationDiffCallback) {
+internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ConversationDiffCallback) {
 
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {

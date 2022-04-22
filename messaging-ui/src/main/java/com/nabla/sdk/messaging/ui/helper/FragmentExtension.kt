@@ -15,8 +15,8 @@ internal interface PermissionRequestLauncher {
 internal data class PermissionRational(
     @StringRes val title: Int,
     @StringRes val description: Int,
-    @StringRes val accept: Int = R.string.chat_message_copy_label,//R.string.permission_rational_default_accept,
-    @StringRes val decline: Int = R.string.chat_message_copy_label,//R.string.permission_rational_default_decline,
+    @StringRes val accept: Int = R.string.nabla_conversation_message_copy_label, // R.string.permission_rational_default_accept,
+    @StringRes val decline: Int = R.string.nabla_conversation_message_copy_label, // R.string.permission_rational_default_decline,
 )
 
 internal fun Fragment.registerForPermissionResult(

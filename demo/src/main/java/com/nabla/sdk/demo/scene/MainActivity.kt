@@ -12,10 +12,8 @@ import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 import com.nabla.sdk.messaging.ui.scene.conversations.bindViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
-import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,17 +25,6 @@ class MainActivity : AppCompatActivity() {
             onConversationClicked = { id ->
                 startActivity(Intent(this, ConversationActivity::class.java).apply { putExtra(CONVERSATION_ID_EXTRA, id.value) })
             },
-            onErrorRetryWhen = { cause, attempt ->
-                println("Error loading conversations - ${cause.stackTraceToString()}")
-                if (attempt < 3) {
-                    println("retrying in 3 sec")
-                    delay(3.seconds)
-                    true
-                } else {
-                    println("giving up")
-                    true
-                }
-            }
         )
     }
 

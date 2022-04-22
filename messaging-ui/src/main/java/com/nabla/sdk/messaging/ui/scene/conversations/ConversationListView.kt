@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaErrorLayoutBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 
 class ConversationListView : FrameLayout {
@@ -15,6 +16,8 @@ class ConversationListView : FrameLayout {
         get() = binding.conversationsRecyclerView
     val loadingView: View
         get() = binding.conversationsLoadingProgressBar
+    internal val errorView: NablaErrorLayoutBinding
+        get() = binding.nablaIncludedErrorLayout
 
     constructor(
         context: Context,

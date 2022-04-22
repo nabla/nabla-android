@@ -34,7 +34,7 @@
         <item name="nablaMessaging_patientMessageBackgroundColor">?colorPrimaryDark</item>
         <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurface</item>
         <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurface</item>
-        <item name="nablaMessaging_sendMessageIconTint">@color/chat_message_cta_color</item>
+        <item name="nablaMessaging_sendMessageIconTint">@color/nabla_conversation_send_message_selector</item>
         <item name="nablaMessaging_conversationComposerEditTextStyle">@style/Widget.Nabla.Messaging.ComposerEditTextStyle</item>
         <item name="nablaMessaging_conversationComposerBackground">@drawable/nabla_conversation_composer_background</item>
 

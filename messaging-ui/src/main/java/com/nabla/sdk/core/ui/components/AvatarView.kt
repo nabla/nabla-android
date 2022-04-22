@@ -122,8 +122,8 @@ internal class AvatarView : ConstraintLayout {
         binding.componentAvatarPlaceholderTextView.visibility = View.VISIBLE
 
         val stateDescription = context.getString(
-            R.string.avatar_state_description_placeholder,
-            if (grayOut) context.getString(R.string.avatar_state_description_gray_out) else ""
+            R.string.nabla_avatar_state_description_placeholder,
+            if (grayOut) context.getString(R.string.nabla_avatar_state_description_gray_out) else ""
         )
         ViewCompat.setStateDescription(this, stateDescription)
     }
@@ -135,8 +135,8 @@ internal class AvatarView : ConstraintLayout {
         binding.componentAvatarPlaceholderTextView.visibility = View.INVISIBLE
 
         val stateDescription = context.getString(
-            R.string.avatar_state_description_no_placeholder,
-            if (grayOut) context.getString(R.string.avatar_state_description_gray_out) else ""
+            R.string.nabla_avatar_state_description_no_placeholder,
+            if (grayOut) context.getString(R.string.nabla_avatar_state_description_gray_out) else ""
         )
         ViewCompat.setStateDescription(this, stateDescription)
     }

@@ -1,12 +1,19 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
+import android.content.Context
 import android.graphics.Rect
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.messaging.ui.R
+import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.ErrorAlert
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch
 
@@ -14,6 +21,16 @@ fun ConversationListView.bindViewModel(
     viewModel: ConversationListViewModel,
     itemDecoration: RecyclerView.ItemDecoration? = DefaultOffsetsItemDecoration(),
 ) {
+    val conversationAdapter = setupRecyclerAdapter(viewModel, itemDecoration)
+    bindViewModelState(viewModel, conversationAdapter)
+
+    bindViewModelAlerts(viewModel)
+}
+
+private fun ConversationListView.setupRecyclerAdapter(
+    viewModel: ConversationListViewModel,
+    itemDecoration: RecyclerView.ItemDecoration?,
+): ConversationListAdapter {
     val conversationAdapter = ConversationListAdapter(viewModel.onConversationClicked)
     recyclerView.apply {
         adapter = conversationAdapter
@@ -28,14 +45,39 @@ fun ConversationListView.bindViewModel(
             }
         )
     }
+    return conversationAdapter
+}
 
+private fun ConversationListView.bindViewModelAlerts(viewModel: ConversationListViewModel) {
+    findViewTreeLifecycleOwner()?.launchCollect(viewModel.errorAlertEventFlow) { errorAlert ->
+        context?.let { context ->
+            Toast.makeText(context, errorAlert.defaultMessage(context), Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+private fun ErrorAlert.defaultMessage(context: Context): String {
+    val resId = when (this) {
+        is ErrorAlert.LoadingMoreConversations -> R.string.nabla_error_message_conversations_loading_more
+    }
+
+    return context.getString(resId)
+}
+
+private fun ConversationListView.bindViewModelState(
+    viewModel: ConversationListViewModel,
+    conversationAdapter: ConversationListAdapter,
+) {
     viewModel.viewModelScope.launch {
         viewModel.stateFlow.collect { state ->
             loadingView.isVisible = state is State.Loading
             recyclerView.isVisible = state is State.Loaded
+            errorView.root.isVisible = state is State.Error
 
-            if (state is State.Loaded) {
-                conversationAdapter.submitList(state.items)
+            when (state) {
+                is State.Loaded -> conversationAdapter.submitList(state.items)
+                is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
+                is State.Loading -> Unit // no-op
             }
         }
     }

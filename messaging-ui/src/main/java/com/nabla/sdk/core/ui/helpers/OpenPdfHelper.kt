@@ -24,16 +24,16 @@ internal suspend fun openPdfReader(context: Context, pdfUri: URI): OpenPdfReader
 private suspend fun askUserToInstallPdfReader(context: Context): OpenPdfReaderResult {
     return suspendCancellableCoroutine { continuation ->
         val dialog = MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.no_pdf_third_party_app_info_title)
-            .setMessage(R.string.no_pdf_third_party_app_info_message)
-            .setPositiveButton(R.string.no_pdf_third_party_app_info_positive) { _, _ ->
+            .setTitle(R.string.nabla_conversation_no_pdf_third_party_app_info_title)
+            .setMessage(R.string.nabla_conversation_no_pdf_third_party_app_info_message)
+            .setPositiveButton(R.string.nabla_conversation_no_pdf_third_party_app_info_positive) { _, _ ->
                 try {
                     context.startActivity(makeWebPlayStoreGooglePdfReaderIntent())
                     continuation.resume(OpenPdfReaderResult.NoPdfReader.PlayStoreOpenedToInstallReaderApp)
                 } catch (activityNotFoundException: ActivityNotFoundException) {
                     continuation.resume(OpenPdfReaderResult.NoPdfReader.ErrorOpeningPlayStoreToInstallReaderApp(activityNotFoundException))
                 }
-            }.setNegativeButton(R.string.no_pdf_third_party_app_info_negative) { _, _ ->
+            }.setNegativeButton(R.string.nabla_conversation_no_pdf_third_party_app_info_negative) { _, _ ->
                 continuation.resume(OpenPdfReaderResult.NoPdfReader.UserRefusedToInstallReaderApp)
             }.setOnCancelListener {
                 continuation.resume(OpenPdfReaderResult.NoPdfReader.UserRefusedToInstallReaderApp)

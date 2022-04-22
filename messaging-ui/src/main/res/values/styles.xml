@@ -6,7 +6,7 @@
         <item name="android:textColor">?colorPrimaryDark</item>
         <item name="android:textColorHint">?colorOnSurface</item>
         <item name="android:lineSpacingExtra">3sp</item>
-        <item name="android:hint">@string/nabla_messaging_composer_placeholder_default</item>
+        <item name="android:hint">@string/nabla_conversation_composer_placeholder_default</item>
         <item name="android:inputType">textMultiLine|textCapSentences</item>
         <item name="android:maxHeight">200dp</item>
     </style>
