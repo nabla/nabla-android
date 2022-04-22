@@ -5,10 +5,6 @@
         <attr name="nablaMessagingThemeOverlay" format="reference" />
     </declare-styleable>
 
-    <style name="Preview.Nabla.Messaging" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="nablaMessagingThemeOverlay">@style/ThemeOverlay.Nabla.Messaging</item>
-    </style>
-
     <!-- Theme overlay adding Nabla UI customization attrs with their defaults, see attrs.xml -->
     <style name="ThemeOverlay.Nabla.Messaging" parent="">
         <item name="hasValidMessagingOverlays">true</item>

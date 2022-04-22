@@ -133,6 +133,6 @@ internal class MessageRepositoryMock : MessageRepository {
     }
 
     companion object {
-        private const val MOCK_ERRORS = true
+        private const val MOCK_ERRORS = false
     }
 }

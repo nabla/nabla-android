@@ -64,6 +64,6 @@ internal class ConversationRepositoryMock : ConversationRepository {
     }
 
     companion object {
-        private const val MOCK_ERRORS = true
+        private const val MOCK_ERRORS = false
     }
 }

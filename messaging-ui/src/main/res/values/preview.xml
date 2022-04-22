@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Just a theme for IDE preview -->
+    <style name="Preview.Nabla.Messaging" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="nablaMessagingThemeOverlay">@style/ThemeOverlay.Nabla.Messaging</item>
+    </style>
+</resources>

@@ -12,7 +12,10 @@ import androidx.annotation.StyleRes
 internal fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
     val typedValue = TypedValue()
     return if (theme.resolveAttribute(themeAttr, typedValue, true)) {
-        typedValue.data
+        // resourceId is used when the final value is ColorStateList
+        if (typedValue.resourceId != 0) {
+            getColor(typedValue.resourceId)
+        } else typedValue.data
     } else {
         // failed to resolve, returning the flashiest color.
         Color.MAGENTA
