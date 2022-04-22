@@ -16,7 +16,7 @@ import kotlinx.datetime.Instant
 
 internal sealed class ItemUiModel(val listId: String) {
 
-    object Loading : ItemUiModel("loading")
+    object Loading : ItemUiModel(listId = "loading_more")
 
     data class Conversation(
         val id: ConversationId,

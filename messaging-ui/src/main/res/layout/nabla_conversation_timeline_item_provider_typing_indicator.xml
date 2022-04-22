@@ -5,7 +5,7 @@
     android:id="@+id/dots"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
-    android:contentDescription="is typing"
+    android:contentDescription="@string/nabla_conversation_typing_indicator_content_description"
     android:padding="12dp"
     android:src="@drawable/nabla_animated_dots"
     />

@@ -35,4 +35,28 @@
     <string name="nabla_error_message_conversation_link_opening">There was an error opening the link, please try again.</string>
     <string name="nabla_error_message_conversation_deleting_message">There was an error deleting the message, please try again.</string>
     <string name="nabla_error_message_conversation_clicked_url_parsing">There was an error processing the link, please try again.</string>
+
+    <string name="nabla_conversation_message_action_copy">Copy</string>
+    <string name="nabla_conversation_message_action_delete">Delete</string>
+    <string name="nabla_conversation_full_screen_media_close_content_description">Close</string>
+    <string name="nabla_conversation_full_screen_media_share_content_description">Share</string>
+    <string name="nabla_conversation_attachment_media_picker_camera">Camera</string>
+    <string name="nabla_conversation_attachment_media_picker_photos_library">Photo’s library</string>
+    <string name="nabla_conversation_attachment_media_picker_docuemnts">Pick a file</string>
+
+    <string name="nabla_conversation_deleted_message_placeholder">Deleted message</string>
+    <string name="nabla_conversation_file_message_content_description">File message</string>
+    <string name="nabla_conversation_typing_indicator_content_description">is typing</string>
+    <string name="nabla_conversation_message_author_unknown_title">Unrecognized sender</string>
+    <string name="nabla_conversation_composer_remove_attachment_content_description">Remove media attachment</string>
+    <string name="nabla_conversation_composer_add_attachment_content_description">Add media attachment</string>
+    <string name="nabla_conversation_composer_send_content_description">Send</string>
+    <string name="nabla_conversation_header_loading">Loading</string>
+    <string name="nabla_conversation_header_error">Error</string>
+    <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Share</string>
+
+    <string name="nabla_conversation_camera_picture_permission_rational_title">Authorisation to access camera</string>
+    <string name="nabla_conversation_camera_picture_permission_rational_description">To take a photo, we need authorisation to access your camera</string>
+    <string name="nabla_permission_rational_default_accept">Accept</string>
+    <string name="nabla_permission_rational_default_decline">Refuse</string>
 </resources>

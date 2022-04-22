@@ -48,7 +48,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Camera"
+                    android:text="@string/nabla_conversation_attachment_media_picker_camera"
                     android:textAppearance="?nablaMessaging_conversationMediaPickerTextAppearance"
                     />
 
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Photo &amp; video’s library"
+                    android:text="@string/nabla_conversation_attachment_media_picker_photos_library"
                     android:textAppearance="?nablaMessaging_conversationMediaPickerTextAppearance"
                     />
 
@@ -109,7 +109,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pick a file"
+                    android:text="@string/nabla_conversation_attachment_media_picker_docuemnts"
                     android:textAppearance="?nablaMessaging_conversationMediaPickerTextAppearance"
                     />
             </LinearLayout>

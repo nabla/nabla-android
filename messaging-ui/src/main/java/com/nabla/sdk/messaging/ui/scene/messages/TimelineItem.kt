@@ -47,7 +47,7 @@ internal sealed interface TimelineItem {
     }
 
     object LoadingMore : TimelineItem {
-        override val listItemId = "load_more"
+        override val listItemId = "loading_more"
     }
 
     data class DateSeparator(

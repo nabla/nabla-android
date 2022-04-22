@@ -35,4 +35,28 @@
     <string name="nabla_error_message_conversation_link_opening">Une erreur est survenue lors de l’ouverture du lien, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du message, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_clicked_url_parsing">Une erreur est survenue lors du traitement du lien, veuillez réessayer.</string>
+
+    <string name="nabla_conversation_message_action_copy">Copier</string>
+    <string name="nabla_conversation_message_action_delete">Supprimer</string>
+    <string name="nabla_conversation_full_screen_media_close_content_description">Fermer</string>
+    <string name="nabla_conversation_full_screen_media_share_content_description">Partager</string>
+    <string name="nabla_conversation_attachment_media_picker_camera">Caméra</string>
+    <string name="nabla_conversation_attachment_media_picker_photos_library">Bibliothèque photos</string>
+    <string name="nabla_conversation_attachment_media_picker_docuemnts">Choisir un fichier</string>
+
+    <string name="nabla_conversation_deleted_message_placeholder">Message supprimé</string>
+    <string name="nabla_conversation_file_message_content_description">Message fichier</string>
+    <string name="nabla_conversation_typing_indicator_content_description">est en train d’écrire</string>
+    <string name="nabla_conversation_message_author_unknown_title">Auteur non reconnu</string>
+    <string name="nabla_conversation_composer_remove_attachment_content_description">Supprimer la pièce-jointe</string>
+    <string name="nabla_conversation_composer_add_attachment_content_description">Ajouter une pièce-jointe</string>
+    <string name="nabla_conversation_composer_send_content_description">Envoyer</string>
+    <string name="nabla_conversation_header_loading">Chargement</string>
+    <string name="nabla_conversation_header_error">Erreur</string>
+    <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Partager</string>
+
+    <string name="nabla_conversation_camera_picture_permission_rational_title">Autorisation d’utiliser l’appareil photo</string>
+    <string name="nabla_conversation_camera_picture_permission_rational_description">Pour prendre une photo, nous avons besoin de votre autorisation d’utiliser l’appareil photo.</string>
+    <string name="nabla_permission_rational_default_accept">Accept</string>
+    <string name="nabla_permission_rational_default_decline">Refuse</string>
 </resources>

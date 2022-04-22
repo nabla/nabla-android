@@ -14,6 +14,7 @@ import coil.request.ImageRequest
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityFullScreenImageBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.createSharableJpegImage
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.createSharingIntent
@@ -86,7 +87,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
                                         (drawable as BitmapDrawable).bitmap
                                             .createSharableJpegImage(imageUri.hashCode().toString(), binding.context)
                                             .createSharingIntent("image/jpeg"),
-                                        "Share", // TODO
+                                        getString(R.string.nabla_conversation_full_screen_image_sharing_chooser_title),
                                     )
                                 )
                             } catch (_: Throwable) {

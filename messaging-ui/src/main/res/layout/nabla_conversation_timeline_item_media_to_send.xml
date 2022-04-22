@@ -57,7 +57,7 @@
             app:iconTint="?colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="Remove draft media"
+            android:contentDescription="@string/nabla_conversation_composer_remove_attachment_content_description"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

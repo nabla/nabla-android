@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/messageActionCopy"
-        android:title="Copy"
+        android:title="@string/nabla_conversation_message_action_copy"
         />
     <item
         android:id="@+id/messageActionDelete"
-        android:title="Delete"
+        android:title="@string/nabla_conversation_message_action_delete"
         />
 
 </menu>

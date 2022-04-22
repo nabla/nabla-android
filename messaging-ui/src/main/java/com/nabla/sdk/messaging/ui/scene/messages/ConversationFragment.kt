@@ -151,8 +151,8 @@ open class ConversationFragment : Fragment() {
         captureCameraPicturePermissionsLauncher = registerForPermissionResult(
             permission = Manifest.permission.CAMERA,
             rational = PermissionRational(
-                title = R.string.nabla_conversation_message_copy_label, // R.string.media_camera_picture_permission_rational_title,
-                description = R.string.nabla_conversation_message_copy_label, // R.string.media_camera_picture_permission_rational_description
+                title = R.string.nabla_conversation_camera_picture_permission_rational_title,
+                description = R.string.nabla_conversation_camera_picture_permission_rational_description,
             )
         ) { isGranted ->
             if (isGranted) {
@@ -268,7 +268,7 @@ open class ConversationFragment : Fragment() {
                 }
                 ConversationViewModel.State.Loading -> {
                     binding.updateToolbar(
-                        title = "loading",
+                        title = getString(R.string.nabla_conversation_header_loading),
                         subtitle = null,
                         providers = null,
                         displayAvatar = false,
@@ -276,7 +276,7 @@ open class ConversationFragment : Fragment() {
                 }
                 is ConversationViewModel.State.Error -> {
                     binding.updateToolbar(
-                        title = "error",
+                        title = getString(R.string.nabla_conversation_header_error),
                         subtitle = null,
                         providers = null,
                         displayAvatar = false,

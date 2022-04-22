@@ -14,7 +14,7 @@
         android:id="@+id/chatSystemMessageAuthorTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="System message"
+        android:text="@string/nabla_conversation_message_author_unknown_title"
         android:textAppearance="?textAppearanceCaption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/chatSystemMessageContentContainer"
