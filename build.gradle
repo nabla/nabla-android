@@ -34,7 +34,7 @@ subprojects {
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = buildConfig.jvmTarget
-            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn,kotlinx.coroutines.FlowPreview"
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn,kotlinx.coroutines.FlowPreview,kotlinx.coroutines.ExperimentalCoroutinesApi"
         }
     }
 }

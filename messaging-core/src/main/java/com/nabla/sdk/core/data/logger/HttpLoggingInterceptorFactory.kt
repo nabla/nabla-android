@@ -8,10 +8,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 internal object HttpLoggingInterceptorFactory {
     fun make(logger: Logger): Interceptor {
         val bodyLogger = HttpLoggingInterceptor { message ->
-            logger.debug(message, tag = Logger.tag("Http"))
+            logger.debug(message, tag = Logger.asSdkTag("Http"))
         }.apply { setLevel(HttpLoggingInterceptor.Level.BODY) }
         val headerLogger = HttpLoggingInterceptor { message ->
-            logger.debug(message, tag = Logger.tag("Http"))
+            logger.debug(message, tag = Logger.asSdkTag("Http"))
         }.apply { setLevel(HttpLoggingInterceptor.Level.HEADERS) }
 
         return Interceptor { chain ->

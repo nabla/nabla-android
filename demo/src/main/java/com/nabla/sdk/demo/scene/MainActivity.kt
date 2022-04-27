@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             owner = this,
             onConversationClicked = { id ->
                 startActivity(Intent(this, ConversationActivity::class.java).apply { putExtra(CONVERSATION_ID_EXTRA, id.value) })
-            },
+            }
         )
     }
 

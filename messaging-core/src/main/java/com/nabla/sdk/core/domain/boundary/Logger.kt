@@ -9,6 +9,8 @@ interface Logger {
     companion object {
         private const val DEFAULT_TAG = "Nabla-SDK"
         internal const val AUTH_TAG = "$DEFAULT_TAG-Auth"
-        fun tag(domain: String): String = "$DEFAULT_TAG-$domain"
+        fun asSdkTag(domain: String): String {
+            return "$DEFAULT_TAG-${domain.replaceFirstChar { it.uppercaseChar() }}"
+        }
     }
 }

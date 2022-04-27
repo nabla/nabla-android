@@ -42,7 +42,7 @@ internal sealed class ItemUiModel(val listId: String) {
 internal fun Conversation.toUiModel() = ItemUiModel.Conversation(
     id = id,
     title = title ?: "",
-    subtitle = description ?: "",
+    subtitle = lastMessagePreview ?: description ?: "",
     lastModified = lastModified,
     hasUnreadMessages = patientUnreadMessageCount > 0,
     providers = providersInConversation.map { it.provider },

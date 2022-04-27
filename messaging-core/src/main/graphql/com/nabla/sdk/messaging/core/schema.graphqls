@@ -84,7 +84,7 @@ union ConversationItem = Message
 type ConversationItemsPage {
   data: [ConversationItem]!
   hasMore: Boolean!
-  nextCursor: DateTime
+  nextCursor: String
 }
 
 union MessageContent = TextMessageContent | ImageMessageContent | DocumentMessageContent | DeletedMessageContent

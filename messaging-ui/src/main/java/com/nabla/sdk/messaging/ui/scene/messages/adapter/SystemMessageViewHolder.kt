@@ -16,7 +16,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.MessageContentB
 internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>>(
     private val binding: NablaConversationTimelineItemSystemMessageBinding,
     contentBinder: BinderType,
-) : MessageViewHolder<ContentType, MessageSender.System, BinderType>(contentBinder, binding.root),
+) : MessageViewHolder<ContentType, MessageSender, BinderType>(contentBinder, binding.root),
     PopUpMenuHolder,
     ClickableItemHolder {
 
@@ -31,7 +31,7 @@ internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message
         menuInflater.inflate(R.menu.message_actions, menu)
     }
 
-    override fun bind(message: TimelineItem.Message, sender: MessageSender.System, content: ContentType) {
+    override fun bind(message: TimelineItem.Message, sender: MessageSender, content: ContentType) {
         super.bind(message, sender, content)
         binding.chatSystemMessageAuthorTextView.isVisible = message.showSenderName
         binding.chatSystemMessageAvatarViewContainer.visibility = if (message.showSenderAvatar) VISIBLE else INVISIBLE

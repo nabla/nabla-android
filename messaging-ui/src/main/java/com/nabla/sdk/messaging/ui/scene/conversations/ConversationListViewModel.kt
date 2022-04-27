@@ -82,6 +82,6 @@ class ConversationListViewModel(
     }
 
     companion object {
-        private val LOGGING_TAG = Logger.tag("UI-ConversationsList")
+        private val LOGGING_TAG = Logger.asSdkTag("UI-ConversationsList")
     }
 }

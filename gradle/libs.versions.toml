@@ -31,6 +31,7 @@ google-material = { group = "com.google.android.material", name = "material", ve
 kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlin-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
 kotlin-serialization-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlin-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.3.2"
@@ -51,3 +52,7 @@ apollo-adapters = { group = "com.apollographql.apollo3", name = "apollo-adapters
 coilCore = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 
 uuid = "com.benasher44:uuid:0.4.0"
+
+junit = "junit:junit:4.13.2"
+turbine = "app.cash.turbine:turbine:0.7.0"
+mockk = "io.mockk:mockk:1.12.3"

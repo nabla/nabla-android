@@ -167,17 +167,17 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             )
             is SystemTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.sender,
                 item.content as TimelineItem.Message.Text
             )
             is SystemFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.sender,
                 item.content as TimelineItem.Message.File
             )
             is SystemImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.sender,
                 item.content as TimelineItem.Message.Image
             )
         }

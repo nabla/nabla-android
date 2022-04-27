@@ -54,4 +54,9 @@ dependencies {
     implementation libs.apollo.adapters
     implementation libs.androidx.startup
     api libs.uuid
+
+    testImplementation libs.junit
+    testImplementation libs.turbine
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.mockk
 }

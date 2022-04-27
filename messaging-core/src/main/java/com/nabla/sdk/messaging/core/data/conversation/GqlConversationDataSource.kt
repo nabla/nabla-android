@@ -6,10 +6,10 @@ import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
+import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
-import com.nabla.sdk.core.kotlin.shareInWithMaterializedErrors
 import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.graphql.CreateConversationMutation
@@ -22,12 +22,10 @@ import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 
 internal class GqlConversationDataSource constructor(
     private val logger: Logger,
@@ -35,31 +33,16 @@ internal class GqlConversationDataSource constructor(
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
 ) {
+    private val tag = Logger.asSdkTag("conversation")
+
     private val conversationsEventsFlow = apolloClient.subscription(ConversationsEventsSubscription())
         .toFlow()
-        .map {
-            it.dataAssertNoErrors
-        }
-        .onEach {
-            it.conversations?.event?.apply {
-                onConversationCreatedEvent?.let {
-                    logger.debug("onConversationCreatedEvent")
-                }
-                onConversationDeletedEvent?.let {
-                    logger.debug("onConversationDeletedEvent")
-                }
-                onConversationUpdatedEvent?.let {
-                    logger.debug("onConversationUpdatedEvent")
-                }
-            }
+        .retryOnNetworkErrorAndShareIn(coroutineScope) {
+            logger.debug("Event $it", tag = tag)
             it.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
                 insertConversationToConversationsListCache(it)
             }
-        }.shareInWithMaterializedErrors(
-            scope = coroutineScope,
-            replay = 0,
-            started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
-        )
+        }
 
     private suspend fun insertConversationToConversationsListCache(
         conversation: ConversationFragment,
@@ -104,7 +87,7 @@ internal class GqlConversationDataSource constructor(
         val query = FIRST_CONVERSATIONS_PAGE_QUERY
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .watch(fetchThrows = true, refetchThrows = true)
+            .watch(fetchThrows = true)
             .map { response -> response.dataAssertNoErrors }
             .map { queryData ->
                 val items = queryData.conversations.conversations.map {

@@ -50,7 +50,7 @@ internal class MessageRepositoryImpl(
             }
             mergeResult ?: gqlMessage
         }
-        val allMessages = (mergedMessages + localMessagesToAdd).sortedBy { it.baseMessage.sentAt }
+        val allMessages = (mergedMessages + localMessagesToAdd).sortedByDescending { it.baseMessage.sentAt }
         return gqlPaginatedConversationAndMessages.copy(
             conversationWithMessages = gqlPaginatedConversationAndMessages.conversationWithMessages.copy(
                 messages = allMessages,

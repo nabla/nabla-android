@@ -408,6 +408,6 @@ internal class ConversationViewModel(
     }
 
     companion object {
-        private val LOGGING_TAG = Logger.tag("UI-Conversation")
+        private val LOGGING_TAG = Logger.asSdkTag("UI-Conversation")
     }
 }

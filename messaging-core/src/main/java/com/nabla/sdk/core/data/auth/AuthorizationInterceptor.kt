@@ -18,7 +18,11 @@ internal class AuthorizationInterceptor(
                     message = "Using access token auth: ${chain.request()}",
                     tag = Logger.AUTH_TAG
                 )
-                val freshAccessToken = runBlocking { tokenRepository.value.getFreshAccessToken().getOrThrow() }
+                val freshAccessToken = runBlocking {
+                    tokenRepository.value.getFreshAccessToken()
+                        .onFailure { throw AuthIoException(it) } // Interceptor are only allowed to throw IOException
+                        .getOrThrow()
+                }
                 chain.request().newBuilder()
                     .header(HEADER_AUTH_NAME, makeHeaderAuthValue(freshAccessToken))
                     .build()
