@@ -12,6 +12,7 @@ import androidx.core.view.updateLayoutParams
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.messaging.ui.R
@@ -27,7 +28,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
     private var binding: NablaActivityFullScreenImageBinding? = null
 
     private val imageUri by lazy {
-        (intent.extras?.get(IMAGE_URI_ARG) as? URI ?: error("missing image uri"))
+        (intent.extras?.get(IMAGE_URI_ARG) as? URI ?: throw NablaException.Internal(IllegalStateException("missing image uri arg")))
             .toAndroidUri()
             .sanitize()
     }

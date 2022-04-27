@@ -2,6 +2,7 @@ package com.nabla.sdk.core
 
 import android.content.Context
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
 
@@ -45,10 +46,10 @@ class NablaCore constructor(
             return lazyInitialize(DEFAULT_NAMESPACE) {
                 NablaCore(
                     DEFAULT_NAMESPACE,
-                    requireNotNull(defaultAppContext),
+                    defaultAppContext ?: throw NablaException.Configuration.MissingContext,
                     NablaCoreConfig(
-                        publicApiKey = requireNotNull(defaultPublicApiKey),
-                        sessionTokenProvider = requireNotNull(defaultSessionTokenProvider)
+                        publicApiKey = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
+                        sessionTokenProvider = defaultSessionTokenProvider ?: throw NablaException.Configuration.MissingSessionTokenProvider,
                     )
                 )
             }

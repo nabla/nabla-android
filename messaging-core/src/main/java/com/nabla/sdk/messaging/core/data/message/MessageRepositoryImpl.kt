@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -87,18 +88,18 @@ internal class MessageRepositoryImpl(
     override suspend fun sendMessage(message: Message): Message {
         val messageId = message.baseMessage.id
         if (messageId !is MessageId.Local) {
-            error("Can't send a message that is not an unsent local one")
+            throw NablaException.InvalidMessage("Can't send a message with an id that is not Local: $messageId")
         }
 
         if (message.sendStatus !in setOf(SendStatus.ToBeSent, SendStatus.ErrorSending)) {
-            error("Can't send a message with status: ${message.sendStatus}")
+            throw NablaException.InvalidMessage("Can't send a message with status: ${message.sendStatus}")
         }
 
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
 
         return runCatchingCancellable {
             return when (message) {
-                is Message.Deleted -> error("Can't send a deleted message")
+                is Message.Deleted -> throw NablaException.InvalidMessage("Can't send a deleted message")
                 is Message.Media.Document -> sendMediaMessageImpl(message, messageId)
                 is Message.Media.Image -> sendMediaMessageImpl(message, messageId)
                 is Message.Text -> sendTextMessageImpl(message, messageId)
@@ -133,7 +134,7 @@ internal class MessageRepositoryImpl(
     ): Message {
         val mediaSource = mediaMessage.mediaSource
         if (mediaSource !is FileSource.Local) {
-            error("Can't send a media message with a media source that is not local")
+            throw NablaException.InvalidMessage("Can't send a media message with a media source that is not local")
         }
         val fileName = if (mediaMessage is Message.Media.Document) {
             mediaMessage.documentName

@@ -12,11 +12,12 @@ internal class BaseExceptionMapper : ExceptionMapper {
     override fun map(exception: Throwable): NablaException? {
         return when {
             exception.isNetworkError() -> NablaException.Network(exception)
-            exception is GraphQLException -> when (val errorCode = exception.errorCode) {
-                ErrorCode.BAD_REQUEST,
-                ErrorCode.INTERNAL_SERVER_ERROR -> NablaException.Server(exception, errorCode.code)
-                else -> NablaException.Internal(exception, errorCode?.code ?: 0)
-            }
+            exception is GraphQLException -> NablaException.Server(
+                exception,
+                exception.numericCode ?: 0,
+                exception.serverMessage,
+                exception.requestId,
+            )
             else -> null
         }
     }

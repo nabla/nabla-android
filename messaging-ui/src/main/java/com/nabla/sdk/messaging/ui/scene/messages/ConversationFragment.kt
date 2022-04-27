@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
 import com.nabla.sdk.core.ui.helpers.canScrollDown
@@ -458,7 +459,7 @@ open class ConversationFragment : Fragment() {
 
             internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId =
                 savedStateHandle.get<Uuid>(CONVERSATION_ID_ARG_KEY)?.toConversationId()
-                    ?: error("Missing conversationId parameter, make sure you follow the documentation to integrate ConversationFragment.")
+                    ?: throw NablaException.MissingConversationId
         }
     }
 

@@ -24,10 +24,12 @@ import coil.size.PixelSize
 import coil.size.Size
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaToSendBinding
+import java.lang.IllegalStateException
 import kotlin.math.max
 
 internal class MediasToSendAdapter(
@@ -110,7 +112,7 @@ internal class MediasToSendAdapter(
                     pdfRenderer.close()
                     return DrawableResult(drawable = bitmap.toDrawable(context.resources), isSampled = false, DataSource.DISK)
                 } else {
-                    throw IllegalStateException("Can't get a file descriptor from $data")
+                    throw NablaException.Internal(IllegalStateException("Can't get a file descriptor from $data"))
                 }
             }
 

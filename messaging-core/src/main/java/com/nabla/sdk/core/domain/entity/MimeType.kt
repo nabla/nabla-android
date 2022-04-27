@@ -18,7 +18,7 @@ sealed interface MimeType {
             Image.JPEG.stringRepresentation -> Image.JPEG
             Image.PNG.stringRepresentation -> Image.PNG
             Application.PDF.stringRepresentation -> Application.PDF
-            else -> throw IllegalArgumentException("Unhandled mimeType: $representation")
+            else -> throw NablaException.Internal(IllegalStateException("Unhandled mimeType: $representation"))
         }
     }
 }
