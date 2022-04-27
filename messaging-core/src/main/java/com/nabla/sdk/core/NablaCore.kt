@@ -1,5 +1,6 @@
 package com.nabla.sdk.core
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.NablaException
@@ -28,7 +29,8 @@ class NablaCore constructor(
         private var defaultPublicApiKey: String? = null
         private var defaultSessionTokenProvider: SessionTokenProvider? = null
 
-        private val instances = mutableMapOf<String, NablaCore>()
+        @SuppressLint("StaticFieldLeak")
+        private var defaultSingletonInstance: NablaCore? = null
 
         internal fun registerDefaultContext(context: Context) {
             defaultAppContext = context.applicationContext
@@ -43,21 +45,21 @@ class NablaCore constructor(
         }
 
         fun getInstance(): NablaCore {
-            return lazyInitialize(DEFAULT_NAMESPACE) {
-                NablaCore(
-                    DEFAULT_NAMESPACE,
-                    defaultAppContext ?: throw NablaException.Configuration.MissingContext,
-                    NablaCoreConfig(
-                        publicApiKey = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
-                        sessionTokenProvider = defaultSessionTokenProvider ?: throw NablaException.Configuration.MissingSessionTokenProvider,
-                    )
-                )
-            }
-        }
-
-        fun getInstance(name: String): NablaCore {
-            return synchronized(this) {
-                instances.getValue(name)
+            synchronized(this) {
+                return defaultSingletonInstance ?: kotlin.run {
+                    val instance = lazyInitialize {
+                        NablaCore(
+                            DEFAULT_NAMESPACE,
+                            defaultAppContext ?: throw NablaException.Configuration.MissingContext,
+                            NablaCoreConfig(
+                                publicApiKey = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
+                                sessionTokenProvider = defaultSessionTokenProvider ?: throw NablaException.Configuration.MissingSessionTokenProvider,
+                            )
+                        )
+                    }
+                    defaultSingletonInstance = instance
+                    instance
+                }
             }
         }
 
@@ -66,17 +68,13 @@ class NablaCore constructor(
         }
 
         fun initialize(context: Context, nablaCoreConfig: NablaCoreConfig, name: String): NablaCore {
-            return lazyInitialize(name) {
+            return lazyInitialize {
                 NablaCore(name, context, nablaCoreConfig)
             }
         }
 
-        private fun lazyInitialize(name: String, lazyBuilder: () -> NablaCore): NablaCore {
-            return synchronized(this) {
-                instances.getOrPut(name) {
-                    lazyBuilder()
-                }
-            }
+        private fun lazyInitialize(lazyBuilder: () -> NablaCore): NablaCore {
+            return lazyBuilder()
         }
     }
 }

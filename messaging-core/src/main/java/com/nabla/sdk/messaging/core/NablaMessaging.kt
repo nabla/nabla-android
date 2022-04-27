@@ -122,26 +122,18 @@ class NablaMessaging private constructor(
     }
 
     companion object {
-        private const val DEFAULT_NAMESPACE = "nabla-messaging"
-
-        private val instances = mutableMapOf<String, NablaMessaging>()
+        private var defaultSingletonInstance: NablaMessaging? = null
 
         fun getInstance(): NablaMessaging {
-            return initialize(NablaCore.getInstance(), DEFAULT_NAMESPACE)
-        }
-
-        fun getInstance(name: String): NablaMessaging {
-            return synchronized(this) {
-                instances.getValue(name)
-            }
-        }
-
-        fun initialize(nablaCore: NablaCore, name: String): NablaMessaging {
-            return synchronized(this) {
-                instances.getOrPut(name) {
-                    NablaMessaging(nablaCore.coreContainer)
+            synchronized(this) {
+                return defaultSingletonInstance ?: kotlin.run {
+                    val instance = initialize(NablaCore.getInstance())
+                    defaultSingletonInstance = instance
+                    instance
                 }
             }
         }
+
+        fun initialize(nablaCore: NablaCore): NablaMessaging = NablaMessaging(nablaCore.coreContainer)
     }
 }
