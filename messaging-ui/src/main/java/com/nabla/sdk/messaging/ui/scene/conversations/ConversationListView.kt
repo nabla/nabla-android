@@ -12,9 +12,9 @@ import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingTheme
 
 class ConversationListView : FrameLayout {
     private lateinit var binding: NablaConversationListViewBinding
-    val recyclerView: RecyclerView
+    internal val recyclerView: RecyclerView
         get() = binding.conversationsRecyclerView
-    val loadingView: View
+    internal val loadingView: View
         get() = binding.conversationsLoadingProgressBar
     internal val errorView: NablaErrorLayoutBinding
         get() = binding.nablaIncludedErrorLayout

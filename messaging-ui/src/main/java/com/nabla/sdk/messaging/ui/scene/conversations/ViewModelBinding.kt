@@ -12,6 +12,7 @@ import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.ErrorAlert
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
@@ -19,9 +20,10 @@ import kotlinx.coroutines.launch
 
 fun ConversationListView.bindViewModel(
     viewModel: ConversationListViewModel,
+    onConversationClicked: (id: ConversationId) -> Unit,
     itemDecoration: RecyclerView.ItemDecoration? = DefaultOffsetsItemDecoration(),
 ) {
-    val conversationAdapter = setupRecyclerAdapter(viewModel, itemDecoration)
+    val conversationAdapter = setupRecyclerAdapter(viewModel, onConversationClicked, itemDecoration)
     bindViewModelState(viewModel, conversationAdapter)
 
     bindViewModelAlerts(viewModel)
@@ -29,9 +31,10 @@ fun ConversationListView.bindViewModel(
 
 private fun ConversationListView.setupRecyclerAdapter(
     viewModel: ConversationListViewModel,
+    onConversationClicked: (id: ConversationId) -> Unit,
     itemDecoration: RecyclerView.ItemDecoration?,
 ): ConversationListAdapter {
-    val conversationAdapter = ConversationListAdapter(viewModel.onConversationClicked)
+    val conversationAdapter = ConversationListAdapter(onConversationClicked)
     recyclerView.apply {
         adapter = conversationAdapter
         itemDecoration?.let { addItemDecoration(it) }

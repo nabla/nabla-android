@@ -17,16 +17,11 @@ import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-
     private val viewModel: ConversationListViewModel by viewModels {
-        ConversationListViewModelFactory(
-            owner = this,
-            onConversationClicked = { id ->
-                startActivity(Intent(this, ConversationActivity::class.java).apply { putExtra(CONVERSATION_ID_EXTRA, id.value) })
-            }
-        )
+        ConversationListViewModelFactory(owner = this)
     }
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +36,15 @@ class MainActivity : AppCompatActivity() {
                     NablaMessaging.getInstance().createConversation()
                 }
             }
-            binding.conversationListView.bindViewModel(viewModel)
+            binding.conversationListView.bindViewModel(
+                viewModel,
+                onConversationClicked = { id ->
+                    startActivity(
+                        Intent(applicationContext, ConversationActivity::class.java)
+                            .apply { putExtra(CONVERSATION_ID_EXTRA, id.value) }
+                    )
+                }
+            )
         }
     }
 }

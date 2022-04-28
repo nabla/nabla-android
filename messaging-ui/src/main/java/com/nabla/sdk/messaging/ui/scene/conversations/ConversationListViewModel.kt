@@ -10,7 +10,6 @@ import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.NablaMessaging
-import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +21,6 @@ import kotlinx.coroutines.launch
 
 class ConversationListViewModel(
     private val nablaMessaging: NablaMessaging,
-    internal val onConversationClicked: (conversationId: ConversationId) -> Unit,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
 
