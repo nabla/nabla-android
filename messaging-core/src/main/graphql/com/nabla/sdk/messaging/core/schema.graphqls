@@ -27,6 +27,7 @@ type Mutation {
 
 type Subscription {
   conversations: ConversationsEventOutput
+
   conversation(id: UUID!): ConversationEventOutput
 }
 
@@ -45,6 +46,11 @@ type System {
 
 type Provider {
   id: UUID!
+
+  prefix: String
+  firstName: String!
+  lastName: String!
+
   avatarUrl: EphemeralUrl
 }
 
