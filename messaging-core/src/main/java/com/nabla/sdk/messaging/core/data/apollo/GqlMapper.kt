@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
@@ -24,7 +25,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 
-internal class GqlMapper {
+internal class GqlMapper(private val logger: Logger) {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
             id = fragment.id.toConversationId(),
@@ -49,7 +50,7 @@ internal class GqlMapper {
         )
     }
 
-    fun mapToMessage(messageFragment: MessageFragment, sendStatus: SendStatus): Message {
+    fun mapToMessage(messageFragment: MessageFragment, sendStatus: SendStatus): Message? {
         val sender = mapToMessageSender(messageFragment.author)
         val baseMessage = BaseMessage(
             id = MessageId.Remote(
@@ -85,9 +86,11 @@ internal class GqlMapper {
                 )
             )
         }
-        error {
-            "Unknown message content mapping for $messageFragment"
+        messageFragment.content?.messageContentFragment?.onDeletedMessageContent?.let {
+            return Message.Deleted(baseMessage = baseMessage)
         }
+        logger.warn("Unknown message content mapping for $messageFragment")
+        return null
     }
 
     private fun mapToMessageSender(author: MessageFragment.Author): MessageSender {

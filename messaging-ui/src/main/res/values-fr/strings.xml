@@ -12,7 +12,7 @@
     <string name="nabla_conversation_message_copy_label">Nabla’s message</string>
 
     <string name="nabla_conversation_message_sending_status">Envoi en cours…</string>
-    <string name="nabla_conversation_message_sent_status">Pas encore lu</string>
+    <string name="nabla_conversation_message_sent_status">Envoyé</string>
     <string name="nabla_conversation_message_error_status">L’envoi a échoué, tapez pour réessayer</string>
 
     <string name="nabla_conversation_no_pdf_third_party_app_info_title">Pas d’application PDF</string>

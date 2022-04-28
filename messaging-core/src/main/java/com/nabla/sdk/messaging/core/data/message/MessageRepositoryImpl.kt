@@ -133,7 +133,7 @@ internal class MessageRepositoryImpl(
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         when (messageId) {
             is MessageId.Local -> localMessageDataSource.removeMessage(conversationId, messageId)
-            is MessageId.Remote -> gqlMessageDataSource.deleteMessage(messageId)
+            is MessageId.Remote -> gqlMessageDataSource.deleteMessage(conversationId, messageId)
         }
     }
 
@@ -167,8 +167,8 @@ internal class MessageRepositoryImpl(
         }
     }
 
-    private suspend fun sendTextMessageOp(message: Message.Text, messageId: MessageId.Local): Message {
-        return gqlMessageDataSource.sendTextMessage(
+    private suspend fun sendTextMessageOp(message: Message.Text, messageId: MessageId.Local) {
+        gqlMessageDataSource.sendTextMessage(
             message.baseMessage.conversationId,
             messageId.clientId,
             message.text

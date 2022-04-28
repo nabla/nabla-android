@@ -21,9 +21,8 @@ import com.nabla.sdk.graphql.SetTypingMutation
 import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
 import com.nabla.sdk.graphql.fragment.MessageContentFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
-import com.nabla.sdk.graphql.type.DeleteMessageOutput
+import com.nabla.sdk.graphql.type.DeletedMessageContent
 import com.nabla.sdk.graphql.type.EmptyObject
-import com.nabla.sdk.graphql.type.MessageContent
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendDocumentMessageInput
 import com.nabla.sdk.graphql.type.SendImageMessageInput
@@ -44,6 +43,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Clock
 
 internal class GqlMessageDataSource(
     private val logger: Logger,
@@ -124,7 +124,7 @@ internal class GqlMessageDataSource(
             .map { queryData ->
                 val page =
                     queryData.conversation.conversation.conversationMessagesPageFragment.items
-                val items = page.data.mapNotNull { it?.messageFragment }.map {
+                val items = page.data.mapNotNull { it?.messageFragment }.mapNotNull {
                     mapper.mapToMessage(it, SendStatus.Sent)
                 }
                 return@map PaginatedConversationWithMessages(
@@ -147,8 +147,8 @@ internal class GqlMessageDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid
-    ): Message {
-        return sendMediaMessage(conversationId, clientId) {
+    ) {
+        sendMediaMessage(conversationId, clientId) {
             SendMessageContentInput(
                 documentInput = Optional.presentIfNotNull(
                     SendDocumentMessageInput(
@@ -163,8 +163,8 @@ internal class GqlMessageDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid
-    ): Message {
-        return sendMediaMessage(conversationId, clientId) {
+    ) {
+        sendMediaMessage(conversationId, clientId) {
             SendMessageContentInput(
                 imageInput = Optional.presentIfNotNull(
                     SendImageMessageInput(
@@ -179,22 +179,13 @@ internal class GqlMessageDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         inputFactoryBlock: () -> SendMessageContentInput
-    ): Message {
+    ) {
         val input = inputFactoryBlock()
         val mutation = SendMessageMutation(conversationId.value, input, clientId)
-
-        return mapper.mapToMessage(
-            apolloClient.mutation(mutation)
-                .execute()
-                .dataAssertNoErrors
-                .sendMessage
-                .message
-                .messageFragment,
-            SendStatus.Sent
-        )
+        apolloClient.mutation(mutation).execute().dataAssertNoErrors
     }
 
-    suspend fun sendTextMessage(conversationId: ConversationId, clientId: Uuid, text: String): Message {
+    suspend fun sendTextMessage(conversationId: ConversationId, clientId: Uuid, text: String) {
         val input = SendMessageContentInput(
             textInput = Optional.presentIfNotNull(
                 SendTextMessageInput(
@@ -204,26 +195,18 @@ internal class GqlMessageDataSource(
         )
         val mutation = SendMessageMutation(conversationId.value, input, clientId)
 
-        return mapper.mapToMessage(
-            apolloClient.mutation(mutation)
-                .execute()
-                .dataAssertNoErrors
-                .sendMessage
-                .message
-                .messageFragment,
-            SendStatus.Sent
-        )
+        apolloClient.mutation(mutation).execute().dataAssertNoErrors
     }
 
-    suspend fun deleteMessage(remoteMessageId: MessageId.Remote) {
+    suspend fun deleteMessage(conversationId: ConversationId, remoteMessageId: MessageId.Remote) {
         val mutation = DeleteMessageMutation(remoteMessageId.remoteId)
         val optimisticData = DeleteMessageMutation.Data(
             deleteMessage = DeleteMessageMutation.DeleteMessage(
                 message = DeleteMessageMutation.Message(
                     content = DeleteMessageMutation.Content(
-                        __typename = DeleteMessageOutput.type.name, // TODO : Double check expected type with mutation real execution
+                        __typename = DeletedMessageContent.type.name,
                         messageContentFragment = MessageContentFragment(
-                            __typename = MessageContent.type.name,
+                            __typename = DeletedMessageContent.type.name,
                             onTextMessageContent = null,
                             onImageMessageContent = null,
                             onDocumentMessageContent = null,
@@ -231,6 +214,11 @@ internal class GqlMessageDataSource(
                                 empty = EmptyObject.EMPTY
                             )
                         )
+                    ),
+                    conversation = DeleteMessageMutation.Conversation(
+                        id = conversationId.value,
+                        updatedAt = Clock.System.now(),
+                        lastMessagePreview = null // Updated by BE
                     )
                 )
             )
@@ -239,6 +227,7 @@ internal class GqlMessageDataSource(
         apolloClient.mutation(mutation)
             .optimisticUpdates(optimisticData)
             .execute()
+            .dataAssertNoErrors
     }
 
     private fun firstMessagePageQuery(id: ConversationId) =

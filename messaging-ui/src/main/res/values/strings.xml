@@ -12,7 +12,7 @@
     <string name="nabla_conversation_message_copy_label">Copied message</string>
 
     <string name="nabla_conversation_message_sending_status">Sending…</string>
-    <string name="nabla_conversation_message_sent_status">Not read yet</string>
+    <string name="nabla_conversation_message_sent_status">Sent</string>
     <string name="nabla_conversation_message_error_status">Failed to send, tap to try again… </string>
 
     <string name="nabla_conversation_no_pdf_third_party_app_info_title">No PDF viewer found</string>

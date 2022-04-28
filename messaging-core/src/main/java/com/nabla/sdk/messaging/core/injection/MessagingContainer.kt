@@ -23,7 +23,7 @@ internal class MessagingContainer(
     val nablaExceptionMapper: NablaExceptionMapper,
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val gqlMapper = GqlMapper()
+    private val gqlMapper = GqlMapper(logger)
     private val localMessageDataSource = LocalMessageDataSource()
     private val gqlMessageDataSource = GqlMessageDataSource(
         logger = logger,

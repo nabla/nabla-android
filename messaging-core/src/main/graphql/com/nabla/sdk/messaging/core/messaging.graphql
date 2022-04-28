@@ -10,6 +10,11 @@ mutation SendMessage($conversationId: UUID!, $content: SendMessageContentInput!,
     sendMessage(conversationId: $conversationId, content: $content, clientId: $clientId) {
         message {
             ...MessageFragment
+            conversation {
+                id
+                updatedAt
+                lastMessagePreview
+            }
         }
     }
 }
@@ -19,6 +24,11 @@ mutation DeleteMessage($messageId: UUID!) {
         message {
             content {
                 ...MessageContentFragment
+            }
+            conversation {
+                id
+                updatedAt
+                lastMessagePreview
             }
         }
     }

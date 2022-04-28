@@ -38,9 +38,7 @@ internal class TimelineBuilder {
                         item.sender is MessageSender.System
                     )
 
-                val showStatus = (index == 0 && item.sender is MessageSender.Patient) ||
-                    item.status != SendStatus.Sent ||
-                    item.id == selectedMessageId
+                val showStatus = item.status != SendStatus.Sent || item.id == selectedMessageId
                 item.copy(showStatus = showStatus, showSenderAvatar = showSenderAvatarAndName, showSenderName = showSenderAvatarAndName)
             } else {
                 item
