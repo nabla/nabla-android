@@ -88,6 +88,11 @@ subscription ConversationEvents($conversationId: UUID!) {
                     ...MessageFragment
                 }
             }
+            ... on TypingEvent {
+                provider {
+                    ...ProviderInConversationFragment
+                }
+            }
         }
     }
 }
@@ -97,6 +102,8 @@ fragment ConversationFragment on Conversation {
     id
     title
     description
+    createdAt
+    updatedAt
     lastMessagePreview
     unreadMessageCount
     providers {
@@ -124,6 +131,12 @@ fragment MessageFragment on Message {
         ... on Patient {
             ...PatientFragment
         }
+        ... on System {
+            empty: _
+        }
+        ... on DeletedProvider {
+            empty: _
+        }
     }
     content {
         ...MessageContentFragment
@@ -146,7 +159,7 @@ fragment MessageContentFragment on MessageContent {
         ...DocumentMessageContentFragment
     }
     ... on DeletedMessageContent {
-        ...DeletedMessageContentFragment
+        empty: _
     }
 }
 
@@ -190,10 +203,6 @@ fragment DocumentMessageContentFragment on DocumentMessageContent {
     documentFileUpload {
         ...DocumentFileUploadFragment
     }
-}
-
-fragment DeletedMessageContentFragment on DeletedMessageContent {
-    empty: _
 }
 
 fragment ImageFileUploadFragment on ImageFileUpload {

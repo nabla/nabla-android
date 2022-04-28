@@ -32,7 +32,7 @@ class NablaMessaging private constructor(
         coreContainer.exceptionMapper,
     )
 
-    private val useMock = true // TODO remove when everything is plugged in
+    private val useMock = false // TODO remove when everything is plugged in
 
     private val conversationRepository: ConversationRepository by lazy {
         if (useMock) ConversationRepositoryMock() else messagingContainer.conversationRepository
@@ -88,9 +88,7 @@ class NablaMessaging private constructor(
     suspend fun sendMessage(message: Message): Result<Unit> {
         return runCatchingCancellable {
             messageRepository.sendMessage(message)
-        }
-            .mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-            .map { } // Just result Unit
+        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
     @CheckResult

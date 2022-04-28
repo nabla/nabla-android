@@ -8,6 +8,7 @@ import com.apollographql.apollo3.cache.normalized.optimisticUpdates
 import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
+import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
@@ -18,11 +19,9 @@ import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
 import com.nabla.sdk.graphql.SetTypingMutation
 import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
-import com.nabla.sdk.graphql.fragment.DeletedMessageContentFragment
 import com.nabla.sdk.graphql.fragment.MessageContentFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.type.DeleteMessageOutput
-import com.nabla.sdk.graphql.type.DeletedMessageContent
 import com.nabla.sdk.graphql.type.EmptyObject
 import com.nabla.sdk.graphql.type.MessageContent
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
@@ -36,6 +35,7 @@ import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.CoroutineScope
@@ -134,6 +134,8 @@ internal class GqlMessageDataSource(
                     ),
                     hasMore = page.hasMore,
                 )
+            }.notifyTypingUpdates {
+                it.conversationWithMessages.conversation.providersInConversation
             }
         return flowOf(
             conversationEventsFlow(conversationId),
@@ -213,8 +215,8 @@ internal class GqlMessageDataSource(
         )
     }
 
-    suspend fun deleteMessage(remoteMessageId: Uuid) {
-        val mutation = DeleteMessageMutation(remoteMessageId)
+    suspend fun deleteMessage(remoteMessageId: MessageId.Remote) {
+        val mutation = DeleteMessageMutation(remoteMessageId.remoteId)
         val optimisticData = DeleteMessageMutation.Data(
             deleteMessage = DeleteMessageMutation.DeleteMessage(
                 message = DeleteMessageMutation.Message(
@@ -226,10 +228,7 @@ internal class GqlMessageDataSource(
                             onImageMessageContent = null,
                             onDocumentMessageContent = null,
                             onDeletedMessageContent = MessageContentFragment.OnDeletedMessageContent(
-                                __typename = DeletedMessageContent.type.name,
-                                deletedMessageContentFragment = DeletedMessageContentFragment(
-                                    EmptyObject.EMPTY
-                                )
+                                empty = EmptyObject.EMPTY
                             )
                         )
                     )

@@ -129,11 +129,11 @@ internal fun User.Provider.Companion.fake(
 
 internal fun ProviderInConversation.Companion.fake(
     provider: User.Provider = User.Provider.fake(),
-    isTyping: Boolean = Random.nextBoolean(),
+    typingAt: Instant? = Random.nextBoolean().let { if (it) Clock.System.now() else null },
     seenUntil: Instant = Clock.System.now(),
 ) = ProviderInConversation(
     provider = provider,
-    isTyping = isTyping,
+    typingAt = typingAt,
     seenUntil = seenUntil,
 )
 

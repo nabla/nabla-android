@@ -12,7 +12,7 @@ internal class SecuredKVStorage(
     logger: Logger,
 ) : SharedPreferences {
 
-    private val fileName = "nabla_kv_${nameSpace}_sec.sp"
+    private val fileName = "nabla_kv_sec_$nameSpace.sp"
 
     init {
         logger.info("Add $fileName to your backup_rules.xml of the app")

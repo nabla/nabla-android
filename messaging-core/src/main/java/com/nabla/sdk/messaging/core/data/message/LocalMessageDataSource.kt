@@ -3,6 +3,7 @@ package com.nabla.sdk.messaging.core.data.message
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -31,10 +32,14 @@ internal class LocalMessageDataSource {
         }
     }
 
-    fun remove(conversationId: ConversationId, messageClientId: Uuid) {
+    fun removeMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
         val stateFlow = getLocalMessagesMutableFlow(conversationId)
         stateFlow.value = stateFlow.value.toMutableMap().apply {
-            remove(messageClientId)
+            remove(localMessageId.clientId)
         }
+    }
+
+    fun getMessage(conversationId: ConversationId, localMessageId: MessageId.Local): Message? {
+        return getLocalMessagesMutableFlow(conversationId).value[localMessageId.clientId]
     }
 }

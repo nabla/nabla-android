@@ -88,7 +88,7 @@ internal class MessageRepositoryMock : MessageRepository {
         }
     }
 
-    override suspend fun sendMessage(message: Message): Message {
+    override suspend fun sendMessage(message: Message) {
         flowMutex.withLock { messagesListFlow.value = messagesListFlow.value + listOf(message) }
         delay(1_000)
         return flowMutex.withLock {
@@ -96,7 +96,6 @@ internal class MessageRepositoryMock : MessageRepository {
             messagesListFlow.value = messagesListFlow.value - listOf(message) + listOf(
                 newMessage
             )
-            newMessage
         }
     }
 

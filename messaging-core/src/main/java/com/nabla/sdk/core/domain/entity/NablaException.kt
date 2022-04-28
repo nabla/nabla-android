@@ -1,5 +1,8 @@
 package com.nabla.sdk.core.domain.entity
 
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
+
 sealed class NablaException private constructor(
     message: String? = null,
     cause: Throwable? = null,
@@ -19,6 +22,9 @@ sealed class NablaException private constructor(
     class Internal constructor(override val wrapped: Throwable) : NablaException(message = wrapped.message)
 
     class InvalidMessage(message: String) : NablaException(message = message)
+    class MessageNotFound(conversationId: ConversationId, localMessageId: MessageId.Local) : NablaException(
+        message = "Unable to find message in cache. localMessageId: $localMessageId, conversationId: $conversationId"
+    )
     object MissingConversationId : NablaException(message = "Missing conversationId parameter, make sure you follow the documentation to integrate ConversationFragment.")
     class InvalidAppTheme(message: String) : NablaException(message = "$message. Please make sure you're using \"Theme.Material3\" on your app theme or at least for activities containing Nabla UI components.")
 

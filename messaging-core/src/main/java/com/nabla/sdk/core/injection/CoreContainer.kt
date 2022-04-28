@@ -68,7 +68,7 @@ internal class CoreContainer(
         ApolloClient.Builder()
             .serverUrl(config.baseUrl + "v1/patient/graphql/sdk/authenticated")
             .normalizedCache(
-                normalizedCacheFactory = SqlNormalizedCacheFactory(config.context, "nabla-cache-apollo.db"),
+                normalizedCacheFactory = SqlNormalizedCacheFactory(config.context, "nabla_cache_apollo_$name.db"),
                 cacheKeyGenerator = TypeAndUuidCacheKeyGenerator
             ).okHttpClient(okHttpClient)
             .build()

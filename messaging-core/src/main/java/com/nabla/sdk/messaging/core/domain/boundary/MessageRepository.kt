@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 internal interface MessageRepository {
     fun watchConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages>
     suspend fun loadMoreMessages(conversationId: ConversationId)
-    suspend fun sendMessage(message: Message): Message
+    suspend fun sendMessage(message: Message)
     suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local)
     suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean)
     suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId)

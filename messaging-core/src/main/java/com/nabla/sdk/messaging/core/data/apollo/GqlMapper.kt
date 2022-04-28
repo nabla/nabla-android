@@ -23,7 +23,6 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
-import kotlinx.datetime.Clock
 
 internal class GqlMapper {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
@@ -32,7 +31,7 @@ internal class GqlMapper {
             title = fragment.title,
             description = fragment.description,
             lastMessagePreview = fragment.lastMessagePreview,
-            lastModified = Clock.System.now(), // TODO : Add to GQL
+            lastModified = fragment.updatedAt,
             patientUnreadMessageCount = fragment.unreadMessageCount,
             providersInConversation = fragment.providers.map {
                 mapToProviderInConversation(it.providerInConversationFragment)
@@ -45,7 +44,7 @@ internal class GqlMapper {
     ): ProviderInConversation {
         return ProviderInConversation(
             provider = mapToProvider(fragment.provider.providerFragment),
-            isTyping = fragment.typingAt != null, // TODO handle typingAt is too old
+            typingAt = fragment.typingAt,
             seenUntil = fragment.seenUntil,
         )
     }
@@ -91,9 +90,11 @@ internal class GqlMapper {
         }
     }
 
-    private fun mapToMessageSender(author: MessageFragment.Author?): MessageSender {
-        author?.onPatient?.let { return MessageSender.Patient }
-        author?.onProvider?.providerFragment?.let { return MessageSender.Provider(mapToProvider(it)) }
+    private fun mapToMessageSender(author: MessageFragment.Author): MessageSender {
+        author.onPatient?.let { return MessageSender.Patient }
+        author.onProvider?.providerFragment?.let { return MessageSender.Provider(mapToProvider(it)) }
+        author.onSystem?.let { return MessageSender.System }
+        author.onDeletedProvider?.let { return MessageSender.DeletedProvider }
         return MessageSender.Unknown
     }
 

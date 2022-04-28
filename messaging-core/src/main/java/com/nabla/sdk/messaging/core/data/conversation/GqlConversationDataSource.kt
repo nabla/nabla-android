@@ -6,6 +6,7 @@ import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
+import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
@@ -94,6 +95,8 @@ internal class GqlConversationDataSource constructor(
                     mapper.mapToConversation(it.conversationFragment)
                 }
                 return@map PaginatedList(items, queryData.conversations.hasMore)
+            }.notifyTypingUpdates {
+                it.items.flatMap { it.providersInConversation }
             }
         return flowOf(conversationsEventsFlow, dataFlow)
             .flattenMerge()

@@ -85,7 +85,7 @@ internal class MessageRepositoryImpl(
         loadMoreConversationMessagesSharedSingle.await()
     }
 
-    override suspend fun sendMessage(message: Message): Message {
+    override suspend fun sendMessage(message: Message) {
         val messageId = message.baseMessage.id
         if (messageId !is MessageId.Local) {
             throw NablaException.InvalidMessage("Can't send a message with an id that is not Local: $messageId")
@@ -97,24 +97,33 @@ internal class MessageRepositoryImpl(
 
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
 
-        return runCatchingCancellable {
-            return when (message) {
+        runCatchingCancellable {
+            when (message) {
                 is Message.Deleted -> throw NablaException.InvalidMessage("Can't send a deleted message")
-                is Message.Media.Document -> sendMediaMessageImpl(message, messageId)
-                is Message.Media.Image -> sendMediaMessageImpl(message, messageId)
-                is Message.Text -> sendTextMessageImpl(message, messageId)
+                is Message.Media.Document -> sendMediaMessageOp(message, messageId)
+                is Message.Media.Image -> sendMediaMessageOp(message, messageId)
+                is Message.Text -> sendTextMessageOp(message, messageId)
             }
-        }.getOrElse {
+        }.onFailure {
             val erredMessage = message.modify(SendStatus.ErrorSending)
             localMessageDataSource.putMessage(
                 erredMessage
             )
-            erredMessage
+        }.onSuccess {
+            val sentMessage = message.modify(SendStatus.Sent)
+            localMessageDataSource.putMessage(
+                sentMessage
+            )
         }
     }
 
     override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
-        TODO("Not yet implemented")
+        val localMessage = localMessageDataSource.getMessage(conversationId, localMessageId)
+        if (localMessage != null) {
+            sendMessage(localMessage)
+        } else {
+            throw NablaException.MessageNotFound(conversationId, localMessageId)
+        }
     }
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
@@ -123,15 +132,15 @@ internal class MessageRepositoryImpl(
 
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         when (messageId) {
-            is MessageId.Local -> localMessageDataSource.remove(conversationId, messageId.clientId)
-            is MessageId.Remote -> gqlMessageDataSource.deleteMessage(messageId.remoteId)
+            is MessageId.Local -> localMessageDataSource.removeMessage(conversationId, messageId)
+            is MessageId.Remote -> gqlMessageDataSource.deleteMessage(messageId)
         }
     }
 
-    private suspend fun sendMediaMessageImpl(
+    private suspend fun sendMediaMessageOp(
         mediaMessage: Message.Media<*, *>,
         messageId: MessageId.Local
-    ): Message {
+    ) {
         val mediaSource = mediaMessage.mediaSource
         if (mediaSource !is FileSource.Local) {
             throw NablaException.InvalidMessage("Can't send a media message with a media source that is not local")
@@ -140,7 +149,7 @@ internal class MessageRepositoryImpl(
             mediaMessage.documentName
         } else null
         val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, fileName)
-        return when (mediaMessage) {
+        when (mediaMessage) {
             is Message.Media.Document -> {
                 gqlMessageDataSource.sendDocumentMessage(
                     mediaMessage.baseMessage.conversationId,
@@ -158,7 +167,7 @@ internal class MessageRepositoryImpl(
         }
     }
 
-    private suspend fun sendTextMessageImpl(message: Message.Text, messageId: MessageId.Local): Message {
+    private suspend fun sendTextMessageOp(message: Message.Text, messageId: MessageId.Local): Message {
         return gqlMessageDataSource.sendTextMessage(
             message.baseMessage.conversationId,
             messageId.clientId,

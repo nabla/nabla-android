@@ -7,5 +7,6 @@ sealed interface MessageSender {
     value class Provider(val provider: User.Provider) : MessageSender
     object Patient : MessageSender
     object System : MessageSender
+    object DeletedProvider : MessageSender
     object Unknown : MessageSender
 }
