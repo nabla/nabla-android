@@ -7,9 +7,9 @@ sealed class NablaException private constructor(
     internal open val wrapped: Throwable? = null
 
     sealed class Configuration(message: String) : NablaException(message = message) {
-        object MissingApiKey : Configuration("Missing API key. Make sure to add \"com.nabla.sdk.PUBLIC_API_KEY\" in your manifest.")
+        object MissingInitialize : Configuration("Missing SDK initialize. Make sure you call \"NablaCore.initialize\".")
+        object MissingApiKey : Configuration("Missing API key. Make sure to add \"com.nabla.sdk.PUBLIC_API_KEY\" in your manifest or call \"NablaCoreBuilder.context(yourContext)\" during initialize call.")
         object MissingContext : Configuration("Missing context. Make sure you follow the doc to integrate the SDK properly.")
-        object MissingSessionTokenProvider : Configuration("Missing SessionTokenProvider. Make sure you call NablaCore.registerDefaultSessionTokenProvider.")
     }
 
     class Network internal constructor(override val wrapped: Throwable) : NablaException()

@@ -1,6 +1,5 @@
 package com.nabla.sdk.core.injection
 
-import android.content.Context
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
@@ -39,12 +38,11 @@ import retrofit2.Retrofit
 
 internal class CoreContainer(
     name: String,
-    context: Context,
     config: NablaCoreConfig,
 ) {
     val logger: Logger = LoggerImpl(AndroidLogger(), config.isLoggingEnabled)
 
-    private val securedKVStorage = SecuredKVStorage(context, name, logger)
+    private val securedKVStorage = SecuredKVStorage(config.context, name, logger)
 
     private val tokenRepositoryLazy = lazy {
         TokenRepositoryImpl(
@@ -70,7 +68,7 @@ internal class CoreContainer(
         ApolloClient.Builder()
             .serverUrl(config.baseUrl + "v1/patient/graphql/sdk/authenticated")
             .normalizedCache(
-                normalizedCacheFactory = SqlNormalizedCacheFactory(context, "nabla-cache-apollo.db"),
+                normalizedCacheFactory = SqlNormalizedCacheFactory(config.context, "nabla-cache-apollo.db"),
                 cacheKeyGenerator = TypeAndUuidCacheKeyGenerator
             ).okHttpClient(okHttpClient)
             .build()
@@ -97,7 +95,7 @@ internal class CoreContainer(
     private val tokenRepository: TokenRepository by tokenRepositoryLazy
     private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
-    val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, context)
+    val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, config.context)
 
     fun loginInteractor() = LoginInteractor(patientRepository, tokenRepository)
 }
