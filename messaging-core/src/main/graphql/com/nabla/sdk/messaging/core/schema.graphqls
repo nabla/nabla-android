@@ -80,6 +80,7 @@ type Conversation {
   createdAt: DateTime!
   updatedAt: DateTime!
 
+  inboxPreviewTitle: String!
   lastMessagePreview: String
   unreadMessageCount: Int!
 
