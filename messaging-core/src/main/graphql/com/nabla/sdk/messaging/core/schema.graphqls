@@ -39,17 +39,25 @@ type EphemeralUrl {
   expiresAt: DateTime!
 }
 
+type System {
+  _: EmptyObject!
+}
+
 type Provider {
   id: UUID!
   avatarUrl: EphemeralUrl
 }
 
-union MessageAuthor = Patient | Provider
+type DeletedProvider {
+  _: EmptyObject!
+}
+
+union MessageAuthor = System | Patient | Provider | DeletedProvider
 
 type Message {
   id: UUID!
 
-  author: MessageAuthor
+  author: MessageAuthor!
   conversation: Conversation!
   createdAt: DateTime!
 
@@ -63,6 +71,9 @@ type Conversation {
 
   title: String
   description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
   lastMessagePreview: String
   unreadMessageCount: Int!
 
@@ -75,7 +86,7 @@ type ProviderInConversation {
 
   provider: Provider!
 
-  isTyping: Boolean!
+  typingAt: DateTime
   seenUntil: DateTime
 }
 
@@ -206,7 +217,7 @@ type SubscriptionReadinessEvent {
 }
 
 union ConversationsEvent =
-  SubscriptionReadinessEvent
+    SubscriptionReadinessEvent
   | ConversationCreatedEvent
   | ConversationUpdatedEvent
   | ConversationDeletedEvent
@@ -227,7 +238,7 @@ type ConversationDeletedEvent {
   conversationId: UUID!
 }
 
-union ConversationEvent = SubscriptionReadinessEvent | MessageCreatedEvent | MessageUpdatedEvent
+union ConversationEvent = SubscriptionReadinessEvent | MessageCreatedEvent | MessageUpdatedEvent | TypingEvent
 
 type ConversationEventOutput {
   event: ConversationEvent!
@@ -239,4 +250,8 @@ type MessageCreatedEvent {
 
 type MessageUpdatedEvent {
   message: Message!
+}
+
+type TypingEvent {
+  provider: ProviderInConversation!
 }

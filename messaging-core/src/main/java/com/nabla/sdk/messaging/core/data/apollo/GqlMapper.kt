@@ -45,7 +45,7 @@ internal class GqlMapper {
     ): ProviderInConversation {
         return ProviderInConversation(
             provider = mapToProvider(fragment.provider.providerFragment),
-            isTyping = fragment.isTyping,
+            isTyping = fragment.typingAt != null, // TODO handle typingAt is too old
             seenUntil = fragment.seenUntil,
         )
     }

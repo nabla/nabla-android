@@ -155,7 +155,7 @@ fragment ProviderInConversationFragment on ProviderInConversation {
     provider {
         ...ProviderFragment
     }
-    isTyping
+    typingAt
     seenUntil
 }
 
