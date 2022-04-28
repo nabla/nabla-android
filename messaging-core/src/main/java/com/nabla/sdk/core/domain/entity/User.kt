@@ -8,7 +8,6 @@ sealed interface User {
         val avatar: EphemeralUrl?,
         val firstName: String,
         val lastName: String,
-        val title: String?,
         val prefix: String?,
     ) : User {
         companion object

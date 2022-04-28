@@ -103,10 +103,9 @@ internal class GqlMapper {
         return User.Provider(
             id = providerFragment.id,
             avatar = avatarUrl,
-            firstName = "", // TODO : Add to GQL
-            lastName = "", // TODO : Add to GQL
-            title = null, // TODO : Add to GQL
-            prefix = null, // TODO : Add to GQL
+            firstName = providerFragment.firstName,
+            lastName = providerFragment.lastName,
+            prefix = providerFragment.prefix,
         )
     }
 

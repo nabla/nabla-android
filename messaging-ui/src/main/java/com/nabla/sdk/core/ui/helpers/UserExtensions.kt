@@ -58,17 +58,5 @@ internal fun User.abbreviatedNameWithPrefix(context: Context): String = when (th
     else -> fullName(context)
 }
 
-internal fun User.fullNameWithPrefixAndTitle(context: Context): String = when (this) {
-    is User.Provider -> {
-        val fullNameWithPrefix = fullNameWithPrefix(context)
-        if (title.isNullOrBlank()) {
-            fullNameWithPrefix
-        } else {
-            context.getString(R.string.nabla_display_name_with_title, fullNameWithPrefix, title)
-        }
-    }
-    else -> fullNameWithPrefix(context)
-}
-
 internal val User.prefix: String?
     get() = (this as? User.Provider)?.prefix

@@ -112,7 +112,6 @@ internal fun User.Provider.Companion.fake(
     id: Uuid = uuid4(),
     firstName: String = "Véronique",
     lastName: String = "Cayol",
-    title: String? = "Gynécologue",
     prefix: String? = "Dr",
     avatar: EphemeralUrl? = EphemeralUrl(
         expiresAt = Instant.DISTANT_FUTURE,
@@ -123,7 +122,6 @@ internal fun User.Provider.Companion.fake(
     avatar = avatar,
     firstName = firstName,
     lastName = lastName,
-    title = title,
     prefix = prefix,
 )
 
