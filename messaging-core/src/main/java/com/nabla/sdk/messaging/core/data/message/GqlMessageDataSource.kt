@@ -9,18 +9,22 @@ import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
+import com.nabla.sdk.core.data.apollo.readFromCache
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationQuery
+import com.nabla.sdk.graphql.ConversationWithMessagesQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
 import com.nabla.sdk.graphql.SetTypingMutation
 import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
+import com.nabla.sdk.graphql.fragment.ConversationPreviewFragment
 import com.nabla.sdk.graphql.fragment.MessageContentFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
+import com.nabla.sdk.graphql.type.Conversation
 import com.nabla.sdk.graphql.type.DeletedMessageContent
 import com.nabla.sdk.graphql.type.EmptyObject
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
@@ -33,7 +37,6 @@ import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
-import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
@@ -82,7 +85,7 @@ internal class GqlMessageDataSource(
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
             val newItem = ConversationMessagesPageFragment.Data(
-                message.__typename,
+                com.nabla.sdk.graphql.type.Message.type.name,
                 message
             )
             val mergedItemsData = listOf(newItem) + cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.data
@@ -101,7 +104,7 @@ internal class GqlMessageDataSource(
                 requireNotNull(cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.nextCursor)
             val updatedQuery = query.copy(
                 pageInfo = OpaqueCursorPage(
-                    cursor = Optional.presentIfNotNull(nextCursor) // TODO : Schema update is probably needed here
+                    cursor = Optional.presentIfNotNull(nextCursor)
                 )
             )
             val freshQueryData = apolloClient.query(updatedQuery)
@@ -200,6 +203,10 @@ internal class GqlMessageDataSource(
 
     suspend fun deleteMessage(conversationId: ConversationId, remoteMessageId: MessageId.Remote) {
         val mutation = DeleteMessageMutation(remoteMessageId.remoteId)
+
+        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationId.value))
+            ?.conversation?.conversation?.conversationFragment
+
         val optimisticData = DeleteMessageMutation.Data(
             deleteMessage = DeleteMessageMutation.DeleteMessage(
                 message = DeleteMessageMutation.Message(
@@ -216,9 +223,13 @@ internal class GqlMessageDataSource(
                         )
                     ),
                     conversation = DeleteMessageMutation.Conversation(
-                        id = conversationId.value,
-                        updatedAt = Clock.System.now(),
-                        lastMessagePreview = null // Updated by BE
+                        __typename = Conversation.type.name,
+                        conversationPreviewFragment = ConversationPreviewFragment(
+                            id = conversationId.value,
+                            updatedAt = Clock.System.now(),
+                            inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
+                            lastMessagePreview = cachedConversationFragment?.lastMessagePreview
+                        )
                     )
                 )
             )
@@ -231,7 +242,7 @@ internal class GqlMessageDataSource(
     }
 
     private fun firstMessagePageQuery(id: ConversationId) =
-        ConversationQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
+        ConversationWithMessagesQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
 
     suspend fun setTyping(conversationId: ConversationId, typing: Boolean) {
         apolloClient.mutation(SetTypingMutation(conversationId.value, typing)).execute()

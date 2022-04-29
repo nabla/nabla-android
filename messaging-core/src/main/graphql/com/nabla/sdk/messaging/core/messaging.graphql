@@ -11,9 +11,7 @@ mutation SendMessage($conversationId: UUID!, $content: SendMessageContentInput!,
         message {
             ...MessageFragment
             conversation {
-                id
-                updatedAt
-                lastMessagePreview
+                ...ConversationPreviewFragment
             }
         }
     }
@@ -26,9 +24,7 @@ mutation DeleteMessage($messageId: UUID!) {
                 ...MessageContentFragment
             }
             conversation {
-                id
-                updatedAt
-                lastMessagePreview
+                ...ConversationPreviewFragment
             }
         }
     }
@@ -46,11 +42,19 @@ mutation SetTyping($conversationId: UUID!, $isTyping: Boolean!) {
     }
 }
 
-query Conversation($id: UUID!, $pageInfo: OpaqueCursorPage!) {
+query ConversationWithMessages($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {
             ...ConversationFragment
             ...ConversationMessagesPageFragment
+        }
+    }
+}
+
+query Conversation($id: UUID!) {
+    conversation(id: $id) {
+        conversation {
+            ...ConversationFragment
         }
     }
 }
@@ -108,17 +112,24 @@ subscription ConversationEvents($conversationId: UUID!) {
 }
 
 fragment ConversationFragment on Conversation {
-    __typename
     id
     title
     description
     createdAt
     updatedAt
+    inboxPreviewTitle
     lastMessagePreview
     unreadMessageCount
     providers {
         ...ProviderInConversationFragment
     }
+}
+
+fragment ConversationPreviewFragment on Conversation {
+    id
+    updatedAt
+    inboxPreviewTitle
+    lastMessagePreview
 }
 
 fragment ConversationMessagesPageFragment on Conversation {
@@ -132,7 +143,6 @@ fragment ConversationMessagesPageFragment on Conversation {
 }
 
 fragment MessageFragment on Message {
-    __typename
     id
     author {
         ... on Provider {

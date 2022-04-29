@@ -41,7 +41,7 @@ internal sealed class ItemUiModel(val listId: String) {
 
 internal fun Conversation.toUiModel() = ItemUiModel.Conversation(
     id = id,
-    title = title ?: "",
+    title = inboxPreviewTitle,
     subtitle = lastMessagePreview ?: description ?: "",
     lastModified = lastModified,
     hasUnreadMessages = patientUnreadMessageCount > 0,

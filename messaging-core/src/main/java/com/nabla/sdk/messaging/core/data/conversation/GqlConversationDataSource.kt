@@ -52,7 +52,7 @@ internal class GqlConversationDataSource constructor(
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
             val newItem = ConversationListQuery.Conversation(
-                conversation.__typename,
+                com.nabla.sdk.graphql.type.Conversation.type.name,
                 conversation
             )
             val mergedConversations = listOf(newItem) + cachedQueryData.conversations.conversations

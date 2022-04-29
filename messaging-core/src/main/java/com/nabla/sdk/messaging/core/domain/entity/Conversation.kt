@@ -12,6 +12,7 @@ data class Conversation(
     val id: ConversationId,
     val title: String?,
     val description: String?,
+    val inboxPreviewTitle: String,
     val lastMessagePreview: String?,
     val lastModified: Instant,
     val patientUnreadMessageCount: Int,

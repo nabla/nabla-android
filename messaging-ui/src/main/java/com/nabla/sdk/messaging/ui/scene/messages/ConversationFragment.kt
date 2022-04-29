@@ -379,7 +379,7 @@ open class ConversationFragment : Fragment() {
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
         binding.updateToolbar(
-            title = state.conversation.title,
+            title = state.conversation.inboxPreviewTitle,
             subtitle = state.conversation.lastMessagePreview,
             providers = state.conversation.providersInConversation.map { it.provider },
             displayAvatar = true,

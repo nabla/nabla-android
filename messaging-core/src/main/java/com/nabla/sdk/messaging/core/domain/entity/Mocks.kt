@@ -147,6 +147,7 @@ internal fun Conversation.Companion.fake(
     id = id.toConversationId(),
     lastModified = lastModified,
     title = inboxPreviewTitle,
+    inboxPreviewTitle = inboxPreviewTitle,
     description = inboxPreviewSubtitle,
     lastMessagePreview = lastMessagePreview,
     patientUnreadMessageCount = patientUnreadMessageCount,
