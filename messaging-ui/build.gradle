@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
+    id 'maven-publish'
 }
 
 group buildConfig.groupId
@@ -17,6 +18,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        aarMetadata {
+            minCompileSdk buildConfig.compileSdk
+        }
     }
 
     buildTypes {
@@ -25,6 +30,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget
@@ -32,6 +38,22 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
     }
 }
 
