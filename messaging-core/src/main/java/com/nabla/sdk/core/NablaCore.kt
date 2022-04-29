@@ -1,6 +1,7 @@
 package com.nabla.sdk.core
 
 import android.annotation.SuppressLint
+import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
@@ -17,6 +18,7 @@ class NablaCore constructor(
 
     suspend fun authenticate(userId: String): Result<Unit> {
         return coreContainer.loginInteractor().invoke(userId.toId())
+            .mapFailureAsNablaException(coreContainer.exceptionMapper)
     }
 
     companion object {
