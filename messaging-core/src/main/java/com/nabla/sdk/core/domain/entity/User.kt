@@ -3,6 +3,9 @@ package com.nabla.sdk.core.domain.entity
 import com.benasher44.uuid.Uuid
 
 sealed interface User {
+    /**
+     * @param prefix Honorific name prefix, e.g. 'Dr' or 'Mrs'.
+     */
     data class Provider(
         val id: Uuid,
         val avatar: EphemeralUrl?,

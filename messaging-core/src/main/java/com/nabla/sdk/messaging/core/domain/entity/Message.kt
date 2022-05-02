@@ -5,6 +5,8 @@ import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.messaging.core.domain.entity.MessageId.Local
+import com.nabla.sdk.messaging.core.domain.entity.MessageId.Remote
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -16,7 +18,15 @@ internal data class BaseMessage(
     val conversationId: ConversationId,
 )
 
+/**
+ * Url and metadata for a local device-hosted file.
+ */
 sealed interface FileLocal {
+    /**
+     * Local device-hosted file uri.
+     *
+     * This is typically provided by the OS file providers.
+     */
     val uri: Uri
 
     data class Image(override val uri: Uri) : FileLocal
@@ -31,12 +41,25 @@ sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileUpload> 
     data class Local<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType,
     ) : FileSource<FileLocalType, FileUploadType>()
+
     data class Uploaded<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType?,
         val fileUpload: FileUploadType,
     ) : FileSource<FileLocalType, FileUploadType>()
 }
 
+/**
+ * Identifier for a message, with an optimistic-friendly architecture.
+ *
+ * If the message is not yet sent (e.g. is sending or failed) then it only has
+ * a client-made [clientId] identifier, this state is represented with [Local].
+ *
+ * If the message is sent and exists server-side, it then necessarily has a server-made identifier
+ * called [remoteId] and maybe also a client-made [clientId]. This state is represented with [Remote].
+ *
+ * Tip: Privilege using [stableId] if you want an identifier that remains the same before, during and after
+ * sending a message. Typical use case is glitch-free optimistic sending.
+ */
 sealed interface MessageId {
     val clientId: Uuid?
     val remoteId: Uuid?
@@ -47,6 +70,7 @@ sealed interface MessageId {
         override val remoteId: Uuid? = null
         override val stableId: Uuid = clientId
     }
+
     data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
@@ -70,7 +94,11 @@ sealed class Message {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
+
         companion object {
+            /**
+             * Create a new [Text] message in conversation.
+             */
             fun new(
                 conversationId: ConversationId,
                 text: String,
@@ -87,19 +115,28 @@ sealed class Message {
 
         data class Image internal constructor(
             override val baseMessage: BaseMessage,
-            override val mediaSource: FileSource<FileLocal.Image, FileUpload.Image>
+            override val mediaSource: FileSource<FileLocal.Image, FileUpload.Image>,
         ) : Media<FileLocal.Image, FileUpload.Image>() {
             val stableUri: Uri = when (mediaSource) {
                 is FileSource.Local -> mediaSource.fileLocal.uri
                 is FileSource.Uploaded -> mediaSource.fileLocal?.uri ?: mediaSource.fileUpload.fileUpload.url.url
             }
+
             override fun modify(status: SendStatus): Message {
                 return copy(baseMessage = baseMessage.copy(sendStatus = status))
             }
+
             internal fun modify(mediaSource: FileSource<FileLocal.Image, FileUpload.Image>): Image {
                 return copy(mediaSource = mediaSource)
             }
+
             companion object {
+                /**
+                 * Create a new [Image] message in conversation.
+                 *
+                 * @param mediaSource local source of the image.
+                 * @see FileLocal.Image
+                 */
                 fun new(
                     conversationId: ConversationId,
                     mediaSource: FileSource.Local<FileLocal.Image, FileUpload.Image>,
@@ -112,7 +149,7 @@ sealed class Message {
 
         data class Document internal constructor(
             override val baseMessage: BaseMessage,
-            override val mediaSource: FileSource<FileLocal.Document, FileUpload.Document>
+            override val mediaSource: FileSource<FileLocal.Document, FileUpload.Document>,
         ) : Media<FileLocal.Document, FileUpload.Document>() {
             val uri: Uri = when (mediaSource) {
                 is FileSource.Local -> mediaSource.fileLocal.uri
@@ -132,6 +169,12 @@ sealed class Message {
             }
 
             companion object {
+                /**
+                 * Create a new [Document] message in conversation.
+                 *
+                 * @param mediaSource local source of the document.
+                 * @see FileLocal.Document
+                 */
                 fun new(
                     conversationId: ConversationId,
                     mediaSource: FileSource.Local<FileLocal.Document, FileUpload.Document>,

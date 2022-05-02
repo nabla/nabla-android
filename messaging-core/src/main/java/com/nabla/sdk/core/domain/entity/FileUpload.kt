@@ -2,6 +2,9 @@ package com.nabla.sdk.core.domain.entity
 
 import com.benasher44.uuid.Uuid
 
+/**
+ * Url and metadata for a distant server-hosted file.
+ */
 sealed class FileUpload {
     abstract val fileUpload: BaseFileUpload
 
