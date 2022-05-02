@@ -2,6 +2,7 @@ package com.nabla.sdk.core.data.auth
 
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.TokenRepository
+import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -19,9 +20,11 @@ internal class AuthorizationInterceptor(
                     tag = Logger.AUTH_TAG
                 )
                 val freshAccessToken = runBlocking {
-                    tokenRepository.value.getFreshAccessToken()
-                        .onFailure { throw AuthIoException(it) } // Interceptor are only allowed to throw IOException
-                        .getOrThrow()
+                    runCatchingCancellable {
+                        tokenRepository.value.getFreshAccessToken()
+                    }.getOrElse {
+                        throw AuthIoException(it)
+                    }
                 }
                 chain.request().newBuilder()
                     .header(HEADER_AUTH_NAME, makeHeaderAuthValue(freshAccessToken))

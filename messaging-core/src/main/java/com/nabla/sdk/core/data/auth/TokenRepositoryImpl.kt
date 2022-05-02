@@ -25,7 +25,7 @@ internal class TokenRepositoryImpl(
         tokenLocalDataSource.setAccessToken(accessToken)
     }
 
-    override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): Result<String> {
+    override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): String {
         return refreshLock.withLock {
             getFreshAccessTokenUnsafe(forceRefreshAccessToken)
         }
@@ -33,7 +33,7 @@ internal class TokenRepositoryImpl(
 
     private suspend fun getFreshAccessTokenUnsafe(
         forceRefreshAccessToken: Boolean
-    ): Result<String> {
+    ): String {
         logger.debug(
             message = "get fresh access token with forceRefreshAccessToken=$forceRefreshAccessToken...",
             tag = Logger.AUTH_TAG
@@ -44,7 +44,7 @@ internal class TokenRepositoryImpl(
                 message = "using still valid access token",
                 tag = Logger.AUTH_TAG
             )
-            return Result.success(accessToken.toString())
+            return accessToken.toString()
         }
         val refreshToken = tokenLocalDataSource.getRefreshToken()
         if (refreshToken.isValid()) {
@@ -59,25 +59,27 @@ internal class TokenRepositoryImpl(
                     message = "tokens refreshed, using refreshed access token",
                     tag = Logger.AUTH_TAG
                 )
-                return Result.success(freshTokens.accessToken)
+                return freshTokens.accessToken
             }.onFailure { refreshTokenError ->
                 // Fallback to refreshing session
                 logger.debug(
                     message = "fail refresh tokens, fallback to refresh session",
                     tag = Logger.AUTH_TAG
                 )
-                return renewSessionAuthTokens().map {
-                    logger.debug(message = "success refresh session", tag = Logger.AUTH_TAG)
-                    it.accessToken
-                }.onFailure { renewSessionError ->
+
+                return runCatchingCancellable {
+                    renewSessionAuthTokens().accessToken.also {
+                        logger.debug(message = "success refresh session", tag = Logger.AUTH_TAG)
+                    }
+                }.getOrElse { renewSessionError ->
                     // Ensure no exception is suppressed
                     logger.debug(message = "fail refreshing session", tag = Logger.AUTH_TAG)
-                    return Result.failure(renewSessionError.apply { addSuppressed(refreshTokenError) })
+                    throw renewSessionError.apply { addSuppressed(refreshTokenError) }
                 }
             }
         }
         // no access or refresh tokens are valid, fallback to refreshing session
-        return renewSessionAuthTokens().map { it.accessToken }
+        return renewSessionAuthTokens().accessToken
     }
 
     override suspend fun clearSession() {
@@ -86,10 +88,10 @@ internal class TokenRepositoryImpl(
         }
     }
 
-    private suspend fun renewSessionAuthTokens(): Result<AuthTokens> {
+    private suspend fun renewSessionAuthTokens(): AuthTokens {
         val patientId = patientRepository.getPatientId()
-            ?: return Result.failure(IllegalStateException("No patient set"))
-        return sessionTokenProvider.fetchNewSessionAuthTokens(patientId).onSuccess {
+            ?: throw IllegalStateException("No patient set")
+        return sessionTokenProvider.fetchNewSessionAuthTokens(patientId).getOrThrow().also {
             tokenLocalDataSource.setAuthTokens(it)
         }
     }

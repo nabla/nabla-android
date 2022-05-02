@@ -39,6 +39,8 @@ class ConversationListViewModel(
                 ).eraseType()
             }
             .retryWhen { cause, _ ->
+                nablaMessaging.logger.error("Failed to fetch conversation list", cause, tag = LOGGING_TAG)
+
                 emit(
                     State.Error(if (cause is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic)
                 )

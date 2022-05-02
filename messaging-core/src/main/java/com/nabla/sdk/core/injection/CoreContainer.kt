@@ -7,7 +7,6 @@ import com.apollographql.apollo3.network.okHttpClient
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.NablaCoreConfig
 import com.nabla.sdk.core.data.apollo.TypeAndUuidCacheKeyGenerator
-import com.nabla.sdk.core.data.auth.ApiAuthenticator
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
 import com.nabla.sdk.core.data.auth.PublicApiKeyInterceptor
@@ -60,7 +59,6 @@ internal class CoreContainer(
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(PublicApiKeyInterceptor(config.publicApiKey))
             .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
-            .authenticator(ApiAuthenticator(logger, tokenRepositoryLazy))
             .build()
     }
 

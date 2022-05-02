@@ -15,6 +15,8 @@ sealed class NablaException private constructor(
         object MissingContext : Configuration("Missing context. Make sure you follow the doc to integrate the SDK properly.")
     }
 
+    class Authentication internal constructor(override val wrapped: Throwable) : NablaException()
+
     class Network internal constructor(override val wrapped: Throwable) : NablaException()
     class Server internal constructor(override val wrapped: Throwable, code: Int, serverMessage: String, requestId: String?) :
         NablaException(message = "Nabla server error. Code: $code, message: $serverMessage, requestId: $requestId")

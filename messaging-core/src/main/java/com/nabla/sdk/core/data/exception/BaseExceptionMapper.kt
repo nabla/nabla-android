@@ -1,12 +1,12 @@
 package com.nabla.sdk.core.data.exception
 
-import com.nabla.sdk.core.data.auth.AuthIoException
 import com.nabla.sdk.core.domain.entity.NablaException
 
 internal class BaseExceptionMapper : ExceptionMapper {
     override fun map(exception: Throwable): NablaException? {
+        val authException: Throwable? = exception.asAuthException()
         return when {
-            exception is AuthIoException -> map(exception.cause)
+            authException != null -> NablaException.Authentication(authException)
             exception.isNetworkError() -> NablaException.Network(exception)
             exception is GraphQLException -> NablaException.Server(
                 exception,
