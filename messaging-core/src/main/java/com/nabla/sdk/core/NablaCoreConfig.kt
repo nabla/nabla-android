@@ -6,12 +6,12 @@ import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.messaging.core.BuildConfig
 
 class NablaCoreConfig(
-    val sessionTokenProvider: SessionTokenProvider,
     context: Context = defaultAppContext ?: throw NablaException.Configuration.MissingContext,
     val publicApiKey: String = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
     val baseUrl: String = "https://api.nabla.com/",
     val isLoggingEnabled: Boolean = BuildConfig.DEBUG,
     val additionalHeadersProvider: HeaderProvider? = null,
+    val sessionTokenProvider: SessionTokenProvider,
 ) {
     val context: Context = context.applicationContext
 

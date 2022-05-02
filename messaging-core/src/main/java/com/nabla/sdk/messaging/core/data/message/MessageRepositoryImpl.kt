@@ -4,7 +4,6 @@ import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.kotlin.SharedSingle
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -12,6 +11,7 @@ import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -97,18 +97,24 @@ internal class MessageRepositoryImpl(
 
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
 
-        runCatchingCancellable {
+        runCatching { // we're interested in cancellations
             when (message) {
                 is Message.Deleted -> throw NablaException.InvalidMessage("Can't send a deleted message")
                 is Message.Media.Document -> sendMediaMessageOp(message, messageId)
                 is Message.Media.Image -> sendMediaMessageOp(message, messageId)
                 is Message.Text -> sendTextMessageOp(message, messageId)
             }
-        }.onFailure {
-            val erredMessage = message.modify(SendStatus.ErrorSending)
-            localMessageDataSource.putMessage(
-                erredMessage
-            )
+        }.onFailure { throwable ->
+            when (throwable) {
+                is CancellationException ->
+                    localMessageDataSource
+                        .removeMessage(message.conversationId, messageId)
+                else ->
+                    localMessageDataSource
+                        .putMessage(message.modify(SendStatus.ErrorSending))
+            }
+
+            throw throwable
         }.onSuccess {
             val sentMessage = message.modify(SendStatus.Sent)
             localMessageDataSource.putMessage(
