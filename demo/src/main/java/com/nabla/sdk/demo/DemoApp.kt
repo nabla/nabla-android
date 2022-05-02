@@ -9,15 +9,17 @@ class DemoApp : Application() {
     override fun onCreate() {
         super.onCreate()
         NablaCore.initialize(
-            NablaCoreConfig.Builder {
-                // Call to authenticate the app on your server
-                Result.success(
-                    AuthTokens(
-                        refreshToken = "dummy-refresh-token",
-                        accessToken = "dummy-access-token"
+            NablaCoreConfig(
+                sessionTokenProvider = {
+                    // Call to authenticate the app on your server
+                    Result.success(
+                        AuthTokens(
+                            refreshToken = "dummy-refresh-token",
+                            accessToken = "dummy-access-token"
+                        )
                     )
-                )
-            }.build()
+                }
+            )
         )
     }
 }

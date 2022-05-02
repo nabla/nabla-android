@@ -117,7 +117,7 @@ internal class ConversationViewModel(
 
     private fun Flow<WatchPaginatedResponse<ConversationWithMessages>>.handleConversationDataSideEffects() =
         onEach { response ->
-            response.items.conversation.markConversationAsReadIfNeeded()
+            response.content.conversation.markConversationAsReadIfNeeded()
             latestLoadMoreCallback = response.loadMore
         }
 
@@ -396,11 +396,11 @@ internal class ConversationViewModel(
             selectedMessageId: MessageId?,
         ): State {
             return State.ConversationLoaded(
-                conversation = conversationWithMessagesResponse.items.conversation,
+                conversation = conversationWithMessagesResponse.content.conversation,
                 items = timelineBuilder.buildTimeline(
-                    messages = conversationWithMessagesResponse.items.messages,
+                    messages = conversationWithMessagesResponse.content.messages,
                     hasMore = conversationWithMessagesResponse.loadMore != null,
-                    providersInConversation = conversationWithMessagesResponse.items.conversation.providersInConversation,
+                    providersInConversation = conversationWithMessagesResponse.content.conversation.providersInConversation,
                     selectedMessageId = selectedMessageId,
                 ),
             )

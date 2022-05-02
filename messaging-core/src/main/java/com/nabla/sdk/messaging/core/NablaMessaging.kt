@@ -53,8 +53,12 @@ class NablaMessaging private constructor(
         return conversationRepository.watchConversations()
             .map { paginatedConversations ->
                 WatchPaginatedResponse(
-                    items = paginatedConversations.items,
-                    loadMore = if (paginatedConversations.hasMore) { loadMoreCallback } else { null },
+                    content = paginatedConversations.items,
+                    loadMore = if (paginatedConversations.hasMore) {
+                        loadMoreCallback
+                    } else {
+                        null
+                    },
                 )
             }
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -77,8 +81,10 @@ class NablaMessaging private constructor(
         return messageRepository.watchConversationMessages(conversationId)
             .map { paginatedConversationWithMessages ->
                 WatchPaginatedResponse(
-                    items = paginatedConversationWithMessages.conversationWithMessages,
-                    loadMore = if (paginatedConversationWithMessages.hasMore) { loadMoreCallback } else null
+                    content = paginatedConversationWithMessages.conversationWithMessages,
+                    loadMore = if (paginatedConversationWithMessages.hasMore) {
+                        loadMoreCallback
+                    } else null
                 )
             }
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -124,7 +130,7 @@ class NablaMessaging private constructor(
 
         fun getInstance(): NablaMessaging {
             synchronized(this) {
-                return defaultSingletonInstance ?: kotlin.run {
+                return defaultSingletonInstance ?: run {
                     val instance = initialize(NablaCore.getInstance())
                     defaultSingletonInstance = instance
                     instance

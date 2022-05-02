@@ -102,7 +102,7 @@ sealed class Message {
             companion object {
                 fun new(
                     conversationId: ConversationId,
-                    mediaSource: FileSource<FileLocal.Image, FileUpload.Image>,
+                    mediaSource: FileSource.Local<FileLocal.Image, FileUpload.Image>,
                 ) = Image(
                     BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
                     mediaSource
@@ -134,7 +134,7 @@ sealed class Message {
             companion object {
                 fun new(
                     conversationId: ConversationId,
-                    mediaSource: FileSource<FileLocal.Document, FileUpload.Document>,
+                    mediaSource: FileSource.Local<FileLocal.Document, FileUpload.Document>,
                 ) = Document(
                     BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
                     mediaSource,

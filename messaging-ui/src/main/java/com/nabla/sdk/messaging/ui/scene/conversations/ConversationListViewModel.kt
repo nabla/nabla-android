@@ -35,7 +35,7 @@ class ConversationListViewModel(
                 latestLoadMoreCallback = result.loadMore
 
                 State.Loaded(
-                    items = result.items.map { it.toUiModel() } + if (result.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
+                    items = result.content.map { it.toUiModel() } + if (result.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
                 ).eraseType()
             }
             .retryWhen { cause, _ ->
