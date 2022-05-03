@@ -1,4 +1,5 @@
-# Nabla Android SDK
+#  Nabla Android SDK
+[![Release](https://jitpack.io/v/nabla/nabla-android.svg)](https://jitpack.io/#Nabla/nabla-android)
 
 The [Nabla](https://www.nabla.dev/) Android SDK makes it quick and easy to build an excellent healthcare communication experience in your Android app. We provide powerful and customizable UI elements that can be used out-of-the-box to create a full healthcare communication experience. We also expose the low-level APIs that power those UIs so that you can build fully custom experiences.
 
@@ -26,13 +27,13 @@ Then add Nabla's dependency in your app's build.gradle. You can choose between:
 - The `messaging-ui` artifact that comes with our ready-to-use UI components
 
 ```
-implementation 'com.github.nabla.nabla-android:messaging-ui:latestVersion'
+implementation 'com.nabla:messaging-ui:latestVersion'
 ```
 
 - The `messaging-core` artifact that exposes the low-level APIs only
 
 ```
-implementation 'com.github.nabla.nabla-android:messaging-core:latestVersion'
+implementation 'com.nabla:messaging-core:latestVersion'
 ```
 
 
