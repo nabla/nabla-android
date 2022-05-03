@@ -27,13 +27,13 @@ Then add Nabla's dependency in your app's build.gradle. You can choose between:
 - The `messaging-ui` artifact that comes with our ready-to-use UI components
 
 ```
-implementation 'com.nabla:messaging-ui:latestVersion'
+implementation 'com.nabla.nabla-android:messaging-ui:latestVersion'
 ```
 
 - The `messaging-core` artifact that exposes the low-level APIs only
 
 ```
-implementation 'com.nabla:messaging-core:latestVersion'
+implementation 'com.nabla.nabla-android:messaging-core:latestVersion'
 ```
 
 
