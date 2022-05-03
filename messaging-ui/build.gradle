@@ -58,7 +58,7 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation project(':messaging-core')
+    api project(':messaging-core')
 
     implementation libs.androidx.lifecycle.viewmodel
     implementation libs.androidx.lifecycle.viewmodel.savedstate
