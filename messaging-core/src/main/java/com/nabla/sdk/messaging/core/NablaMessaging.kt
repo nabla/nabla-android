@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.map
  * We recommend you reuse the same instance for all interactions,
  * check documentation of [initialize] and [getInstance].
  */
-class NablaMessaging private constructor(
+public class NablaMessaging private constructor(
     coreContainer: CoreContainer,
 ) {
 
@@ -54,7 +54,7 @@ class NablaMessaging private constructor(
         if (useMock) MessageRepositoryMock() else messagingContainer.messageRepository
     }
 
-    val logger: Logger = coreContainer.logger
+    public val logger: Logger = coreContainer.logger
 
     /**
      * Watch the list of conversations the current user is involved in.
@@ -63,7 +63,7 @@ class NablaMessaging private constructor(
      *
      * Returned flow might throw any of [NablaException] children.
      */
-    fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
+    public fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 conversationRepository.loadMoreConversations()
@@ -92,7 +92,7 @@ class NablaMessaging private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    suspend fun createConversation(): Result<Conversation> {
+    public suspend fun createConversation(): Result<Conversation> {
         return runCatchingCancellable {
             conversationRepository.createConversation()
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -108,7 +108,7 @@ class NablaMessaging private constructor(
      *
      * @param conversationId the id from [Conversation.id].
      */
-    fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationWithMessages>> {
+    public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationWithMessages>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 messageRepository.loadMoreMessages(conversationId)
@@ -146,7 +146,7 @@ class NablaMessaging private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    suspend fun sendMessage(message: Message): Result<Unit> {
+    public suspend fun sendMessage(message: Message): Result<Unit> {
         return runCatchingCancellable {
             messageRepository.sendMessage(message)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -161,7 +161,7 @@ class NablaMessaging private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
+    public suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
             messageRepository.retrySendingMessage(conversationId, localMessageId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -188,7 +188,7 @@ class NablaMessaging private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
+    public suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
         return runCatchingCancellable {
             messageRepository.setTyping(conversationId, isTyping)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -201,7 +201,7 @@ class NablaMessaging private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
+    public suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
             conversationRepository.markConversationAsRead(conversationId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -225,13 +225,13 @@ class NablaMessaging private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
+    public suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
         return runCatchingCancellable {
             messageRepository.deleteMessage(conversationId, id)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
-    companion object {
+    public companion object {
         private var defaultSingletonInstance: NablaMessaging? = null
 
         /**
@@ -242,7 +242,7 @@ class NablaMessaging private constructor(
          * unless you prefer maintaining your own instances.
          * @see initialize
          */
-        fun getInstance(): NablaMessaging {
+        public fun getInstance(): NablaMessaging {
             synchronized(this) {
                 return defaultSingletonInstance ?: run {
                     val instance = initialize(NablaCore.getInstance())
@@ -258,6 +258,6 @@ class NablaMessaging private constructor(
          * Unlike the singleton provided in [getInstance], you have the responsibility
          * of maintaining a reference to the returned instance.
          */
-        fun initialize(nablaCore: NablaCore): NablaMessaging = NablaMessaging(nablaCore.coreContainer)
+        public fun initialize(nablaCore: NablaCore): NablaMessaging = NablaMessaging(nablaCore.coreContainer)
     }
 }

@@ -16,24 +16,24 @@ import com.nabla.sdk.messaging.core.BuildConfig
  *        This is exposed for internal usage and you should probably not use it in your app.
  * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
  */
-class NablaCoreConfig(
+public class NablaCoreConfig(
     context: Context = defaultAppContext ?: throw NablaException.Configuration.MissingContext,
-    val publicApiKey: String = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
-    val baseUrl: String = "https://api.nabla.com/",
-    val isLoggingEnabled: Boolean = BuildConfig.DEBUG,
-    val additionalHeadersProvider: HeaderProvider? = null,
-    val sessionTokenProvider: SessionTokenProvider,
+    internal val publicApiKey: String = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
+    internal val baseUrl: String = "https://api.nabla.com/",
+    internal val isLoggingEnabled: Boolean = BuildConfig.DEBUG,
+    internal val additionalHeadersProvider: HeaderProvider? = null,
+    internal val sessionTokenProvider: SessionTokenProvider,
 ) {
-    val context: Context = context.applicationContext
+    internal val context: Context = context.applicationContext
 
-    companion object {
+    internal companion object {
         internal var defaultAppContext: Context? = null
         internal var defaultPublicApiKey: String? = null
     }
 }
 
-data class Header(val name: String, val value: String)
+public data class Header(val name: String, val value: String)
 
-interface HeaderProvider {
-    fun headers(): List<Header>
+public interface HeaderProvider {
+    public fun headers(): List<Header>
 }

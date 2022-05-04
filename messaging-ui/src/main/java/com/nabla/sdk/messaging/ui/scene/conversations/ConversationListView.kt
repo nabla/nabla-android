@@ -10,7 +10,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaErrorLayoutBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 
-class ConversationListView : FrameLayout {
+public class ConversationListView : FrameLayout {
     private lateinit var binding: NablaConversationListViewBinding
     internal val recyclerView: RecyclerView
         get() = binding.conversationsRecyclerView
@@ -19,7 +19,7 @@ class ConversationListView : FrameLayout {
     internal val errorView: NablaErrorLayoutBinding
         get() = binding.nablaIncludedErrorLayout
 
-    constructor(
+    public constructor(
         context: Context,
         attrs: AttributeSet,
         defAttrRes: Int,
@@ -31,11 +31,11 @@ class ConversationListView : FrameLayout {
         init(attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context.withNablaMessagingThemeOverlays(attrs), attrs) {
+    public constructor(context: Context, attrs: AttributeSet) : super(context.withNablaMessagingThemeOverlays(attrs), attrs) {
         init(attrs)
     }
 
-    constructor(context: Context) : super(context.withNablaMessagingThemeOverlays()) {
+    public constructor(context: Context) : super(context.withNablaMessagingThemeOverlays()) {
         init(attrs = null)
     }
 

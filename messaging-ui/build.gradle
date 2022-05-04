@@ -12,6 +12,8 @@ android {
 
     compileSdk buildConfig.compileSdk
 
+    resourcePrefix "nabla"
+
     defaultConfig {
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
@@ -44,6 +46,19 @@ android {
         singleVariant('release') {
             withSourcesJar()
         }
+    }
+
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'RtlEnabled'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    // we don't want it for test src, see https://stackoverflow.com/questions/64267076
+    if (!it.name.contains("Test")) {
+        kotlinOptions.freeCompilerArgs += "-Xexplicit-api=strict"
     }
 }
 

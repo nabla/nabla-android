@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ConversationListViewModel(
+public class ConversationListViewModel(
     private val nablaMessaging: NablaMessaging,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
@@ -81,7 +81,7 @@ class ConversationListViewModel(
         fun eraseType() = this
     }
 
-    companion object {
+    private companion object {
         private val LOGGING_TAG = Logger.asSdkTag("UI-ConversationsList")
     }
 }

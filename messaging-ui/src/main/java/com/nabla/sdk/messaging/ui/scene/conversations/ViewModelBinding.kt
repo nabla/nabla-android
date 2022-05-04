@@ -18,7 +18,7 @@ import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch
 
-fun ConversationListView.bindViewModel(
+public fun ConversationListView.bindViewModel(
     viewModel: ConversationListViewModel,
     onConversationClicked: (id: ConversationId) -> Unit,
     itemDecoration: RecyclerView.ItemDecoration? = DefaultOffsetsItemDecoration(),
@@ -86,7 +86,7 @@ private fun ConversationListView.bindViewModelState(
     }
 }
 
-class DefaultOffsetsItemDecoration : RecyclerView.ItemDecoration() {
+public class DefaultOffsetsItemDecoration : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val adapterPosition = parent.getChildAdapterPosition(view)
 

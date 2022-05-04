@@ -7,7 +7,7 @@
         <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.Demo.Customized</item>
     </style>
 
-    <style name="NablaOverlay.Demo.Customized" parent="ThemeOverlay.Nabla.Messaging">
+    <style name="NablaOverlay.Demo.Customized" parent="Nabla.ThemeOverlay.Messaging">
         <item name="nablaMessaging_conversationPreviewBackgroundDrawable">@drawable/demo_conversation_preview_background</item>
         <item name="nablaRoundedCornersRadius">28dp</item>
         <item name="nablaMessaging_unreadMessagesIndicatorDrawable">@drawable/demo_animated_unread_dot</item>

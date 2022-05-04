@@ -32,7 +32,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
 import kotlin.math.absoluteValue
 import kotlin.math.min
 
-internal class AvatarView : ConstraintLayout {
+internal class NablaAvatarView : ConstraintLayout {
     private lateinit var binding: NablaComponentAvatarViewBinding
 
     private var useSingleLetterInPlaceHolder: Boolean = false
@@ -52,13 +52,13 @@ internal class AvatarView : ConstraintLayout {
     private fun init(
         context: Context,
         attrs: AttributeSet?,
-        @StyleRes defStyleRes: Int = R.style.Widget_Nabla_AvatarView,
+        @StyleRes defStyleRes: Int = R.style.Nabla_Widget_AvatarView,
         @AttrRes defAttrRes: Int = R.attr.nablaAvatarViewStyle,
     ) {
         binding = NablaComponentAvatarViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-        context.obtainStyledAttributes(attrs, R.styleable.AvatarView, defAttrRes, defStyleRes).use { typedArray ->
-            val shape = typedArray.getInt(R.styleable.AvatarView_clipShape, CLIP_SHAPE_NONE)
+        context.obtainStyledAttributes(attrs, R.styleable.NablaAvatarView, defAttrRes, defStyleRes).use { typedArray ->
+            val shape = typedArray.getInt(R.styleable.NablaAvatarView_nabla_clipShape, CLIP_SHAPE_NONE)
             if (shape != CLIP_SHAPE_NONE) {
                 clipToOutline = true
                 outlineProvider = object : ViewOutlineProvider() {
@@ -71,7 +71,7 @@ internal class AvatarView : ConstraintLayout {
                     }
                 }
             }
-            useSingleLetterInPlaceHolder = typedArray.getBoolean(R.styleable.AvatarView_useSingleLetterInPlaceHolder, false)
+            useSingleLetterInPlaceHolder = typedArray.getBoolean(R.styleable.NablaAvatarView_nabla_useSingleLetterInPlaceHolder, false)
         }
     }
 
@@ -148,14 +148,14 @@ internal class AvatarView : ConstraintLayout {
 
     @ColorRes
     private val backgroundColors: List<Int> = listOf(
-        R.color.turquoise,
-        R.color.blue,
-        R.color.red,
-        R.color.orange,
-        R.color.indigo,
-        R.color.stone,
+        R.color.nabla_turquoise,
+        R.color.nabla_blue,
+        R.color.nabla_red,
+        R.color.nabla_orange,
+        R.color.nabla_indigo,
+        R.color.nabla_stone,
     )
 
     @ColorRes
-    private val deactivatedBackground = R.color.grey
+    private val deactivatedBackground = R.color.nabla_grey
 }

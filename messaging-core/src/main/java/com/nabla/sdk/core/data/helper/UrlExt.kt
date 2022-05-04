@@ -5,26 +5,22 @@ import java.net.MalformedURLException
 import java.net.URI
 
 @Throws(MalformedURLException::class)
-fun Uri.toJvmUri(): URI {
+public fun Uri.toJvmUri(): URI {
     return URI(uri)
 }
 
-fun Uri.toAndroidUri(): android.net.Uri {
+public fun Uri.toAndroidUri(): android.net.Uri {
     return android.net.Uri.parse(uri)
 }
 
-fun URI.toKtUri(): Uri {
+public fun URI.toKtUri(): Uri {
     return Uri(toString())
 }
 
-fun URI.toAndroidUri(): android.net.Uri {
-    return android.net.Uri.parse(toString())
-}
-
-fun android.net.Uri.toJvmURI(): URI {
+internal fun android.net.Uri.toJvmURI(): URI {
     return URI.create(toString())
 }
 
-fun android.net.Uri.toKtUri(): Uri {
+public fun android.net.Uri.toKtUri(): Uri {
     return toJvmURI().toKtUri()
 }

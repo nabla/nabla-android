@@ -5,7 +5,5 @@
     <string name="nabla_display_username_initials_format">%1$.1s</string>
     <string name="nabla_display_name_unknown_user_initials">\?</string>
     <string name="nabla_display_name_full_name_format">%1$s %2$s</string>
-    <string name="nabla_display_name_unknown_provider_initials">\?</string>
-    <string name="nabla_display_name_with_title">%1$s (%2$s)</string>
     <string name="nabla_display_name_full_name_and_prefix">%1$s %2$s</string>
 </resources>

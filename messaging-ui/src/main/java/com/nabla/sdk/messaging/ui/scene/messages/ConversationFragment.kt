@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.User
@@ -39,6 +38,7 @@ import com.nabla.sdk.core.ui.helpers.mediapicker.PickMediasFromLibraryActivityCo
 import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
+import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.NablaMessaging
@@ -56,8 +56,8 @@ import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.ErrorAler
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
 
-open class ConversationFragment : Fragment() {
-    open val nablaMessaging: NablaMessaging = NablaMessaging.getInstance()
+public open class ConversationFragment : Fragment() {
+    public open val nablaMessaging: NablaMessaging = NablaMessaging.getInstance()
 
     private val viewModel: ConversationViewModel by viewModels {
         object : AbstractSavedStateViewModelFactory(this, arguments) {
@@ -437,10 +437,10 @@ open class ConversationFragment : Fragment() {
     }
 
     @Suppress("UNUSED")
-    class Builder internal constructor(private val conversationId: ConversationId) {
+    public class Builder internal constructor(private val conversationId: ConversationId) {
         private var customFragment: ConversationFragment? = null
 
-        fun setFragment(fragment: ConversationFragment) {
+        public fun setFragment(fragment: ConversationFragment) {
             customFragment = fragment
         }
 
@@ -450,7 +450,7 @@ open class ConversationFragment : Fragment() {
             }
         }
 
-        companion object {
+        internal companion object {
             private const val CONVERSATION_ID_ARG_KEY = "conversationId"
 
             private fun newArgsBundle(conversationId: ConversationId): Bundle = Bundle().apply {
@@ -463,8 +463,8 @@ open class ConversationFragment : Fragment() {
         }
     }
 
-    companion object {
-        fun newInstance(
+    public companion object {
+        public fun newInstance(
             conversationId: ConversationId,
             init: (Builder.() -> Unit)? = null,
         ): ConversationFragment {

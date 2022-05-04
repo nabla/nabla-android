@@ -28,7 +28,7 @@ internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message
         binding.chatSystemMessageContentContainer,
         Gravity.BOTTOM
     ).apply {
-        menuInflater.inflate(R.menu.message_actions, menu)
+        menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
     override fun bind(message: TimelineItem.Message, sender: MessageSender, content: ContentType) {

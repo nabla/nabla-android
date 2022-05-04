@@ -25,6 +25,6 @@ internal class NablaExceptionMapper {
     }
 }
 
-interface ExceptionMapper {
+internal interface ExceptionMapper {
     fun map(exception: Throwable): NablaException?
 }

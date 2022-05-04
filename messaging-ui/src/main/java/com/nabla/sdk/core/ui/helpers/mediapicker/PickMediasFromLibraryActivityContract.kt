@@ -6,8 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.result.contract.ActivityResultContract
-import com.nabla.sdk.core.data.helper.toJvmURI
 import com.nabla.sdk.core.domain.entity.MimeType
+import java.net.URI
 
 internal class PickMediasFromLibraryActivityContract(private val context: Context) :
     ActivityResultContract<Array<MimeType>, MediaPickingResult<List<LocalMedia>>>() {
@@ -55,7 +55,7 @@ internal class PickMediasFromLibraryActivityContract(private val context: Contex
             val mimeTypeRepresentation = context.contentResolver.getType(uri)
                 ?: throw IllegalArgumentException("Unable to get mime type for uri: $uri")
 
-            return@map LocalMedia.create(uri.toJvmURI(), mimeTypeRepresentation, getMediaName(uri))
+            return@map LocalMedia.create(URI.create(uri.toString()), mimeTypeRepresentation, getMediaName(uri))
         }
     }
 

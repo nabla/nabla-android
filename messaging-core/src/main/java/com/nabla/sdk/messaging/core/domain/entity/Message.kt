@@ -21,28 +21,28 @@ internal data class BaseMessage(
 /**
  * Url and metadata for a local device-hosted file.
  */
-sealed interface FileLocal {
+public sealed interface FileLocal {
     /**
      * Local device-hosted file uri.
      *
      * This is typically provided by the OS file providers.
      */
-    val uri: Uri
+    public val uri: Uri
 
-    data class Image(override val uri: Uri) : FileLocal
-    data class Document(
+    public data class Image(override val uri: Uri) : FileLocal
+    public data class Document(
         override val uri: Uri,
         val documentName: String?,
         val mimeType: MimeType,
     ) : FileLocal
 }
 
-sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileUpload> {
-    data class Local<FileLocalType : FileLocal, FileUploadType : FileUpload>(
+public sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileUpload> {
+    public data class Local<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType,
     ) : FileSource<FileLocalType, FileUploadType>()
 
-    data class Uploaded<FileLocalType : FileLocal, FileUploadType : FileUpload>(
+    public data class Uploaded<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType?,
         val fileUpload: FileUploadType,
     ) : FileSource<FileLocalType, FileUploadType>()
@@ -60,60 +60,60 @@ sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileUpload> 
  * Tip: Privilege using [stableId] if you want an identifier that remains the same before, during and after
  * sending a message. Typical use case is glitch-free optimistic sending.
  */
-sealed interface MessageId {
-    val clientId: Uuid?
-    val remoteId: Uuid?
+public sealed interface MessageId {
+    public val clientId: Uuid?
+    public val remoteId: Uuid?
 
-    val stableId: Uuid
+    public val stableId: Uuid
 
-    data class Local internal constructor(override val clientId: Uuid) : MessageId {
+    public data class Local internal constructor(override val clientId: Uuid) : MessageId {
         override val remoteId: Uuid? = null
         override val stableId: Uuid = clientId
     }
 
-    data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
+    public data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
 
-    companion object {
+    public companion object {
         internal fun new(): MessageId = Local(uuid4())
     }
 }
 
-sealed class Message {
+public sealed class Message {
     internal abstract val baseMessage: BaseMessage
     internal abstract fun modify(status: SendStatus): Message
 
-    val id: MessageId get() = baseMessage.id
-    val sentAt: Instant get() = baseMessage.sentAt
-    val sender: MessageSender get() = baseMessage.sender
-    val sendStatus: SendStatus get() = baseMessage.sendStatus
-    val conversationId: ConversationId get() = baseMessage.conversationId
+    public val id: MessageId get() = baseMessage.id
+    public val sentAt: Instant get() = baseMessage.sentAt
+    public val sender: MessageSender get() = baseMessage.sender
+    public val sendStatus: SendStatus get() = baseMessage.sendStatus
+    public val conversationId: ConversationId get() = baseMessage.conversationId
 
-    data class Text internal constructor(override val baseMessage: BaseMessage, val text: String) : Message() {
+    public data class Text internal constructor(override val baseMessage: BaseMessage, val text: String) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
 
-        companion object {
+        public companion object {
             /**
              * Create a new [Text] message in conversation.
              */
-            fun new(
+            public fun new(
                 conversationId: ConversationId,
                 text: String,
-            ) = Text(
+            ): Text = Text(
                 BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
                 text,
             )
         }
     }
 
-    sealed class Media<FileLocalType : FileLocal, FileUploadType : FileUpload> : Message() {
+    public sealed class Media<FileLocalType : FileLocal, FileUploadType : FileUpload> : Message() {
 
         internal abstract val mediaSource: FileSource<FileLocalType, FileUploadType>
 
-        data class Image internal constructor(
+        public data class Image internal constructor(
             override val baseMessage: BaseMessage,
             override val mediaSource: FileSource<FileLocal.Image, FileUpload.Image>,
         ) : Media<FileLocal.Image, FileUpload.Image>() {
@@ -130,24 +130,24 @@ sealed class Message {
                 return copy(mediaSource = mediaSource)
             }
 
-            companion object {
+            public companion object {
                 /**
                  * Create a new [Image] message in conversation.
                  *
                  * @param mediaSource local source of the image.
                  * @see FileLocal.Image
                  */
-                fun new(
+                public fun new(
                     conversationId: ConversationId,
                     mediaSource: FileSource.Local<FileLocal.Image, FileUpload.Image>,
-                ) = Image(
+                ): Image = Image(
                     BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
                     mediaSource
                 )
             }
         }
 
-        data class Document internal constructor(
+        public data class Document internal constructor(
             override val baseMessage: BaseMessage,
             override val mediaSource: FileSource<FileLocal.Document, FileUpload.Document>,
         ) : Media<FileLocal.Document, FileUpload.Document>() {
@@ -168,17 +168,17 @@ sealed class Message {
                 return copy(baseMessage = baseMessage.copy(sendStatus = status))
             }
 
-            companion object {
+            public companion object {
                 /**
                  * Create a new [Document] message in conversation.
                  *
                  * @param mediaSource local source of the document.
                  * @see FileLocal.Document
                  */
-                fun new(
+                public fun new(
                     conversationId: ConversationId,
                     mediaSource: FileSource.Local<FileLocal.Document, FileUpload.Document>,
-                ) = Document(
+                ): Document = Document(
                     BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
                     mediaSource,
                 )
@@ -186,13 +186,13 @@ sealed class Message {
         }
     }
 
-    data class Deleted internal constructor(override val baseMessage: BaseMessage) : Message() {
+    public data class Deleted internal constructor(override val baseMessage: BaseMessage) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
 
-        companion object
+        public companion object
     }
 
-    companion object
+    public companion object
 }

@@ -13,7 +13,7 @@ import androidx.annotation.CheckResult
  * @param content the data being watched, grows after each new page successful loading.
  * @param loadMore the callback to trigger loading of the next page, will eventually result in a new emission in the Flow.
  */
-data class WatchPaginatedResponse<T> internal constructor(
+public data class WatchPaginatedResponse<T> internal constructor(
     val content: T,
     val loadMore: (@CheckResult suspend () -> Result<Unit>)?,
 )

@@ -4,11 +4,11 @@ import com.benasher44.uuid.Uuid
 import kotlinx.datetime.Instant
 
 @JvmInline
-value class ConversationId internal constructor(val value: Uuid)
+public value class ConversationId internal constructor(public val value: Uuid)
 
-fun Uuid.toConversationId() = ConversationId(this)
+public fun Uuid.toConversationId(): ConversationId = ConversationId(this)
 
-data class Conversation(
+public data class Conversation(
     val id: ConversationId,
     val title: String?,
     val description: String?,
@@ -18,5 +18,5 @@ data class Conversation(
     val patientUnreadMessageCount: Int,
     val providersInConversation: List<ProviderInConversation>,
 ) {
-    companion object
+    public companion object
 }

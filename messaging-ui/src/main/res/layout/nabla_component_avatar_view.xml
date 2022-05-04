@@ -62,7 +62,7 @@
         android:maxLines="1"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textColor="@color/white"
+        android:textColor="@color/nabla_white"
         android:visibility="gone"
         app:autoSizeMaxTextSize="50dp"
         app:autoSizeMinTextSize="9dp"

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <application>
+    <application tools:ignore="RtlEnabled">
         <activity
             android:name="com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity"
-            android:theme="@style/FullScreenImageActivityTheme"
+            android:theme="@style/NablaFullScreenImageActivityTheme"
             />
 
         <provider
@@ -20,7 +21,7 @@
             >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/share_file_paths"
+                android:resource="@xml/nabla_share_file_paths"
                 />
         </provider>
 
@@ -32,7 +33,7 @@
             >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/media_picker_file_paths"
+                android:resource="@xml/nabla_media_picker_file_paths"
                 />
         </provider>
     </application>

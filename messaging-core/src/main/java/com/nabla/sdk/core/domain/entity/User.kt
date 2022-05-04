@@ -2,28 +2,28 @@ package com.nabla.sdk.core.domain.entity
 
 import com.benasher44.uuid.Uuid
 
-sealed interface User {
+public sealed interface User {
     /**
      * @param prefix Honorific name prefix, e.g. 'Dr' or 'Mrs'.
      */
-    data class Provider(
+    public data class Provider(
         val id: Uuid,
         val avatar: EphemeralUrl?,
         val firstName: String,
         val lastName: String,
         val prefix: String?,
     ) : User {
-        companion object
+        public companion object
     }
 
-    data class Patient(
+    public data class Patient(
         val id: Uuid,
         val avatar: Attachment?,
         val username: String,
         val labels: List<String>,
     ) : User {
-        companion object
+        public companion object
     }
 
-    object Unknown : User
+    public object Unknown : User
 }

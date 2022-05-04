@@ -9,6 +9,6 @@ import com.nabla.sdk.core.domain.entity.StringId
  * You will typically call your server here and make sure no caching is used:
  * the SDK is only interested in fresh versions each time it calls back.
  */
-fun interface SessionTokenProvider {
-    suspend fun fetchNewSessionAuthTokens(userId: StringId): Result<AuthTokens>
+public fun interface SessionTokenProvider {
+    public suspend fun fetchNewSessionAuthTokens(userId: StringId): Result<AuthTokens>
 }

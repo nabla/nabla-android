@@ -28,7 +28,7 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
         binding.chatPatientMessageContentContainer,
         Gravity.BOTTOM
     ).apply {
-        menuInflater.inflate(R.menu.message_actions, menu)
+        menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
     override fun bind(message: TimelineItem.Message, sender: MessageSender.Patient, content: ContentType) {

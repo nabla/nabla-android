@@ -5,7 +5,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration.Companion.seconds
 
-data class ProviderInConversation(
+public data class ProviderInConversation(
     val provider: User.Provider,
     val typingAt: Instant?,
     val seenUntil: Instant?,
@@ -16,7 +16,7 @@ data class ProviderInConversation(
         return Companion.isInactiveAt(typingAt)
     }
 
-    companion object {
+    public companion object {
         private val TYPING_TIME_WINDOW = 20.seconds
 
         private fun isInactiveAt(typingAt: Instant?): Instant? {

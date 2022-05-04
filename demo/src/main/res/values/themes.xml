@@ -29,7 +29,7 @@
         <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.Demo</item>
     </style>
 
-    <style name="NablaOverlay.Demo" parent="ThemeOverlay.Nabla.Messaging">
+    <style name="NablaOverlay.Demo" parent="Nabla.ThemeOverlay.Messaging">
         <!-- keeping defaults for this one, check other demo themes for extensive customization -->
     </style>
 </resources>

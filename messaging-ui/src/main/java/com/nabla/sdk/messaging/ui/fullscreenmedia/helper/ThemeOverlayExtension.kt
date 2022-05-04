@@ -14,7 +14,7 @@ import com.nabla.sdk.messaging.ui.R
  */
 internal fun Context.withNablaMessagingThemeOverlays(attrs: AttributeSet? = null): Context {
     val outValue = TypedValue()
-    val hasValidOverlays = theme.resolveAttribute(R.attr.hasValidMessagingOverlays, outValue, true)
+    val hasValidOverlays = theme.resolveAttribute(R.attr.nablaHasValidMessagingOverlays, outValue, true)
 
     return if (hasValidOverlays) this else {
         val nablaOverlayInAttrs = obtainStyledAttributes(attrs, R.styleable.NablaThemeOverlayApplier).use {
@@ -31,7 +31,7 @@ internal fun Context.withNablaMessagingThemeOverlays(attrs: AttributeSet? = null
                 this,
                 if (hasOverlayAsThemeAttr) outValue.resourceId else {
                     // Neither theme nor attrs do specify Nabla overlays. Fallback to defaults.
-                    R.style.ThemeOverlay_Nabla_Messaging
+                    R.style.Nabla_ThemeOverlay_Messaging
                 }
             )
         }

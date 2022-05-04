@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/chatProviderMessageAuthorTextView"
         >
 
-        <com.nabla.sdk.core.ui.components.AvatarView
+        <com.nabla.sdk.core.ui.components.NablaAvatarView
             android:id="@+id/chatProviderMessageAvatarView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

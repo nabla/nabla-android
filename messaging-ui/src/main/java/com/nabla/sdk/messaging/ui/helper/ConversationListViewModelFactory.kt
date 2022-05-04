@@ -7,7 +7,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
-class ConversationListViewModelFactory(
+public class ConversationListViewModelFactory(
     owner: SavedStateRegistryOwner,
     private val nablaMessaging: NablaMessaging = NablaMessaging.getInstance(),
 ) : AbstractSavedStateViewModelFactory(owner, null) {

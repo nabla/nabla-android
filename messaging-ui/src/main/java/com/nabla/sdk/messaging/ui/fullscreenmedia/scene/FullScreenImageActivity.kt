@@ -11,10 +11,10 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import coil.imageLoader
 import coil.request.ImageRequest
-import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityFullScreenImageBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.createSharableJpegImage

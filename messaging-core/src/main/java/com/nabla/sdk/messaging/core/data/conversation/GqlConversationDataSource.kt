@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.map
 
 internal class GqlConversationDataSource constructor(
     private val logger: Logger,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
 ) {

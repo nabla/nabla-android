@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlin.coroutines.cancellation.CancellationException
 
-inline fun <R> runCatchingCancellable(block: () -> R): Result<R> {
+internal inline fun <R> runCatchingCancellable(block: () -> R): Result<R> {
     return try {
         Result.success(block())
     } catch (cancellationException: CancellationException) {

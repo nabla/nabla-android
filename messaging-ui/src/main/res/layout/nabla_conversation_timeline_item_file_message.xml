@@ -13,7 +13,7 @@
         android:layout_width="233dp"
         android:layout_height="166dp"
         android:importantForAccessibility="no"
-        android:scaleType="center"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +34,7 @@
             android:id="@+id/chatComposerTopDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/on_surface_alpha_12"
+            android:background="@color/nabla_on_surface_alpha_12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
-            app:srcCompat="@drawable/ic_nabla_pick_file"
+            app:srcCompat="@drawable/nabla_ic_pick_file"
             tools:tint="?attr/colorOnSurface"
             />
 

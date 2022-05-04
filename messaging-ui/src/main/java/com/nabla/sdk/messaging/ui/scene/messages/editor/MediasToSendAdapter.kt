@@ -22,14 +22,13 @@ import coil.loadAny
 import coil.size.OriginalSize
 import coil.size.PixelSize
 import coil.size.Size
-import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
+import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaToSendBinding
-import java.lang.IllegalStateException
 import kotlin.math.max
 
 internal class MediasToSendAdapter(
@@ -102,7 +101,7 @@ internal class MediasToSendAdapter(
                         is PixelSize -> size
                     }
                     val bitmap = pool.get(targetSize.width, targetSize.height, Bitmap.Config.ARGB_8888)
-                    bitmap.eraseColor(context.getColor(R.color.white))
+                    bitmap.eraseColor(context.getColor(R.color.nabla_white))
                     val xScale = targetSize.width.toFloat() / firstPage.width.toFloat()
                     val yScale = targetSize.height.toFloat() / firstPage.height.toFloat()
                     val cropScale = max(xScale, yScale)

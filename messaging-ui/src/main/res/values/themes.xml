@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="hasValidMessagingOverlays" format="boolean" />
+    <attr name="nablaHasValidMessagingOverlays" format="boolean" />
     <declare-styleable name="NablaThemeOverlayApplier">
         <attr name="nablaMessagingThemeOverlay" format="reference" />
     </declare-styleable>
 
     <!-- Theme overlay adding Nabla UI customization attrs with their defaults, see attrs.xml -->
-    <style name="ThemeOverlay.Nabla.Messaging" parent="">
-        <item name="hasValidMessagingOverlays">true</item>
+    <style name="Nabla.ThemeOverlay.Messaging" parent="">
+        <item name="nablaHasValidMessagingOverlays">true</item>
 
-        <item name="nablaAvatarViewStyle">@style/Widget.Nabla.AvatarView</item>
+        <item name="nablaAvatarViewStyle">@style/Nabla.Widget.AvatarView</item>
         <item name="nablaRoundedCornersRadius">12dp</item>
 
         <item name="nablaMessaging_conversationPreviewTitleAppearance">?textAppearanceBodyLarge</item>
         <item name="nablaMessaging_conversationPreviewSubtitleAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationPreviewTimeAppearance">?textAppearanceLabelLarge</item>
 
-        <item name="nablaMessaging_unreadMessagesIndicatorDrawable">@drawable/ic_nabla_unread_dot</item>
+        <item name="nablaMessaging_unreadMessagesIndicatorDrawable">@drawable/nabla_ic_unread_dot</item>
         <item name="nablaMessaging_conversationPreviewBackgroundDrawable">@drawable/nabla_conversation_preview_background</item>
         <item name="nablaMessaging_conversationPreviewBackgroundElevation">1dp</item>
         <item name="nablaMessaging_conversationHeaderTitleAppearance">?textAppearanceTitleMedium</item>
         <item name="nablaMessaging_conversationHeaderSubtitleAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationDateSeparatorAppearance">?textAppearanceLabelMedium</item>
-        <item name="nablaMessaging_conversationPatientMessageAppearance">@style/TextAppearance.Nabla.TextMessage.Patient</item>
-        <item name="nablaMessaging_conversationProviderMessageAppearance">@style/TextAppearance.Nabla.TextMessage.Provider</item>
+        <item name="nablaMessaging_conversationPatientMessageAppearance">@style/Nabla.TextAppearance.TextMessage.Patient</item>
+        <item name="nablaMessaging_conversationProviderMessageAppearance">@style/Nabla.TextAppearance.TextMessage.Provider</item>
         <item name="nablaMessaging_conversationDeletedMessageAppearance">?textAppearanceBodyLarge</item>
         <item name="nablaMessaging_conversationMessageAuthorAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationMessageStatusAppearance">?textAppearanceBodyMedium</item>
@@ -31,14 +31,14 @@
         <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurface</item>
         <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurface</item>
         <item name="nablaMessaging_sendMessageIconTint">@color/nabla_conversation_send_message_selector</item>
-        <item name="nablaMessaging_conversationComposerEditTextStyle">@style/Widget.Nabla.Messaging.ComposerEditTextStyle</item>
+        <item name="nablaMessaging_conversationComposerEditTextStyle">@style/Nabla.Widget.Messaging.ComposerEditTextStyle</item>
         <item name="nablaMessaging_conversationComposerBackground">@drawable/nabla_conversation_composer_background</item>
 
-        <item name="nablaMessaging_sendMessageIcon">@drawable/ic_nabla_send</item>
-        <item name="nablaMessaging_addMediaIcon">@drawable/ic_nabla_add</item>
-        <item name="nablaMessaging_mediaSourceCameraIcon">@drawable/ic_nabla_camera</item>
-        <item name="nablaMessaging_mediaSourceGalleryIcon">@drawable/ic_nabla_photo</item>
-        <item name="nablaMessaging_mediaSourceDocumentIcon">@drawable/ic_nabla_pick_file</item>
+        <item name="nablaMessaging_sendMessageIcon">@drawable/nabla_ic_send</item>
+        <item name="nablaMessaging_addMediaIcon">@drawable/nabla_ic_add</item>
+        <item name="nablaMessaging_mediaSourceCameraIcon">@drawable/nabla_ic_camera</item>
+        <item name="nablaMessaging_mediaSourceGalleryIcon">@drawable/nabla_ic_photo</item>
+        <item name="nablaMessaging_mediaSourceDocumentIcon">@drawable/nabla_ic_pick_file</item>
         <item name="nablaMessaging_conversationBackgroundColor">?android:colorBackground</item>
         <item name="nablaMessaging_conversationHeaderColor">?colorSurface</item>
 
@@ -47,12 +47,12 @@
 
     </style>
 
-    <style name="TextAppearance.Nabla.TextMessage.Patient" parent="TextAppearance.Material3.BodyLarge">
+    <style name="Nabla.TextAppearance.TextMessage.Patient" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">?colorOnPrimary</item>
         <item name="fontFamily">?fontFamily</item>
     </style>
 
-    <style name="TextAppearance.Nabla.TextMessage.Provider" parent="TextAppearance.Material3.BodyLarge">
+    <style name="Nabla.TextAppearance.TextMessage.Provider" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">?colorPrimaryDark</item>
         <item name="fontFamily">?fontFamily</item>
     </style>

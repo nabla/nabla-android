@@ -1,8 +1,8 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
-sealed interface SendStatus {
-    object ToBeSent : SendStatus
-    object Sending : SendStatus
-    object Sent : SendStatus
-    object ErrorSending : SendStatus
+public sealed interface SendStatus {
+    public object ToBeSent : SendStatus
+    public object Sending : SendStatus
+    public object Sent : SendStatus
+    public object ErrorSending : SendStatus
 }

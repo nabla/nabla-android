@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Just a theme for IDE preview -->
-    <style name="Preview.Nabla.Messaging" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="nablaMessagingThemeOverlay">@style/ThemeOverlay.Nabla.Messaging</item>
+    <style name="Nabla.Preview.Messaging" parent="Theme.Material3.DayNight.NoActionBar" tools:ignore="UnusedResources">
+        <item name="nablaMessagingThemeOverlay">@style/Nabla.ThemeOverlay.Messaging</item>
     </style>
 </resources>

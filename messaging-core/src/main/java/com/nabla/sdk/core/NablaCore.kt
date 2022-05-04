@@ -16,7 +16,7 @@ import com.nabla.sdk.core.injection.CoreContainer
  * We recommend you reuse the same instance for all interactions,
  * check documentation of [initialize] and [getInstance].
  */
-class NablaCore private constructor(
+public class NablaCore private constructor(
     private val name: String,
     private val nablaCoreConfig: NablaCoreConfig,
 ) {
@@ -36,12 +36,12 @@ class NablaCore private constructor(
      * @see initialize
      * @see com.nabla.sdk.core.domain.boundary.SessionTokenProvider
      */
-    suspend fun authenticate(userId: String): Result<Unit> {
+    public suspend fun authenticate(userId: String): Result<Unit> {
         return coreContainer.loginInteractor().invoke(userId.toId())
             .mapFailureAsNablaException(coreContainer.exceptionMapper)
     }
 
-    companion object {
+    public companion object {
         private const val DEFAULT_NAMESPACE = "nabla-core"
 
         @SuppressLint("StaticFieldLeak")
@@ -57,7 +57,7 @@ class NablaCore private constructor(
          *
          * @see initialize
          */
-        fun getInstance(): NablaCore {
+        public fun getInstance(): NablaCore {
             return defaultSingletonInstance ?: throw NablaException.Configuration.MissingInitialize
         }
 
@@ -70,7 +70,7 @@ class NablaCore private constructor(
          *   and passing it to other components of the SDK relying on [NablaCore],
          *   for instance [com.nabla.sdk.messaging.core.NablaMessaging.initialize].
          */
-        fun initialize(nablaCoreConfig: NablaCoreConfig, name: String? = null): NablaCore {
+        public fun initialize(nablaCoreConfig: NablaCoreConfig, name: String? = null): NablaCore {
             synchronized(this) {
                 return if (name == null) {
                     defaultSingletonInstance

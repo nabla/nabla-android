@@ -7,7 +7,7 @@
         android:height="44dp"
         android:width="44dp"
         />
-    <solid android:color="@color/on_surface_alpha_12" />
+    <solid android:color="@color/nabla_on_surface_alpha_12" />
     <padding
         android:bottom="14dp"
         android:left="14dp"

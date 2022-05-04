@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.messaging.ui.R
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.net.URI
