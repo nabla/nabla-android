@@ -6,6 +6,7 @@ internal class BaseExceptionMapper : ExceptionMapper {
     override fun map(exception: Throwable): NablaException? {
         val authException: Throwable? = exception.asAuthException()
         return when {
+            exception is NablaException -> exception
             authException != null -> NablaException.Authentication(authException)
             exception.isNetworkError() -> NablaException.Network(exception)
             exception is GraphQLException -> NablaException.Server(
