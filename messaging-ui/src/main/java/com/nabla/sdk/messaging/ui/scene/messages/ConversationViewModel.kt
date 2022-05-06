@@ -17,7 +17,7 @@ import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.NablaMessaging
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -79,9 +79,11 @@ internal class ConversationViewModel(
 
     init {
         stateFlow = makeStateFlow(
+            nablaMessaging.watchConversation(conversationId)
+                .handleConversationDataSideEffects(),
             nablaMessaging
                 .watchConversationMessages(conversationId)
-                .handleConversationDataSideEffects()
+                .handleConversationMessagesSideEffects()
         )
 
         editorStateFlow = combine(
@@ -94,9 +96,13 @@ internal class ConversationViewModel(
         }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = EditorState(canSubmit = false))
     }
 
-    private fun makeStateFlow(conversationDataFlow: Flow<WatchPaginatedResponse<ConversationWithMessages>>): StateFlow<State> {
+    private fun makeStateFlow(
+        conversationDataFlow: Flow<Conversation>,
+        conversationMessagesFlow: Flow<WatchPaginatedResponse<ConversationMessages>>,
+    ): StateFlow<State> {
         return combine(
             conversationDataFlow,
+            conversationMessagesFlow,
             selectedMessageIdFlow,
             StateMapper()::mapToState,
         )
@@ -115,9 +121,13 @@ internal class ConversationViewModel(
             .stateIn(viewModelScope + Dispatchers.Default, SharingStarted.Eagerly, initialValue = State.Loading)
     }
 
-    private fun Flow<WatchPaginatedResponse<ConversationWithMessages>>.handleConversationDataSideEffects() =
+    private fun Flow<Conversation>.handleConversationDataSideEffects() =
+        onEach { conversation ->
+            conversation.markConversationAsReadIfNeeded()
+        }
+
+    private fun Flow<WatchPaginatedResponse<ConversationMessages>>.handleConversationMessagesSideEffects() =
         onEach { response ->
-            response.content.conversation.markConversationAsReadIfNeeded()
             latestLoadMoreCallback = response.loadMore
         }
 
@@ -392,15 +402,16 @@ internal class ConversationViewModel(
         private val timelineBuilder = TimelineBuilder()
 
         fun mapToState(
-            conversationWithMessagesResponse: WatchPaginatedResponse<ConversationWithMessages>,
+            conversation: Conversation,
+            conversationMessagesResponse: WatchPaginatedResponse<ConversationMessages>,
             selectedMessageId: MessageId?,
         ): State {
             return State.ConversationLoaded(
-                conversation = conversationWithMessagesResponse.content.conversation,
+                conversation = conversation,
                 items = timelineBuilder.buildTimeline(
-                    messages = conversationWithMessagesResponse.content.messages,
-                    hasMore = conversationWithMessagesResponse.loadMore != null,
-                    providersInConversation = conversationWithMessagesResponse.content.conversation.providersInConversation,
+                    messages = conversationMessagesResponse.content.messages,
+                    hasMore = conversationMessagesResponse.loadMore != null,
+                    providersInConversation = conversation.providersInConversation,
                     selectedMessageId = selectedMessageId,
                 ),
             )

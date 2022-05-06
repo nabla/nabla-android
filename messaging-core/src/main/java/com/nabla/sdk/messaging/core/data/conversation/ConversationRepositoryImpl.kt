@@ -22,6 +22,10 @@ internal class ConversationRepositoryImpl(
         return gqlConversationDataSource.createConversation()
     }
 
+    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+        return gqlConversationDataSource.watchConversation(conversationId)
+    }
+
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
         return gqlConversationDataSource.watchConversations()
     }

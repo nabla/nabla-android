@@ -12,6 +12,7 @@ import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.ConversationListQuery
+import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.graphql.CreateConversationMutation
 import com.nabla.sdk.graphql.MaskAsSeenMutation
@@ -95,8 +96,6 @@ internal class GqlConversationDataSource constructor(
                     mapper.mapToConversation(it.conversationFragment)
                 }
                 return@map PaginatedList(items, queryData.conversations.hasMore)
-            }.notifyTypingUpdates {
-                it.items.flatMap { it.providersInConversation }
             }
         return flowOf(conversationsEventsFlow, dataFlow)
             .flattenMerge()
@@ -116,6 +115,17 @@ internal class GqlConversationDataSource constructor(
                 .conversationFragment
         )
     }
+
+    fun watchConversation(conversationId: ConversationId): Flow<Conversation> = apolloClient.query(ConversationQuery(conversationId.value))
+        .fetchPolicy(FetchPolicy.CacheAndNetwork)
+        .watch(fetchThrows = true)
+        .map { response -> response.dataAssertNoErrors }
+        .notifyTypingUpdates { data ->
+            data.conversation.conversation.conversationFragment.providers
+                .map { it.providerInConversationFragment }
+                .map { mapper.mapToProviderInConversation(it) }
+        }
+        .map { queryData -> mapper.mapToConversation(queryData.conversation.conversation.conversationFragment) }
 
     companion object {
         private val FIRST_CONVERSATIONS_PAGE_QUERY = ConversationListQuery(OpaqueCursorPage(cursor = Optional.Absent))

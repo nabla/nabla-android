@@ -41,7 +41,7 @@ internal class GqlMapper(private val logger: Logger) {
         )
     }
 
-    private fun mapToProviderInConversation(
+    fun mapToProviderInConversation(
         fragment: ProviderInConversationFragment
     ): ProviderInConversation {
         return ProviderInConversation(

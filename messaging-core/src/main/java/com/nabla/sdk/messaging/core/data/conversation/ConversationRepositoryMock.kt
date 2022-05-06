@@ -11,6 +11,7 @@ import com.nabla.sdk.messaging.core.domain.entity.fake
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.Clock
 import kotlin.random.Random
@@ -27,6 +28,10 @@ internal class ConversationRepositoryMock : ConversationRepository {
 
     override suspend fun createConversation(): Conversation {
         return Conversation.randomFake()
+    }
+
+    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+        return flowOf(Conversation.fake(id = conversationId.value))
     }
 
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {

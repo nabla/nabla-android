@@ -1,16 +1,14 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.apollographql.apollo3.exception.ApolloNetworkException
-import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
-import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.fake
 import kotlinx.coroutines.delay
@@ -52,11 +50,11 @@ internal class MessageRepositoryMock : MessageRepository {
         }
     )
 
-    override fun watchConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages> {
+    override fun watchConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationMessages> {
         return messagesListFlow.map { messages ->
-            PaginatedConversationWithMessages(
-                conversationWithMessages = ConversationWithMessages.fake(
-                    conversation = Conversation.fake(providersInConversation = listOf(ProviderInConversation.fake(provider))),
+            PaginatedConversationMessages(
+                conversationMessages = ConversationMessages.fake(
+                    conversation = Conversation.fake(),
                     messages = messages.sortedByDescending { it.baseMessage.sentAt }
                 ),
                 hasMore = true,

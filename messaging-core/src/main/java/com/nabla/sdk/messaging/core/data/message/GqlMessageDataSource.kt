@@ -8,15 +8,13 @@ import com.apollographql.apollo3.cache.normalized.optimisticUpdates
 import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
-import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.readFromCache
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.entity.PaginatedConversationWithMessages
 import com.nabla.sdk.graphql.ConversationEventsSubscription
+import com.nabla.sdk.graphql.ConversationMessagesQuery
 import com.nabla.sdk.graphql.ConversationQuery
-import com.nabla.sdk.graphql.ConversationWithMessagesQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
 import com.nabla.sdk.graphql.SetTypingMutation
@@ -36,7 +34,7 @@ import com.nabla.sdk.graphql.type.UploadInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
@@ -118,7 +116,7 @@ internal class GqlMessageDataSource(
         }
     }
 
-    fun watchRemoteConversationWithMessages(conversationId: ConversationId): Flow<PaginatedConversationWithMessages> {
+    fun watchRemoteConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationMessages> {
         val query = firstMessagePageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
@@ -130,15 +128,13 @@ internal class GqlMessageDataSource(
                 val items = page.data.mapNotNull { it?.messageFragment }.mapNotNull {
                     mapper.mapToMessage(it, SendStatus.Sent)
                 }
-                return@map PaginatedConversationWithMessages(
-                    conversationWithMessages = ConversationWithMessages(
-                        conversation = mapper.mapToConversation(queryData.conversation.conversation.conversationFragment),
+                return@map PaginatedConversationMessages(
+                    conversationMessages = ConversationMessages(
+                        conversationId = queryData.conversation.conversation.id.toConversationId(),
                         messages = items,
                     ),
                     hasMore = page.hasMore,
                 )
-            }.notifyTypingUpdates {
-                it.conversationWithMessages.conversation.providersInConversation
             }
         return flowOf(
             conversationEventsFlow(conversationId),
@@ -242,7 +238,7 @@ internal class GqlMessageDataSource(
     }
 
     private fun firstMessagePageQuery(id: ConversationId) =
-        ConversationWithMessagesQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
+        ConversationMessagesQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
 
     suspend fun setTyping(conversationId: ConversationId, typing: Boolean) {
         apolloClient.mutation(SetTypingMutation(conversationId.value, typing)).execute()

@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface ConversationRepository {
     suspend fun createConversation(): Conversation
+    fun watchConversation(conversationId: ConversationId): Flow<Conversation>
     fun watchConversations(): Flow<PaginatedList<Conversation>>
     suspend fun loadMoreConversations()
     suspend fun markConversationAsRead(conversationId: ConversationId)

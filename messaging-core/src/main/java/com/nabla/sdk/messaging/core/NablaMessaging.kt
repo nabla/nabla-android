@@ -16,7 +16,7 @@ import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationWithMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -99,6 +99,24 @@ public class NablaMessaging private constructor(
     }
 
     /**
+     * Watch a conversation details.
+     *
+     * This flow will be called with a new [Conversation] every time something changes
+     * in that specific conversation state.
+     *
+     * You probably want to use that method to watch for things like the [Conversation.title]
+     * changes or [Conversation.providersInConversation] changes.
+     *
+     * Returned flow might throw any of [NablaException] children.
+     *
+     * @param conversationId the id of the conversation you want to watch update for.
+     */
+    public fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+        return conversationRepository.watchConversation(conversationId)
+            .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
+    }
+
+    /**
      * Watch the list of messages in a conversation.
      * The current user should be involved in that conversation or a security error will be raised.
      *
@@ -108,7 +126,7 @@ public class NablaMessaging private constructor(
      *
      * @param conversationId the id from [Conversation.id].
      */
-    public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationWithMessages>> {
+    public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 messageRepository.loadMoreMessages(conversationId)
@@ -116,10 +134,10 @@ public class NablaMessaging private constructor(
         }
 
         return messageRepository.watchConversationMessages(conversationId)
-            .map { paginatedConversationWithMessages ->
+            .map { paginatedConversationMessages ->
                 WatchPaginatedResponse(
-                    content = paginatedConversationWithMessages.conversationWithMessages,
-                    loadMore = if (paginatedConversationWithMessages.hasMore) {
+                    content = paginatedConversationMessages.conversationMessages,
+                    loadMore = if (paginatedConversationMessages.hasMore) {
                         loadMoreCallback
                     } else null
                 )

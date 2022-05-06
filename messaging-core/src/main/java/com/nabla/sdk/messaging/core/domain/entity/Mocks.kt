@@ -20,11 +20,11 @@ import kotlin.time.Duration.Companion.minutes
  * Ultimately we'll move these mockers to test srcSet to help with UTs.
  */
 
-internal fun ConversationWithMessages.Companion.fake(
+internal fun ConversationMessages.Companion.fake(
     conversation: Conversation = Conversation.fake(),
     messages: List<Message> = ((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }),
-) = ConversationWithMessages(
-    conversation = conversation,
+) = ConversationMessages(
+    conversationId = conversation.id,
     messages = messages,
 )
 

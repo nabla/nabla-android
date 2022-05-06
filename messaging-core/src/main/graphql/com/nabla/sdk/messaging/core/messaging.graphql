@@ -42,10 +42,10 @@ mutation SetTyping($conversationId: UUID!, $isTyping: Boolean!) {
     }
 }
 
-query ConversationWithMessages($id: UUID!, $pageInfo: OpaqueCursorPage!) {
+query ConversationMessages($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {
-            ...ConversationFragment
+            id
             ...ConversationMessagesPageFragment
         }
     }
