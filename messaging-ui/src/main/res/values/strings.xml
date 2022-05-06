@@ -42,7 +42,7 @@
     <string name="nabla_conversation_full_screen_media_share_content_description">Share</string>
     <string name="nabla_conversation_attachment_media_picker_camera">Camera</string>
     <string name="nabla_conversation_attachment_media_picker_photos_library">Photo’s library</string>
-    <string name="nabla_conversation_attachment_media_picker_docuemnts">Pick a file</string>
+    <string name="nabla_conversation_attachment_media_picker_documents">Pick a file</string>
 
     <string name="nabla_conversation_deleted_message_placeholder">Deleted message</string>
     <string name="nabla_conversation_file_message_content_description">File message</string>

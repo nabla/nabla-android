@@ -42,7 +42,7 @@
     <string name="nabla_conversation_full_screen_media_share_content_description">Partager</string>
     <string name="nabla_conversation_attachment_media_picker_camera">Caméra</string>
     <string name="nabla_conversation_attachment_media_picker_photos_library">Bibliothèque photos</string>
-    <string name="nabla_conversation_attachment_media_picker_docuemnts">Choisir un fichier</string>
+    <string name="nabla_conversation_attachment_media_picker_documents">Choisir un fichier</string>
 
     <string name="nabla_conversation_deleted_message_placeholder">Message supprimé</string>
     <string name="nabla_conversation_file_message_content_description">Message fichier</string>
