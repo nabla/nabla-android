@@ -13,17 +13,17 @@
 
     <string name="nabla_conversation_message_sending_status">Sending…</string>
     <string name="nabla_conversation_message_sent_status">Sent</string>
-    <string name="nabla_conversation_message_error_status">Failed to send, tap to try again… </string>
+    <string name="nabla_conversation_message_error_status">Failed to send, tap to try again…</string>
 
     <string name="nabla_conversation_no_pdf_third_party_app_info_title">No PDF viewer found</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_message">Do you want to install Google Drive to open PDF files?</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Install</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Yes</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_negative">No</string>
 
     <string name="nabla_error_message_network_title">There was a network error</string>
     <string name="nabla_error_message_network_body">Please check your internet and try again.</string>
     <string name="nabla_error_message_generic_title">There was an error</string>
-    <string name="nabla_error_message_generic_body">If this keeps happening please reach out to us.</string>
+    <string name="nabla_error_message_generic_body">If this keeps happening, please reach out to us.</string>
     <string name="nabla_error_retry_cta">Retry</string>
 
     <string name="nabla_error_message_conversations_loading_more">There was an error loading more conversations, please try again.</string>
@@ -41,8 +41,8 @@
     <string name="nabla_conversation_full_screen_media_close_content_description">Close</string>
     <string name="nabla_conversation_full_screen_media_share_content_description">Share</string>
     <string name="nabla_conversation_attachment_media_picker_camera">Camera</string>
-    <string name="nabla_conversation_attachment_media_picker_photos_library">Photo’s library</string>
-    <string name="nabla_conversation_attachment_media_picker_documents">Pick a file</string>
+    <string name="nabla_conversation_attachment_media_picker_photos_library">Gallery</string>
+    <string name="nabla_conversation_attachment_media_picker_documents">Files</string>
 
     <string name="nabla_conversation_deleted_message_placeholder">Deleted message</string>
     <string name="nabla_conversation_file_message_content_description">File message</string>
@@ -58,5 +58,5 @@
     <string name="nabla_conversation_camera_picture_permission_rational_title">Authorisation to access camera</string>
     <string name="nabla_conversation_camera_picture_permission_rational_description">To take a photo, we need authorisation to access your camera</string>
     <string name="nabla_permission_rational_default_accept">Accept</string>
-    <string name="nabla_permission_rational_default_decline">Refuse</string>
+    <string name="nabla_permission_rational_default_decline">Decline</string>
 </resources>
