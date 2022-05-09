@@ -26,15 +26,15 @@
     <string name="nabla_error_message_generic_body">If this keeps happening, please reach out to us.</string>
     <string name="nabla_error_retry_cta">Retry</string>
 
-    <string name="nabla_error_message_conversations_loading_more">There was an error loading more conversations, please try again.</string>
-    <string name="nabla_error_message_conversation_loading_more">There was an error loading more messages, please try again.</string>
-    <string name="nabla_error_message_conversation_attachment_media_picker">There was an error opening media picker, please try again.</string>
-    <string name="nabla_error_message_conversation_attachment_camera_capturing">There was an error capturing a photo, please try again.</string>
-    <string name="nabla_error_message_conversation_attachment_camera_opening">There was an error opening the camera, please try again.</string>
-    <string name="nabla_error_message_conversation_attachment_library_opening">There was an error opening the library, please try again.</string>
-    <string name="nabla_error_message_conversation_link_opening">There was an error opening the link, please try again.</string>
-    <string name="nabla_error_message_conversation_deleting_message">There was an error deleting the message, please try again.</string>
-    <string name="nabla_error_message_conversation_clicked_url_parsing">There was an error processing the link, please try again.</string>
+    <string name="nabla_error_message_conversations_loading_more">An error occurred while loading more conversations, please try again.</string>
+    <string name="nabla_error_message_conversation_loading_more">An error occurred while loading more messages, please try again.</string>
+    <string name="nabla_error_message_conversation_attachment_media_picker">An error occurred while opening media picker, please try again.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_capturing">An error occurred while capturing a photo, please try again.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_opening">An error occurred while opening the camera, please try again.</string>
+    <string name="nabla_error_message_conversation_attachment_library_opening">An error occurred while opening the library, please try again.</string>
+    <string name="nabla_error_message_conversation_link_opening">An error occurred while opening the link, please try again.</string>
+    <string name="nabla_error_message_conversation_deleting_message">An error occurred while deleting the message, please try again.</string>
+    <string name="nabla_error_message_conversation_clicked_url_parsing">An error occurred while processing the link, please try again.</string>
 
     <string name="nabla_conversation_message_action_copy">Copy</string>
     <string name="nabla_conversation_message_action_delete">Delete</string>
