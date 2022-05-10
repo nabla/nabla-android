@@ -1,7 +1,6 @@
 package com.nabla.sdk.core
 
 import android.content.Context
-import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.messaging.core.BuildConfig
 
@@ -14,7 +13,6 @@ import com.nabla.sdk.messaging.core.BuildConfig
  * @param isLoggingEnabled Optional — whether to verbosely log or not.
  * @param additionalHeadersProvider Optional — useful to append additional query headers to http calls.
  *        This is exposed for internal usage and you should probably not use it in your app.
- * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
  */
 public class NablaCoreConfig(
     context: Context = defaultAppContext ?: throw NablaException.Configuration.MissingContext,
@@ -22,7 +20,6 @@ public class NablaCoreConfig(
     internal val baseUrl: String = "https://api.nabla.com/",
     internal val isLoggingEnabled: Boolean = BuildConfig.DEBUG,
     internal val additionalHeadersProvider: HeaderProvider? = null,
-    internal val sessionTokenProvider: SessionTokenProvider,
 ) {
     internal val context: Context = context.applicationContext
 

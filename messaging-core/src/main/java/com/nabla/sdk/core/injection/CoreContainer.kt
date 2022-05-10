@@ -24,11 +24,14 @@ import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
 import com.nabla.sdk.core.data.logger.LoggerImpl
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
+import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
+import com.nabla.sdk.core.domain.interactor.LogoutInteractor
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -47,7 +50,6 @@ internal class CoreContainer(
         TokenRepositoryImpl(
             tokenLocalDataSource,
             tokenRemoteDataSource,
-            config.sessionTokenProvider,
             patientRepository,
             logger
         )
@@ -87,7 +89,7 @@ internal class CoreContainer(
     private val authService: AuthService by lazy { retrofit.create(AuthService::class.java) }
     private val fileService: FileService by lazy { retrofit.create(FileService::class.java) }
 
-    private val tokenLocalDataSource = TokenLocalDataSource(securedKVStorage)
+    private val tokenLocalDataSource = TokenLocalDataSource()
     private val tokenRemoteDataSource by lazy { TokenRemoteDataSource(authService) }
 
     private val tokenRepository: TokenRepository by tokenRepositoryLazy
@@ -95,5 +97,12 @@ internal class CoreContainer(
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, config.context)
 
-    fun loginInteractor() = LoginInteractor(patientRepository, tokenRepository)
+    private val sessionLocalDataCleaner: SessionLocalDataCleaner = SessionLocalDataCleanerImpl(
+        apolloClient,
+        localPatientDataSource,
+        tokenLocalDataSource,
+    )
+
+    fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
+    fun loginInteractor() = LoginInteractor(patientRepository, tokenRepository, logoutInteractor())
 }

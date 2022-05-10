@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import com.nabla.sdk.core.NablaCore.Companion.getInstance
 import com.nabla.sdk.core.NablaCore.Companion.initialize
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
+import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
@@ -27,18 +28,23 @@ public class NablaCore private constructor(
     internal val coreContainer by coreContainerDelegate
 
     /**
-     * Authenticate the current user.
+     * Authenticate the current user with the given [userId].
      *
-     * This relies on the [NablaCoreConfig.sessionTokenProvider] callback specified during SDK configuration.
+     * Note that this method isn't suspending as it doesn't directly call the [sessionTokenProvider]
+     * but rather stores it to use it later if needed for an authenticated call.
      *
      * @param userId user identifier, typically created on Nabla server and communicated to your own server.
+     * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
      *
-     * @see initialize
      * @see com.nabla.sdk.core.domain.boundary.SessionTokenProvider
      */
-    public suspend fun authenticate(userId: String): Result<Unit> {
-        return coreContainer.loginInteractor().invoke(userId.toId())
-            .mapFailureAsNablaException(coreContainer.exceptionMapper)
+    public fun authenticate(
+        userId: String,
+        sessionTokenProvider: SessionTokenProvider,
+    ) {
+        runCatching {
+            coreContainer.loginInteractor().login(userId.toId(), sessionTokenProvider)
+        }.mapFailureAsNablaException(coreContainer.exceptionMapper)
     }
 
     public companion object {
@@ -69,8 +75,11 @@ public class NablaCore private constructor(
          *  - Or do specify a [name] but then will be responsible of maintaining the returned reference
          *   and passing it to other components of the SDK relying on [NablaCore],
          *   for instance [com.nabla.sdk.messaging.core.NablaMessaging.initialize].
+         *
+         * @param nablaCoreConfig optional configuration if you're not using the manifest for the API key or you want to override some defaults
+         * @param name optional name to create your own instance to manage
          */
-        public fun initialize(nablaCoreConfig: NablaCoreConfig, name: String? = null): NablaCore {
+        public fun initialize(nablaCoreConfig: NablaCoreConfig = NablaCoreConfig(), name: String? = null): NablaCore {
             synchronized(this) {
                 return if (name == null) {
                     defaultSingletonInstance

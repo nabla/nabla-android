@@ -6,6 +6,7 @@ import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -13,16 +14,16 @@ import kotlinx.coroutines.sync.withLock
 internal class TokenRepositoryImpl(
     private val tokenLocalDataSource: TokenLocalDataSource,
     private val tokenRemoteDataSource: TokenRemoteDataSource,
-    private val sessionTokenProvider: SessionTokenProvider,
     private val patientRepository: PatientRepository,
     private val logger: Logger,
 ) : TokenRepository {
 
     private val refreshLock = Mutex()
 
-    override fun initSession(refreshToken: String, accessToken: String?) {
-        tokenLocalDataSource.setRefreshToken(refreshToken)
-        tokenLocalDataSource.setAccessToken(accessToken)
+    private var sessionTokenProvider: SessionTokenProvider? = null
+
+    override fun initSession(sessionTokenProvider: SessionTokenProvider) {
+        this.sessionTokenProvider = sessionTokenProvider
     }
 
     override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): String {
@@ -52,15 +53,17 @@ internal class TokenRepositoryImpl(
                 message = "using still valid refresh token to refresh tokens",
                 tag = Logger.AUTH_TAG
             )
-            runCatchingCancellable {
+
+            return runCatchingCancellable {
                 val freshTokens = tokenRemoteDataSource.refresh(refreshToken.toString())
                 tokenLocalDataSource.setAuthTokens(freshTokens)
                 logger.debug(
                     message = "tokens refreshed, using refreshed access token",
                     tag = Logger.AUTH_TAG
                 )
-                return freshTokens.accessToken
-            }.onFailure { refreshTokenError ->
+
+                freshTokens.accessToken
+            }.getOrElse { refreshTokenError ->
                 // Fallback to refreshing session
                 logger.debug(
                     message = "fail refresh tokens, fallback to refresh session",
@@ -82,15 +85,16 @@ internal class TokenRepositoryImpl(
         return renewSessionAuthTokens().accessToken
     }
 
-    override suspend fun clearSession() {
-        refreshLock.withLock {
-            tokenLocalDataSource.clear()
-        }
+    override fun clearSession() {
+        sessionTokenProvider = null
+        tokenLocalDataSource.clear()
     }
 
     private suspend fun renewSessionAuthTokens(): AuthTokens {
+        val sessionTokenProvider = sessionTokenProvider ?: throw NablaException.Authentication(RuntimeException("No call to authenticate made"))
         val patientId = patientRepository.getPatientId()
-            ?: throw IllegalStateException("No patient set")
+            ?: throw NablaException.Internal(RuntimeException("Session token provider available without patientId"))
+
         return sessionTokenProvider.fetchNewSessionAuthTokens(patientId).getOrThrow().also {
             tokenLocalDataSource.setAuthTokens(it)
         }
