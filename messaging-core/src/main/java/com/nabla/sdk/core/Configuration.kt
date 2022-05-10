@@ -14,7 +14,7 @@ import com.nabla.sdk.messaging.core.BuildConfig
  * @param additionalHeadersProvider Optional — useful to append additional query headers to http calls.
  *        This is exposed for internal usage and you should probably not use it in your app.
  */
-public class NablaCoreConfig(
+public class Configuration(
     context: Context = defaultAppContext ?: throw NablaException.Configuration.MissingContext,
     internal val publicApiKey: String = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
     internal val baseUrl: String = "https://api.nabla.com/",

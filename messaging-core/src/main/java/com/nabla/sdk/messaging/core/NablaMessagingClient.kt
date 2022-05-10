@@ -1,15 +1,15 @@
 package com.nabla.sdk.messaging.core
 
 import androidx.annotation.CheckResult
-import com.nabla.sdk.core.NablaCore
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
-import com.nabla.sdk.messaging.core.NablaMessaging.Companion.getInstance
-import com.nabla.sdk.messaging.core.NablaMessaging.Companion.initialize
+import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.getInstance
+import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.initialize
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
 import com.nabla.sdk.messaging.core.data.message.MessageRepositoryMock
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
@@ -29,12 +29,12 @@ import kotlinx.coroutines.flow.map
  * Main entry-point for SDK messaging features.
  *
  * Mandatory: before any interaction with messaging features make sure you
- * successfully authenticated your user by calling [NablaCore.authenticate].
+ * successfully authenticated your user by calling [NablaClient.authenticate].
  *
  * We recommend you reuse the same instance for all interactions,
  * check documentation of [initialize] and [getInstance].
  */
-public class NablaMessaging private constructor(
+public class NablaMessagingClient private constructor(
     coreContainer: CoreContainer,
 ) {
 
@@ -250,20 +250,20 @@ public class NablaMessaging private constructor(
     }
 
     public companion object {
-        private var defaultSingletonInstance: NablaMessaging? = null
+        private var defaultSingletonInstance: NablaMessagingClient? = null
 
         /**
-         * Lazy initializer for the singleton of [NablaMessaging].
-         * Relies on the singleton in [NablaCore.getInstance].
+         * Lazy initializer for the singleton of [NablaMessagingClient].
+         * Relies on the singleton in [NablaClient.getInstance].
          *
          * Use for all interactions with the messaging SDK,
          * unless you prefer maintaining your own instances.
          * @see initialize
          */
-        public fun getInstance(): NablaMessaging {
+        public fun getInstance(): NablaMessagingClient {
             synchronized(this) {
                 return defaultSingletonInstance ?: run {
-                    val instance = initialize(NablaCore.getInstance())
+                    val instance = initialize(NablaClient.getInstance())
                     defaultSingletonInstance = instance
                     instance
                 }
@@ -271,11 +271,11 @@ public class NablaMessaging private constructor(
         }
 
         /**
-         * Creator of a custom instance of [NablaMessaging].
+         * Creator of a custom instance of [NablaMessagingClient].
          *
          * Unlike the singleton provided in [getInstance], you have the responsibility
          * of maintaining a reference to the returned instance.
          */
-        public fun initialize(nablaCore: NablaCore): NablaMessaging = NablaMessaging(nablaCore.coreContainer)
+        public fun initialize(nablaClient: NablaClient): NablaMessagingClient = NablaMessagingClient(nablaClient.coreContainer)
     }
 }

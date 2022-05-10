@@ -4,12 +4,12 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
-import com.nabla.sdk.messaging.core.NablaMessaging
+import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
 public class ConversationListViewModelFactory(
     owner: SavedStateRegistryOwner,
-    private val nablaMessaging: NablaMessaging = NablaMessaging.getInstance(),
+    private val messagingClient: NablaMessagingClient = NablaMessagingClient.getInstance(),
 ) : AbstractSavedStateViewModelFactory(owner, null) {
     override fun <T : ViewModel> create(
         key: String,
@@ -22,7 +22,7 @@ public class ConversationListViewModelFactory(
 
         @Suppress("UNCHECKED_CAST")
         return ConversationListViewModel(
-            nablaMessaging,
+            messagingClient,
         ) as T
     }
 }

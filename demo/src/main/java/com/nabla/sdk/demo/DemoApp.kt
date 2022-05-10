@@ -1,14 +1,14 @@
 package com.nabla.sdk.demo
 
 import android.app.Application
-import com.nabla.sdk.core.NablaCore
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.entity.AuthTokens
 
 class DemoApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        NablaCore.initialize()
-        NablaCore.getInstance().authenticate(
+        NablaClient.initialize()
+        NablaClient.getInstance().authenticate(
             userId = "dummy-user-id",
             sessionTokenProvider = {
                 // Emulate a call to authenticate the user on your server

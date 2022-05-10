@@ -41,7 +41,7 @@ import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
-import com.nabla.sdk.messaging.core.NablaMessaging
+import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import com.nabla.sdk.messaging.ui.R
@@ -57,7 +57,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
 
 public open class ConversationFragment : Fragment() {
-    public open val nablaMessaging: NablaMessaging = NablaMessaging.getInstance()
+    public open val messagingClient: NablaMessagingClient = NablaMessagingClient.getInstance()
 
     private val viewModel: ConversationViewModel by viewModels {
         object : AbstractSavedStateViewModelFactory(this, arguments) {
@@ -68,7 +68,7 @@ public open class ConversationFragment : Fragment() {
                 handle: SavedStateHandle,
             ): T {
                 return ConversationViewModel(
-                    nablaMessaging = nablaMessaging,
+                    messagingClient = messagingClient,
                     savedStateHandle = handle,
                 ) as T
             }

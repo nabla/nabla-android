@@ -9,7 +9,7 @@ import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.messaging.core.NablaMessaging
+import com.nabla.sdk.messaging.core.NablaMessagingClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 public class ConversationListViewModel(
-    private val nablaMessaging: NablaMessaging,
+    private val messagingClient: NablaMessagingClient,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
 
@@ -30,7 +30,7 @@ public class ConversationListViewModel(
     internal val errorAlertEventFlow: LiveFlow<ErrorAlert> = errorAlertMutableFlow
 
     internal val stateFlow: StateFlow<State> =
-        nablaMessaging.watchConversations()
+        messagingClient.watchConversations()
             .map { result ->
                 latestLoadMoreCallback = result.loadMore
 
@@ -39,7 +39,7 @@ public class ConversationListViewModel(
                 ).eraseType()
             }
             .retryWhen { cause, _ ->
-                nablaMessaging.logger.error("Failed to fetch conversation list", cause, tag = LOGGING_TAG)
+                messagingClient.logger.error("Failed to fetch conversation list", cause, tag = LOGGING_TAG)
 
                 emit(
                     State.Error(if (cause is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic)
@@ -61,7 +61,7 @@ public class ConversationListViewModel(
         viewModelScope.launch {
             loadMore()
                 .onFailure { error ->
-                    nablaMessaging.logger.error("Error while loading more conversations", error, tag = LOGGING_TAG)
+                    messagingClient.logger.error("Error while loading more conversations", error, tag = LOGGING_TAG)
                     errorAlertMutableFlow.emit(ErrorAlert.LoadingMoreConversations(error))
                 }
         }
