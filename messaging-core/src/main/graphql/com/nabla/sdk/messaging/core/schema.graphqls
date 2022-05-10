@@ -72,6 +72,19 @@ type Message {
   clientId: UUID
 }
 
+type ConversationActivity {
+  id: UUID!
+
+  conversation: Conversation!
+
+  createdAt: DateTime!
+  activityTime: DateTime!
+
+  content: ConversationActivityContent!
+}
+
+union ConversationActivityContent = ProviderJoinedConversation
+
 type Conversation {
   id: UUID!
 
@@ -97,7 +110,7 @@ type ProviderInConversation {
   seenUntil: DateTime
 }
 
-union ConversationItem = Message
+union ConversationItem = Message | ConversationActivity
 
 type ConversationItemsPage {
   data: [ConversationItem]!
@@ -245,10 +258,21 @@ type ConversationDeletedEvent {
   conversationId: UUID!
 }
 
-union ConversationEvent = SubscriptionReadinessEvent | MessageCreatedEvent | MessageUpdatedEvent | TypingEvent
+union ConversationEvent =
+    SubscriptionReadinessEvent
+  | ConversationActivityCreated
+  | MessageCreatedEvent
+  | MessageUpdatedEvent
+  | TypingEvent
 
 type ConversationEventOutput {
   event: ConversationEvent!
+}
+
+# --- Conversation Events
+
+type ConversationActivityCreated {
+  activity: ConversationActivity!
 }
 
 type MessageCreatedEvent {
@@ -261,4 +285,10 @@ type MessageUpdatedEvent {
 
 type TypingEvent {
   provider: ProviderInConversation!
+}
+
+# --- Conversation Activity Contents
+
+type ProviderJoinedConversation {
+  provider: Provider
 }
