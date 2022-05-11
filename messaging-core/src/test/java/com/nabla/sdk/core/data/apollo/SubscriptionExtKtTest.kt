@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.net.UnknownHostException
 
-class SubscriptionExtKtTest {
+internal class SubscriptionExtKtTest {
     @Test
     fun `gql subscription recovers from network error`() {
         val gqlFlow = gqlFlowThatThrowsNetworkErrorThenEmitItem()

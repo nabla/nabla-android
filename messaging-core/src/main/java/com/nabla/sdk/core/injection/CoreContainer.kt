@@ -1,12 +1,10 @@
 package com.nabla.sdk.core.injection
 
-import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.cache.normalized.normalizedCache
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.Configuration
-import com.nabla.sdk.core.data.apollo.TypeAndUuidCacheKeyGenerator
+import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
 import com.nabla.sdk.core.data.auth.PublicApiKeyInterceptor
@@ -65,12 +63,14 @@ internal class CoreContainer(
     }
 
     val apolloClient by lazy {
-        ApolloClient.Builder()
-            .serverUrl(configuration.baseUrl + "v1/patient/graphql/sdk/authenticated")
-            .normalizedCache(
-                normalizedCacheFactory = SqlNormalizedCacheFactory(configuration.context, "nabla_cache_apollo_$name.db"),
-                cacheKeyGenerator = TypeAndUuidCacheKeyGenerator
-            ).okHttpClient(okHttpClient)
+        ApolloFactory
+            .configureBuilder(
+                normalizedCacheFactory = SqlNormalizedCacheFactory(
+                    configuration.context,
+                    "nabla_cache_apollo_$name.db"
+                )
+            ).serverUrl(configuration.baseUrl + "v1/patient/graphql/sdk/authenticated")
+            .okHttpClient(okHttpClient)
             .build()
     }
 

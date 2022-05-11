@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.conversation
 
+import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
@@ -37,14 +38,16 @@ internal class GqlConversationDataSource constructor(
 ) {
     private val tag = Logger.asSdkTag("conversation")
 
-    private val conversationsEventsFlow = apolloClient.subscription(ConversationsEventsSubscription())
-        .toFlow()
-        .retryOnNetworkErrorAndShareIn(coroutineScope) {
-            logger.debug("Event $it", tag = tag)
-            it.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
-                insertConversationToConversationsListCache(it)
+    private val conversationsEventsFlow by lazy {
+        apolloClient.subscription(ConversationsEventsSubscription())
+            .toFlow()
+            .retryOnNetworkErrorAndShareIn(coroutineScope) {
+                logger.debug("Event $it", tag = tag)
+                it.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
+                    insertConversationToConversationsListCache(it)
+                }
             }
-        }
+    }
 
     private suspend fun insertConversationToConversationsListCache(
         conversation: ConversationFragment,
@@ -128,6 +131,7 @@ internal class GqlConversationDataSource constructor(
         .map { queryData -> mapper.mapToConversation(queryData.conversation.conversation.conversationFragment) }
 
     companion object {
-        private val FIRST_CONVERSATIONS_PAGE_QUERY = ConversationListQuery(OpaqueCursorPage(cursor = Optional.Absent))
+        @VisibleForTesting
+        internal val FIRST_CONVERSATIONS_PAGE_QUERY = ConversationListQuery(OpaqueCursorPage(cursor = Optional.Absent))
     }
 }

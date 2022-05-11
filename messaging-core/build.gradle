@@ -65,6 +65,7 @@ apollo {
     packageName.set("com.nabla.sdk.graphql")
     mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
     mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
+    generateTestBuilders.set(true)
 }
 
 dependencies {
@@ -88,4 +89,6 @@ dependencies {
     testImplementation libs.turbine
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.mockk
+    testImplementation libs.apollo.testingSupport
+    testImplementation libs.kotlin.test
 }
