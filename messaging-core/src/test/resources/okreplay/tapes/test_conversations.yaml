@@ -1,0 +1,161 @@
+!tape
+name: test conversations
+interactions:
+- recorded: 2022-05-12T14:05:00.667Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 7d1447f32538f697270eb23c4a1230e709ef0ba187cf8f93be9e83de84f335de
+      X-APOLLO-OPERATION-NAME: CreateConversation
+    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation { createConversation { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment
+      on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment
+      on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '350'
+      Content-Type: application/json; charset=UTF-8
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '323'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 3a9ec412-459f-48ba-8f27-5bbbe2925b16
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"74882c8a-6539-44d7-9d12-626f85cebc64","title":null,"description":null,"createdAt":"2022-05-12T16:05:00.656+02:00","updatedAt":"2022-05-12T16:05:00.656+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-05-12T14:05:01.578Z
+  request:
+    method: GET
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      Connection: Upgrade
+      Sec-WebSocket-Extensions: permessage-deflate
+      Sec-WebSocket-Key: EIdLM6dL9rVYFkp6NHB27w==
+      Sec-WebSocket-Protocol: graphql-ws
+      Sec-WebSocket-Version: '13'
+      Upgrade: websocket
+  response:
+    status: 101
+    headers:
+      Connection: Upgrade
+      Sec-WebSocket-Accept: naJv/ME9zQ5Yvgr8UwlYOs7sI9Q=
+      Sec-WebSocket-Protocol: graphql-ws
+      Upgrade: websocket
+      Vary: Origin
+      X-Request-ID: 0ef80bea-36fa-4f8a-9dd4-e853fb96010a
+    body: ''
+- recorded: 2022-05-12T14:05:01.617Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 244deb178192060baf2b4a8957f3cc1cffc740319d7b09da0641aaa4dcb0f46a
+      X-APOLLO-OPERATION-NAME: ConversationList
+    body: '{"operationName":"ConversationList","variables":{"pageInfo":{}},"query":"query ConversationList($pageInfo: OpaqueCursorPage!) { conversations(page: $pageInfo) { conversations { __typename ...ConversationFragment } hasMore nextCursor } }  fragment
+      EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider
+      { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
+      } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '24479'
+      Content-Type: application/json; charset=UTF-8
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '323'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 4844df9b-0d53-43e9-8451-99681e0021ce
+    body: '{"data":{"conversations":{"conversations":[{"__typename":"Conversation","id":"506cb7b9-02ff-4256-8ca5-2b2a08b84c5f","title":null,"description":null,"createdAt":"2022-04-29T11:11:06.202+02:00","updatedAt":"2022-05-05T21:03:59.209+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vincent : hello","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"51b3038c-aee1-42bc-baff-2029b024deb1","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-05-06T10:29:46.530+02:00"}]},{"__typename":"Conversation","id":"6502a008-0585-4524-860e-f600c72f12fa","title":"Ceci
+      est un titre","description":null,"createdAt":"2022-04-22T14:32:31.712+02:00","updatedAt":"2022-04-29T11:10:29.682+02:00","inboxPreviewTitle":"Ceci est un titre","lastMessagePreview":"Vous : message supprimé","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"8272c40a-4c8f-4b16-a01c-41176a549b89","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-29T11:11:15.242+02:00"}]},{"__typename":"Conversation","id":"8644a891-90b6-4762-bc37-d0f645ebb601","title":null,"description":null,"createdAt":"2022-04-27T16:48:32.204+02:00","updatedAt":"2022-04-28T18:27:12.547+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : message supprimé","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"a14c3bd6-319c-497e-889c-5788cafac607","title":null,"description":null,"createdAt":"2022-04-27T10:17:56.350+02:00","updatedAt":"2022-04-27T16:48:48.716+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : message supprimé","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"0c643687-01ce-4871-8b68-def8828decbf","title":null,"description":null,"createdAt":"2022-04-21T16:04:00.247+02:00","updatedAt":"2022-04-22T16:15:17.818+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : message supprimé","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"935459d6-f662-4d4f-b486-c3d08517c9ab","title":null,"description":null,"createdAt":"2022-04-21T16:21:44.771+02:00","updatedAt":"2022-04-22T16:10:50.646+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vous : message supprimé","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"07b052f3-7a90-49a0-b489-9cfa0639f60c","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-22T14:32:48.659+02:00"}]},{"__typename":"Conversation","id":"f6a6c234-46ae-4350-b69c-b0bb564f75d0","title":null,"description":null,"createdAt":"2022-04-22T12:51:52.511+02:00","updatedAt":"2022-04-22T16:08:09.102+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vous : Test","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"c4837f85-643c-4404-ad0a-cfa91916719b","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-22T15:15:43.933+02:00"}]},{"__typename":"Conversation","id":"224f2ec1-e8dc-4c22-b9b1-5345faff8954","title":null,"description":null,"createdAt":"2022-04-19T11:07:37.397+02:00","updatedAt":"2022-04-22T16:05:18.495+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous avez envoyé un document","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"e0f4b90d-3fcb-42c8-ae0b-bbcaccf098c4","title":null,"description":null,"createdAt":"2022-04-19T11:48:52.388+02:00","updatedAt":"2022-04-22T12:25:38.572+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vincent a envoyé une image","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"5856634f-ccc8-45e1-abd9-e69a6faf9419","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-22T12:27:11.567+02:00"}]},{"__typename":"Conversation","id":"29e0bbea-56bb-492b-b2d7-00583a8bc97c","title":null,"description":null,"createdAt":"2022-04-19T11:49:24.923+02:00","updatedAt":"2022-04-22T12:19:37.067+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous avez envoyé un document","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"987eea46-aaf6-43f5-93cb-1759d4583d08","title":null,"description":null,"createdAt":"2022-04-19T11:58:54.370+02:00","updatedAt":"2022-04-22T11:40:38.491+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vous : H","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"99e2cc61-0ac1-4945-9d34-6584862af0fc","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-21T17:46:43.631+02:00"}]},{"__typename":"Conversation","id":"6e1b5694-9f00-48e7-aefd-488afba3294f","title":null,"description":null,"createdAt":"2022-04-15T13:59:03.961+02:00","updatedAt":"2022-04-22T11:22:57.806+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vous : Yo","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"177f6915-ad01-4978-a884-2f3dea2fdf0b","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-19T11:35:25.774+02:00"}]},{"__typename":"Conversation","id":"9efd3e0c-59c0-4daf-a725-196445e67bb2","title":null,"description":null,"createdAt":"2022-04-19T11:44:14.363+02:00","updatedAt":"2022-04-19T18:37:35.235+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous avez envoyé un document","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"3fc1c703-adc9-48d0-bbef-4f78de93eed9","title":null,"description":null,"createdAt":"2022-04-19T11:46:40.113+02:00","updatedAt":"2022-04-19T11:47:09.689+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Nabla : Un professionnel de santé vous répondra rapidement ! En cas d’urgence, appelez le 15.","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"5f670b6b-ee9c-4450-b031-189337fe23e8","title":null,"description":null,"createdAt":"2022-04-15T14:00:02.402+02:00","updatedAt":"2022-04-19T11:35:38.666+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vincent : Bonjour vincenttest, fff","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"cc3e0795-d26c-4be2-834e-be5611e3921d","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-19T11:37:09.465+02:00"}]},{"__typename":"Conversation","id":"87eb1f32-9612-4568-8639-20bdc38a7096","title":null,"description":null,"createdAt":"2022-04-19T11:07:57.696+02:00","updatedAt":"2022-04-19T11:18:24.974+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : yo","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"c0e63ca9-7a70-472d-a23f-fe4490e0c371","title":null,"description":null,"createdAt":"2022-04-15T14:21:34.563+02:00","updatedAt":"2022-04-15T14:21:34.710+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Nabla : Un professionnel de santé vous répondra rapidement ! En cas d’urgence, appelez le 15.","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"e325bde9-1ba9-4d41-af92-a5932523d6fc","title":null,"description":null,"createdAt":"2022-04-15T14:21:17.017+02:00","updatedAt":"2022-04-15T14:21:17.114+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Nabla : Un professionnel de santé vous répondra rapidement ! En cas d’urgence, appelez le 15.","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"a30d0431-495a-41c6-928f-b631be704d77","title":null,"description":null,"createdAt":"2022-04-15T12:02:26.652+02:00","updatedAt":"2022-04-15T14:20:44.807+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vincent : tt","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"0e594e5a-9e7c-4784-ac7d-84eddb926a07","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":"2022-04-15T14:20:56.672+02:00","seenUntil":"2022-04-19T11:35:29.780+02:00"}]},{"__typename":"Conversation","id":"a18588ef-9712-48a5-9f6a-96e4e97070ca","title":null,"description":null,"createdAt":"2022-04-15T14:12:23.799+02:00","updatedAt":"2022-04-15T14:20:36.194+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : gg","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"311afee1-85b3-454b-9593-41dedcf638bf","title":null,"description":null,"createdAt":"2022-04-15T14:11:02.374+02:00","updatedAt":"2022-04-15T14:11:02.525+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Nabla : Un professionnel de santé vous répondra rapidement ! En cas d’urgence, appelez le 15.","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"fdb26e00-a780-4293-889f-9bfae547c3d4","title":null,"description":null,"createdAt":"2022-04-15T14:10:45.982+02:00","updatedAt":"2022-04-15T14:10:54.283+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : hh","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"614d32cf-cf15-48dd-a242-a81ce2c6614d","title":null,"description":null,"createdAt":"2022-04-15T14:06:26.775+02:00","updatedAt":"2022-04-15T14:10:36.386+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : yy","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"b5cd9633-a9a5-4227-9dc5-7df9a3029cd8","title":null,"description":null,"createdAt":"2022-04-15T14:06:05.001+02:00","updatedAt":"2022-04-15T14:06:22.754+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous : ff","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"479619af-1e93-465b-bac3-52c5b3d40340","title":null,"description":null,"createdAt":"2022-04-15T14:04:54.904+02:00","updatedAt":"2022-04-15T14:04:55.042+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Nabla : Un professionnel de santé vous répondra rapidement ! En cas d’urgence, appelez le 15.","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"3de57ff9-b669-48ed-8161-7a7d24963a73","title":null,"description":null,"createdAt":"2022-04-15T14:04:22.533+02:00","updatedAt":"2022-04-15T14:04:22.743+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Nabla : Un professionnel de santé vous répondra rapidement ! En cas d’urgence, appelez le 15.","unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"d4561eb6-b2b5-4886-aaa9-1a7bb5bd3e51","title":null,"description":null,"createdAt":"2022-04-15T11:01:30.990+02:00","updatedAt":"2022-04-15T11:57:40.556+02:00","inboxPreviewTitle":"Vincent
+      Doctor","lastMessagePreview":"Vincent : Hello hello","unreadMessageCount":0,"providers":[{"__typename":"ProviderInConversation","id":"0dbac5bd-f307-467e-9c4d-7a7df239c5fa","provider":{"__typename":"Provider","id":"b96923d4-3334-402e-bed7-eb54fe7d0995","avatarUrl":null,"prefix":null,"firstName":"Vincent","lastName":"Doctor"},"typingAt":null,"seenUntil":"2022-04-19T11:35:30.607+02:00"}]},{"__typename":"Conversation","id":"bab7a643-fdcf-4c30-a915-14b8f2de35a9","title":null,"description":null,"createdAt":"2022-05-12T10:03:27.320+02:00","updatedAt":"2022-05-12T10:03:27.320+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"f8f49fcc-c1e2-49e4-aaba-792bda280048","title":null,"description":null,"createdAt":"2022-05-12T12:08:34.970+02:00","updatedAt":"2022-05-12T12:08:34.970+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"8fb1dd72-bdf9-47b7-88f5-245fb22f4e78","title":null,"description":null,"createdAt":"2022-05-12T13:52:45.229+02:00","updatedAt":"2022-05-12T13:52:45.229+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"966ad57a-57fe-40da-a314-bea8cfcbff45","title":null,"description":null,"createdAt":"2022-05-12T15:19:23.071+02:00","updatedAt":"2022-05-12T15:19:23.071+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"a7f5322a-0041-404a-8a99-b5fa22666d16","title":null,"description":null,"createdAt":"2022-05-12T15:30:49.523+02:00","updatedAt":"2022-05-12T15:30:49.523+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"2fd2af04-a036-4294-bb49-494f8f02befc","title":null,"description":null,"createdAt":"2022-05-12T15:31:06.228+02:00","updatedAt":"2022-05-12T15:31:06.228+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"ceea6c8e-59e6-4b78-80d6-ee9dd057b22a","title":null,"description":null,"createdAt":"2022-05-12T15:32:28.075+02:00","updatedAt":"2022-05-12T15:32:28.075+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"da95a20b-c6ec-4f3a-a47f-5f7233d94863","title":null,"description":null,"createdAt":"2022-05-12T15:32:47.506+02:00","updatedAt":"2022-05-12T15:32:47.506+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"b35eb81e-2f89-4aa5-a222-29aee7fe5738","title":null,"description":null,"createdAt":"2022-05-12T15:33:07.955+02:00","updatedAt":"2022-05-12T15:33:07.955+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"3b528e16-790a-4015-a146-76cee6c02b9c","title":null,"description":null,"createdAt":"2022-05-12T15:38:12.510+02:00","updatedAt":"2022-05-12T15:38:12.510+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"229964c9-189e-47fe-a1e9-bc321de4881e","title":null,"description":null,"createdAt":"2022-05-12T15:49:49.436+02:00","updatedAt":"2022-05-12T15:49:49.436+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"cc40220c-223a-474f-af55-1b49b70c811e","title":null,"description":null,"createdAt":"2022-05-12T15:50:03.653+02:00","updatedAt":"2022-05-12T15:50:03.653+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"51db62d2-a17c-44fb-aee0-e4b7849a3a89","title":null,"description":null,"createdAt":"2022-05-12T15:52:15.433+02:00","updatedAt":"2022-05-12T15:52:15.433+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"157c8518-1bcd-4a34-9d86-8c2ce49073c5","title":null,"description":null,"createdAt":"2022-05-12T15:53:25.703+02:00","updatedAt":"2022-05-12T15:53:25.703+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"74882c8a-6539-44d7-9d12-626f85cebc64","title":null,"description":null,"createdAt":"2022-05-12T16:05:00.656+02:00","updatedAt":"2022-05-12T16:05:00.656+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"405e9dae-1169-489c-a7d4-16efac654c31","title":null,"description":null,"createdAt":"2022-04-15T17:08:52.053+02:00","updatedAt":"2022-04-15T17:08:52.053+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"20621b6d-1cae-446d-b8fc-41f9daee1e4c","title":null,"description":null,"createdAt":"2022-04-15T17:09:12.462+02:00","updatedAt":"2022-04-15T17:09:12.462+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"a1fb2c59-2eef-4680-a93f-939695824fbd","title":null,"description":null,"createdAt":"2022-04-20T15:34:33.003+02:00","updatedAt":"2022-04-20T15:34:33.003+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"28311e77-2a72-45ef-8930-2d59846eea05","title":null,"description":null,"createdAt":"2022-04-21T15:20:39.584+02:00","updatedAt":"2022-04-21T15:20:39.584+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"e17ba0e1-59f0-4793-8234-c9af871f18f0","title":null,"description":null,"createdAt":"2022-04-22T16:11:15.934+02:00","updatedAt":"2022-04-22T16:11:15.934+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"87527dd9-0ed8-43ae-bc7d-11a22b30c432","title":null,"description":null,"createdAt":"2022-04-27T11:29:55.694+02:00","updatedAt":"2022-04-27T11:29:55.694+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"09298151-d13a-40cb-99e5-a98b6092cde6","title":null,"description":null,"createdAt":"2022-04-27T11:30:06.076+02:00","updatedAt":"2022-04-27T11:30:06.076+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"fc9ef15e-f243-432a-92b4-3d4ad9ec85d7","title":null,"description":null,"createdAt":"2022-04-27T11:30:13.851+02:00","updatedAt":"2022-04-27T11:30:13.851+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"dca1a026-78cc-44ac-b203-216da9e9f77e","title":null,"description":null,"createdAt":"2022-04-28T16:21:05.595+02:00","updatedAt":"2022-04-28T16:21:05.595+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"c07f9fd5-9bb0-47af-81e3-a0fe2e3761de","title":null,"description":null,"createdAt":"2022-04-29T11:11:01.486+02:00","updatedAt":"2022-04-29T11:11:01.486+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"531922dd-537a-4dc1-9ada-24285625f0a7","title":null,"description":null,"createdAt":"2022-05-11T16:22:34.713+02:00","updatedAt":"2022-05-11T16:22:34.713+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"5e2bf8a3-6ce0-453a-8ac6-09805998b5f3","title":null,"description":null,"createdAt":"2022-05-11T16:56:15.529+02:00","updatedAt":"2022-05-11T16:56:15.529+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"d166587d-df51-463f-9180-07067236ef17","title":null,"description":null,"createdAt":"2022-05-11T16:57:35.675+02:00","updatedAt":"2022-05-11T16:57:35.675+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"581145b6-d28a-4e2a-a092-b83880526efa","title":null,"description":null,"createdAt":"2022-05-11T18:13:58.830+02:00","updatedAt":"2022-05-11T18:13:58.830+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"2261db9f-1b64-4d04-b2a4-e69d1d6337e1","title":null,"description":null,"createdAt":"2022-05-11T18:15:11.053+02:00","updatedAt":"2022-05-11T18:15:11.053+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"384e732e-8378-4f6b-9168-9cd2d64a0160","title":null,"description":null,"createdAt":"2022-05-11T18:15:20.302+02:00","updatedAt":"2022-05-11T18:15:20.302+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"fddc3ea8-a22f-46b3-9a34-ba1e6fa12065","title":null,"description":null,"createdAt":"2022-05-11T18:15:51.716+02:00","updatedAt":"2022-05-11T18:15:51.716+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"ea3e90c1-5377-4ad2-8db7-ebd3f6d971a5","title":null,"description":null,"createdAt":"2022-05-12T09:23:10.608+02:00","updatedAt":"2022-05-12T09:23:10.608+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"d9e64160-eb46-41fe-be3c-554f7a669901","title":null,"description":null,"createdAt":"2022-05-12T09:41:26.964+02:00","updatedAt":"2022-05-12T09:41:26.964+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"d681a29f-921a-4e62-9793-b1251d517ce8","title":null,"description":null,"createdAt":"2022-05-12T09:45:47.910+02:00","updatedAt":"2022-05-12T09:45:47.910+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"33365f29-3b20-4c48-9eda-4bd7dda51669","title":null,"description":null,"createdAt":"2022-05-12T09:47:16.750+02:00","updatedAt":"2022-05-12T09:47:16.750+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"effee25c-fbd9-4467-a914-07cd730c582f","title":null,"description":null,"createdAt":"2022-05-12T09:49:36.223+02:00","updatedAt":"2022-05-12T09:49:36.223+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"ae8a7226-60c0-49fb-bad7-eae168117270","title":null,"description":null,"createdAt":"2022-05-12T09:54:09.273+02:00","updatedAt":"2022-05-12T09:54:09.273+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"ecaea2b9-b2a9-46ea-a77f-34f5fdddba8e","title":null,"description":null,"createdAt":"2022-05-12T09:54:41.589+02:00","updatedAt":"2022-05-12T09:54:41.589+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"b8adbd35-e52b-46f4-9db3-33fc2aa1ab93","title":null,"description":null,"createdAt":"2022-05-12T10:02:15.558+02:00","updatedAt":"2022-05-12T10:02:15.558+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]},{"__typename":"Conversation","id":"b21025b2-1f79-45a8-a30d-df15f114ff44","title":null,"description":null,"createdAt":"2022-05-12T10:02:45.417+02:00","updatedAt":"2022-05-12T10:02:45.417+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}],"hasMore":false,"nextCursor":"100"}}}'
+- recorded: 2022-05-12T14:05:01.688Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 5b7089e28d9c42992d08448bbc7d5c8d9b5165a817a48fc93ade3008af078795
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"74882c8a-6539-44d7-9d12-626f85cebc64"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '344'
+      Content-Type: application/json; charset=UTF-8
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '323'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 92a7fffe-2b52-4273-875b-ab7f3d7f4455
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"74882c8a-6539-44d7-9d12-626f85cebc64","title":null,"description":null,"createdAt":"2022-05-12T16:05:00.656+02:00","updatedAt":"2022-05-12T16:05:00.656+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

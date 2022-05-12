@@ -42,6 +42,17 @@ android {
             withSourcesJar()
         }
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed"
+            }
+        }
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -74,7 +85,6 @@ dependencies {
     implementation libs.retrofit
     implementation libs.retrofit.kotlin.serialization
     implementation libs.jwtdecode
-    implementation libs.androidx.security.crypto
     implementation libs.kotlin.coroutines.android
     implementation libs.kotlin.serialization.json
     api libs.kotlin.datetime
@@ -91,4 +101,7 @@ dependencies {
     testImplementation libs.mockk
     testImplementation libs.apollo.testingSupport
     testImplementation libs.kotlin.test
+    testImplementation libs.roboelectric
+    testImplementation libs.android.junit
+    testImplementation libs.okreplay
 }

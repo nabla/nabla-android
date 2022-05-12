@@ -1,5 +1,7 @@
 package com.nabla.sdk.core.injection
 
+import android.content.Context
+import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -16,10 +18,9 @@ import com.nabla.sdk.core.data.exception.BaseExceptionMapper
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.file.FileService
 import com.nabla.sdk.core.data.file.FileUploadRepositoryImpl
-import com.nabla.sdk.core.data.local.SecuredKVStorage
 import com.nabla.sdk.core.data.logger.AndroidLogger
 import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
-import com.nabla.sdk.core.data.logger.LoggerImpl
+import com.nabla.sdk.core.data.logger.SwitchableLogger
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
@@ -40,9 +41,15 @@ internal class CoreContainer(
     name: String,
     configuration: Configuration,
 ) {
-    val logger: Logger = LoggerImpl(AndroidLogger(), configuration.isLoggingEnabled)
 
-    private val securedKVStorage = SecuredKVStorage(configuration.context, name, logger)
+    val logger: Logger = SwitchableLogger(
+        overriddenLogger ?: AndroidLogger(),
+        configuration.isLoggingEnabled
+    )
+
+    private val kvStorage = configuration.context.getSharedPreferences(
+        "nabla_kv_$name.sp", Context.MODE_PRIVATE
+    )
 
     val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {
         registerMapper(BaseExceptionMapper())
@@ -64,6 +71,7 @@ internal class CoreContainer(
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(PublicApiKeyInterceptor(configuration.publicApiKey))
             .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
+            .apply { overriddenOkHttpClient?.let { it(this) } }
             .build()
     }
 
@@ -94,7 +102,8 @@ internal class CoreContainer(
     private val tokenRemoteDataSource by lazy { TokenRemoteDataSource(authService) }
 
     val sessionClient: SessionClient by tokenRepositoryLazy
-    private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
+    private val localPatientDataSource = LocalPatientDataSource(kvStorage)
+
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context)
 
@@ -106,4 +115,12 @@ internal class CoreContainer(
 
     fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
     fun loginInteractor() = LoginInteractor(patientRepository, sessionClient, logoutInteractor())
+
+    companion object {
+        @VisibleForTesting
+        internal var overriddenLogger: Logger? = null
+
+        @VisibleForTesting
+        internal var overriddenOkHttpClient: ((OkHttpClient.Builder) -> Unit)? = null
+    }
 }
