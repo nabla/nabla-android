@@ -2,7 +2,7 @@ package com.nabla.sdk.core.data.auth
 
 import com.nabla.sdk.core.data.exception.WrappedOkhttpInterceptorException
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.boundary.TokenRepository
+import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -11,7 +11,7 @@ import okhttp3.Response
 
 internal class AuthorizationInterceptor(
     private val logger: Logger,
-    private val tokenRepository: Lazy<TokenRepository>,
+    private val sessionClient: Lazy<SessionClient>,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val updatedRequest: Request = when (AuthorizationType.fromRequest(chain.request())) {
@@ -22,11 +22,12 @@ internal class AuthorizationInterceptor(
                 )
                 val freshAccessToken = runBlocking {
                     runCatchingCancellable {
-                        tokenRepository.value.getFreshAccessToken()
+                        sessionClient.value.getFreshAccessToken()
                     }.getOrElse {
                         throw WrappedOkhttpInterceptorException(it)
                     }
                 }
+
                 chain.request().newBuilder()
                     .header(HEADER_AUTH_NAME, makeHeaderAuthValue(freshAccessToken))
                     .build()

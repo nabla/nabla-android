@@ -1,13 +1,13 @@
 package com.nabla.sdk.core.domain.interactor
 
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
-import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.StringId
 
 internal class LoginInteractor(
     private val patientRepository: PatientRepository,
-    private val tokenRepository: TokenRepository,
+    private val sessionClient: SessionClient,
     private val logoutInteractor: LogoutInteractor,
 ) {
     fun login(
@@ -20,7 +20,7 @@ internal class LoginInteractor(
         }
 
         patientRepository.setPatientId(patientId)
-        tokenRepository.clearSession()
-        tokenRepository.initSession(sessionTokenProvider)
+        sessionClient.clearSession()
+        sessionClient.initSession(sessionTokenProvider)
     }
 }

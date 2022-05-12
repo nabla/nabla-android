@@ -43,6 +43,7 @@ public class NablaMessagingClient private constructor(
         coreContainer.apolloClient,
         coreContainer.fileUploadRepository,
         coreContainer.exceptionMapper,
+        coreContainer.sessionClient,
     )
 
     private val useMock = false // TODO remove when everything is plugged in
@@ -64,6 +65,8 @@ public class NablaMessagingClient private constructor(
      * Returned flow might throw any of [NablaException] children.
      */
     public fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
+        ensureAuthenticatedOrThrow()
+
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 conversationRepository.loadMoreConversations()
@@ -93,6 +96,8 @@ public class NablaMessagingClient private constructor(
      */
     @CheckResult
     public suspend fun createConversation(): Result<Conversation> {
+        ensureAuthenticatedOrThrow()
+
         return runCatchingCancellable {
             conversationRepository.createConversation()
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -112,6 +117,8 @@ public class NablaMessagingClient private constructor(
      * @param conversationId the id of the conversation you want to watch update for.
      */
     public fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+        ensureAuthenticatedOrThrow()
+
         return conversationRepository.watchConversation(conversationId)
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
@@ -127,6 +134,8 @@ public class NablaMessagingClient private constructor(
      * @param conversationId the id from [Conversation.id].
      */
     public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>> {
+        ensureAuthenticatedOrThrow()
+
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 messageRepository.loadMoreMessages(conversationId)
@@ -165,6 +174,8 @@ public class NablaMessagingClient private constructor(
      */
     @CheckResult
     public suspend fun sendMessage(message: Message): Result<Unit> {
+        ensureAuthenticatedOrThrow()
+
         return runCatchingCancellable {
             messageRepository.sendMessage(message)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -180,6 +191,8 @@ public class NablaMessagingClient private constructor(
      */
     @CheckResult
     public suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
+        ensureAuthenticatedOrThrow()
+
         return runCatchingCancellable {
             messageRepository.retrySendingMessage(conversationId, localMessageId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -207,6 +220,8 @@ public class NablaMessagingClient private constructor(
      */
     @CheckResult
     public suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
+        ensureAuthenticatedOrThrow()
+
         return runCatchingCancellable {
             messageRepository.setTyping(conversationId, isTyping)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -220,6 +235,8 @@ public class NablaMessagingClient private constructor(
      */
     @CheckResult
     public suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
+        ensureAuthenticatedOrThrow()
+
         return runCatchingCancellable {
             conversationRepository.markConversationAsRead(conversationId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
@@ -244,9 +261,17 @@ public class NablaMessagingClient private constructor(
      */
     @CheckResult
     public suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
+        ensureAuthenticatedOrThrow()
+
         return runCatchingCancellable {
             messageRepository.deleteMessage(conversationId, id)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
+    }
+
+    private fun ensureAuthenticatedOrThrow() {
+        if (!messagingContainer.sessionClient.isSessionInitialized()) {
+            throw NablaException.Authentication.NotAuthenticated
+        }
     }
 
     public companion object {

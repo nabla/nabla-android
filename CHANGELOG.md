@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some `messaging-ui` strings have been updated
 - `NablaMessagingClient.watchConversationMessages` now returns a `ConversationMessages` object which only contains the messages themself. Details of the conversation and its participants should now be watched using `NablaMessagingClient.watchConversation`
 - Some resources of `messaging-ui` and `messaging-core` have been prefixed correctly with `nabla_`
+- `NablaException.Authentication` is now clearer with new `NotAuthenticated` and `UnableToGetFreshSessionToken` exceptions
 
 ## [1.0-alpha02] - 2022-05-03
 

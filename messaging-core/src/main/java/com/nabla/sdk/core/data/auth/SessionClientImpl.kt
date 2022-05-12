@@ -1,22 +1,24 @@
 package com.nabla.sdk.core.data.auth
 
 import com.auth0.android.jwt.JWT
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
-import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-internal class TokenRepositoryImpl(
+internal class SessionClientImpl(
     private val tokenLocalDataSource: TokenLocalDataSource,
     private val tokenRemoteDataSource: TokenRemoteDataSource,
     private val patientRepository: PatientRepository,
     private val logger: Logger,
-) : TokenRepository {
+    private val exceptionMapper: NablaExceptionMapper,
+) : SessionClient {
 
     private val refreshLock = Mutex()
 
@@ -25,6 +27,8 @@ internal class TokenRepositoryImpl(
     override fun initSession(sessionTokenProvider: SessionTokenProvider) {
         this.sessionTokenProvider = sessionTokenProvider
     }
+
+    override fun isSessionInitialized(): Boolean = sessionTokenProvider != null
 
     override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): String {
         return refreshLock.withLock {
@@ -91,13 +95,15 @@ internal class TokenRepositoryImpl(
     }
 
     private suspend fun renewSessionAuthTokens(): AuthTokens {
-        val sessionTokenProvider = sessionTokenProvider ?: throw NablaException.Authentication(RuntimeException("No call to authenticate made"))
+        val sessionTokenProvider = sessionTokenProvider ?: throw NablaException.Authentication.NotAuthenticated
         val patientId = patientRepository.getPatientId()
             ?: throw NablaException.Internal(RuntimeException("Session token provider available without patientId"))
 
-        return sessionTokenProvider.fetchNewSessionAuthTokens(patientId).getOrThrow().also {
-            tokenLocalDataSource.setAuthTokens(it)
-        }
+        return sessionTokenProvider.fetchNewSessionAuthTokens(patientId)
+            .getOrElse { exception -> throw NablaException.Authentication.UnableToGetFreshSessionToken(exceptionMapper.map(exception)) }
+            .also {
+                tokenLocalDataSource.setAuthTokens(it)
+            }
     }
 }
 

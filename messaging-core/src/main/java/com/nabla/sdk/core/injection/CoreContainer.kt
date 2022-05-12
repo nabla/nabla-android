@@ -8,9 +8,9 @@ import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
 import com.nabla.sdk.core.data.auth.PublicApiKeyInterceptor
+import com.nabla.sdk.core.data.auth.SessionClientImpl
 import com.nabla.sdk.core.data.auth.TokenLocalDataSource
 import com.nabla.sdk.core.data.auth.TokenRemoteDataSource
-import com.nabla.sdk.core.data.auth.TokenRepositoryImpl
 import com.nabla.sdk.core.data.auth.UserHeaderInterceptor
 import com.nabla.sdk.core.data.exception.BaseExceptionMapper
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
@@ -26,8 +26,8 @@ import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
-import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -44,12 +44,17 @@ internal class CoreContainer(
 
     private val securedKVStorage = SecuredKVStorage(configuration.context, name, logger)
 
+    val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {
+        registerMapper(BaseExceptionMapper())
+    }
+
     private val tokenRepositoryLazy = lazy {
-        TokenRepositoryImpl(
+        SessionClientImpl(
             tokenLocalDataSource,
             tokenRemoteDataSource,
             patientRepository,
-            logger
+            logger,
+            exceptionMapper,
         )
     }
 
@@ -74,10 +79,6 @@ internal class CoreContainer(
             .build()
     }
 
-    val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {
-        registerMapper(BaseExceptionMapper())
-    }
-
     @OptIn(ExperimentalSerializationApi::class)
     private val retrofit by lazy {
         Retrofit.Builder()
@@ -92,7 +93,7 @@ internal class CoreContainer(
     private val tokenLocalDataSource = TokenLocalDataSource()
     private val tokenRemoteDataSource by lazy { TokenRemoteDataSource(authService) }
 
-    private val tokenRepository: TokenRepository by tokenRepositoryLazy
+    val sessionClient: SessionClient by tokenRepositoryLazy
     private val localPatientDataSource = LocalPatientDataSource(securedKVStorage)
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context)
@@ -104,5 +105,5 @@ internal class CoreContainer(
     )
 
     fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
-    fun loginInteractor() = LoginInteractor(patientRepository, tokenRepository, logoutInteractor())
+    fun loginInteractor() = LoginInteractor(patientRepository, sessionClient, logoutInteractor())
 }
