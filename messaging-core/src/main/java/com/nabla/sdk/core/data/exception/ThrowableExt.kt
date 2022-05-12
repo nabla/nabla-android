@@ -1,7 +1,6 @@
 package com.nabla.sdk.core.data.exception
 
 import com.apollographql.apollo3.exception.ApolloNetworkException
-import com.nabla.sdk.core.data.auth.AuthIoException
 import okhttp3.internal.http2.ConnectionShutdownException
 import java.io.InterruptedIOException
 import java.net.SocketException
@@ -17,12 +16,10 @@ internal fun Throwable.isNetworkError(depth: Int = 0): Boolean =
         this is ApolloNetworkException ||
         (depth <= IS_NETWORK_MAX_DEPTH && cause?.isNetworkError(depth + 1) ?: false)
 
-internal fun Throwable.asAuthException(depth: Int = 0): Throwable? {
-    if (this is AuthIoException) { return this.cause }
-    return if (depth <= IS_NETWORK_MAX_DEPTH) {
-        cause?.asAuthException(depth + 1)
-    } else {
-        null
+internal fun Throwable.unwrapException(): Throwable {
+    return when (this) {
+        is WrappedOkhttpInterceptorException -> cause
+        else -> this
     }
 }
 

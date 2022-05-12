@@ -4,10 +4,13 @@ import com.nabla.sdk.core.domain.entity.NablaException
 
 internal class BaseExceptionMapper : ExceptionMapper {
     override fun map(exception: Throwable): NablaException? {
-        val authException: Throwable? = exception.asAuthException()
+        val unwrappedException: Throwable = exception.unwrapException()
+        return mapOp(unwrappedException)
+    }
+
+    private fun mapOp(exception: Throwable): NablaException? {
         return when {
             exception is NablaException -> exception
-            authException != null -> NablaException.Authentication(authException)
             exception.isNetworkError() -> NablaException.Network(exception)
             exception is GraphQLException -> NablaException.Server(
                 exception,

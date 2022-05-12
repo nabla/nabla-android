@@ -1,5 +1,6 @@
 package com.nabla.sdk.core.data.auth
 
+import com.nabla.sdk.core.data.exception.WrappedOkhttpInterceptorException
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.TokenRepository
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -23,7 +24,7 @@ internal class AuthorizationInterceptor(
                     runCatchingCancellable {
                         tokenRepository.value.getFreshAccessToken()
                     }.getOrElse {
-                        throw AuthIoException(it)
+                        throw WrappedOkhttpInterceptorException(it)
                     }
                 }
                 chain.request().newBuilder()
