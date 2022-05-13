@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - This CHANGELOG file
+- Proguard configuration through `consumerProguardFiles` config.
 
 ### Changed
 - `NablaCore` is now called `NablaClient`, `NablaMessaging` is now called `NablaMessagingClient`
