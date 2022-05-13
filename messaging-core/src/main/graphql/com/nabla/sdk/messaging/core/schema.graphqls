@@ -118,7 +118,12 @@ type ConversationItemsPage {
   nextCursor: String
 }
 
-union MessageContent = TextMessageContent | ImageMessageContent | DocumentMessageContent | DeletedMessageContent
+union MessageContent =
+    TextMessageContent
+  | ImageMessageContent
+  | DocumentMessageContent
+  | DeletedMessageContent
+  | AudioMessageContent
 
 type TextMessageContent {
   text: String!
@@ -153,6 +158,16 @@ type DocumentFileUpload implements IFileUpload {
   thumbnail: ImageFileUpload
 }
 
+type AudioFileUpload implements IFileUpload {
+  id: UUID!
+
+  url: EphemeralUrl!
+  fileName: String!
+  mimeType: String!
+
+  durationMs: Int
+}
+
 type ImageMessageContent {
   imageFileUpload: ImageFileUpload!
 }
@@ -161,6 +176,10 @@ type DocumentMessageContent {
   documentFileUpload: DocumentFileUpload!
 
   title: String
+}
+
+type AudioMessageContent {
+  audioFileUpload: AudioFileUpload!
 }
 
 enum EmptyObject {
@@ -194,6 +213,7 @@ input SendMessageContentInput {
   textInput: SendTextMessageInput
   imageInput: SendImageMessageInput
   documentInput: SendDocumentMessageInput
+  audioInput: SendAudioMessageInput
 }
 
 input SendTextMessageInput {
@@ -209,6 +229,10 @@ input SendImageMessageInput {
 }
 
 input SendDocumentMessageInput {
+  upload: UploadInput!
+}
+
+input SendAudioMessageInput {
   upload: UploadInput!
 }
 
