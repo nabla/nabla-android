@@ -8,9 +8,9 @@ public sealed class NablaException private constructor(
     cause: Throwable? = null,
 ) : Exception(message, cause) {
     public sealed class Configuration(message: String) : NablaException(message = message) {
-        public object MissingInitialize : Configuration("Missing SDK initialize. Make sure you call \"NablaCore.initialize\".")
+        public object MissingInitialize : Configuration("Missing SDK initialize. Make sure you call \"NablaClient.initialize\".")
         public object MissingApiKey :
-            Configuration("Missing API key. Make sure to add \"com.nabla.sdk.PUBLIC_API_KEY\" in your manifest or call \"NablaCoreBuilder.context(yourContext)\" during initialize call.")
+            Configuration("Missing API key. Make sure to add \"com.nabla.sdk.PUBLIC_API_KEY\" in your manifest or pass a Context to \"NablaClient.initialize\" in the \"Configuration\" argument.")
 
         public object MissingContext : Configuration("Missing context. Make sure you follow the doc to integrate the SDK properly.")
     }
