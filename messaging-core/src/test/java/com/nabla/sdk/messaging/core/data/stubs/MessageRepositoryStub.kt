@@ -1,7 +1,9 @@
-package com.nabla.sdk.messaging.core.data.message
+package com.nabla.sdk.messaging.core.data.stubs
 
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.messaging.core.data.message.PaginatedConversationMessages
 import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -10,8 +12,6 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.messaging.core.domain.entity.fake
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -24,8 +24,9 @@ import kotlin.random.Random
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
-internal class MessageRepositoryMock : MessageRepository {
+internal class MessageRepositoryStub(private val idlingRes: CountingIdlingResource) : MessageRepository {
     private val provider = User.Provider.fake()
     private val flowMutex = Mutex()
     private val messagesListFlow = MutableStateFlow(
@@ -61,14 +62,14 @@ internal class MessageRepositoryMock : MessageRepository {
             )
         }
             .onStart {
-                delay(1_000)
+                delayWithIdlingRes(idlingRes, 1.seconds)
                 if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
             }
     }
 
     override suspend fun loadMoreMessages(conversationId: ConversationId) {
         println("load more messages")
-        delay(1_000)
+        delayWithIdlingRes(idlingRes, 1.seconds)
         if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
         flowMutex.withLock {
             val oldestInstant = messagesListFlow.value.minOf { it.baseMessage.sentAt }
@@ -88,7 +89,7 @@ internal class MessageRepositoryMock : MessageRepository {
 
     override suspend fun sendMessage(message: Message) {
         flowMutex.withLock { messagesListFlow.value = messagesListFlow.value + listOf(message) }
-        delay(1_000)
+        delayWithIdlingRes(idlingRes, 1.seconds)
         return flowMutex.withLock {
             val newMessage = message.modify(if ((message as? Message.Text)?.text?.contains("fail") == true) SendStatus.ErrorSending else SendStatus.Sent)
             messagesListFlow.value = messagesListFlow.value - listOf(message) + listOf(
@@ -105,7 +106,7 @@ internal class MessageRepositoryMock : MessageRepository {
                 } else it
             }
         }
-        delay(1_000)
+        delayWithIdlingRes(idlingRes, 1.seconds)
         flowMutex.withLock {
             messagesListFlow.value = messagesListFlow.value.map {
                 if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.Sending) {

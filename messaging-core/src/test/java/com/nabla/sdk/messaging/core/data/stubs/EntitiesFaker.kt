@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.core.domain.entity
+package com.nabla.sdk.messaging.core.data.stubs
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
@@ -9,6 +9,17 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
+import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.FileSource
+import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.math.absoluteValue
@@ -16,11 +27,7 @@ import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-/**
- * Ultimately we'll move these mockers to test srcSet to help with UTs.
- */
-
-internal fun ConversationMessages.Companion.fake(
+fun ConversationMessages.Companion.fake(
     conversation: Conversation = Conversation.fake(),
     messages: List<Message> = ((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }),
 ) = ConversationMessages(
@@ -28,7 +35,7 @@ internal fun ConversationMessages.Companion.fake(
     messages = messages,
 )
 
-internal fun Message.Text.Companion.fake(
+fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
@@ -45,7 +52,7 @@ internal fun Message.Text.Companion.fake(
     text = text,
 )
 
-internal fun Message.Media.Image.Companion.fake(
+fun Message.Media.Image.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
@@ -76,7 +83,7 @@ internal fun Message.Media.Image.Companion.fake(
     ),
 )
 
-internal fun Message.Media.Document.Companion.fake(
+fun Message.Media.Document.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
@@ -108,7 +115,7 @@ internal fun Message.Media.Document.Companion.fake(
     ),
 )
 
-internal fun User.Provider.Companion.fake(
+fun User.Provider.Companion.fake(
     id: Uuid = uuid4(),
     firstName: String = "Véronique",
     lastName: String = "Cayol",
@@ -125,7 +132,7 @@ internal fun User.Provider.Companion.fake(
     prefix = prefix,
 )
 
-internal fun ProviderInConversation.Companion.fake(
+fun ProviderInConversation.Companion.fake(
     provider: User.Provider = User.Provider.fake(),
     typingAt: Instant? = Random.nextBoolean().let { if (it) Clock.System.now() else null },
     seenUntil: Instant = Clock.System.now(),
@@ -135,7 +142,7 @@ internal fun ProviderInConversation.Companion.fake(
     seenUntil = seenUntil,
 )
 
-internal fun Conversation.Companion.fake(
+fun Conversation.Companion.fake(
     id: Uuid = uuid4(),
     inboxPreviewTitle: String = randomText(maxWords = 10),
     inboxPreviewSubtitle: String = listOf("", "You: oh great!", "You: image", "Doctor is typing...").random(),
@@ -154,7 +161,7 @@ internal fun Conversation.Companion.fake(
     providersInConversation = providersInConversation,
 )
 
-internal fun EphemeralUrl.Companion.fake(
+fun EphemeralUrl.Companion.fake(
     expiresAt: Instant = Instant.DISTANT_FUTURE,
     url: Uri,
 ) = EphemeralUrl(

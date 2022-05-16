@@ -8,6 +8,8 @@ plugins {
 
 group buildConfig.groupId
 
+apply from: rootProject.file('gradle/export-test-helpers-workaround.gradle')
+
 android {
     namespace = 'com.nabla.sdk.messaging.core'
 
@@ -97,4 +99,5 @@ dependencies {
     testImplementation libs.roboelectric
     testImplementation libs.android.junit
     testImplementation libs.okreplay
+    testApi libs.espressoIdlingResource
 }

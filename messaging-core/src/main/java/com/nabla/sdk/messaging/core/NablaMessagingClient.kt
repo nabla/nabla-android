@@ -2,18 +2,10 @@ package com.nabla.sdk.messaging.core
 
 import androidx.annotation.CheckResult
 import com.nabla.sdk.core.NablaClient
-import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
-import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.NablaException
-import com.nabla.sdk.core.injection.CoreContainer
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.getInstance
 import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.initialize
-import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryMock
-import com.nabla.sdk.messaging.core.data.message.MessageRepositoryMock
-import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
-import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
@@ -21,9 +13,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
-import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 /**
  * Main entry-point for SDK messaging features.
@@ -34,28 +24,13 @@ import kotlinx.coroutines.flow.map
  * We recommend you reuse the same instance for all interactions,
  * check documentation of [initialize] and [getInstance].
  */
-public class NablaMessagingClient private constructor(
-    coreContainer: CoreContainer,
-) {
+public interface NablaMessagingClient {
 
-    private val messagingContainer = MessagingContainer(
-        coreContainer.logger,
-        coreContainer.apolloClient,
-        coreContainer.fileUploadRepository,
-        coreContainer.exceptionMapper,
-        coreContainer.sessionClient,
-    )
-
-    private val useMock = false // TODO remove when everything is plugged in
-
-    private val conversationRepository: ConversationRepository by lazy {
-        if (useMock) ConversationRepositoryMock() else messagingContainer.conversationRepository
-    }
-    private val messageRepository: MessageRepository by lazy {
-        if (useMock) MessageRepositoryMock() else messagingContainer.messageRepository
-    }
-
-    public val logger: Logger = coreContainer.logger
+    /**
+     * Exposed for internal usage by Nabla Messaging UI.
+     * You're not expected to use it.
+     */
+    public val logger: Logger
 
     /**
      * Watch the list of conversations the current user is involved in.
@@ -64,28 +39,7 @@ public class NablaMessagingClient private constructor(
      *
      * Returned flow might throw any of [NablaException] children.
      */
-    public fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
-        ensureAuthenticatedOrThrow()
-
-        val loadMoreCallback = suspend {
-            runCatchingCancellable {
-                conversationRepository.loadMoreConversations()
-            }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-        }
-
-        return conversationRepository.watchConversations()
-            .map { paginatedConversations ->
-                WatchPaginatedResponse(
-                    content = paginatedConversations.items,
-                    loadMore = if (paginatedConversations.hasMore) {
-                        loadMoreCallback
-                    } else {
-                        null
-                    },
-                )
-            }
-            .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>>
 
     /**
      * Create a new conversation on behalf of the current user.
@@ -95,13 +49,7 @@ public class NablaMessagingClient private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun createConversation(): Result<Conversation> {
-        ensureAuthenticatedOrThrow()
-
-        return runCatchingCancellable {
-            conversationRepository.createConversation()
-        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public suspend fun createConversation(): Result<Conversation>
 
     /**
      * Watch a conversation details.
@@ -116,12 +64,7 @@ public class NablaMessagingClient private constructor(
      *
      * @param conversationId the id of the conversation you want to watch update for.
      */
-    public fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
-        ensureAuthenticatedOrThrow()
-
-        return conversationRepository.watchConversation(conversationId)
-            .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public fun watchConversation(conversationId: ConversationId): Flow<Conversation>
 
     /**
      * Watch the list of messages in a conversation.
@@ -133,26 +76,7 @@ public class NablaMessagingClient private constructor(
      *
      * @param conversationId the id from [Conversation.id].
      */
-    public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>> {
-        ensureAuthenticatedOrThrow()
-
-        val loadMoreCallback = suspend {
-            runCatchingCancellable {
-                messageRepository.loadMoreMessages(conversationId)
-            }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-        }
-
-        return messageRepository.watchConversationMessages(conversationId)
-            .map { paginatedConversationMessages ->
-                WatchPaginatedResponse(
-                    content = paginatedConversationMessages.conversationMessages,
-                    loadMore = if (paginatedConversationMessages.hasMore) {
-                        loadMoreCallback
-                    } else null
-                )
-            }
-            .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>>
 
     /**
      * Send a new message in the conversation referenced by its [Message.conversationId].
@@ -173,13 +97,7 @@ public class NablaMessagingClient private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun sendMessage(message: Message): Result<Unit> {
-        ensureAuthenticatedOrThrow()
-
-        return runCatchingCancellable {
-            messageRepository.sendMessage(message)
-        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public suspend fun sendMessage(message: Message): Result<Unit>
 
     /**
      * Retry sending a message for which [Message.sendStatus] is [SendStatus.ErrorSending].
@@ -190,13 +108,7 @@ public class NablaMessagingClient private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
-        ensureAuthenticatedOrThrow()
-
-        return runCatchingCancellable {
-            messageRepository.retrySendingMessage(conversationId, localMessageId)
-        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit>
 
     /**
      * Change the current user typing status in the conversation.
@@ -219,13 +131,7 @@ public class NablaMessagingClient private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
-        ensureAuthenticatedOrThrow()
-
-        return runCatchingCancellable {
-            messageRepository.setTyping(conversationId, isTyping)
-        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit>
 
     /**
      * Acknowledge that the current user has seen all messages in it.
@@ -234,13 +140,7 @@ public class NablaMessagingClient private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
-        ensureAuthenticatedOrThrow()
-
-        return runCatchingCancellable {
-            conversationRepository.markConversationAsRead(conversationId)
-        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
+    public suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit>
 
     /**
      * Delete a message in the conversation. Current user should be its author.
@@ -260,19 +160,7 @@ public class NablaMessagingClient private constructor(
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
-        ensureAuthenticatedOrThrow()
-
-        return runCatchingCancellable {
-            messageRepository.deleteMessage(conversationId, id)
-        }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
-    }
-
-    private fun ensureAuthenticatedOrThrow() {
-        if (!messagingContainer.sessionClient.isSessionInitialized()) {
-            throw NablaException.Authentication.NotAuthenticated
-        }
-    }
+    public suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit>
 
     public companion object {
         private var defaultSingletonInstance: NablaMessagingClient? = null
@@ -301,6 +189,7 @@ public class NablaMessagingClient private constructor(
          * Unlike the singleton provided in [getInstance], you have the responsibility
          * of maintaining a reference to the returned instance.
          */
-        public fun initialize(nablaClient: NablaClient): NablaMessagingClient = NablaMessagingClient(nablaClient.coreContainer)
+        public fun initialize(nablaClient: NablaClient): NablaMessagingClient =
+            NablaMessagingClientImpl(nablaClient.coreContainer)
     }
 }

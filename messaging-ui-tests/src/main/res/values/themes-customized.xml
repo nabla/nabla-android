@@ -1,0 +1,44 @@
+<resources>
+
+    <style name="Theme.Nabla.Sdk.UiTests.Customized" parent="Theme.Nabla.Sdk.UiTests">
+        <item name="fontFamily">@font/josefin_sans_regular</item>
+        <item name="android:colorBackground">#D2FFFB</item>
+
+        <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.UiTests.Customized</item>
+    </style>
+
+    <style name="NablaOverlay.UiTests.Customized" parent="Nabla.ThemeOverlay.Messaging">
+        <item name="nablaMessaging_conversationPreviewBackgroundDrawable">@drawable/uitests_conversation_preview_background</item>
+        <item name="nablaRoundedCornersRadius">28dp</item>
+        <item name="nablaMessaging_unreadMessagesIndicatorDrawable">@drawable/uitests_animated_unread_dot</item>
+
+        <item name="nablaMessaging_conversationPatientMessageAppearance">@style/AppearancePatient</item>
+        <item name="nablaMessaging_conversationProviderMessageAppearance">@style/AppearanceProvider</item>
+
+        <item name="nablaMessaging_sendMessageIconTint">@color/uitests_send_message_cta_color</item>
+        <item name="nablaMessaging_conversationComposerEditTextStyle">@style/UiTestsComposerEditTextStyle</item>
+
+        <item name="nablaMessaging_patientMessageBackgroundColor">#FF99FF</item>
+        <item name="nablaMessaging_providerMessageBackgroundColor">#EEEE44</item>
+    </style>
+
+    <style name="AppearancePatient" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">#000</item>
+        <item name="fontFamily">?fontFamily</item>
+    </style>
+
+    <style name="AppearanceProvider" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">#000</item>
+        <item name="fontFamily">?fontFamily</item>
+    </style>
+
+    <style name="UiTestsComposerEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/AppearancePatient</item>
+        <item name="android:textColor">#FF0000</item>
+        <item name="android:textColorHint">?colorOnSurface</item>
+        <item name="android:lineSpacingExtra">8sp</item>
+        <item name="android:hint">"Customized placeholder!"</item>
+        <item name="android:inputType">textMultiLine|textCapSentences</item>
+        <item name="android:maxHeight">300dp</item>
+    </style>
+</resources>

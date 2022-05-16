@@ -1,0 +1,36 @@
+<resources>
+
+    <style name="Theme.Nabla.Sdk.UiTests" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#FF018786</item>
+        <item name="colorPrimaryDark">#025353</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/turbo</item>
+        <item name="colorSecondaryVariant">@color/pale_blue_green</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <item name="colorSurface">@color/pale_blue_green</item>
+        <item name="colorOnSurface">@color/stone</item>
+
+        <item name="android:colorBackground">@color/silver</item>
+        <item name="colorOnBackground">@color/stone</item>
+
+        <item name="android:textColorPrimary">?colorPrimaryDark</item>
+        <item name="android:textColorSecondary">?colorOnSurface</item>
+
+        <item name="colorAccent">?colorSecondary</item>
+        <item name="colorPrimaryVariant">?attr/colorPrimaryDark</item>
+        <item name="android:windowBackground">?android:attr/colorBackground</item>
+
+        <!-- ripple & scroll edges -->
+        <item name="android:colorEdgeEffect">?colorSecondary</item>
+        <!-- this color is used by material library as background drawable, which is not supported on Android < 29 if the color is a selector -->
+        <item name="colorControlHighlight">@color/stone_alpha_12</item>
+
+        <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.UiTests</item>
+    </style>
+
+    <style name="NablaOverlay.UiTests" parent="Nabla.ThemeOverlay.Messaging">
+        <!-- keeping defaults for this one, check other uitests themes for extensive customization -->
+    </style>
+</resources>

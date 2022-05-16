@@ -1,5 +1,6 @@
-package com.nabla.sdk.messaging.core.data.conversation
+package com.nabla.sdk.messaging.core.data.stubs
 
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.User
@@ -7,8 +8,6 @@ import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
-import com.nabla.sdk.messaging.core.domain.entity.fake
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -18,7 +17,7 @@ import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-internal class ConversationRepositoryMock : ConversationRepository {
+internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingResource) : ConversationRepository {
     private val conversationsFlow = MutableStateFlow(
         PaginatedList(
             items = (0..10).map { Conversation.randomFake() },
@@ -37,7 +36,7 @@ internal class ConversationRepositoryMock : ConversationRepository {
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
         return conversationsFlow
             .onStart {
-                delay(1.seconds)
+                delayWithIdlingRes(idlingRes, 1.seconds)
                 if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
             }
     }
@@ -55,7 +54,7 @@ internal class ConversationRepositoryMock : ConversationRepository {
     override suspend fun loadMoreConversations() {
         if (!conversationsFlow.value.hasMore) return
 
-        delay(1.seconds)
+        delayWithIdlingRes(idlingRes, 1.seconds)
         if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
         val newItems = conversationsFlow.value.items + (0..10).map { Conversation.randomFake() }
         conversationsFlow.value = conversationsFlow.value.copy(
