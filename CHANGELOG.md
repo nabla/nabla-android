@@ -7,11 +7,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Fixed
-
-- `ConversationFragment` was initializing default nabla client even if overridden with custom
-  instance.
-
 ### Added
 
 - This CHANGELOG file
@@ -28,6 +23,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   be watched using `NablaMessagingClient.watchConversation`
 - Some resources of `messaging-ui` and `messaging-core` have been prefixed correctly with `nabla_`
 - `NablaException.Authentication` is now clearer with new `NotAuthenticated` and `UnableToGetFreshSessionToken` exceptions
+
+### Fixed
+- `ConversationFragment` was initializing default nabla client even if overridden with custom
+  instance.
+- Remove the ability to copy or delete a deleted message when using `ConversationFragment`
 
 ## [1.0-alpha02] - 2022-05-03
 

@@ -11,6 +11,7 @@ internal fun Message.toTimelineItem(
 ): TimelineItem.Message {
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
     val actions: Set<MessageAction> = when {
+        this is Message.Deleted -> emptySet()
         sender is MessageSender.Provider -> setOfNotNull(copyActionOrNull)
         sender is MessageSender.System -> setOfNotNull(copyActionOrNull)
         sender is MessageSender.Patient && sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
