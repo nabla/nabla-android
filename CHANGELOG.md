@@ -7,6 +7,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha03] - 2022-05-16
+
 ### Added
 
 - This CHANGELOG file
