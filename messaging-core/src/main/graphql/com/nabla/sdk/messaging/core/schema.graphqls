@@ -58,6 +58,8 @@ type DeletedProvider {
   _: EmptyObject!
 }
 
+union MaybeProvider = Provider | DeletedProvider
+
 union MessageAuthor = System | Patient | Provider | DeletedProvider
 
 type Message {
@@ -314,5 +316,5 @@ type TypingEvent {
 # --- Conversation Activity Contents
 
 type ProviderJoinedConversation {
-  provider: Provider
+  provider: MaybeProvider!
 }
