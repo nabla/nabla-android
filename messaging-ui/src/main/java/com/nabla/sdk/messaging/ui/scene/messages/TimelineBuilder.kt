@@ -34,8 +34,7 @@ internal class TimelineBuilder {
                 val showSenderAvatarAndName = item.sender != MessageSender.Patient && (
                     nextMessage == null ||
                         nextMessage !is TimelineItem.Message ||
-                        nextMessage.sender != item.sender ||
-                        item.sender is MessageSender.System
+                        nextMessage.sender != item.sender
                     )
 
                 val showStatus = item.status != SendStatus.Sent || item.id == selectedMessageId
