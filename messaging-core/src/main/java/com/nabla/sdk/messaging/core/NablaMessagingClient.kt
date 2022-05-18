@@ -12,6 +12,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import kotlinx.coroutines.flow.Flow
@@ -80,25 +81,26 @@ public interface NablaMessagingClient {
     public fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>>
 
     /**
-     * Send a new message in the conversation referenced by its [Message.conversationId].
+     * Send a new message in the conversation.
      *
-     * This will immediately append [message] to the list of messages in the conversation
+     * This will immediately append the message to the list of messages in the conversation
      * while making the necessary network query (optimistic behavior).
      *
      * A successful sending will result in the message's [Message.sendStatus] changing to [SendStatus.Sent]
      * and [Message.id] changing to [MessageId.Remote]. While failures will keep a [MessageId.Local] id
      * and change status to [SendStatus.ErrorSending].
      *
-     * @param message message to send, check `Message.**.new(..)` helpers to create new messages.
+     * @param input input of the message to send, check `MessageInput.**` to create new messages.
+     * @param conversationId the id of the conversation to send the message to.
      *
-     * @see Message.Text.new
-     * @see Message.Media.Image.new
-     * @see Message.Media.Document.new
+     * @see MessageInput.Text
+     * @see MessageInput.Media.Image
+     * @see MessageInput.Media.Document
      *
-     * @return [Result] of the operation, eventual errors will be of type [NablaException].
+     * @return [Result] of the operation containing the id of the message created, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun sendMessage(message: Message): Result<Unit>
+    public suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): Result<MessageId.Local>
 
     /**
      * Retry sending a message for which [Message.sendStatus] is [SendStatus.ErrorSending].

@@ -35,7 +35,7 @@ fun ConversationItems.Companion.fake(
     items = messages,
 )
 
-fun Message.Text.Companion.fake(
+internal fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
@@ -52,7 +52,7 @@ fun Message.Text.Companion.fake(
     text = text,
 )
 
-fun Message.Media.Image.Companion.fake(
+internal fun Message.Media.Image.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,
@@ -83,7 +83,7 @@ fun Message.Media.Image.Companion.fake(
     ),
 )
 
-fun Message.Media.Document.Companion.fake(
+internal fun Message.Media.Document.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     sender: MessageSender = MessageSender.Patient,

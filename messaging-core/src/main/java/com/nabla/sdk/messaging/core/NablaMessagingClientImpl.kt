@@ -12,8 +12,8 @@ import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
-import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
@@ -100,12 +100,14 @@ internal class NablaMessagingClientImpl internal constructor(
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
-    @CheckResult
-    override suspend fun sendMessage(message: Message): Result<Unit> {
+    override suspend fun sendMessage(
+        input: MessageInput,
+        conversationId: ConversationId
+    ): Result<MessageId.Local> {
         ensureAuthenticatedOrThrow()
 
         return runCatchingCancellable {
-            conversationContentRepository.sendMessage(message)
+            conversationContentRepository.sendMessage(input, conversationId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 

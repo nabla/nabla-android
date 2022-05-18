@@ -5,11 +5,13 @@ import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.data.message.PaginatedConversationItems
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
+import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.coroutines.flow.Flow
@@ -78,23 +80,35 @@ internal class ConversationContentRepositoryStub(private val idlingRes: Counting
         }
     }
 
+    override suspend fun sendMessage(
+        input: MessageInput,
+        conversationId: ConversationId
+    ): MessageId.Local {
+        val messageId = MessageId.new()
+        val baseMessage = BaseMessage(messageId, Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId)
+        val message = when (input) {
+            is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
+            is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
+            is MessageInput.Text -> Message.Text(baseMessage, input.text)
+        }
+
+        flowMutex.withLock { messagesListFlow.value = messagesListFlow.value + listOf(message) }
+        delayWithIdlingRes(idlingRes, 1.seconds)
+        return flowMutex.withLock {
+            val newMessage = message.modify(if ((message as? Message.Text)?.text?.contains("fail") == true) SendStatus.ErrorSending else SendStatus.Sent)
+            messagesListFlow.value = messagesListFlow.value - setOf(message) + listOf(
+                newMessage
+            )
+            messageId
+        }
+    }
+
     private fun Message.Companion.randomFake(sentAt: Instant): Message {
         val sender = if (Random.nextBoolean()) MessageSender.Patient else MessageSender.Provider(User.Provider.fake())
         return when (Random.nextInt() % 100) {
             in 0..70 -> Message.Text.fake(sender = sender, sentAt = sentAt)
             in 71..85 -> Message.Media.Image.fake(sender = sender, sentAt = sentAt)
             else -> Message.Media.Document.fake(sender = sender, sentAt = sentAt)
-        }
-    }
-
-    override suspend fun sendMessage(message: Message) {
-        flowMutex.withLock { messagesListFlow.value = messagesListFlow.value + listOf(message) }
-        delayWithIdlingRes(idlingRes, 1.seconds)
-        return flowMutex.withLock {
-            val newMessage = message.modify(if ((message as? Message.Text)?.text?.contains("fail") == true) SendStatus.ErrorSending else SendStatus.Sent)
-            messagesListFlow.value = messagesListFlow.value - listOf(message) + listOf(
-                newMessage
-            )
         }
     }
 

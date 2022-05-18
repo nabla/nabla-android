@@ -20,8 +20,8 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
-import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
@@ -221,13 +221,11 @@ internal class ConversationViewModel(
             mediaMessages.map { mediaToSend ->
                 async {
                     messagingClient.sendMessage(
-                        when (mediaToSend) {
-                            is LocalMedia.Image -> Message.Media.Image.new(
-                                conversationId = conversationId,
+                        input = when (mediaToSend) {
+                            is LocalMedia.Image -> MessageInput.Media.Image(
                                 mediaSource = FileSource.Local(FileLocal.Image(Uri(mediaToSend.uri.toString())))
                             )
-                            is LocalMedia.Document -> Message.Media.Document.new(
-                                conversationId = conversationId,
+                            is LocalMedia.Document -> MessageInput.Media.Document(
                                 mediaSource = FileSource.Local(
                                     FileLocal.Document(
                                         Uri(mediaToSend.uri.toString()),
@@ -236,7 +234,8 @@ internal class ConversationViewModel(
                                     )
                                 )
                             )
-                        }
+                        },
+                        conversationId = conversationId,
                     ).getOrNull()
                 }
             }.forEach { it.join() }
@@ -245,10 +244,8 @@ internal class ConversationViewModel(
                 currentMessageStateFlow.value = ""
 
                 messagingClient.sendMessage(
-                    Message.Text.new(
-                        conversationId = conversationId,
-                        text = textMessage,
-                    )
+                    input = MessageInput.Text(text = textMessage),
+                    conversationId = conversationId,
                 ).getOrNull()
             }
 

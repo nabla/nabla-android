@@ -5,11 +5,14 @@ import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
+import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
+import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.datetime.Clock
 
 internal class ConversationContentRepositoryImpl(
     private val repoScope: CoroutineScope,
@@ -92,15 +96,29 @@ internal class ConversationContentRepositoryImpl(
         loadMoreConversationMessagesSharedSingle.await()
     }
 
-    override suspend fun sendMessage(message: Message) {
-        val messageId = message.baseMessage.id
-        if (messageId !is MessageId.Local) {
-            throw NablaException.InvalidMessage("Can't send a message with an id that is not Local: $messageId")
+    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
+        val baseMessage = BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId)
+        val message = when (input) {
+            is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
+            is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
+            is MessageInput.Text -> Message.Text(baseMessage, input.text)
         }
 
-        if (message.sendStatus !in setOf(SendStatus.ToBeSent, SendStatus.ErrorSending)) {
-            throw NablaException.InvalidMessage("Can't send a message with status: ${message.sendStatus}")
+        return sendMessage(message)
+    }
+
+    override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
+        val localMessage = localMessageDataSource.getMessage(conversationId, localMessageId)
+        if (localMessage != null) {
+            sendMessage(localMessage)
+        } else {
+            throw NablaException.MessageNotFound(conversationId, localMessageId)
         }
+    }
+
+    private suspend fun sendMessage(message: Message): MessageId.Local {
+        val messageId = message.id as? MessageId.Local
+            ?: throw NablaException.InvalidMessage("Can't send a message that is not a local one")
 
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
 
@@ -128,15 +146,8 @@ internal class ConversationContentRepositoryImpl(
                 sentMessage
             )
         }
-    }
 
-    override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
-        val localMessage = localMessageDataSource.getMessage(conversationId, localMessageId)
-        if (localMessage != null) {
-            sendMessage(localMessage)
-        } else {
-            throw NablaException.MessageNotFound(conversationId, localMessageId)
-        }
+        return messageId
     }
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {

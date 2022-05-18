@@ -7,7 +7,6 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageId.Local
 import com.nabla.sdk.messaging.core.domain.entity.MessageId.Remote
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 internal data class BaseMessage(
@@ -76,7 +75,7 @@ public sealed interface MessageId {
     }
 
     public companion object {
-        internal fun new(): MessageId = Local(uuid4())
+        internal fun new(): Local = Local(uuid4())
     }
 }
 
@@ -97,18 +96,7 @@ public sealed class Message : ConversationItem {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
 
-        public companion object {
-            /**
-             * Create a new [Text] message in conversation.
-             */
-            public fun new(
-                conversationId: ConversationId,
-                text: String,
-            ): Text = Text(
-                BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
-                text,
-            )
-        }
+        internal companion object
     }
 
     public sealed class Media<FileLocalType : FileLocal, FileUploadType : FileUpload> : Message() {
@@ -132,21 +120,7 @@ public sealed class Message : ConversationItem {
                 return copy(mediaSource = mediaSource)
             }
 
-            public companion object {
-                /**
-                 * Create a new [Image] message in conversation.
-                 *
-                 * @param mediaSource local source of the image.
-                 * @see FileLocal.Image
-                 */
-                public fun new(
-                    conversationId: ConversationId,
-                    mediaSource: FileSource.Local<FileLocal.Image, FileUpload.Image>,
-                ): Image = Image(
-                    BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
-                    mediaSource
-                )
-            }
+            internal companion object
         }
 
         public data class Document internal constructor(
@@ -170,21 +144,7 @@ public sealed class Message : ConversationItem {
                 return copy(baseMessage = baseMessage.copy(sendStatus = status))
             }
 
-            public companion object {
-                /**
-                 * Create a new [Document] message in conversation.
-                 *
-                 * @param mediaSource local source of the document.
-                 * @see FileLocal.Document
-                 */
-                public fun new(
-                    conversationId: ConversationId,
-                    mediaSource: FileSource.Local<FileLocal.Document, FileUpload.Document>,
-                ): Document = Document(
-                    BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId),
-                    mediaSource,
-                )
-            }
+            internal companion object
         }
     }
 
