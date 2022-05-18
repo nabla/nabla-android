@@ -50,6 +50,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             is TimelineItem.LoadingMore -> ViewType.LOADING_MORE_VIEW_TYPE.ordinal
             is TimelineItem.DateSeparator -> ViewType.DATE_VIEW_TYPE.ordinal
             is TimelineItem.ProviderTypingIndicator -> ViewType.PROVIDER_TYPING_INDICATOR.ordinal
+            is TimelineItem.ConversationActivity -> ViewType.CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE.ordinal
         }
     }
 
@@ -83,6 +84,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE -> SystemImageMessageViewHolder.create(inflater, parent)
             ViewType.LOADING_MORE_VIEW_TYPE -> LoadingMoreViewHolder(NablaConversationTimelineItemLoadingMoreBinding.inflate(inflater, parent, false))
             ViewType.DATE_VIEW_TYPE -> DateSeparatorViewHolder.create(inflater, parent)
+            ViewType.CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE -> ConversationActivityTextMessageViewHolder.create(inflater, parent)
         }
     }
 
@@ -180,6 +182,9 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item.sender,
                 item.content as TimelineItem.Message.Image
             )
+            is ConversationActivityTextMessageViewHolder -> holder.bind(
+                item as TimelineItem.ConversationActivity
+            )
         }
         if (holder is ClickableItemHolder) {
             holder.bindOnItemClicked(item)
@@ -242,5 +247,6 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         SYSTEM_FILE_MESSAGE_VIEW_TYPE,
         SYSTEM_IMAGE_MESSAGE_VIEW_TYPE,
         SYSTEM_TEXT_MESSAGE_VIEW_TYPE,
+        CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE,
     }
 }

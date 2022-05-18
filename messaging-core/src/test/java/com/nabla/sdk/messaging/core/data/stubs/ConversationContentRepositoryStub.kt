@@ -3,11 +3,11 @@ package com.nabla.sdk.messaging.core.data.stubs
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.User
-import com.nabla.sdk.messaging.core.data.message.PaginatedConversationMessages
-import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
+import com.nabla.sdk.messaging.core.data.message.PaginatedConversationItems
+import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
@@ -26,7 +26,7 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-internal class MessageRepositoryStub(private val idlingRes: CountingIdlingResource) : MessageRepository {
+internal class ConversationContentRepositoryStub(private val idlingRes: CountingIdlingResource) : ConversationContentRepository {
     private val provider = User.Provider.fake()
     private val flowMutex = Mutex()
     private val messagesListFlow = MutableStateFlow(
@@ -51,12 +51,12 @@ internal class MessageRepositoryStub(private val idlingRes: CountingIdlingResour
         }
     )
 
-    override fun watchConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationMessages> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
         return messagesListFlow.map { messages ->
-            PaginatedConversationMessages(
-                conversationMessages = ConversationMessages.fake(
+            PaginatedConversationItems(
+                conversationItems = ConversationItems.fake(
                     conversation = Conversation.fake(),
-                    messages = messages.sortedByDescending { it.baseMessage.sentAt }
+                    messages = messages.sortedByDescending { it.baseMessage.createdAt }
                 ),
                 hasMore = true,
             )
@@ -72,7 +72,7 @@ internal class MessageRepositoryStub(private val idlingRes: CountingIdlingResour
         delayWithIdlingRes(idlingRes, 1.seconds)
         if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
         flowMutex.withLock {
-            val oldestInstant = messagesListFlow.value.minOf { it.baseMessage.sentAt }
+            val oldestInstant = messagesListFlow.value.minOf { it.baseMessage.createdAt }
             messagesListFlow.value =
                 messagesListFlow.value + (1..10).map { Message.randomFake(sentAt = oldestInstant.minus(12.hours).minus(it.minutes)) }
         }

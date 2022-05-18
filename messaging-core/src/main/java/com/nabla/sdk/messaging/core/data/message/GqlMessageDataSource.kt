@@ -18,13 +18,16 @@ import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
 import com.nabla.sdk.graphql.SetTypingMutation
-import com.nabla.sdk.graphql.fragment.ConversationMessagesPageFragment
+import com.nabla.sdk.graphql.fragment.ConversationActivityFragment
+import com.nabla.sdk.graphql.fragment.ConversationItemsPageFragment
 import com.nabla.sdk.graphql.fragment.ConversationPreviewFragment
 import com.nabla.sdk.graphql.fragment.MessageContentFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.type.Conversation
+import com.nabla.sdk.graphql.type.ConversationActivity
 import com.nabla.sdk.graphql.type.DeletedMessageContent
 import com.nabla.sdk.graphql.type.EmptyObject
+import com.nabla.sdk.graphql.type.Message
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendDocumentMessageInput
 import com.nabla.sdk.graphql.type.SendImageMessageInput
@@ -34,7 +37,7 @@ import com.nabla.sdk.graphql.type.UploadInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
@@ -73,20 +76,44 @@ internal class GqlMessageDataSource(
                 it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
                     insertMessageToConversationCache(messageFragment)
                 }
+                it.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
+                    insertConversationActivityToConversationCache(conversationActivityFragment)
+                }
             }.filterIsInstance()
     }
 
     private suspend fun insertMessageToConversationCache(
-        message: MessageFragment,
+        messageFragment: MessageFragment,
     ) {
-        val query = firstMessagePageQuery(message.conversation.id.toConversationId())
+        val query = firstMessagePageQuery(messageFragment.conversation.id.toConversationId())
+        val newItem = ConversationItemsPageFragment.Data(
+            Message.type.name,
+            null,
+            messageFragment
+        )
+        insertConversationItemToConversationCache(query, newItem)
+    }
+
+    private suspend fun insertConversationActivityToConversationCache(
+        conversationActivityFragment: ConversationActivityFragment
+    ) {
+        val query = firstMessagePageQuery(conversationActivityFragment.conversation.id.toConversationId())
+        val newItem = ConversationItemsPageFragment.Data(
+            ConversationActivity.type.name,
+            conversationActivityFragment,
+            null
+        )
+        insertConversationItemToConversationCache(query, newItem)
+    }
+
+    private suspend fun insertConversationItemToConversationCache(
+        query: ConversationMessagesQuery,
+        newItem: ConversationItemsPageFragment.Data
+    ) {
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
-            val newItem = ConversationMessagesPageFragment.Data(
-                com.nabla.sdk.graphql.type.Message.type.name,
-                message
-            )
-            val mergedItemsData = listOf(newItem) + cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.data
+            val mergedItemsData =
+                listOf(newItem) + cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data
             val mergedQueryData = cachedQueryData.modify(mergedItemsData)
             CacheUpdateOperation.Write(mergedQueryData)
         }
@@ -95,11 +122,11 @@ internal class GqlMessageDataSource(
     suspend fun loadMoreConversationMessagesInCache(conversationId: ConversationId) {
         val query = firstMessagePageQuery(conversationId)
         apolloClient.updateCache(query) { cachedQueryData ->
-            if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.hasMore) {
+            if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.hasMore) {
                 return@updateCache CacheUpdateOperation.Ignore()
             }
             val nextCursor =
-                requireNotNull(cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.nextCursor)
+                requireNotNull(cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.nextCursor)
             val updatedQuery = query.copy(
                 pageInfo = OpaqueCursorPage(
                     cursor = Optional.presentIfNotNull(nextCursor)
@@ -110,13 +137,13 @@ internal class GqlMessageDataSource(
                 .execute()
                 .dataAssertNoErrors
             val mergedData =
-                (cachedQueryData.conversation.conversation.conversationMessagesPageFragment.items.data + freshQueryData.conversation.conversation.conversationMessagesPageFragment.items.data).distinctBy { it?.messageFragment?.id }
+                (cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data + freshQueryData.conversation.conversation.conversationItemsPageFragment.items.data).distinctBy { it?.messageFragment?.id }
             val mergedQueryData = freshQueryData.modify(mergedData)
             return@updateCache CacheUpdateOperation.Write(mergedQueryData)
         }
     }
 
-    fun watchRemoteConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationMessages> {
+    fun watchRemoteConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationItems> {
         val query = firstMessagePageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
@@ -124,14 +151,19 @@ internal class GqlMessageDataSource(
             .map { response -> requireNotNull(response.data) }
             .map { queryData ->
                 val page =
-                    queryData.conversation.conversation.conversationMessagesPageFragment.items
-                val items = page.data.mapNotNull { it?.messageFragment }.mapNotNull {
-                    mapper.mapToMessage(it, SendStatus.Sent)
+                    queryData.conversation.conversation.conversationItemsPageFragment.items
+                val items = page.data.mapNotNull {
+                    it?.messageFragment?.let {
+                        return@mapNotNull mapper.mapToMessage(it, SendStatus.Sent)
+                    }
+                    it?.conversationActivityFragment?.let {
+                        return@mapNotNull mapper.mapToConversationActivity(it)
+                    }
                 }
-                return@map PaginatedConversationMessages(
-                    conversationMessages = ConversationMessages(
+                return@map PaginatedConversationItems(
+                    conversationItems = ConversationItems(
                         conversationId = queryData.conversation.conversation.id.toConversationId(),
-                        messages = items,
+                        items = items,
                     ),
                     hasMore = page.hasMore,
                 )

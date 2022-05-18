@@ -2,27 +2,35 @@ package com.nabla.sdk.messaging.core.data.apollo
 
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
+import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
+import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.graphql.fragment.ConversationActivityContentFragment
+import com.nabla.sdk.graphql.fragment.ConversationActivityFragment
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.fragment.DocumentFileUploadFragment
 import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
 import com.nabla.sdk.graphql.fragment.ImageFileUploadFragment
+import com.nabla.sdk.graphql.fragment.MaybeProviderFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 
 internal class GqlMapper(private val logger: Logger) {
@@ -51,6 +59,39 @@ internal class GqlMapper(private val logger: Logger) {
         )
     }
 
+    fun mapToConversationActivity(
+        conversationActivityFragment: ConversationActivityFragment
+    ): ConversationActivity? {
+        val content = mapToConversationActivityContent(conversationActivityFragment.conversationActivityContent.conversationActivityContentFragment)
+        if (content == null) {
+            logger.warn("Unknown conversation activity content mapping for $conversationActivityFragment")
+            return null
+        }
+        return ConversationActivity(
+            id = conversationActivityFragment.id.toConversationActivityId(),
+            conversationId = conversationActivityFragment.conversation.id.toConversationId(),
+            createdAt = conversationActivityFragment.createdAt,
+            activityTime = conversationActivityFragment.activityTime,
+            content = content,
+        )
+    }
+
+    private fun mapToConversationActivityContent(
+        conversationActivityContentFragment: ConversationActivityContentFragment
+    ): ConversationActivityContent? {
+        conversationActivityContentFragment.onProviderJoinedConversation?.let {
+            val maybeProvider = mapToMaybeProvider(it.provider.maybeProviderFragment) ?: return null
+            return ConversationActivityContent.ProviderJoinedConversation(maybeProvider)
+        }
+        return null
+    }
+
+    private fun mapToMaybeProvider(maybeProviderFragment: MaybeProviderFragment): MaybeProvider? {
+        maybeProviderFragment.onProvider?.let { return mapToProvider(it.providerFragment) }
+        maybeProviderFragment.onDeletedProvider?.let { return DeletedProvider }
+        return null
+    }
+
     fun mapToMessage(messageFragment: MessageFragment, sendStatus: SendStatus): Message? {
         val sender = mapToMessageSender(messageFragment.author)
         val baseMessage = BaseMessage(
@@ -58,18 +99,18 @@ internal class GqlMapper(private val logger: Logger) {
                 clientId = messageFragment.clientId,
                 remoteId = messageFragment.id
             ),
-            sentAt = messageFragment.createdAt,
+            createdAt = messageFragment.createdAt,
             sender = sender,
             sendStatus = sendStatus,
             conversationId = messageFragment.conversation.id.toConversationId(),
         )
-        messageFragment.content?.messageContentFragment?.onTextMessageContent?.textMessageContentFragment?.let {
+        messageFragment.messageContent?.messageContentFragment?.onTextMessageContent?.textMessageContentFragment?.let {
             return Message.Text(
                 baseMessage = baseMessage,
                 text = it.text
             )
         }
-        messageFragment.content?.messageContentFragment?.onImageMessageContent?.imageMessageContentFragment?.let {
+        messageFragment.messageContent?.messageContentFragment?.onImageMessageContent?.imageMessageContentFragment?.let {
             return Message.Media.Image(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -78,7 +119,7 @@ internal class GqlMapper(private val logger: Logger) {
                 ),
             )
         }
-        messageFragment.content?.messageContentFragment?.onDocumentMessageContent?.documentMessageContentFragment?.let {
+        messageFragment.messageContent?.messageContentFragment?.onDocumentMessageContent?.documentMessageContentFragment?.let {
             return Message.Media.Document(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -87,7 +128,7 @@ internal class GqlMapper(private val logger: Logger) {
                 )
             )
         }
-        messageFragment.content?.messageContentFragment?.onDeletedMessageContent?.let {
+        messageFragment.messageContent?.messageContentFragment?.onDeletedMessageContent?.let {
             return Message.Deleted(baseMessage = baseMessage)
         }
         logger.warn("Unknown message content mapping for $messageFragment")

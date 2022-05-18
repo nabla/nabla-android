@@ -54,6 +54,8 @@
     <string name="nabla_conversation_header_loading">Loading</string>
     <string name="nabla_conversation_header_error">Error</string>
     <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Share</string>
+    <string name="nabla_conversation_conversation_activity_provider_joined">%1$s joined the conversation</string>
+    <string name="nabla_conversation_conversation_activity_deleted_provider_joined">A practitioner joined the conversation</string>
 
     <string name="nabla_conversation_camera_picture_permission_rational_title">Authorisation to access camera</string>
     <string name="nabla_conversation_camera_picture_permission_rational_description">To take a photo, we need authorisation to access your camera</string>

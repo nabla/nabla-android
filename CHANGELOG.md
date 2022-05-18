@@ -7,9 +7,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Changed
+### Added
+- `ConversationActivity` in conversations. A message is displayed when a provider joins a conversation.
 
+### Changed
 - Documents name are now displayed only on 1 line when using `ConversationFragment`
+- `NablaMessagingClient.watchConversationMessages` replaced by `NablaMessagingClient.watchConversationItems`.
 
 ## [1.0-alpha03] - 2022-05-16
 

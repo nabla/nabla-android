@@ -1,5 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -44,4 +46,15 @@ private fun Message.toMessageContent() = when (this) {
     is Message.Text -> TimelineItem.Message.Text(
         text = text,
     )
+}
+
+internal fun ConversationActivity.toTimelineItem(): TimelineItem.ConversationActivity {
+    return when (val content = content) {
+        is ConversationActivityContent.ProviderJoinedConversation -> {
+            TimelineItem.ConversationActivity(
+                createdAt,
+                TimelineItem.ConversationActivity.ProviderJoinedConversation(content.maybeProvider)
+            )
+        }
+    }
 }

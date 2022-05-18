@@ -1,8 +1,8 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
-public data class ConversationMessages(
+public data class ConversationItems(
     val conversationId: ConversationId,
-    val messages: List<Message>,
+    val items: List<ConversationItem>,
 ) {
     public companion object
 }

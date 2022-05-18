@@ -27,6 +27,7 @@
         <item name="nablaMessaging_conversationDeletedMessageAppearance">?textAppearanceBodyLarge</item>
         <item name="nablaMessaging_conversationMessageAuthorAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationMessageStatusAppearance">?textAppearanceBodyMedium</item>
+        <item name="nablaMessaging_conversationActivityAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_patientMessageBackgroundColor">?colorPrimaryDark</item>
         <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurface</item>
         <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurface</item>

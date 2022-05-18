@@ -1,5 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
@@ -10,21 +12,24 @@ import kotlinx.datetime.Instant
 internal class TimelineBuilder {
 
     fun buildTimeline(
-        messages: List<Message>,
+        items: List<ConversationItem>,
         hasMore: Boolean,
         providersInConversation: List<ProviderInConversation>,
         selectedMessageId: MessageId? = null,
     ): List<TimelineItem> {
 
-        // First generates items containing messages, conversation event and action request.
+        // First generates items containing messages, conversation activity and action request.
         // In this first pass, we don't show the status and the author (will do in a second pass)
-        val allMessageItems = messages.map { message ->
-            message.toTimelineItem(
-                showSenderAvatar = false,
-                showSenderName = false,
-                showStatus = false,
-            )
-        } as List<TimelineItem>
+        val allMessageItems = items.map { item ->
+            when (item) {
+                is ConversationActivity -> item.toTimelineItem()
+                is Message -> item.toTimelineItem(
+                    showSenderAvatar = false,
+                    showSenderName = false,
+                    showStatus = false,
+                )
+            }
+        }
 
         // Now that we have the complete list of messages, action request and conversation events,
         // determines if we should show the status and show the author

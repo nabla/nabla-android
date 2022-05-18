@@ -8,11 +8,11 @@ import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryImpl
 import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
+import com.nabla.sdk.messaging.core.data.message.ConversationContentRepositoryImpl
 import com.nabla.sdk.messaging.core.data.message.GqlMessageDataSource
 import com.nabla.sdk.messaging.core.data.message.LocalMessageDataSource
-import com.nabla.sdk.messaging.core.data.message.MessageRepositoryImpl
+import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
-import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -45,7 +45,7 @@ internal class MessagingContainer(
         gqlConversationDataSource = gqlConversationDataSource,
     )
 
-    private val messageRepositoryImpl = MessageRepositoryImpl(
+    private val conversationContentRepositoryImpl = ConversationContentRepositoryImpl(
         repoScope = repoScope,
         localMessageDataSource = localMessageDataSource,
         gqlMessageDataSource = gqlMessageDataSource,
@@ -53,5 +53,5 @@ internal class MessagingContainer(
     )
 
     val conversationRepository: ConversationRepository = conversationRepositoryImpl
-    val messageRepository: MessageRepository = messageRepositoryImpl
+    val conversationContentRepository: ConversationContentRepository = conversationContentRepositoryImpl
 }

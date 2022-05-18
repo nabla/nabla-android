@@ -12,7 +12,7 @@ import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -27,12 +27,12 @@ import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-fun ConversationMessages.Companion.fake(
+fun ConversationItems.Companion.fake(
     conversation: Conversation = Conversation.fake(),
     messages: List<Message> = ((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }),
-) = ConversationMessages(
+) = ConversationItems(
     conversationId = conversation.id,
-    messages = messages,
+    items = messages,
 )
 
 fun Message.Text.Companion.fake(
@@ -44,7 +44,7 @@ fun Message.Text.Companion.fake(
 ) = Message.Text(
     BaseMessage(
         id = id,
-        sentAt = sentAt,
+        createdAt = sentAt,
         sender = sender,
         sendStatus = status,
         conversationId = uuid4().toConversationId(),
@@ -64,7 +64,7 @@ fun Message.Media.Image.Companion.fake(
 ) = Message.Media.Image(
     baseMessage = BaseMessage(
         id = id,
-        sentAt = sentAt,
+        createdAt = sentAt,
         sender = sender,
         sendStatus = status,
         conversationId = conversationId,
@@ -96,7 +96,7 @@ fun Message.Media.Document.Companion.fake(
 ) = Message.Media.Document(
     baseMessage = BaseMessage(
         id = id,
-        sentAt = sentAt,
+        createdAt = sentAt,
         sender = sender,
         sendStatus = status,
         conversationId = conversationId,

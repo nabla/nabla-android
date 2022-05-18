@@ -17,7 +17,7 @@ import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -82,7 +82,7 @@ internal class ConversationViewModel(
             messagingClient.watchConversation(conversationId)
                 .handleConversationDataSideEffects(),
             messagingClient
-                .watchConversationMessages(conversationId)
+                .watchConversationItems(conversationId)
                 .handleConversationMessagesSideEffects()
         )
 
@@ -98,11 +98,11 @@ internal class ConversationViewModel(
 
     private fun makeStateFlow(
         conversationDataFlow: Flow<Conversation>,
-        conversationMessagesFlow: Flow<WatchPaginatedResponse<ConversationMessages>>,
+        conversationItemsFlow: Flow<WatchPaginatedResponse<ConversationItems>>,
     ): StateFlow<State> {
         return combine(
             conversationDataFlow,
-            conversationMessagesFlow,
+            conversationItemsFlow,
             selectedMessageIdFlow,
             StateMapper()::mapToState,
         )
@@ -126,7 +126,7 @@ internal class ConversationViewModel(
             conversation.markConversationAsReadIfNeeded()
         }
 
-    private fun Flow<WatchPaginatedResponse<ConversationMessages>>.handleConversationMessagesSideEffects() =
+    private fun Flow<WatchPaginatedResponse<ConversationItems>>.handleConversationMessagesSideEffects() =
         onEach { response ->
             latestLoadMoreCallback = response.loadMore
         }
@@ -403,14 +403,14 @@ internal class ConversationViewModel(
 
         fun mapToState(
             conversation: Conversation,
-            conversationMessagesResponse: WatchPaginatedResponse<ConversationMessages>,
+            conversationItemsResponse: WatchPaginatedResponse<ConversationItems>,
             selectedMessageId: MessageId?,
         ): State {
             return State.ConversationLoaded(
                 conversation = conversation,
                 items = timelineBuilder.buildTimeline(
-                    messages = conversationMessagesResponse.content.messages,
-                    hasMore = conversationMessagesResponse.loadMore != null,
+                    items = conversationItemsResponse.content.items,
+                    hasMore = conversationItemsResponse.loadMore != null,
                     providersInConversation = conversation.providersInConversation,
                     selectedMessageId = selectedMessageId,
                 ),

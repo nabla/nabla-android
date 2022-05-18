@@ -8,7 +8,8 @@ import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.getInstance
 import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.initialize
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -67,7 +68,7 @@ public interface NablaMessagingClient {
     public fun watchConversation(conversationId: ConversationId): Flow<Conversation>
 
     /**
-     * Watch the list of messages in a conversation.
+     * Watch the list of [ConversationItem] in a conversation.
      * The current user should be involved in that conversation or a security error will be raised.
      *
      * @see WatchPaginatedResponse for pagination mechanism.
@@ -76,7 +77,7 @@ public interface NablaMessagingClient {
      *
      * @param conversationId the id from [Conversation.id].
      */
-    public fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>>
+    public fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>>
 
     /**
      * Send a new message in the conversation referenced by its [Message.conversationId].

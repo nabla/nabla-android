@@ -1,5 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.entity.DeletedProvider
+import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
@@ -61,11 +63,34 @@ internal sealed interface TimelineItem {
     ) : TimelineItem {
         override val listItemId: String = "provider_typing_${provider.id}"
     }
+
+    data class ConversationActivity(
+        val date: Instant,
+        val content: Content,
+    ) : TimelineItem {
+
+        sealed interface Content
+
+        data class ProviderJoinedConversation(
+            val maybeProvider: MaybeProvider,
+        ) : Content
+
+        override val listItemId = when (content) {
+            is ProviderJoinedConversation -> {
+                val id = when (content.maybeProvider) {
+                    DeletedProvider -> "deleted_$date"
+                    is User.Provider -> "${content.maybeProvider.id}_$date"
+                }
+                "provider_joined_$id"
+            }
+        }
+    }
 }
 
 internal fun TimelineItem.getDate(): Instant? = when (this) {
     is TimelineItem.Message -> time
     TimelineItem.LoadingMore -> null
-    is TimelineItem.DateSeparator -> this.date
+    is TimelineItem.DateSeparator -> date
     is TimelineItem.ProviderTypingIndicator -> null
+    is TimelineItem.ConversationActivity -> date
 }

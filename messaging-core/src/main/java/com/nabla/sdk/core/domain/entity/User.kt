@@ -12,7 +12,7 @@ public sealed interface User {
         val firstName: String,
         val lastName: String,
         val prefix: String?,
-    ) : User {
+    ) : User, MaybeProvider {
         public companion object
     }
 

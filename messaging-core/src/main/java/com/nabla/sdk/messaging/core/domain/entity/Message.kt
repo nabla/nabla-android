@@ -12,7 +12,7 @@ import kotlinx.datetime.Instant
 
 internal data class BaseMessage(
     val id: MessageId,
-    val sentAt: Instant,
+    val createdAt: Instant,
     val sender: MessageSender,
     val sendStatus: SendStatus,
     val conversationId: ConversationId,
@@ -80,15 +80,17 @@ public sealed interface MessageId {
     }
 }
 
-public sealed class Message {
+public sealed class Message : ConversationItem {
     internal abstract val baseMessage: BaseMessage
     internal abstract fun modify(status: SendStatus): Message
 
     public val id: MessageId get() = baseMessage.id
-    public val sentAt: Instant get() = baseMessage.sentAt
+    public val sentAt: Instant get() = baseMessage.createdAt
     public val sender: MessageSender get() = baseMessage.sender
     public val sendStatus: SendStatus get() = baseMessage.sendStatus
     public val conversationId: ConversationId get() = baseMessage.conversationId
+
+    override val createdAt: Instant get() = baseMessage.createdAt
 
     public data class Text internal constructor(override val baseMessage: BaseMessage, val text: String) : Message() {
         override fun modify(status: SendStatus): Message {

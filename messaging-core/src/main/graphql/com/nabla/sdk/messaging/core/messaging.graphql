@@ -46,7 +46,7 @@ query ConversationMessages($id: UUID!, $pageInfo: OpaqueCursorPage!) {
     conversation(id: $id) {
         conversation {
             id
-            ...ConversationMessagesPageFragment
+            ...ConversationItemsPageFragment
         }
     }
 }
@@ -107,6 +107,11 @@ subscription ConversationEvents($conversationId: UUID!) {
                     ...ProviderInConversationFragment
                 }
             }
+            ... on ConversationActivityCreated {
+                activity {
+                    ...ConversationActivityFragment
+                }
+            }
         }
     }
 }
@@ -132,13 +137,43 @@ fragment ConversationPreviewFragment on Conversation {
     lastMessagePreview
 }
 
-fragment ConversationMessagesPageFragment on Conversation {
+fragment ConversationItemsPageFragment on Conversation {
     items(page: $pageInfo) {
         data {
+            ...ConversationActivityFragment
             ...MessageFragment
         }
         hasMore
         nextCursor
+    }
+}
+
+fragment ConversationActivityFragment on ConversationActivity {
+    id
+    conversation {
+        id
+    }
+    createdAt
+    activityTime
+    conversationActivityContent: content {
+        ...ConversationActivityContentFragment
+    }
+}
+
+fragment ConversationActivityContentFragment on ConversationActivityContent {
+    ... on ProviderJoinedConversation {
+        provider {
+            ...MaybeProviderFragment
+        }
+    }
+}
+
+fragment MaybeProviderFragment on MaybeProvider {
+    ... on Provider {
+        ...ProviderFragment
+    }
+    ... on DeletedProvider {
+        empty: _
     }
 }
 
@@ -158,7 +193,7 @@ fragment MessageFragment on Message {
             empty: _
         }
     }
-    content {
+    messageContent: content {
         ...MessageContentFragment
     }
     clientId

@@ -6,7 +6,7 @@ import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
@@ -18,7 +18,7 @@ class NablaMessagingClientStub(
 ) : NablaMessagingClient {
 
     private val conversationRepository = ConversationRepositoryStub(idlingRes)
-    private val messageRepository = MessageRepositoryStub(idlingRes)
+    private val conversationContentRepository = ConversationContentRepositoryStub(idlingRes)
 
     override val logger: Logger = LoggerImpl
 
@@ -52,17 +52,17 @@ class NablaMessagingClientStub(
         return conversationRepository.watchConversation(conversationId)
     }
 
-    override fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
-                messageRepository.loadMoreMessages(conversationId)
+                conversationContentRepository.loadMoreMessages(conversationId)
             }
         }
 
-        return messageRepository.watchConversationMessages(conversationId)
+        return conversationContentRepository.watchConversationItems(conversationId)
             .map { paginatedConversationMessages ->
                 WatchPaginatedResponse(
-                    content = paginatedConversationMessages.conversationMessages,
+                    content = paginatedConversationMessages.conversationItems,
                     loadMore = if (paginatedConversationMessages.hasMore) {
                         loadMoreCallback
                     } else null
@@ -72,19 +72,19 @@ class NablaMessagingClientStub(
 
     override suspend fun sendMessage(message: Message): Result<Unit> {
         return runCatchingCancellable {
-            messageRepository.sendMessage(message)
+            conversationContentRepository.sendMessage(message)
         }
     }
 
     override suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
-            messageRepository.retrySendingMessage(conversationId, localMessageId)
+            conversationContentRepository.retrySendingMessage(conversationId, localMessageId)
         }
     }
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
         return runCatchingCancellable {
-            messageRepository.setTyping(conversationId, isTyping)
+            conversationContentRepository.setTyping(conversationId, isTyping)
         }
     }
 
@@ -96,7 +96,7 @@ class NablaMessagingClientStub(
 
     override suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
         return runCatchingCancellable {
-            messageRepository.deleteMessage(conversationId, id)
+            conversationContentRepository.deleteMessage(conversationId, id)
         }
     }
 }

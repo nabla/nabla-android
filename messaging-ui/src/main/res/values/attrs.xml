@@ -22,6 +22,7 @@
     <attr name="nablaMessaging_conversationDeletedMessageAppearance" format="reference" />
     <attr name="nablaMessaging_conversationMessageAuthorAppearance" format="reference" />
     <attr name="nablaMessaging_conversationMessageStatusAppearance" format="reference" />
+    <attr name="nablaMessaging_conversationActivityAppearance" format="reference" />
 
     <attr name="nablaMessaging_conversationComposerEditTextStyle" format="reference" />
     <attr name="nablaMessaging_conversationComposerBackground" format="reference" />

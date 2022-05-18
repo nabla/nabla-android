@@ -7,11 +7,11 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
-import com.nabla.sdk.messaging.core.domain.boundary.MessageRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationMessages
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
@@ -34,8 +34,8 @@ internal class NablaMessagingClientImpl internal constructor(
     private val conversationRepository: ConversationRepository by lazy {
         messagingContainer.conversationRepository
     }
-    private val messageRepository: MessageRepository by lazy {
-        messagingContainer.messageRepository
+    private val conversationContentRepository: ConversationContentRepository by lazy {
+        messagingContainer.conversationContentRepository
     }
 
     override val logger: Logger = coreContainer.logger
@@ -79,19 +79,19 @@ internal class NablaMessagingClientImpl internal constructor(
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
-    override fun watchConversationMessages(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationMessages>> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>> {
         ensureAuthenticatedOrThrow()
 
         val loadMoreCallback = suspend {
             runCatchingCancellable {
-                messageRepository.loadMoreMessages(conversationId)
+                conversationContentRepository.loadMoreMessages(conversationId)
             }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
         }
 
-        return messageRepository.watchConversationMessages(conversationId)
+        return conversationContentRepository.watchConversationItems(conversationId)
             .map { paginatedConversationMessages ->
                 WatchPaginatedResponse(
-                    content = paginatedConversationMessages.conversationMessages,
+                    content = paginatedConversationMessages.conversationItems,
                     loadMore = if (paginatedConversationMessages.hasMore) {
                         loadMoreCallback
                     } else null
@@ -105,7 +105,7 @@ internal class NablaMessagingClientImpl internal constructor(
         ensureAuthenticatedOrThrow()
 
         return runCatchingCancellable {
-            messageRepository.sendMessage(message)
+            conversationContentRepository.sendMessage(message)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
@@ -114,7 +114,7 @@ internal class NablaMessagingClientImpl internal constructor(
         ensureAuthenticatedOrThrow()
 
         return runCatchingCancellable {
-            messageRepository.retrySendingMessage(conversationId, localMessageId)
+            conversationContentRepository.retrySendingMessage(conversationId, localMessageId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
@@ -123,7 +123,7 @@ internal class NablaMessagingClientImpl internal constructor(
         ensureAuthenticatedOrThrow()
 
         return runCatchingCancellable {
-            messageRepository.setTyping(conversationId, isTyping)
+            conversationContentRepository.setTyping(conversationId, isTyping)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
@@ -141,7 +141,7 @@ internal class NablaMessagingClientImpl internal constructor(
         ensureAuthenticatedOrThrow()
 
         return runCatchingCancellable {
-            messageRepository.deleteMessage(conversationId, id)
+            conversationContentRepository.deleteMessage(conversationId, id)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
