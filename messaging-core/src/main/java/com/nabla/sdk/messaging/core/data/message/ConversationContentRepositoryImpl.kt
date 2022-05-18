@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
+import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
@@ -27,6 +28,8 @@ internal class ConversationContentRepositoryImpl(
     private val localMessageDataSource: LocalMessageDataSource,
     private val gqlMessageDataSource: GqlMessageDataSource,
     private val fileUploadRepository: FileUploadRepository,
+    private val clock: Clock,
+    private val uuidGenerator: UuidGenerator,
 ) : ConversationContentRepository {
 
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
@@ -97,7 +100,7 @@ internal class ConversationContentRepositoryImpl(
     }
 
     override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
-        val baseMessage = BaseMessage(MessageId.new(), Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId)
+        val baseMessage = BaseMessage(MessageId.Local(uuidGenerator.generate()), clock.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)

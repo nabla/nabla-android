@@ -29,6 +29,8 @@ internal class NablaMessagingClientImpl internal constructor(
         coreContainer.fileUploadRepository,
         coreContainer.exceptionMapper,
         coreContainer.sessionClient,
+        coreContainer.clock,
+        coreContainer.uuidGenerator,
     )
 
     private val conversationRepository: ConversationRepository by lazy {

@@ -1,7 +1,6 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
 import com.benasher44.uuid.Uuid
-import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
@@ -72,10 +71,6 @@ public sealed interface MessageId {
 
     public data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
-    }
-
-    public companion object {
-        internal fun new(): Local = Local(uuid4())
     }
 }
 

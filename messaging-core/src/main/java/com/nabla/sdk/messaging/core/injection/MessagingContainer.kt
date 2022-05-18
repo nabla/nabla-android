@@ -5,6 +5,7 @@ import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.SessionClient
+import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryImpl
 import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
@@ -16,6 +17,7 @@ import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.datetime.Clock
 
 internal class MessagingContainer(
     logger: Logger,
@@ -23,6 +25,8 @@ internal class MessagingContainer(
     fileUploadRepository: FileUploadRepository,
     val nablaExceptionMapper: NablaExceptionMapper,
     val sessionClient: SessionClient,
+    clock: Clock,
+    uuidGenerator: UuidGenerator,
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val gqlMapper = GqlMapper(logger)
@@ -50,6 +54,8 @@ internal class MessagingContainer(
         localMessageDataSource = localMessageDataSource,
         gqlMessageDataSource = gqlMessageDataSource,
         fileUploadRepository = fileUploadRepository,
+        clock = clock,
+        uuidGenerator = uuidGenerator,
     )
 
     val conversationRepository: ConversationRepository = conversationRepositoryImpl

@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.data.stubs
 
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.data.message.PaginatedConversationItems
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
@@ -84,7 +85,7 @@ internal class ConversationContentRepositoryStub(private val idlingRes: Counting
         input: MessageInput,
         conversationId: ConversationId
     ): MessageId.Local {
-        val messageId = MessageId.new()
+        val messageId = MessageId.Local(Uuid.randomUUID())
         val baseMessage = BaseMessage(messageId, Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)

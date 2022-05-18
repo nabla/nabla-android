@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.okHttpClient
+import com.benasher44.uuid.Uuid
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.data.apollo.ApolloFactory
@@ -29,8 +30,10 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
+import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
+import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -46,6 +49,11 @@ internal class CoreContainer(
         overriddenLogger ?: AndroidLogger(),
         configuration.isLoggingEnabled
     )
+
+    val clock: Clock = overriddenClock ?: Clock.System
+    val uuidGenerator: UuidGenerator = overriddenUuidGenerator ?: object : UuidGenerator {
+        override fun generate(): Uuid = Uuid.randomUUID()
+    }
 
     private val kvStorage = configuration.context.getSharedPreferences(
         "nabla_kv_$name.sp", Context.MODE_PRIVATE
@@ -122,5 +130,11 @@ internal class CoreContainer(
 
         @VisibleForTesting
         internal var overriddenOkHttpClient: ((OkHttpClient.Builder) -> Unit)? = null
+
+        @VisibleForTesting
+        internal var overriddenUuidGenerator: UuidGenerator? = null
+
+        @VisibleForTesting
+        internal var overriddenClock: Clock? = null
     }
 }

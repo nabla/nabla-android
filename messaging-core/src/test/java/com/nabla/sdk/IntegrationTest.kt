@@ -1,14 +1,24 @@
 package com.nabla.sdk
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.logger.StdLogger
+import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
+import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import okreplay.MatchRules
 import okreplay.OkReplay
 import okreplay.OkReplayConfig
@@ -24,6 +34,8 @@ import java.io.FileNotFoundException
 import java.io.FileReader
 import java.util.Properties
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
@@ -76,7 +88,7 @@ internal class IntegrationTest {
 
     @Test
     @OkReplay
-    fun `test conversations`() = runTest {
+    fun `test conversation creation and conversations & conversation watching`() = runTest {
         val nablaMessagingClient = setupClient()
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
         val firstPageOfConversations = nablaMessagingClient.watchConversations().first()
@@ -89,9 +101,67 @@ internal class IntegrationTest {
         assertEquals(createdConversation.id, watchedConversation.id)
     }
 
-    private fun setupClient(): NablaMessagingClient {
+    @Test
+    @OkReplay
+    fun `test conversation text message sending watching`() = runTest {
+        val nablaMessagingClient = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+            uuidGenerator = object : UuidGenerator {
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000000")
+            }
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.content.items.size)
+
+            assertEquals(createdConversation.id, firstEmit.content.conversationId)
+            assertNull(firstEmit.loadMore)
+
+            val messageToSend = "Hello"
+            nablaMessagingClient.sendMessage(MessageInput.Text(messageToSend), createdConversation.id).getOrThrow()
+
+            val secondEmit = awaitItem()
+            val message = secondEmit.content.items.first()
+            assertIs<Message.Text>(message)
+            assertEquals("Hello", message.text)
+            assertEquals(createdConversation.id, message.conversationId)
+            assertIs<MessageId.Local>(message.id)
+            assertEquals(SendStatus.Sending, message.sendStatus)
+            assertEquals(MessageSender.Patient, message.sender)
+            assertEquals(createdConversation.id, secondEmit.content.conversationId)
+            assertNull(secondEmit.loadMore)
+
+            val thirdEmit = awaitItem()
+            val message2 = thirdEmit.content.items.first()
+            assertIs<Message.Text>(message2)
+            assertEquals("Hello", message2.text)
+            assertEquals(createdConversation.id, message2.conversationId)
+            assertIs<MessageId.Local>(message2.id)
+            assertEquals(SendStatus.Sent, message2.sendStatus)
+            assertEquals(MessageSender.Patient, message2.sender)
+            assertEquals(createdConversation.id, thirdEmit.content.conversationId)
+            assertNull(thirdEmit.loadMore)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun setupClient(
+        clock: Clock? = null,
+        uuidGenerator: UuidGenerator? = null,
+    ): NablaMessagingClient {
+        CoreContainer.overriddenUuidGenerator = uuidGenerator
+        CoreContainer.overriddenClock = clock
+
         val nablaClient = NablaClient.initialize(
-            Configuration(
+            name = Uuid.randomUUID().toString(),
+            configuration = Configuration(
                 context = RuntimeEnvironment.getApplication(),
                 publicApiKey = "dummy-api-key",
                 baseUrl = baseUrl,
@@ -111,7 +181,7 @@ internal class IntegrationTest {
     }
 
     companion object {
-        private const val DUMMY_BASE_URL = "https://dummy-base-url/"
+        private const val DUMMY_BASE_URL = "https://dummy-base-url/api/"
 
         // Valid JWT token from https://www.javainuse.com/jwtgenerator
         private const val DUMMY_TOKEN =
