@@ -7,6 +7,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Documents name are now displayed only on 1 line when using `ConversationFragment`
+
 ## [1.0-alpha03] - 2022-05-16
 
 ### Added
