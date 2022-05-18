@@ -19,6 +19,7 @@ class UiTests {
 
     @Test
     fun firstTest() {
-        onView(first(withId(R.id.conversationListViewItemRoot))).perform(click())
+        onView(first(withId(R.id.conversationListViewItemRoot)))
+            .perform(click())
     }
 }
