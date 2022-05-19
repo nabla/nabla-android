@@ -64,7 +64,7 @@ internal class TimelineBuilder {
         }
 
         val typingIndicators = providersInConversation
-            .filter { it.isTyping }
+            .filter { it.isTyping() }
             .mapIndexed { index, typingProvider ->
                 val firstMessage = allItemsWithDates.firstOrNull()
                 val showProviderName = index > 0 ||

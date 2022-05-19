@@ -47,7 +47,7 @@ internal interface SharedSingle<R> {
 internal fun <T> Flow<T>.shareInWithMaterializedErrors(
     scope: CoroutineScope,
     started: SharingStarted,
-    replay: Int
+    replay: Int = 0
 ): Flow<T> {
     return map {
         Result.success(it)

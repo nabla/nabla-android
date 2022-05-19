@@ -9,11 +9,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.math.min
 
 internal fun <D : Operation.Data> Flow<ApolloResponse<D>>.retryOnNetworkErrorWithExponentialBackoff(): Flow<ApolloResponse<D>> {
@@ -30,19 +31,16 @@ internal fun <D : Operation.Data> Flow<ApolloResponse<D>>.retryOnNetworkErrorWit
 
 internal fun <D : Operation.Data> Flow<ApolloResponse<D>>.retryOnNetworkErrorAndShareIn(
     coroutineScope: CoroutineScope,
-    action: (suspend (D) -> Unit)? = null
 ) = retryOnNetworkErrorWithExponentialBackoff()
-    .map {
-        it.dataAssertNoErrors
-    }.onEach {
-        if (action != null) { action(it) }
-    }.shareInWithMaterializedErrors(
+    .shareInWithMaterializedErrors(
         scope = coroutineScope,
         replay = 0,
         started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
     )
 
 internal fun <D> Flow<D>.notifyTypingUpdates(
+    clock: Clock = Clock.System,
+    context: CoroutineContext = EmptyCoroutineContext,
     providersSelector: (D) -> List<ProviderInConversation>
 ): Flow<D> {
     return transformLatest { data ->
@@ -50,7 +48,9 @@ internal fun <D> Flow<D>.notifyTypingUpdates(
         providersSelector(data).mapNotNull { provider ->
             provider.isInactiveAt()
         }.minOrNull()?.let {
-            delay(it - Clock.System.now())
+            withContext(context) {
+                delay(it - clock.now())
+            }
             emit(data)
         }
     }

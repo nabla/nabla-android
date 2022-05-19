@@ -9,8 +9,9 @@ public data class ProviderInConversation(
     val provider: User.Provider,
     val typingAt: Instant?,
     val seenUntil: Instant?,
-    val isTyping: Boolean = isTyping(typingAt),
 ) {
+
+    public fun isTyping(clock: Clock = Clock.System): Boolean = Companion.isTyping(clock, typingAt)
 
     internal fun isInactiveAt(): Instant? {
         return Companion.isInactiveAt(typingAt)
@@ -27,10 +28,10 @@ public data class ProviderInConversation(
             }
         }
 
-        private fun isTyping(typingAt: Instant?): Boolean {
+        private fun isTyping(clock: Clock, typingAt: Instant?): Boolean {
             val isInactiveAt = isInactiveAt(typingAt)
             return if (isInactiveAt != null) {
-                isInactiveAt > Clock.System.now()
+                isInactiveAt > clock.now()
             } else {
                 false
             }

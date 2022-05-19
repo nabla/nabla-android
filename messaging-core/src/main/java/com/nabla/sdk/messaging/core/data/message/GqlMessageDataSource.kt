@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Clock
 
 internal class GqlMessageDataSource(
@@ -71,12 +72,13 @@ internal class GqlMessageDataSource(
     private fun createConversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
         return apolloClient.subscription(ConversationEventsSubscription(conversationId.value))
             .toFlow()
-            .retryOnNetworkErrorAndShareIn(coroutineScope) {
+            .retryOnNetworkErrorAndShareIn(coroutineScope)
+            .onEach {
                 logger.debug("Event $it", tag = tag)
-                it.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
+                it.dataAssertNoErrors.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
                     insertMessageToConversationCache(messageFragment)
                 }
-                it.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
+                it.dataAssertNoErrors.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
                     insertConversationActivityToConversationCache(conversationActivityFragment)
                 }
             }.filterIsInstance()

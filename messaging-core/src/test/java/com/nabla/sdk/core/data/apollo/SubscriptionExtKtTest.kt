@@ -1,9 +1,12 @@
 package com.nabla.sdk.core.data.apollo
 
-import app.cash.turbine.FlowTurbine
 import app.cash.turbine.test
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.messaging.core.data.stubs.fake
+import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
+import com.nabla.sdk.test.TestClock
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Job
@@ -13,19 +16,63 @@ import kotlinx.coroutines.plus
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.net.UnknownHostException
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class SubscriptionExtKtTest {
+
     @Test
-    fun `gql subscription recovers from network error`() {
-        val gqlFlow = gqlFlowThatThrowsNetworkErrorThenEmitItem()
-        assertGqlFlowBehaviour(gqlFlow) {
+    fun `retryOnNetworkErrorWithExponentialBackoff() retries on network error`() = runTest {
+        val gqlFlow = gqlFlowThatThrowsNetworkErrorThenEmitItem().retryOnNetworkErrorWithExponentialBackoff()
+        gqlFlow.test {
             awaitItem()
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `retryOnNetworkErrorAndShareIn() retries on network error`() = runTest {
+        val job = Job()
+        val gqlFlow = gqlFlowThatThrowsNetworkErrorThenEmitItem().retryOnNetworkErrorAndShareIn(this + job)
+        gqlFlow.test {
+            awaitItem()
+        }
+        job.cancel()
+    }
+
+    @Test
+    fun `retryOnNetworkErrorAndShareIn() propagate to downstream not network error`() = runTest {
+        val job = Job()
+        val gqlFlow = flow<ApolloResponse<Operation.Data>> {
+            throw IllegalArgumentException()
+        }.retryOnNetworkErrorAndShareIn(this + job)
+        gqlFlow.test {
+            awaitError()
+        }
+        job.cancel()
+    }
+
+    @Test
+    fun `notifyTypingUpdates() notifies typing updates`() = runTest {
+        val clock = TestClock(this)
+        val typingProvider = ProviderInConversation(
+            User.Provider.fake(), clock.now(), null
+        )
+        val eventFlowWithProviders = flow {
+            emit(typingProvider)
+        }.notifyTypingUpdates(clock, coroutineContext) {
+            listOf(it)
+        }
+        eventFlowWithProviders.test {
+            assertTrue(awaitItem().isTyping(clock))
+            assertFalse(awaitItem().isTyping(clock))
+            awaitComplete()
         }
     }
 
     private fun gqlFlowThatThrowsNetworkErrorThenEmitItem(): Flow<ApolloResponse<Operation.Data>> {
         var firstCall = true
-        val networkError = UnknownHostException()
+        val networkError = NETWORK_ERROR
         return flow {
             if (firstCall) {
                 firstCall = false
@@ -39,13 +86,7 @@ internal class SubscriptionExtKtTest {
         }
     }
 
-    private fun assertGqlFlowBehaviour(
-        gqlFlow: Flow<ApolloResponse<Operation.Data>>,
-        validate: suspend FlowTurbine<Operation.Data>.() -> Unit
-    ) = runTest {
-        val job = Job()
-        gqlFlow.retryOnNetworkErrorAndShareIn(this + job).test(validate = validate)
-        // Cancelling hot flow as it never completes itself, which would prevent runTest to complete
-        job.cancel()
+    companion object {
+        private val NETWORK_ERROR = UnknownHostException()
     }
 }

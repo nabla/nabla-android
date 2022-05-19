@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 internal class GqlConversationDataSource constructor(
     private val logger: Logger,
@@ -41,9 +42,9 @@ internal class GqlConversationDataSource constructor(
     private val conversationsEventsFlow by lazy {
         apolloClient.subscription(ConversationsEventsSubscription())
             .toFlow()
-            .retryOnNetworkErrorAndShareIn(coroutineScope) {
+            .retryOnNetworkErrorAndShareIn(coroutineScope).onEach {
                 logger.debug("Event $it", tag = tag)
-                it.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
+                it.dataAssertNoErrors.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
                     insertConversationToConversationsListCache(it)
                 }
             }
