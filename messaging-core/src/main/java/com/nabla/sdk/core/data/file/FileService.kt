@@ -1,16 +1,13 @@
 package com.nabla.sdk.core.data.file
 
-import okhttp3.MultipartBody
-import retrofit2.http.Multipart
+import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.POST
-import retrofit2.http.Part
 
 internal interface FileService {
-    @Multipart
     @POST(UPLOAD_FILE_PATH)
     suspend fun upload(
-        @Part purpose: MultipartBody.Part,
-        @Part file: MultipartBody.Part
+        @Body body: RequestBody,
     ): List<String>
 
     companion object {

@@ -113,7 +113,7 @@ internal class CoreContainer(
     private val localPatientDataSource = LocalPatientDataSource(kvStorage)
 
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
-    val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context)
+    val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context, uuidGenerator)
 
     private val sessionLocalDataCleaner: SessionLocalDataCleaner = SessionLocalDataCleanerImpl(
         apolloClient,

@@ -5,16 +5,22 @@ import app.cash.turbine.test
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.data.logger.StdLogger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.entity.FileUpload
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.core.domain.entity.FileLocal
+import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.test.MockMimeTypeContentProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -29,6 +35,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows
+import org.robolectric.shadows.ShadowContentResolver
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileReader
@@ -54,10 +63,19 @@ internal class IntegrationTest {
         }
         val properties = Properties()
         tapeMode = try {
-            properties.load(FileReader(File(TEST_CONFIG_OVERRIDE_PATH)))
+            try {
+                properties.load(FileReader(File(TEST_CONFIG_OVERRIDE_PATH)))
+            } catch (e: FileNotFoundException) {
+                throw ReplayException
+            }
+
+            if (properties.getProperty("ignore", "false") == "true") {
+                throw ReplayException
+            }
+
             println("--- RECORD ---")
             TapeMode.WRITE_ONLY
-        } catch (throwable: FileNotFoundException) {
+        } catch (throwable: ReplayException) {
             println("--- REPLAY ---")
             println(
                 "If you want to record new integration test, please create a" +
@@ -70,6 +88,8 @@ internal class IntegrationTest {
         refreshToken = properties.getProperty("refreshToken", DUMMY_TOKEN)
         accessToken = properties.getProperty("accessToken", DUMMY_TOKEN)
     }
+
+    private object ReplayException : Exception()
 
     private val okReplayInterceptor = OkReplayInterceptor()
 
@@ -150,6 +170,83 @@ internal class IntegrationTest {
 
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    @OkReplay
+    fun `test conversation image message sending watching`() = runTest {
+        val nablaMessagingClient = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+            uuidGenerator = object : UuidGenerator {
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000001")
+            }
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.content.items.size)
+
+            assertEquals(createdConversation.id, firstEmit.content.conversationId)
+            assertNull(firstEmit.loadMore)
+
+            val uri = setupContentProviderForMediaUpload(
+                authority = "AUTHORITY_TEST",
+                mimeType = "image/png",
+            )
+
+            val mediaSource = FileSource.Local<FileLocal.Image, FileUpload.Image>(FileLocal.Image(uri))
+            nablaMessagingClient.sendMessage(
+                MessageInput.Media.Image(mediaSource),
+                createdConversation.id
+            ).getOrThrow()
+
+            val secondEmit = awaitItem()
+            val message = secondEmit.content.items.first()
+            assertIs<Message.Media.Image>(message)
+            assertEquals(mediaSource, message.mediaSource)
+            assertEquals(uri, message.stableUri)
+            assertEquals(createdConversation.id, message.conversationId)
+            assertIs<MessageId.Local>(message.id)
+            assertEquals(SendStatus.Sending, message.sendStatus)
+            assertEquals(MessageSender.Patient, message.sender)
+            assertEquals(createdConversation.id, secondEmit.content.conversationId)
+            assertNull(secondEmit.loadMore)
+
+            val thirdEmit = awaitItem()
+            val message2 = thirdEmit.content.items.first()
+            assertIs<Message.Media.Image>(message2)
+            assertEquals(mediaSource, message2.mediaSource)
+            assertEquals(uri, message2.stableUri)
+            assertEquals(createdConversation.id, message2.conversationId)
+            assertIs<MessageId.Local>(message2.id)
+            assertEquals(SendStatus.Sent, message2.sendStatus)
+            assertEquals(MessageSender.Patient, message2.sender)
+            assertEquals(createdConversation.id, thirdEmit.content.conversationId)
+            assertNull(thirdEmit.loadMore)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun setupContentProviderForMediaUpload(authority: String, mimeType: String): Uri {
+        val uri = Uri("content://$authority/test")
+
+        ShadowContentResolver.registerProviderInternal(
+            authority,
+            MockMimeTypeContentProvider(mimeType = mimeType)
+        )
+
+        Shadows.shadowOf(RuntimeEnvironment.getApplication().contentResolver).registerInputStream(
+            uri.toAndroidUri(),
+            ByteArrayInputStream(byteArrayOf()),
+        )
+
+        return uri
     }
 
     private fun setupClient(
