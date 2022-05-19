@@ -14,6 +14,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Documents name are now displayed only on 1 line when using `ConversationFragment`
 - `NablaMessagingClient.watchConversationMessages` replaced by `NablaMessagingClient.watchConversationItems`.
 - `NablaMessagingClient.sendMessage` now takes a `MessageInput` and the `ConversationId` rather than the message directly
+- `FileLocal.Image` now takes an optional file name and the `MimeType` of the image as parameter, along with the `Uri`
+
+### Fixed
+- Uploading an image captured from camera using `ConversationFragment` would fail, this is now fixed
 
 ## [1.0-alpha03] - 2022-05-16
 

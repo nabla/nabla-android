@@ -27,7 +27,11 @@ public sealed interface FileLocal {
      */
     public val uri: Uri
 
-    public data class Image(override val uri: Uri) : FileLocal
+    public data class Image(
+        override val uri: Uri,
+        val imageName: String?,
+        val mimeType: MimeType.Image,
+    ) : FileLocal
     public data class Document(
         override val uri: Uri,
         val documentName: String?,
@@ -105,6 +109,16 @@ public sealed class Message : ConversationItem {
             val stableUri: Uri = when (mediaSource) {
                 is FileSource.Local -> mediaSource.fileLocal.uri
                 is FileSource.Uploaded -> mediaSource.fileLocal?.uri ?: mediaSource.fileUpload.fileUpload.url.url
+            }
+
+            val mimeType: MimeType = when (mediaSource) {
+                is FileSource.Local -> mediaSource.fileLocal.mimeType
+                is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.mimeType
+            }
+
+            val imageName: String? = when (mediaSource) {
+                is FileSource.Local -> mediaSource.fileLocal.imageName
+                is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.fileName
             }
 
             override fun modify(status: SendStatus): Message {

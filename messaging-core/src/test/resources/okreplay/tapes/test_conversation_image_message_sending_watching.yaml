@@ -47,14 +47,14 @@ interactions:
       vary: Origin
       x-request-id: 60e40730-1e67-48d0-89c0-5f8c3f750b83
     body: ''
-- recorded: 2022-05-19T13:57:36.255Z
+- recorded: 2022-05-19T14:53:51.809Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
       X-APOLLO-OPERATION-ID: 0dd808ea7e5ea5dd331b8e682ecb6f54335e6c146db2a3399e100a7945a9fb69
       X-APOLLO-OPERATION-NAME: ConversationMessages
-    body: '{"operationName":"ConversationMessages","variables":{"id":"b013aa8c-be89-42e1-8938-0a326f6ea639","pageInfo":{}},"query":"query ConversationMessages($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
+    body: '{"operationName":"ConversationMessages","variables":{"id":"54c0f727-d053-4207-b7d4-bb627a356fb0","pageInfo":{}},"query":"query ConversationMessages($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
       } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment MaybeProviderFragment on MaybeProvider { __typename
       ... on Provider { __typename ...ProviderFragment } ... on DeletedProvider { empty: _ } }  fragment ConversationActivityContentFragment on ConversationActivityContent { __typename ... on ProviderJoinedConversation { provider { __typename ...MaybeProviderFragment
       } } }  fragment ConversationActivityFragment on ConversationActivity { id conversation { id } createdAt activityTime conversationActivityContent: content { __typename ...ConversationActivityContentFragment } }  fragment PatientFragment on Patient { id
@@ -68,7 +68,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Thu, 19 May 2022 13:57:36 GMT
+      Date: Thu, 19 May 2022 14:53:51 GMT
       connection: close
       content-length: '170'
       content-type: application/json; charset=UTF-8
@@ -83,7 +83,7 @@ interactions:
     method: POST
     uri: http://localhost:3000/api/v1/upload/patient
     body: "--00000000-0000-0000-0000-000000000001\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--00000000-0000-0000-0000-000000000001\r\nContent-Disposition: form-data; name=\"file\"; filename=\"00000000-0000-0000-0000-000000000001\"\
-      \r\nContent-Type: image/png\r\n\r\n\r\n--00000000-0000-0000-0000-000000000001--\r\n"
+      \r\nContent-Type: image/jpeg\r\n\r\n\r\n--00000000-0000-0000-0000-000000000001--\r\n"
   response:
     status: 200
     headers:
@@ -98,14 +98,14 @@ interactions:
       [
           "e33e3eb5-3061-478a-bca7-0c87db9ecae3"
       ]
-- recorded: 2022-05-19T13:57:36.812Z
+- recorded: 2022-05-19T14:53:52.159Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
       X-APOLLO-OPERATION-ID: df34eb05f29ad403acec61dcb19eca1adff39144d8d0f88456aa1527edd1602d
       X-APOLLO-OPERATION-NAME: SendMessage
-    body: '{"operationName":"SendMessage","variables":{"conversationId":"b013aa8c-be89-42e1-8938-0a326f6ea639","content":{"imageInput":{"upload":{"uuid":"9b93877c-be02-4e87-9920-616068418276"}}},"clientId":"00000000-0000-0000-0000-000000000001"},"query":"mutation
+    body: '{"operationName":"SendMessage","variables":{"conversationId":"54c0f727-d053-4207-b7d4-bb627a356fb0","content":{"imageInput":{"upload":{"uuid":"aad35a67-f052-44c2-9357-431b3543dde0"}}},"clientId":"00000000-0000-0000-0000-000000000001"},"query":"mutation
       SendMessage($conversationId: UUID!, $content: SendMessageContentInput!, $clientId: UUID!) { sendMessage(conversationId: $conversationId, content: $content, clientId: $clientId) { message { __typename ...MessageFragment conversation { __typename ...ConversationPreviewFragment
       } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment PatientFragment on Patient { id }  fragment TextMessageContentFragment
       on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment on ImageMessageContent { imageFileUpload { __typename
@@ -118,9 +118,9 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Thu, 19 May 2022 13:57:36 GMT
+      Date: Thu, 19 May 2022 14:53:52 GMT
       connection: close
-      content-length: '1713'
+      content-length: '1714'
       content-type: application/json; charset=UTF-8
       vary: Origin
       x-nabla-minimum-android-code-version: '0'

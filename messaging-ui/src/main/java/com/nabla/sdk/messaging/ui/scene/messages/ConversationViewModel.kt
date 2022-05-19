@@ -223,7 +223,13 @@ internal class ConversationViewModel(
                     messagingClient.sendMessage(
                         input = when (mediaToSend) {
                             is LocalMedia.Image -> MessageInput.Media.Image(
-                                mediaSource = FileSource.Local(FileLocal.Image(Uri(mediaToSend.uri.toString())))
+                                mediaSource = FileSource.Local(
+                                    FileLocal.Image(
+                                        uri = Uri(mediaToSend.uri.toString()),
+                                        imageName = mediaToSend.name,
+                                        mimeType = mediaToSend.mimeType,
+                                    )
+                                )
                             )
                             is LocalMedia.Document -> MessageInput.Media.Document(
                                 mediaSource = FileSource.Local(

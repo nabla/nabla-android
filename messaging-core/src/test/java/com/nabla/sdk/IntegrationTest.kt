@@ -10,6 +10,7 @@ import com.nabla.sdk.core.data.logger.StdLogger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.FileUpload
+import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
@@ -20,7 +21,6 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.test.MockMimeTypeContentProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -36,7 +36,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows
-import org.robolectric.shadows.ShadowContentResolver
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -194,12 +193,17 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, firstEmit.content.conversationId)
             assertNull(firstEmit.loadMore)
 
-            val uri = setupContentProviderForMediaUpload(
-                authority = "AUTHORITY_TEST",
-                mimeType = "image/png",
+            val uri = Uri("content://image_test")
+            setupContentProviderForMediaUpload(uri)
+
+            val mediaSource = FileSource.Local<FileLocal.Image, FileUpload.Image>(
+                FileLocal.Image(
+                    uri = uri,
+                    imageName = null,
+                    mimeType = MimeType.Image.JPEG,
+                )
             )
 
-            val mediaSource = FileSource.Local<FileLocal.Image, FileUpload.Image>(FileLocal.Image(uri))
             nablaMessagingClient.sendMessage(
                 MessageInput.Media.Image(mediaSource),
                 createdConversation.id
@@ -233,20 +237,11 @@ internal class IntegrationTest {
         }
     }
 
-    private fun setupContentProviderForMediaUpload(authority: String, mimeType: String): Uri {
-        val uri = Uri("content://$authority/test")
-
-        ShadowContentResolver.registerProviderInternal(
-            authority,
-            MockMimeTypeContentProvider(mimeType = mimeType)
-        )
-
+    private fun setupContentProviderForMediaUpload(uri: Uri) {
         Shadows.shadowOf(RuntimeEnvironment.getApplication().contentResolver).registerInputStream(
             uri.toAndroidUri(),
             ByteArrayInputStream(byteArrayOf()),
         )
-
-        return uri
     }
 
     private fun setupClient(

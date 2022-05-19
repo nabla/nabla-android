@@ -172,10 +172,16 @@ internal class ConversationContentRepositoryImpl(
         if (mediaSource !is FileSource.Local) {
             throw NablaException.InvalidMessage("Can't send a media message with a media source that is not local")
         }
-        val fileName = if (mediaMessage is Message.Media.Document) {
-            mediaMessage.documentName
-        } else null
-        val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, fileName)
+        val fileName = when (mediaMessage) {
+            is Message.Media.Document -> mediaMessage.documentName
+            is Message.Media.Image -> mediaMessage.imageName
+        }
+        val mimeType = when (mediaMessage) {
+            is Message.Media.Document -> mediaMessage.mimeType
+            is Message.Media.Image -> mediaMessage.mimeType
+        }
+
+        val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, fileName, mimeType)
         when (mediaMessage) {
             is Message.Media.Document -> {
                 gqlMessageDataSource.sendDocumentMessage(
