@@ -41,7 +41,8 @@ type EphemeralUrl {
 }
 
 type System {
-  _: EmptyObject!
+  name: String!
+  avatar: ImageFileUpload
 }
 
 type Provider {

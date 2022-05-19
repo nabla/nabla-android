@@ -187,7 +187,7 @@ fragment MessageFragment on Message {
             ...PatientFragment
         }
         ... on System {
-            empty: _
+            ...SystemFragment
         }
         ... on DeletedProvider {
             empty: _
@@ -235,6 +235,10 @@ fragment ProviderFragment on Provider {
     prefix
     firstName
     lastName
+}
+
+fragment SystemFragment on System {
+    name
 }
 
 fragment PatientFragment on Patient {
