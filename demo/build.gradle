@@ -25,6 +25,8 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget
     }
@@ -38,4 +40,6 @@ dependencies {
     implementation libs.androidx.material
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.fragment.ktx
+
+    coreLibraryDesugaring libs.desugaring
 }
