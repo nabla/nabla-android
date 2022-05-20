@@ -104,13 +104,13 @@ internal class GqlMapper(private val logger: Logger) {
             sendStatus = sendStatus,
             conversationId = messageFragment.conversation.id.toConversationId(),
         )
-        messageFragment.messageContent?.messageContentFragment?.onTextMessageContent?.textMessageContentFragment?.let {
+        messageFragment.messageContent.messageContentFragment.onTextMessageContent?.textMessageContentFragment?.let {
             return Message.Text(
                 baseMessage = baseMessage,
                 text = it.text
             )
         }
-        messageFragment.messageContent?.messageContentFragment?.onImageMessageContent?.imageMessageContentFragment?.let {
+        messageFragment.messageContent.messageContentFragment.onImageMessageContent?.imageMessageContentFragment?.let {
             return Message.Media.Image(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -119,7 +119,7 @@ internal class GqlMapper(private val logger: Logger) {
                 ),
             )
         }
-        messageFragment.messageContent?.messageContentFragment?.onDocumentMessageContent?.documentMessageContentFragment?.let {
+        messageFragment.messageContent.messageContentFragment.onDocumentMessageContent?.documentMessageContentFragment?.let {
             return Message.Media.Document(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -128,7 +128,7 @@ internal class GqlMapper(private val logger: Logger) {
                 )
             )
         }
-        messageFragment.messageContent?.messageContentFragment?.onDeletedMessageContent?.let {
+        messageFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {
             return Message.Deleted(baseMessage = baseMessage)
         }
         logger.warn("Unknown message content mapping for $messageFragment")

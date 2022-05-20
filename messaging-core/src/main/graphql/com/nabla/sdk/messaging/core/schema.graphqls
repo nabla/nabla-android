@@ -70,7 +70,7 @@ type Message {
   conversation: Conversation!
   createdAt: DateTime!
 
-  content: MessageContent
+  content: MessageContent!
 
   clientId: UUID
 }
