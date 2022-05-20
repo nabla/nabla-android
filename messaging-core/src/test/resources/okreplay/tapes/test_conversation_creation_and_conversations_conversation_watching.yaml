@@ -53,8 +53,8 @@ interactions:
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
       X-APOLLO-OPERATION-ID: 244deb178192060baf2b4a8957f3cc1cffc740319d7b09da0641aaa4dcb0f46a
-      X-APOLLO-OPERATION-NAME: ConversationList
-    body: '{"operationName":"ConversationList","variables":{"pageInfo":{}},"query":"query ConversationList($pageInfo: OpaqueCursorPage!) { conversations(page: $pageInfo) { conversations { __typename ...ConversationFragment } hasMore nextCursor } }  fragment
+      X-APOLLO-OPERATION-NAME: Conversations
+    body: '{"operationName":"Conversations","variables":{"pageInfo":{}},"query":"query Conversations($pageInfo: OpaqueCursorPage!) { conversations(page: $pageInfo) { conversations { __typename ...ConversationFragment } hasMore nextCursor } }  fragment
       EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider
       { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
       } }"}'

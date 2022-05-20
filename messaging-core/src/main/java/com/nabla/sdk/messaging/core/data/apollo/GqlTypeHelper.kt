@@ -1,14 +1,14 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
-import com.nabla.sdk.graphql.ConversationListQuery
-import com.nabla.sdk.graphql.ConversationMessagesQuery
+import com.nabla.sdk.graphql.ConversationItemsQuery
+import com.nabla.sdk.graphql.ConversationsQuery
 import com.nabla.sdk.graphql.fragment.ConversationItemsPageFragment
 
 internal object GqlTypeHelper {
 
-    fun ConversationListQuery.Data.modify(
-        conversations: List<ConversationListQuery.Conversation> = this.conversations.conversations
-    ): ConversationListQuery.Data {
+    fun ConversationsQuery.Data.modify(
+        conversations: List<ConversationsQuery.Conversation> = this.conversations.conversations
+    ): ConversationsQuery.Data {
         return copy(
             conversations = this.conversations.copy(
                 conversations = conversations
@@ -16,9 +16,9 @@ internal object GqlTypeHelper {
         )
     }
 
-    fun ConversationMessagesQuery.Data.modify(
+    fun ConversationItemsQuery.Data.modify(
         data: List<ConversationItemsPageFragment.Data?> = conversation.conversation.conversationItemsPageFragment.items.data
-    ): ConversationMessagesQuery.Data {
+    ): ConversationItemsQuery.Data {
         return copy(
             conversation = conversation.copy(
                 conversation = conversation.conversation.copy(

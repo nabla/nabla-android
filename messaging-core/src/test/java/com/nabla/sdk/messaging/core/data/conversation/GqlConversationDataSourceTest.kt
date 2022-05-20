@@ -2,24 +2,28 @@ package com.nabla.sdk.messaging.core.data.conversation
 
 import app.cash.turbine.test
 import com.apollographql.apollo3.annotations.ApolloExperimental
+import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
+import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.apollo.ApolloFactory
-import com.nabla.sdk.core.data.apollo.test.CustomTestResolver
 import com.nabla.sdk.core.data.apollo.test.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
-import com.nabla.sdk.graphql.test.ConversationListQuery_TestBuilder.Data
-import com.nabla.sdk.graphql.test.ConversationsEventsSubscription_TestBuilder.Data
+import com.nabla.sdk.graphql.ConversationsQuery
+import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
+import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertTrue
@@ -29,20 +33,11 @@ internal class GqlConversationDataSourceTest {
 
     @Test
     fun `created conversation event is notified to conversations watcher`() = runTest {
-        val testNetworkTransport = FlowTestNetworkTransport()
-        val job = Job()
-        val gqlConversationDataSource = createTestableGqlConversationDataSource(
-            testNetworkTransport,
-            this + job
-        )
+        val (testNetworkTransport, job, gqlConversationDataSource) = setupTest(this)
 
         testNetworkTransport.register(
             GqlConversationDataSource.FIRST_CONVERSATIONS_PAGE_QUERY,
-            ConversationListQuery.Data {
-                conversations = conversations {
-                    conversations = emptyList()
-                }
-            }
+            GqlData.Conversations.empty()
         )
         val conversationsEventsSubscriptionResponseFlow =
             MutableStateFlow<ConversationsEventsSubscription.Data?>(null)
@@ -55,15 +50,52 @@ internal class GqlConversationDataSourceTest {
             var paginatedConversations = awaitItem()
             assertTrue(paginatedConversations.items.isEmpty())
             conversationsEventsSubscriptionResponseFlow.value =
-                ConversationsEventsSubscription.Data(CustomTestResolver()) {
-                    conversations = conversations {
-                        event = conversationCreatedEventEvent { }
-                    }
-                }
+                GqlData.ConversationsEvents.conversationCreated()
             paginatedConversations = awaitItem()
             assertTrue(paginatedConversations.items.size == 1)
         }
         job.cancel()
+    }
+
+    @Test
+    fun `load more conversation is notified to conversations watcher`() = runTest {
+        val (testNetworkTransport, job, gqlConversationDataSource) = setupTest(this)
+
+        val cursor = uuid4().toString()
+        testNetworkTransport.register(
+            GqlConversationDataSource.FIRST_CONVERSATIONS_PAGE_QUERY,
+            GqlData.Conversations.single {
+                nextCursor = cursor
+                hasMore = true
+            }
+        )
+        testNetworkTransport.register(
+            ConversationsQuery(OpaqueCursorPage(cursor = Optional.Present(cursor))),
+            GqlData.Conversations.single {
+                nextCursor = null
+                hasMore = false
+            }
+        )
+        testNetworkTransport.register(
+            ConversationsEventsSubscription(),
+            emptyFlow()
+        )
+        gqlConversationDataSource.watchConversations().test {
+            var paginatedConversations = awaitItem()
+            assertTrue(paginatedConversations.items.size == 1)
+            launch { gqlConversationDataSource.loadMoreConversationsInCache() }
+            paginatedConversations = awaitItem()
+            assertTrue(paginatedConversations.items.size == 2)
+        }
+        job.cancel()
+    }
+
+    private fun setupTest(testScope: TestScope): Triple<FlowTestNetworkTransport, CompletableJob, GqlConversationDataSource> {
+        val testNetworkTransport = FlowTestNetworkTransport()
+        val job = Job()
+        val gqlConversationDataSource =
+            createTestableGqlConversationDataSource(testNetworkTransport, testScope + job)
+        return Triple(testNetworkTransport, job, gqlConversationDataSource)
     }
 
     private fun createTestableGqlConversationDataSource(

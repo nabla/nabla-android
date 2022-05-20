@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.message
 
+import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
@@ -13,7 +14,7 @@ import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.graphql.ConversationEventsSubscription
-import com.nabla.sdk.graphql.ConversationMessagesQuery
+import com.nabla.sdk.graphql.ConversationItemsQuery
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.DeleteMessageMutation
 import com.nabla.sdk.graphql.SendMessageMutation
@@ -50,7 +51,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Clock
 
-internal class GqlMessageDataSource(
+internal class GqlConversationContentDataSource(
     private val logger: Logger,
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
@@ -87,7 +88,7 @@ internal class GqlMessageDataSource(
     private suspend fun insertMessageToConversationCache(
         messageFragment: MessageFragment,
     ) {
-        val query = firstMessagePageQuery(messageFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(messageFragment.conversation.id.toConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             Message.type.name,
             null,
@@ -99,7 +100,7 @@ internal class GqlMessageDataSource(
     private suspend fun insertConversationActivityToConversationCache(
         conversationActivityFragment: ConversationActivityFragment
     ) {
-        val query = firstMessagePageQuery(conversationActivityFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(conversationActivityFragment.conversation.id.toConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             ConversationActivity.type.name,
             conversationActivityFragment,
@@ -109,7 +110,7 @@ internal class GqlMessageDataSource(
     }
 
     private suspend fun insertConversationItemToConversationCache(
-        query: ConversationMessagesQuery,
+        query: ConversationItemsQuery,
         newItem: ConversationItemsPageFragment.Data
     ) {
         apolloClient.updateCache(query) { cachedQueryData ->
@@ -121,8 +122,8 @@ internal class GqlMessageDataSource(
         }
     }
 
-    suspend fun loadMoreConversationMessagesInCache(conversationId: ConversationId) {
-        val query = firstMessagePageQuery(conversationId)
+    suspend fun loadMoreConversationItemsInCache(conversationId: ConversationId) {
+        val query = firstItemsPageQuery(conversationId)
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.hasMore) {
                 return@updateCache CacheUpdateOperation.Ignore()
@@ -145,8 +146,8 @@ internal class GqlMessageDataSource(
         }
     }
 
-    fun watchRemoteConversationMessages(conversationId: ConversationId): Flow<PaginatedConversationItems> {
-        val query = firstMessagePageQuery(conversationId)
+    fun watchRemoteConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
+        val query = firstItemsPageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
@@ -271,8 +272,9 @@ internal class GqlMessageDataSource(
             .dataAssertNoErrors
     }
 
-    private fun firstMessagePageQuery(id: ConversationId) =
-        ConversationMessagesQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
+    @VisibleForTesting
+    internal fun firstItemsPageQuery(id: ConversationId) =
+        ConversationItemsQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
 
     suspend fun setTyping(conversationId: ConversationId, typing: Boolean) {
         apolloClient.mutation(SetTypingMutation(conversationId.value, typing)).execute()

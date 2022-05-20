@@ -26,7 +26,7 @@ import kotlinx.datetime.Clock
 internal class ConversationContentRepositoryImpl(
     private val repoScope: CoroutineScope,
     private val localMessageDataSource: LocalMessageDataSource,
-    private val gqlMessageDataSource: GqlMessageDataSource,
+    private val gqlConversationContentDataSource: GqlConversationContentDataSource,
     private val fileUploadRepository: FileUploadRepository,
     private val clock: Clock,
     private val uuidGenerator: UuidGenerator,
@@ -36,7 +36,7 @@ internal class ConversationContentRepositoryImpl(
     private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit>>()
 
     override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
-        val gqlConversationAndMessagesFlow = gqlMessageDataSource.watchRemoteConversationMessages(conversationId)
+        val gqlConversationAndMessagesFlow = gqlConversationContentDataSource.watchRemoteConversationItems(conversationId)
         val localMessagesFlow = localMessageDataSource.watchLocalMessages(conversationId)
         val messageFlow = gqlConversationAndMessagesFlow.combine(localMessagesFlow) { gqlConversationAndMessages, localMessages ->
             return@combine combineGqlAndLocalInfo(localMessages, gqlConversationAndMessages)
@@ -92,7 +92,7 @@ internal class ConversationContentRepositoryImpl(
         val loadMoreConversationMessagesSharedSingle = loadMoreConversationMessagesSharedSingleLock.withLock {
             loadMoreConversationMessagesSharedSingleMap.getOrPut(conversationId) {
                 sharedSingleIn(repoScope) {
-                    gqlMessageDataSource.loadMoreConversationMessagesInCache(conversationId)
+                    gqlConversationContentDataSource.loadMoreConversationItemsInCache(conversationId)
                 }
             }
         }
@@ -154,13 +154,13 @@ internal class ConversationContentRepositoryImpl(
     }
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
-        gqlMessageDataSource.setTyping(conversationId, isTyping)
+        gqlConversationContentDataSource.setTyping(conversationId, isTyping)
     }
 
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         when (messageId) {
             is MessageId.Local -> localMessageDataSource.removeMessage(conversationId, messageId)
-            is MessageId.Remote -> gqlMessageDataSource.deleteMessage(conversationId, messageId)
+            is MessageId.Remote -> gqlConversationContentDataSource.deleteMessage(conversationId, messageId)
         }
     }
 
@@ -184,14 +184,14 @@ internal class ConversationContentRepositoryImpl(
         val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, fileName, mimeType)
         when (mediaMessage) {
             is Message.Media.Document -> {
-                gqlMessageDataSource.sendDocumentMessage(
+                gqlConversationContentDataSource.sendDocumentMessage(
                     mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
                     fileUploadId
                 )
             }
             is Message.Media.Image -> {
-                gqlMessageDataSource.sendImageMessage(
+                gqlConversationContentDataSource.sendImageMessage(
                     mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
                     fileUploadId
@@ -201,7 +201,7 @@ internal class ConversationContentRepositoryImpl(
     }
 
     private suspend fun sendTextMessageOp(message: Message.Text, messageId: MessageId.Local) {
-        gqlMessageDataSource.sendTextMessage(
+        gqlConversationContentDataSource.sendTextMessage(
             message.baseMessage.conversationId,
             messageId.clientId,
             message.text

@@ -10,7 +10,7 @@ import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryImpl
 import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
 import com.nabla.sdk.messaging.core.data.message.ConversationContentRepositoryImpl
-import com.nabla.sdk.messaging.core.data.message.GqlMessageDataSource
+import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
 import com.nabla.sdk.messaging.core.data.message.LocalMessageDataSource
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
@@ -31,7 +31,7 @@ internal class MessagingContainer(
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val gqlMapper = GqlMapper(logger)
     private val localMessageDataSource = LocalMessageDataSource()
-    private val gqlMessageDataSource = GqlMessageDataSource(
+    private val gqlConversationContentDataSource = GqlConversationContentDataSource(
         logger = logger,
         apolloClient = apolloClient,
         mapper = gqlMapper,
@@ -52,7 +52,7 @@ internal class MessagingContainer(
     private val conversationContentRepositoryImpl = ConversationContentRepositoryImpl(
         repoScope = repoScope,
         localMessageDataSource = localMessageDataSource,
-        gqlMessageDataSource = gqlMessageDataSource,
+        gqlConversationContentDataSource = gqlConversationContentDataSource,
         fileUploadRepository = fileUploadRepository,
         clock = clock,
         uuidGenerator = uuidGenerator,

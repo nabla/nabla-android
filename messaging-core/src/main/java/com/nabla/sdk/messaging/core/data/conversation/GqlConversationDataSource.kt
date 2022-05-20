@@ -12,9 +12,9 @@ import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedList
-import com.nabla.sdk.graphql.ConversationListQuery
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.graphql.ConversationsQuery
 import com.nabla.sdk.graphql.CreateConversationMutation
 import com.nabla.sdk.graphql.MaskAsSeenMutation
 import com.nabla.sdk.graphql.fragment.ConversationFragment
@@ -56,7 +56,7 @@ internal class GqlConversationDataSource constructor(
         val query = FIRST_CONVERSATIONS_PAGE_QUERY
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
-            val newItem = ConversationListQuery.Conversation(
+            val newItem = ConversationsQuery.Conversation(
                 com.nabla.sdk.graphql.type.Conversation.type.name,
                 conversation
             )
@@ -133,6 +133,6 @@ internal class GqlConversationDataSource constructor(
 
     companion object {
         @VisibleForTesting
-        internal val FIRST_CONVERSATIONS_PAGE_QUERY = ConversationListQuery(OpaqueCursorPage(cursor = Optional.Absent))
+        internal val FIRST_CONVERSATIONS_PAGE_QUERY = ConversationsQuery(OpaqueCursorPage(cursor = Optional.Absent))
     }
 }
