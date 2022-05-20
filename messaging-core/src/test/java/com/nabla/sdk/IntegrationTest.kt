@@ -237,6 +237,78 @@ internal class IntegrationTest {
         }
     }
 
+    @Test
+    @OkReplay
+    fun `test conversation document message sending watching`() = runTest {
+        val nablaMessagingClient = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+            uuidGenerator = object : UuidGenerator {
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000002")
+            }
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.content.items.size)
+
+            assertEquals(createdConversation.id, firstEmit.content.conversationId)
+            assertNull(firstEmit.loadMore)
+
+            val uri = Uri("content://document_test")
+            setupContentProviderForMediaUpload(uri)
+
+            val docName = "test.pdf"
+            val mimeType = MimeType.Application.PDF
+            val mediaSource = FileSource.Local<FileLocal.Document, FileUpload.Document>(
+                FileLocal.Document(
+                    uri = uri,
+                    documentName = docName,
+                    mimeType = mimeType,
+                )
+            )
+
+            nablaMessagingClient.sendMessage(
+                MessageInput.Media.Document(mediaSource),
+                createdConversation.id
+            ).getOrThrow()
+
+            val secondEmit = awaitItem()
+            val message = secondEmit.content.items.first()
+            assertIs<Message.Media.Document>(message)
+            assertEquals(mediaSource, message.mediaSource)
+            assertEquals(uri, message.uri)
+            assertEquals(mimeType, message.mimeType)
+            assertEquals(docName, message.documentName)
+            assertEquals(createdConversation.id, message.conversationId)
+            assertIs<MessageId.Local>(message.id)
+            assertEquals(SendStatus.Sending, message.sendStatus)
+            assertEquals(MessageSender.Patient, message.sender)
+            assertEquals(createdConversation.id, secondEmit.content.conversationId)
+            assertNull(secondEmit.loadMore)
+
+            val thirdEmit = awaitItem()
+            val message2 = thirdEmit.content.items.first()
+            assertIs<Message.Media.Document>(message2)
+            assertEquals(mediaSource, message2.mediaSource)
+            assertEquals(uri, message2.uri)
+            assertEquals(mimeType, message2.mimeType)
+            assertEquals(docName, message2.documentName)
+            assertEquals(createdConversation.id, message2.conversationId)
+            assertIs<MessageId.Local>(message2.id)
+            assertEquals(SendStatus.Sent, message2.sendStatus)
+            assertEquals(MessageSender.Patient, message2.sender)
+            assertEquals(createdConversation.id, thirdEmit.content.conversationId)
+            assertNull(thirdEmit.loadMore)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun setupContentProviderForMediaUpload(uri: Uri) {
         Shadows.shadowOf(RuntimeEnvironment.getApplication().contentResolver).registerInputStream(
             uri.toAndroidUri(),
