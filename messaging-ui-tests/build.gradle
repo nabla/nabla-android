@@ -32,6 +32,10 @@ android {
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget
     }
+
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -44,13 +48,14 @@ dependencies {
     implementation libs.espressoIdlingResource
     implementation project(path: ':messaging-core', configuration: 'test-helpers')
 
-    androidTestImplementation libs.espresso
+    androidTestImplementation libs.espressoCore
+    androidTestImplementation libs.espressoContrib
+    androidTestImplementation libs.espressoIntents
     androidTestImplementation libs.espressoIdlingResource
     androidTestImplementation libs.testRules
     androidTestImplementation libs.kotlin.coroutines.test
     androidTestImplementation libs.kotlin.test
     androidTestImplementation libs.android.junit
-
     androidTestImplementation project(path: ':messaging-core', configuration: 'test-helpers')
 
     coreLibraryDesugaring libs.desugaring

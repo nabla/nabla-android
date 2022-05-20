@@ -10,33 +10,48 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.Clock
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingResource) : ConversationRepository {
-    private val conversationsFlow = MutableStateFlow(
+    internal val conversationsFlow = MutableStateFlow(
         PaginatedList(
-            items = (0..10).map { Conversation.randomFake() },
+            items = listOf(
+                Conversation.fake(inboxPreviewTitle = "With Unreads", patientUnreadMessageCount = 1),
+                Conversation.fake(inboxPreviewTitle = "Without Unreads", patientUnreadMessageCount = 0),
+            ) + (2..9).map { Conversation.randomFake() },
             hasMore = true
         )
     )
 
+    val newlyCreatedConversationIds = mutableSetOf<ConversationId>()
+
     override suspend fun createConversation(): Conversation {
-        return Conversation.randomFake()
+        delayWithIdlingRes(idlingRes, 300.milliseconds)
+
+        val newConversation = Conversation.fake(
+            title = "New conversation",
+            inboxPreviewTitle = "New conversation",
+            providersInConversation = emptyList(),
+        )
+        newlyCreatedConversationIds.add(newConversation.id)
+        conversationsFlow.value = conversationsFlow.value.copy(items = listOf(newConversation) + conversationsFlow.value.items)
+
+        return newConversation
     }
 
     override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
-        return flowOf(Conversation.fake(id = conversationId.value))
+        return conversationsFlow.map { it.items.first { it.id == conversationId } }
     }
 
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
         return conversationsFlow
             .onStart {
-                delayWithIdlingRes(idlingRes, 1.seconds)
+                delayWithIdlingRes(idlingRes, 100.milliseconds)
                 if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
             }
     }
@@ -54,7 +69,7 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
     override suspend fun loadMoreConversations() {
         if (!conversationsFlow.value.hasMore) return
 
-        delayWithIdlingRes(idlingRes, 1.seconds)
+        delayWithIdlingRes(idlingRes, 100.milliseconds)
         if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
         val newItems = conversationsFlow.value.items + (0..10).map { Conversation.randomFake() }
         conversationsFlow.value = conversationsFlow.value.copy(

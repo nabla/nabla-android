@@ -134,7 +134,7 @@ fun User.Provider.Companion.fake(
 
 fun ProviderInConversation.Companion.fake(
     provider: User.Provider = User.Provider.fake(),
-    typingAt: Instant? = Random.nextBoolean().let { if (it) Clock.System.now() else null },
+    typingAt: Instant? = null,
     seenUntil: Instant = Clock.System.now(),
 ) = ProviderInConversation(
     provider = provider,
@@ -144,18 +144,19 @@ fun ProviderInConversation.Companion.fake(
 
 fun Conversation.Companion.fake(
     id: Uuid = uuid4(),
+    title: String = randomText(maxWords = 10),
     inboxPreviewTitle: String = randomText(maxWords = 10),
-    inboxPreviewSubtitle: String = listOf("", "You: oh great!", "You: image", "Doctor is typing...").random(),
+    description: String = listOf("", "You: oh great!", "You: image", "Doctor is typing...").random(),
     lastModified: Instant = Clock.System.now().minus(2.minutes),
-    lastMessagePreview: String = "Bonjour:",
+    lastMessagePreview: String = randomText(maxWords = 10),
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
 ) = Conversation(
     id = id.toConversationId(),
     lastModified = lastModified,
-    title = inboxPreviewTitle,
+    title = title,
     inboxPreviewTitle = inboxPreviewTitle,
-    description = inboxPreviewSubtitle,
+    description = description,
     lastMessagePreview = lastMessagePreview,
     patientUnreadMessageCount = patientUnreadMessageCount,
     providersInConversation = providersInConversation,

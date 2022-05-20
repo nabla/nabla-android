@@ -33,15 +33,15 @@ internal class PickMediasFromLibraryActivityContract(private val context: Contex
             }
 
             result?.clipData?.let { clipData ->
-                val uris = mutableListOf<Uri>()
+                val urisWithMimeTypes = mutableListOf<Pair<Uri, String?>>()
                 for (i in 0 until clipData.itemCount) {
-                    uris.add(clipData.getItemAt(i).uri)
+                    urisWithMimeTypes.add(clipData.getItemAt(i).uri to clipData.description.getMimeType(i))
                 }
-                return MediaPickingResult.Success(createMediasOrThrow(uris))
+                return MediaPickingResult.Success(createMediasOrThrow(urisWithMimeTypes))
             }
 
             result?.data?.let { uri ->
-                return MediaPickingResult.Success(createMediasOrThrow(listOf(uri)))
+                return MediaPickingResult.Success(createMediasOrThrow(listOf(Pair(uri, null))))
             }
 
             throw RuntimeException("Unable to get uri from result")
@@ -50,9 +50,10 @@ internal class PickMediasFromLibraryActivityContract(private val context: Contex
         }
     }
 
-    private fun createMediasOrThrow(uris: List<Uri>): List<LocalMedia> {
-        return uris.map { uri ->
-            val mimeTypeRepresentation = context.contentResolver.getType(uri)
+    private fun createMediasOrThrow(uris: List<Pair<Uri, String?>>): List<LocalMedia> {
+        return uris.map { (uri, mimeTypeString) ->
+            val mimeTypeRepresentation = mimeTypeString
+                ?: context.contentResolver.getType(uri)
                 ?: throw IllegalArgumentException("Unable to get mime type for uri: $uri")
 
             return@map LocalMedia.create(URI.create(uri.toString()), mimeTypeRepresentation, getMediaName(uri))

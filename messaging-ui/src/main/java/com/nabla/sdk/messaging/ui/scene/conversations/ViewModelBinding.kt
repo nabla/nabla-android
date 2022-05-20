@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.R
@@ -78,7 +79,14 @@ private fun ConversationListView.bindViewModelState(
             errorView.root.isVisible = state is State.Error
 
             when (state) {
-                is State.Loaded -> conversationAdapter.submitList(state.items)
+                is State.Loaded -> {
+                    // Only scroll down automatically if we're at the bottom of the chat && there are new items
+                    val shouldScrollToBottomAfterSubmit = recyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size
+
+                    conversationAdapter.submitList(state.items) {
+                        if (shouldScrollToBottomAfterSubmit) recyclerView.scrollToTop()
+                    }
+                }
                 is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
                 is State.Loading -> Unit // no-op
             }

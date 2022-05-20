@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nabla.sdk.uitests"
     >
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
@@ -22,8 +23,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity android:name=".scene.ConversationActivity" />
 
         <meta-data
             android:name="com.nabla.sdk.PUBLIC_API_KEY"

@@ -16,9 +16,10 @@ import kotlinx.coroutines.flow.map
 class NablaMessagingClientStub(
     val idlingRes: CountingIdlingResource = CountingIdlingResource("Stubs Idling Res", true),
 ) : NablaMessagingClient {
+    var isTyping = false
 
-    private val conversationRepository = ConversationRepositoryStub(idlingRes)
-    private val conversationContentRepository = ConversationContentRepositoryStub(idlingRes)
+    internal val conversationRepository = ConversationRepositoryStub(idlingRes)
+    internal val messageRepository = ConversationContentRepositoryStub(idlingRes, conversationRepository)
 
     override val logger: Logger = LoggerImpl
 
@@ -55,40 +56,38 @@ class NablaMessagingClientStub(
     override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
-                conversationContentRepository.loadMoreMessages(conversationId)
+                messageRepository.loadMoreMessages(conversationId)
             }
         }
 
-        return conversationContentRepository.watchConversationItems(conversationId)
-            .map { paginatedConversationMessages ->
+        return messageRepository.watchConversationItems(conversationId)
+            .map { paginatedConversationItems ->
                 WatchPaginatedResponse(
-                    content = paginatedConversationMessages.conversationItems,
-                    loadMore = if (paginatedConversationMessages.hasMore) {
+                    content = paginatedConversationItems.conversationItems,
+                    loadMore = if (paginatedConversationItems.hasMore) {
                         loadMoreCallback
                     } else null
                 )
             }
     }
 
-    override suspend fun sendMessage(
-        input: MessageInput,
-        conversationId: ConversationId
-    ): Result<MessageId.Local> {
+    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): Result<MessageId.Local> {
+        isTyping = false
         return runCatchingCancellable {
-            conversationContentRepository.sendMessage(input, conversationId)
+            messageRepository.sendMessage(input, conversationId)
         }
     }
 
     override suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
-            conversationContentRepository.retrySendingMessage(conversationId, localMessageId)
+            messageRepository.retrySendingMessage(conversationId, localMessageId)
         }
     }
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
-        return runCatchingCancellable {
-            conversationContentRepository.setTyping(conversationId, isTyping)
-        }
+        this.isTyping = isTyping
+
+        return Result.success(Unit)
     }
 
     override suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
@@ -99,7 +98,7 @@ class NablaMessagingClientStub(
 
     override suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
         return runCatchingCancellable {
-            conversationContentRepository.deleteMessage(conversationId, id)
+            messageRepository.deleteMessage(conversationId, id)
         }
     }
 }

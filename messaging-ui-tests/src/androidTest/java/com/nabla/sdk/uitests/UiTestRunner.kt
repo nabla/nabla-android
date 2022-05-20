@@ -9,6 +9,8 @@ class UiTestRunner : AndroidJUnitRunner() {
     override fun callApplicationOnCreate(app: Application?) {
         super.callApplicationOnCreate(app)
 
-        IdlingRegistry.getInstance().register(nablaMessagingClientStub.idlingRes)
+        IdlingRegistry.getInstance().apply {
+            register(nablaMessagingClientStub.idlingRes)
+        }
     }
 }

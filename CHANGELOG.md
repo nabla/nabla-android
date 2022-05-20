@@ -19,15 +19,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Uploading an image captured from camera using `ConversationFragment` would fail, this is now fixed
 
+### Fixed
+- In `ConversationListView`: Keep scroll at the top of conversations list when a new item is added.
+- In `ConversationFragment`: Now we check the mime type in media picker intent if any before
+  inferring one from the file itself.
+
 ## [1.0-alpha03] - 2022-05-16
 
 ### Added
-
 - This CHANGELOG file
 - Proguard configuration through `consumerProguardFiles` config.
 
 ### Changed
-
 - `NablaCore` is now called `NablaClient`, `NablaMessaging` is now called `NablaMessagingClient`
 - `NablaCore.initialize` now doesn't require a `SessionTokenProvider`, it must now be passed
   to `NablaCore.authenticate` along with the `userId`

@@ -17,18 +17,18 @@ internal class CaptureImageFromCameraActivityContract : ActivityResultContract<U
         val file = CameraFileProvider.createFile(context)
         currentFile = file
 
-        val takeVideoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        takeVideoIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        takeVideoIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePhotoIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        takePhotoIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
 
         file.parentFile?.mkdirs()
         file.createNewFile()
 
-        val videoUri: Uri = CameraFileProvider.getUri(context, file)
+        val imageUri: Uri = CameraFileProvider.getUri(context, file)
 
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, videoUri)
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
 
-        return takeVideoIntent
+        return takePhotoIntent
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): MediaPickingResult<LocalMedia.Image> {
