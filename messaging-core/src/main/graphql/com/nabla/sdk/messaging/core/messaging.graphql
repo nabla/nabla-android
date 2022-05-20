@@ -239,6 +239,12 @@ fragment ProviderFragment on Provider {
 
 fragment SystemFragment on System {
     name
+    avatar {
+        id
+        url {
+            ...EphemeralUrlFragment
+        }
+    }
 }
 
 fragment PatientFragment on Patient {

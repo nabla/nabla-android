@@ -21,8 +21,8 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <ImageView
-        android:id="@+id/chatSystemMessageAvatarViewContainer"
+    <com.nabla.sdk.core.ui.components.NablaAvatarView
+        android:id="@+id/chatSystemMessageAvatarView"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_gravity="center"
@@ -43,8 +43,8 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/chatSystemMessageAvatarViewContainer"
-        app:layout_constraintTop_toTopOf="@+id/chatSystemMessageAvatarViewContainer"
+        app:layout_constraintStart_toEndOf="@+id/chatSystemMessageAvatarView"
+        app:layout_constraintTop_toTopOf="@+id/chatSystemMessageAvatarView"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

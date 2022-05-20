@@ -14,6 +14,7 @@ internal fun User.initials(context: Context, singleLetter: Boolean = false): Str
                 context.getString(R.string.nabla_display_name_initials_format, firstName, lastName)
             }
         }
+        is User.System -> name.firstOrNull()?.toString() ?: "?"
         User.Unknown -> {
             context.getString(R.string.nabla_display_name_unknown_user_initials)
         }
@@ -24,12 +25,14 @@ internal fun User.fullName(context: Context): String = when (this) {
     is User.Provider -> context.getString(R.string.nabla_display_name_full_name_format, firstName, lastName)
     is User.Patient -> username
     is User.Unknown -> context.getString(R.string.nabla_display_name_unknown_user)
+    is User.System -> name
 }
 
 internal fun User.lastNameOrUserName(context: Context): String = when (this) {
     is User.Provider -> lastName
     is User.Patient -> username
     is User.Unknown -> context.getString(R.string.nabla_display_name_unknown_user)
+    is User.System -> name
 }
 
 internal fun User.fullNameWithPrefix(context: Context): String = when (this) {

@@ -20,6 +20,7 @@ import com.nabla.sdk.graphql.fragment.MaybeProviderFragment
 import com.nabla.sdk.graphql.fragment.MessageFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
+import com.nabla.sdk.graphql.fragment.SystemFragment
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -138,7 +139,7 @@ internal class GqlMapper(private val logger: Logger) {
     private fun mapToMessageSender(author: MessageFragment.Author): MessageSender {
         author.onPatient?.let { return MessageSender.Patient }
         author.onProvider?.providerFragment?.let { return MessageSender.Provider(mapToProvider(it)) }
-        author.onSystem?.let { return MessageSender.System }
+        author.onSystem?.let { return MessageSender.System(mapToSystem(it.systemFragment)) }
         author.onDeletedProvider?.let { return MessageSender.DeletedProvider }
         return MessageSender.Unknown
     }
@@ -151,6 +152,14 @@ internal class GqlMapper(private val logger: Logger) {
             firstName = providerFragment.firstName,
             lastName = providerFragment.lastName,
             prefix = providerFragment.prefix,
+        )
+    }
+
+    private fun mapToSystem(systemFragment: SystemFragment): User.System {
+        val avatarUrl = systemFragment.avatar?.url?.ephemeralUrlFragment?.let { mapToEphemeralUrl(it) }
+        return User.System(
+            name = systemFragment.name,
+            avatar = avatarUrl,
         )
     }
 

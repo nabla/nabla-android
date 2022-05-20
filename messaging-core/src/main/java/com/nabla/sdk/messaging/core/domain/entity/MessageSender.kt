@@ -6,7 +6,8 @@ public sealed interface MessageSender {
     @JvmInline
     public value class Provider(public val provider: User.Provider) : MessageSender
     public object Patient : MessageSender
-    public object System : MessageSender
+    @JvmInline
+    public value class System(public val system: User.System) : MessageSender
     public object DeletedProvider : MessageSender
     public object Unknown : MessageSender
 }

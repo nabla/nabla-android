@@ -25,5 +25,12 @@ public sealed interface User {
         public companion object
     }
 
+    public data class System(
+        val name: String,
+        val avatar: EphemeralUrl?,
+    ) : User {
+        public companion object
+    }
+
     public object Unknown : User
 }

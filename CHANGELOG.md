@@ -9,12 +9,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `ConversationActivity` in conversations. A message is displayed when a provider joins a conversation.
+- `ConversationFragment` now displays system messages, with the right name and avatar.
 
 ### Changed
 - Documents name are now displayed only on 1 line when using `ConversationFragment`
 - `NablaMessagingClient.watchConversationMessages` replaced by `NablaMessagingClient.watchConversationItems`.
 - `NablaMessagingClient.sendMessage` now takes a `MessageInput` and the `ConversationId` rather than the message directly
 - `FileLocal.Image` now takes an optional file name and the `MimeType` of the image as parameter, along with the `Uri`
+- `MessageSender.System` now exposes a `User.System` parameter which contains the name of the organization and the avatar url.
 
 ### Fixed
 - Uploading an image captured from camera using `ConversationFragment` would fail, this is now fixed
