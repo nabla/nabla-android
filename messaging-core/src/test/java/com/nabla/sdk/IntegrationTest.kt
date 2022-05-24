@@ -11,9 +11,11 @@ import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -309,6 +311,98 @@ internal class IntegrationTest {
         }
     }
 
+    @Test
+    @OkReplay
+    fun `test conversation text message deletion watching`() = runTest {
+        val nablaMessagingClient = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+            uuidGenerator = object : UuidGenerator {
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000003")
+            }
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            awaitItem() // First emit with empty conversation
+
+            val messageToSend = "Hello"
+            val messageId = nablaMessagingClient.sendMessage(MessageInput.Text(messageToSend), createdConversation.id).getOrThrow()
+
+            val firstEmit = awaitItem()
+            val message = firstEmit.content.items.first()
+            assertIs<Message.Text>(message)
+            assertEquals("Hello", message.text)
+
+            awaitItem() // Another emit with message marked as sent
+
+            nablaMessagingClient.deleteMessage(createdConversation.id, messageId).getOrThrow()
+
+            val secondEmit = awaitItem()
+            assertEquals(0, secondEmit.content.items.size)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `test calling public methods without auth throws`() = runTest {
+        val nablaMessagingClient = setupClient(
+            authenticate = false,
+        )
+
+        nablaMessagingClient.watchConversations().test {
+            assertEquals(NablaException.Authentication.NotAuthenticated, awaitError())
+        }
+
+        nablaMessagingClient.watchConversation(ConversationId(Uuid.randomUUID())).test {
+            assertEquals(NablaException.Authentication.NotAuthenticated, awaitError())
+        }
+
+        nablaMessagingClient.watchConversationItems(ConversationId(Uuid.randomUUID())).test {
+            assertEquals(NablaException.Authentication.NotAuthenticated, awaitError())
+        }
+
+        assertEquals(NablaException.Authentication.NotAuthenticated, nablaMessagingClient.createConversation().exceptionOrNull())
+        assertEquals(
+            NablaException.Authentication.NotAuthenticated,
+            nablaMessagingClient.deleteMessage(
+                ConversationId(Uuid.randomUUID()),
+                MessageId.Local(Uuid.randomUUID()),
+            ).exceptionOrNull()
+        )
+        assertEquals(
+            NablaException.Authentication.NotAuthenticated,
+            nablaMessagingClient.markConversationAsRead(
+                ConversationId(Uuid.randomUUID())
+            ).exceptionOrNull()
+        )
+        assertEquals(
+            NablaException.Authentication.NotAuthenticated,
+            nablaMessagingClient.retrySendingMessage(
+                MessageId.Local(Uuid.randomUUID()),
+                ConversationId(Uuid.randomUUID()),
+            ).exceptionOrNull()
+        )
+        assertEquals(
+            NablaException.Authentication.NotAuthenticated,
+            nablaMessagingClient.setTyping(
+                ConversationId(Uuid.randomUUID()),
+                isTyping = true,
+            ).exceptionOrNull()
+        )
+        assertEquals(
+            NablaException.Authentication.NotAuthenticated,
+            nablaMessagingClient.sendMessage(
+                MessageInput.Text(""),
+                ConversationId(Uuid.randomUUID()),
+            ).exceptionOrNull()
+        )
+    }
+
     private fun setupContentProviderForMediaUpload(uri: Uri) {
         Shadows.shadowOf(RuntimeEnvironment.getApplication().contentResolver).registerInputStream(
             uri.toAndroidUri(),
@@ -319,6 +413,7 @@ internal class IntegrationTest {
     private fun setupClient(
         clock: Clock? = null,
         uuidGenerator: UuidGenerator? = null,
+        authenticate: Boolean = true,
     ): NablaMessagingClient {
         CoreContainer.overriddenUuidGenerator = uuidGenerator
         CoreContainer.overriddenClock = clock
@@ -332,15 +427,23 @@ internal class IntegrationTest {
                 isLoggingEnabled = true
             )
         )
+
+        // Disable websocket connection for tests as events are not recorded
+        nablaClient.coreContainer.apolloClient.subscriptionNetworkTransport.dispose()
+
         val nablaMessagingClient = NablaMessagingClient.initialize(nablaClient)
-        nablaClient.authenticate("dummy-user") {
-            Result.success(
-                AuthTokens(
-                    refreshToken = refreshToken,
-                    accessToken = accessToken
+
+        if (authenticate) {
+            nablaClient.authenticate("dummy-user") {
+                Result.success(
+                    AuthTokens(
+                        refreshToken = refreshToken,
+                        accessToken = accessToken
+                    )
                 )
-            )
+            }
         }
+
         return nablaMessagingClient
     }
 

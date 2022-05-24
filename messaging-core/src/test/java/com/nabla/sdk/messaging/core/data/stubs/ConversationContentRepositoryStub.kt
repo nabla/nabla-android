@@ -87,7 +87,7 @@ internal class ConversationContentRepositoryStub(
 
     override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
         val localId = MessageId.Local(uuid4())
-        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageSender.Patient, SendStatus.ToBeSent, conversationId)
+        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageSender.Patient, SendStatus.Sending, conversationId)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)

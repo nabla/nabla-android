@@ -17,14 +17,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `NablaMessagingClient.sendMessage` now takes a `MessageInput` and the `ConversationId` rather than the message directly
 - `FileLocal.Image` now takes an optional file name and the `MimeType` of the image as parameter, along with the `Uri`
 - `MessageSender.System` now exposes a `User.System` parameter which contains the name of the organization and the avatar url.
+- Removed `SendStatus.ToBeSent` as it was never provided as a value by the SDK.
 
 ### Fixed
 - Uploading an image captured from camera using `ConversationFragment` would fail, this is now fixed
-
-### Fixed
 - In `ConversationListView`: Keep scroll at the top of conversations list when a new item is added.
 - In `ConversationFragment`: Now we check the mime type in media picker intent if any before
   inferring one from the file itself.
+- `NablaException.Authentication.NotAuthenticated` will now be correctly returned as a `Result.failure`
+  for methods that require authentication and return a `Result`, rather than thrown.
+- `NablaException.Authentication.NotAuthenticated` will now be correctly sent as an error in the `Flow`
+  for methods that require authentication and return a `Flow`, rather than thrown.
 
 ## [1.0-alpha03] - 2022-05-16
 
