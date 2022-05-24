@@ -146,7 +146,7 @@ internal class GqlConversationContentDataSource(
         }
     }
 
-    fun watchRemoteConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
+    fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
         val query = firstItemsPageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)

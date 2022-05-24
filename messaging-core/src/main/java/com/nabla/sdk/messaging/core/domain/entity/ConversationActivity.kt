@@ -15,10 +15,14 @@ public data class ConversationActivity(
     override val createdAt: Instant,
     val activityTime: Instant,
     val content: ConversationActivityContent
-) : ConversationItem
+) : ConversationItem {
+    public companion object
+}
 
 public sealed class ConversationActivityContent {
     public data class ProviderJoinedConversation(
         val maybeProvider: MaybeProvider
-    ) : ConversationActivityContent()
+    ) : ConversationActivityContent() {
+        public companion object
+    }
 }

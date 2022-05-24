@@ -11,7 +11,9 @@ public sealed class FileUpload {
     public data class Image(
         val size: Size?,
         override val fileUpload: BaseFileUpload,
-    ) : FileUpload()
+    ) : FileUpload() {
+        public companion object
+    }
 
     public data class Document(
         val thumbnail: Image?,

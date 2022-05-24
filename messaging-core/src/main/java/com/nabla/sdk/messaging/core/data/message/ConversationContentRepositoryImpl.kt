@@ -36,7 +36,7 @@ internal class ConversationContentRepositoryImpl(
     private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit>>()
 
     override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
-        val gqlConversationAndMessagesFlow = gqlConversationContentDataSource.watchRemoteConversationItems(conversationId)
+        val gqlConversationAndMessagesFlow = gqlConversationContentDataSource.watchConversationItems(conversationId)
         val localMessagesFlow = localMessageDataSource.watchLocalMessages(conversationId)
         val messageFlow = gqlConversationAndMessagesFlow.combine(localMessagesFlow) { gqlConversationAndMessages, localMessages ->
             return@combine combineGqlAndLocalInfo(localMessages, gqlConversationAndMessages)

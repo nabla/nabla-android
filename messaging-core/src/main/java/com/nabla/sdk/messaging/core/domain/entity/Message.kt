@@ -31,7 +31,10 @@ public sealed interface FileLocal {
         override val uri: Uri,
         val imageName: String?,
         val mimeType: MimeType.Image,
-    ) : FileLocal
+    ) : FileLocal {
+        public companion object
+    }
+
     public data class Document(
         override val uri: Uri,
         val documentName: String?,
@@ -42,12 +45,16 @@ public sealed interface FileLocal {
 public sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileUpload> {
     public data class Local<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType,
-    ) : FileSource<FileLocalType, FileUploadType>()
+    ) : FileSource<FileLocalType, FileUploadType>() {
+        public companion object
+    }
 
     public data class Uploaded<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType?,
         val fileUpload: FileUploadType,
-    ) : FileSource<FileLocalType, FileUploadType>()
+    ) : FileSource<FileLocalType, FileUploadType>() {
+        public companion object
+    }
 }
 
 /**

@@ -46,7 +46,7 @@ class GqlConversationContentDataSourceTest {
             ConversationEventsSubscription(conversationId.value),
             gqlEventEmitter.filterNotNull()
         )
-        gqlConversationContentDataSource.watchRemoteConversationItems(conversationId).test {
+        gqlConversationContentDataSource.watchConversationItems(conversationId).test {
             var paginatedConversations = awaitItem()
             assertTrue(paginatedConversations.conversationItems.items.isEmpty())
             gqlEventEmitter.value =
@@ -84,7 +84,7 @@ class GqlConversationContentDataSourceTest {
             ConversationEventsSubscription(conversationId.value),
             emptyFlow()
         )
-        gqlConversationContentDataSource.watchRemoteConversationItems(conversationId).test {
+        gqlConversationContentDataSource.watchConversationItems(conversationId).test {
             var paginatedItems = awaitItem()
             assertTrue(paginatedItems.conversationItems.items.size == 1)
             launch {
