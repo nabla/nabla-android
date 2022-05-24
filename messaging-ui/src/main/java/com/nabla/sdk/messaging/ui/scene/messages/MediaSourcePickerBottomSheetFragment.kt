@@ -1,11 +1,14 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationMediaSourcePickerBinding
@@ -24,6 +27,13 @@ internal class MediaSourcePickerBottomSheetFragment : BottomSheetDialogFragment(
         return NablaConversationMediaSourcePickerBinding.inflate(inflater, container, false)
             .also { binding = it }
             .root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState)
+            .also {
+                (it as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
