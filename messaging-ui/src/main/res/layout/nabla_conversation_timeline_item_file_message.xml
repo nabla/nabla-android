@@ -34,7 +34,7 @@
             android:id="@+id/chatComposerTopDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:background="@color/nabla_on_surface_alpha_12"
+            android:background="@drawable/nabla_drawable_on_surface_alpha_12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -28,6 +28,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   for methods that require authentication and return a `Result`, rather than thrown.
 - `NablaException.Authentication.NotAuthenticated` will now be correctly sent as an error in the `Flow`
   for methods that require authentication and return a `Flow`, rather than thrown.
+- Fix usage of color selector as background not working on older android api levels.
 
 ## [1.0-alpha03] - 2022-05-16
 
