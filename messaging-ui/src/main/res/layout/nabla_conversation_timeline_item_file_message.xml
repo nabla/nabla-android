@@ -6,6 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
+    tools:background="?colorPrimary"
     >
 
     <ImageView
@@ -13,7 +14,7 @@
         android:layout_width="233dp"
         android:layout_height="166dp"
         android:importantForAccessibility="no"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -64,10 +65,10 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/chatFileMessageIconImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/chatFileMessageIconImageView"
             app:layout_constraintTop_toTopOf="@id/chatFileMessageIconImageView"
-            app:layout_constraintBottom_toBottomOf="@id/chatFileMessageIconImageView"
             tools:text="analyses.pdf"
             tools:textColor="?attr/colorOnSurface"
             />
