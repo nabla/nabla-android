@@ -116,10 +116,12 @@ internal class ConversationContentRepositoryStub(
         scope.launch {
             val conversationsFlow = conversationRepositoryStub.conversationsFlow
             val conversation = conversationsFlow.value.items.first { it.id == conversationId }
-            val provider = ProviderInConversation.fake(typingAt = Clock.System.now())
+            var provider = ProviderInConversation.fake(typingAt = Clock.System.now())
             setProviderTyping(conversationsFlow, conversation, provider)
 
             delayWithIdlingRes(idlingRes, 200.milliseconds)
+            provider = provider.copy(typingAt = null)
+            setProviderTyping(conversationsFlow, conversation, provider)
             conversationFlow.value = messagesOf(conversationId) + Message.Text.fake(
                 sender = MessageSender.Provider(provider.provider),
                 text = "Here I am!",
