@@ -72,6 +72,7 @@ apollo {
     mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
     mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
     generateTestBuilders.set(true)
+    generateAsInternal.set(true)
 }
 
 dependencies {

@@ -20,7 +20,14 @@ buildscript {
         classpath libs.kotlin.serialization.pluginGradle
         classpath libs.apollo.pluginGradle
         classpath libs.ktlint.pluginGradle
+        classpath libs.kotlin.binaryCompatibilityValidator.pluginGradle
     }
+}
+
+apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
+
+apiValidation {
+    ignoredProjects += ["demo", "messaging-ui-tests"]
 }
 
 subprojects {

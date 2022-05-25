@@ -37,6 +37,7 @@ kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coro
 kotlin-serialization-json = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
 kotlin-serialization-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 kotlin-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.3.2"
+kotlin-binaryCompatibilityValidator-pluginGradle = 'org.jetbrains.kotlinx:binary-compatibility-validator:0.10.0'
 
 ktlint-pluginGradle = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
 

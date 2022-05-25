@@ -1,0 +1,829 @@
+public final class com/nabla/sdk/core/Configuration {
+	public fun <init> ()V
+	public fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;ZLcom/nabla/sdk/core/HeaderProvider;)V
+	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;ZLcom/nabla/sdk/core/HeaderProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/nabla/sdk/core/Header {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/Header;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/Header;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/Header;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/core/HeaderProvider {
+	public abstract fun headers ()Ljava/util/List;
+}
+
+public final class com/nabla/sdk/core/NablaClient {
+	public static final field Companion Lcom/nabla/sdk/core/NablaClient$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun authenticate (Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
+}
+
+public final class com/nabla/sdk/core/NablaClient$Companion {
+	public final fun getInstance ()Lcom/nabla/sdk/core/NablaClient;
+	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
+	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
+}
+
+public final class com/nabla/sdk/core/data/helper/UrlExtKt {
+	public static final fun toAndroidUri-tuorwt8 (Ljava/lang/String;)Landroid/net/Uri;
+	public static final fun toJvmUri-tuorwt8 (Ljava/lang/String;)Ljava/net/URI;
+	public static final fun toKtUri (Landroid/net/Uri;)Ljava/lang/String;
+	public static final fun toKtUri (Ljava/net/URI;)Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/Logger {
+	public static final field Companion Lcom/nabla/sdk/core/domain/boundary/Logger$Companion;
+	public abstract fun debug (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
+	public abstract fun error (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
+	public abstract fun info (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
+	public abstract fun warn (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
+}
+
+public final class com/nabla/sdk/core/domain/boundary/Logger$Companion {
+	public final fun asSdkTag (Ljava/lang/String;)Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/boundary/Logger$DefaultImpls {
+	public static synthetic fun debug$default (Lcom/nabla/sdk/core/domain/boundary/Logger;Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun error$default (Lcom/nabla/sdk/core/domain/boundary/Logger;Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun info$default (Lcom/nabla/sdk/core/domain/boundary/Logger;Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)V
+	public static synthetic fun warn$default (Lcom/nabla/sdk/core/domain/boundary/Logger;Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)V
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/SessionClient {
+	public abstract fun clearSession ()V
+	public abstract fun getFreshAccessToken (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun initSession (Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
+	public abstract fun isSessionInitialized ()Z
+}
+
+public final class com/nabla/sdk/core/domain/boundary/SessionClient$DefaultImpls {
+	public static synthetic fun getFreshAccessToken$default (Lcom/nabla/sdk/core/domain/boundary/SessionClient;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenProvider {
+	public abstract fun fetchNewSessionAuthTokens-f_-3YFY (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/UuidGenerator {
+	public abstract fun generate ()Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/core/domain/entity/Attachment {
+	public synthetic fun <init> (Ljava/util/UUID;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2-9Mbh8_A ()Ljava/lang/String;
+	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun component4-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-b8VQ8CI (Ljava/util/UUID;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/Attachment;
+	public static synthetic fun copy-b8VQ8CI$default (Lcom/nabla/sdk/core/domain/entity/Attachment;Ljava/util/UUID;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/Attachment;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/util/UUID;
+	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun getThumbnailUrl-9Mbh8_A ()Ljava/lang/String;
+	public final fun getUrl-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/AuthTokens {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/AuthTokens$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/AuthTokens;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/AuthTokens;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/AuthTokens;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccessToken ()Ljava/lang/String;
+	public final fun getRefreshToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/AuthTokens$Companion {
+}
+
+public final class com/nabla/sdk/core/domain/entity/BaseFileUpload {
+	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getId ()Ljava/util/UUID;
+	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun getUrl ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/DeletedProvider : com/nabla/sdk/core/domain/entity/MaybeProvider {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/DeletedProvider;
+}
+
+public final class com/nabla/sdk/core/domain/entity/EphemeralUrl {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/EphemeralUrl$Companion;
+	public synthetic fun <init> (Lkotlinx/datetime/Instant;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/datetime/Instant;
+	public final fun component2-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-5Ger90c (Lkotlinx/datetime/Instant;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public static synthetic fun copy-5Ger90c$default (Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Lkotlinx/datetime/Instant;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExpiresAt ()Lkotlinx/datetime/Instant;
+	public final fun getUrl-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/EphemeralUrl$Companion {
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/FileUpload {
+	public abstract fun getFileUpload ()Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+}
+
+public final class com/nabla/sdk/core/domain/entity/FileUpload$Document : com/nabla/sdk/core/domain/entity/FileUpload {
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;)Lcom/nabla/sdk/core/domain/entity/FileUpload$Document;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/FileUpload$Document;Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/FileUpload$Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getFileUpload ()Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+	public final fun getThumbnail ()Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/FileUpload$Image : com/nabla/sdk/core/domain/entity/FileUpload {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/FileUpload$Image$Companion;
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/Size;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/Size;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/Size;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;)Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;Lcom/nabla/sdk/core/domain/entity/Size;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getFileUpload ()Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;
+	public final fun getSize ()Lcom/nabla/sdk/core/domain/entity/Size;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/FileUpload$Image$Companion {
+}
+
+public abstract interface class com/nabla/sdk/core/domain/entity/MaybeProvider {
+}
+
+public abstract interface class com/nabla/sdk/core/domain/entity/MimeType {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/MimeType$Companion;
+	public abstract fun getStringRepresentation ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Application : java/lang/Enum, com/nabla/sdk/core/domain/entity/MimeType {
+	public static final field PDF Lcom/nabla/sdk/core/domain/entity/MimeType$Application;
+	public fun getStringRepresentation ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Application;
+	public static fun values ()[Lcom/nabla/sdk/core/domain/entity/MimeType$Application;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Companion {
+	public final fun fromStringRepresentation (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Image : java/lang/Enum, com/nabla/sdk/core/domain/entity/MimeType {
+	public static final field JPEG Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public static final field PNG Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public fun getStringRepresentation ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public static fun values ()[Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/NablaException : java/lang/Exception {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/NablaException$Authentication : com/nabla/sdk/core/domain/entity/NablaException {
+	public synthetic fun <init> (Ljava/lang/Throwable;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Authentication$NotAuthenticated : com/nabla/sdk/core/domain/entity/NablaException$Authentication {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/NablaException$Authentication$NotAuthenticated;
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Authentication$UnableToGetFreshSessionToken : com/nabla/sdk/core/domain/entity/NablaException$Authentication {
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/NablaException$Configuration : com/nabla/sdk/core/domain/entity/NablaException {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Configuration$MissingApiKey : com/nabla/sdk/core/domain/entity/NablaException$Configuration {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/NablaException$Configuration$MissingApiKey;
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Configuration$MissingContext : com/nabla/sdk/core/domain/entity/NablaException$Configuration {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/NablaException$Configuration$MissingContext;
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Configuration$MissingInitialize : com/nabla/sdk/core/domain/entity/NablaException$Configuration {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/NablaException$Configuration$MissingInitialize;
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Internal : com/nabla/sdk/core/domain/entity/NablaException {
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$InvalidAppTheme : com/nabla/sdk/core/domain/entity/NablaException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$InvalidMessage : com/nabla/sdk/core/domain/entity/NablaException {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$MessageNotFound : com/nabla/sdk/core/domain/entity/NablaException {
+	public synthetic fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$MissingConversationId : com/nabla/sdk/core/domain/entity/NablaException {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/NablaException$MissingConversationId;
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Network : com/nabla/sdk/core/domain/entity/NablaException {
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Server : com/nabla/sdk/core/domain/entity/NablaException {
+}
+
+public final class com/nabla/sdk/core/domain/entity/NablaException$Unknown : com/nabla/sdk/core/domain/entity/NablaException {
+}
+
+public final class com/nabla/sdk/core/domain/entity/Size {
+	public fun <init> (II)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lcom/nabla/sdk/core/domain/entity/Size;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/Size;IIILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/Size;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeight ()I
+	public final fun getWidth ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/StringId {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/StringId;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/Uri {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/Uri;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/core/domain/entity/User {
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$Patient : com/nabla/sdk/core/domain/entity/User {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/User$Patient$Companion;
+	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/Attachment;Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/Attachment;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/Attachment;Ljava/lang/String;Ljava/util/List;)Lcom/nabla/sdk/core/domain/entity/User$Patient;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/User$Patient;Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/Attachment;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/User$Patient;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAvatar ()Lcom/nabla/sdk/core/domain/entity/Attachment;
+	public final fun getId ()Ljava/util/UUID;
+	public final fun getLabels ()Ljava/util/List;
+	public final fun getUsername ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$Patient$Companion {
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$Provider : com/nabla/sdk/core/domain/entity/MaybeProvider, com/nabla/sdk/core/domain/entity/User {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/User$Provider$Companion;
+	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/User$Provider;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/User$Provider;Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/User$Provider;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAvatar ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public final fun getFirstName ()Ljava/lang/String;
+	public final fun getId ()Ljava/util/UUID;
+	public final fun getLastName ()Ljava/lang/String;
+	public final fun getPrefix ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$Provider$Companion {
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$System : com/nabla/sdk/core/domain/entity/User {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/User$System$Companion;
+	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public final fun copy (Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;)Lcom/nabla/sdk/core/domain/entity/User$System;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/User$System;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/User$System;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAvatar ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$System$Companion {
+}
+
+public final class com/nabla/sdk/core/domain/entity/User$Unknown : com/nabla/sdk/core/domain/entity/User {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/User$Unknown;
+}
+
+public final class com/nabla/sdk/messaging/core/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClient {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/NablaMessagingClient$Companion;
+	public abstract fun createConversation-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun deleteMessage--tBrw7Y (Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
+	public abstract fun markConversationAsRead-0PoKK-I (Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun retrySendingMessage-ppEkrSo (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun sendMessage-ppEkrSo (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun setTyping--tBrw7Y (Ljava/util/UUID;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun watchConversation-osbTWhs (Ljava/util/UUID;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun watchConversationItems-osbTWhs (Ljava/util/UUID;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun watchConversations ()Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class com/nabla/sdk/messaging/core/NablaMessagingClient$Companion {
+	public final fun getInstance ()Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
+	public final fun initialize (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Conversation {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Conversation$Companion;
+	public synthetic fun <init> (Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-qJUv34w ()Ljava/util/UUID;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Lkotlinx/datetime/Instant;
+	public final fun component7 ()I
+	public final fun component8 ()Ljava/util/List;
+	public final fun copy-4VvGseU (Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
+	public static synthetic fun copy-4VvGseU$default (Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId-qJUv34w ()Ljava/util/UUID;
+	public final fun getInboxPreviewTitle ()Ljava/lang/String;
+	public final fun getLastMessagePreview ()Ljava/lang/String;
+	public final fun getLastModified ()Lkotlinx/datetime/Instant;
+	public final fun getPatientUnreadMessageCount ()I
+	public final fun getProvidersInConversation ()Ljava/util/List;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Conversation$Companion {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivity : com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivity$Companion;
+	public synthetic fun <init> (Ljava/util/UUID;Ljava/util/UUID;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-d5d7EwY ()Ljava/util/UUID;
+	public final fun component2-qJUv34w ()Ljava/util/UUID;
+	public final fun component3 ()Lkotlinx/datetime/Instant;
+	public final fun component4 ()Lkotlinx/datetime/Instant;
+	public final fun component5 ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent;
+	public final fun copy-_CQ2coQ (Ljava/util/UUID;Ljava/util/UUID;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivity;
+	public static synthetic fun copy-_CQ2coQ$default (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivity;Ljava/util/UUID;Ljava/util/UUID;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivity;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActivityTime ()Lkotlinx/datetime/Instant;
+	public final fun getContent ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent;
+	public final fun getConversationId-qJUv34w ()Ljava/util/UUID;
+	public fun getCreatedAt ()Lkotlinx/datetime/Instant;
+	public final fun getId-d5d7EwY ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivity$Companion {
+}
+
+public abstract class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation : com/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation$Companion;
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/MaybeProvider;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/MaybeProvider;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/MaybeProvider;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation;Lcom/nabla/sdk/core/domain/entity/MaybeProvider;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMaybeProvider ()Lcom/nabla/sdk/core/domain/entity/MaybeProvider;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation$Companion {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityId {
+	public static final synthetic fun box-impl (Ljava/util/UUID;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityId;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/UUID;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/UUID;Ljava/util/UUID;)Z
+	public final fun getValue ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/UUID;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/UUID;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityKt {
+	public static final fun toConversationActivityId (Ljava/util/UUID;)Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId {
+	public static final synthetic fun box-impl (Ljava/util/UUID;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/UUID;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/UUID;Ljava/util/UUID;)Z
+	public final fun getValue ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/UUID;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/UUID;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/UUID;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
+	public abstract fun getCreatedAt ()Lkotlinx/datetime/Instant;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationItems {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems$Companion;
+	public synthetic fun <init> (Ljava/util/UUID;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-qJUv34w ()Ljava/util/UUID;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy-mdLlEGU (Ljava/util/UUID;Ljava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;
+	public static synthetic fun copy-mdLlEGU$default (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;Ljava/util/UUID;Ljava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConversationId-qJUv34w ()Ljava/util/UUID;
+	public final fun getItems ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationItems$Companion {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationKt {
+	public static final fun toConversationId (Ljava/util/UUID;)Ljava/util/UUID;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/entity/FileLocal {
+	public abstract fun getUri-9Mbh8_A ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Document : com/nabla/sdk/messaging/core/domain/entity/FileLocal {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun copy-oGBYvLY (Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Document;
+	public static synthetic fun copy-oGBYvLY$default (Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Document;Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocumentName ()Ljava/lang/String;
+	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public fun getUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Image : com/nabla/sdk/messaging/core/domain/entity/FileLocal {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Image$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public final fun copy-oGBYvLY (Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;)Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Image;
+	public static synthetic fun copy-oGBYvLY$default (Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Image;Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImageName ()Ljava/lang/String;
+	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public fun getUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Image$Companion {
+}
+
+public abstract class com/nabla/sdk/messaging/core/domain/entity/FileSource {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Local : com/nabla/sdk/messaging/core/domain/entity/FileSource {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local$Companion;
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;)Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Local$Companion {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded : com/nabla/sdk/messaging/core/domain/entity/FileSource {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded$Companion;
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;Lcom/nabla/sdk/core/domain/entity/FileUpload;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/FileUpload;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;Lcom/nabla/sdk/core/domain/entity/FileUpload;)Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded;Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;Lcom/nabla/sdk/core/domain/entity/FileUpload;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;
+	public final fun getFileUpload ()Lcom/nabla/sdk/core/domain/entity/FileUpload;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded$Companion {
+}
+
+public abstract class com/nabla/sdk/messaging/core/domain/entity/Message : com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Companion;
+	public final fun getConversationId-qJUv34w ()Ljava/util/UUID;
+	public fun getCreatedAt ()Lkotlinx/datetime/Instant;
+	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
+	public final fun getSendStatus ()Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;
+	public final fun getSender ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageSender;
+	public final fun getSentAt ()Lkotlinx/datetime/Instant;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$Companion {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted : com/nabla/sdk/messaging/core/domain/entity/Message {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted$Companion;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted$Companion {
+}
+
+public abstract class com/nabla/sdk/messaging/core/domain/entity/Message$Media : com/nabla/sdk/messaging/core/domain/entity/Message {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Document : com/nabla/sdk/messaging/core/domain/entity/Message$Media {
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDocumentName ()Ljava/lang/String;
+	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun getThumbnailUri-fMOd5P8 ()Ljava/lang/String;
+	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Image : com/nabla/sdk/messaging/core/domain/entity/Message$Media {
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getImageName ()Ljava/lang/String;
+	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun getStableUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$Text : com/nabla/sdk/messaging/core/domain/entity/Message {
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/lang/String;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/entity/MessageId {
+	public abstract fun getClientId ()Ljava/util/UUID;
+	public abstract fun getRemoteId ()Ljava/util/UUID;
+	public abstract fun getStableId ()Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$Local : com/nabla/sdk/messaging/core/domain/entity/MessageId {
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun copy (Ljava/util/UUID;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getClientId ()Ljava/util/UUID;
+	public fun getRemoteId ()Ljava/util/UUID;
+	public fun getStableId ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$Remote : com/nabla/sdk/messaging/core/domain/entity/MessageId {
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Ljava/util/UUID;
+	public final fun copy (Ljava/util/UUID;Ljava/util/UUID;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Ljava/util/UUID;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getClientId ()Ljava/util/UUID;
+	public fun getRemoteId ()Ljava/util/UUID;
+	public fun getStableId ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/nabla/sdk/messaging/core/domain/entity/MessageInput {
+}
+
+public abstract class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media : com/nabla/sdk/messaging/core/domain/entity/MessageInput {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Document : com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media {
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Document;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Document;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMediaSource ()Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Image : com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media {
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Image;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Image;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMediaSource ()Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Text : com/nabla/sdk/messaging/core/domain/entity/MessageInput {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Text;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Text;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Text;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/entity/MessageSender {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageSender$DeletedProvider : com/nabla/sdk/messaging/core/domain/entity/MessageSender {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/MessageSender$DeletedProvider;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageSender$Patient : com/nabla/sdk/messaging/core/domain/entity/MessageSender {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/MessageSender$Patient;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageSender$Provider : com/nabla/sdk/messaging/core/domain/entity/MessageSender {
+	public static final synthetic fun box-impl (Lcom/nabla/sdk/core/domain/entity/User$Provider;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageSender$Provider;
+	public static fun constructor-impl (Lcom/nabla/sdk/core/domain/entity/User$Provider;)Lcom/nabla/sdk/core/domain/entity/User$Provider;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lcom/nabla/sdk/core/domain/entity/User$Provider;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lcom/nabla/sdk/core/domain/entity/User$Provider;Lcom/nabla/sdk/core/domain/entity/User$Provider;)Z
+	public final fun getProvider ()Lcom/nabla/sdk/core/domain/entity/User$Provider;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lcom/nabla/sdk/core/domain/entity/User$Provider;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lcom/nabla/sdk/core/domain/entity/User$Provider;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lcom/nabla/sdk/core/domain/entity/User$Provider;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageSender$System : com/nabla/sdk/messaging/core/domain/entity/MessageSender {
+	public static final synthetic fun box-impl (Lcom/nabla/sdk/core/domain/entity/User$System;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageSender$System;
+	public static fun constructor-impl (Lcom/nabla/sdk/core/domain/entity/User$System;)Lcom/nabla/sdk/core/domain/entity/User$System;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Lcom/nabla/sdk/core/domain/entity/User$System;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Lcom/nabla/sdk/core/domain/entity/User$System;Lcom/nabla/sdk/core/domain/entity/User$System;)Z
+	public final fun getSystem ()Lcom/nabla/sdk/core/domain/entity/User$System;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Lcom/nabla/sdk/core/domain/entity/User$System;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Lcom/nabla/sdk/core/domain/entity/User$System;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Lcom/nabla/sdk/core/domain/entity/User$System;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageSender$Unknown : com/nabla/sdk/messaging/core/domain/entity/MessageSender {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/MessageSender$Unknown;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ProviderInConversation {
+	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/ProviderInConversation$Companion;
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/User$Provider;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/User$Provider;
+	public final fun component2 ()Lkotlinx/datetime/Instant;
+	public final fun component3 ()Lkotlinx/datetime/Instant;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/User$Provider;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;)Lcom/nabla/sdk/messaging/core/domain/entity/ProviderInConversation;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/ProviderInConversation;Lcom/nabla/sdk/core/domain/entity/User$Provider;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ProviderInConversation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getProvider ()Lcom/nabla/sdk/core/domain/entity/User$Provider;
+	public final fun getSeenUntil ()Lkotlinx/datetime/Instant;
+	public final fun getTypingAt ()Lkotlinx/datetime/Instant;
+	public fun hashCode ()I
+	public final fun isTyping (Lkotlinx/datetime/Clock;)Z
+	public static synthetic fun isTyping$default (Lcom/nabla/sdk/messaging/core/domain/entity/ProviderInConversation;Lkotlinx/datetime/Clock;ILjava/lang/Object;)Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ProviderInConversation$Companion {
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/entity/SendStatus {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/SendStatus$ErrorSending : com/nabla/sdk/messaging/core/domain/entity/SendStatus {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus$ErrorSending;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/SendStatus$Sending : com/nabla/sdk/messaging/core/domain/entity/SendStatus {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus$Sending;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/SendStatus$Sent : com/nabla/sdk/messaging/core/domain/entity/SendStatus {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus$Sent;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/WatchPaginatedResponse {
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun component2 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/messaging/core/domain/entity/WatchPaginatedResponse;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/WatchPaginatedResponse;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/WatchPaginatedResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/Object;
+	public final fun getLoadMore ()Lkotlin/jvm/functions/Function1;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
