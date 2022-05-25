@@ -10,6 +10,7 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.graphql.fragment.AudioFileUploadFragment
 import com.nabla.sdk.graphql.fragment.ConversationActivityContentFragment
 import com.nabla.sdk.graphql.fragment.ConversationActivityFragment
 import com.nabla.sdk.graphql.fragment.ConversationFragment
@@ -51,7 +52,7 @@ internal class GqlMapper(private val logger: Logger) {
     }
 
     fun mapToProviderInConversation(
-        fragment: ProviderInConversationFragment
+        fragment: ProviderInConversationFragment,
     ): ProviderInConversation {
         return ProviderInConversation(
             provider = mapToProvider(fragment.provider.providerFragment),
@@ -61,7 +62,7 @@ internal class GqlMapper(private val logger: Logger) {
     }
 
     fun mapToConversationActivity(
-        conversationActivityFragment: ConversationActivityFragment
+        conversationActivityFragment: ConversationActivityFragment,
     ): ConversationActivity? {
         val content = mapToConversationActivityContent(conversationActivityFragment.conversationActivityContent.conversationActivityContentFragment)
         if (content == null) {
@@ -78,7 +79,7 @@ internal class GqlMapper(private val logger: Logger) {
     }
 
     private fun mapToConversationActivityContent(
-        conversationActivityContentFragment: ConversationActivityContentFragment
+        conversationActivityContentFragment: ConversationActivityContentFragment,
     ): ConversationActivityContent? {
         conversationActivityContentFragment.onProviderJoinedConversation?.let {
             val maybeProvider = mapToMaybeProvider(it.provider.maybeProviderFragment) ?: return null
@@ -108,7 +109,7 @@ internal class GqlMapper(private val logger: Logger) {
         messageFragment.messageContent.messageContentFragment.onTextMessageContent?.textMessageContentFragment?.let {
             return Message.Text(
                 baseMessage = baseMessage,
-                text = it.text
+                text = it.text,
             )
         }
         messageFragment.messageContent.messageContentFragment.onImageMessageContent?.imageMessageContentFragment?.let {
@@ -116,7 +117,7 @@ internal class GqlMapper(private val logger: Logger) {
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
-                    fileUpload = mapToFileUploadImage(it.imageFileUpload.imageFileUploadFragment)
+                    fileUpload = mapToFileUploadImage(it.imageFileUpload.imageFileUploadFragment),
                 ),
             )
         }
@@ -125,7 +126,16 @@ internal class GqlMapper(private val logger: Logger) {
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
-                    fileUpload = mapToFileUploadDocument(it.documentFileUpload.documentFileUploadFragment)
+                    fileUpload = mapToFileUploadDocument(it.documentFileUpload.documentFileUploadFragment),
+                )
+            )
+        }
+        messageFragment.messageContent.messageContentFragment.onAudioMessageContent?.audioMessageContentFragment?.let {
+            return Message.Media.Audio(
+                baseMessage = baseMessage,
+                mediaSource = FileSource.Uploaded(
+                    fileLocal = null,
+                    fileUpload = mapToFileUploadAudio(it.audioFileUpload.audioFileUploadFragment),
                 )
             )
         }
@@ -175,7 +185,7 @@ internal class GqlMapper(private val logger: Logger) {
     }
 
     private fun mapToFileUploadImage(
-        imageFileUploadFragment: ImageFileUploadFragment
+        imageFileUploadFragment: ImageFileUploadFragment,
     ): FileUpload.Image {
         return FileUpload.Image(
             size = imageFileUploadFragment.size(),
@@ -193,7 +203,7 @@ internal class GqlMapper(private val logger: Logger) {
     }
 
     private fun mapToFileUploadDocument(
-        documentFileUploadFragment: DocumentFileUploadFragment
+        documentFileUploadFragment: DocumentFileUploadFragment,
     ): FileUpload.Document {
         return FileUpload.Document(
             thumbnail = documentFileUploadFragment.thumbnail?.imageFileUploadFragment?.let {
@@ -204,6 +214,20 @@ internal class GqlMapper(private val logger: Logger) {
                 url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
+            )
+        )
+    }
+
+    private fun mapToFileUploadAudio(
+        audioFileUploadFragment: AudioFileUploadFragment,
+    ): FileUpload.Audio {
+        return FileUpload.Audio(
+            durationMs = audioFileUploadFragment.durationMs?.toLong(),
+            fileUpload = BaseFileUpload(
+                id = audioFileUploadFragment.id,
+                url = mapToEphemeralUrl(audioFileUploadFragment.url.ephemeralUrlFragment),
+                fileName = audioFileUploadFragment.fileName,
+                mimeType = mapToMimeType(audioFileUploadFragment.mimeType)
             )
         )
     }

@@ -78,6 +78,7 @@ dependencies {
     implementation libs.androidx.fragment.ktx
     implementation libs.recyclerview
     implementation libs.touchImageView
+    implementation libs.exoplayer
 
     implementation libs.mimeTypeDetector
 }

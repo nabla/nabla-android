@@ -72,6 +72,12 @@ internal class ConversationViewModel(
     private val scrollToBottomAfterNextUpdateMutableFlow = MutableStateFlow(false)
     val shouldScrollToBottomAfterNextUpdate get() = scrollToBottomAfterNextUpdateMutableFlow.compareAndSet(expect = true, update = false)
 
+    private val voiceMessagesProgressMutableFlow = MutableStateFlow(emptyMap<Uri, PlaybackProgress>())
+    val voiceMessagesProgressFlow: Flow<Map<Uri, PlaybackProgress>> = voiceMessagesProgressMutableFlow
+
+    private val nowPlayingVoiceMessageMutableFlow = MutableStateFlow<Uri?>(null)
+    val nowPlayingVoiceMessageFlow: Flow<Uri?> = nowPlayingVoiceMessageMutableFlow
+
     private var lastTypingEventSentAt: Instant = Instant.DISTANT_PAST
     private var isViewForeground = false
 
@@ -104,6 +110,8 @@ internal class ConversationViewModel(
             conversationDataFlow,
             conversationItemsFlow,
             selectedMessageIdFlow,
+            voiceMessagesProgressMutableFlow,
+            nowPlayingVoiceMessageMutableFlow,
             StateMapper()::mapToState,
         )
             .retryWhen { throwable, _ ->
@@ -226,7 +234,7 @@ internal class ConversationViewModel(
                                 mediaSource = FileSource.Local(
                                     FileLocal.Image(
                                         uri = Uri(mediaToSend.uri.toString()),
-                                        imageName = mediaToSend.name,
+                                        fileName = mediaToSend.name,
                                         mimeType = mediaToSend.mimeType,
                                     )
                                 )
@@ -325,6 +333,7 @@ internal class ConversationViewModel(
                     else -> navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenUriExternally(fileContent.uri.toJvmUri()))
                 }
             }
+            is TimelineItem.Message.Audio -> Unit
             is TimelineItem.Message.Deleted -> Unit // Nothing to do when taping on deleted message
         }
     }
@@ -364,6 +373,25 @@ internal class ConversationViewModel(
             .onSuccess { url ->
                 navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenWebBrowser(url))
             }
+    }
+
+    fun onVoiceMessagePlaybackProgress(voiceMessageUri: Uri, position: Long, totalDuration: Long?) {
+        voiceMessagesProgressMutableFlow.value = voiceMessagesProgressMutableFlow.value.toMutableMap()
+            .apply { put(voiceMessageUri, PlaybackProgress(position, totalDuration)) }
+    }
+
+    fun onVoiceMessagePlaybackStarted(uri: Uri) {
+        nowPlayingVoiceMessageMutableFlow.value = uri
+    }
+
+    fun onVoiceMessagePlaybackStopped(uri: Uri) {
+        nowPlayingVoiceMessageMutableFlow.compareAndSet(uri, null)
+    }
+
+    fun onToggleVoiceMessagePlay(uri: Uri) {
+        if (!nowPlayingVoiceMessageMutableFlow.compareAndSet(uri, null)) {
+            nowPlayingVoiceMessageMutableFlow.value = uri
+        }
     }
 
     sealed interface State {
@@ -408,6 +436,8 @@ internal class ConversationViewModel(
             conversation: Conversation,
             conversationItemsResponse: WatchPaginatedResponse<ConversationItems>,
             selectedMessageId: MessageId?,
+            audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
+            nowPlayingAudio: Uri?,
         ): State {
             return State.ConversationLoaded(
                 conversation = conversation,
@@ -416,6 +446,8 @@ internal class ConversationViewModel(
                     hasMore = conversationItemsResponse.loadMore != null,
                     providersInConversation = conversation.providersInConversation,
                     selectedMessageId = selectedMessageId,
+                    audioPlaybackProgressMap = audioPlaybackProgressMap,
+                    nowPlayingAudioUri = nowPlayingAudio,
                 ),
             )
         }

@@ -213,6 +213,9 @@ fragment MessageContentFragment on MessageContent {
     ... on DocumentMessageContent {
         ...DocumentMessageContentFragment
     }
+    ... on AudioMessageContent {
+      ...AudioMessageContentFragment
+    }
     ... on DeletedMessageContent {
         empty: _
     }
@@ -273,6 +276,12 @@ fragment DocumentMessageContentFragment on DocumentMessageContent {
     }
 }
 
+fragment AudioMessageContentFragment on AudioMessageContent {
+    audioFileUpload {
+        ...AudioFileUploadFragment
+    }
+}
+
 fragment ImageFileUploadFragment on ImageFileUpload {
     id
     url {
@@ -294,4 +303,14 @@ fragment DocumentFileUploadFragment on DocumentFileUpload {
     thumbnail {
         ...ImageFileUploadFragment
     }
+}
+
+fragment AudioFileUploadFragment on AudioFileUpload {
+    id
+    url {
+        ...EphemeralUrlFragment
+    }
+    fileName
+    mimeType
+    durationMs
 }

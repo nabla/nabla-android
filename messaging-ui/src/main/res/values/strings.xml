@@ -61,4 +61,9 @@
     <string name="nabla_conversation_camera_picture_permission_rational_description">To take a photo, we need authorisation to access your camera</string>
     <string name="nabla_permission_rational_default_accept">Accept</string>
     <string name="nabla_permission_rational_default_decline">Decline</string>
+
+    <string name="nabla_conversation_audio_message_player_title">Voice message</string>
+    <string name="nabla_conversation_audio_message_play_pause_content_description">Play/Pause</string>
+    <string name="nabla_conversation_button_record_audio_message_content_description">Start voice message recording</string>
+    <string name="nabla_conversation_button_cancel_audio_message_content_description">Cancel voice message recording</string>
 </resources>

@@ -24,6 +24,11 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Player.STATE_ENDED
+import com.google.android.exoplayer2.Player.STATE_READY
+import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.User
@@ -36,9 +41,11 @@ import com.nabla.sdk.core.ui.helpers.mediapicker.CaptureImageFromCameraActivityC
 import com.nabla.sdk.core.ui.helpers.mediapicker.MediaPickingResult
 import com.nabla.sdk.core.ui.helpers.mediapicker.PickMediasFromLibraryActivityContract
 import com.nabla.sdk.core.ui.helpers.openPdfReader
+import com.nabla.sdk.core.ui.helpers.player.createMediaPlayersCoordinator
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.toAndroidUri
+import com.nabla.sdk.core.ui.helpers.toKtUri
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.NablaMessagingClient
@@ -55,6 +62,11 @@ import com.nabla.sdk.messaging.ui.helper.registerForPermissionResult
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.ErrorAlert
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import com.nabla.sdk.core.domain.entity.Uri as KtUri
 
 public open class ConversationFragment : Fragment() {
     public open val messagingClient: NablaMessagingClient
@@ -83,6 +95,7 @@ public open class ConversationFragment : Fragment() {
     private var binding: NablaFragmentConversationBinding? = null
 
     private val conversationAdapter = ConversationAdapter(makeConversationAdapterCallbacks())
+    private val voiceMessagesCoordinator = createMediaPlayersCoordinator(C.CONTENT_TYPE_SPEECH, pauseOnPause = false)
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,6 +130,7 @@ public open class ConversationFragment : Fragment() {
         setupMediasToSendRecyclerView(binding)
         wireViewEvents(binding)
         setupConversationRecyclerView(binding)
+        collectVoicePlayersEvents()
         collectAlertEvents()
         collectNavigationEvents()
         collectState(binding)
@@ -376,6 +390,10 @@ public open class ConversationFragment : Fragment() {
         override fun onUrlClicked(url: String, isFromPatient: Boolean) {
             viewModel.onUrlClicked(url)
         }
+
+        override fun onToggleAudioMessagePlay(audioMessageUri: KtUri) {
+            viewModel.onToggleVoiceMessagePlay(audioMessageUri)
+        }
     }
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
@@ -395,6 +413,82 @@ public open class ConversationFragment : Fragment() {
             if (shouldScrollToBottomAfterSubmit) {
                 binding.conversationRecyclerView.scrollToTop()
             }
+        }
+    }
+
+    private fun collectVoicePlayersEvents() {
+        // prepare players
+        viewLifeCycleScope.launchCollect(viewModel.voiceMessagesProgressFlow) { voiceMessages ->
+            voiceMessages.forEach { (uri, _) -> getOrSetupPlayerForVoiceMessage(uri) }
+        }
+
+        // forward play/pause commands
+        viewLifeCycleScope.launchCollect(viewModel.nowPlayingVoiceMessageFlow) { uri ->
+            if (uri != null) {
+                getOrSetupPlayerForVoiceMessage(uri)?.play()
+                startPlaybackProgressPolling()
+            } else {
+                voiceMessagesCoordinator.getAll().forEach { (_, player) -> player.pause() }
+                stopPlaybackProgressPolling()
+            }
+        }
+    }
+
+    private var playbackProgressPollingJob: Job? = null
+
+    private fun startPlaybackProgressPolling() {
+        stopPlaybackProgressPolling()
+        playbackProgressPollingJob = viewLifeCycleScope.launch {
+            while (isActive) {
+                voiceMessagesCoordinator.getAll().forEach { (uri, player) ->
+                    if (player.isPlaying) {
+                        reportProgress(uri.toKtUri(), player)
+                    }
+                }
+                delay(AUDIO_PLAYBACK_PROGRESS_POLLING_MS)
+            }
+        }
+    }
+
+    private fun stopPlaybackProgressPolling() {
+        playbackProgressPollingJob?.cancel()
+    }
+
+    private fun reportProgress(uri: KtUri, player: Player) {
+        viewModel.onVoiceMessagePlaybackProgress(
+            voiceMessageUri = uri,
+            position = player.currentPosition,
+            totalDuration = player.duration
+                .let { if (it == C.TIME_UNSET) null else it }
+        )
+    }
+
+    private fun getOrSetupPlayerForVoiceMessage(uri: KtUri): Player? {
+        return voiceMessagesCoordinator.getOrCreatePlayerForUri(context ?: return null, uri.toAndroidUri()) {
+            playWhenReady = false
+            addListener(object : Player.Listener {
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    if (isPlaying) {
+                        viewModel.onVoiceMessagePlaybackStarted(uri)
+                    } else {
+                        viewModel.onVoiceMessagePlaybackStopped(uri)
+                    }
+                }
+
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    when (playbackState) {
+                        STATE_READY -> {
+                            // now we know the total length of media, report it
+                            reportProgress(uri, player = this@getOrCreatePlayerForUri)
+                        }
+                        STATE_ENDED -> {
+                            // on end of playback, reset position to be ready to replay
+                            seekTo(0)
+                        }
+                        else -> Unit /* no-op */
+                    }
+                }
+            })
         }
     }
 
@@ -465,6 +559,8 @@ public open class ConversationFragment : Fragment() {
     }
 
     public companion object {
+        internal const val AUDIO_PLAYBACK_PROGRESS_POLLING_MS = 200L
+
         public fun newInstance(
             conversationId: ConversationId,
             init: (Builder.() -> Unit)? = null,

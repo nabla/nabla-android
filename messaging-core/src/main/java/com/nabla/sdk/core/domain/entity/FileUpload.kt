@@ -18,7 +18,16 @@ public sealed class FileUpload {
     public data class Document(
         val thumbnail: Image?,
         override val fileUpload: BaseFileUpload,
-    ) : FileUpload()
+    ) : FileUpload() {
+        public companion object
+    }
+
+    public data class Audio(
+        val durationMs: Long?,
+        override val fileUpload: BaseFileUpload,
+    ) : FileUpload() {
+        public companion object
+    }
 }
 
 public data class Size(

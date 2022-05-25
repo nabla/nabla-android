@@ -53,11 +53,43 @@ internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>()
                 actions = newItem.actions,
                 itemForCallback = newItem,
             )
+            oldItem.content is TimelineItem.Message.Audio && newItem.content is TimelineItem.Message.Audio -> getAudioMessageChangePayload(
+                newItem,
+                newItem.content,
+                oldItem.content,
+            )
             oldItem.content is TimelineItem.Message.Image && newItem.content is TimelineItem.Message.Image -> getImageMessageChangePayload(
                 newItem,
                 newItem.content,
                 oldItem.content,
             )
+            else -> null
+        }
+    }
+
+    private fun getAudioMessageChangePayload(
+        newItem: TimelineItem.Message,
+        newContent: TimelineItem.Message.Audio,
+        oldContent: TimelineItem.Message.Audio,
+    ): BindingPayload.Audio? {
+        val onlyUriOrProgressChanged = newContent == oldContent.copy(
+            uri = newContent.uri,
+            progress = newContent.progress,
+            isPlaying = newContent.isPlaying,
+        )
+
+        return when {
+            onlyUriOrProgressChanged -> {
+                BindingPayload.Audio(
+                    uri = newContent.uri,
+                    isPlaying = newContent.isPlaying,
+                    progress = newContent.progress,
+                    status = newItem.status,
+                    showStatus = newItem.showStatus,
+                    actions = newItem.actions,
+                    itemForCallback = newItem
+                )
+            }
             else -> null
         }
     }

@@ -10,6 +10,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - `ConversationActivity` in conversations. A message is displayed when a provider joins a conversation.
 - `ConversationFragment` now displays system messages, with the right name and avatar.
+- Added support for receiving and playing voice messages. 
 
 ### Changed
 - Documents name are now displayed only on 1 line when using `ConversationFragment`

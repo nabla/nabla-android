@@ -6,4 +6,5 @@
     <string name="nabla_display_name_unknown_user_initials">\?</string>
     <string name="nabla_display_name_full_name_format">%1$s %2$s</string>
     <string name="nabla_display_name_full_name_and_prefix">%1$s %2$s</string>
+    <string name="nabla_conversation_audio_message_seconds_format">%02d:%02d</string>
 </resources>

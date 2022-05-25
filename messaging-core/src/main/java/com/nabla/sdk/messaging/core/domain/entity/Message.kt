@@ -21,24 +21,31 @@ internal data class BaseMessage(
  */
 public sealed interface FileLocal {
     /**
-     * Local device-hosted file uri.
-     *
-     * This is typically provided by the OS file providers.
+     * Local device-hosted file uri. This is typically provided by the OS file providers.
      */
     public val uri: Uri
+    public val mimeType: MimeType
+    public val fileName: String?
 
     public data class Image(
         override val uri: Uri,
-        val imageName: String?,
-        val mimeType: MimeType.Image,
+        override val fileName: String?,
+        override val mimeType: MimeType.Image,
     ) : FileLocal {
         public companion object
     }
 
     public data class Document(
         override val uri: Uri,
-        val documentName: String?,
-        val mimeType: MimeType,
+        override val fileName: String?,
+        override val mimeType: MimeType,
+    ) : FileLocal
+
+    public data class Audio(
+        override val uri: Uri,
+        override val fileName: String?,
+        override val mimeType: MimeType.Audio,
+        val estimatedDurationMs: Long,
     ) : FileLocal
 }
 
@@ -109,32 +116,31 @@ public sealed class Message : ConversationItem {
 
         internal abstract val mediaSource: FileSource<FileLocalType, FileUploadType>
 
-        public data class Image internal constructor(
-            override val baseMessage: BaseMessage,
-            override val mediaSource: FileSource<FileLocal.Image, FileUpload.Image>,
-        ) : Media<FileLocal.Image, FileUpload.Image>() {
-            val stableUri: Uri = when (mediaSource) {
+        public val stableUri: Uri
+            get() = when (val mediaSource = mediaSource) {
                 is FileSource.Local -> mediaSource.fileLocal.uri
                 is FileSource.Uploaded -> mediaSource.fileLocal?.uri ?: mediaSource.fileUpload.fileUpload.url.url
             }
 
-            val mimeType: MimeType = when (mediaSource) {
+        public val mimeType: MimeType
+            get() = when (val mediaSource = mediaSource) {
                 is FileSource.Local -> mediaSource.fileLocal.mimeType
                 is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.mimeType
             }
 
-            val imageName: String? = when (mediaSource) {
-                is FileSource.Local -> mediaSource.fileLocal.imageName
+        public val fileName: String?
+            get() = when (val mediaSource = mediaSource) {
+                is FileSource.Local -> mediaSource.fileLocal.fileName
                 is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.fileName
             }
 
-            override fun modify(status: SendStatus): Message {
-                return copy(baseMessage = baseMessage.copy(sendStatus = status))
-            }
+        public data class Image internal constructor(
+            override val baseMessage: BaseMessage,
+            override val mediaSource: FileSource<FileLocal.Image, FileUpload.Image>,
+        ) : Media<FileLocal.Image, FileUpload.Image>() {
 
-            internal fun modify(mediaSource: FileSource<FileLocal.Image, FileUpload.Image>): Image {
-                return copy(mediaSource = mediaSource)
-            }
+            override fun modify(status: SendStatus): Message = copy(baseMessage = baseMessage.copy(sendStatus = status))
+            internal fun modify(mediaSource: FileSource<FileLocal.Image, FileUpload.Image>): Image = copy(mediaSource = mediaSource)
 
             internal companion object
         }
@@ -143,22 +149,25 @@ public sealed class Message : ConversationItem {
             override val baseMessage: BaseMessage,
             override val mediaSource: FileSource<FileLocal.Document, FileUpload.Document>,
         ) : Media<FileLocal.Document, FileUpload.Document>() {
-            val uri: Uri = when (mediaSource) {
-                is FileSource.Local -> mediaSource.fileLocal.uri
-                is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.url.url
-            }
-            val mimeType: MimeType = when (mediaSource) {
-                is FileSource.Local -> mediaSource.fileLocal.mimeType
-                is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.mimeType
-            }
-            val documentName: String? = when (mediaSource) {
-                is FileSource.Local -> mediaSource.fileLocal.documentName
-                is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.fileName
-            }
+
             val thumbnailUri: Uri? = (mediaSource as? FileSource.Uploaded)?.fileUpload?.thumbnail?.fileUpload?.url?.url
-            override fun modify(status: SendStatus): Message {
-                return copy(baseMessage = baseMessage.copy(sendStatus = status))
+
+            override fun modify(status: SendStatus): Message = copy(baseMessage = baseMessage.copy(sendStatus = status))
+
+            internal companion object
+        }
+
+        public data class Audio internal constructor(
+            override val baseMessage: BaseMessage,
+            override val mediaSource: FileSource<FileLocal.Audio, FileUpload.Audio>,
+        ) : Media<FileLocal.Audio, FileUpload.Audio>() {
+
+            val durationMs: Long? = when (mediaSource) {
+                is FileSource.Local -> mediaSource.fileLocal.estimatedDurationMs
+                is FileSource.Uploaded -> mediaSource.fileUpload.durationMs
             }
+
+            override fun modify(status: SendStatus): Message = copy(baseMessage = baseMessage.copy(sendStatus = status))
 
             internal companion object
         }

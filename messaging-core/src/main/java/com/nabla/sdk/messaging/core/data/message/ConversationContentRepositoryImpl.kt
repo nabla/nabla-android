@@ -46,7 +46,7 @@ internal class ConversationContentRepositoryImpl(
 
     private fun combineGqlAndLocalInfo(
         localMessages: Collection<Message>,
-        gqlPaginatedConversationAndMessages: PaginatedConversationItems
+        gqlPaginatedConversationAndMessages: PaginatedConversationItems,
     ): PaginatedConversationItems {
         val (gqlConversationItemMessages, gqlConversationItemNotMessages) = gqlPaginatedConversationAndMessages.conversationItems.items.partition { conversationItem ->
             conversationItem is Message
@@ -100,7 +100,8 @@ internal class ConversationContentRepositoryImpl(
     }
 
     override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
-        val baseMessage = BaseMessage(MessageId.Local(uuidGenerator.generate()), clock.now(), MessageSender.Patient, SendStatus.Sending, conversationId)
+        val baseMessage =
+            BaseMessage(MessageId.Local(uuidGenerator.generate()), clock.now(), MessageSender.Patient, SendStatus.Sending, conversationId)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
@@ -128,8 +129,7 @@ internal class ConversationContentRepositoryImpl(
         runCatching { // we're interested in cancellations
             when (message) {
                 is Message.Deleted -> throw NablaException.InvalidMessage("Can't send a deleted message")
-                is Message.Media.Document -> sendMediaMessageOp(message, messageId)
-                is Message.Media.Image -> sendMediaMessageOp(message, messageId)
+                is Message.Media<*, *> -> sendMediaMessageOp(message, messageId)
                 is Message.Text -> sendTextMessageOp(message, messageId)
             }
         }.onFailure { throwable ->
@@ -166,35 +166,35 @@ internal class ConversationContentRepositoryImpl(
 
     private suspend fun sendMediaMessageOp(
         mediaMessage: Message.Media<*, *>,
-        messageId: MessageId.Local
+        messageId: MessageId.Local,
     ) {
         val mediaSource = mediaMessage.mediaSource
         if (mediaSource !is FileSource.Local) {
             throw NablaException.InvalidMessage("Can't send a media message with a media source that is not local")
         }
-        val fileName = when (mediaMessage) {
-            is Message.Media.Document -> mediaMessage.documentName
-            is Message.Media.Image -> mediaMessage.imageName
-        }
-        val mimeType = when (mediaMessage) {
-            is Message.Media.Document -> mediaMessage.mimeType
-            is Message.Media.Image -> mediaMessage.mimeType
-        }
 
-        val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, fileName, mimeType)
+        val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, mediaMessage.fileName, mediaMessage.mimeType)
+
         when (mediaMessage) {
             is Message.Media.Document -> {
                 gqlConversationContentDataSource.sendDocumentMessage(
                     mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
-                    fileUploadId
+                    fileUploadId,
                 )
             }
             is Message.Media.Image -> {
                 gqlConversationContentDataSource.sendImageMessage(
                     mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
-                    fileUploadId
+                    fileUploadId,
+                )
+            }
+            is Message.Media.Audio -> {
+                gqlConversationContentDataSource.sendAudioMessage(
+                    mediaMessage.baseMessage.conversationId,
+                    messageId.clientId,
+                    fileUploadId,
                 )
             }
         }

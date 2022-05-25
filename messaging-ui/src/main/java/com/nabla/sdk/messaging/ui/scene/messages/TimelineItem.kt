@@ -45,6 +45,12 @@ internal sealed interface TimelineItem {
             val thumbnailUri: Uri?,
         ) : Content
 
+        data class Audio(
+            val uri: Uri,
+            val progress: PlaybackProgress,
+            val isPlaying: Boolean,
+        ) : Content
+
         object Deleted : Content
     }
 

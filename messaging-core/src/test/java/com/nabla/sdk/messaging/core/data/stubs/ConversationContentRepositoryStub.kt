@@ -80,7 +80,8 @@ internal class ConversationContentRepositoryStub(
         val sender = if (Random.nextBoolean()) MessageSender.Patient else MessageSender.Provider(User.Provider.fake())
         return when (Random.nextInt() % 100) {
             in 0..70 -> Message.Text.fake(sender = sender, sentAt = sentAt)
-            in 71..85 -> Message.Media.Image.fake(sender = sender, sentAt = sentAt)
+            in 71..80 -> Message.Media.Image.fake(sender = sender, sentAt = sentAt)
+            in 81..90 -> Message.Media.Audio.fake(sender = sender, sentAt = sentAt)
             else -> Message.Media.Document.fake(sender = sender, sentAt = sentAt)
         }
     }

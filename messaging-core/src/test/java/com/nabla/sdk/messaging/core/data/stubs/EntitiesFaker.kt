@@ -75,25 +75,51 @@ internal fun Message.Media.Image.Companion.fake(
     mediaSource = mediaSource,
 )
 
+internal fun Message.Media.Audio.Companion.fake(
+    id: MessageId = MessageId.Remote(uuid4(), uuid4()),
+    sentAt: Instant = Clock.System.now().minus(20.minutes),
+    sender: MessageSender = MessageSender.Patient,
+    status: SendStatus = SendStatus.Sent,
+    conversationId: ConversationId = ConversationId(uuid4()),
+    mediaSource: FileSource<FileLocal.Audio, FileUpload.Audio> = FileSource.Uploaded.fakeAudio(),
+) = Message.Media.Audio(
+    baseMessage = BaseMessage(
+        id = id,
+        createdAt = sentAt,
+        sender = sender,
+        sendStatus = status,
+        conversationId = conversationId,
+    ),
+    mediaSource = mediaSource,
+)
+
 internal fun FileSource.Local.Companion.fakeImage(
-    fileLocal: FileLocal.Image = FileLocal.Image.fake()
+    fileLocal: FileLocal.Image = FileLocal.Image.fake(),
 ) = FileSource.Local<FileLocal.Image, FileUpload.Image>(
     fileLocal = fileLocal,
 )
 
 internal fun FileSource.Uploaded.Companion.fakeImage(
     fileLocal: FileLocal.Image? = FileLocal.Image.fake(),
-    fileUpload: FileUpload.Image = FileUpload.Image.fake()
+    fileUpload: FileUpload.Image = FileUpload.Image.fake(),
 ) = FileSource.Uploaded<FileLocal.Image, FileUpload.Image>(
     fileLocal = fileLocal,
     fileUpload = fileUpload,
 )
 
+internal fun FileSource.Uploaded.Companion.fakeAudio(
+    fileLocal: FileLocal.Audio? = null,
+    fileUpload: FileUpload.Audio = FileUpload.Audio.fake(),
+) = FileSource.Uploaded(
+    fileLocal = fileLocal,
+    fileUpload = fileUpload,
+)
+
 internal fun FileLocal.Image.Companion.fake(
-    uri: Uri = Uri("contentprovider:image.png")
+    uri: Uri = Uri("contentprovider:image.png"),
 ) = FileLocal.Image(
     uri = uri,
-    imageName = "image.png",
+    fileName = "image.png",
     mimeType = MimeType.Image.JPEG
 )
 
@@ -103,6 +129,22 @@ internal fun FileUpload.Image.Companion.fake(
     fileName: String = "filename.jpg",
 ) = FileUpload.Image(
     size = null,
+    fileUpload = BaseFileUpload(
+        id = uuid4(),
+        url = ephemeralUrl,
+        mimeType = mimeType,
+        fileName = fileName,
+    )
+)
+
+internal fun FileUpload.Audio.Companion.fake(
+    ephemeralUrl: EphemeralUrl =
+        EphemeralUrl.fake(url = Uri("https://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.mp3?uniqueness=${uuid4()}")),
+    mimeType: MimeType = MimeType.Audio.MP3,
+    fileName: String = "audio.mp3",
+    durationMs: Long = 27_000L,
+) = FileUpload.Audio(
+    durationMs = durationMs,
     fileUpload = BaseFileUpload(
         id = uuid4(),
         url = ephemeralUrl,

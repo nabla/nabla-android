@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene.messages.adapter
+package com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders
 
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.LayoutInflater

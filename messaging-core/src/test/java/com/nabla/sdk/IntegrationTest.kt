@@ -201,7 +201,7 @@ internal class IntegrationTest {
             val mediaSource = FileSource.Local<FileLocal.Image, FileUpload.Image>(
                 FileLocal.Image(
                     uri = uri,
-                    imageName = null,
+                    fileName = null,
                     mimeType = MimeType.Image.JPEG,
                 )
             )
@@ -269,7 +269,7 @@ internal class IntegrationTest {
             val mediaSource = FileSource.Local<FileLocal.Document, FileUpload.Document>(
                 FileLocal.Document(
                     uri = uri,
-                    documentName = docName,
+                    fileName = docName,
                     mimeType = mimeType,
                 )
             )
@@ -283,9 +283,9 @@ internal class IntegrationTest {
             val message = secondEmit.content.items.first()
             assertIs<Message.Media.Document>(message)
             assertEquals(mediaSource, message.mediaSource)
-            assertEquals(uri, message.uri)
+            assertEquals(uri, message.stableUri)
             assertEquals(mimeType, message.mimeType)
-            assertEquals(docName, message.documentName)
+            assertEquals(docName, message.fileName)
             assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
@@ -297,9 +297,9 @@ internal class IntegrationTest {
             val message2 = thirdEmit.content.items.first()
             assertIs<Message.Media.Document>(message2)
             assertEquals(mediaSource, message2.mediaSource)
-            assertEquals(uri, message2.uri)
+            assertEquals(uri, message2.stableUri)
             assertEquals(mimeType, message2.mimeType)
-            assertEquals(docName, message2.documentName)
+            assertEquals(docName, message2.fileName)
             assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)

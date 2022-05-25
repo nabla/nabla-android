@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -16,6 +17,8 @@ internal class TimelineBuilder {
         hasMore: Boolean,
         providersInConversation: List<ProviderInConversation>,
         selectedMessageId: MessageId? = null,
+        audioPlaybackProgressMap: Map<Uri, PlaybackProgress> = emptyMap(),
+        nowPlayingAudioUri: Uri? = null,
     ): List<TimelineItem> {
 
         // First generates items containing messages, conversation activity and action request.
@@ -27,6 +30,8 @@ internal class TimelineBuilder {
                     showSenderAvatar = false,
                     showSenderName = false,
                     showStatus = false,
+                    audioPlaybackProgressMap = audioPlaybackProgressMap,
+                    nowPlayingAudioUri = nowPlayingAudioUri,
                 )
             }
         }

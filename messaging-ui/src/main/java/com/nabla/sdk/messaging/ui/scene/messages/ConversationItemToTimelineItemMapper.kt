@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -10,6 +11,8 @@ internal fun Message.toTimelineItem(
     showSenderAvatar: Boolean,
     showSenderName: Boolean,
     showStatus: Boolean,
+    audioPlaybackProgressMap: Map<Uri, PlaybackProgress> = emptyMap(),
+    nowPlayingAudioUri: Uri? = null,
 ): TimelineItem.Message {
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
     val actions: Set<MessageAction> = when {
@@ -28,15 +31,21 @@ internal fun Message.toTimelineItem(
         showStatus = showStatus,
         time = sentAt,
         actions = actions,
-        content = toMessageContent(),
+        content = toMessageContent(
+            nowPlayingAudio = nowPlayingAudioUri,
+            audioPlaybackProgressMap = audioPlaybackProgressMap,
+        ),
     )
 }
 
-private fun Message.toMessageContent() = when (this) {
+private fun Message.toMessageContent(
+    nowPlayingAudio: Uri?,
+    audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
+) = when (this) {
     is Message.Deleted -> TimelineItem.Message.Deleted
     is Message.Media.Document -> TimelineItem.Message.File(
-        uri = uri,
-        fileName = documentName ?: "",
+        uri = stableUri,
+        fileName = fileName ?: "",
         mimeType = mimeType,
         thumbnailUri = thumbnailUri,
     )
@@ -45,6 +54,11 @@ private fun Message.toMessageContent() = when (this) {
     )
     is Message.Text -> TimelineItem.Message.Text(
         text = text,
+    )
+    is Message.Media.Audio -> TimelineItem.Message.Audio(
+        uri = stableUri,
+        isPlaying = nowPlayingAudio == stableUri,
+        progress = audioPlaybackProgressMap[stableUri] ?: PlaybackProgress(currentPositionMillis = 0, durationMs),
     )
 }
 

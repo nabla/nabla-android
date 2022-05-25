@@ -30,6 +30,7 @@ import com.nabla.sdk.graphql.type.DeletedMessageContent
 import com.nabla.sdk.graphql.type.EmptyObject
 import com.nabla.sdk.graphql.type.Message
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
+import com.nabla.sdk.graphql.type.SendAudioMessageInput
 import com.nabla.sdk.graphql.type.SendDocumentMessageInput
 import com.nabla.sdk.graphql.type.SendImageMessageInput
 import com.nabla.sdk.graphql.type.SendMessageContentInput
@@ -98,7 +99,7 @@ internal class GqlConversationContentDataSource(
     }
 
     private suspend fun insertConversationActivityToConversationCache(
-        conversationActivityFragment: ConversationActivityFragment
+        conversationActivityFragment: ConversationActivityFragment,
     ) {
         val query = firstItemsPageQuery(conversationActivityFragment.conversation.id.toConversationId())
         val newItem = ConversationItemsPageFragment.Data(
@@ -111,7 +112,7 @@ internal class GqlConversationContentDataSource(
 
     private suspend fun insertConversationItemToConversationCache(
         query: ConversationItemsQuery,
-        newItem: ConversationItemsPageFragment.Data
+        newItem: ConversationItemsPageFragment.Data,
     ) {
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
@@ -173,21 +174,21 @@ internal class GqlConversationContentDataSource(
             }
         return flowOf(
             conversationEventsFlow(conversationId),
-            dataFlow
+            dataFlow,
         ).flattenMerge().filterIsInstance()
     }
 
     suspend fun sendDocumentMessage(
         conversationId: ConversationId,
         clientId: Uuid,
-        fileUploadId: Uuid
+        fileUploadId: Uuid,
     ) {
         sendMediaMessage(conversationId, clientId) {
             SendMessageContentInput(
                 documentInput = Optional.presentIfNotNull(
                     SendDocumentMessageInput(
-                        UploadInput(fileUploadId)
-                    )
+                        UploadInput(fileUploadId),
+                    ),
                 ),
             )
         }
@@ -196,14 +197,30 @@ internal class GqlConversationContentDataSource(
     suspend fun sendImageMessage(
         conversationId: ConversationId,
         clientId: Uuid,
-        fileUploadId: Uuid
+        fileUploadId: Uuid,
     ) {
         sendMediaMessage(conversationId, clientId) {
             SendMessageContentInput(
                 imageInput = Optional.presentIfNotNull(
                     SendImageMessageInput(
-                        UploadInput(fileUploadId)
-                    )
+                        UploadInput(fileUploadId),
+                    ),
+                ),
+            )
+        }
+    }
+
+    suspend fun sendAudioMessage(
+        conversationId: ConversationId,
+        clientId: Uuid,
+        fileUploadId: Uuid,
+    ) {
+        sendMediaMessage(conversationId, clientId) {
+            SendMessageContentInput(
+                audioInput = Optional.presentIfNotNull(
+                    SendAudioMessageInput(
+                        UploadInput(fileUploadId),
+                    ),
                 ),
             )
         }
@@ -212,7 +229,7 @@ internal class GqlConversationContentDataSource(
     private suspend fun sendMediaMessage(
         conversationId: ConversationId,
         clientId: Uuid,
-        inputFactoryBlock: () -> SendMessageContentInput
+        inputFactoryBlock: () -> SendMessageContentInput,
     ) {
         val input = inputFactoryBlock()
         val mutation = SendMessageMutation(conversationId.value, input, clientId)
@@ -248,9 +265,10 @@ internal class GqlConversationContentDataSource(
                             onTextMessageContent = null,
                             onImageMessageContent = null,
                             onDocumentMessageContent = null,
+                            onAudioMessageContent = null,
                             onDeletedMessageContent = MessageContentFragment.OnDeletedMessageContent(
                                 empty = EmptyObject.EMPTY
-                            )
+                            ),
                         )
                     ),
                     conversation = DeleteMessageMutation.Conversation(
@@ -259,7 +277,7 @@ internal class GqlConversationContentDataSource(
                             id = conversationId.value,
                             updatedAt = Clock.System.now(),
                             inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
-                            lastMessagePreview = cachedConversationFragment?.lastMessagePreview
+                            lastMessagePreview = cachedConversationFragment?.lastMessagePreview,
                         )
                     )
                 )

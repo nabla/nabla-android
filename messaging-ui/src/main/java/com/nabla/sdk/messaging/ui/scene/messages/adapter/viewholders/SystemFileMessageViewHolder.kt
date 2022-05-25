@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.scene.messages.adapter
+package com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import com.google.android.material.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemSystemMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.FileMessageContentBinder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.inflateSystemMessageContentCard
 
 internal class SystemFileMessageViewHolder(
     binding: NablaConversationTimelineItemSystemMessageBinding,

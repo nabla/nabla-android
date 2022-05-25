@@ -5,11 +5,34 @@ import android.view.ViewGroup
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.ListAdapter
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemLoadingMoreBinding
 import com.nabla.sdk.messaging.ui.scene.messages.MessageAction
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ChatViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ClickableItemHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ConversationActivityTextMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.DateSeparatorViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.LoadingMoreViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientAudioMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientDeletedMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientFileMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientImageMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientTextMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PopUpMenuHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderAudioMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderDeletedMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderFileMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderImageMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderTextMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderTypingIndicatorViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemAudioMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemFileMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemImageMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemTextMessageViewHolder
 
 internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ConversationDiffCallback) {
 
@@ -35,6 +58,13 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                         when (item.sender) {
                             is MessageSender.Patient -> ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE.ordinal
                             is MessageSender.Provider -> ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE.ordinal
+                            else -> ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE.ordinal
+                        }
+                    }
+                    is TimelineItem.Message.Audio -> {
+                        when (item.sender) {
+                            is MessageSender.Patient -> ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE.ordinal
+                            is MessageSender.Provider -> ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE.ordinal
                             else -> ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
@@ -66,6 +96,12 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             )
             ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE -> ProviderFileMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
             ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE -> ProviderImageMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
+            ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE -> ProviderAudioMessageViewHolder.create(
+                inflater,
+                parent,
+                callbacks::onProviderClicked,
+                callbacks::onToggleAudioMessagePlay
+            )
             ViewType.PROVIDER_TYPING_INDICATOR -> ProviderTypingIndicatorViewHolder.create(inflater, parent)
             ViewType.PATIENT_DELETED_MESSAGE_VIEW_TYPE -> PatientDeletedMessageViewHolder.create(inflater, parent)
             ViewType.PATIENT_TEXT_MESSAGE_VIEW_TYPE -> PatientTextMessageViewHolder.create(
@@ -75,6 +111,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             )
             ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE -> PatientFileMessageViewHolder.create(inflater, parent)
             ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE -> PatientImageMessageViewHolder.create(inflater, parent)
+            ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE -> PatientAudioMessageViewHolder.create(inflater, parent, callbacks::onToggleAudioMessagePlay)
             ViewType.SYSTEM_TEXT_MESSAGE_VIEW_TYPE -> SystemTextMessageViewHolder.create(
                 inflater,
                 parent,
@@ -109,11 +146,19 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         when (payload) {
             is BindingPayload.PatientSendStatus -> (holder as PatientMessageViewHolder<*, *>).bindStatus(payload.status, payload.showStatus)
             is BindingPayload.Image -> {
-                (holder as? ProviderImageMessageViewHolder ?: holder as? PatientImageMessageViewHolder)?.contentBinder
+                (holder as? ProviderImageMessageViewHolder ?: holder as? PatientImageMessageViewHolder ?: holder as? SystemImageMessageViewHolder)
+                    ?.contentBinder
                     ?.loadImage(
                         uri = payload.uri,
                         itemId = payload.itemId,
                     )
+
+                (holder as? PatientImageMessageViewHolder)?.bindStatus(payload.status, payload.showStatus)
+            }
+            is BindingPayload.Audio -> {
+                (holder as? ProviderAudioMessageViewHolder ?: holder as? PatientAudioMessageViewHolder ?: holder as? SystemAudioMessageViewHolder)
+                    ?.contentBinder
+                    ?.bind(payload.uri, payload.isPlaying, payload.progress)
 
                 (holder as? PatientImageMessageViewHolder)?.bindStatus(payload.status, payload.showStatus)
             }
@@ -142,6 +187,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item.sender as MessageSender.Provider,
                 item.content as TimelineItem.Message.Image
             )
+            is ProviderAudioMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.sender as MessageSender.Provider,
+                item.content as TimelineItem.Message.Audio,
+            )
             is ProviderTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.sender as MessageSender.Provider,
@@ -162,6 +212,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item.sender as MessageSender.Patient,
                 item.content as TimelineItem.Message.Image
             )
+            is PatientAudioMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.sender as MessageSender.Patient,
+                item.content as TimelineItem.Message.Audio,
+            )
             is PatientTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.sender as MessageSender.Patient,
@@ -181,6 +236,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item as TimelineItem.Message,
                 item.sender as MessageSender.System,
                 item.content as TimelineItem.Message.Image
+            )
+            is SystemAudioMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.sender as MessageSender.System,
+                item.content as TimelineItem.Message.Audio,
             )
             is ConversationActivityTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.ConversationActivity
@@ -230,6 +290,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         fun onCopyMessage(item: TimelineItem.Message.Text)
         fun onProviderClicked(providerId: Uuid)
         fun onUrlClicked(url: String, isFromPatient: Boolean)
+        fun onToggleAudioMessagePlay(audioMessageUri: Uri)
     }
 
     private enum class ViewType {
@@ -238,11 +299,13 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         PROVIDER_DELETED_MESSAGE_VIEW_TYPE,
         PROVIDER_FILE_MESSAGE_VIEW_TYPE,
         PROVIDER_IMAGE_MESSAGE_VIEW_TYPE,
+        PROVIDER_AUDIO_MESSAGE_VIEW_TYPE,
         PROVIDER_TEXT_MESSAGE_VIEW_TYPE,
         PROVIDER_TYPING_INDICATOR,
         PATIENT_DELETED_MESSAGE_VIEW_TYPE,
         PATIENT_FILE_MESSAGE_VIEW_TYPE,
         PATIENT_IMAGE_MESSAGE_VIEW_TYPE,
+        PATIENT_AUDIO_MESSAGE_VIEW_TYPE,
         PATIENT_TEXT_MESSAGE_VIEW_TYPE,
         SYSTEM_FILE_MESSAGE_VIEW_TYPE,
         SYSTEM_IMAGE_MESSAGE_VIEW_TYPE,
