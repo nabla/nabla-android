@@ -14,10 +14,10 @@
     <string name="nabla_conversation_message_sent_status">Sent</string>
     <string name="nabla_conversation_message_error_status">Failed to send, tap to try again…</string>
 
-    <string name="nabla_conversation_no_pdf_third_party_app_info_title">No PDF viewer found</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_message">Do you want to install Google Drive to open PDF files?</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Yes</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_negative">No</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Install Google Drive to open the PDF?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_message">No PDF reader was found on your phone, do you want to install Google Drive to open the PDF file?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Install</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Cancel</string>
 
     <string name="nabla_error_message_network_title">There was a network error</string>
     <string name="nabla_error_message_network_body">Please check your internet and try again.</string>

@@ -14,10 +14,10 @@
     <string name="nabla_conversation_message_sent_status">Envoyé</string>
     <string name="nabla_conversation_message_error_status">L’envoi a échoué, tapez pour réessayer…</string>
 
-    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Pas d’application PDF trouvée</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_message">Voulez-vous installer l’application Google Drive pour ouvrir des fichiers PDF ?</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Oui</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Non</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Installer Google Drive pour ouvrir le PDF ?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_message">Aucun lecteur de PDF n’a été trouvé sur votre téléphone, voulez-vous installer Google Drive pour ouvrir le PDF ?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Installer</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Annuler</string>
 
     <string name="nabla_error_message_network_title">Une erreur réseau est survenue</string>
     <string name="nabla_error_message_network_body">Veuillez vérifier votre connexion internet et réessayer.</string>
