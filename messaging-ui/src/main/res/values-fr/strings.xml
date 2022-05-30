@@ -3,8 +3,8 @@
     <string name="nabla_conversation_composer_placeholder_default">Tapez votre message</string>
 
     <string name="nabla_avatar_state_description_placeholder">Avatar sans photo (%1$s)</string>
-    <string name="nabla_avatar_state_description_no_placeholder">Avatar avec photo (%1$s)</string>
     <string name="nabla_avatar_state_description_gray_out">désactivé</string>
+    <string name="nabla_avatar_state_description_no_placeholder">Avatar avec photo (%1$s)</string>
 
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Messages non lus</string>
 
@@ -13,17 +13,17 @@
 
     <string name="nabla_conversation_message_sending_status">Envoi en cours…</string>
     <string name="nabla_conversation_message_sent_status">Envoyé</string>
-    <string name="nabla_conversation_message_error_status">L’envoi a échoué, tapez pour réessayer</string>
+    <string name="nabla_conversation_message_error_status">L’envoi a échoué, tapez pour réessayer…</string>
 
-    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Pas d’application PDF</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Pas d’application PDF trouvée</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_message">Voulez-vous installer l’application Google Drive pour ouvrir des fichiers PDF ?</string>
-    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Installer</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Oui</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Non</string>
 
     <string name="nabla_error_message_network_title">Une erreur réseau est survenue</string>
     <string name="nabla_error_message_network_body">Veuillez vérifier votre connexion internet et réessayer.</string>
     <string name="nabla_error_message_generic_title">Une erreur est survenue</string>
-    <string name="nabla_error_message_generic_body">Veuillez réessayer.</string>
+    <string name="nabla_error_message_generic_body">Si elle persiste, contactez-nous.</string>
     <string name="nabla_error_retry_cta">Réessayer</string>
 
     <string name="nabla_error_message_conversations_loading_more">Une erreur est survenue lors du chargement des conversations, veuillez réessayer.</string>
@@ -41,8 +41,8 @@
     <string name="nabla_conversation_full_screen_media_close_content_description">Fermer</string>
     <string name="nabla_conversation_full_screen_media_share_content_description">Partager</string>
     <string name="nabla_conversation_attachment_media_picker_camera">Appareil photo</string>
-    <string name="nabla_conversation_attachment_media_picker_photos_library">Bibliothèque photos</string>
-    <string name="nabla_conversation_attachment_media_picker_documents">Choisir un fichier</string>
+    <string name="nabla_conversation_attachment_media_picker_photos_library">Galerie</string>
+    <string name="nabla_conversation_attachment_media_picker_documents">Fichiers</string>
 
     <string name="nabla_conversation_deleted_message_placeholder">Message supprimé</string>
     <string name="nabla_conversation_file_message_content_description">Message fichier</string>
