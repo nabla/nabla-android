@@ -43,50 +43,37 @@ internal class SessionClientImpl(
             message = "get fresh access token with forceRefreshAccessToken=$forceRefreshAccessToken...",
             tag = Logger.AUTH_TAG
         )
-        val accessToken = tokenLocalDataSource.getAccessToken()
-        if (accessToken.isValid() && !forceRefreshAccessToken) {
+        val authTokens = tokenLocalDataSource.getAuthTokens() ?: renewSessionAuthTokens()
+        val accessToken = JWT(authTokens.accessToken)
+        val refreshToken = JWT(authTokens.refreshToken)
+
+        if (!accessToken.isExpired() && !forceRefreshAccessToken) {
             logger.debug(
                 message = "using still valid access token",
                 tag = Logger.AUTH_TAG
             )
             return accessToken.toString()
         }
-        val refreshToken = tokenLocalDataSource.getRefreshToken()
-        if (refreshToken.isValid()) {
+
+        return if (refreshToken.isExpired()) {
+            logger.debug(
+                message = "both access or refresh tokens are expired, fallback to refreshing session",
+                tag = Logger.AUTH_TAG
+            )
+            renewSessionAuthTokens()
+        } else {
             logger.debug(
                 message = "using still valid refresh token to refresh tokens",
                 tag = Logger.AUTH_TAG
             )
-
-            return runCatchingCancellable {
-                val freshTokens = tokenRemoteDataSource.refresh(refreshToken.toString())
-                tokenLocalDataSource.setAuthTokens(freshTokens)
-                logger.debug(
-                    message = "tokens refreshed, using refreshed access token",
-                    tag = Logger.AUTH_TAG
+            refreshSessionAuthTokens(refreshToken.toString())
+        }.also { freshTokens ->
+            if (JWT(freshTokens.accessToken).isExpired()) {
+                throw NablaException.Authentication.UnableToGetFreshSessionToken(
+                    IllegalStateException("access token is expired")
                 )
-
-                freshTokens.accessToken
-            }.getOrElse { refreshTokenError ->
-                // Fallback to refreshing session
-                logger.debug(
-                    message = "fail refresh tokens, fallback to refresh session",
-                    tag = Logger.AUTH_TAG
-                )
-
-                return runCatchingCancellable {
-                    renewSessionAuthTokens().accessToken.also {
-                        logger.debug(message = "success refresh session", tag = Logger.AUTH_TAG)
-                    }
-                }.getOrElse { renewSessionError ->
-                    // Ensure no exception is suppressed
-                    logger.debug(message = "fail refreshing session", tag = Logger.AUTH_TAG)
-                    throw renewSessionError.apply { addSuppressed(refreshTokenError) }
-                }
             }
-        }
-        // no access or refresh tokens are valid, fallback to refreshing session
-        return renewSessionAuthTokens().accessToken
+        }.accessToken
     }
 
     override fun clearSession() {
@@ -95,18 +82,50 @@ internal class SessionClientImpl(
     }
 
     private suspend fun renewSessionAuthTokens(): AuthTokens {
-        val sessionTokenProvider = sessionTokenProvider ?: throw NablaException.Authentication.NotAuthenticated
+        val sessionTokenProvider =
+            sessionTokenProvider ?: throw NablaException.Authentication.NotAuthenticated
         val patientId = patientRepository.getPatientId()
             ?: throw NablaException.Internal(RuntimeException("Session token provider available without patientId"))
 
         return sessionTokenProvider.fetchNewSessionAuthTokens(patientId)
-            .getOrElse { exception -> throw NablaException.Authentication.UnableToGetFreshSessionToken(exceptionMapper.map(exception)) }
+            .getOrElse { exception ->
+                throw NablaException.Authentication.UnableToGetFreshSessionToken(
+                    exceptionMapper.map(exception)
+                )
+            }
             .also {
                 tokenLocalDataSource.setAuthTokens(it)
             }
     }
+
+    private suspend fun refreshSessionAuthTokens(refreshToken: String): AuthTokens {
+        return runCatchingCancellable {
+            val freshTokens = tokenRemoteDataSource.refresh(refreshToken)
+            tokenLocalDataSource.setAuthTokens(freshTokens)
+            logger.debug(
+                message = "tokens refreshed, using refreshed access token",
+                tag = Logger.AUTH_TAG
+            )
+
+            freshTokens
+        }.getOrElse { refreshTokenError ->
+            // Fallback to renewing session
+            logger.debug(
+                message = "fail refresh tokens, fallback to renew session",
+                tag = Logger.AUTH_TAG
+            )
+
+            return runCatchingCancellable {
+                renewSessionAuthTokens()
+            }.getOrElse { renewSessionError ->
+                // Ensure no exception is suppressed
+                logger.debug(message = "fail renewing session", tag = Logger.AUTH_TAG)
+                throw renewSessionError.apply { addSuppressed(refreshTokenError) }
+            }
+        }
+    }
 }
 
-private fun JWT?.isValid(): Boolean {
-    return this != null && !this.isExpired(1)
+private fun JWT.isExpired(): Boolean {
+    return this.isExpired(1)
 }

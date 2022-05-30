@@ -12,8 +12,7 @@ internal class SessionLocalDataCleanerImpl(
 ) : SessionLocalDataCleaner {
     override fun cleanLocalSessionData() {
         localPatientDataSource.setPatient(null)
-        tokenLocalDataSource.setAccessToken(null)
-        tokenLocalDataSource.setRefreshToken(null)
+        tokenLocalDataSource.clear()
         apolloClient.apolloStore.clearAll()
     }
 }
