@@ -2,18 +2,18 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders
 
 import android.view.View
 import androidx.annotation.CallSuper
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.MessageContentBinder
 
-internal sealed class MessageViewHolder<ContentType, SenderType, BinderType>(
+internal sealed class MessageViewHolder<ContentType, AuthorType, BinderType>(
     val contentBinder: BinderType,
     itemView: View,
 ) : ChatViewHolder(itemView)
-    where ContentType : TimelineItem.Message.Content, SenderType : MessageSender, BinderType : MessageContentBinder<ContentType> {
+    where ContentType : TimelineItem.Message.Content, AuthorType : MessageAuthor, BinderType : MessageContentBinder<ContentType> {
 
     @CallSuper
-    open fun bind(message: TimelineItem.Message, sender: SenderType, content: ContentType) {
+    open fun bind(message: TimelineItem.Message, author: AuthorType, content: ContentType) {
         contentBinder.bind(message.listItemId, content)
     }
 }

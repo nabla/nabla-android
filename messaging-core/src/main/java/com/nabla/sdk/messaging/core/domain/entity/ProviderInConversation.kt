@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
-import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.Provider
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration.Companion.seconds
 
 public data class ProviderInConversation(
-    val provider: User.Provider,
+    val provider: Provider,
     val typingAt: Instant?,
     val seenUntil: Instant?,
 ) {

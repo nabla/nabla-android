@@ -2,7 +2,7 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
 internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>() {
@@ -37,7 +37,7 @@ internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>()
             actions = newItem.actions,
             time = newItem.time, // date change is ignored
         )
-        val sentByPatient = newItem.sender is MessageSender.Patient
+        val sentByPatient = newItem.author is MessageAuthor.Patient
         val onlyStatusChanged = newItem == oldItem.copy(
             id = newItem.id,
             status = newItem.status,

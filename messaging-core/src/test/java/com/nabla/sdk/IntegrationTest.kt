@@ -21,9 +21,9 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -171,7 +171,7 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
-            assertEquals(MessageSender.Patient, message.sender)
+            assertEquals(MessageAuthor.Patient, message.author)
             assertEquals(createdConversation.id, secondEmit.content.conversationId)
             assertNull(secondEmit.loadMore)
 
@@ -182,7 +182,7 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
-            assertEquals(MessageSender.Patient, message2.sender)
+            assertEquals(MessageAuthor.Patient, message2.author)
             assertEquals(createdConversation.id, thirdEmit.content.conversationId)
             assertNull(thirdEmit.loadMore)
 
@@ -237,7 +237,7 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
-            assertEquals(MessageSender.Patient, message.sender)
+            assertEquals(MessageAuthor.Patient, message.author)
             assertEquals(createdConversation.id, secondEmit.content.conversationId)
             assertNull(secondEmit.loadMore)
 
@@ -249,7 +249,7 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
-            assertEquals(MessageSender.Patient, message2.sender)
+            assertEquals(MessageAuthor.Patient, message2.author)
             assertEquals(createdConversation.id, thirdEmit.content.conversationId)
             assertNull(thirdEmit.loadMore)
 
@@ -308,7 +308,7 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
-            assertEquals(MessageSender.Patient, message.sender)
+            assertEquals(MessageAuthor.Patient, message.author)
             assertEquals(createdConversation.id, secondEmit.content.conversationId)
             assertNull(secondEmit.loadMore)
 
@@ -322,7 +322,7 @@ internal class IntegrationTest {
             assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
-            assertEquals(MessageSender.Patient, message2.sender)
+            assertEquals(MessageAuthor.Patient, message2.author)
             assertEquals(createdConversation.id, thirdEmit.content.conversationId)
             assertNull(thirdEmit.loadMore)
 

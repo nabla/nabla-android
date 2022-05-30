@@ -3,7 +3,7 @@ package com.nabla.sdk.messaging.core.data.stubs
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedList
-import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -60,8 +60,8 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
         lastModified = Clock.System.now().minus((1..1_000).random().minutes),
         providersInConversation = listOf(
             ProviderInConversation.fake(),
-            ProviderInConversation.fake(provider = User.Provider.fake(avatar = null)),
-            ProviderInConversation.fake(provider = User.Provider.fake(avatar = null, lastName = "Doe")),
+            ProviderInConversation.fake(provider = Provider.fake(avatar = null)),
+            ProviderInConversation.fake(provider = Provider.fake(avatar = null, lastName = "Doe")),
         ).shuffled().take((0..3).random()),
         patientUnreadMessageCount = (0..3).random(),
     )

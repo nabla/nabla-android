@@ -11,9 +11,9 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -101,7 +101,7 @@ internal class ConversationContentRepositoryImpl(
 
     override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
         val baseMessage =
-            BaseMessage(MessageId.Local(uuidGenerator.generate()), clock.now(), MessageSender.Patient, SendStatus.Sending, conversationId)
+            BaseMessage(MessageId.Local(uuidGenerator.generate()), clock.now(), MessageAuthor.Patient, SendStatus.Sending, conversationId)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)

@@ -18,10 +18,9 @@ import coil.clear
 import coil.load
 import coil.size.Scale
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.domain.entity.User
-import com.nabla.sdk.core.domain.entity.User.Patient
-import com.nabla.sdk.core.domain.entity.User.Provider
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
@@ -74,15 +73,14 @@ internal class NablaAvatarView : ConstraintLayout {
         }
     }
 
-    fun loadAvatar(user: User) {
-        val initials = user.initials(context = context, singleLetter = useSingleLetterInPlaceHolder)
-        when (user) {
-            is Provider -> loadAvatar(user.avatar?.url, initials, user.id)
-            is Patient -> loadAvatar(user.avatar?.url, initials, user.id)
-            is User.Unknown -> loadAvatar(avatarUrl = null, placeholderText = null, userId = null)
-            is User.System -> loadAvatar(user.avatar?.url, initials, userId = null)
-            User.DeletedProvider -> loadAvatar(avatarUrl = null, placeholderText = null, userId = null)
-        }
+    fun loadAvatar(provider: Provider) {
+        val initials = provider.initials(context = context, singleLetter = useSingleLetterInPlaceHolder)
+        loadAvatar(provider.avatar?.url, initials, provider.id)
+    }
+
+    fun loadAvatar(systemUser: SystemUser) {
+        val initials = systemUser.initials()
+        loadAvatar(systemUser.avatar?.url, initials, userId = null)
     }
 
     fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userId: Uuid?) {

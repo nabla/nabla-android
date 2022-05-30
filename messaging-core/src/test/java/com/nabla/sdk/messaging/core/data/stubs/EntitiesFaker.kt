@@ -8,8 +8,8 @@ import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -19,8 +19,8 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
@@ -43,14 +43,14 @@ fun ConversationItems.Companion.fake(
 internal fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    sender: MessageSender = MessageSender.Patient,
+    author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
     text: String = randomText(),
 ) = Message.Text(
     BaseMessage(
         id = id,
         createdAt = sentAt,
-        sender = sender,
+        author = author,
         sendStatus = status,
         conversationId = uuid4().toConversationId(),
     ),
@@ -60,7 +60,7 @@ internal fun Message.Text.Companion.fake(
 internal fun Message.Media.Image.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    sender: MessageSender = MessageSender.Patient,
+    author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
     conversationId: ConversationId = ConversationId(uuid4()),
     mediaSource: FileSource<FileLocal.Image, FileUpload.Image> = FileSource.Uploaded.fakeImage(),
@@ -68,7 +68,7 @@ internal fun Message.Media.Image.Companion.fake(
     baseMessage = BaseMessage(
         id = id,
         createdAt = sentAt,
-        sender = sender,
+        author = author,
         sendStatus = status,
         conversationId = conversationId,
     ),
@@ -78,7 +78,7 @@ internal fun Message.Media.Image.Companion.fake(
 internal fun Message.Media.Audio.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    sender: MessageSender = MessageSender.Patient,
+    author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
     conversationId: ConversationId = ConversationId(uuid4()),
     mediaSource: FileSource<FileLocal.Audio, FileUpload.Audio> = FileSource.Uploaded.fakeAudio(),
@@ -86,7 +86,7 @@ internal fun Message.Media.Audio.Companion.fake(
     baseMessage = BaseMessage(
         id = id,
         createdAt = sentAt,
-        sender = sender,
+        author = author,
         sendStatus = status,
         conversationId = conversationId,
     ),
@@ -156,7 +156,7 @@ internal fun FileUpload.Audio.Companion.fake(
 internal fun Message.Media.Document.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    sender: MessageSender = MessageSender.Patient,
+    author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
     conversationId: ConversationId = ConversationId(uuid4()),
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
@@ -167,7 +167,7 @@ internal fun Message.Media.Document.Companion.fake(
     baseMessage = BaseMessage(
         id = id,
         createdAt = sentAt,
-        sender = sender,
+        author = author,
         sendStatus = status,
         conversationId = conversationId,
     ),
@@ -185,7 +185,7 @@ internal fun Message.Media.Document.Companion.fake(
     ),
 )
 
-fun User.Provider.Companion.fake(
+fun Provider.Companion.fake(
     id: Uuid = uuid4(),
     firstName: String = "Véronique",
     lastName: String = "Cayol",
@@ -194,7 +194,7 @@ fun User.Provider.Companion.fake(
         expiresAt = Instant.DISTANT_FUTURE,
         url = Uri("https://i.pravatar.cc/300"),
     ),
-) = User.Provider(
+) = Provider(
     id = id,
     avatar = avatar,
     firstName = firstName,
@@ -203,7 +203,7 @@ fun User.Provider.Companion.fake(
 )
 
 fun ProviderInConversation.Companion.fake(
-    provider: User.Provider = User.Provider.fake(),
+    provider: Provider = Provider.fake(),
     typingAt: Instant? = null,
     seenUntil: Instant = Clock.System.now(),
 ) = ProviderInConversation(
@@ -246,7 +246,7 @@ internal fun ConversationActivity.Companion.fakeProviderJoined() = ConversationA
     createdAt = Clock.System.now(),
     activityTime = Clock.System.now(),
     content = ConversationActivityContent.ProviderJoinedConversation(
-        maybeProvider = User.Provider.fake()
+        maybeProvider = Provider.fake()
     )
 )
 

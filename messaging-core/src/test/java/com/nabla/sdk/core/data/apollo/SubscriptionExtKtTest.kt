@@ -3,7 +3,7 @@ package com.nabla.sdk.core.data.apollo
 import app.cash.turbine.test
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
-import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.test.TestClock
@@ -56,7 +56,7 @@ internal class SubscriptionExtKtTest {
     fun `notifyTypingUpdates() notifies typing updates`() = runTest {
         val clock = TestClock(this)
         val typingProvider = ProviderInConversation(
-            User.Provider.fake(), clock.now(), null
+            Provider.fake(), clock.now(), null
         )
         val eventFlowWithProviders = flow {
             emit(typingProvider)

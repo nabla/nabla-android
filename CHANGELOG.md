@@ -13,6 +13,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added support for receiving and playing voice messages. 
 
 ### Changed
+- `MessageSender` is renamed to `MessageAuthor`.
 - Documents name are now displayed only on 1 line when using `ConversationFragment`
 - `NablaMessagingClient.watchConversationMessages` replaced by `NablaMessagingClient.watchConversationItems`.
 - `NablaMessagingClient.sendMessage` now takes a `MessageInput` and the `ConversationId` rather than the message directly

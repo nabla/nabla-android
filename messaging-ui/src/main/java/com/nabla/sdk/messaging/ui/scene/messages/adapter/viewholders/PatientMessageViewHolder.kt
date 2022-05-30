@@ -6,7 +6,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.getThemeColor
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemPatientMessageBinding
@@ -17,7 +17,7 @@ import com.google.android.material.R as MaterialR
 internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>>(
     private val binding: NablaConversationTimelineItemPatientMessageBinding,
     contentBinder: BinderType,
-) : MessageViewHolder<ContentType, MessageSender.Patient, BinderType>(contentBinder, binding.root),
+) : MessageViewHolder<ContentType, MessageAuthor.Patient, BinderType>(contentBinder, binding.root),
     ClickableItemHolder,
     PopUpMenuHolder {
     override val clickableView: View
@@ -31,8 +31,8 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
-    override fun bind(message: TimelineItem.Message, sender: MessageSender.Patient, content: ContentType) {
-        super.bind(message, sender, content)
+    override fun bind(message: TimelineItem.Message, author: MessageAuthor.Patient, content: ContentType) {
+        super.bind(message, author, content)
         val showStatus = message.showStatus
         val status = message.status
         bindStatus(status, showStatus)

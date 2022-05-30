@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
 import android.content.Context
-import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.isThisWeek
 import com.nabla.sdk.core.ui.helpers.isThisYear
 import com.nabla.sdk.core.ui.helpers.isToday
@@ -24,7 +24,7 @@ internal sealed class ItemUiModel(val listId: String) {
         val subtitle: String,
         val lastModified: Instant,
         val hasUnreadMessages: Boolean,
-        val providers: List<User.Provider>,
+        val providers: List<Provider>,
     ) : ItemUiModel(listId = id.value.toString()) {
 
         fun formatLastModified(context: Context): String {

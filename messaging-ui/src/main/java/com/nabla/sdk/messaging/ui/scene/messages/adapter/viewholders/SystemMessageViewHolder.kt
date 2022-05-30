@@ -7,7 +7,7 @@ import android.view.View.VISIBLE
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemSystemMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
@@ -16,7 +16,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.MessageContentB
 internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>>(
     private val binding: NablaConversationTimelineItemSystemMessageBinding,
     contentBinder: BinderType,
-) : MessageViewHolder<ContentType, MessageSender.System, BinderType>(contentBinder, binding.root),
+) : MessageViewHolder<ContentType, MessageAuthor.System, BinderType>(contentBinder, binding.root),
     PopUpMenuHolder,
     ClickableItemHolder {
 
@@ -31,18 +31,18 @@ internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
-    override fun bind(message: TimelineItem.Message, sender: MessageSender.System, content: ContentType) {
-        super.bind(message, sender, content)
+    override fun bind(message: TimelineItem.Message, author: MessageAuthor.System, content: ContentType) {
+        super.bind(message, author, content)
 
-        binding.chatSystemMessageAuthorTextView.isVisible = message.showSenderName
-        binding.chatSystemMessageAvatarView.visibility = if (message.showSenderAvatar) VISIBLE else INVISIBLE
+        binding.chatSystemMessageAuthorTextView.isVisible = message.showAuthorName
+        binding.chatSystemMessageAvatarView.visibility = if (message.showAuthorAvatar) VISIBLE else INVISIBLE
 
-        if (message.showSenderName) {
-            binding.chatSystemMessageAuthorTextView.text = sender.system.name
+        if (message.showAuthorName) {
+            binding.chatSystemMessageAuthorTextView.text = author.system.name
         }
 
-        if (message.showSenderAvatar) {
-            binding.chatSystemMessageAvatarView.loadAvatar(sender.system)
+        if (message.showAuthorAvatar) {
+            binding.chatSystemMessageAvatarView.loadAvatar(author.system)
         }
     }
 }

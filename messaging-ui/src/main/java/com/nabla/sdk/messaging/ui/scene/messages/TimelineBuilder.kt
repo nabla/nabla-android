@@ -4,8 +4,8 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.datetime.Instant
@@ -27,8 +27,8 @@ internal class TimelineBuilder {
             when (item) {
                 is ConversationActivity -> item.toTimelineItem()
                 is Message -> item.toTimelineItem(
-                    showSenderAvatar = false,
-                    showSenderName = false,
+                    showAuthorAvatar = false,
+                    showAuthorName = false,
                     showStatus = false,
                     audioPlaybackProgressMap = audioPlaybackProgressMap,
                     nowPlayingAudioUri = nowPlayingAudioUri,
@@ -41,14 +41,14 @@ internal class TimelineBuilder {
         val allMessageItemsWithStatus = allMessageItems.mapIndexed { index, item ->
             if (item is TimelineItem.Message) {
                 val nextMessage = allMessageItems.getOrNull(index + 1)
-                val showSenderAvatarAndName = item.sender != MessageSender.Patient && (
+                val showAuthorAvatarAndName = item.author != MessageAuthor.Patient && (
                     nextMessage == null ||
                         nextMessage !is TimelineItem.Message ||
-                        nextMessage.sender != item.sender
+                        nextMessage.author != item.author
                     )
 
                 val showStatus = item.status != SendStatus.Sent || item.id == selectedMessageId
-                item.copy(showStatus = showStatus, showSenderAvatar = showSenderAvatarAndName, showSenderName = showSenderAvatarAndName)
+                item.copy(showStatus = showStatus, showAuthorAvatar = showAuthorAvatarAndName, showAuthorName = showAuthorAvatarAndName)
             } else {
                 item
             }
@@ -74,7 +74,7 @@ internal class TimelineBuilder {
                 val firstMessage = allItemsWithDates.firstOrNull()
                 val showProviderName = index > 0 ||
                     firstMessage == null ||
-                    (firstMessage is TimelineItem.Message && (firstMessage.sender as? MessageSender.Provider)?.provider != typingProvider.provider) ||
+                    (firstMessage is TimelineItem.Message && (firstMessage.author as? MessageAuthor.Provider)?.provider != typingProvider.provider) ||
                     firstMessage !is TimelineItem.Message
                 TimelineItem.ProviderTypingIndicator(
                     provider = typingProvider.provider,

@@ -4,12 +4,12 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.Message
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 
 internal fun Message.toTimelineItem(
-    showSenderAvatar: Boolean,
-    showSenderName: Boolean,
+    showAuthorAvatar: Boolean,
+    showAuthorName: Boolean,
     showStatus: Boolean,
     audioPlaybackProgressMap: Map<Uri, PlaybackProgress> = emptyMap(),
     nowPlayingAudioUri: Uri? = null,
@@ -17,16 +17,16 @@ internal fun Message.toTimelineItem(
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
     val actions: Set<MessageAction> = when {
         this is Message.Deleted -> emptySet()
-        sender is MessageSender.Provider -> setOfNotNull(copyActionOrNull)
-        sender is MessageSender.System -> setOfNotNull(copyActionOrNull)
-        sender is MessageSender.Patient && sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
+        author is MessageAuthor.Provider -> setOfNotNull(copyActionOrNull)
+        author is MessageAuthor.System -> setOfNotNull(copyActionOrNull)
+        author is MessageAuthor.Patient && sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
         else -> emptySet()
     }
     return TimelineItem.Message(
         id = id,
-        sender = sender,
-        showSenderAvatar = showSenderAvatar,
-        showSenderName = showSenderName,
+        author = author,
+        showAuthorAvatar = showAuthorAvatar,
+        showAuthorName = showAuthorName,
         status = sendStatus,
         showStatus = showStatus,
         time = sentAt,

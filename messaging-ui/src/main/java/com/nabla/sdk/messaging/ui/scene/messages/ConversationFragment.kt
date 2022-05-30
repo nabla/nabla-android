@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.Player.STATE_READY
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
-import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.canScrollUp
@@ -495,7 +495,7 @@ public open class ConversationFragment : Fragment() {
     private fun NablaFragmentConversationBinding.updateToolbar(
         title: String?,
         subtitle: String?,
-        providers: List<User.Provider>?,
+        providers: List<Provider>?,
         displayAvatar: Boolean,
     ) {
         conversationToolbarTitle.setTextOrHide(title)

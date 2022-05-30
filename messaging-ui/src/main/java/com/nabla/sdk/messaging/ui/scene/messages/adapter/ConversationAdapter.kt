@@ -6,7 +6,7 @@ import androidx.core.view.forEach
 import androidx.recyclerview.widget.ListAdapter
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemLoadingMoreBinding
 import com.nabla.sdk.messaging.ui.scene.messages.MessageAction
@@ -41,35 +41,35 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             is TimelineItem.Message -> {
                 when (item.content) {
                     is TimelineItem.Message.Text -> {
-                        when (item.sender) {
-                            is MessageSender.Patient -> ViewType.PATIENT_TEXT_MESSAGE_VIEW_TYPE.ordinal
-                            is MessageSender.Provider -> ViewType.PROVIDER_TEXT_MESSAGE_VIEW_TYPE.ordinal
+                        when (item.author) {
+                            is MessageAuthor.Patient -> ViewType.PATIENT_TEXT_MESSAGE_VIEW_TYPE.ordinal
+                            is MessageAuthor.Provider -> ViewType.PROVIDER_TEXT_MESSAGE_VIEW_TYPE.ordinal
                             else -> ViewType.SYSTEM_TEXT_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
                     is TimelineItem.Message.Image -> {
-                        when (item.sender) {
-                            is MessageSender.Patient -> ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE.ordinal
-                            is MessageSender.Provider -> ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE.ordinal
+                        when (item.author) {
+                            is MessageAuthor.Patient -> ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE.ordinal
+                            is MessageAuthor.Provider -> ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE.ordinal
                             else -> ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
                     is TimelineItem.Message.File -> {
-                        when (item.sender) {
-                            is MessageSender.Patient -> ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE.ordinal
-                            is MessageSender.Provider -> ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE.ordinal
+                        when (item.author) {
+                            is MessageAuthor.Patient -> ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE.ordinal
+                            is MessageAuthor.Provider -> ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE.ordinal
                             else -> ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
                     is TimelineItem.Message.Audio -> {
-                        when (item.sender) {
-                            is MessageSender.Patient -> ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE.ordinal
-                            is MessageSender.Provider -> ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE.ordinal
+                        when (item.author) {
+                            is MessageAuthor.Patient -> ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE.ordinal
+                            is MessageAuthor.Provider -> ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE.ordinal
                             else -> ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
                     is TimelineItem.Message.Deleted -> {
-                        if (item.sender is MessageSender.Patient) {
+                        if (item.author is MessageAuthor.Patient) {
                             ViewType.PATIENT_DELETED_MESSAGE_VIEW_TYPE.ordinal
                         } else {
                             ViewType.PROVIDER_DELETED_MESSAGE_VIEW_TYPE.ordinal
@@ -174,72 +174,72 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             is LoadingMoreViewHolder -> Unit /* no-op */
             is ProviderDeletedMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Provider,
+                item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.Deleted
             )
             is ProviderFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Provider,
+                item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.File
             )
             is ProviderImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Provider,
+                item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.Image
             )
             is ProviderAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Provider,
+                item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.Audio,
             )
             is ProviderTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Provider,
+                item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.Text
             )
             is PatientDeletedMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Patient,
+                item.author as MessageAuthor.Patient,
                 item.content as TimelineItem.Message.Deleted
             )
             is PatientFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Patient,
+                item.author as MessageAuthor.Patient,
                 item.content as TimelineItem.Message.File
             )
             is PatientImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Patient,
+                item.author as MessageAuthor.Patient,
                 item.content as TimelineItem.Message.Image
             )
             is PatientAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Patient,
+                item.author as MessageAuthor.Patient,
                 item.content as TimelineItem.Message.Audio,
             )
             is PatientTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.Patient,
+                item.author as MessageAuthor.Patient,
                 item.content as TimelineItem.Message.Text
             )
             is SystemTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.author as MessageAuthor.System,
                 item.content as TimelineItem.Message.Text
             )
             is SystemFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.author as MessageAuthor.System,
                 item.content as TimelineItem.Message.File
             )
             is SystemImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.author as MessageAuthor.System,
                 item.content as TimelineItem.Message.Image
             )
             is SystemAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
-                item.sender as MessageSender.System,
+                item.author as MessageAuthor.System,
                 item.content as TimelineItem.Message.Audio,
             )
             is ConversationActivityTextMessageViewHolder -> holder.bind(

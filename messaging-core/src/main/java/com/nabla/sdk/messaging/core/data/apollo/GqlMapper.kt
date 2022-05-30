@@ -2,13 +2,15 @@ package com.nabla.sdk.messaging.core.data.apollo
 
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
+import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Size
+import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.graphql.fragment.AudioFileUploadFragment
 import com.nabla.sdk.graphql.fragment.ConversationActivityContentFragment
 import com.nabla.sdk.graphql.fragment.ConversationActivityFragment
@@ -27,8 +29,8 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
@@ -89,19 +91,19 @@ internal class GqlMapper(private val logger: Logger) {
 
     private fun mapToMaybeProvider(maybeProviderFragment: MaybeProviderFragment): MaybeProvider? {
         maybeProviderFragment.onProvider?.let { return mapToProvider(it.providerFragment) }
-        maybeProviderFragment.onDeletedProvider?.let { return User.DeletedProvider }
+        maybeProviderFragment.onDeletedProvider?.let { return DeletedProvider }
         return null
     }
 
     fun mapToMessage(messageFragment: MessageFragment, sendStatus: SendStatus): Message? {
-        val sender = mapToMessageSender(messageFragment.author)
+        val author = mapToMessageAuthor(messageFragment.author)
         val baseMessage = BaseMessage(
             id = MessageId.Remote(
                 clientId = messageFragment.clientId,
                 remoteId = messageFragment.id
             ),
             createdAt = messageFragment.createdAt,
-            sender = sender,
+            author = author,
             sendStatus = sendStatus,
             conversationId = messageFragment.conversation.id.toConversationId(),
         )
@@ -145,17 +147,17 @@ internal class GqlMapper(private val logger: Logger) {
         return null
     }
 
-    private fun mapToMessageSender(author: MessageFragment.Author): MessageSender {
-        author.onPatient?.let { return MessageSender.Patient }
-        author.onProvider?.providerFragment?.let { return MessageSender.Provider(mapToProvider(it)) }
-        author.onSystem?.let { return MessageSender.System(mapToSystem(it.systemFragment)) }
-        author.onDeletedProvider?.let { return MessageSender.DeletedProvider }
-        return MessageSender.Unknown
+    private fun mapToMessageAuthor(author: MessageFragment.Author): MessageAuthor {
+        author.onPatient?.let { return MessageAuthor.Patient }
+        author.onProvider?.providerFragment?.let { return MessageAuthor.Provider(mapToProvider(it)) }
+        author.onSystem?.let { return MessageAuthor.System(mapToSystem(it.systemFragment)) }
+        author.onDeletedProvider?.let { return MessageAuthor.DeletedProvider }
+        return MessageAuthor.Unknown
     }
 
-    private fun mapToProvider(providerFragment: ProviderFragment): User.Provider {
+    private fun mapToProvider(providerFragment: ProviderFragment): Provider {
         val avatarUrl = providerFragment.avatarUrl?.ephemeralUrlFragment?.let { mapToEphemeralUrl(it) }
-        return User.Provider(
+        return Provider(
             id = providerFragment.id,
             avatar = avatarUrl,
             firstName = providerFragment.firstName,
@@ -164,9 +166,9 @@ internal class GqlMapper(private val logger: Logger) {
         )
     }
 
-    private fun mapToSystem(systemFragment: SystemFragment): User.System {
+    private fun mapToSystem(systemFragment: SystemFragment): SystemUser {
         val avatarUrl = systemFragment.avatar?.url?.ephemeralUrlFragment?.let { mapToEphemeralUrl(it) }
-        return User.System(
+        return SystemUser(
             name = systemFragment.name,
             avatar = avatarUrl,
         )

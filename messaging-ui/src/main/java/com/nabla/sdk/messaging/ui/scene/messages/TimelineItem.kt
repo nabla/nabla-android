@@ -1,11 +1,12 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.domain.entity.User
+import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.datetime.Instant
 
@@ -16,9 +17,9 @@ internal sealed interface TimelineItem {
 
     data class Message(
         val id: MessageId,
-        val sender: MessageSender,
-        val showSenderAvatar: Boolean,
-        val showSenderName: Boolean,
+        val author: MessageAuthor,
+        val showAuthorAvatar: Boolean,
+        val showAuthorName: Boolean,
         val status: SendStatus,
         val showStatus: Boolean,
         val time: Instant,
@@ -63,7 +64,7 @@ internal sealed interface TimelineItem {
     ) : TimelineItem
 
     data class ProviderTypingIndicator(
-        val provider: User.Provider,
+        val provider: Provider,
         val showProviderName: Boolean,
     ) : TimelineItem {
         override val listItemId: String = "provider_typing_${provider.id}"
@@ -83,8 +84,8 @@ internal sealed interface TimelineItem {
         override val listItemId = when (content) {
             is ProviderJoinedConversation -> {
                 val id = when (content.maybeProvider) {
-                    User.DeletedProvider -> "deleted_$date"
-                    is User.Provider -> "${content.maybeProvider.id}_$date"
+                    DeletedProvider -> "deleted_$date"
+                    is Provider -> "${content.maybeProvider.id}_$date"
                 }
                 "provider_joined_$id"
             }
