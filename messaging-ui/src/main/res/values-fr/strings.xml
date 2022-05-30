@@ -8,8 +8,8 @@
 
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Messages non lus</string>
 
-    <string name="nabla_display_name_unknown_user">Unknown user</string>
-    <string name="nabla_conversation_message_copy_label">Nabla’s message</string>
+    <string name="nabla_display_name_unknown_user">Utilisateur inconnu</string>
+    <string name="nabla_conversation_message_copy_label">Message copié</string>
 
     <string name="nabla_conversation_message_sending_status">Envoi en cours…</string>
     <string name="nabla_conversation_message_sent_status">Envoyé</string>
@@ -28,9 +28,9 @@
 
     <string name="nabla_error_message_conversations_loading_more">Une erreur est survenue lors du chargement des conversations, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_loading_more">Une erreur est survenue lors du chargement des messages, veuillez réessayer.</string>
-    <string name="nabla_error_message_conversation_attachment_media_picker">Une erreur est survenue lors de l’ouverture du selecteur, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_media_picker">Une erreur est survenue lors de l’ouverture du selecteur de media, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_attachment_camera_capturing">Une erreur est survenue lors de la capture de photo, veuillez réessayer.</string>
-    <string name="nabla_error_message_conversation_attachment_camera_opening">Une erreur est survenue lors de l’ouverture de la caméra, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_opening">Une erreur est survenue lors de l’ouverture de l’appareil photo, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_attachment_library_opening">Une erreur est survenue lors de l’ouverture de la bibliothèque, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_link_opening">Une erreur est survenue lors de l’ouverture du lien, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du message, veuillez réessayer.</string>
@@ -40,7 +40,7 @@
     <string name="nabla_conversation_message_action_delete">Supprimer</string>
     <string name="nabla_conversation_full_screen_media_close_content_description">Fermer</string>
     <string name="nabla_conversation_full_screen_media_share_content_description">Partager</string>
-    <string name="nabla_conversation_attachment_media_picker_camera">Caméra</string>
+    <string name="nabla_conversation_attachment_media_picker_camera">Appareil photo</string>
     <string name="nabla_conversation_attachment_media_picker_photos_library">Bibliothèque photos</string>
     <string name="nabla_conversation_attachment_media_picker_documents">Choisir un fichier</string>
 
@@ -59,8 +59,8 @@
 
     <string name="nabla_conversation_camera_picture_permission_rational_title">Autorisation d’utiliser l’appareil photo</string>
     <string name="nabla_conversation_camera_picture_permission_rational_description">Pour prendre une photo, nous avons besoin de votre autorisation d’utiliser l’appareil photo.</string>
-    <string name="nabla_permission_rational_default_accept">Accept</string>
-    <string name="nabla_permission_rational_default_decline">Refuse</string>
+    <string name="nabla_permission_rational_default_accept">Accepter</string>
+    <string name="nabla_permission_rational_default_decline">Refuser</string>
 
     <string name="nabla_conversation_audio_message_player_title">Message vocal</string>
     <string name="nabla_conversation_audio_message_play_pause_content_description">Lire/Arrêter</string>
