@@ -3,7 +3,6 @@
     <string name="nabla_conversation_composer_placeholder_default">Tapez votre message</string>
 
     <string name="nabla_avatar_state_description_placeholder">Avatar sans photo (%1$s)</string>
-    <string name="nabla_avatar_state_description_gray_out">désactivé</string>
     <string name="nabla_avatar_state_description_no_placeholder">Avatar avec photo (%1$s)</string>
 
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Messages non lus</string>

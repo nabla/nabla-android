@@ -1,7 +1,6 @@
 package com.nabla.sdk.core.ui.components
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Outline
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -85,60 +84,48 @@ internal class NablaAvatarView : ConstraintLayout {
         }
     }
 
-    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userId: Uuid?, grayOut: Boolean = false) {
+    fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userId: Uuid?) {
         val placeholderTextComputed = placeholderText ?: ""
         val indexBackground = userId?.let { (it.hashCode() % backgroundColors.size).absoluteValue } ?: 0
-        val placeholderBackgroundColor = if (grayOut) deactivatedBackground else backgroundColors[indexBackground]
+        val placeholderBackgroundColor = backgroundColors[indexBackground]
         val placeholderBackground = ColorDrawable(context.getColor(placeholderBackgroundColor))
         if (avatarUrl == null) {
-            showPlaceholder(placeholderTextComputed, placeholderBackground, grayOut)
+            showPlaceholder(placeholderTextComputed, placeholderBackground)
             binding.componentAvatarImageView.clear()
             return
         }
 
-        if (grayOut) {
-            binding.componentAvatarImageView.setColorFilter(Color.argb(128, 255, 255, 255))
-        } else {
-            binding.componentAvatarImageView.clearColorFilter()
-        }
-
-        hidePlaceholder(grayOut)
+        hidePlaceholder()
         binding.componentAvatarImageView.load(avatarUrl.uri) {
             scale(Scale.FIT)
             listener(
                 onSuccess = { _, _ ->
-                    hidePlaceholder(grayOut)
+                    hidePlaceholder()
                 },
                 onError = { _, _ ->
-                    showPlaceholder(placeholderTextComputed, placeholderBackground, grayOut)
+                    showPlaceholder(placeholderTextComputed, placeholderBackground)
                 }
             )
         }
     }
 
-    private fun showPlaceholder(text: String, background: Drawable, grayOut: Boolean) {
+    private fun showPlaceholder(text: String, background: Drawable) {
         binding.componentAvatarRoot.background = background
         binding.componentAvatarImageView.visibility = View.INVISIBLE
         binding.componentAvatarPlaceholderTextView.text = text
         binding.componentAvatarPlaceholderTextView.visibility = View.VISIBLE
 
-        val stateDescription = context.getString(
-            R.string.nabla_avatar_state_description_placeholder,
-            if (grayOut) context.getString(R.string.nabla_avatar_state_description_gray_out) else ""
-        )
+        val stateDescription = context.getString(R.string.nabla_avatar_state_description_placeholder)
         ViewCompat.setStateDescription(this, stateDescription)
     }
 
-    private fun hidePlaceholder(grayOut: Boolean) {
+    private fun hidePlaceholder() {
         binding.componentAvatarRoot.background = null
         binding.componentAvatarImageView.visibility = View.VISIBLE
         binding.componentAvatarPlaceholderTextView.text = ""
         binding.componentAvatarPlaceholderTextView.visibility = View.INVISIBLE
 
-        val stateDescription = context.getString(
-            R.string.nabla_avatar_state_description_no_placeholder,
-            if (grayOut) context.getString(R.string.nabla_avatar_state_description_gray_out) else ""
-        )
+        val stateDescription = context.getString(R.string.nabla_avatar_state_description_no_placeholder)
         ViewCompat.setStateDescription(this, stateDescription)
     }
 
@@ -156,7 +143,4 @@ internal class NablaAvatarView : ConstraintLayout {
         R.color.nabla_indigo,
         R.color.nabla_stone,
     )
-
-    @ColorRes
-    private val deactivatedBackground = R.color.nabla_grey
 }

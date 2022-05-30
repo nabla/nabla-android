@@ -2,9 +2,8 @@
 <resources>
     <string name="nabla_conversation_composer_placeholder_default">Type your message</string>
 
-    <string name="nabla_avatar_state_description_placeholder">Avatar without picture (%1$s)</string>
-    <string name="nabla_avatar_state_description_gray_out">deactivated</string>
-    <string name="nabla_avatar_state_description_no_placeholder">Avatar with picture (%1$s)</string>
+    <string name="nabla_avatar_state_description_placeholder">Avatar without picture</string>
+    <string name="nabla_avatar_state_description_no_placeholder">Avatar with picture</string>
 
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Unread messages</string>
 
