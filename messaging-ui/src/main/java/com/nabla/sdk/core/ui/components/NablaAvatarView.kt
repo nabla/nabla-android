@@ -81,6 +81,7 @@ internal class NablaAvatarView : ConstraintLayout {
             is Patient -> loadAvatar(user.avatar?.url, initials, user.id)
             is User.Unknown -> loadAvatar(avatarUrl = null, placeholderText = null, userId = null)
             is User.System -> loadAvatar(user.avatar?.url, initials, userId = null)
+            User.DeletedProvider -> loadAvatar(avatarUrl = null, placeholderText = null, userId = null)
         }
     }
 

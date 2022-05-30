@@ -16,6 +16,8 @@ public sealed interface User {
         public companion object
     }
 
+    public object DeletedProvider : User, MaybeProvider
+
     public data class Patient(
         val id: Uuid,
         val avatar: Attachment?,

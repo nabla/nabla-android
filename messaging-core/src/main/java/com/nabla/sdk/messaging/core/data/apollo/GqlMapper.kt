@@ -2,7 +2,6 @@ package com.nabla.sdk.messaging.core.data.apollo
 
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
-import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MaybeProvider
@@ -90,7 +89,7 @@ internal class GqlMapper(private val logger: Logger) {
 
     private fun mapToMaybeProvider(maybeProviderFragment: MaybeProviderFragment): MaybeProvider? {
         maybeProviderFragment.onProvider?.let { return mapToProvider(it.providerFragment) }
-        maybeProviderFragment.onDeletedProvider?.let { return DeletedProvider }
+        maybeProviderFragment.onDeletedProvider?.let { return User.DeletedProvider }
         return null
     }
 

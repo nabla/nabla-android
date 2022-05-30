@@ -2,7 +2,6 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.User
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
@@ -15,7 +14,7 @@ internal class ConversationActivityTextMessageViewHolder(private val binding: Na
         val text = when (item.content) {
             is TimelineItem.ConversationActivity.ProviderJoinedConversation -> {
                 val providerText = when (item.content.maybeProvider) {
-                    is DeletedProvider -> {
+                    is User.DeletedProvider -> {
                         binding.context.getString(R.string.nabla_conversation_conversation_activity_deleted_provider_joined)
                     }
                     is User.Provider -> {

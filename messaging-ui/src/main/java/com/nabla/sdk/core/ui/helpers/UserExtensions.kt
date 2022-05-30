@@ -18,6 +18,9 @@ internal fun User.initials(context: Context, singleLetter: Boolean = false): Str
         User.Unknown -> {
             context.getString(R.string.nabla_display_name_unknown_user_initials)
         }
+        User.DeletedProvider -> {
+            context.getString(R.string.nabla_display_name_deleted_provider_initials)
+        }
     }
 }
 
@@ -26,6 +29,7 @@ internal fun User.fullName(context: Context): String = when (this) {
     is User.Patient -> username
     is User.Unknown -> context.getString(R.string.nabla_display_name_unknown_user)
     is User.System -> name
+    User.DeletedProvider -> context.getString(R.string.nabla_display_name_deleted_provider)
 }
 
 internal fun User.lastNameOrUserName(context: Context): String = when (this) {
@@ -33,6 +37,7 @@ internal fun User.lastNameOrUserName(context: Context): String = when (this) {
     is User.Patient -> username
     is User.Unknown -> context.getString(R.string.nabla_display_name_unknown_user)
     is User.System -> name
+    User.DeletedProvider -> context.getString(R.string.nabla_display_name_deleted_provider)
 }
 
 internal fun User.fullNameWithPrefix(context: Context): String = when (this) {
@@ -60,6 +65,3 @@ internal fun User.abbreviatedNameWithPrefix(context: Context): String = when (th
     }
     else -> fullName(context)
 }
-
-internal val User.prefix: String?
-    get() = (this as? User.Provider)?.prefix

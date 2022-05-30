@@ -8,6 +8,7 @@
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Unread messages</string>
 
     <string name="nabla_display_name_unknown_user">Unknown user</string>
+    <string name="nabla_display_name_deleted_provider">Deleted provider</string>
     <string name="nabla_conversation_message_copy_label">Copied message</string>
 
     <string name="nabla_conversation_message_sending_status">Sending…</string>

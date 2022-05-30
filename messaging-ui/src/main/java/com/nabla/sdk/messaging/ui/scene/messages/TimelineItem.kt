@@ -1,6 +1,5 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
-import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
@@ -84,7 +83,7 @@ internal sealed interface TimelineItem {
         override val listItemId = when (content) {
             is ProviderJoinedConversation -> {
                 val id = when (content.maybeProvider) {
-                    DeletedProvider -> "deleted_$date"
+                    User.DeletedProvider -> "deleted_$date"
                     is User.Provider -> "${content.maybeProvider.id}_$date"
                 }
                 "provider_joined_$id"
