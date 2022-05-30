@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.data.apollo.test
+package com.nabla.sdk.test.apollo
 
 import com.apollographql.apollo3.api.ApolloRequest
 import com.apollographql.apollo3.api.ApolloResponse
@@ -8,6 +8,7 @@ import com.apollographql.apollo3.api.Subscription
 import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.map
  */
 internal class FlowTestNetworkTransport : NetworkTransport {
 
+    private var isDisposed = false
     private val operationsToResponses = mutableMapOf<Operation<out Operation.Data>, Flow<ApolloResponse<out Operation.Data>>>()
 
     fun <D : Subscription.Data> register(subscription: Subscription<D>, dataProducer: Flow<D>) {
@@ -38,9 +40,14 @@ internal class FlowTestNetworkTransport : NetworkTransport {
     }
 
     override fun <D : Operation.Data> execute(request: ApolloRequest<D>): Flow<ApolloResponse<D>> {
+        if (isDisposed) {
+            return emptyFlow()
+        }
         @Suppress("UNCHECKED_CAST")
         return operationsToResponses[request.operation] as Flow<ApolloResponse<D>>
     }
 
-    override fun dispose() {}
+    override fun dispose() {
+        isDisposed = true
+    }
 }

@@ -2,8 +2,11 @@ package com.nabla.sdk.core.injection
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
+import com.apollographql.apollo3.network.http.DefaultHttpEngine
 import com.apollographql.apollo3.network.okHttpClient
+import com.apollographql.apollo3.network.ws.DefaultWebSocketEngine
 import com.benasher44.uuid.Uuid
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.Configuration
@@ -91,7 +94,15 @@ internal class CoreContainer(
                     "nabla_cache_apollo_$name.db"
                 )
             ).serverUrl(configuration.baseUrl + "v1/patient/graphql/sdk/authenticated")
-            .okHttpClient(okHttpClient)
+            .httpEngine(DefaultHttpEngine(okHttpClient))
+            .apply {
+                val overriddenApolloWsConfig = overriddenApolloWsConfig
+                if (overriddenApolloWsConfig != null) {
+                    overriddenApolloWsConfig(this)
+                } else {
+                    webSocketEngine(DefaultWebSocketEngine(okHttpClient))
+                }
+            }
             .build()
     }
 
@@ -130,6 +141,9 @@ internal class CoreContainer(
 
         @VisibleForTesting
         internal var overriddenOkHttpClient: ((OkHttpClient.Builder) -> Unit)? = null
+
+        @VisibleForTesting
+        internal var overriddenApolloWsConfig: ((ApolloClient.Builder) -> Unit)? = null
 
         @VisibleForTesting
         internal var overriddenUuidGenerator: UuidGenerator? = null

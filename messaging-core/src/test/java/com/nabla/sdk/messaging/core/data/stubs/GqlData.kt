@@ -1,7 +1,6 @@
 package com.nabla.sdk.messaging.core.data.stubs
 
 import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.nabla.sdk.core.data.apollo.test.CustomTestResolver
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationItemsQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
@@ -13,6 +12,7 @@ import com.nabla.sdk.graphql.test.ConversationsEventsSubscription_TestBuilder.Da
 import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder
 import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder.Data
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.test.apollo.CustomTestResolver
 
 @OptIn(ApolloExperimental::class)
 internal object GqlData {
@@ -66,9 +66,13 @@ internal object GqlData {
     }
 
     object ConversationsEvents {
-        fun conversationCreated() = ConversationsEventsSubscription.Data(CustomTestResolver()) {
+        fun conversationCreated(conversationId: ConversationId? = null) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
             conversations = conversations {
-                event = conversationCreatedEventEvent { }
+                event = conversationCreatedEventEvent {
+                    conversation = conversation {
+                        conversationId?.let { id = conversationId.value.toString() }
+                    }
+                }
             }
         }
     }

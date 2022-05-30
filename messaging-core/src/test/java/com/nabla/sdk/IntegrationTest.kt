@@ -14,7 +14,9 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
+import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
@@ -23,7 +25,9 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.MessageSender
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import kotlinx.coroutines.flow.first
+import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -46,7 +50,6 @@ import java.util.Properties
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 internal class IntegrationTest {
@@ -110,28 +113,42 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation creation and conversations & conversation watching`() = runTest {
-        val nablaMessagingClient = setupClient()
-        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
-        val firstPageOfConversations = nablaMessagingClient.watchConversations().first()
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient()
 
-        // We just created a conversation, it should not be empty
-        assertTrue(firstPageOfConversations.content.isNotEmpty())
+        val replayEventEmitter = MutableStateFlow<ConversationsEventsSubscription.Data?>(null)
+        replaySubscriptionNetworkTransport.register(
+            ConversationsEventsSubscription(),
+            replayEventEmitter.filterNotNull()
+        )
 
-        val watchedConversation =
-            nablaMessagingClient.watchConversation(createdConversation.id).first()
-        assertEquals(createdConversation.id, watchedConversation.id)
+        nablaMessagingClient.watchConversations().test {
+            val firstPageOfConversation = awaitItem()
+            val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+            replayEventEmitter.value = GqlData.ConversationsEvents.conversationCreated(createdConversation.id)
+
+            val updatedPageOfConversations = awaitItem()
+
+            val expectedContentOfUpdatedPageOfConversations = listOf(createdConversation) + firstPageOfConversation.content
+            assertEquals(
+                expectedContentOfUpdatedPageOfConversations.map { it.id },
+                updatedPageOfConversations.content.map { it.id }
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
     @OkReplay
     fun `test conversation text message sending watching`() = runTest {
-        val nablaMessagingClient = setupClient(
+        val (nablaMessagingClient) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000000")
-            }
+            },
+            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -176,13 +193,14 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation image message sending watching`() = runTest {
-        val nablaMessagingClient = setupClient(
+        val (nablaMessagingClient) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000001")
-            }
+            },
+            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -242,13 +260,14 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation document message sending watching`() = runTest {
-        val nablaMessagingClient = setupClient(
+        val (nablaMessagingClient) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000002")
-            }
+            },
+            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -314,13 +333,14 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation text message deletion watching`() = runTest {
-        val nablaMessagingClient = setupClient(
+        val (nablaMessagingClient) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000003")
-            }
+            },
+            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -350,8 +370,9 @@ internal class IntegrationTest {
 
     @Test
     fun `test calling public methods without auth throws`() = runTest {
-        val nablaMessagingClient = setupClient(
+        val (nablaMessagingClient) = setupClient(
             authenticate = false,
+            disposeSubscriptionNetworkTransport = true
         )
 
         nablaMessagingClient.watchConversations().test {
@@ -414,9 +435,15 @@ internal class IntegrationTest {
         clock: Clock? = null,
         uuidGenerator: UuidGenerator? = null,
         authenticate: Boolean = true,
-    ): NablaMessagingClient {
+        disposeSubscriptionNetworkTransport: Boolean = false,
+    ): ComponentUnderTest {
         CoreContainer.overriddenUuidGenerator = uuidGenerator
         CoreContainer.overriddenClock = clock
+        val mockSubscriptionNetworkTransport = FlowTestNetworkTransport()
+
+        CoreContainer.overriddenApolloWsConfig = {
+            it.subscriptionNetworkTransport(mockSubscriptionNetworkTransport)
+        }
 
         val nablaClient = NablaClient.initialize(
             name = Uuid.randomUUID().toString(),
@@ -429,7 +456,9 @@ internal class IntegrationTest {
         )
 
         // Disable websocket connection for tests as events are not recorded
-        nablaClient.coreContainer.apolloClient.subscriptionNetworkTransport.dispose()
+        if (disposeSubscriptionNetworkTransport) {
+            nablaClient.coreContainer.apolloClient.subscriptionNetworkTransport.dispose()
+        }
 
         val nablaMessagingClient = NablaMessagingClient.initialize(nablaClient)
 
@@ -444,7 +473,7 @@ internal class IntegrationTest {
             }
         }
 
-        return nablaMessagingClient
+        return ComponentUnderTest(nablaMessagingClient, mockSubscriptionNetworkTransport)
     }
 
     companion object {
@@ -456,3 +485,8 @@ internal class IntegrationTest {
         private const val TEST_CONFIG_OVERRIDE_PATH = "src/test/record.properties"
     }
 }
+
+private data class ComponentUnderTest(
+    val nablaMessagingClient: NablaMessagingClient,
+    val mockSubscriptionNetworkTransport: FlowTestNetworkTransport,
+)
