@@ -35,6 +35,8 @@
     <attr name="nablaMessaging_sendMessageIconTint" format="reference|color" />
     <attr name="nablaMessaging_sendMessageIcon" format="reference" />
     <attr name="nablaMessaging_addMediaIcon" format="reference" />
+    <attr name="nablaMessaging_recordVoiceMessageIcon" format="reference" />
+    <attr name="nablaMessaging_cancelVoiceMessageIcon" format="reference" />
     <attr name="nablaMessaging_mediaSourceCameraIcon" format="reference" />
     <attr name="nablaMessaging_mediaSourceGalleryIcon" format="reference" />
     <attr name="nablaMessaging_mediaSourceDocumentIcon" format="reference" />

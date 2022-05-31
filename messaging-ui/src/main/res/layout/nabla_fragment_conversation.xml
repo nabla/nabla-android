@@ -157,26 +157,62 @@
                 android:id="@+id/conversationComposerTopDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginBottom="6dp"
                 android:background="@drawable/nabla_drawable_on_surface_alpha_12"
-                app:layout_constraintBottom_toTopOf="@id/conversationTextInputLayoutContainer"
+                app:layout_constraintBottom_toTopOf="@id/conversationComposerGroup"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_goneMarginBottom="12dp"
                 />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/conversationComposerGroup"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:barrierDirection="top"
+                app:constraint_referenced_ids="conversationTextInputLayoutContainer, conversationRecordingVoiceProgress"
+                />
+
 
             <ImageView
                 android:id="@+id/conversationAddMediaButton"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                app:layout_constraintHorizontal_bias="0"
                 android:background="@drawable/nabla_circle_ripple_background"
                 android:contentDescription="@string/nabla_conversation_composer_add_attachment_content_description"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
                 app:layout_constraintEnd_toStartOf="@id/conversationTextInputLayoutContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="?nablaMessaging_addMediaIcon"
+                />
+
+            <ImageView
+                android:id="@+id/conversationRecordVoiceButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="2dp"
+                android:background="@drawable/nabla_circle_ripple_background"
+                android:contentDescription="@string/nabla_conversation_button_record_audio_message_content_description"
+                app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
+                app:layout_constraintEnd_toStartOf="@id/conversationTextInputLayoutContainer"
+                app:layout_constraintStart_toEndOf="@id/conversationAddMediaButton"
+                app:srcCompat="?nablaMessaging_recordVoiceMessageIcon"
+                />
+
+            <ImageView
+                android:id="@+id/conversationCancelRecordingButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginHorizontal="10dp"
+                android:contentDescription="@string/nabla_conversation_button_cancel_audio_message_content_description"
+                android:visibility="gone"
+                app:iconSize="32dp"
+                app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
+                app:layout_constraintEnd_toStartOf="@id/conversationTextInputLayoutContainer"
+                app:layout_constraintStart_toEndOf="@id/conversationAddMediaButton"
+                app:srcCompat="?nablaMessaging_cancelVoiceMessageIcon"
                 />
 
             <LinearLayout
@@ -189,7 +225,7 @@
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
                 app:layout_constraintEnd_toStartOf="@id/conversationSendButton"
-                app:layout_constraintStart_toEndOf="@id/conversationAddMediaButton"
+                app:layout_constraintStart_toEndOf="@id/conversationRecordVoiceButton"
                 >
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -211,6 +247,42 @@
                     android:inputType="textMultiLine|textCapSentences"
                     android:paddingVertical="12dp"
                     tools:ignore="LabelFor"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/conversationRecordingVoiceProgress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/nabla_recording_voice_message_indicator_background"
+                android:gravity="center"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+                app:layout_constraintEnd_toStartOf="@id/conversationSendButton"
+                app:layout_constraintStart_toEndOf="@id/conversationCancelRecordingButton"
+                tools:elevation="4dp"
+                tools:visibility="visible"
+                >
+
+                <ImageView
+                    android:id="@+id/conversationRecordingVoiceProgressDot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/nabla_recording_voice_message_indicator_dot"
+                    />
+
+                <TextView
+                    android:id="@+id/conversationRecordingVoiceProgressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:textColor="?colorOnPrimary"
+                    tools:text="0:16"
                     />
 
             </LinearLayout>

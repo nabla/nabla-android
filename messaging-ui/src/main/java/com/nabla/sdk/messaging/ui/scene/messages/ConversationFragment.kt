@@ -1,17 +1,25 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.CycleInterpolator
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.CallSuper
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -59,13 +67,20 @@ import com.nabla.sdk.messaging.ui.helper.PermissionRational
 import com.nabla.sdk.messaging.ui.helper.PermissionRequestLauncher
 import com.nabla.sdk.messaging.ui.helper.copyNewPlainText
 import com.nabla.sdk.messaging.ui.helper.registerForPermissionResult
+import com.nabla.sdk.messaging.ui.helper.registerForPermissionsResult
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.EditingText
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.RecordingVoice
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.ErrorAlert
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import com.nabla.sdk.core.domain.entity.Uri as KtUri
 
 public open class ConversationFragment : Fragment() {
@@ -91,7 +106,9 @@ public open class ConversationFragment : Fragment() {
     private lateinit var pickMediaFromGalleryLauncher: ActivityResultLauncher<Array<MimeType>>
     private lateinit var captureCameraPictureLauncher: ActivityResultLauncher<Unit>
     private lateinit var captureCameraPicturePermissionsLauncher: PermissionRequestLauncher
+    private lateinit var captureAudioPermissionsLauncher: PermissionRequestLauncher
     private lateinit var mediasToSendAdapter: MediasToSendAdapter
+    private var mediaRecorder: MediaRecorder? = null
     private var binding: NablaFragmentConversationBinding? = null
 
     private val conversationAdapter = ConversationAdapter(makeConversationAdapterCallbacks())
@@ -131,6 +148,7 @@ public open class ConversationFragment : Fragment() {
         wireViewEvents(binding)
         setupConversationRecyclerView(binding)
         collectVoicePlayersEvents()
+        collectVoiceMessageRecordingEvents(binding)
         collectAlertEvents()
         collectNavigationEvents()
         collectState(binding)
@@ -173,6 +191,32 @@ public open class ConversationFragment : Fragment() {
         ) { isGranted ->
             if (isGranted) {
                 viewModel.onMediaSourceCameraPictureSelectedAndPermissionsGranted()
+            }
+        }
+
+        captureAudioPermissionsLauncher = registerForPermissionsResult(
+            permissions = arrayOf(Manifest.permission.RECORD_AUDIO),
+            rational = PermissionRational(
+                title = R.string.nabla_conversation_voice_message_audio_permission_rational_title,
+                description = R.string.nabla_conversation_voice_message_audio_permission_rational_description,
+            )
+        ) { permissionsGranted ->
+            val context = context ?: return@registerForPermissionsResult
+
+            if (permissionsGranted.all { it.value }) {
+                viewLifeCycleScope.launch {
+                    try {
+                        @Suppress("BlockingMethodInNonBlockingContext")
+                        val targetFile = withContext(Dispatchers.IO) {
+                            File(context.cacheDir, "voice_message_${System.currentTimeMillis()}")
+                                .apply { createNewFile() }
+                        }
+                        viewModel.onVoiceRecorderFileReadyAndPermissionGranted(targetFile.toUri().toKtUri())
+                    } catch (e: Exception) {
+                        if (e is CancellationException) throw e
+                        viewModel.onFailedToRecordVoiceMessage(e)
+                    }
+                }
             }
         }
     }
@@ -242,6 +286,7 @@ public open class ConversationFragment : Fragment() {
                 is ConversationViewModel.NavigationEvent.OpenFullScreenImage -> {
                     startActivity(FullScreenImageActivity.newIntent(requireActivity(), event.imageUri))
                 }
+                ConversationViewModel.NavigationEvent.RequestVoiceMessagePermissions -> captureAudioPermissionsLauncher.launch()
             }
         }
     }
@@ -258,7 +303,32 @@ public open class ConversationFragment : Fragment() {
 
     private fun collectEditorState(binding: NablaFragmentConversationBinding) {
         viewLifeCycleScope.launchCollect(viewModel.editorStateFlow) { editorState ->
-            binding.conversationSendButton.isEnabled = editorState.canSubmit
+            binding.conversationSendButton.isEnabled = editorState is RecordingVoice || (editorState is EditingText && editorState.canSubmit)
+            binding.conversationSendButton.isVisible = editorState is RecordingVoice || editorState is EditingText
+
+            binding.conversationTextInputLayoutContainer.isVisible = editorState is EditingText
+            binding.conversationAddMediaButton.isVisible = editorState is EditingText
+            binding.conversationRecordVoiceButton.isVisible = editorState is EditingText
+
+            binding.conversationCancelRecordingButton.isVisible = editorState is RecordingVoice
+            binding.conversationRecordingVoiceProgress.isVisible = editorState is RecordingVoice
+
+            if (editorState is RecordingVoice) {
+                val minutes = editorState.recordProgressSeconds / 60
+                val seconds = editorState.recordProgressSeconds % 60
+                binding.conversationRecordingVoiceProgressText.text = binding.context
+                    .getString(R.string.nabla_conversation_audio_message_seconds_format, minutes, seconds)
+
+                // half-cycle sinusoidal blinking between 0 and 1
+                ObjectAnimator
+                    .ofFloat(binding.conversationRecordingVoiceProgressDot, "alpha", 0f, 1f)
+                    .apply {
+                        duration = 1_000
+                        interpolator = CycleInterpolator(/* cycles = */ 0.5f)
+                        setAutoCancel(true)
+                        start()
+                    }
+            }
         }
 
         viewLifeCycleScope.launchCollect(viewModel.currentMessageFlow) { currentMessage ->
@@ -307,13 +377,10 @@ public open class ConversationFragment : Fragment() {
     private fun wireViewEvents(binding: NablaFragmentConversationBinding) {
         binding.conversationTextInputLayoutContainer.clipToOutline = true
 
-        binding.conversationAddMediaButton.setOnClickListener {
-            viewModel.onAddMediaButtonClicked()
-        }
-
-        binding.conversationSendButton.setOnClickListener {
-            viewModel.onSendButtonClicked()
-        }
+        binding.conversationAddMediaButton.setOnClickListener { viewModel.onAddMediaButtonClicked() }
+        binding.conversationSendButton.setOnClickListener { viewModel.onSendButtonClicked() }
+        binding.conversationRecordVoiceButton.setOnClickListener { viewModel.onRecordVoiceMessageClicked() }
+        binding.conversationCancelRecordingButton.setOnClickListener { viewModel.onCancelVoiceMessageClicked() }
 
         binding.conversationEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.onCurrentMessageChanged(text?.toString() ?: "")
@@ -434,6 +501,60 @@ public open class ConversationFragment : Fragment() {
         }
     }
 
+    private fun collectVoiceMessageRecordingEvents(binding: NablaFragmentConversationBinding) {
+        viewLifeCycleScope.launchCollect(viewModel.currentlyRecordingVoiceFlow) { ongoingRecord ->
+            try {
+                withContext(Dispatchers.IO) {
+                    if (ongoingRecord != null) {
+                        @Suppress("DEPRECATION")
+                        val newOrExistingRecorder = mediaRecorder ?: MediaRecorder().apply {
+                            requestVoiceAudioFocus(binding)
+                            setAudioSource(MediaRecorder.AudioSource.MIC)
+                            setOutputFile(ongoingRecord.targetUri.toAndroidUri().toFile())
+                            // if you ever change format or encoder make sure "stop after pause" doesn't freeze the app
+                            // see https://issuetracker.google.com/issues/178630865
+                            setOutputFormat(MediaRecorder.OutputFormat.AMR_WB)
+                            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB)
+                            setOnErrorListener { _, what, extra ->
+                                viewModel.onVoiceMessageError("error code= $what, extra info: $extra")
+                            }
+                            @Suppress("BlockingMethodInNonBlockingContext")
+                            prepare()
+                            start()
+                        }
+
+                        if (ongoingRecord.isPaused) {
+                            newOrExistingRecorder.pause()
+                        } else {
+                            newOrExistingRecorder.resume()
+                        }
+
+                        mediaRecorder = newOrExistingRecorder
+                    } else {
+                        stopAndReleaseMediaRecorder()
+                    }
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) throw e
+            }
+        }
+    }
+
+    private fun stopAndReleaseMediaRecorder() {
+        mediaRecorder?.stop()
+        mediaRecorder?.release()
+        mediaRecorder = null
+    }
+
+    private fun requestVoiceAudioFocus(binding: NablaFragmentConversationBinding) {
+        (binding.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager).requestAudioFocus(
+            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
+                .setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
+                .setOnAudioFocusChangeListener { if (it == AudioManager.AUDIOFOCUS_LOSS) viewModel.onLostAudioFocus() }
+                .build()
+        )
+    }
+
     private var playbackProgressPollingJob: Job? = null
 
     private fun startPlaybackProgressPolling() {
@@ -512,23 +633,8 @@ public open class ConversationFragment : Fragment() {
 
     private fun showErrorAlert(errorAlert: ErrorAlert) {
         context?.let { context ->
-            Toast.makeText(context, errorAlert.defaultMessage(context), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(errorAlert.errorMessageRes), Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun ErrorAlert.defaultMessage(context: Context): String {
-        val resId = when (this) {
-            is ErrorAlert.LoadingMoreItems -> R.string.nabla_error_message_conversation_loading_more
-            is ErrorAlert.AttachmentMediaPicker -> R.string.nabla_error_message_conversation_attachment_media_picker
-            is ErrorAlert.AttachmentCameraCapturing -> R.string.nabla_error_message_conversation_attachment_camera_capturing
-            is ErrorAlert.AttachmentCameraOpening -> R.string.nabla_error_message_conversation_attachment_camera_opening
-            is ErrorAlert.AttachmentLibraryOpening -> R.string.nabla_error_message_conversation_attachment_library_opening
-            is ErrorAlert.LinkOpening -> R.string.nabla_error_message_conversation_link_opening
-            is ErrorAlert.DeletingMessage -> R.string.nabla_error_message_conversation_deleting_message
-            is ErrorAlert.ClickedUrlParsing -> R.string.nabla_error_message_conversation_clicked_url_parsing
-        }
-
-        return context.getString(resId)
     }
 
     @Suppress("UNUSED")

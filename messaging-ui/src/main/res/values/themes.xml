@@ -37,6 +37,8 @@
 
         <item name="nablaMessaging_sendMessageIcon">@drawable/nabla_ic_send</item>
         <item name="nablaMessaging_addMediaIcon">@drawable/nabla_ic_add</item>
+        <item name="nablaMessaging_recordVoiceMessageIcon">@drawable/nabla_ic_mic</item>
+        <item name="nablaMessaging_cancelVoiceMessageIcon">@drawable/nabla_ic_trash</item>
         <item name="nablaMessaging_mediaSourceCameraIcon">@drawable/nabla_ic_camera</item>
         <item name="nablaMessaging_mediaSourceGalleryIcon">@drawable/nabla_ic_photo</item>
         <item name="nablaMessaging_mediaSourceDocumentIcon">@drawable/nabla_ic_pick_file</item>

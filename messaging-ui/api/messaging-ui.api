@@ -256,12 +256,18 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBindin
 public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationBinding : androidx/viewbinding/ViewBinding {
 	public final field appbar Lcom/google/android/material/appbar/AppBarLayout;
 	public final field conversationAddMediaButton Landroid/widget/ImageView;
+	public final field conversationCancelRecordingButton Landroid/widget/ImageView;
+	public final field conversationComposerGroup Landroidx/constraintlayout/widget/Barrier;
 	public final field conversationComposerLayout Landroidx/constraintlayout/widget/ConstraintLayout;
 	public final field conversationComposerTopDivider Landroid/view/View;
 	public final field conversationEditText Landroid/widget/EditText;
 	public final field conversationLoaded Landroidx/constraintlayout/widget/ConstraintLayout;
 	public final field conversationLoading Landroid/widget/ProgressBar;
 	public final field conversationMediasToSendRecyclerView Landroidx/recyclerview/widget/RecyclerView;
+	public final field conversationRecordVoiceButton Landroid/widget/ImageView;
+	public final field conversationRecordingVoiceProgress Landroid/widget/LinearLayout;
+	public final field conversationRecordingVoiceProgressDot Landroid/widget/ImageView;
+	public final field conversationRecordingVoiceProgressText Landroid/widget/TextView;
 	public final field conversationRecyclerBottomBarrier Landroidx/constraintlayout/widget/Barrier;
 	public final field conversationRecyclerView Landroidx/recyclerview/widget/RecyclerView;
 	public final field conversationSendButton Landroid/widget/ImageView;

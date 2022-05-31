@@ -66,4 +66,7 @@
     <string name="nabla_conversation_audio_message_play_pause_content_description">Lire/Arrêter</string>
     <string name="nabla_conversation_button_record_audio_message_content_description">Commencer l’enregistrement d’un message vocal</string>
     <string name="nabla_conversation_button_cancel_audio_message_content_description">Arrêter l’enregistrement d’un message vocal</string>
+    <string name="nabla_conversation_error_recording_voice_message">Une erreur est survenue lors de l’enregistrement audio</string>
+    <string name="nabla_conversation_voice_message_audio_permission_rational_title">Autorisation d’utiliser le microphone</string>
+    <string name="nabla_conversation_voice_message_audio_permission_rational_description">Pour enregistrer un message vocal, nous avons besoin de votre autorisation d’utiliser le micro.</string>
 </resources>

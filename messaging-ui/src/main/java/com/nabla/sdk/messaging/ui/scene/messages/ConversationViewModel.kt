@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import androidx.annotation.CheckResult
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,9 +25,12 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +41,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.datetime.Clock
@@ -78,6 +83,9 @@ internal class ConversationViewModel(
     private val nowPlayingVoiceMessageMutableFlow = MutableStateFlow<Uri?>(null)
     val nowPlayingVoiceMessageFlow: Flow<Uri?> = nowPlayingVoiceMessageMutableFlow
 
+    private val currentlyRecordingVoiceMutableFlow = MutableStateFlow<OngoingVoiceRecording?>(null)
+    val currentlyRecordingVoiceFlow: Flow<OngoingVoiceRecording?> = currentlyRecordingVoiceMutableFlow
+
     private var lastTypingEventSentAt: Instant = Instant.DISTANT_PAST
     private var isViewForeground = false
 
@@ -95,11 +103,19 @@ internal class ConversationViewModel(
         editorStateFlow = combine(
             currentMessageStateFlow,
             mediasToSendMutableFlow,
-        ) { currentMessage, mediasToSend ->
-            EditorState(
-                canSubmit = currentMessage.isNotBlank() || mediasToSend.isNotEmpty(),
-            )
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = EditorState(canSubmit = false))
+            currentlyRecordingVoiceMutableFlow,
+        ) { currentMessage, mediasToSend, ongoingVoiceRecording ->
+            when {
+                ongoingVoiceRecording != null -> {
+                    EditorState.RecordingVoice(recordProgressSeconds = ongoingVoiceRecording.secondsSoFar)
+                }
+                else -> {
+                    EditorState.EditingText(
+                        canSubmit = currentMessage.isNotBlank() || mediasToSend.isNotEmpty(),
+                    )
+                }
+            }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = EditorState.EditingText(canSubmit = false))
     }
 
     private fun makeStateFlow(
@@ -150,6 +166,10 @@ internal class ConversationViewModel(
         isViewForeground = false
     }
 
+    fun onRecordVoiceMessageClicked() {
+        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.RequestVoiceMessagePermissions)
+    }
+
     fun onAddMediaButtonClicked() {
         navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenMediaSourcePicker)
     }
@@ -196,71 +216,120 @@ internal class ConversationViewModel(
 
     fun onErrorWithMediaPicker(error: Exception) {
         messagingClient.logger.error("Error in new media attachment picker", error, tag = LOGGING_TAG)
-        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentMediaPicker(error))
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentMediaPicker)
     }
 
     fun onErrorWithPictureCapture(error: Exception) {
         messagingClient.logger.error("Error in camera for new attachment", error, tag = LOGGING_TAG)
-        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraCapturing(error))
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraCapturing)
     }
 
     fun onErrorLaunchingCameraForImageCapture(error: Throwable) {
         messagingClient.logger.error("Failed open camera for new attachment", error, tag = LOGGING_TAG)
-        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraOpening(error))
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraOpening)
     }
 
     fun onErrorLaunchingLibrary(error: Throwable) {
         messagingClient.logger.error("Failed open media gallery for new attachment", error, tag = LOGGING_TAG)
-        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentLibraryOpening(error))
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentLibraryOpening)
     }
 
     fun onErrorOpeningLink(error: Throwable) {
         messagingClient.logger.error("Failed to open link", error, tag = LOGGING_TAG)
-        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LinkOpening(error))
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LinkOpening)
+    }
+
+    private var voiceRecordingDurationIncrementJob: Job? = null
+
+    fun onVoiceRecorderFileReadyAndPermissionGranted(recordingTargetUri: Uri) {
+        voiceRecordingDurationIncrementJob?.cancel()
+        voiceRecordingDurationIncrementJob = viewModelScope.launch {
+            while (isActive && currentlyRecordingVoiceMutableFlow.value?.isPaused != true) {
+                // increment previous or start at zero if null
+                val secondsSoFar = (currentlyRecordingVoiceMutableFlow.value?.secondsSoFar ?: -1) + 1
+
+                if (secondsSoFar < VOICE_MESSAGE_MAX_LENGTH_SECONDS) {
+                    currentlyRecordingVoiceMutableFlow.value = OngoingVoiceRecording(recordingTargetUri, secondsSoFar, isPaused = false)
+                    delay(1_000) // 1 sec ticking
+                } else {
+                    currentlyRecordingVoiceMutableFlow.value = OngoingVoiceRecording(recordingTargetUri, secondsSoFar, isPaused = true)
+                }
+            }
+        }
+    }
+
+    fun onCancelVoiceMessageClicked() {
+        closeVoiceMessageRecord()
+    }
+
+    private fun closeVoiceMessageRecord() {
+        voiceRecordingDurationIncrementJob?.cancel()
+        voiceRecordingDurationIncrementJob = null
+        currentlyRecordingVoiceMutableFlow.value = null
     }
 
     fun onSendButtonClicked() {
         viewModelScope.launch(Dispatchers.Default) {
+            val voiceMessage = currentlyRecordingVoiceMutableFlow.value
             val mediaMessages = mediasToSendMutableFlow.value
             val textMessage = currentMessageStateFlow.value
 
-            mediasToSendMutableFlow.value = emptyList()
+            if (voiceMessage != null) {
+                closeVoiceMessageRecord()
 
-            mediaMessages.map { mediaToSend ->
-                async {
+                messagingClient.sendMessage(
+                    MessageInput.Media.Audio(
+                        FileSource.Local(
+                            FileLocal.Audio(
+                                uri = voiceMessage.targetUri,
+                                fileName = "voice_message_${Clock.System.now()}",
+                                mimeType = MimeType.Audio.MP3,
+                                estimatedDurationMs = voiceMessage.secondsSoFar * 1_000L,
+                            )
+                        )
+                    ),
+                    conversationId,
+                ).getOrNull()
+            } else {
+
+                mediasToSendMutableFlow.value = emptyList()
+
+                mediaMessages.map { mediaToSend ->
+                    async {
+                        messagingClient.sendMessage(
+                            input = when (mediaToSend) {
+                                is LocalMedia.Image -> MessageInput.Media.Image(
+                                    mediaSource = FileSource.Local(
+                                        FileLocal.Image(
+                                            uri = Uri(mediaToSend.uri.toString()),
+                                            fileName = mediaToSend.name,
+                                            mimeType = mediaToSend.mimeType,
+                                        )
+                                    )
+                                )
+                                is LocalMedia.Document -> MessageInput.Media.Document(
+                                    mediaSource = FileSource.Local(
+                                        FileLocal.Document(
+                                            Uri(mediaToSend.uri.toString()),
+                                            mediaToSend.name,
+                                            mediaToSend.mimeType
+                                        )
+                                    )
+                                )
+                            },
+                            conversationId = conversationId,
+                        ).getOrNull()
+                    }
+                }.forEach { it.join() }
+
+                if (textMessage.isNotBlank()) {
+                    currentMessageStateFlow.value = ""
+
                     messagingClient.sendMessage(
-                        input = when (mediaToSend) {
-                            is LocalMedia.Image -> MessageInput.Media.Image(
-                                mediaSource = FileSource.Local(
-                                    FileLocal.Image(
-                                        uri = Uri(mediaToSend.uri.toString()),
-                                        fileName = mediaToSend.name,
-                                        mimeType = mediaToSend.mimeType,
-                                    )
-                                )
-                            )
-                            is LocalMedia.Document -> MessageInput.Media.Document(
-                                mediaSource = FileSource.Local(
-                                    FileLocal.Document(
-                                        Uri(mediaToSend.uri.toString()),
-                                        mediaToSend.name,
-                                        mediaToSend.mimeType
-                                    )
-                                )
-                            )
-                        },
+                        input = MessageInput.Text(text = textMessage),
                         conversationId = conversationId,
                     ).getOrNull()
                 }
-            }.forEach { it.join() }
-
-            if (textMessage.isNotBlank()) {
-                currentMessageStateFlow.value = ""
-
-                messagingClient.sendMessage(
-                    input = MessageInput.Text(text = textMessage),
-                    conversationId = conversationId,
-                ).getOrNull()
             }
 
             scrollToBottomAfterNextUpdateMutableFlow.value = true
@@ -297,7 +366,7 @@ internal class ConversationViewModel(
             loadMore()
                 .onFailure {
                     messagingClient.logger.error("Error while loading more items in conversation", it, tag = LOGGING_TAG)
-                    errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LoadingMoreItems(it))
+                    errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LoadingMoreItems)
                 }
         }
     }
@@ -359,7 +428,7 @@ internal class ConversationViewModel(
             messagingClient.deleteMessage(conversationId, item.id)
                 .onFailure { error ->
                     messagingClient.logger.error("Failed to delete message", error, tag = LOGGING_TAG)
-                    errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.DeletingMessage(error))
+                    errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.DeletingMessage)
                 }
         }
     }
@@ -368,7 +437,7 @@ internal class ConversationViewModel(
         runCatching { URI.create(stringUrl) }
             .onFailure {
                 messagingClient.logger.error("Failed to parse clicked URL", it, tag = LOGGING_TAG)
-                errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.ClickedUrlParsing(it))
+                errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.ClickedUrlParsing)
             }
             .onSuccess { url ->
                 navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenWebBrowser(url))
@@ -394,6 +463,22 @@ internal class ConversationViewModel(
         }
     }
 
+    fun onFailedToRecordVoiceMessage(exception: Exception) {
+        messagingClient.logger.error("failed to start/stop voice message recording", exception)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.RecordingVoiceMessage)
+        closeVoiceMessageRecord()
+    }
+
+    fun onVoiceMessageError(message: String) {
+        messagingClient.logger.error("voice message recorder error - $message")
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.RecordingVoiceMessage)
+        closeVoiceMessageRecord()
+    }
+
+    fun onLostAudioFocus() {
+        currentlyRecordingVoiceMutableFlow.value = currentlyRecordingVoiceMutableFlow.value?.copy(isPaused = true)
+    }
+
     sealed interface State {
         object Loading : State
         data class Error(val error: ErrorUiModel) : State
@@ -404,9 +489,13 @@ internal class ConversationViewModel(
         ) : State
     }
 
-    data class EditorState(
-        val canSubmit: Boolean,
-    )
+    sealed interface EditorState {
+        data class EditingText(
+            val canSubmit: Boolean,
+        ) : EditorState
+
+        data class RecordingVoice(val recordProgressSeconds: Int) : EditorState
+    }
 
     sealed class NavigationEvent {
         object OpenMediaSourcePicker : NavigationEvent()
@@ -416,17 +505,19 @@ internal class ConversationViewModel(
         data class OpenWebBrowser(val url: URI) : NavigationEvent()
         object OpenCameraPictureCapture : NavigationEvent()
         data class OpenMediaLibrary(val mimeTypes: List<MimeType>) : NavigationEvent()
+        object RequestVoiceMessagePermissions : NavigationEvent()
     }
 
-    sealed interface ErrorAlert {
-        data class LoadingMoreItems(val throwable: Throwable) : ErrorAlert
-        data class AttachmentMediaPicker(val throwable: Throwable) : ErrorAlert
-        data class AttachmentCameraCapturing(val throwable: Throwable) : ErrorAlert
-        data class AttachmentCameraOpening(val throwable: Throwable) : ErrorAlert
-        data class AttachmentLibraryOpening(val throwable: Throwable) : ErrorAlert
-        data class LinkOpening(val throwable: Throwable) : ErrorAlert
-        data class DeletingMessage(val throwable: Throwable) : ErrorAlert
-        data class ClickedUrlParsing(val throwable: Throwable) : ErrorAlert
+    sealed class ErrorAlert(@StringRes val errorMessageRes: Int) {
+        object LoadingMoreItems : ErrorAlert(R.string.nabla_error_message_conversation_loading_more)
+        object AttachmentMediaPicker : ErrorAlert(R.string.nabla_error_message_conversation_attachment_media_picker)
+        object AttachmentCameraCapturing : ErrorAlert(R.string.nabla_error_message_conversation_attachment_camera_capturing)
+        object AttachmentCameraOpening : ErrorAlert(R.string.nabla_error_message_conversation_attachment_camera_opening)
+        object AttachmentLibraryOpening : ErrorAlert(R.string.nabla_error_message_conversation_attachment_library_opening)
+        object LinkOpening : ErrorAlert(R.string.nabla_error_message_conversation_link_opening)
+        object DeletingMessage : ErrorAlert(R.string.nabla_error_message_conversation_deleting_message)
+        object ClickedUrlParsing : ErrorAlert(R.string.nabla_error_message_conversation_clicked_url_parsing)
+        object RecordingVoiceMessage : ErrorAlert(R.string.nabla_conversation_error_recording_voice_message)
     }
 
     private class StateMapper {
@@ -455,5 +546,6 @@ internal class ConversationViewModel(
 
     companion object {
         private val LOGGING_TAG = Logger.asSdkTag("UI-Conversation")
+        private const val VOICE_MESSAGE_MAX_LENGTH_SECONDS = 10 * 60 // 10 minutes
     }
 }
