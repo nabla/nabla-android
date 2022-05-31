@@ -41,6 +41,9 @@ public sealed interface FileLocal {
         override val mimeType: MimeType,
     ) : FileLocal
 
+    /**
+     * @param estimatedDurationMs best-effort estimation of the audio file's duration in milliseconds.
+     */
     public data class Audio(
         override val uri: Uri,
         override val fileName: String?,
