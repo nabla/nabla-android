@@ -41,8 +41,8 @@ You can find the latest version available in the [release page](https://github.c
 
 ## Sample app
 
-You can find an example of a complete integration of the Messaging UI SDK in our [demo app](https://github.com/nabla/nabla-android/tree/main/demo).
+You can find an example of a basic integration of the Messaging UI SDK in our [demo app](https://github.com/nabla/nabla-android/tree/main/demo).
 
 ## Need more help?
 
-If you need any help for setting up the SDK or using the Nabla platform, please contact us on [our website](https://www.nabla.dev/). We are available to answer any question.
+If you need any help with the set-up of the SDK or the Nabla platform, please contact us on [our website](https://nabla.com). We are available to answer any question.

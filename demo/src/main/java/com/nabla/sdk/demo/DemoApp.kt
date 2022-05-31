@@ -12,7 +12,7 @@ class DemoApp : Application() {
             userId = "dummy-user-id",
             sessionTokenProvider = {
                 // Emulate a call to authenticate the user on your server
-                // In your app, you need to replace this with an actually call to your backend to get fresh tokens
+                // In your app, you need to replace this with an actual call to your backend to get fresh tokens
                 Result.success(
                     AuthTokens(
                         refreshToken = "dummy-refresh-token",

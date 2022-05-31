@@ -75,6 +75,22 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationMedia
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationMediaSourcePickerBinding;
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemAudioMessageBinding : androidx/viewbinding/ViewBinding {
+	public final field audioMessageProgress Landroid/widget/ProgressBar;
+	public final field audioMessageSecondsText Landroid/widget/TextView;
+	public final field audioMessageTitle Landroid/widget/TextView;
+	public final field audioPlayPauseButton Landroid/widget/ImageView;
+	public final field guidelineBottom Landroidx/constraintlayout/widget/Guideline;
+	public final field guidelineEnd Landroidx/constraintlayout/widget/Guideline;
+	public final field guidelineStart Landroidx/constraintlayout/widget/Guideline;
+	public final field guidelineTop Landroidx/constraintlayout/widget/Guideline;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemAudioMessageBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemAudioMessageBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemAudioMessageBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemDateBinding : androidx/viewbinding/ViewBinding {
 	public final field chatDateTextView Landroid/widget/TextView;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemDateBinding;
