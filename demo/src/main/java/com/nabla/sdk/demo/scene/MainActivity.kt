@@ -26,21 +26,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lifecycleScope.launch {
-            binding.createConversation.setOnClickListener {
-                launch {
-                    NablaMessagingClient.getInstance().createConversation()
-                }
+        binding.createConversation.setOnClickListener {
+            lifecycleScope.launch {
+                NablaMessagingClient.getInstance().createConversation()
+                    .getOrNull()
             }
-            binding.conversationListView.bindViewModel(
-                viewModel,
-                onConversationClicked = { id ->
-                    startActivity(
-                        Intent(applicationContext, ConversationActivity::class.java)
-                            .apply { putExtra(CONVERSATION_ID_EXTRA, id.value) }
-                    )
-                }
-            )
         }
+
+        binding.conversationListView.bindViewModel(
+            viewModel,
+            onConversationClicked = { id ->
+                startActivity(
+                    Intent(applicationContext, ConversationActivity::class.java)
+                        .apply { putExtra(CONVERSATION_ID_EXTRA, id.value) }
+                )
+            }
+        )
     }
 }
