@@ -15,7 +15,7 @@ the app.
 
 1. Clone the repository
 2. Head to [https://`your_organisation_id`.pro.nabla.com/developers/sdk-setup-guide]()
-3. Follow the setup guide to get your public API key and temporaries `access_token` and `refresh_token` to use for the demo
+3. Follow the setup guide to create a test patient and get your public API key and temporary `access_token` and `refresh_token` to use for the demo
 
 > At this stage, you should have a public API key and 2 tokens
 
