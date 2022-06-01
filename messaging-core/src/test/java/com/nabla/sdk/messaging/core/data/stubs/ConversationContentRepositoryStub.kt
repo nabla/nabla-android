@@ -19,6 +19,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -120,7 +121,7 @@ internal class ConversationContentRepositoryStub(
             var provider = ProviderInConversation.fake(typingAt = Clock.System.now())
             setProviderTyping(conversationsFlow, conversation, provider)
 
-            delayWithIdlingRes(idlingRes, 200.milliseconds)
+            delay(200.milliseconds)
             provider = provider.copy(typingAt = null)
             setProviderTyping(conversationsFlow, conversation, provider)
             conversationFlow.value = messagesOf(conversationId) + Message.Text.fake(
