@@ -115,15 +115,16 @@ internal class ConversationContentRepositoryStub(
         conversationId: ConversationId,
         conversationFlow: MutableStateFlow<List<Message>>,
     ) {
-        scope.launch {
-            val conversationsFlow = conversationRepositoryStub.conversationsFlow
-            val conversation = conversationsFlow.value.items.first { it.id == conversationId }
-            var provider = ProviderInConversation.fake(typingAt = Clock.System.now())
-            setProviderTyping(conversationsFlow, conversation, provider)
+        println("faking provider reply")
+        val conversationsFlow = conversationRepositoryStub.conversationsFlow
+        val conversation = conversationsFlow.value.items.first { it.id == conversationId }
+        var provider = ProviderInConversation.fake(typingAt = Clock.System.now())
+        setProviderInConversation(conversationsFlow, conversation, provider)
 
-            delay(200.milliseconds)
+        scope.launch {
+            delay(2000.milliseconds)
             provider = provider.copy(typingAt = null)
-            setProviderTyping(conversationsFlow, conversation, provider)
+            setProviderInConversation(conversationsFlow, conversation, provider)
             conversationFlow.value = messagesOf(conversationId) + Message.Text.fake(
                 author = MessageAuthor.Provider(provider.provider),
                 text = "Here I am!",
@@ -131,11 +132,12 @@ internal class ConversationContentRepositoryStub(
         }
     }
 
-    private fun setProviderTyping(
+    private fun setProviderInConversation(
         conversationsFlow: MutableStateFlow<PaginatedList<Conversation>>,
         conversation: Conversation,
         provider: ProviderInConversation,
     ) {
+        println("setProviderInConversation - typingAt: ${provider.typingAt}")
         conversationsFlow.value = conversationsFlow.value.copy(
             conversationsFlow.value.items.map {
                 if (it.id == conversation.id) {
