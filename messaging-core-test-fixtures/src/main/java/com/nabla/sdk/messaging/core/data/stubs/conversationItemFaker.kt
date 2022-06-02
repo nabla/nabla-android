@@ -1,6 +1,5 @@
 package com.nabla.sdk.messaging.core.data.stubs
 
-import com.auth0.android.jwt.JWT
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.AuthTokens
@@ -9,7 +8,9 @@ import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.messaging.core.data.stubs.StringFaker.randomText
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -27,8 +28,6 @@ import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlin.math.absoluteValue
-import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
@@ -40,7 +39,7 @@ fun ConversationItems.Companion.fake(
     items = messages,
 )
 
-internal fun Message.Text.Companion.fake(
+fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
@@ -57,7 +56,7 @@ internal fun Message.Text.Companion.fake(
     text = text,
 )
 
-internal fun Message.Media.Image.Companion.fake(
+fun Message.Media.Image.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
@@ -75,7 +74,7 @@ internal fun Message.Media.Image.Companion.fake(
     mediaSource = mediaSource,
 )
 
-internal fun Message.Media.Audio.Companion.fake(
+fun Message.Media.Audio.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
@@ -93,13 +92,13 @@ internal fun Message.Media.Audio.Companion.fake(
     mediaSource = mediaSource,
 )
 
-internal fun FileSource.Local.Companion.fakeImage(
+fun FileSource.Local.Companion.fakeImage(
     fileLocal: FileLocal.Image = FileLocal.Image.fake(),
 ) = FileSource.Local<FileLocal.Image, FileUpload.Image>(
     fileLocal = fileLocal,
 )
 
-internal fun FileSource.Uploaded.Companion.fakeImage(
+fun FileSource.Uploaded.Companion.fakeImage(
     fileLocal: FileLocal.Image? = FileLocal.Image.fake(),
     fileUpload: FileUpload.Image = FileUpload.Image.fake(),
 ) = FileSource.Uploaded<FileLocal.Image, FileUpload.Image>(
@@ -107,7 +106,7 @@ internal fun FileSource.Uploaded.Companion.fakeImage(
     fileUpload = fileUpload,
 )
 
-internal fun FileSource.Uploaded.Companion.fakeAudio(
+fun FileSource.Uploaded.Companion.fakeAudio(
     fileLocal: FileLocal.Audio? = null,
     fileUpload: FileUpload.Audio = FileUpload.Audio.fake(),
 ) = FileSource.Uploaded(
@@ -115,7 +114,7 @@ internal fun FileSource.Uploaded.Companion.fakeAudio(
     fileUpload = fileUpload,
 )
 
-internal fun FileLocal.Image.Companion.fake(
+fun FileLocal.Image.Companion.fake(
     uri: Uri = Uri("contentprovider:image.png"),
 ) = FileLocal.Image(
     uri = uri,
@@ -123,7 +122,7 @@ internal fun FileLocal.Image.Companion.fake(
     mimeType = MimeType.Image.JPEG
 )
 
-internal fun FileUpload.Image.Companion.fake(
+fun FileUpload.Image.Companion.fake(
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://i.pravatar.cc/900")),
     mimeType: MimeType = MimeType.Image.JPEG,
     fileName: String = "filename.jpg",
@@ -137,7 +136,7 @@ internal fun FileUpload.Image.Companion.fake(
     )
 )
 
-internal fun FileUpload.Audio.Companion.fake(
+fun FileUpload.Audio.Companion.fake(
     ephemeralUrl: EphemeralUrl =
         EphemeralUrl.fake(url = Uri("https://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.mp3?uniqueness=${uuid4()}")),
     mimeType: MimeType = MimeType.Audio.MP3,
@@ -153,7 +152,7 @@ internal fun FileUpload.Audio.Companion.fake(
     )
 )
 
-internal fun Message.Media.Document.Companion.fake(
+fun Message.Media.Document.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
@@ -202,6 +201,11 @@ fun Provider.Companion.fake(
     prefix = prefix,
 )
 
+fun SystemUser.Companion.fake() = SystemUser(
+    name = randomText(),
+    avatar = EphemeralUrl.fake()
+)
+
 fun ProviderInConversation.Companion.fake(
     provider: Provider = Provider.fake(),
     typingAt: Instant? = null,
@@ -234,13 +238,13 @@ fun Conversation.Companion.fake(
 
 fun EphemeralUrl.Companion.fake(
     expiresAt: Instant = Instant.DISTANT_FUTURE,
-    url: Uri,
+    url: Uri = UriFaker.remote(),
 ) = EphemeralUrl(
     expiresAt = expiresAt,
     url = url,
 )
 
-internal fun ConversationActivity.Companion.fakeProviderJoined() = ConversationActivity(
+fun ConversationActivity.Companion.fakeProviderJoined() = ConversationActivity(
     id = uuid4().toConversationActivityId(),
     conversationId = uuid4().toConversationId(),
     createdAt = Clock.System.now(),
@@ -250,28 +254,9 @@ internal fun ConversationActivity.Companion.fakeProviderJoined() = ConversationA
     )
 )
 
-internal fun AuthTokens.Companion.fake() = AuthTokens(
-    refreshToken = Jwt.expiredIn2050,
-    accessToken = Jwt.expiredIn2050_2,
+fun AuthTokens.Companion.fake() = AuthTokens(
+    refreshToken = JwtFaker.expiredIn2050,
+    accessToken = JwtFaker.expiredIn2050_2,
 )
 
-internal object Jwt {
-    // Use https://www.javainuse.com/jwtgenerator to easily generate mocked tokens
-    const val expiredIn2050 = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiUm9sZSIsIklzc3VlciI6Iklzc3VlciIsIlVzZXJuYW1lIjoiVXNlcm5hbWUiLCJleHAiOjI1MjE4NDMyMDAsImlhdCI6OTQzOTIwMDAwfQ.a9B-ZzVUPI04w6AjKZ9ODvU7P8s4G6SqpQnfaei5EaE"
-    const val expiredIn2050_2 = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiUm9sZSIsIklzc3VlciI6Iklzc3VlciIsIlVzZXJuYW1lIjoiVXNlcm5hbWUiLCJleHAiOjI1MjE4NDMyMDAsImlhdCI6OTQzOTIwMDAwfQ.nqK7fOSd0WcVk3HYlbQuK8jindWlao4QTp8E2CWhIdg"
-    const val expiredIn2050_3 = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiUm9sZSIsIklzc3VlciI6Iklzc3VlciIsIlVzZXJuYW1lIjoiVXNlcm5hbWUiLCJleHAiOjI1MjE4NDMyMDAsImlhdCI6OTQzOTIwMDAwfQ.SBykkJNK3avicHjw16uHCxFUYmbp_YpLc34YsC31eu0"
-
-    const val expiredIn2020 = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiUm9sZSIsIklzc3VlciI6Iklzc3VlciIsIlVzZXJuYW1lIjoiVXNlcm5hbWUiLCJleHAiOjE1NzUwNzIwMDAsImlhdCI6OTQzOTIwMDAwfQ.tITlAVJAI8LX1Fi0FStSJWf5z45Vs8mXoXlfpaTnR9c"
-    const val expiredIn2020_2 = "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1Nzc4MzY4MDAsImlhdCI6MTU3NzgzNjgwMH0.xHfoyMAIvzB1sk3s04Z-BhOviUCMPz2QzM3qL3vuHcU"
-}
-
-internal fun String.toJwt() = JWT(this)
-
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)
-
-private fun randomText(maxWords: Int? = null) =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        .split(" ")
-        .shuffled()
-        .let { it.take(Random.nextInt().absoluteValue % it.size.coerceAtMost(maxWords ?: Int.MAX_VALUE) + 1) }
-        .joinToString(separator = " ")

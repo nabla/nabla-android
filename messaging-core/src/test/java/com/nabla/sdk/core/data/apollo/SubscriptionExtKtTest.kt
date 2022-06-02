@@ -9,6 +9,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.test.TestClock
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,6 +20,7 @@ import java.net.UnknownHostException
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class SubscriptionExtKtTest {
 
     @Test

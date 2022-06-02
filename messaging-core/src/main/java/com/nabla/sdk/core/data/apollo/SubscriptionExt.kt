@@ -6,6 +6,7 @@ import com.nabla.sdk.core.data.exception.isNetworkError
 import com.nabla.sdk.core.kotlin.shareInWithMaterializedErrors
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,6 +39,7 @@ internal fun <D : Operation.Data> Flow<ApolloResponse<D>>.retryOnNetworkErrorAnd
         started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
     )
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal fun <D> Flow<D>.notifyTypingUpdates(
     clock: Clock = Clock.System,
     context: CoroutineContext = EmptyCoroutineContext,

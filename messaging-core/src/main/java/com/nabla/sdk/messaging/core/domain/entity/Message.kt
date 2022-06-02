@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
@@ -8,7 +9,8 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId.Local
 import com.nabla.sdk.messaging.core.domain.entity.MessageId.Remote
 import kotlinx.datetime.Instant
 
-internal data class BaseMessage(
+@VisibleForTesting
+public data class BaseMessage(
     val id: MessageId,
     val createdAt: Instant,
     val author: MessageAuthor,
@@ -85,12 +87,15 @@ public sealed interface MessageId {
 
     public val stableId: Uuid
 
-    public data class Local internal constructor(override val clientId: Uuid) : MessageId {
+    public data class Local @VisibleForTesting public constructor(override val clientId: Uuid) : MessageId {
         override val remoteId: Uuid? = null
         override val stableId: Uuid = clientId
     }
 
-    public data class Remote internal constructor(override val clientId: Uuid?, override val remoteId: Uuid) : MessageId {
+    public data class Remote @VisibleForTesting public constructor(
+        override val clientId: Uuid?,
+        override val remoteId: Uuid
+    ) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
 }
@@ -107,12 +112,16 @@ public sealed class Message : ConversationItem {
 
     override val createdAt: Instant get() = baseMessage.createdAt
 
-    public data class Text internal constructor(override val baseMessage: BaseMessage, val text: String) : Message() {
+    public data class Text @VisibleForTesting public constructor(
+        override val baseMessage: BaseMessage,
+        val text: String
+    ) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
 
-        internal companion object
+        @VisibleForTesting
+        public companion object
     }
 
     public sealed class Media<FileLocalType : FileLocal, FileUploadType : FileUpload> : Message() {
@@ -122,7 +131,9 @@ public sealed class Message : ConversationItem {
         public val stableUri: Uri
             get() = when (val mediaSource = mediaSource) {
                 is FileSource.Local -> mediaSource.fileLocal.uri
-                is FileSource.Uploaded -> mediaSource.fileLocal?.uri ?: mediaSource.fileUpload.fileUpload.url.url
+                is FileSource.Uploaded ->
+                    mediaSource.fileLocal?.uri
+                        ?: mediaSource.fileUpload.fileUpload.url.url
             }
 
         public val mimeType: MimeType
@@ -137,30 +148,36 @@ public sealed class Message : ConversationItem {
                 is FileSource.Uploaded -> mediaSource.fileUpload.fileUpload.fileName
             }
 
-        public data class Image internal constructor(
+        public data class Image @VisibleForTesting public constructor(
             override val baseMessage: BaseMessage,
             override val mediaSource: FileSource<FileLocal.Image, FileUpload.Image>,
         ) : Media<FileLocal.Image, FileUpload.Image>() {
 
-            override fun modify(status: SendStatus): Message = copy(baseMessage = baseMessage.copy(sendStatus = status))
-            internal fun modify(mediaSource: FileSource<FileLocal.Image, FileUpload.Image>): Image = copy(mediaSource = mediaSource)
+            override fun modify(status: SendStatus): Message =
+                copy(baseMessage = baseMessage.copy(sendStatus = status))
 
-            internal companion object
+            internal fun modify(mediaSource: FileSource<FileLocal.Image, FileUpload.Image>): Image =
+                copy(mediaSource = mediaSource)
+
+            @VisibleForTesting
+            public companion object
         }
 
-        public data class Document internal constructor(
+        public data class Document @VisibleForTesting public constructor(
             override val baseMessage: BaseMessage,
             override val mediaSource: FileSource<FileLocal.Document, FileUpload.Document>,
         ) : Media<FileLocal.Document, FileUpload.Document>() {
 
-            val thumbnailUri: Uri? = (mediaSource as? FileSource.Uploaded)?.fileUpload?.thumbnail?.fileUpload?.url?.url
+            val thumbnailUri: Uri? =
+                (mediaSource as? FileSource.Uploaded)?.fileUpload?.thumbnail?.fileUpload?.url?.url
 
-            override fun modify(status: SendStatus): Message = copy(baseMessage = baseMessage.copy(sendStatus = status))
+            override fun modify(status: SendStatus): Message =
+                copy(baseMessage = baseMessage.copy(sendStatus = status))
 
-            internal companion object
+            @VisibleForTesting public companion object
         }
 
-        public data class Audio internal constructor(
+        public data class Audio @VisibleForTesting public constructor(
             override val baseMessage: BaseMessage,
             override val mediaSource: FileSource<FileLocal.Audio, FileUpload.Audio>,
         ) : Media<FileLocal.Audio, FileUpload.Audio>() {
@@ -170,13 +187,16 @@ public sealed class Message : ConversationItem {
                 is FileSource.Uploaded -> mediaSource.fileUpload.durationMs
             }
 
-            override fun modify(status: SendStatus): Message = copy(baseMessage = baseMessage.copy(sendStatus = status))
+            override fun modify(status: SendStatus): Message =
+                copy(baseMessage = baseMessage.copy(sendStatus = status))
 
-            internal companion object
+            @VisibleForTesting
+            public companion object
         }
     }
 
-    public data class Deleted internal constructor(override val baseMessage: BaseMessage) : Message() {
+    public data class Deleted internal constructor(override val baseMessage: BaseMessage) :
+        Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }

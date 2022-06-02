@@ -1,7 +1,6 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import app.cash.turbine.test
-import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
@@ -18,6 +17,7 @@ import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -29,7 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertTrue
 
-@OptIn(ApolloExperimental::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class GqlConversationContentDataSourceTest {
 
     @Test

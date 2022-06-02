@@ -46,6 +46,14 @@ android {
         abortOnError true
         disable 'RtlEnabled'
     }
+
+    testOptions {
+        unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed"
+            }
+        }
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -81,4 +89,11 @@ dependencies {
     implementation libs.exoplayer
 
     implementation libs.mimeTypeDetector
+
+    testImplementation libs.junit
+    testImplementation libs.kotlin.test
+    testImplementation libs.mockk
+    testImplementation project(':messaging-core-test-fixtures')
+    testImplementation libs.roboelectric
+    testImplementation libs.android.junit
 }

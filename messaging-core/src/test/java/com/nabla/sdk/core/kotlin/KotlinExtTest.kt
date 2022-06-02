@@ -2,6 +2,7 @@ package com.nabla.sdk.core.kotlin
 
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class KotlinExtTest {
 
     @Test(expected = CancellationException::class)

@@ -27,7 +27,7 @@ buildscript {
 apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
 
 apiValidation {
-    ignoredProjects += ["demo", "messaging-ui-tests"]
+    ignoredProjects += ["demo", "messaging-ui-tests", "messaging-core-test-fixtures"]
 }
 
 subprojects {
@@ -41,7 +41,7 @@ subprojects {
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = buildConfig.jvmTarget
-            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn,kotlinx.coroutines.FlowPreview,kotlinx.coroutines.ExperimentalCoroutinesApi"
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
         }
     }
 }

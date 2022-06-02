@@ -1,0 +1,24 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace = 'com.nabla.sdk.messaging.core.testing.support'
+
+    compileSdk buildConfig.compileSdk
+
+    defaultConfig {
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility buildConfig.jvmTarget
+        targetCompatibility buildConfig.jvmTarget
+    }
+}
+
+dependencies {
+    api project(':messaging-core')
+}

@@ -100,5 +100,6 @@ dependencies {
     testImplementation libs.roboelectric
     testImplementation libs.android.junit
     testImplementation libs.okreplay
+    testImplementation project(':messaging-core-test-fixtures')
     testApi libs.espressoIdlingResource
 }

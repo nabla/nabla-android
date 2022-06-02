@@ -1,8 +1,10 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.nabla.sdk.core.domain.entity.Provider
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 public data class ProviderInConversation(
@@ -18,7 +20,7 @@ public data class ProviderInConversation(
     }
 
     public companion object {
-        private val TYPING_TIME_WINDOW = 20.seconds
+        @VisibleForTesting public val TYPING_TIME_WINDOW: Duration = 20.seconds
 
         private fun isInactiveAt(typingAt: Instant?): Instant? {
             return if (typingAt != null) {

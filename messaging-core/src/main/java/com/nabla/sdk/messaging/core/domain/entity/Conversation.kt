@@ -1,10 +1,11 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import kotlinx.datetime.Instant
 
 @JvmInline
-public value class ConversationId internal constructor(public val value: Uuid)
+public value class ConversationId @VisibleForTesting public constructor(public val value: Uuid)
 
 public fun Uuid.toConversationId(): ConversationId = ConversationId(this)
 

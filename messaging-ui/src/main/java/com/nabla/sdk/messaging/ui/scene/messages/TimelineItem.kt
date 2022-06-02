@@ -32,11 +32,15 @@ internal sealed interface TimelineItem {
 
         data class Text(
             val text: String,
-        ) : Content
+        ) : Content {
+            internal companion object
+        }
 
         data class Image(
             val uri: Uri,
-        ) : Content
+        ) : Content {
+            internal companion object
+        }
 
         data class File(
             val uri: Uri,
@@ -49,9 +53,13 @@ internal sealed interface TimelineItem {
             val uri: Uri,
             val progress: PlaybackProgress,
             val isPlaying: Boolean,
-        ) : Content
+        ) : Content {
+            internal companion object
+        }
 
         object Deleted : Content
+
+        internal companion object
     }
 
     object LoadingMore : TimelineItem {

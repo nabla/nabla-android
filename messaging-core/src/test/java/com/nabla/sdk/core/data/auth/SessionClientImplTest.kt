@@ -10,7 +10,7 @@ import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.StringId
-import com.nabla.sdk.messaging.core.data.stubs.Jwt
+import com.nabla.sdk.messaging.core.data.stubs.JwtFaker
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import io.mockk.Called
 import io.mockk.Runs
@@ -79,8 +79,8 @@ class SessionClientImplTest {
 
     @Test
     fun `get fresh access token with valid access token should return it`() = runTest {
-        val accessToken = Jwt.expiredIn2050
-        every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = Jwt.expiredIn2050_2, accessToken = accessToken)
+        val accessToken = JwtFaker.expiredIn2050
+        every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = JwtFaker.expiredIn2050_2, accessToken = accessToken)
         sessionClient.initSession(sessionTokenProvider)
         assertTrue {
             sessionClient.getFreshAccessToken(false) == accessToken
@@ -95,9 +95,9 @@ class SessionClientImplTest {
     @Test
     fun `get fresh access token with expired access token should return refreshed tokens using refresh token`() =
         runTest {
-            val accessToken = Jwt.expiredIn2020
-            val refreshToken = Jwt.expiredIn2050
-            val refreshedAccessToken = Jwt.expiredIn2050_2
+            val accessToken = JwtFaker.expiredIn2020
+            val refreshToken = JwtFaker.expiredIn2050
+            val refreshedAccessToken = JwtFaker.expiredIn2050_2
             every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = refreshToken, accessToken = accessToken)
             every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
             coEvery { tokenRemoteDataSource.refresh(refreshToken) } returns AuthTokens(
@@ -118,11 +118,11 @@ class SessionClientImplTest {
     fun `get fresh access token with expired access and refresh tokens should return refreshed session`() =
         runTest {
             val patientId = StringId(uuid4().toString())
-            val accessToken = Jwt.expiredIn2020
-            val refreshToken = Jwt.expiredIn2020
+            val accessToken = JwtFaker.expiredIn2020
+            val refreshToken = JwtFaker.expiredIn2020
             val newSessionTokens = AuthTokens(
-                refreshToken = Jwt.expiredIn2050,
-                accessToken = Jwt.expiredIn2050_2
+                refreshToken = JwtFaker.expiredIn2050,
+                accessToken = JwtFaker.expiredIn2050_2
             )
             every { patientRepository.getPatientId() } returns patientId
             every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = refreshToken, accessToken = accessToken)
@@ -142,11 +142,11 @@ class SessionClientImplTest {
     @Test
     fun `get forced fresh access token with valid access token still refresh access token`() =
         runTest {
-            val accessToken = Jwt.expiredIn2050
-            val refreshToken = Jwt.expiredIn2050_2
+            val accessToken = JwtFaker.expiredIn2050
+            val refreshToken = JwtFaker.expiredIn2050_2
             val newSessionTokens = AuthTokens(
-                refreshToken = Jwt.expiredIn2050,
-                accessToken = Jwt.expiredIn2050_3
+                refreshToken = JwtFaker.expiredIn2050,
+                accessToken = JwtFaker.expiredIn2050_3
             )
             every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = refreshToken, accessToken = accessToken)
             every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
@@ -167,13 +167,13 @@ class SessionClientImplTest {
 
         // expired access token but valid refresh token
         val authTokens_1 = AuthTokens(
-            refreshToken = Jwt.expiredIn2050,
-            accessToken = Jwt.expiredIn2020
+            refreshToken = JwtFaker.expiredIn2050,
+            accessToken = JwtFaker.expiredIn2020
         )
         // valid access and refresh tokens
         val authTokens_2 = AuthTokens(
-            refreshToken = Jwt.expiredIn2050_2,
-            accessToken = Jwt.expiredIn2050_3
+            refreshToken = JwtFaker.expiredIn2050_2,
+            accessToken = JwtFaker.expiredIn2050_3
         )
         every { patientRepository.getPatientId() } returns patientId
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
@@ -192,8 +192,8 @@ class SessionClientImplTest {
     fun `expired auth tokens from session provider should throw`() = runTest {
         val patientId = StringId(uuid4().toString())
         val expiredAuthTokens = AuthTokens(
-            refreshToken = Jwt.expiredIn2020,
-            accessToken = Jwt.expiredIn2020_2
+            refreshToken = JwtFaker.expiredIn2020,
+            accessToken = JwtFaker.expiredIn2020_2
         )
         every { patientRepository.getPatientId() } returns patientId
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
@@ -232,10 +232,10 @@ class SessionClientImplTest {
         @JvmStatic
         fun beforeClass() {
             val jwts = listOf(
-                Jwt.expiredIn2050,
-                Jwt.expiredIn2050_2,
-                Jwt.expiredIn2050_3,
-                Jwt.expiredIn2020
+                JwtFaker.expiredIn2050,
+                JwtFaker.expiredIn2050_2,
+                JwtFaker.expiredIn2050_3,
+                JwtFaker.expiredIn2020
             )
             assertTrue { jwts.distinct().size == jwts.size }
         }

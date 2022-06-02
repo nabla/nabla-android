@@ -44,6 +44,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
@@ -147,6 +148,7 @@ internal class GqlConversationContentDataSource(
         }
     }
 
+    @OptIn(FlowPreview::class)
     fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
         val query = firstItemsPageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
