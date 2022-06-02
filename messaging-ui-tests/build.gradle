@@ -57,6 +57,7 @@ dependencies {
     androidTestImplementation libs.kotlin.test
     androidTestImplementation libs.android.junit
     androidTestImplementation project(path: ':messaging-core', configuration: 'test-helpers')
-
+    androidTestImplementation project(':messaging-core-test-fixtures')
+    
     coreLibraryDesugaring libs.desugaring
 }
