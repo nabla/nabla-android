@@ -7,6 +7,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- Media in conversations: Extend support to `image/*` and `audio/*` mime types.
+
 ## [1.0-alpha04] - 2022-05-31
 
 ### Added

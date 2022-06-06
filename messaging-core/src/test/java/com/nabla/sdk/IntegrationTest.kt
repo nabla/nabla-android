@@ -222,7 +222,7 @@ internal class IntegrationTest {
                 FileLocal.Image(
                     uri = uri,
                     fileName = null,
-                    mimeType = MimeType.Image.JPEG,
+                    mimeType = MimeType.Image.Jpeg,
                 )
             )
 
@@ -286,7 +286,7 @@ internal class IntegrationTest {
             setupContentProviderForMediaUpload(uri)
 
             val docName = "test.pdf"
-            val mimeType = MimeType.Application.PDF
+            val mimeType = MimeType.Application.Pdf
             val mediaSource = FileSource.Local<FileLocal.Document, FileUpload.Document>(
                 FileLocal.Document(
                     uri = uri,

@@ -29,7 +29,7 @@ fun createImageGallerySetResultStub(context: Context): Instrumentation.ActivityR
     parcels.add(parcelable1)
     bundle.putParcelableArrayList(Intent.EXTRA_STREAM, parcels)
     resultData.putExtras(bundle)
-    resultData.clipData = ClipData("label", arrayOf(MimeType.Image.JPEG.stringRepresentation), ClipData.Item(uri))
+    resultData.clipData = ClipData("label", arrayOf(MimeType.Image.Jpeg.stringRepresentation), ClipData.Item(uri))
     return Instrumentation.ActivityResult(Activity.RESULT_OK, resultData)
 }
 

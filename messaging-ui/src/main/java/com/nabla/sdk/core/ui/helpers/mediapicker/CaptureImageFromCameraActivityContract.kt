@@ -47,18 +47,11 @@ internal class CaptureImageFromCameraActivityContract : ActivityResultContract<U
                 ?: throw IllegalArgumentException("Mime type is not a supported image one")
 
             return MediaPickingResult.Success(
-                when (mimeType) {
-                    MimeType.Image.PNG -> LocalMedia.Image(
-                        file.toURI(),
-                        generateFileName("png"),
-                        MimeType.Image.PNG,
-                    )
-                    MimeType.Image.JPEG -> LocalMedia.Image(
-                        file.toURI(),
-                        generateFileName("jpg"),
-                        MimeType.Image.JPEG,
-                    )
-                }
+                LocalMedia.Image(
+                    file.toURI(),
+                    generateFileName(extension = mimeType.subtype),
+                    mimeType,
+                )
             )
         } catch (error: Exception) {
             return MediaPickingResult.Failure(error)

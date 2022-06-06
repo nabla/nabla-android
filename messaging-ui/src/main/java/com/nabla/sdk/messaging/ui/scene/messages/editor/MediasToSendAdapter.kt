@@ -84,7 +84,7 @@ internal class MediasToSendAdapter(
             binding.chatMediaToSendImageView.loadAny(media) {
                 placeholder(R.drawable.nabla_file_placeholder)
                 error(R.drawable.nabla_file_placeholder)
-                if (media.mimeType == MimeType.Application.PDF) {
+                if (media.mimeType == MimeType.Application.Pdf) {
                     fetcher(makeLocalPdfPreviewFetcher(binding.context))
                 }
             }

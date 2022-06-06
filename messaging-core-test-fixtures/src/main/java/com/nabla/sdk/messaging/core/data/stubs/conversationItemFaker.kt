@@ -119,12 +119,12 @@ fun FileLocal.Image.Companion.fake(
 ) = FileLocal.Image(
     uri = uri,
     fileName = "image.png",
-    mimeType = MimeType.Image.JPEG
+    mimeType = MimeType.Image.Jpeg
 )
 
 fun FileUpload.Image.Companion.fake(
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://i.pravatar.cc/900")),
-    mimeType: MimeType = MimeType.Image.JPEG,
+    mimeType: MimeType = MimeType.Image.Jpeg,
     fileName: String = "filename.jpg",
 ) = FileUpload.Image(
     size = null,
@@ -139,7 +139,7 @@ fun FileUpload.Image.Companion.fake(
 fun FileUpload.Audio.Companion.fake(
     ephemeralUrl: EphemeralUrl =
         EphemeralUrl.fake(url = Uri("https://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.mp3?uniqueness=${uuid4()}")),
-    mimeType: MimeType = MimeType.Audio.MP3,
+    mimeType: MimeType = MimeType.Audio.Mp3,
     fileName: String = "audio.mp3",
     durationMs: Long = 27_000L,
 ) = FileUpload.Audio(
@@ -159,7 +159,7 @@ fun Message.Media.Document.Companion.fake(
     status: SendStatus = SendStatus.Sent,
     conversationId: ConversationId = ConversationId(uuid4()),
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
-    mimeType: MimeType = MimeType.Application.PDF,
+    mimeType: MimeType = MimeType.Application.Pdf,
     fileName: String = "filename.pdf",
     thumbnail: FileUpload.Image? = null,
 ) = Message.Media.Document(

@@ -18,10 +18,9 @@ internal sealed class LocalMedia {
     companion object {
         @Throws(IllegalArgumentException::class)
         fun create(uri: URI, mimeTypeRepresentation: String, name: String?): LocalMedia {
-            return when (MimeType.fromStringRepresentation(mimeTypeRepresentation)) {
-                MimeType.Image.PNG -> Image(uri, name, MimeType.Image.PNG)
-                MimeType.Image.JPEG -> Image(uri, name, MimeType.Image.JPEG)
-                MimeType.Application.PDF -> Document(uri, name, MimeType.Application.PDF)
+            return when (val mimeType = MimeType.fromStringRepresentation(mimeTypeRepresentation)) {
+                is MimeType.Image -> Image(uri, name, mimeType)
+                is MimeType.Application -> Document(uri, name, mimeType)
                 else -> throw NablaException.Internal(IllegalStateException("Unhandled mimeType: $mimeTypeRepresentation"))
             }
         }

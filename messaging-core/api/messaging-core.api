@@ -208,35 +208,80 @@ public final class com/nabla/sdk/core/domain/entity/FileUpload$Image$Companion {
 public abstract interface class com/nabla/sdk/core/domain/entity/MaybeProvider {
 }
 
-public abstract interface class com/nabla/sdk/core/domain/entity/MimeType {
+public abstract class com/nabla/sdk/core/domain/entity/MimeType {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/MimeType$Companion;
-	public abstract fun getStringRepresentation ()Ljava/lang/String;
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getStringRepresentation ()Ljava/lang/String;
+	public abstract fun getSubtype ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/MimeType$Application : java/lang/Enum, com/nabla/sdk/core/domain/entity/MimeType {
-	public static final field PDF Lcom/nabla/sdk/core/domain/entity/MimeType$Application;
-	public fun getStringRepresentation ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Application;
-	public static fun values ()[Lcom/nabla/sdk/core/domain/entity/MimeType$Application;
+public abstract class com/nabla/sdk/core/domain/entity/MimeType$Application : com/nabla/sdk/core/domain/entity/MimeType {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getSubtype ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/MimeType$Audio : java/lang/Enum, com/nabla/sdk/core/domain/entity/MimeType {
-	public static final field MP3 Lcom/nabla/sdk/core/domain/entity/MimeType$Audio;
-	public fun getStringRepresentation ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Audio;
-	public static fun values ()[Lcom/nabla/sdk/core/domain/entity/MimeType$Audio;
+public final class com/nabla/sdk/core/domain/entity/MimeType$Application$Other : com/nabla/sdk/core/domain/entity/MimeType$Application {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Application$Other;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/MimeType$Application$Other;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/MimeType$Application$Other;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getSubtype ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Application$Pdf : com/nabla/sdk/core/domain/entity/MimeType$Application {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/MimeType$Application$Pdf;
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/MimeType$Audio : com/nabla/sdk/core/domain/entity/MimeType {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getSubtype ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Audio$Mp3 : com/nabla/sdk/core/domain/entity/MimeType$Audio {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/MimeType$Audio$Mp3;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Audio$Other : com/nabla/sdk/core/domain/entity/MimeType$Audio {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Audio$Other;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/MimeType$Audio$Other;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/MimeType$Audio$Other;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getSubtype ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/MimeType$Companion {
 	public final fun fromStringRepresentation (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType;
 }
 
-public final class com/nabla/sdk/core/domain/entity/MimeType$Image : java/lang/Enum, com/nabla/sdk/core/domain/entity/MimeType {
-	public static final field JPEG Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
-	public static final field PNG Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
-	public fun getStringRepresentation ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
-	public static fun values ()[Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+public abstract class com/nabla/sdk/core/domain/entity/MimeType$Image : com/nabla/sdk/core/domain/entity/MimeType {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getSubtype ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Image$Jpeg : com/nabla/sdk/core/domain/entity/MimeType$Image {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/MimeType$Image$Jpeg;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Image$Other : com/nabla/sdk/core/domain/entity/MimeType$Image {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/MimeType$Image$Other;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/MimeType$Image$Other;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/MimeType$Image$Other;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getSubtype ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/MimeType$Image$Png : com/nabla/sdk/core/domain/entity/MimeType$Image {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/MimeType$Image$Png;
 }
 
 public abstract class com/nabla/sdk/core/domain/entity/NablaException : java/lang/Exception {

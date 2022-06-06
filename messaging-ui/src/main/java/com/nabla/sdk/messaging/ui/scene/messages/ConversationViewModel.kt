@@ -179,11 +179,14 @@ internal class ConversationViewModel(
     }
 
     fun onImageSourceLibrarySelected() {
-        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenMediaLibrary(listOf(MimeType.Image.JPEG, MimeType.Image.PNG)))
+        navigationEventMutableFlow.emitIn(
+            viewModelScope,
+            NavigationEvent.OpenMediaLibrary(listOf(MimeType.Image.Jpeg, MimeType.Image.Png))
+        )
     }
 
     fun onDocumentSourceLibrarySelected() {
-        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenMediaLibrary(listOf(MimeType.Application.PDF)))
+        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenMediaLibrary(listOf(MimeType.Application.Pdf)))
     }
 
     fun onMediasPickedFromGallery(medias: List<LocalMedia>) {
@@ -198,7 +201,7 @@ internal class ConversationViewModel(
         when (media) {
             is LocalMedia.Image -> navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenImage(media.uri))
             is LocalMedia.Document -> {
-                if (media.mimeType == MimeType.Application.PDF) {
+                if (media.mimeType == MimeType.Application.Pdf) {
                     navigationEventMutableFlow.emitIn(
                         viewModelScope,
                         NavigationEvent.OpenFullScreenPdf(media.uri)
@@ -283,7 +286,7 @@ internal class ConversationViewModel(
                             FileLocal.Audio(
                                 uri = voiceMessage.targetUri,
                                 fileName = "voice_message_${Clock.System.now()}",
-                                mimeType = MimeType.Audio.MP3,
+                                mimeType = MimeType.Audio.Mp3,
                                 estimatedDurationMs = voiceMessage.secondsSoFar * 1_000L,
                             )
                         )
@@ -393,7 +396,7 @@ internal class ConversationViewModel(
             is TimelineItem.Message.File -> {
                 val fileContent = item.content
                 when (fileContent.mimeType) {
-                    MimeType.Application.PDF -> navigationEventMutableFlow.emitIn(
+                    MimeType.Application.Pdf -> navigationEventMutableFlow.emitIn(
                         viewModelScope, NavigationEvent.OpenFullScreenPdf(fileContent.uri.toJvmUri())
                     )
                     is MimeType.Image -> {
