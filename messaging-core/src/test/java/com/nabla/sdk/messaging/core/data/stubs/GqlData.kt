@@ -130,7 +130,7 @@ internal object GqlData {
                             clientId = localMessageId.clientId.toString()
                             messageContent = imageMessageContentMessageContent {
                                 imageFileUpload = imageFileUpload {
-                                    mimeType = MimeType.Image.JPEG.stringRepresentation
+                                    mimeType = MimeType.Image.Jpeg.stringRepresentation
                                 }
                             }
                             conversation = conversation {
@@ -152,9 +152,9 @@ internal object GqlData {
                             clientId = localMessageId.clientId.toString()
                             messageContent = documentMessageContentMessageContent {
                                 documentFileUpload = documentFileUpload {
-                                    mimeType = MimeType.Application.PDF.stringRepresentation
+                                    mimeType = MimeType.Application.Pdf.stringRepresentation
                                     thumbnail = thumbnail {
-                                        mimeType = MimeType.Image.JPEG.stringRepresentation
+                                        mimeType = MimeType.Image.Jpeg.stringRepresentation
                                     }
                                 }
                             }
