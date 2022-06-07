@@ -50,7 +50,7 @@ class GqlConversationContentDataSourceTest {
             var paginatedConversations = awaitItem()
             assertTrue(paginatedConversations.conversationItems.items.isEmpty())
             gqlEventEmitter.value =
-                GqlData.ConversationEvents.MessageCreated.textMessage(conversationId)
+                GqlData.ConversationEvents.MessageCreated.patientTextMessage(conversationId)
             paginatedConversations = awaitItem()
             assertTrue(paginatedConversations.conversationItems.items.size == 1)
         }

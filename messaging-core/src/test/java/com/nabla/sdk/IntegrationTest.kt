@@ -14,6 +14,7 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
+import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
@@ -27,8 +28,8 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -117,17 +118,17 @@ internal class IntegrationTest {
     fun `test conversation creation and conversations & conversation watching`() = runTest {
         val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient()
 
-        val replayEventEmitter = MutableStateFlow<ConversationsEventsSubscription.Data?>(null)
+        val replayEventEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationsEventsSubscription(),
-            replayEventEmitter.filterNotNull()
+            replayEventEmitter
         )
 
         nablaMessagingClient.watchConversations().test {
             val firstPageOfConversation = awaitItem()
             val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
-            replayEventEmitter.value = GqlData.ConversationsEvents.conversationCreated(createdConversation.id)
+            replayEventEmitter.emit(GqlData.ConversationsEvents.conversationCreated(createdConversation.id))
 
             val updatedPageOfConversations = awaitItem()
 
@@ -143,16 +144,22 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation text message sending watching`() = runTest {
-        val (nablaMessagingClient) = setupClient(
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000000")
             },
-            disposeSubscriptionNetworkTransport = true
         )
+
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
 
@@ -175,6 +182,7 @@ internal class IntegrationTest {
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
             assertEquals(createdConversation.id, secondEmit.content.conversationId)
+            assertEquals(secondEmit.content.items.size, 1)
             assertNull(secondEmit.loadMore)
 
             val thirdEmit = awaitItem()
@@ -186,7 +194,27 @@ internal class IntegrationTest {
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
             assertEquals(createdConversation.id, thirdEmit.content.conversationId)
+            assertEquals(thirdEmit.content.items.size, 1)
             assertNull(thirdEmit.loadMore)
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.MessageCreated.patientTextMessage(
+                    conversationId = createdConversation.id,
+                    localMessageId = message2.id,
+                )
+            )
+
+            val lastEmit = awaitItem()
+            val message3 = lastEmit.content.items.first()
+            assertIs<Message.Text>(message3)
+            assertEquals(createdConversation.id, message3.conversationId)
+            assertIs<MessageId.Remote>(message3.id)
+            assertEquals(message2.id.clientId, message3.id.clientId)
+            assertEquals(SendStatus.Sent, message3.sendStatus)
+            assertEquals(MessageAuthor.Patient, message3.author)
+            assertEquals(createdConversation.id, lastEmit.content.conversationId)
+            assertEquals(lastEmit.content.items.size, 1)
+            assertNull(lastEmit.loadMore)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -195,16 +223,21 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation image message sending watching`() = runTest {
-        val (nablaMessagingClient) = setupClient(
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000001")
             },
-            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
 
@@ -241,6 +274,7 @@ internal class IntegrationTest {
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
             assertEquals(createdConversation.id, secondEmit.content.conversationId)
+            assertEquals(secondEmit.content.items.size, 1)
             assertNull(secondEmit.loadMore)
 
             val thirdEmit = awaitItem()
@@ -253,7 +287,27 @@ internal class IntegrationTest {
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
             assertEquals(createdConversation.id, thirdEmit.content.conversationId)
+            assertEquals(thirdEmit.content.items.size, 1)
             assertNull(thirdEmit.loadMore)
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.MessageCreated.patientImageMessage(
+                    conversationId = createdConversation.id,
+                    localMessageId = message2.id,
+                )
+            )
+
+            val lastEmit = awaitItem()
+            val message3 = lastEmit.content.items.first()
+            assertIs<Message.Media.Image>(message3)
+            assertEquals(createdConversation.id, message3.conversationId)
+            assertIs<MessageId.Remote>(message3.id)
+            assertEquals(message2.id.clientId, message3.id.clientId)
+            assertEquals(SendStatus.Sent, message3.sendStatus)
+            assertEquals(MessageAuthor.Patient, message3.author)
+            assertEquals(createdConversation.id, lastEmit.content.conversationId)
+            assertEquals(lastEmit.content.items.size, 1)
+            assertNull(lastEmit.loadMore)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -262,16 +316,21 @@ internal class IntegrationTest {
     @Test
     @OkReplay
     fun `test conversation document message sending watching`() = runTest {
-        val (nablaMessagingClient) = setupClient(
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000002")
             },
-            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
 
@@ -312,6 +371,7 @@ internal class IntegrationTest {
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
             assertEquals(createdConversation.id, secondEmit.content.conversationId)
+            assertEquals(secondEmit.content.items.size, 1)
             assertNull(secondEmit.loadMore)
 
             val thirdEmit = awaitItem()
@@ -326,7 +386,27 @@ internal class IntegrationTest {
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
             assertEquals(createdConversation.id, thirdEmit.content.conversationId)
+            assertEquals(thirdEmit.content.items.size, 1)
             assertNull(thirdEmit.loadMore)
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.MessageCreated.patientDocumentMessage(
+                    conversationId = createdConversation.id,
+                    localMessageId = message2.id,
+                )
+            )
+
+            val lastEmit = awaitItem()
+            val message3 = lastEmit.content.items.first()
+            assertIs<Message.Media.Document>(message3)
+            assertEquals(createdConversation.id, message3.conversationId)
+            assertIs<MessageId.Remote>(message3.id)
+            assertEquals(message2.id.clientId, message3.id.clientId)
+            assertEquals(SendStatus.Sent, message3.sendStatus)
+            assertEquals(MessageAuthor.Patient, message3.author)
+            assertEquals(createdConversation.id, lastEmit.content.conversationId)
+            assertEquals(lastEmit.content.items.size, 1)
+            assertNull(lastEmit.loadMore)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -334,7 +414,7 @@ internal class IntegrationTest {
 
     @Test
     @OkReplay
-    fun `test conversation text message deletion watching`() = runTest {
+    fun `test conversation local text message deletion watching`() = runTest {
         val (nablaMessagingClient) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
@@ -342,7 +422,6 @@ internal class IntegrationTest {
             uuidGenerator = object : UuidGenerator {
                 override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000003")
             },
-            disposeSubscriptionNetworkTransport = true
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -374,7 +453,6 @@ internal class IntegrationTest {
     fun `test calling public methods without auth throws`() = runTest {
         val (nablaMessagingClient) = setupClient(
             authenticate = false,
-            disposeSubscriptionNetworkTransport = true
         )
 
         nablaMessagingClient.watchConversations().test {
@@ -437,7 +515,6 @@ internal class IntegrationTest {
         clock: Clock? = null,
         uuidGenerator: UuidGenerator? = null,
         authenticate: Boolean = true,
-        disposeSubscriptionNetworkTransport: Boolean = false,
     ): ComponentUnderTest {
         CoreContainer.overriddenUuidGenerator = uuidGenerator
         CoreContainer.overriddenClock = clock
@@ -456,11 +533,6 @@ internal class IntegrationTest {
                 isLoggingEnabled = true
             )
         )
-
-        // Disable websocket connection for tests as events are not recorded
-        if (disposeSubscriptionNetworkTransport) {
-            nablaClient.coreContainer.apolloClient.subscriptionNetworkTransport.dispose()
-        }
 
         val nablaMessagingClient = NablaMessagingClient.initialize(nablaClient)
 

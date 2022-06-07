@@ -260,6 +260,7 @@ internal class GqlConversationContentDataSource(
         val optimisticData = DeleteMessageMutation.Data(
             deleteMessage = DeleteMessageMutation.DeleteMessage(
                 message = DeleteMessageMutation.Message(
+                    id = remoteMessageId.remoteId,
                     content = DeleteMessageMutation.Content(
                         __typename = DeletedMessageContent.type.name,
                         messageContentFragment = MessageContentFragment(

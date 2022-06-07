@@ -43,8 +43,11 @@ internal class FlowTestNetworkTransport : NetworkTransport {
         if (isDisposed) {
             return emptyFlow()
         }
+
+        val responsesFlow = operationsToResponses[request.operation] ?: return emptyFlow()
+
         @Suppress("UNCHECKED_CAST")
-        return operationsToResponses[request.operation] as Flow<ApolloResponse<D>>
+        return responsesFlow as Flow<ApolloResponse<D>>
     }
 
     override fun dispose() {
