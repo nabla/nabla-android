@@ -34,7 +34,8 @@ internal fun TimelineItem.Message.Audio.Companion.fake() = TimelineItem.Message.
 )
 
 internal fun TimelineItem.Message.Text.Companion.fake() = TimelineItem.Message.Text(
-    text = randomText()
+    text = randomText(),
+    repliedMessage = null,
 )
 
 internal fun TimelineItem.Message.Image.Companion.fake() = TimelineItem.Message.Image(

@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import app.cash.turbine.test
+import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
@@ -12,6 +13,7 @@ import com.nabla.sdk.graphql.ConversationItemsQuery
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
+import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import io.mockk.mockk
@@ -27,8 +29,11 @@ import kotlinx.coroutines.plus
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
+@ApolloExperimental
 @OptIn(ExperimentalCoroutinesApi::class)
 class GqlConversationContentDataSourceTest {
 
@@ -98,6 +103,90 @@ class GqlConversationContentDataSourceTest {
         job.cancel()
     }
 
+    @Test
+    fun `deleted message is notified to conversation watcher`() = runTest {
+        val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
+
+        val conversationId = uuid4().toConversationId()
+        testNetworkTransport.register(
+            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlData.ConversationItems.single(conversationId) {
+                nextCursor = uuid4().toString()
+                hasMore = false
+            }
+        )
+        val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
+        testNetworkTransport.register(
+            ConversationEventsSubscription(conversationId.value),
+            gqlEventEmitter.filterNotNull()
+        )
+        gqlConversationContentDataSource.watchConversationItems(conversationId).test {
+            var paginatedConversationItems = awaitItem()
+            var message = paginatedConversationItems.conversationItems.items.first()
+            assertIs<Message.Text>(message)
+
+            gqlEventEmitter.value = GqlData.ConversationEvents.MessageDeleted.deletedPatientMessage(conversationId, message.id)
+
+            paginatedConversationItems = awaitItem()
+            message = paginatedConversationItems.conversationItems.items.first()
+
+            assertIs<Message.Deleted>(message)
+        }
+        job.cancel()
+    }
+
+    @Test
+    fun `deleted message is notified in replier message conversation watcher`() = runTest {
+        val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
+
+        val conversationId = uuid4().toConversationId()
+        val replyToMessageId = uuid4()
+        testNetworkTransport.register(
+            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlData.ConversationItems.single(conversationId) {
+                nextCursor = uuid4().toString()
+                hasMore = false
+                val firstMessage = messageData {
+                    id = replyToMessageId.toString()
+                    messageContent = textMessageContentMessageContent { }
+                    replyTo = null
+                }
+                data = listOf(
+                    firstMessage,
+                    messageData {
+                        id = uuid4().toString()
+                        messageContent = textMessageContentMessageContent { }
+                        replyTo = firstMessage
+                    },
+                )
+            }
+        )
+        val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
+        testNetworkTransport.register(
+            ConversationEventsSubscription(conversationId.value),
+            gqlEventEmitter.filterNotNull()
+        )
+        gqlConversationContentDataSource.watchConversationItems(conversationId).test {
+            var paginatedConversationItems = awaitItem()
+            var (firstMessage, secondMessage) = paginatedConversationItems.conversationItems.items
+            assertIs<Message.Text>(firstMessage)
+            assertIs<Message.Text>(secondMessage)
+            assertEquals(firstMessage.id.remoteId, replyToMessageId)
+            assertEquals(secondMessage.replyTo?.id?.remoteId, replyToMessageId)
+
+            gqlEventEmitter.value = GqlData.ConversationEvents.MessageDeleted.deletedPatientMessage(conversationId, firstMessage.id)
+
+            paginatedConversationItems = awaitItem()
+            firstMessage = paginatedConversationItems.conversationItems.items[0]
+            secondMessage = paginatedConversationItems.conversationItems.items[1]
+
+            assertIs<Message.Deleted>(firstMessage)
+            assertIs<Message.Text>(secondMessage)
+            assertIs<Message.Deleted>(secondMessage.replyTo)
+        }
+        job.cancel()
+    }
+
     private fun setupTest(testScope: TestScope): Triple<FlowTestNetworkTransport, CompletableJob, GqlConversationContentDataSource> {
         val testNetworkTransport = FlowTestNetworkTransport()
         val job = Job()
@@ -108,7 +197,7 @@ class GqlConversationContentDataSourceTest {
 
     private fun createTestableGqlMessageDataSource(
         testNetworkTransport: NetworkTransport,
-        scope: CoroutineScope
+        scope: CoroutineScope,
     ): GqlConversationContentDataSource {
         val apolloClient = ApolloFactory.configureBuilder(
             normalizedCacheFactory = MemoryCacheFactory()

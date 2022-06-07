@@ -13,6 +13,12 @@ android {
         targetSdk buildConfig.targetSdk
     }
 
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'VisibleForTests'
+    }
+
     compileOptions {
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget

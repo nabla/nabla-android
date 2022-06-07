@@ -50,7 +50,7 @@ internal object GqlData {
 
         fun single(
             conversationId: ConversationId,
-            block: ConversationItemsQuery_TestBuilder.ItemsBuilder.() -> Unit = {}
+            block: ConversationItemsQuery_TestBuilder.ItemsBuilder.() -> Unit = {},
         ) = ConversationItemsQuery.Data(CustomTestResolver()) {
             conversation = conversation {
                 conversation = conversation {
@@ -59,6 +59,7 @@ internal object GqlData {
                         data = listOf(
                             messageData {
                                 messageContent = textMessageContentMessageContent { }
+                                replyTo = null
                             }
                         )
                         block()
@@ -84,17 +85,19 @@ internal object GqlData {
         object MessageDeleted {
             fun deletedPatientMessage(
                 conversationId: ConversationId,
-                localMessageId: MessageId = MessageId.Local(uuid4()),
+                messageId: MessageId,
             ) = ConversationEventsSubscription.Data(CustomTestResolver()) {
                 conversation = conversation {
                     event = messageUpdatedEventEvent {
                         message = message {
-                            clientId = localMessageId.clientId.toString()
+                            id = messageId.remoteId.toString()
+                            clientId = messageId.clientId.toString()
                             messageContent = deletedMessageContentMessageContent { }
                             conversation = conversation {
                                 id = conversationId.value.toString()
                             }
                             author = patientAuthor {}
+                            replyTo = null
                         }
                     }
                 }
@@ -115,6 +118,7 @@ internal object GqlData {
                                 id = conversationId.value.toString()
                             }
                             author = patientAuthor {}
+                            replyTo = null
                         }
                     }
                 }
@@ -137,6 +141,7 @@ internal object GqlData {
                                 id = conversationId.value.toString()
                             }
                             author = patientAuthor {}
+                            replyTo = null
                         }
                     }
                 }
@@ -162,6 +167,7 @@ internal object GqlData {
                                 id = conversationId.value.toString()
                             }
                             author = patientAuthor {}
+                            replyTo = null
                         }
                     }
                 }

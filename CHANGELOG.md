@@ -2,17 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
-adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
+to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Now `messaging-core` supports messages replying to other messages.
+
 ### Changed
+
 - Media in conversations: Extend support to `image/*` and `audio/*` mime types.
 
 ## [1.0-alpha04] - 2022-05-31
 
 ### Added
+
 - `ConversationActivity` in conversations. A message is displayed when a provider joins a conversation.
 - `ConversationFragment` now displays system messages, with the right name and avatar.
 - Added support for sending, receiving and playing voice messages.

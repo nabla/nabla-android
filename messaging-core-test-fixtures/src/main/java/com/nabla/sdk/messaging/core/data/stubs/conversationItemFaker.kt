@@ -45,6 +45,7 @@ fun Message.Text.Companion.fake(
     author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
     text: String = randomText(),
+    replyTo: Message? = null,
 ) = Message.Text(
     BaseMessage(
         id = id,
@@ -52,6 +53,7 @@ fun Message.Text.Companion.fake(
         author = author,
         sendStatus = status,
         conversationId = uuid4().toConversationId(),
+        replyTo = replyTo,
     ),
     text = text,
 )

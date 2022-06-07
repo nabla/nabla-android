@@ -16,6 +16,7 @@ public data class BaseMessage(
     val author: MessageAuthor,
     val sendStatus: SendStatus,
     val conversationId: ConversationId,
+    val replyTo: Message? = null,
 )
 
 /**
@@ -94,7 +95,7 @@ public sealed interface MessageId {
 
     public data class Remote @VisibleForTesting public constructor(
         override val clientId: Uuid?,
-        override val remoteId: Uuid
+        override val remoteId: Uuid,
     ) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
@@ -110,11 +111,16 @@ public sealed class Message : ConversationItem {
     public val sendStatus: SendStatus get() = baseMessage.sendStatus
     public val conversationId: ConversationId get() = baseMessage.conversationId
 
+    /**
+     * the message that this message is a reply to, or null if this is a root message.
+     */
+    public val replyTo: Message? get() = baseMessage.replyTo
+
     override val createdAt: Instant get() = baseMessage.createdAt
 
     public data class Text @VisibleForTesting public constructor(
         override val baseMessage: BaseMessage,
-        val text: String
+        val text: String,
     ) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
@@ -174,7 +180,8 @@ public sealed class Message : ConversationItem {
             override fun modify(status: SendStatus): Message =
                 copy(baseMessage = baseMessage.copy(sendStatus = status))
 
-            @VisibleForTesting public companion object
+            @VisibleForTesting
+            public companion object
         }
 
         public data class Audio @VisibleForTesting public constructor(
@@ -195,8 +202,7 @@ public sealed class Message : ConversationItem {
         }
     }
 
-    public data class Deleted internal constructor(override val baseMessage: BaseMessage) :
-        Message() {
+    public data class Deleted internal constructor(override val baseMessage: BaseMessage) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }

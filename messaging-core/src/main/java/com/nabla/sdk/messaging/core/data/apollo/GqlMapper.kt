@@ -19,7 +19,7 @@ import com.nabla.sdk.graphql.fragment.DocumentFileUploadFragment
 import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
 import com.nabla.sdk.graphql.fragment.ImageFileUploadFragment
 import com.nabla.sdk.graphql.fragment.MaybeProviderFragment
-import com.nabla.sdk.graphql.fragment.MessageFragment
+import com.nabla.sdk.graphql.fragment.MessageSummaryFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
 import com.nabla.sdk.graphql.fragment.SystemFragment
@@ -95,25 +95,20 @@ internal class GqlMapper(private val logger: Logger) {
         return null
     }
 
-    fun mapToMessage(messageFragment: MessageFragment, sendStatus: SendStatus): Message? {
-        val author = mapToMessageAuthor(messageFragment.author)
-        val baseMessage = BaseMessage(
-            id = MessageId.Remote(
-                clientId = messageFragment.clientId,
-                remoteId = messageFragment.id
-            ),
-            createdAt = messageFragment.createdAt,
-            author = author,
-            sendStatus = sendStatus,
-            conversationId = messageFragment.conversation.id.toConversationId(),
-        )
-        messageFragment.messageContent.messageContentFragment.onTextMessageContent?.textMessageContentFragment?.let {
+    fun mapToMessage(
+        summaryFragment: MessageSummaryFragment,
+        sendStatus: SendStatus,
+        replyTo: MessageSummaryFragment?,
+    ): Message? {
+        val baseMessage = mapToBaseMessage(summaryFragment, sendStatus, replyTo)
+
+        summaryFragment.messageContent.messageContentFragment.onTextMessageContent?.textMessageContentFragment?.let {
             return Message.Text(
                 baseMessage = baseMessage,
                 text = it.text,
             )
         }
-        messageFragment.messageContent.messageContentFragment.onImageMessageContent?.imageMessageContentFragment?.let {
+        summaryFragment.messageContent.messageContentFragment.onImageMessageContent?.imageMessageContentFragment?.let {
             return Message.Media.Image(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -122,7 +117,7 @@ internal class GqlMapper(private val logger: Logger) {
                 ),
             )
         }
-        messageFragment.messageContent.messageContentFragment.onDocumentMessageContent?.documentMessageContentFragment?.let {
+        summaryFragment.messageContent.messageContentFragment.onDocumentMessageContent?.documentMessageContentFragment?.let {
             return Message.Media.Document(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -131,7 +126,7 @@ internal class GqlMapper(private val logger: Logger) {
                 )
             )
         }
-        messageFragment.messageContent.messageContentFragment.onAudioMessageContent?.audioMessageContentFragment?.let {
+        summaryFragment.messageContent.messageContentFragment.onAudioMessageContent?.audioMessageContentFragment?.let {
             return Message.Media.Audio(
                 baseMessage = baseMessage,
                 mediaSource = FileSource.Uploaded(
@@ -140,14 +135,39 @@ internal class GqlMapper(private val logger: Logger) {
                 )
             )
         }
-        messageFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {
+        summaryFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {
             return Message.Deleted(baseMessage = baseMessage)
         }
-        logger.warn("Unknown message content mapping for $messageFragment")
+        logger.warn("Unknown message content mapping for $summaryFragment")
         return null
     }
 
-    private fun mapToMessageAuthor(author: MessageFragment.Author): MessageAuthor {
+    private fun mapToBaseMessage(
+        summaryFragment: MessageSummaryFragment,
+        sendStatus: SendStatus,
+        replyTo: MessageSummaryFragment?,
+    ): BaseMessage {
+        val author = mapToMessageAuthor(summaryFragment.author)
+        return BaseMessage(
+            id = MessageId.Remote(
+                clientId = summaryFragment.clientId,
+                remoteId = summaryFragment.id
+            ),
+            createdAt = summaryFragment.createdAt,
+            author = author,
+            sendStatus = sendStatus,
+            conversationId = summaryFragment.conversation.id.toConversationId(),
+            replyTo = replyTo?.let {
+                mapToMessage(
+                    summaryFragment = replyTo,
+                    sendStatus = SendStatus.Sent,
+                    replyTo = null,
+                )
+            }
+        )
+    }
+
+    private fun mapToMessageAuthor(author: MessageSummaryFragment.Author): MessageAuthor {
         author.onPatient?.let { return MessageAuthor.Patient }
         author.onProvider?.providerFragment?.let { return MessageAuthor.Provider(mapToProvider(it)) }
         author.onSystem?.let { return MessageAuthor.System(mapToSystem(it.systemFragment)) }

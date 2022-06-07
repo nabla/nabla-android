@@ -334,3 +334,69 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragmen
 	public static synthetic fun newInstance-mdLlEGU$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;Ljava/util/UUID;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
 }
 
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage {
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
+	public final fun component2 ()Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content;
+	public final fun component3 ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAuthor ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
+	public final fun getContent ()Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content;
+	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Audio : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-tuorwt8 (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Audio;
+	public static synthetic fun copy-tuorwt8$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Audio;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Audio;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Deleted : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Deleted;
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-tuorwt8 (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;
+	public static synthetic fun copy-tuorwt8$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Image : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-tuorwt8 (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Image;
+	public static synthetic fun copy-tuorwt8$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Image;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+

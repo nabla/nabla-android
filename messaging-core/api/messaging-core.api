@@ -453,19 +453,22 @@ public final class com/nabla/sdk/messaging/core/NablaMessagingClient$Companion {
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/BaseMessage {
-	public synthetic fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/Message;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/Message;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
 	public final fun component2 ()Lkotlinx/datetime/Instant;
 	public final fun component3 ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
 	public final fun component4 ()Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;
 	public final fun component5-qJUv34w ()Ljava/util/UUID;
-	public final fun copy-74cM7Zg (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;)Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
-	public static synthetic fun copy-74cM7Zg$default (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
+	public final fun component6 ()Lcom/nabla/sdk/messaging/core/domain/entity/Message;
+	public final fun copy-ADlY7B0 (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/Message;)Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
+	public static synthetic fun copy-ADlY7B0$default (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/Message;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAuthor ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
 	public final fun getConversationId-qJUv34w ()Ljava/util/UUID;
 	public final fun getCreatedAt ()Lkotlinx/datetime/Instant;
 	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
+	public final fun getReplyTo ()Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public final fun getSendStatus ()Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -697,6 +700,7 @@ public abstract class com/nabla/sdk/messaging/core/domain/entity/Message : com/n
 	public final fun getConversationId-qJUv34w ()Ljava/util/UUID;
 	public fun getCreatedAt ()Lkotlinx/datetime/Instant;
 	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
+	public final fun getReplyTo ()Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public final fun getSendStatus ()Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;
 	public final fun getSentAt ()Lkotlinx/datetime/Instant;
 }

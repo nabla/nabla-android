@@ -179,6 +179,13 @@ fragment MaybeProviderFragment on MaybeProvider {
 }
 
 fragment MessageFragment on Message {
+    ...MessageSummaryFragment
+    replyTo {
+        ...MessageSummaryFragment
+    }
+}
+
+fragment MessageSummaryFragment on Message {
     id
     author {
         ... on Provider {

@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.conversation
 
 import app.cash.turbine.test
+import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
@@ -58,6 +59,7 @@ internal class GqlConversationDataSourceTest {
     }
 
     @Test
+    @ApolloExperimental
     fun `load more conversation is notified to conversations watcher`() = runTest {
         val (testNetworkTransport, job, gqlConversationDataSource) = setupTest(this)
 

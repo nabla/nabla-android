@@ -38,6 +38,12 @@ android {
         }
     }
 
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'VisibleForTests'
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true

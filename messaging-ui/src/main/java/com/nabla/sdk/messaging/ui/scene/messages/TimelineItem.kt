@@ -28,10 +28,13 @@ internal sealed interface TimelineItem {
     ) : TimelineItem {
         override val listItemId = "message_${id.stableId}"
 
-        sealed interface Content
+        sealed interface Content {
+            val repliedMessage: RepliedMessage?
+        }
 
         data class Text(
             val text: String,
+            override val repliedMessage: RepliedMessage?,
         ) : Content {
             internal companion object
         }
@@ -39,6 +42,8 @@ internal sealed interface TimelineItem {
         data class Image(
             val uri: Uri,
         ) : Content {
+            override val repliedMessage: RepliedMessage? = null
+
             internal companion object
         }
 
@@ -47,17 +52,25 @@ internal sealed interface TimelineItem {
             val fileName: String,
             val mimeType: MimeType,
             val thumbnailUri: Uri?,
-        ) : Content
+        ) : Content {
+            override val repliedMessage: RepliedMessage? = null
+
+            internal companion object
+        }
 
         data class Audio(
             val uri: Uri,
             val progress: PlaybackProgress,
             val isPlaying: Boolean,
         ) : Content {
+            override val repliedMessage: RepliedMessage? = null
+
             internal companion object
         }
 
-        object Deleted : Content
+        object Deleted : Content {
+            override val repliedMessage: RepliedMessage? = null
+        }
 
         internal companion object
     }

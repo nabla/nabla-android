@@ -90,7 +90,7 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertMessageToConversationCache(
         messageFragment: MessageFragment,
     ) {
-        val query = firstItemsPageQuery(messageFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(messageFragment.messageSummaryFragment.conversation.id.toConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             Message.type.name,
             null,
@@ -130,8 +130,7 @@ internal class GqlConversationContentDataSource(
             if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.hasMore) {
                 return@updateCache CacheUpdateOperation.Ignore()
             }
-            val nextCursor =
-                requireNotNull(cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.nextCursor)
+            val nextCursor = requireNotNull(cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.nextCursor)
             val updatedQuery = query.copy(
                 pageInfo = OpaqueCursorPage(
                     cursor = Optional.presentIfNotNull(nextCursor)
@@ -142,7 +141,8 @@ internal class GqlConversationContentDataSource(
                 .execute()
                 .dataAssertNoErrors
             val mergedData =
-                (cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data + freshQueryData.conversation.conversation.conversationItemsPageFragment.items.data).distinctBy { it?.messageFragment?.id }
+                (cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data + freshQueryData.conversation.conversation.conversationItemsPageFragment.items.data)
+                    .distinctBy { it?.messageFragment?.messageSummaryFragment?.id }
             val mergedQueryData = freshQueryData.modify(mergedData)
             return@updateCache CacheUpdateOperation.Write(mergedQueryData)
         }
@@ -156,17 +156,20 @@ internal class GqlConversationContentDataSource(
             .watch(fetchThrows = true)
             .map { response -> requireNotNull(response.data) }
             .map { queryData ->
-                val page =
-                    queryData.conversation.conversation.conversationItemsPageFragment.items
-                val items = page.data.mapNotNull {
-                    it?.messageFragment?.let {
-                        return@mapNotNull mapper.mapToMessage(it, SendStatus.Sent)
+                val page = queryData.conversation.conversation.conversationItemsPageFragment.items
+                val items = page.data.mapNotNull { pageData ->
+                    pageData?.messageFragment?.let {
+                        return@mapNotNull mapper.mapToMessage(
+                            it.messageSummaryFragment,
+                            SendStatus.Sent,
+                            it.replyTo?.messageSummaryFragment,
+                        )
                     }
-                    it?.conversationActivityFragment?.let {
+                    pageData?.conversationActivityFragment?.let {
                         return@mapNotNull mapper.mapToConversationActivity(it)
                     }
                 }
-                return@map PaginatedConversationItems(
+                PaginatedConversationItems(
                     conversationItems = ConversationItems(
                         conversationId = queryData.conversation.conversation.id.toConversationId(),
                         items = items,

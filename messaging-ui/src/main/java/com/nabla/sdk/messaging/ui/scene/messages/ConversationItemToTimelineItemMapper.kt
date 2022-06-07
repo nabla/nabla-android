@@ -41,7 +41,7 @@ internal fun Message.toTimelineItem(
 private fun Message.toMessageContent(
     nowPlayingAudio: Uri?,
     audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
-) = when (this) {
+): TimelineItem.Message.Content = when (this) {
     is Message.Deleted -> TimelineItem.Message.Deleted
     is Message.Media.Document -> TimelineItem.Message.File(
         uri = stableUri,
@@ -54,6 +54,7 @@ private fun Message.toMessageContent(
     )
     is Message.Text -> TimelineItem.Message.Text(
         text = text,
+        repliedMessage = replyTo?.toRepliedMessage(),
     )
     is Message.Media.Audio -> TimelineItem.Message.Audio(
         uri = stableUri,
@@ -61,6 +62,18 @@ private fun Message.toMessageContent(
         progress = audioPlaybackProgressMap[stableUri] ?: PlaybackProgress(currentPositionMillis = 0, durationMs),
     )
 }
+
+private fun Message.toRepliedMessage() = RepliedMessage(
+    id = id,
+    content = when (this) {
+        is Message.Deleted -> RepliedMessage.Content.Deleted
+        is Message.Media.Audio -> RepliedMessage.Content.Audio(stableUri)
+        is Message.Media.Document -> RepliedMessage.Content.Document(stableUri)
+        is Message.Media.Image -> RepliedMessage.Content.Image(stableUri)
+        is Message.Text -> RepliedMessage.Content.Text(text)
+    },
+    author = author,
+)
 
 internal fun ConversationActivity.toTimelineItem(): TimelineItem.ConversationActivity {
     return when (val content = content) {

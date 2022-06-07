@@ -185,18 +185,18 @@ internal class ConversationContentRepositoryStub(
     private fun conversationItemsStateFlow(prepopulate: Boolean): MutableStateFlow<List<Message>> = MutableStateFlow(
         buildList {
             if (prepopulate) {
-                add(
-                    Message.Text.fake(
-                        sentAt = Clock.System.now().minus(2.days),
-                        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                    )
+                val firstMessage = Message.Text.fake(
+                    sentAt = Clock.System.now().minus(2.days),
+                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                 )
+                add(firstMessage)
                 addAll((9 downTo 4).map { Message.Text.fake(sentAt = Clock.System.now().minus(it.minutes)) })
                 add(
                     Message.Text.fake(
                         author = MessageAuthor.Provider(provider),
                         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
                         sentAt = Clock.System.now().minus(3.minutes),
+                        replyTo = firstMessage,
                     )
                 )
 
