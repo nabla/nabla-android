@@ -16,7 +16,12 @@ type Query {
 type Mutation {
   createConversation: CreateConversationOutput!
 
-  sendMessage(conversationId: UUID!, content: SendMessageContentInput!, clientId: UUID!): SendMessageOutput!
+  sendMessage(
+    conversationId: UUID!
+    content: SendMessageContentInput!
+    clientId: UUID!
+    replyToMessageId: UUID
+  ): SendMessageOutput!
 
   deleteMessage(id: UUID!): DeleteMessageOutput!
 
@@ -73,6 +78,7 @@ type Message {
   content: MessageContent!
 
   clientId: UUID
+  replyTo: Message
 }
 
 type ConversationActivity {
