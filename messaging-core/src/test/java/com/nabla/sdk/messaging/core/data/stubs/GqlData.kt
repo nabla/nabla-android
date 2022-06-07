@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.stubs
 
 import com.apollographql.apollo3.annotations.ApolloExperimental
+import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.graphql.ConversationEventsSubscription
@@ -79,6 +80,39 @@ internal object GqlData {
                 }
             }
         }
+
+        fun providerJoinsConversation(
+            conversationId: ConversationId,
+            providerId: Uuid = uuid4(),
+        ) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
+            conversations = conversations {
+                event = conversationUpdatedEventEvent {
+                    conversation = conversation {
+                        id = conversationId.value.toString()
+                        providers = listOf(
+                            provider {
+                                provider = provider {
+                                    id = providerId.toString()
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        fun providersLeaveConversation(
+            conversationId: ConversationId,
+        ) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
+            conversations = conversations {
+                event = conversationUpdatedEventEvent {
+                    conversation = conversation {
+                        id = conversationId.value.toString()
+                        providers = listOf()
+                    }
+                }
+            }
+        }
     }
 
     object ConversationEvents {
@@ -98,6 +132,45 @@ internal object GqlData {
                             }
                             author = patientAuthor {}
                             replyTo = null
+                        }
+                    }
+                }
+            }
+        }
+
+        object Activity {
+            fun existingProviderJoinedActivity(
+                conversationId: ConversationId,
+                providerId: Uuid = uuid4(),
+            ) = ConversationEventsSubscription.Data(CustomTestResolver()) {
+                conversation = conversation {
+                    event = conversationActivityCreatedEvent {
+                        activity = activity {
+                            conversation = conversation {
+                                id = conversationId.value.toString()
+                            }
+                            conversationActivityContent = providerJoinedConversationConversationActivityContent {
+                                provider = providerProvider {
+                                    id = providerId.toString()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            fun deletedProviderJoinedActivity(
+                conversationId: ConversationId,
+            ) = ConversationEventsSubscription.Data(CustomTestResolver()) {
+                conversation = conversation {
+                    event = conversationActivityCreatedEvent {
+                        activity = activity {
+                            conversation = conversation {
+                                id = conversationId.value.toString()
+                            }
+                            conversationActivityContent = providerJoinedConversationConversationActivityContent {
+                                provider = deletedProviderProvider { }
+                            }
                         }
                     }
                 }

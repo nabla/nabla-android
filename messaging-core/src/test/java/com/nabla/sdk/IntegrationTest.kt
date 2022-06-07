@@ -3,21 +3,26 @@ package com.nabla.sdk
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.data.logger.StdLogger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
+import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
@@ -29,7 +34,6 @@ import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -446,6 +450,136 @@ internal class IntegrationTest {
             assertEquals(0, secondEmit.content.items.size)
 
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    @OkReplay
+    fun `test watch conversation is called when the providers are updated`() = runTest {
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+        )
+
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val conversationsReplayEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationsEventsSubscription(),
+            conversationsReplayEmitter
+        )
+
+        val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
+
+        conversationUpdatesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.providersInConversation.size)
+
+            val providerId = uuid4()
+
+            conversationsReplayEmitter.emit(
+                GqlData.ConversationsEvents.providerJoinsConversation(
+                    conversationId = createdConversation.id,
+                    providerId = providerId,
+                )
+            )
+
+            val secondEmit = awaitItem()
+            assertEquals(1, secondEmit.providersInConversation.size)
+            assertEquals(providerId, secondEmit.providersInConversation.first().provider.id)
+
+            conversationsReplayEmitter.emit(
+                GqlData.ConversationsEvents.providersLeaveConversation(
+                    conversationId = createdConversation.id,
+                )
+            )
+
+            val thirdEmit = awaitItem()
+            assertEquals(0, thirdEmit.providersInConversation.size)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    @OkReplay
+    fun `test new existing provider in conversation activity watching`() = runTest {
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.content.items.size)
+
+            val providerId = uuid4()
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.Activity.existingProviderJoinedActivity(
+                    conversationId = createdConversation.id,
+                    providerId = providerId,
+                )
+            )
+
+            val secondEmit = awaitItem()
+            assertEquals(1, secondEmit.content.items.size)
+            val activityItem = secondEmit.content.items.first()
+            assertIs<ConversationActivity>(activityItem)
+            val activityContent = activityItem.content
+            assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)
+            val provider = activityContent.maybeProvider
+            assertIs<Provider>(provider)
+            assertEquals(providerId, provider.id)
+        }
+    }
+
+    @Test
+    @OkReplay
+    fun `test new deleted provider in conversation activity watching`() = runTest {
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.content.items.size)
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.Activity.deletedProviderJoinedActivity(
+                    conversationId = createdConversation.id,
+                )
+            )
+
+            val secondEmit = awaitItem()
+            assertEquals(1, secondEmit.content.items.size)
+            val activityItem = secondEmit.content.items.first()
+            assertIs<ConversationActivity>(activityItem)
+            val activityContent = activityItem.content
+            assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)
+            val provider = activityContent.maybeProvider
+            assertIs<DeletedProvider>(provider)
         }
     }
 

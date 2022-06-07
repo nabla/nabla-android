@@ -122,16 +122,23 @@ internal class GqlConversationDataSource constructor(
         )
     }
 
-    fun watchConversation(conversationId: ConversationId): Flow<Conversation> = apolloClient.query(ConversationQuery(conversationId.value))
-        .fetchPolicy(FetchPolicy.CacheAndNetwork)
-        .watch(fetchThrows = true)
-        .map { response -> response.dataAssertNoErrors }
-        .notifyTypingUpdates { data ->
-            data.conversation.conversation.conversationFragment.providers
-                .map { it.providerInConversationFragment }
-                .map { mapper.mapToProviderInConversation(it) }
-        }
-        .map { queryData -> mapper.mapToConversation(queryData.conversation.conversation.conversationFragment) }
+    @OptIn(FlowPreview::class)
+    fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+        val watcher = apolloClient.query(ConversationQuery(conversationId.value))
+            .fetchPolicy(FetchPolicy.CacheAndNetwork)
+            .watch(fetchThrows = true)
+            .map { response -> response.dataAssertNoErrors }
+            .notifyTypingUpdates { data ->
+                data.conversation.conversation.conversationFragment.providers
+                    .map { it.providerInConversationFragment }
+                    .map { mapper.mapToProviderInConversation(it) }
+            }
+            .map { queryData -> mapper.mapToConversation(queryData.conversation.conversation.conversationFragment) }
+
+        return flowOf(conversationsEventsFlow, watcher)
+            .flattenMerge()
+            .filterIsInstance()
+    }
 
     companion object {
         @VisibleForTesting

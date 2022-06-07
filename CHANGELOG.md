@@ -15,6 +15,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Media in conversations: Extend support to `image/*` and `audio/*` mime types.
 
+### Fixed
+- Fix an issue where `NablaMessagingClient.watchConversation` wouldn't be called correctly in some cases
+when the conversation is updated.
+
 ## [1.0-alpha04] - 2022-05-31
 
 ### Added
