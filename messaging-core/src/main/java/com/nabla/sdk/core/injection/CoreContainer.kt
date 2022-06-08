@@ -5,7 +5,6 @@ import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.http.DefaultHttpEngine
-import com.apollographql.apollo3.network.okHttpClient
 import com.apollographql.apollo3.network.ws.DefaultWebSocketEngine
 import com.benasher44.uuid.Uuid
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -14,6 +13,7 @@ import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
 import com.nabla.sdk.core.data.auth.PublicApiKeyInterceptor
+import com.nabla.sdk.core.data.auth.SdkVersionInterceptor
 import com.nabla.sdk.core.data.auth.SessionClientImpl
 import com.nabla.sdk.core.data.auth.TokenLocalDataSource
 import com.nabla.sdk.core.data.auth.TokenRemoteDataSource
@@ -36,6 +36,7 @@ import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
+import com.nabla.sdk.messaging.core.BuildConfig
 import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -81,6 +82,7 @@ internal class CoreContainer(
             .apply { configuration.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(PublicApiKeyInterceptor(configuration.publicApiKey))
+            .addInterceptor(SdkVersionInterceptor(BuildConfig.VERSION_NAME))
             .addInterceptor(HttpLoggingInterceptorFactory.make(logger))
             .apply { overriddenOkHttpClient?.let { it(this) } }
             .build()

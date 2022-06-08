@@ -19,12 +19,16 @@ android {
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
 
+        versionName getGitDescribe()
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro', 'serialization-rules.pro'
 
         aarMetadata {
             minCompileSdk buildConfig.compileSdk
         }
+
+        buildConfigField 'String', 'VERSION_NAME', "\"${defaultConfig.versionName}\""
     }
 
     compileOptions {
@@ -54,6 +58,15 @@ android {
             }
         }
     }
+}
+
+String getGitDescribe() {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
