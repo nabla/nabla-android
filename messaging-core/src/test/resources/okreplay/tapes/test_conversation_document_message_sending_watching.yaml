@@ -1,7 +1,7 @@
 !tape
 name: test conversation document message sending watching
 interactions:
-- recorded: 2022-06-08T14:31:37.079Z
+- recorded: 2022-06-09T12:51:39.979Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -15,7 +15,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 08 Jun 2022 14:31:37 GMT
+      Date: Thu, 09 Jun 2022 12:51:39 GMT
       connection: close
       content-length: '350'
       content-type: application/json; charset=UTF-8
@@ -23,17 +23,17 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 310ccff4-7772-41b9-9395-69830df683ee
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"06a388bc-1694-4a6d-841a-e7ede7f80d5a","title":null,"description":null,"createdAt":"2022-06-08T16:31:37.036+02:00","updatedAt":"2022-06-08T16:31:37.036+02:00","inboxPreviewTitle":"Nouvelle
+      x-request-id: 3b4f4213-d40f-4194-a6c4-88708f791abd
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"11caad07-ad1b-4f12-98fb-0b78d400b4f2","title":null,"description":null,"createdAt":"2022-06-09T14:51:39.973+02:00","updatedAt":"2022-06-09T14:51:39.973+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
-- recorded: 2022-06-08T14:31:37.695Z
+- recorded: 2022-06-09T12:51:40.082Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
       X-APOLLO-OPERATION-ID: 8d61aa29fca9a723467fd8f119349b4eecc466622494760793e29fb8e047cc57
       X-APOLLO-OPERATION-NAME: ConversationItems
-    body: '{"operationName":"ConversationItems","variables":{"id":"06a388bc-1694-4a6d-841a-e7ede7f80d5a","pageInfo":{}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
+    body: '{"operationName":"ConversationItems","variables":{"id":"11caad07-ad1b-4f12-98fb-0b78d400b4f2","pageInfo":{}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
       } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment MaybeProviderFragment on MaybeProvider { __typename
       ... on Provider { __typename ...ProviderFragment } ... on DeletedProvider { empty: _ } }  fragment ConversationActivityContentFragment on ConversationActivityContent { __typename ... on ProviderJoinedConversation { provider { __typename ...MaybeProviderFragment
       } } }  fragment ConversationActivityFragment on ConversationActivity { id conversation { id } createdAt activityTime conversationActivityContent: content { __typename ...ConversationActivityContentFragment } }  fragment PatientFragment on Patient { id
@@ -50,7 +50,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 08 Jun 2022 14:31:37 GMT
+      Date: Thu, 09 Jun 2022 12:51:40 GMT
       connection: close
       content-length: '170'
       content-type: application/json; charset=UTF-8
@@ -58,9 +58,9 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: a0783076-70c1-4385-9d61-754dfac82026
-    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"06a388bc-1694-4a6d-841a-e7ede7f80d5a","items":{"data":[],"hasMore":false,"nextCursor":null}}}}}'
-- recorded: 2022-06-08T14:31:38.334Z
+      x-request-id: 68370be0-b3b0-432a-b5b5-5b890748ebe7
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"11caad07-ad1b-4f12-98fb-0b78d400b4f2","items":{"data":[],"hasMore":false,"nextCursor":null}}}}}'
+- recorded: 2022-06-09T12:51:40.493Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/upload/patient
@@ -70,24 +70,24 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 08 Jun 2022 14:31:38 GMT
+      Date: Thu, 09 Jun 2022 12:51:40 GMT
       connection: close
       content-length: '46'
       content-type: application/json; charset=UTF-8
       vary: Origin
-      x-request-id: 5961397f-39f5-4af0-86ad-5c148c8ea7cd
+      x-request-id: 8243f7d3-0d7e-4893-a1b2-372915b0da95
     body: |-
       [
-          "0380425e-306d-4755-a47f-1b7f8a0e1fbe"
+          "4958e5a3-52f6-4076-940c-9be7967d0925"
       ]
-- recorded: 2022-06-08T14:31:38.559Z
+- recorded: 2022-06-09T12:51:40.602Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
-      X-APOLLO-OPERATION-ID: 6e60f36bc0e80440be80386b265a63b3d47ce5935a8b9259f4b5ad443eda7013
+      X-APOLLO-OPERATION-ID: 6092e8d47479a4ae808d0584d118ade4d87bb2941b714d497e84308ad8bf57fd
       X-APOLLO-OPERATION-NAME: SendMessage
-    body: '{"operationName":"SendMessage","variables":{"conversationId":"06a388bc-1694-4a6d-841a-e7ede7f80d5a","content":{"documentInput":{"upload":{"uuid":"0380425e-306d-4755-a47f-1b7f8a0e1fbe"}}},"clientId":"00000000-0000-0000-0000-000000000002"},"query":"mutation
+    body: '{"operationName":"SendMessage","variables":{"conversationId":"11caad07-ad1b-4f12-98fb-0b78d400b4f2","content":{"documentInput":{"upload":{"uuid":"4958e5a3-52f6-4076-940c-9be7967d0925"}}},"clientId":"00000000-0000-0000-0000-000000000002"},"query":"mutation
       SendMessage($conversationId: UUID!, $content: SendMessageContentInput!, $clientId: UUID!) { sendMessage(conversationId: $conversationId, content: $content, clientId: $clientId) { message { __typename ...MessageFragment conversation { __typename ...ConversationPreviewFragment
       } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment PatientFragment on Patient { id }  fragment SystemFragment
       on System { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName
@@ -97,19 +97,19 @@ interactions:
       MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ...
       on AudioMessageContent { __typename ...AudioMessageContentFragment } ... on DeletedMessageContent { empty: _ } }  fragment MessageSummaryFragment on Message { id author { __typename ... on Provider { __typename ...ProviderFragment } ... on Patient { __typename
       ...PatientFragment } ... on System { __typename ...SystemFragment } ... on DeletedProvider { empty: _ } } messageContent: content { __typename ...MessageContentFragment } clientId conversation { id } createdAt }  fragment MessageFragment on Message { __typename
-      ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }  fragment ConversationPreviewFragment on Conversation { id updatedAt inboxPreviewTitle lastMessagePreview }"}'
+      ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }  fragment ConversationPreviewFragment on Conversation { id updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount }"}'
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 08 Jun 2022 14:31:38 GMT
+      Date: Thu, 09 Jun 2022 12:51:40 GMT
       connection: close
-      content-length: '1726'
+      content-length: '1749'
       content-type: application/json; charset=UTF-8
       vary: Origin
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 34c9a663-2427-42e7-92ec-01dd605ee163
-    body: '{"data":{"sendMessage":{"message":{"__typename":"Message","id":"d767cca0-f316-45a2-838b-a8b2cdec9b02","author":{"__typename":"Patient","id":"0bf03b1f-37c1-4993-b666-3e8fc9f8e093"},"messageContent":{"__typename":"DocumentMessageContent","title":"test.pdf","documentFileUpload":{"__typename":"DocumentFileUpload","id":"0380425e-306d-4755-a47f-1b7f8a0e1fbe","url":{"__typename":"EphemeralUrl","expiresAt":"2022-06-08T18:31:38.555+02:00","url":"https://storage.googleapis.com/2cb158acbf985d6-attachment-development/1573f32c-3f99-4633-bcc2-73fb8276c7c4?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=dev-impersonate%40nabla-staging-317712.iam.gserviceaccount.com%2F20220608%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20220608T143138Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=92d93f472ab53483d30d9add3cf7d9fb450d37a4bb9f3b186300ae5afe418ca642ff293d77cffc02d1927b684aa6b2fa8fbec3614ecf8a162d9caebe9457e7902fe052fae0c0f2c25435c72555723f5d70acbabfea097ea9ff2da5e31f600427a4be10573ed6c8619a92ac6961525f3aa0315d566978f025f1b84b5bc53537b31177794efeadf5968fc1f4db13cc19e92afe1fb72b1d80243704c7b9a9637f8a2459c564e8b722e8aff2fecb8f302f0f09cc464d5f270c7c6dbdbceb3fbea652bb888a2bdd693e3ab88a64e6d43b96aa7fbdca99b1a8a2eb14e35219d5f7184ad4aa2cbdb5a30684716b094ea11135e300d0c94203be461193bf0035a0d88be6"},"fileName":"test.pdf","mimeType":"application/pdf","thumbnail":null}},"clientId":"00000000-0000-0000-0000-000000000002","conversation":{"id":"06a388bc-1694-4a6d-841a-e7ede7f80d5a","__typename":"Conversation","updatedAt":"2022-06-08T16:31:38.425+02:00","inboxPreviewTitle":"Nouvelle
-      conversation","lastMessagePreview":"Vous avez envoyé un document"},"createdAt":"2022-06-08T16:31:38.425+02:00","replyTo":null}}}}'
+      x-request-id: 8534ad04-0f87-4f2b-bbaf-ba7bbde1e139
+    body: '{"data":{"sendMessage":{"message":{"__typename":"Message","id":"738a0494-ba7c-485d-add3-c9330fcb3321","author":{"__typename":"Patient","id":"e9be1928-b085-414c-b02c-eb887a53e655"},"messageContent":{"__typename":"DocumentMessageContent","title":"test.pdf","documentFileUpload":{"__typename":"DocumentFileUpload","id":"4958e5a3-52f6-4076-940c-9be7967d0925","url":{"__typename":"EphemeralUrl","expiresAt":"2022-06-09T16:51:40.599+02:00","url":"https://storage.googleapis.com/2cb158acbf985d6-attachment-development/e27e35b0-4b74-4d9c-9f6a-598e90100430?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=dev-impersonate%40nabla-staging-317712.iam.gserviceaccount.com%2F20220609%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20220609T125140Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=13284071b477beea9863513291c4f30ff045d82f225448daa07683c0ab7b18313165acd010ad38dbeb2549d08d850dfb439f6eb483f9e6822924a53c8a927f8a662e0d4f1b856d47930abe2620d73f2ef4be818beb7c1786fff91c915c2d87bca8ec47713c2b93bc62365793f597b48fa7d69f8148d34a2e569ac6eb1238ebc8e928644a88a164e7fd3e449e3cc209bb16fd8b07bdd460d1190007e12fb1e8e4136b2ba0fed6372315aad57ef70ee8a9610acffe7e757143667e80a78cdc0c979dc2364c0c12b4be54333982bc5055aa808a654fc3f1178aeb0e0ca1ee56894e769d7892e357edd7fa73fc589e28add8530fcb36070d6693e69e47615bb9a6e0"},"fileName":"test.pdf","mimeType":"application/pdf","thumbnail":null}},"clientId":"00000000-0000-0000-0000-000000000002","conversation":{"id":"11caad07-ad1b-4f12-98fb-0b78d400b4f2","__typename":"Conversation","updatedAt":"2022-06-09T14:51:40.520+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":"Vous avez envoyé un document","unreadMessageCount":0},"createdAt":"2022-06-09T14:51:40.520+02:00","replyTo":null}}}}'

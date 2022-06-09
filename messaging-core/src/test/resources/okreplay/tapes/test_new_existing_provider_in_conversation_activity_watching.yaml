@@ -1,7 +1,7 @@
 !tape
 name: test new existing provider in conversation activity watching
 interactions:
-- recorded: 2022-06-08T14:32:09.586Z
+- recorded: 2022-06-09T12:51:39.742Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -15,7 +15,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 08 Jun 2022 14:32:09 GMT
+      Date: Thu, 09 Jun 2022 12:51:39 GMT
       connection: close
       content-length: '350'
       content-type: application/json; charset=UTF-8
@@ -23,17 +23,17 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 9a7710c6-1b26-41ca-946c-deaef12207e8
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"0490c1c5-d7b0-4d5c-9f6b-68a83fb5d8f0","title":null,"description":null,"createdAt":"2022-06-08T16:32:09.567+02:00","updatedAt":"2022-06-08T16:32:09.567+02:00","inboxPreviewTitle":"Nouvelle
+      x-request-id: 2de48bff-cf85-4a57-bbfc-a484cb143dce
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"30c67845-0117-447b-aba7-459d7cb4d6b1","title":null,"description":null,"createdAt":"2022-06-09T14:51:39.736+02:00","updatedAt":"2022-06-09T14:51:39.736+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
-- recorded: 2022-06-08T14:32:10.175Z
+- recorded: 2022-06-09T12:51:39.769Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
       X-APOLLO-OPERATION-ID: 8d61aa29fca9a723467fd8f119349b4eecc466622494760793e29fb8e047cc57
       X-APOLLO-OPERATION-NAME: ConversationItems
-    body: '{"operationName":"ConversationItems","variables":{"id":"0490c1c5-d7b0-4d5c-9f6b-68a83fb5d8f0","pageInfo":{}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
+    body: '{"operationName":"ConversationItems","variables":{"id":"30c67845-0117-447b-aba7-459d7cb4d6b1","pageInfo":{}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
       } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment MaybeProviderFragment on MaybeProvider { __typename
       ... on Provider { __typename ...ProviderFragment } ... on DeletedProvider { empty: _ } }  fragment ConversationActivityContentFragment on ConversationActivityContent { __typename ... on ProviderJoinedConversation { provider { __typename ...MaybeProviderFragment
       } } }  fragment ConversationActivityFragment on ConversationActivity { id conversation { id } createdAt activityTime conversationActivityContent: content { __typename ...ConversationActivityContentFragment } }  fragment PatientFragment on Patient { id
@@ -50,7 +50,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 08 Jun 2022 14:32:10 GMT
+      Date: Thu, 09 Jun 2022 12:51:39 GMT
       connection: close
       content-length: '170'
       content-type: application/json; charset=UTF-8
@@ -58,5 +58,5 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: b1c2394e-2f23-477a-96e7-45eabbaa0bb2
-    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"0490c1c5-d7b0-4d5c-9f6b-68a83fb5d8f0","items":{"data":[],"hasMore":false,"nextCursor":null}}}}}'
+      x-request-id: 4e75abc9-397e-4487-a82d-12b46336839c
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"30c67845-0117-447b-aba7-459d7cb4d6b1","items":{"data":[],"hasMore":false,"nextCursor":null}}}}}'

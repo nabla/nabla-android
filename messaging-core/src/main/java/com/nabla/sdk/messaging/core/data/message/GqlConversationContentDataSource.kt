@@ -284,6 +284,7 @@ internal class GqlConversationContentDataSource(
                             updatedAt = Clock.System.now(),
                             inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
                             lastMessagePreview = cachedConversationFragment?.lastMessagePreview,
+                            unreadMessageCount = cachedConversationFragment?.unreadMessageCount ?: 0,
                         )
                     )
                 )

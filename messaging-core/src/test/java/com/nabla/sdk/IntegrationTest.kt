@@ -550,40 +550,42 @@ internal class IntegrationTest {
 
     @Test
     @OkReplay
-    fun `test new deleted provider in conversation activity watching`() = runTest {
+    fun `test marking a conversation as read updates the conversation`() = runTest {
         val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
         )
-        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
-        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        val conversationsReplayEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
-            replayEventEmitter
+            ConversationsEventsSubscription(),
+            conversationsReplayEmitter
         )
 
-        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+        val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
 
-        messagesFlow.test {
+        conversationUpdatesFlow.test {
             val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.content.items.size)
+            assertEquals(0, firstEmit.patientUnreadMessageCount)
 
-            replayEventEmitter.emit(
-                GqlData.ConversationEvents.Activity.deletedProviderJoinedActivity(
+            conversationsReplayEmitter.emit(
+                GqlData.ConversationsEvents.conversationUpdated(
                     conversationId = createdConversation.id,
+                    patientUnreadMessageCount = 1,
                 )
             )
 
             val secondEmit = awaitItem()
-            assertEquals(1, secondEmit.content.items.size)
-            val activityItem = secondEmit.content.items.first()
-            assertIs<ConversationActivity>(activityItem)
-            val activityContent = activityItem.content
-            assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)
-            val provider = activityContent.maybeProvider
-            assertIs<DeletedProvider>(provider)
+            assertEquals(1, secondEmit.patientUnreadMessageCount)
+
+            nablaMessagingClient.markConversationAsRead(createdConversation.id).getOrThrow()
+
+            val third = awaitItem()
+            assertEquals(0, third.patientUnreadMessageCount)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -666,6 +668,45 @@ internal class IntegrationTest {
             assertFalse(fifthEmit.providersInConversation.first().isTyping(clock))
 
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    @OkReplay
+    fun `test new deleted provider in conversation activity watching`() = runTest {
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
+            clock = object : Clock {
+                override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
+            },
+        )
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
+
+        val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
+
+        messagesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.content.items.size)
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.Activity.deletedProviderJoinedActivity(
+                    conversationId = createdConversation.id,
+                )
+            )
+
+            val secondEmit = awaitItem()
+            assertEquals(1, secondEmit.content.items.size)
+            val activityItem = secondEmit.content.items.first()
+            assertIs<ConversationActivity>(activityItem)
+            val activityContent = activityItem.content
+            assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)
+            val provider = activityContent.maybeProvider
+            assertIs<DeletedProvider>(provider)
         }
     }
 

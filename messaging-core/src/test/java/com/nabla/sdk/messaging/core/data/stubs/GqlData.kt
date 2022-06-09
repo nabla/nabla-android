@@ -72,6 +72,20 @@ internal object GqlData {
     }
 
     object ConversationsEvents {
+        fun conversationUpdated(
+            conversationId: ConversationId,
+            patientUnreadMessageCount: Int = 0,
+        ) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
+            conversations = conversations {
+                event = conversationUpdatedEventEvent {
+                    conversation = conversation {
+                        id = conversationId.value.toString()
+                        unreadMessageCount = patientUnreadMessageCount
+                    }
+                }
+            }
+        }
+
         fun conversationCreated(conversationId: ConversationId? = null) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
             conversations = conversations {
                 event = conversationCreatedEventEvent {

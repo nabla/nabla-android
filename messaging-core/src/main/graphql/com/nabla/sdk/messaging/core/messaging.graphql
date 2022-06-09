@@ -34,6 +34,9 @@ mutation DeleteMessage($messageId: UUID!) {
 mutation MaskAsSeen($conversationId: UUID!) {
     markAsSeen(conversationId: $conversationId) {
         __typename
+        conversation {
+            ...ConversationPreviewFragment
+        }
     }
 }
 
@@ -136,6 +139,7 @@ fragment ConversationPreviewFragment on Conversation {
     updatedAt
     inboxPreviewTitle
     lastMessagePreview
+    unreadMessageCount
 }
 
 fragment ConversationItemsPageFragment on Conversation {
