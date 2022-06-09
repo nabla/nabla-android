@@ -64,7 +64,7 @@ internal class GqlConversationContentDataSource(
 
     private val tag: String = Logger.asSdkTag("message")
 
-    private fun conversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
+    internal fun conversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
         return synchronized(this) {
             return@synchronized conversationEventsFlowMap.getOrPut(conversationId) {
                 createConversationEventsFlow(conversationId)

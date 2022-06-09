@@ -13,6 +13,7 @@ import com.nabla.sdk.graphql.ConversationsQuery
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
+import com.nabla.sdk.test.TestClock
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
@@ -96,13 +97,14 @@ internal class GqlConversationDataSourceTest {
         val testNetworkTransport = FlowTestNetworkTransport()
         val job = Job()
         val gqlConversationDataSource =
-            createTestableGqlConversationDataSource(testNetworkTransport, testScope + job)
+            createTestableGqlConversationDataSource(testNetworkTransport, testScope + job, testScope)
         return Triple(testNetworkTransport, job, gqlConversationDataSource)
     }
 
     private fun createTestableGqlConversationDataSource(
         testNetworkTransport: NetworkTransport,
-        scope: CoroutineScope
+        scope: CoroutineScope,
+        testScope: TestScope,
     ): GqlConversationDataSource {
         val apolloClient = ApolloFactory.configureBuilder(
             normalizedCacheFactory = MemoryCacheFactory()
@@ -113,7 +115,8 @@ internal class GqlConversationDataSourceTest {
             logger = logger,
             coroutineScope = scope,
             apolloClient = apolloClient,
-            mapper = GqlMapper(logger)
+            mapper = GqlMapper(logger),
+            clock = TestClock(testScope),
         )
     }
 }

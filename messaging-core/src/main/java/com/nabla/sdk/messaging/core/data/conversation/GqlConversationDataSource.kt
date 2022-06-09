@@ -31,12 +31,14 @@ import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.Clock
 
 internal class GqlConversationDataSource constructor(
     private val logger: Logger,
     coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
+    private val clock: Clock,
 ) {
     private val tag = Logger.asSdkTag("conversation")
 
@@ -128,7 +130,7 @@ internal class GqlConversationDataSource constructor(
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
             .map { response -> response.dataAssertNoErrors }
-            .notifyTypingUpdates { data ->
+            .notifyTypingUpdates(clock = clock) { data ->
                 data.conversation.conversation.conversationFragment.providers
                     .map { it.providerInConversationFragment }
                     .map { mapper.mapToProviderInConversation(it) }

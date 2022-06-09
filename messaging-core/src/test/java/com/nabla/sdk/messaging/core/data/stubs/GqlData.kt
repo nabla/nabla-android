@@ -17,6 +17,7 @@ import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder.Data
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.test.apollo.CustomTestResolver
+import kotlinx.datetime.Instant
 
 @OptIn(ApolloExperimental::class)
 internal object GqlData {
@@ -83,7 +84,9 @@ internal object GqlData {
 
         fun providerJoinsConversation(
             conversationId: ConversationId,
+            providerInConversationId: Uuid = uuid4(),
             providerId: Uuid = uuid4(),
+            providerIsTypingAt: Instant? = null,
         ) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
             conversations = conversations {
                 event = conversationUpdatedEventEvent {
@@ -91,6 +94,8 @@ internal object GqlData {
                         id = conversationId.value.toString()
                         providers = listOf(
                             provider {
+                                id = providerInConversationId.toString()
+                                typingAt = providerIsTypingAt?.toString()
                                 provider = provider {
                                     id = providerId.toString()
                                 }
@@ -116,6 +121,26 @@ internal object GqlData {
     }
 
     object ConversationEvents {
+        object Typing {
+            fun providerIsTyping(
+                providerInConversationId: Uuid,
+                providerId: Uuid,
+                typingAtInstant: Instant?,
+            ) = ConversationEventsSubscription.Data(CustomTestResolver()) {
+                conversation = conversation {
+                    event = typingEventEvent {
+                        provider = provider {
+                            id = providerInConversationId.toString()
+                            provider = provider {
+                                id = providerId.toString()
+                            }
+                            typingAt = typingAtInstant?.toString()
+                        }
+                    }
+                }
+            }
+        }
+
         object MessageDeleted {
             fun deletedPatientMessage(
                 conversationId: ConversationId,

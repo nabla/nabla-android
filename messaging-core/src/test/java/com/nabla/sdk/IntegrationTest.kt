@@ -30,6 +30,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
+import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation.Companion.TYPING_TIME_WINDOW
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,8 +55,11 @@ import java.io.FileNotFoundException
 import java.io.FileReader
 import java.util.Properties
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -580,6 +584,88 @@ internal class IntegrationTest {
             assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)
             val provider = activityContent.maybeProvider
             assertIs<DeletedProvider>(provider)
+        }
+    }
+
+    @Test
+    @OkReplay
+    fun `test provider typing events are updating the conversation`() = runTest {
+        val now = Instant.parse("2020-01-01T00:00:00Z")
+        val clock = object : Clock {
+            override fun now(): Instant = now
+        }
+        val (nablaMessagingClient, replaySubscriptionNetworkTransport) = setupClient(
+            clock = clock,
+        )
+
+        val conversationsReplayEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationsEventsSubscription(),
+            conversationsReplayEmitter
+        )
+
+        val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
+
+        val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+        replaySubscriptionNetworkTransport.register(
+            ConversationEventsSubscription(createdConversation.id.value),
+            replayEventEmitter
+        )
+
+        val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
+
+        conversationUpdatesFlow.test {
+            val firstEmit = awaitItem()
+            assertEquals(0, firstEmit.providersInConversation.size)
+
+            val providerId = uuid4()
+            val providerInConversationId = uuid4()
+            conversationsReplayEmitter.emit(
+                GqlData.ConversationsEvents.providerJoinsConversation(
+                    conversationId = createdConversation.id,
+                    providerInConversationId = providerInConversationId,
+                    providerId = providerId,
+                    providerIsTypingAt = null,
+                )
+            )
+
+            val secondEmit = awaitItem()
+            assertFalse(secondEmit.providersInConversation.first().isTyping(clock))
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.Typing.providerIsTyping(
+                    providerId = providerId,
+                    providerInConversationId = providerInConversationId,
+                    typingAtInstant = now.minus(1.seconds),
+                )
+            )
+
+            val thirdEmit = awaitItem()
+            assertTrue(thirdEmit.providersInConversation.first().isTyping(clock))
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.Typing.providerIsTyping(
+                    providerId = providerId,
+                    providerInConversationId = providerInConversationId,
+                    typingAtInstant = now.minus(TYPING_TIME_WINDOW),
+                )
+            )
+
+            val fourthEmit = awaitItem()
+            assertFalse(fourthEmit.providersInConversation.first().isTyping(clock))
+
+            replayEventEmitter.emit(
+                GqlData.ConversationEvents.Typing.providerIsTyping(
+                    providerId = providerId,
+                    providerInConversationId = providerInConversationId,
+                    typingAtInstant = null,
+                )
+            )
+
+            val fifthEmit = awaitItem()
+            assertFalse(fifthEmit.providersInConversation.first().isTyping(clock))
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

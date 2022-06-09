@@ -41,12 +41,14 @@ internal class MessagingContainer(
         logger = logger,
         coroutineScope = repoScope,
         apolloClient = apolloClient,
-        mapper = gqlMapper
+        mapper = gqlMapper,
+        clock = clock,
     )
 
     private val conversationRepositoryImpl = ConversationRepositoryImpl(
         repoScope = repoScope,
         gqlConversationDataSource = gqlConversationDataSource,
+        gqlConversationContentDataSource = gqlConversationContentDataSource,
     )
 
     private val conversationContentRepositoryImpl = ConversationContentRepositoryImpl(

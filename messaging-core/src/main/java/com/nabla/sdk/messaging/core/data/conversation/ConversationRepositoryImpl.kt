@@ -3,15 +3,21 @@ package com.nabla.sdk.messaging.core.data.conversation
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
+import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flattenMerge
+import kotlinx.coroutines.flow.flowOf
 
 internal class ConversationRepositoryImpl(
     repoScope: CoroutineScope,
     private val gqlConversationDataSource: GqlConversationDataSource,
+    private val gqlConversationContentDataSource: GqlConversationContentDataSource,
 ) : ConversationRepository {
 
     private val loadMoreConversationSharedSingle: SharedSingle<Unit> = sharedSingleIn(repoScope) {
@@ -22,8 +28,14 @@ internal class ConversationRepositoryImpl(
         return gqlConversationDataSource.createConversation()
     }
 
+    @OptIn(FlowPreview::class)
     override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
-        return gqlConversationDataSource.watchConversation(conversationId)
+        return flowOf(
+            gqlConversationContentDataSource.conversationEventsFlow(conversationId),
+            gqlConversationDataSource.watchConversation(conversationId)
+        )
+            .flattenMerge()
+            .filterIsInstance()
     }
 
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {
