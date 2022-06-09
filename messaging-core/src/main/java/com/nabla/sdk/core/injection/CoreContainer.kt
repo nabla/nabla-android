@@ -9,6 +9,7 @@ import com.apollographql.apollo3.network.ws.DefaultWebSocketEngine
 import com.benasher44.uuid.Uuid
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.Configuration
+import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
@@ -47,6 +48,7 @@ import retrofit2.Retrofit
 internal class CoreContainer(
     name: String,
     configuration: Configuration,
+    networkConfiguration: NetworkConfiguration,
 ) {
 
     val logger: Logger = SwitchableLogger(
@@ -79,7 +81,7 @@ internal class CoreContainer(
 
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
-            .apply { configuration.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
+            .apply { networkConfiguration.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(PublicApiKeyInterceptor(configuration.publicApiKey))
             .addInterceptor(SdkVersionInterceptor(BuildConfig.VERSION_NAME))
@@ -95,7 +97,7 @@ internal class CoreContainer(
                     configuration.context,
                     "nabla_cache_apollo_$name.db"
                 )
-            ).serverUrl(configuration.baseUrl + "v1/patient/graphql/sdk/authenticated")
+            ).serverUrl(networkConfiguration.baseUrl + "v1/patient/graphql/sdk/authenticated")
             .httpEngine(DefaultHttpEngine(okHttpClient))
             .apply {
                 val overriddenApolloWsConfig = overriddenApolloWsConfig
@@ -112,7 +114,7 @@ internal class CoreContainer(
     private val retrofit by lazy {
         Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(configuration.baseUrl)
+            .baseUrl(networkConfiguration.baseUrl)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
     }

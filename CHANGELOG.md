@@ -14,6 +14,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Media in conversations: Extend support to `image/*` and `audio/*` mime types.
+- `Configuration` has been split into `NetworkConfiguration` and `Configuration`. This should not have 
+an impact on an existing app as all the properties that have been moved are supposed to be for tests only.
 
 ### Fixed
 - Fix an issue where `NablaMessagingClient.watchConversation` wouldn't be called correctly in some cases

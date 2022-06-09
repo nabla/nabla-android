@@ -20,10 +20,11 @@ import com.nabla.sdk.core.injection.CoreContainer
 public class NablaClient private constructor(
     private val name: String,
     private val configuration: Configuration,
+    networkConfiguration: NetworkConfiguration,
 ) {
 
     private val coreContainerDelegate = lazy {
-        CoreContainer(name, configuration)
+        CoreContainer(name, configuration, networkConfiguration)
     }
     internal val coreContainer by coreContainerDelegate
 
@@ -77,15 +78,20 @@ public class NablaClient private constructor(
          *   for instance [com.nabla.sdk.messaging.core.NablaMessagingClient.initialize].
          *
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults
+         * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app
          * @param name optional name to create your own instance to manage
          */
-        public fun initialize(configuration: Configuration = Configuration(), name: String? = null): NablaClient {
+        public fun initialize(
+            configuration: Configuration = Configuration(),
+            networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
+            name: String? = null,
+        ): NablaClient {
             synchronized(this) {
                 return if (name == null) {
                     defaultSingletonInstance
-                        ?: NablaClient(DEFAULT_NAMESPACE, configuration).also { defaultSingletonInstance = it }
+                        ?: NablaClient(DEFAULT_NAMESPACE, configuration, networkConfiguration).also { defaultSingletonInstance = it }
                 } else {
-                    NablaClient(name, configuration)
+                    NablaClient(name, configuration, networkConfiguration)
                 }
             }
         }

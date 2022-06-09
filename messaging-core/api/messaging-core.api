@@ -1,7 +1,7 @@
 public final class com/nabla/sdk/core/Configuration {
 	public fun <init> ()V
-	public fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;ZLcom/nabla/sdk/core/HeaderProvider;)V
-	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;ZLcom/nabla/sdk/core/HeaderProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Landroid/content/Context;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/nabla/sdk/core/Header {
@@ -23,14 +23,20 @@ public abstract interface class com/nabla/sdk/core/HeaderProvider {
 
 public final class com/nabla/sdk/core/NablaClient {
 	public static final field Companion Lcom/nabla/sdk/core/NablaClient$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun authenticate (Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
 }
 
 public final class com/nabla/sdk/core/NablaClient$Companion {
 	public final fun getInstance ()Lcom/nabla/sdk/core/NablaClient;
-	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
-	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
+	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
+	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
+}
+
+public final class com/nabla/sdk/core/NetworkConfiguration {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/HeaderProvider;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/HeaderProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class com/nabla/sdk/core/data/helper/UrlExtKt {

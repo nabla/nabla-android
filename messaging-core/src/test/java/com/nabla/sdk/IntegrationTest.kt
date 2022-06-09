@@ -6,6 +6,7 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.data.logger.StdLogger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
@@ -790,8 +791,10 @@ internal class IntegrationTest {
             configuration = Configuration(
                 context = RuntimeEnvironment.getApplication(),
                 publicApiKey = "dummy-api-key",
+                isLoggingEnabled = true,
+            ),
+            networkConfiguration = NetworkConfiguration(
                 baseUrl = baseUrl,
-                isLoggingEnabled = true
             )
         )
 
