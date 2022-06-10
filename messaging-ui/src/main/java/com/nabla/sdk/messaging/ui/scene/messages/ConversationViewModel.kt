@@ -6,7 +6,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.data.helper.toJvmUri
-import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Uri
@@ -131,7 +130,12 @@ internal class ConversationViewModel(
             StateMapper()::mapToState,
         )
             .retryWhen { throwable, _ ->
-                messagingClient.logger.error("Failed to fetch conversation messages", throwable, tag = LOGGING_TAG)
+                messagingClient.logger.warn(
+                    domain = LOGGING_DOMAIN,
+                    message = "Failed to fetch conversation messages",
+                    error = throwable
+                )
+
                 emit(
                     State.Error(
                         if (throwable is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic
@@ -218,27 +222,52 @@ internal class ConversationViewModel(
     }
 
     fun onErrorWithMediaPicker(error: Exception) {
-        messagingClient.logger.error("Error in new media attachment picker", error, tag = LOGGING_TAG)
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "Error in new media attachment picker",
+            error = error,
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentMediaPicker)
     }
 
     fun onErrorWithPictureCapture(error: Exception) {
-        messagingClient.logger.error("Error in camera for new attachment", error, tag = LOGGING_TAG)
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "Error in camera for new attachment",
+            error = error,
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraCapturing)
     }
 
     fun onErrorLaunchingCameraForImageCapture(error: Throwable) {
-        messagingClient.logger.error("Failed open camera for new attachment", error, tag = LOGGING_TAG)
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "Failed open camera for new attachment",
+            error = error,
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraOpening)
     }
 
     fun onErrorLaunchingLibrary(error: Throwable) {
-        messagingClient.logger.error("Failed open media gallery for new attachment", error, tag = LOGGING_TAG)
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "Failed open media gallery for new attachment",
+            error = error,
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentLibraryOpening)
     }
 
     fun onErrorOpeningLink(error: Throwable) {
-        messagingClient.logger.error("Failed to open link", error, tag = LOGGING_TAG)
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "Failed to open link",
+            error = error,
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LinkOpening)
     }
 
@@ -354,7 +383,11 @@ internal class ConversationViewModel(
                     isTyping = currentMessage.isNotEmpty(),
                     conversationId = conversationId,
                 ).onFailure {
-                    messagingClient.logger.error("failed to set patient as typing", it, tag = LOGGING_TAG)
+                    messagingClient.logger.warn(
+                        domain = LOGGING_DOMAIN,
+                        message = "failed to set patient as typing",
+                        error = it,
+                    )
                     // no UI alert on purpose
                 }
             }
@@ -368,7 +401,12 @@ internal class ConversationViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             loadMore()
                 .onFailure {
-                    messagingClient.logger.error("Error while loading more items in conversation", it, tag = LOGGING_TAG)
+                    messagingClient.logger.warn(
+                        domain = LOGGING_DOMAIN,
+                        message = "Error while loading more items in conversation",
+                        error = it,
+                    )
+
                     errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.LoadingMoreItems)
                 }
         }
@@ -419,7 +457,12 @@ internal class ConversationViewModel(
             viewModelScope.launch {
                 messagingClient.markConversationAsRead(conversationId)
                     .onFailure {
-                        messagingClient.logger.error("Failed to mark conversation as read", it, tag = LOGGING_TAG)
+                        messagingClient.logger.warn(
+                            domain = LOGGING_DOMAIN,
+                            message = "Failed to mark conversation as read",
+                            error = it,
+                        )
+
                         // no UI alert on purpose
                     }
             }
@@ -430,7 +473,12 @@ internal class ConversationViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             messagingClient.deleteMessage(conversationId, item.id)
                 .onFailure { error ->
-                    messagingClient.logger.error("Failed to delete message", error, tag = LOGGING_TAG)
+                    messagingClient.logger.warn(
+                        domain = LOGGING_DOMAIN,
+                        message = "Failed to delete message",
+                        error = error,
+                    )
+
                     errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.DeletingMessage)
                 }
         }
@@ -439,7 +487,12 @@ internal class ConversationViewModel(
     fun onUrlClicked(stringUrl: String) {
         runCatching { URI.create(stringUrl) }
             .onFailure {
-                messagingClient.logger.error("Failed to parse clicked URL", it, tag = LOGGING_TAG)
+                messagingClient.logger.warn(
+                    domain = LOGGING_DOMAIN,
+                    message = "Failed to parse clicked URL",
+                    error = it,
+                )
+
                 errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.ClickedUrlParsing)
             }
             .onSuccess { url ->
@@ -467,13 +520,22 @@ internal class ConversationViewModel(
     }
 
     fun onFailedToRecordVoiceMessage(exception: Exception) {
-        messagingClient.logger.error("failed to start/stop voice message recording", exception)
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "failed to start/stop voice message recording",
+            error = exception,
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.RecordingVoiceMessage)
         closeVoiceMessageRecord()
     }
 
     fun onVoiceMessageError(message: String) {
-        messagingClient.logger.error("voice message recorder error - $message")
+        messagingClient.logger.warn(
+            domain = LOGGING_DOMAIN,
+            message = "voice message recorder error - $message",
+        )
+
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.RecordingVoiceMessage)
         closeVoiceMessageRecord()
     }
@@ -548,7 +610,7 @@ internal class ConversationViewModel(
     }
 
     companion object {
-        private val LOGGING_TAG = Logger.asSdkTag("UI-Conversation")
+        private const val LOGGING_DOMAIN = "UI-Conversation"
         private const val VOICE_MESSAGE_MAX_LENGTH_SECONDS = 10 * 60 // 10 minutes
     }
 }

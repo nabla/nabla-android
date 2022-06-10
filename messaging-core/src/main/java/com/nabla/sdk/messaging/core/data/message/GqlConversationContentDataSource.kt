@@ -13,6 +13,7 @@ import com.nabla.sdk.core.data.apollo.readFromCache
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
 import com.nabla.sdk.graphql.ConversationEventsSubscription
 import com.nabla.sdk.graphql.ConversationItemsQuery
 import com.nabla.sdk.graphql.ConversationQuery
@@ -62,8 +63,6 @@ internal class GqlConversationContentDataSource(
 
     private val conversationEventsFlowMap = mutableMapOf<ConversationId, Flow<Unit>>()
 
-    private val tag: String = Logger.asSdkTag("message")
-
     internal fun conversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
         return synchronized(this) {
             return@synchronized conversationEventsFlowMap.getOrPut(conversationId) {
@@ -77,7 +76,7 @@ internal class GqlConversationContentDataSource(
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope)
             .onEach {
-                logger.debug("Event $it", tag = tag)
+                logger.debug(domain = GQL_DOMAIN, message = "Event $it")
                 it.dataAssertNoErrors.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
                     insertMessageToConversationCache(messageFragment)
                 }

@@ -3,7 +3,6 @@ package com.nabla.sdk.messaging.ui.scene.conversations
 import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -39,7 +38,11 @@ public class ConversationListViewModel(
                 ).eraseType()
             }
             .retryWhen { cause, _ ->
-                messagingClient.logger.error("Failed to fetch conversation list", cause, tag = LOGGING_TAG)
+                messagingClient.logger.warn(
+                    domain = LOGGING_DOMAIN,
+                    message = "Failed to fetch conversation list",
+                    error = cause,
+                )
 
                 emit(
                     State.Error(if (cause is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic)
@@ -61,7 +64,11 @@ public class ConversationListViewModel(
         viewModelScope.launch {
             loadMore()
                 .onFailure { error ->
-                    messagingClient.logger.error("Error while loading more conversations", error, tag = LOGGING_TAG)
+                    messagingClient.logger.warn(
+                        domain = LOGGING_DOMAIN,
+                        message = "Error while loading more conversations",
+                        error = error,
+                    )
                     errorAlertMutableFlow.emit(ErrorAlert.LoadingMoreConversations(error))
                 }
         }
@@ -82,6 +89,6 @@ public class ConversationListViewModel(
     }
 
     private companion object {
-        private val LOGGING_TAG = Logger.asSdkTag("UI-ConversationsList")
+        private const val LOGGING_DOMAIN = "UI-ConversationsList"
     }
 }

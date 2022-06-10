@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.data.stubs
 
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.LogcatLogger
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -21,7 +22,7 @@ class NablaMessagingClientStub(
     internal val conversationRepository = ConversationRepositoryStub(idlingRes)
     internal val messageRepository = ConversationContentRepositoryStub(idlingRes, conversationRepository)
 
-    override val logger: Logger = LoggerImpl
+    override val logger: Logger = LogcatLogger(logLevel = LogcatLogger.LogLevel.DEBUG)
 
     override fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
         val loadMoreCallback = suspend {

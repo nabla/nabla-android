@@ -23,9 +23,7 @@ import com.nabla.sdk.core.data.exception.BaseExceptionMapper
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.file.FileService
 import com.nabla.sdk.core.data.file.FileUploadRepositoryImpl
-import com.nabla.sdk.core.data.logger.AndroidLogger
 import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
-import com.nabla.sdk.core.data.logger.SwitchableLogger
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
@@ -51,10 +49,7 @@ internal class CoreContainer(
     networkConfiguration: NetworkConfiguration,
 ) {
 
-    val logger: Logger = SwitchableLogger(
-        overriddenLogger ?: AndroidLogger(),
-        configuration.isLoggingEnabled
-    )
+    val logger: Logger = configuration.logger
 
     val clock: Clock = overriddenClock ?: Clock.System
     val uuidGenerator: UuidGenerator = overriddenUuidGenerator ?: object : UuidGenerator {
@@ -140,9 +135,6 @@ internal class CoreContainer(
     fun loginInteractor() = LoginInteractor(patientRepository, sessionClient, logoutInteractor())
 
     companion object {
-        @VisibleForTesting
-        internal var overriddenLogger: Logger? = null
-
         @VisibleForTesting
         internal var overriddenOkHttpClient: ((OkHttpClient.Builder) -> Unit)? = null
 

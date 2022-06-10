@@ -2,6 +2,7 @@ package com.nabla.sdk.core.data.auth
 
 import com.nabla.sdk.core.data.exception.WrappedOkhttpInterceptorException
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.Logger.Companion.AUTH_DOMAIN
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.runBlocking
@@ -17,8 +18,8 @@ internal class AuthorizationInterceptor(
         val updatedRequest: Request = when (AuthorizationType.fromRequest(chain.request())) {
             AuthorizationType.ACCESS_TOKEN -> {
                 logger.debug(
+                    domain = AUTH_DOMAIN,
                     message = "Using access token auth: ${chain.request()}",
-                    tag = Logger.AUTH_TAG
                 )
                 val freshAccessToken = runBlocking {
                     runCatchingCancellable {
@@ -34,8 +35,8 @@ internal class AuthorizationInterceptor(
             }
             AuthorizationType.NONE -> {
                 logger.debug(
+                    domain = AUTH_DOMAIN,
                     message = "Using no auth method: ${chain.request()}",
-                    tag = Logger.AUTH_TAG
                 )
                 chain.request()
             }

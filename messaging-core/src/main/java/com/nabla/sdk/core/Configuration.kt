@@ -1,20 +1,22 @@
 package com.nabla.sdk.core
 
 import android.content.Context
+import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.LogcatLogger
 import com.nabla.sdk.core.domain.entity.NablaException
-import com.nabla.sdk.messaging.core.BuildConfig
 
 /**
  * Nabla SDK Configuration parameters.
  *
  * @param context Optional as the SDK will fallback to your application context if not specified.
  * @param publicApiKey Optional if already specified in manifest — your organisation's API key (typically created online on Nabla dashboard).
- * @param isLoggingEnabled Optional — whether to verbosely log or not.
+ * @param logger Optional — the logger used by the SDK. You can pass your own logger instance or pass another [LogcatLogger] with a
+ * different [LogcatLogger.LogLevel]. Default is [LogcatLogger.LogLevel.WARN].
  */
 public class Configuration(
     context: Context = defaultAppContext ?: throw NablaException.Configuration.MissingContext,
     internal val publicApiKey: String = defaultPublicApiKey ?: throw NablaException.Configuration.MissingApiKey,
-    internal val isLoggingEnabled: Boolean = BuildConfig.DEBUG,
+    internal val logger: Logger = LogcatLogger(),
 ) {
     internal val context: Context = context.applicationContext
 

@@ -67,7 +67,7 @@ internal class GqlMapper(private val logger: Logger) {
     ): ConversationActivity? {
         val content = mapToConversationActivityContent(conversationActivityFragment.conversationActivityContent.conversationActivityContentFragment)
         if (content == null) {
-            logger.warn("Unknown conversation activity content mapping for $conversationActivityFragment")
+            logger.error("Unknown conversation activity content mapping for $conversationActivityFragment")
             return null
         }
         return ConversationActivity(
@@ -138,7 +138,7 @@ internal class GqlMapper(private val logger: Logger) {
         summaryFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {
             return Message.Deleted(baseMessage = baseMessage)
         }
-        logger.warn("Unknown message content mapping for $summaryFragment")
+        logger.error("Unknown message content mapping for $summaryFragment")
         return null
     }
 

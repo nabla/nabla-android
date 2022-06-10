@@ -3,6 +3,7 @@ package com.nabla.sdk.core.data.auth
 import com.auth0.android.jwt.JWT
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.Logger.Companion.AUTH_DOMAIN
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
@@ -40,8 +41,8 @@ internal class SessionClientImpl(
         forceRefreshAccessToken: Boolean
     ): String {
         logger.debug(
+            domain = AUTH_DOMAIN,
             message = "get fresh access token with forceRefreshAccessToken=$forceRefreshAccessToken...",
-            tag = Logger.AUTH_TAG
         )
         val authTokens = tokenLocalDataSource.getAuthTokens() ?: renewSessionAuthTokens()
         val accessToken = JWT(authTokens.accessToken)
@@ -49,22 +50,22 @@ internal class SessionClientImpl(
 
         if (!accessToken.isExpired() && !forceRefreshAccessToken) {
             logger.debug(
+                domain = AUTH_DOMAIN,
                 message = "using still valid access token",
-                tag = Logger.AUTH_TAG
             )
             return accessToken.toString()
         }
 
         return if (refreshToken.isExpired()) {
             logger.debug(
+                domain = AUTH_DOMAIN,
                 message = "both access or refresh tokens are expired, fallback to refreshing session",
-                tag = Logger.AUTH_TAG
             )
             renewSessionAuthTokens()
         } else {
             logger.debug(
+                domain = AUTH_DOMAIN,
                 message = "using still valid refresh token to refresh tokens",
-                tag = Logger.AUTH_TAG
             )
             refreshSessionAuthTokens(refreshToken.toString())
         }.also { freshTokens ->
@@ -103,23 +104,26 @@ internal class SessionClientImpl(
             val freshTokens = tokenRemoteDataSource.refresh(refreshToken)
             tokenLocalDataSource.setAuthTokens(freshTokens)
             logger.debug(
+                domain = AUTH_DOMAIN,
                 message = "tokens refreshed, using refreshed access token",
-                tag = Logger.AUTH_TAG
             )
 
             freshTokens
         }.getOrElse { refreshTokenError ->
             // Fallback to renewing session
             logger.debug(
+                domain = AUTH_DOMAIN,
                 message = "fail refresh tokens, fallback to renew session",
-                tag = Logger.AUTH_TAG
             )
 
             return runCatchingCancellable {
                 renewSessionAuthTokens()
             }.getOrElse { renewSessionError ->
                 // Ensure no exception is suppressed
-                logger.debug(message = "fail renewing session", tag = Logger.AUTH_TAG)
+                logger.debug(
+                    domain = AUTH_DOMAIN,
+                    message = "fail renewing session",
+                )
                 throw renewSessionError.apply { addSuppressed(refreshTokenError) }
             }
         }

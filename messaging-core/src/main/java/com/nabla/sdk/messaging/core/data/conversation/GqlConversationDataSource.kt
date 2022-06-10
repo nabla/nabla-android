@@ -11,6 +11,7 @@ import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.ConversationQuery
 import com.nabla.sdk.graphql.ConversationsEventsSubscription
@@ -40,13 +41,11 @@ internal class GqlConversationDataSource constructor(
     private val mapper: GqlMapper,
     private val clock: Clock,
 ) {
-    private val tag = Logger.asSdkTag("conversation")
-
     private val conversationsEventsFlow by lazy {
         apolloClient.subscription(ConversationsEventsSubscription())
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach {
-                logger.debug("Event $it", tag = tag)
+                logger.debug(domain = GQL_DOMAIN, message = "Event $it")
                 it.dataAssertNoErrors.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
                     insertConversationToConversationsListCache(it)
                 }

@@ -72,7 +72,6 @@ internal class IntegrationTest {
     private val tapeMode: TapeMode
 
     init {
-        CoreContainer.overriddenLogger = StdLogger()
         CoreContainer.overriddenOkHttpClient = {
             // Add replay interceptor in first to redact auth tokens from tape
             it.interceptors().add(0, okReplayInterceptor)
@@ -791,7 +790,7 @@ internal class IntegrationTest {
             configuration = Configuration(
                 context = RuntimeEnvironment.getApplication(),
                 publicApiKey = "dummy-api-key",
-                isLoggingEnabled = true,
+                logger = StdLogger(),
             ),
             networkConfiguration = NetworkConfiguration(
                 baseUrl = baseUrl,
