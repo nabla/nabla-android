@@ -21,6 +21,7 @@ import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -183,6 +184,49 @@ class GqlConversationContentDataSourceTest {
             assertIs<Message.Deleted>(firstMessage)
             assertIs<Message.Text>(secondMessage)
             assertIs<Message.Deleted>(secondMessage.replyTo)
+        }
+        job.cancel()
+    }
+
+    @Test
+    fun `receiving a duplicate new timeline item is idempotent`() = runTest {
+        val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
+
+        val conversationId = uuid4().toConversationId()
+        testNetworkTransport.register(
+            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlData.ConversationItems.single(conversationId) {
+                nextCursor = uuid4().toString()
+                hasMore = false
+                data = emptyList()
+            }
+        )
+        val gqlEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
+
+        testNetworkTransport.register(
+            ConversationEventsSubscription(conversationId.value),
+            gqlEventEmitter,
+        )
+        gqlConversationContentDataSource.watchConversationItems(conversationId).test {
+            var items = awaitItem().conversationItems.items
+            assertEquals(0, items.size)
+
+            val event = GqlData.ConversationEvents.Activity.existingProviderJoinedActivity(conversationId)
+
+            gqlEventEmitter.emit(event)
+
+            items = awaitItem().conversationItems.items
+            assertEquals(1, items.size)
+
+            gqlEventEmitter.emit(event) // should be ignored by idempotency
+
+            gqlEventEmitter.emit(GqlData.ConversationEvents.MessageCreated.patientTextMessage(conversationId))
+
+            items = awaitItem().conversationItems.items
+
+            assertEquals(2, items.size)
+            assertIs<Message.Text>(items[0])
+            assertIs<com.nabla.sdk.messaging.core.domain.entity.ConversationActivity>(items[1])
         }
         job.cancel()
     }

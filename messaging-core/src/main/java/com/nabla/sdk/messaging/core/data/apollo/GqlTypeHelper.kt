@@ -7,7 +7,7 @@ import com.nabla.sdk.graphql.fragment.ConversationItemsPageFragment
 internal object GqlTypeHelper {
 
     fun ConversationsQuery.Data.modify(
-        conversations: List<ConversationsQuery.Conversation> = this.conversations.conversations
+        conversations: List<ConversationsQuery.Conversation> = this.conversations.conversations,
     ): ConversationsQuery.Data {
         return copy(
             conversations = this.conversations.copy(
@@ -17,7 +17,7 @@ internal object GqlTypeHelper {
     }
 
     fun ConversationItemsQuery.Data.modify(
-        data: List<ConversationItemsPageFragment.Data?> = conversation.conversation.conversationItemsPageFragment.items.data
+        data: List<ConversationItemsPageFragment.Data?> = conversation.conversation.conversationItemsPageFragment.items.data,
     ): ConversationItemsQuery.Data {
         return copy(
             conversation = conversation.copy(

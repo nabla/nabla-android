@@ -19,8 +19,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 an impact on an existing app as all the properties that have been moved are supposed to be for tests only.
 
 ### Fixed
-- Fix an issue where `NablaMessagingClient.watchConversation` wouldn't be called correctly in some cases
-when the conversation is updated.
+- Fix an issue where `NablaMessagingClient.watchConversation` wouldn't be called correctly in some cases when the conversation is updated.
+- Fix duplicate activity item when a provider joins a conversation.
 
 ## [1.0-alpha04] - 2022-05-31
 

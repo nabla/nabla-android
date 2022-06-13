@@ -58,6 +58,10 @@ internal class GqlConversationDataSource constructor(
         val query = FIRST_CONVERSATIONS_PAGE_QUERY
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
+            val isAlreadyInCache = cachedQueryData.conversations.conversations.any { it.conversationFragment.id == conversation.id }
+
+            if (isAlreadyInCache) return@updateCache CacheUpdateOperation.Ignore()
+
             val newItem = ConversationsQuery.Conversation(
                 com.nabla.sdk.graphql.type.Conversation.type.name,
                 conversation

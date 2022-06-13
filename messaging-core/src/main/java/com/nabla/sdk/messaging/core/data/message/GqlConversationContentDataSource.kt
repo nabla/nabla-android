@@ -87,38 +87,42 @@ internal class GqlConversationContentDataSource(
     }
 
     private suspend fun insertMessageToConversationCache(
-        messageFragment: MessageFragment,
+        newMessageFragment: MessageFragment,
     ) {
-        val query = firstItemsPageQuery(messageFragment.messageSummaryFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(newMessageFragment.messageSummaryFragment.conversation.id.toConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             Message.type.name,
             null,
-            messageFragment
+            newMessageFragment
         )
-        insertConversationItemToConversationCache(query, newItem)
+        insertConversationItemToConversationCache(query, newItem) { messageFragment?.messageSummaryFragment?.id }
     }
 
     private suspend fun insertConversationActivityToConversationCache(
-        conversationActivityFragment: ConversationActivityFragment,
+        newConversationActivityFragment: ConversationActivityFragment,
     ) {
-        val query = firstItemsPageQuery(conversationActivityFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(newConversationActivityFragment.conversation.id.toConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             ConversationActivity.type.name,
-            conversationActivityFragment,
+            newConversationActivityFragment,
             null
         )
-        insertConversationItemToConversationCache(query, newItem)
+        insertConversationItemToConversationCache(query, newItem) { conversationActivityFragment?.id }
     }
 
     private suspend fun insertConversationItemToConversationCache(
         query: ConversationItemsQuery,
         newItem: ConversationItemsPageFragment.Data,
+        itemIdGetter: ConversationItemsPageFragment.Data.() -> Uuid?,
     ) {
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
-            val mergedItemsData =
-                listOf(newItem) + cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data
-            val mergedQueryData = cachedQueryData.modify(mergedItemsData)
+            val items = cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data
+            val isAlreadyInCache = items.any { it?.itemIdGetter() == newItem.itemIdGetter() }
+
+            if (isAlreadyInCache) return@updateCache CacheUpdateOperation.Ignore()
+
+            val mergedQueryData = cachedQueryData.modify(listOf(newItem) + items)
             CacheUpdateOperation.Write(mergedQueryData)
         }
     }
