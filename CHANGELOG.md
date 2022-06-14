@@ -22,6 +22,7 @@ an impact on an existing app as all the properties that have been moved are supp
 ### Fixed
 - Fix an issue where `NablaMessagingClient.watchConversation` wouldn't be called correctly in some cases when the conversation is updated.
 - Fix duplicate activity item when a provider joins a conversation.
+- Fix voice message recording on Android API < 26.
 
 ## [1.0-alpha04] - 2022-05-31
 

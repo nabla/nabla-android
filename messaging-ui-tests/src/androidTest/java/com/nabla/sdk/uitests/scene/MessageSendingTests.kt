@@ -43,7 +43,7 @@ class MessageSendingTests {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @get:Rule
-    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO)
 
     private val context: Context
         get() = InstrumentationRegistry.getInstrumentation().targetContext
@@ -138,5 +138,12 @@ class MessageSendingTests {
         Thread.sleep(5_000)
 
         onView(withId(SdkR.id.nablaConversationTimelineItemImageRoot)).check(matches(isDisplayed()))
+
+        // Record & send audio message
+        onView(withId(SdkR.id.conversationRecordVoiceButton)).perform(click())
+        Thread.sleep(1_100) // recording time
+        onView(withId(SdkR.id.conversationSendButton)).perform(click())
+        onView(allOf(withId(SdkR.id.audioMessageSecondsText), withText("00:01"))).check(matches(isDisplayed()))
+        onView(withId(SdkR.id.audioPlayPauseButton)).perform(click())
     }
 }

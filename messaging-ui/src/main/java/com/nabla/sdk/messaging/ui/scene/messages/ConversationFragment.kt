@@ -9,6 +9,7 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaRecorder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -539,7 +540,7 @@ public open class ConversationFragment : Fragment() {
                         val newOrExistingRecorder = mediaRecorder ?: MediaRecorder().apply {
                             requestVoiceAudioFocus(binding)
                             setAudioSource(MediaRecorder.AudioSource.MIC)
-                            setOutputFile(ongoingRecord.targetUri.toAndroidUri().toFile())
+                            setOutputFile(ongoingRecord.targetUri.toAndroidUri().toFile().absolutePath)
                             // if you ever change format or encoder make sure "stop after pause" doesn't freeze the app
                             // see https://issuetracker.google.com/issues/178630865
                             setOutputFormat(MediaRecorder.OutputFormat.AMR_WB)
@@ -552,11 +553,13 @@ public open class ConversationFragment : Fragment() {
                             start()
                         }
 
-                        if (ongoingRecord.isPaused) {
-                            newOrExistingRecorder.pause()
-                        } else {
-                            newOrExistingRecorder.resume()
-                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            if (ongoingRecord.isPaused) {
+                                newOrExistingRecorder.pause()
+                            } else {
+                                newOrExistingRecorder.resume()
+                            }
+                        } // else: on Android < N, we don't have the pause/resume API
 
                         mediaRecorder = newOrExistingRecorder
                     } else {
@@ -576,12 +579,14 @@ public open class ConversationFragment : Fragment() {
     }
 
     private fun requestVoiceAudioFocus(binding: NablaFragmentConversationBinding) {
-        (binding.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager).requestAudioFocus(
-            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
-                .setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-                .setOnAudioFocusChangeListener { if (it == AudioManager.AUDIOFOCUS_LOSS) viewModel.onLostAudioFocus() }
-                .build()
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            (binding.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager).requestAudioFocus(
+                AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
+                    .setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
+                    .setOnAudioFocusChangeListener { if (it == AudioManager.AUDIOFOCUS_LOSS) viewModel.onLostAudioFocus() }
+                    .build()
+            )
+        } // else no-op
     }
 
     private var playbackProgressPollingJob: Job? = null
