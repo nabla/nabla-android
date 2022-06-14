@@ -99,7 +99,8 @@ class ConversationContentRepositoryImplTest {
             gqlConversationContentDataSource,
             mockk(),
             mockk(),
-            mockk()
+            mockk(),
+            mockk(),
         )
         repo.watchConversationItems(conversationId).test {
             val item = awaitItem()

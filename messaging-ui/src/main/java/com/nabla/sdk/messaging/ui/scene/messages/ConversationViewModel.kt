@@ -56,6 +56,7 @@ internal class ConversationViewModel(
 
     private val retryAfterErrorTriggerFlow = MutableSharedFlow<Unit>()
     private val selectedMessageIdFlow = MutableStateFlow<MessageId?>(null)
+    private val currentlyReplyingToMutableFlow = MutableStateFlow<TimelineItem.Message?>(null)
 
     val stateFlow: StateFlow<State>
 
@@ -103,7 +104,8 @@ internal class ConversationViewModel(
             currentMessageStateFlow,
             mediasToSendMutableFlow,
             currentlyRecordingVoiceMutableFlow,
-        ) { currentMessage, mediasToSend, ongoingVoiceRecording ->
+            currentlyReplyingToMutableFlow,
+        ) { currentMessage, mediasToSend, ongoingVoiceRecording, replyingTo ->
             when {
                 ongoingVoiceRecording != null -> {
                     EditorState.RecordingVoice(recordProgressSeconds = ongoingVoiceRecording.secondsSoFar)
@@ -111,10 +113,15 @@ internal class ConversationViewModel(
                 else -> {
                     EditorState.EditingText(
                         canSubmit = currentMessage.isNotBlank() || mediasToSend.isNotEmpty(),
+                        replyingTo = replyingTo?.toRepliedMessage(),
                     )
                 }
             }
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = EditorState.EditingText(canSubmit = false))
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            initialValue = EditorState.EditingText(canSubmit = false, replyingTo = null)
+        )
     }
 
     private fun makeStateFlow(
@@ -326,7 +333,7 @@ internal class ConversationViewModel(
 
                 mediasToSendMutableFlow.value = emptyList()
 
-                mediaMessages.map { mediaToSend ->
+                val mediaSendingJobs = mediaMessages.map { mediaToSend ->
                     async {
                         messagingClient.sendMessage(
                             input = when (mediaToSend) {
@@ -352,16 +359,26 @@ internal class ConversationViewModel(
                             conversationId = conversationId,
                         ).getOrNull()
                     }
-                }.forEach { it.join() }
+                }
 
                 if (textMessage.isNotBlank()) {
+                    val replyTo = currentlyReplyingToMutableFlow.value?.id?.let {
+                        it as? MessageId.Remote ?: run {
+                            messagingClient.logger.error("ignoring replyTo because it is not a remote id", domain = LOGGING_DOMAIN)
+                            null
+                        }
+                    }
+                    currentlyReplyingToMutableFlow.value = null
                     currentMessageStateFlow.value = ""
 
                     messagingClient.sendMessage(
                         input = MessageInput.Text(text = textMessage),
                         conversationId = conversationId,
+                        replyTo = replyTo,
                     ).getOrNull()
                 }
+
+                mediaSendingJobs.forEach { it.join() }
             }
 
             scrollToBottomAfterNextUpdateMutableFlow.value = true
@@ -500,6 +517,15 @@ internal class ConversationViewModel(
             }
     }
 
+    fun onRepliedMessageClicked(messageId: MessageId) {
+        val items = (stateFlow.value as? State.ConversationLoaded)?.items ?: return
+        val messageIndex = items.indexOfFirst { item -> item is TimelineItem.Message && item.id == messageId }
+
+        if (messageIndex >= 0) {
+            navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.ScrollToItem(position = messageIndex))
+        }
+    }
+
     fun onVoiceMessagePlaybackProgress(voiceMessageUri: Uri, position: Long, totalDuration: Long?) {
         voiceMessagesProgressMutableFlow.value = voiceMessagesProgressMutableFlow.value.toMutableMap()
             .apply { put(voiceMessageUri, PlaybackProgress(position, totalDuration)) }
@@ -544,6 +570,14 @@ internal class ConversationViewModel(
         currentlyRecordingVoiceMutableFlow.value = currentlyRecordingVoiceMutableFlow.value?.copy(isPaused = true)
     }
 
+    fun onReplyToMessage(item: TimelineItem.Message) {
+        currentlyReplyingToMutableFlow.value = item
+    }
+
+    fun onCancelReplyToMessage() {
+        currentlyReplyingToMutableFlow.value = null
+    }
+
     sealed interface State {
         object Loading : State
         data class Error(val error: ErrorUiModel) : State
@@ -557,6 +591,7 @@ internal class ConversationViewModel(
     sealed interface EditorState {
         data class EditingText(
             val canSubmit: Boolean,
+            val replyingTo: RepliedMessage?,
         ) : EditorState
 
         data class RecordingVoice(val recordProgressSeconds: Int) : EditorState
@@ -571,6 +606,7 @@ internal class ConversationViewModel(
         object OpenCameraPictureCapture : NavigationEvent()
         data class OpenMediaLibrary(val mimeTypes: List<MimeType>) : NavigationEvent()
         object RequestVoiceMessagePermissions : NavigationEvent()
+        data class ScrollToItem(val position: Int) : NavigationEvent()
     }
 
     sealed class ErrorAlert(@StringRes val errorMessageRes: Int) {

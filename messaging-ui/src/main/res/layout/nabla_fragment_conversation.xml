@@ -140,8 +140,83 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="top"
-            app:constraint_referenced_ids="conversationComposerLayout"
+            app:constraint_referenced_ids="conversationComposerLayout, currentlyReplyingToLayout"
             />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/currentlyReplyingToLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?nablaMessaging_conversationBackgroundColor"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/conversationComposerLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible"
+            >
+
+            <TextView
+                android:id="@+id/currentlyReplyingToTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="22dp"
+                android:layout_marginTop="12dp"
+                android:maxLines="1"
+                android:textAppearance="?textAppearanceTitleSmall"
+                app:layout_constraintBottom_toTopOf="@id/currentlyReplyingToBody"
+                app:layout_constraintEnd_toStartOf="@id/currentlyReplyingToThumbnail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Reply to Dr. Joe (ob-gyn)"
+                />
+
+            <TextView
+                android:id="@+id/currentlyReplyingToBody"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?textAppearanceBodyMedium"
+                android:textColor="?android:textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/currentlyReplyingToTitle"
+                app:layout_constraintStart_toStartOf="@id/currentlyReplyingToTitle"
+                app:layout_constraintTop_toBottomOf="@id/currentlyReplyingToTitle"
+                tools:text="Hi, could you please give us more details on your problem ?"
+                />
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:id="@+id/currentlyReplyingToThumbnail"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@id/currentlyReplyingToBody"
+                app:layout_constraintEnd_toStartOf="@id/currentlyReplyingToCancel"
+                app:layout_constraintTop_toTopOf="@id/currentlyReplyingToTitle"
+                app:roundPercent="0.5"
+                tools:background="?colorAccent"
+                />
+
+            <ImageView
+                android:id="@+id/currentlyReplyingToCancel"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/nabla_circle_ripple_background"
+                android:contentDescription="@string/nabla_conversation_composer_cancel_reply_content_description"
+                android:padding="9dp"
+                app:layout_constraintBottom_toBottomOf="@id/currentlyReplyingToBody"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/currentlyReplyingToTitle"
+                app:srcCompat="@drawable/nabla_ic_close"
+                app:tint="?colorOnSurface"
+                app:tintMode="src_in"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conversationComposerLayout"
@@ -178,11 +253,11 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="10dp"
-                app:layout_constraintHorizontal_bias="0"
                 android:background="@drawable/nabla_circle_ripple_background"
                 android:contentDescription="@string/nabla_conversation_composer_add_attachment_content_description"
                 app:layout_constraintBottom_toBottomOf="@id/guidelineControlsBottom"
                 app:layout_constraintEnd_toStartOf="@id/conversationTextInputLayoutContainer"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="?nablaMessaging_addMediaIcon"
                 />

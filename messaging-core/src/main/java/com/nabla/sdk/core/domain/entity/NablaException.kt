@@ -16,8 +16,11 @@ public sealed class NablaException private constructor(
     }
 
     public sealed class Authentication constructor(cause: Throwable?, message: String) : NablaException(cause = cause, message = message) {
-        public object NotAuthenticated : Authentication(cause = null, message = "You must call NablaClient.authenticate before using any authenticated API")
-        public class UnableToGetFreshSessionToken(cause: Throwable) : Authentication(cause = cause, message = "Unable to get session token from the SessionTokenProvider")
+        public object NotAuthenticated :
+            Authentication(cause = null, message = "You must call NablaClient.authenticate before using any authenticated API")
+
+        public class UnableToGetFreshSessionToken(cause: Throwable) :
+            Authentication(cause = cause, message = "Unable to get session token from the SessionTokenProvider")
     }
 
     public class Network internal constructor(cause: Throwable) : NablaException(cause = cause)

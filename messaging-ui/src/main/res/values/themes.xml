@@ -24,6 +24,8 @@
         <item name="nablaMessaging_conversationDateSeparatorAppearance">?textAppearanceLabelMedium</item>
         <item name="nablaMessaging_conversationPatientMessageAppearance">@style/Nabla.TextAppearance.TextMessage.Patient</item>
         <item name="nablaMessaging_conversationProviderMessageAppearance">@style/Nabla.TextAppearance.TextMessage.Provider</item>
+        <item name="nablaMessaging_conversationRepliedMessageAuthorAppearance">?textAppearanceTitleSmall</item>
+        <item name="nablaMessaging_conversationRepliedMessageBodyAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationDeletedMessageAppearance">?textAppearanceBodyLarge</item>
         <item name="nablaMessaging_conversationMessageAuthorAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationMessageStatusAppearance">?textAppearanceBodyMedium</item>

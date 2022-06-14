@@ -128,9 +128,8 @@ internal class NablaAvatarView : ConstraintLayout {
         ViewCompat.setStateDescription(this, stateDescription)
     }
 
-    fun displaySystemAvatar() {
-        // System avatar not supported for now
-        loadAvatar(null, null, null)
+    fun displayUnicolorPlaceholder() {
+        loadAvatar(avatarUrl = null, placeholderText = null, userId = null)
     }
 
     @ColorRes

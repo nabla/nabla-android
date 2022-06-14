@@ -7,8 +7,6 @@
 
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Unread messages</string>
 
-    <string name="nabla_display_name_unknown_user">Unknown user</string>
-    <string name="nabla_display_name_deleted_provider">Deleted provider</string>
     <string name="nabla_conversation_message_copy_label">Copied message</string>
 
     <string name="nabla_conversation_message_sending_status">Sending…</string>
@@ -36,6 +34,7 @@
     <string name="nabla_error_message_conversation_deleting_message">An error occurred while deleting the message, please try again.</string>
     <string name="nabla_error_message_conversation_clicked_url_parsing">An error occurred while processing the link, please try again.</string>
 
+    <string name="nabla_conversation_message_action_reply">Reply</string>
     <string name="nabla_conversation_message_action_copy">Copy</string>
     <string name="nabla_conversation_message_action_delete">Delete</string>
     <string name="nabla_conversation_full_screen_media_close_content_description">Close</string>
@@ -51,6 +50,8 @@
     <string name="nabla_conversation_composer_remove_attachment_content_description">Remove media attachment</string>
     <string name="nabla_conversation_composer_add_attachment_content_description">Add media attachment</string>
     <string name="nabla_conversation_composer_send_content_description">Send</string>
+    <string name="nabla_conversation_composer_cancel_reply_content_description">Cancel reply</string>
+    <string name="nabla_conversation_composer_replying_to_title_author">Reply to %1$s</string>
     <string name="nabla_conversation_header_loading">Loading</string>
     <string name="nabla_conversation_header_error">Error</string>
     <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Share</string>
@@ -69,4 +70,10 @@
     <string name="nabla_conversation_error_recording_voice_message">Something went wrong while recording voice message</string>
     <string name="nabla_conversation_voice_message_audio_permission_rational_title">Authorisation to use microphone</string>
     <string name="nabla_conversation_voice_message_audio_permission_rational_description">To record a voice message, we need your authorisation to use your microphone.</string>
+
+    <string name="nabla_conversation_replied_to_message_author_patient">You</string>
+    <string name="nabla_conversation_replied_to_message_description_deleted">Deleted message</string>
+    <string name="nabla_conversation_replied_to_message_description_voice">🔊 Voice message</string>
+    <string name="nabla_conversation_replied_to_message_description_document">📁 Document</string>
+    <string name="nabla_conversation_replied_to_message_description_photo">📷 Photo</string>
 </resources>

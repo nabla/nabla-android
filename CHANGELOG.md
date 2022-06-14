@@ -11,6 +11,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Now `messaging-core` supports messages replying to other messages.
 - You can now pass your own instance of `Logger` via the `Configuration` when initializing the SDK.
+- Now on `ConversationFragment` you can reply to messages.
 
 ### Changed
 

@@ -44,7 +44,7 @@ internal class ConversationViewHolder(
         if (firstProvider != null) {
             binding.conversationAvatarView.loadAvatar(firstProvider)
         } else {
-            binding.conversationAvatarView.displaySystemAvatar()
+            binding.conversationAvatarView.displayUnicolorPlaceholder()
         }
 
         binding.unreadDot.visibility = if (uiModel.hasUnreadMessages) VISIBLE else INVISIBLE

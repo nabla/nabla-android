@@ -53,6 +53,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Clock
+import com.nabla.sdk.messaging.core.domain.entity.Message as DomainEntityMessage
 
 internal class GqlConversationContentDataSource(
     private val logger: Logger,
@@ -127,6 +128,24 @@ internal class GqlConversationContentDataSource(
         }
     }
 
+    internal suspend fun findMessageInConversationCache(
+        conversationId: ConversationId,
+        messageId: MessageId,
+    ): DomainEntityMessage? {
+        val cacheData = apolloClient.readFromCache(firstItemsPageQuery(conversationId))
+
+        return cacheData?.conversation?.conversation?.conversationItemsPageFragment?.items?.data
+            ?.firstOrNull { item -> item?.messageFragment?.messageSummaryFragment?.id == messageId.remoteId }
+            ?.messageFragment
+            ?.let {
+                mapper.mapToMessage(
+                    it.messageSummaryFragment,
+                    SendStatus.Sent,
+                    it.replyTo?.messageSummaryFragment,
+                )
+            }
+    }
+
     suspend fun loadMoreConversationItemsInCache(conversationId: ConversationId) {
         val query = firstItemsPageQuery(conversationId)
         apolloClient.updateCache(query) { cachedQueryData ->
@@ -190,8 +209,9 @@ internal class GqlConversationContentDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid,
+        replyToMessageId: Uuid?,
     ) {
-        sendMediaMessage(conversationId, clientId) {
+        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
             SendMessageContentInput(
                 documentInput = Optional.presentIfNotNull(
                     SendDocumentMessageInput(
@@ -206,8 +226,9 @@ internal class GqlConversationContentDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid,
+        replyToMessageId: Uuid?,
     ) {
-        sendMediaMessage(conversationId, clientId) {
+        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
             SendMessageContentInput(
                 imageInput = Optional.presentIfNotNull(
                     SendImageMessageInput(
@@ -222,8 +243,9 @@ internal class GqlConversationContentDataSource(
         conversationId: ConversationId,
         clientId: Uuid,
         fileUploadId: Uuid,
+        replyToMessageId: Uuid?,
     ) {
-        sendMediaMessage(conversationId, clientId) {
+        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
             SendMessageContentInput(
                 audioInput = Optional.presentIfNotNull(
                     SendAudioMessageInput(
@@ -237,22 +259,34 @@ internal class GqlConversationContentDataSource(
     private suspend fun sendMediaMessage(
         conversationId: ConversationId,
         clientId: Uuid,
+        replyToMessageId: Uuid?,
         inputFactoryBlock: () -> SendMessageContentInput,
     ) {
         val input = inputFactoryBlock()
-        val mutation = SendMessageMutation(conversationId.value, input, clientId)
+        val mutation = SendMessageMutation(
+            conversationId = conversationId.value,
+            content = input,
+            clientId = clientId,
+            replyToMessageId = Optional.presentIfNotNull(replyToMessageId),
+        )
         apolloClient.mutation(mutation).execute().dataAssertNoErrors
     }
 
-    suspend fun sendTextMessage(conversationId: ConversationId, clientId: Uuid, text: String) {
+    suspend fun sendTextMessage(
+        conversationId: ConversationId,
+        clientId: Uuid,
+        text: String,
+        replyToMessageId: Uuid?,
+    ) {
         val input = SendMessageContentInput(
-            textInput = Optional.presentIfNotNull(
-                SendTextMessageInput(
-                    text = text
-                )
-            )
+            textInput = Optional.presentIfNotNull(SendTextMessageInput(text = text)),
         )
-        val mutation = SendMessageMutation(conversationId.value, input, clientId)
+        val mutation = SendMessageMutation(
+            conversationId = conversationId.value,
+            content = input,
+            clientId = clientId,
+            replyToMessageId = Optional.presentIfNotNull(replyToMessageId),
+        )
 
         apolloClient.mutation(mutation).execute().dataAssertNoErrors
     }

@@ -17,9 +17,10 @@ internal fun Message.toTimelineItem(
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
     val actions: Set<MessageAction> = when {
         this is Message.Deleted -> emptySet()
-        author is MessageAuthor.Provider -> setOfNotNull(copyActionOrNull)
-        author is MessageAuthor.System -> setOfNotNull(copyActionOrNull)
-        author is MessageAuthor.Patient && sendStatus == SendStatus.Sent -> setOfNotNull(copyActionOrNull, MessageAction.Delete)
+        author is MessageAuthor.Provider -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
+        author is MessageAuthor.System -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
+        author is MessageAuthor.Patient && sendStatus == SendStatus.Sent ->
+            setOfNotNull(copyActionOrNull, MessageAction.Delete, MessageAction.Reply)
         else -> emptySet()
     }
     return TimelineItem.Message(
@@ -68,9 +69,21 @@ private fun Message.toRepliedMessage() = RepliedMessage(
     content = when (this) {
         is Message.Deleted -> RepliedMessage.Content.Deleted
         is Message.Media.Audio -> RepliedMessage.Content.Audio(stableUri)
-        is Message.Media.Document -> RepliedMessage.Content.Document(stableUri)
+        is Message.Media.Document -> RepliedMessage.Content.Document(stableUri, thumbnailUri)
         is Message.Media.Image -> RepliedMessage.Content.Image(stableUri)
         is Message.Text -> RepliedMessage.Content.Text(text)
+    },
+    author = author,
+)
+
+internal fun TimelineItem.Message.toRepliedMessage() = RepliedMessage(
+    id = id,
+    content = when (content) {
+        is TimelineItem.Message.Deleted -> RepliedMessage.Content.Deleted
+        is TimelineItem.Message.Audio -> RepliedMessage.Content.Audio(content.uri)
+        is TimelineItem.Message.File -> RepliedMessage.Content.Document(content.uri, content.thumbnailUri)
+        is TimelineItem.Message.Image -> RepliedMessage.Content.Image(content.uri)
+        is TimelineItem.Message.Text -> RepliedMessage.Content.Text(content.text)
     },
     author = author,
 )

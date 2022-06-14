@@ -72,6 +72,7 @@ fun Message.Media.Image.Companion.fake(
         author = author,
         sendStatus = status,
         conversationId = conversationId,
+        replyTo = null,
     ),
     mediaSource = mediaSource,
 )
@@ -90,6 +91,7 @@ fun Message.Media.Audio.Companion.fake(
         author = author,
         sendStatus = status,
         conversationId = conversationId,
+        replyTo = null,
     ),
     mediaSource = mediaSource,
 )
@@ -171,6 +173,7 @@ fun Message.Media.Document.Companion.fake(
         author = author,
         sendStatus = status,
         conversationId = conversationId,
+        replyTo = null,
     ),
     mediaSource = FileSource.Uploaded(
         fileLocal = null,

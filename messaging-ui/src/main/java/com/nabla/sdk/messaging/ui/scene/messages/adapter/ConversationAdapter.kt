@@ -3,10 +3,14 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.forEach
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemLoadingMoreBinding
 import com.nabla.sdk.messaging.ui.scene.messages.MessageAction
@@ -35,6 +39,33 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemImage
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemTextMessageViewHolder
 
 internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ConversationDiffCallback) {
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        val swipeToReplyCallback = SwipeToReplyCallback(
+            context = recyclerView.context,
+            swipeToReplyItemViewTypes = listOf(
+                ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PROVIDER_TEXT_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PATIENT_TEXT_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.SYSTEM_TEXT_MESSAGE_VIEW_TYPE.ordinal,
+            )
+        ) { viewHolder ->
+            val item = getItem(viewHolder.bindingAdapterPosition)
+            if (item is TimelineItem.Message && item.status == SendStatus.Sent) {
+                callbacks.onReplyToMessage(item)
+            }
+        }
+        ItemTouchHelper(swipeToReplyCallback).attachToRecyclerView(recyclerView)
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when (val item = getItem(position)) {
@@ -93,6 +124,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 parent,
                 callbacks::onProviderClicked,
                 onUrlClicked = { callbacks.onUrlClicked(it, isFromPatient = false) },
+                onRepliedMessageClicked = callbacks::onRepliedMessageClicked,
             )
             ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE -> ProviderFileMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
             ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE -> ProviderImageMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
@@ -108,6 +140,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 inflater,
                 parent,
                 onUrlClicked = { callbacks.onUrlClicked(it, isFromPatient = true) },
+                onRepliedMessageClicked = callbacks::onRepliedMessageClicked,
             )
             ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE -> PatientFileMessageViewHolder.create(inflater, parent)
             ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE -> PatientImageMessageViewHolder.create(inflater, parent)
@@ -116,6 +149,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 inflater,
                 parent,
                 onUrlClicked = { callbacks.onUrlClicked(it, isFromPatient = false) },
+                onRepliedMessageClicked = callbacks::onRepliedMessageClicked,
             )
             ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE -> SystemFileMessageViewHolder.create(inflater, parent)
             ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE -> SystemImageMessageViewHolder.create(inflater, parent)
@@ -266,12 +300,14 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         val popup = popUpMenu.apply {
             menu.forEach { menuItem ->
                 when (menuItem.itemId) {
+                    R.id.messageActionReply -> menuItem.isVisible = actions.contains(MessageAction.Reply)
                     R.id.messageActionCopy -> menuItem.isVisible = actions.contains(MessageAction.Copy)
                     R.id.messageActionDelete -> menuItem.isVisible = actions.contains(MessageAction.Delete)
                 }
             }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
+                    R.id.messageActionReply -> callbacks.onReplyToMessage(itemForCallback)
                     R.id.messageActionCopy -> (itemForCallback.content as? TimelineItem.Message.Text)?.let(callbacks::onCopyMessage)
                     R.id.messageActionDelete -> callbacks.onDeleteMessage(itemForCallback)
                 }
@@ -288,9 +324,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         fun onItemClicked(item: TimelineItem)
         fun onDeleteMessage(item: TimelineItem.Message)
         fun onCopyMessage(item: TimelineItem.Message.Text)
+        fun onReplyToMessage(item: TimelineItem.Message)
         fun onProviderClicked(providerId: Uuid)
         fun onUrlClicked(url: String, isFromPatient: Boolean)
         fun onToggleAudioMessagePlay(audioMessageUri: Uri)
+        fun onRepliedMessageClicked(messageId: MessageId)
     }
 
     private enum class ViewType {

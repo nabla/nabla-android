@@ -33,8 +33,8 @@ internal fun Provider.fullNameWithPrefix(context: Context): String {
     } else fullName
 }
 
-// For a doctor with prefix it's Prefix + Last Name (ie: Dr Cayol)
-// For a doctor without prefix it's First Name + Last Name (ie: Véronique Cayol)
+// For a provider with prefix it's Prefix + Last Name (e.g.: Dr Cayol)
+// For a provider without prefix it's First Name + Last Name (e.g.: Véronique Cayol)
 // Else full name
 internal fun Provider.abbreviatedNameWithPrefix(context: Context): String {
     val prefix = prefix

@@ -8,6 +8,11 @@
     tools:layout_width="wrap_content"
     >
 
+    <include
+        android:id="@+id/repliedMessage"
+        layout="@layout/nabla_conversation_timeline_item_replied_message_view"
+        />
+
     <TextView
         android:id="@+id/chatTextMessageTextView"
         android:layout_width="wrap_content"
@@ -19,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/repliedMessage"
         tools:text="I have a question !"
         />
 

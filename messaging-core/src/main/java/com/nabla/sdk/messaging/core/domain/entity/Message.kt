@@ -16,7 +16,7 @@ public data class BaseMessage(
     val author: MessageAuthor,
     val sendStatus: SendStatus,
     val conversationId: ConversationId,
-    val replyTo: Message? = null,
+    val replyTo: Message?,
 )
 
 /**

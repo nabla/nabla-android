@@ -13,7 +13,7 @@ public data class RepliedMessage(
         public data class Text(val text: String) : Content
         public data class Image(val uri: Uri) : Content
         public data class Audio(val uri: Uri) : Content
-        public data class Document(val uri: Uri) : Content
+        public data class Document(val uri: Uri, val thumbnailUri: Uri?) : Content
         public object Deleted : Content
     }
 }

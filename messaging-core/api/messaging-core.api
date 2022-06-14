@@ -469,7 +469,7 @@ public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClien
 	public abstract fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
 	public abstract fun markConversationAsRead-0PoKK-I (Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun retrySendingMessage-ppEkrSo (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun sendMessage-ppEkrSo (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun sendMessage-HBPqEjA (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun setTyping--tBrw7Y (Ljava/util/UUID;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun watchConversation-osbTWhs (Ljava/util/UUID;)Lkotlinx/coroutines/flow/Flow;
 	public abstract fun watchConversationItems-osbTWhs (Ljava/util/UUID;)Lkotlinx/coroutines/flow/Flow;
@@ -481,8 +481,11 @@ public final class com/nabla/sdk/messaging/core/NablaMessagingClient$Companion {
 	public final fun initialize (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
 }
 
+public final class com/nabla/sdk/messaging/core/NablaMessagingClient$DefaultImpls {
+	public static synthetic fun sendMessage-HBPqEjA$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class com/nabla/sdk/messaging/core/domain/entity/BaseMessage {
-	public synthetic fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/Message;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/Message;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
 	public final fun component2 ()Lkotlinx/datetime/Instant;

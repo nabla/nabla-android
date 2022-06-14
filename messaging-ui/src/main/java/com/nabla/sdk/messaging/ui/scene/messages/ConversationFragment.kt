@@ -58,6 +58,7 @@ import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
@@ -72,6 +73,9 @@ import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorSta
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.RecordingVoice
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.ErrorAlert
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.loadReplyContentThumbnailOrHide
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToAuthorName
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToContent
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -287,6 +291,9 @@ public open class ConversationFragment : Fragment() {
                     startActivity(FullScreenImageActivity.newIntent(requireActivity(), event.imageUri))
                 }
                 ConversationViewModel.NavigationEvent.RequestVoiceMessagePermissions -> captureAudioPermissionsLauncher.launch()
+                is ConversationViewModel.NavigationEvent.ScrollToItem -> {
+                    binding?.conversationRecyclerView?.smoothScrollToPosition(event.position)
+                }
             }
         }
     }
@@ -306,6 +313,7 @@ public open class ConversationFragment : Fragment() {
             binding.conversationSendButton.isEnabled = editorState is RecordingVoice || (editorState is EditingText && editorState.canSubmit)
             binding.conversationSendButton.isVisible = editorState is RecordingVoice || editorState is EditingText
 
+            binding.currentlyReplyingToLayout.isVisible = editorState is EditingText && editorState.replyingTo != null
             binding.conversationTextInputLayoutContainer.isVisible = editorState is EditingText
             binding.conversationAddMediaButton.isVisible = editorState is EditingText
             binding.conversationRecordVoiceButton.isVisible = editorState is EditingText
@@ -313,21 +321,33 @@ public open class ConversationFragment : Fragment() {
             binding.conversationCancelRecordingButton.isVisible = editorState is RecordingVoice
             binding.conversationRecordingVoiceProgress.isVisible = editorState is RecordingVoice
 
-            if (editorState is RecordingVoice) {
-                val minutes = editorState.recordProgressSeconds / 60
-                val seconds = editorState.recordProgressSeconds % 60
-                binding.conversationRecordingVoiceProgressText.text = binding.context
-                    .getString(R.string.nabla_conversation_audio_message_seconds_format, minutes, seconds)
+            when (editorState) {
+                is RecordingVoice -> {
+                    val minutes = editorState.recordProgressSeconds / 60
+                    val seconds = editorState.recordProgressSeconds % 60
+                    binding.conversationRecordingVoiceProgressText.text = binding.context
+                        .getString(R.string.nabla_conversation_audio_message_seconds_format, minutes, seconds)
 
-                // half-cycle sinusoidal blinking between 0 and 1
-                ObjectAnimator
-                    .ofFloat(binding.conversationRecordingVoiceProgressDot, "alpha", 0f, 1f)
-                    .apply {
-                        duration = 1_000
-                        interpolator = CycleInterpolator(/* cycles = */ 0.5f)
-                        setAutoCancel(true)
-                        start()
+                    // half-cycle sinusoidal blinking between 0 and 1
+                    ObjectAnimator
+                        .ofFloat(binding.conversationRecordingVoiceProgressDot, "alpha", 0f, 1f)
+                        .apply {
+                            duration = 1_000
+                            interpolator = CycleInterpolator(/* cycles = */ 0.5f)
+                            setAutoCancel(true)
+                            start()
+                        }
+                }
+                is EditingText -> {
+                    if (editorState.replyingTo != null) {
+                        binding.currentlyReplyingToBody.text = editorState.replyingTo.repliedToContent(binding.context)
+                        binding.currentlyReplyingToTitle.text = getString(
+                            R.string.nabla_conversation_composer_replying_to_title_author,
+                            editorState.replyingTo.repliedToAuthorName(binding.context),
+                        )
+                        binding.currentlyReplyingToThumbnail.loadReplyContentThumbnailOrHide(editorState.replyingTo.content)
                     }
+                }
             }
         }
 
@@ -381,6 +401,7 @@ public open class ConversationFragment : Fragment() {
         binding.conversationSendButton.setOnClickListener { viewModel.onSendButtonClicked() }
         binding.conversationRecordVoiceButton.setOnClickListener { viewModel.onRecordVoiceMessageClicked() }
         binding.conversationCancelRecordingButton.setOnClickListener { viewModel.onCancelVoiceMessageClicked() }
+        binding.currentlyReplyingToCancel.setOnClickListener { viewModel.onCancelReplyToMessage() }
 
         binding.conversationEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.onCurrentMessageChanged(text?.toString() ?: "")
@@ -454,12 +475,20 @@ public open class ConversationFragment : Fragment() {
             }
         }
 
+        override fun onReplyToMessage(item: TimelineItem.Message) {
+            viewModel.onReplyToMessage(item)
+        }
+
         override fun onUrlClicked(url: String, isFromPatient: Boolean) {
             viewModel.onUrlClicked(url)
         }
 
         override fun onToggleAudioMessagePlay(audioMessageUri: KtUri) {
             viewModel.onToggleVoiceMessagePlay(audioMessageUri)
+        }
+
+        override fun onRepliedMessageClicked(messageId: MessageId) {
+            viewModel.onRepliedMessageClicked(messageId)
         }
     }
 
@@ -626,7 +655,7 @@ public open class ConversationFragment : Fragment() {
         if (firstProvider != null) {
             conversationToolbarAvatarView.loadAvatar(firstProvider)
         } else {
-            conversationToolbarAvatarView.displaySystemAvatar()
+            conversationToolbarAvatarView.displayUnicolorPlaceholder()
         }
         conversationToolbarAvatarView.isVisible = displayAvatar
     }

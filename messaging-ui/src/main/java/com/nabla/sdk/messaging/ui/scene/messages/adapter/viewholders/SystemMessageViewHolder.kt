@@ -16,7 +16,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.MessageContentB
 internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>>(
     private val binding: NablaConversationTimelineItemSystemMessageBinding,
     contentBinder: BinderType,
-) : MessageViewHolder<ContentType, MessageAuthor.System, BinderType>(contentBinder, binding.root),
+) : MessageViewHolder<ContentType, MessageAuthor, BinderType>(contentBinder, binding.root),
     PopUpMenuHolder,
     ClickableItemHolder {
 
@@ -31,18 +31,20 @@ internal sealed class SystemMessageViewHolder<ContentType : TimelineItem.Message
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
-    override fun bind(message: TimelineItem.Message, author: MessageAuthor.System, content: ContentType) {
+    // we can't assume author is System because System VH is used as fallback when author is unknown/deleted/etc.
+    override fun bind(message: TimelineItem.Message, author: MessageAuthor, content: ContentType) {
         super.bind(message, author, content)
 
         binding.chatSystemMessageAuthorTextView.isVisible = message.showAuthorName
         binding.chatSystemMessageAvatarView.visibility = if (message.showAuthorAvatar) VISIBLE else INVISIBLE
 
-        if (message.showAuthorName) {
-            binding.chatSystemMessageAuthorTextView.text = author.system.name
-        }
+        binding.chatSystemMessageAuthorTextView.text =
+            if (message.showAuthorName && author is MessageAuthor.System) {
+                author.system.name
+            } else ""
 
-        if (message.showAuthorAvatar) {
+        if (message.showAuthorAvatar && author is MessageAuthor.System) {
             binding.chatSystemMessageAvatarView.loadAvatar(author.system)
-        }
+        } else binding.chatSystemMessageAvatarView.displayUnicolorPlaceholder()
     }
 }

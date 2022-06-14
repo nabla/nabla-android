@@ -3,6 +3,7 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
@@ -20,6 +21,7 @@ internal class ProviderTextMessageViewHolder(
             parent: ViewGroup,
             onProviderClicked: (providerId: Uuid) -> Unit,
             onUrlClicked: (url: String) -> Unit,
+            onRepliedMessageClicked: (MessageId) -> Unit,
         ): ProviderTextMessageViewHolder {
             val binding = NablaConversationTimelineItemProviderMessageBinding.inflate(inflater, parent, false)
             return ProviderTextMessageViewHolder(
@@ -27,7 +29,7 @@ internal class ProviderTextMessageViewHolder(
                 onProviderClicked,
                 inflateProviderMessageContentCard(inflater, binding.chatProviderMessageContentContainer) { content ->
                     TextMessageContentBinder
-                        .create(R.attr.nablaMessaging_conversationProviderMessageAppearance, inflater, content, onUrlClicked)
+                        .create(R.attr.nablaMessaging_conversationProviderMessageAppearance, inflater, content, onUrlClicked, onRepliedMessageClicked)
                 }
             )
         }

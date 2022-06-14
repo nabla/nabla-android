@@ -19,6 +19,8 @@
     <attr name="nablaMessaging_conversationDateSeparatorAppearance" format="reference" />
     <attr name="nablaMessaging_conversationPatientMessageAppearance" format="reference" />
     <attr name="nablaMessaging_conversationProviderMessageAppearance" format="reference" />
+    <attr name="nablaMessaging_conversationRepliedMessageAuthorAppearance" format="reference" />
+    <attr name="nablaMessaging_conversationRepliedMessageBodyAppearance" format="reference" />
     <attr name="nablaMessaging_conversationDeletedMessageAppearance" format="reference" />
     <attr name="nablaMessaging_conversationMessageAuthorAppearance" format="reference" />
     <attr name="nablaMessaging_conversationMessageStatusAppearance" format="reference" />

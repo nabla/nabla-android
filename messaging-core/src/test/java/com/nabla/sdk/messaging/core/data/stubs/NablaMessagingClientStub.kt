@@ -72,10 +72,10 @@ class NablaMessagingClientStub(
             }
     }
 
-    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): Result<MessageId.Local> {
+    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId, replyTo: MessageId.Remote?): Result<MessageId.Local> {
         isTyping = false
         return runCatchingCancellable {
-            messageRepository.sendMessage(input, conversationId)
+            messageRepository.sendMessage(input, conversationId, replyTo)
         }
     }
 

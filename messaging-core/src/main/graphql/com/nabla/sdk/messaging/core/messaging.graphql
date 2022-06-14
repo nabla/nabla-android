@@ -6,8 +6,18 @@ mutation CreateConversation {
     }
 }
 
-mutation SendMessage($conversationId: UUID!, $content: SendMessageContentInput!, $clientId: UUID!) {
-    sendMessage(conversationId: $conversationId, content: $content, clientId: $clientId) {
+mutation SendMessage(
+    $conversationId: UUID!,
+    $content: SendMessageContentInput!,
+    $clientId: UUID!,
+    $replyToMessageId: UUID,
+) {
+    sendMessage(
+        conversationId: $conversationId,
+        content: $content,
+        clientId: $clientId,
+        replyToMessageId: $replyToMessageId,
+    ) {
         message {
             ...MessageFragment
             conversation {
@@ -226,7 +236,7 @@ fragment MessageContentFragment on MessageContent {
         ...DocumentMessageContentFragment
     }
     ... on AudioMessageContent {
-      ...AudioMessageContentFragment
+        ...AudioMessageContentFragment
     }
     ... on DeletedMessageContent {
         empty: _

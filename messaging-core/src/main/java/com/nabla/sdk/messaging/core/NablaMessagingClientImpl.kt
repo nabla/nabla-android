@@ -101,11 +101,12 @@ internal class NablaMessagingClientImpl internal constructor(
 
     override suspend fun sendMessage(
         input: MessageInput,
-        conversationId: ConversationId
+        conversationId: ConversationId,
+        replyTo: MessageId.Remote?,
     ): Result<MessageId.Local> {
         return runCatchingCancellable {
             ensureAuthenticatedOrThrow()
-            conversationContentRepository.sendMessage(input, conversationId)
+            conversationContentRepository.sendMessage(input, conversationId, replyTo)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 

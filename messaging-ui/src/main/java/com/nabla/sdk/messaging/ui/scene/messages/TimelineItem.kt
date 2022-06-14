@@ -10,7 +10,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.datetime.Instant
 
-internal enum class MessageAction { Delete, Copy }
+internal enum class MessageAction { Delete, Copy, Reply }
 
 internal sealed interface TimelineItem {
     val listItemId: String

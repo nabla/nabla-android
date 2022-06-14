@@ -175,7 +175,7 @@ class TimelineBuilderTest {
     }
 
     @Test
-    fun `Patient message has Delete and Copy actions`() {
+    fun `Patient message has Delete, Copy and Reply actions`() {
         val outputMessage = TimelineBuilder().buildTimeline(
             items = listOf(Message.Text.fake(author = MessageAuthor.Patient)),
             hasMore = false,
@@ -183,14 +183,14 @@ class TimelineBuilderTest {
         ).filterIsInstance<TimelineItem.Message>().first()
 
         assertEquals(
-            setOf(MessageAction.Copy, MessageAction.Delete),
+            setOf(MessageAction.Copy, MessageAction.Delete, MessageAction.Reply),
             outputMessage.actions,
             "wrong actions on message"
         )
     }
 
     @Test
-    fun `Provider message has Copy action`() {
+    fun `Provider message has Copy and Reply actions`() {
         val outputMessage = TimelineBuilder().buildTimeline(
             items = listOf(
                 Message.Text.fake(author = MessageAuthor.Provider(Provider.fake()))
@@ -199,11 +199,11 @@ class TimelineBuilderTest {
             providersInConversation = emptyList(),
         ).filterIsInstance<TimelineItem.Message>().first()
 
-        assertEquals(setOf(MessageAction.Copy), outputMessage.actions, "wrong actions on message")
+        assertEquals(setOf(MessageAction.Copy, MessageAction.Reply), outputMessage.actions, "wrong actions on message")
     }
 
     @Test
-    fun `System message has Copy action`() {
+    fun `System message has Copy and Reply actions`() {
         val outputMessage = TimelineBuilder().buildTimeline(
             items = listOf(
                 Message.Text.fake(author = MessageAuthor.System(SystemUser.fake()))
@@ -212,6 +212,6 @@ class TimelineBuilderTest {
             providersInConversation = emptyList(),
         ).filterIsInstance<TimelineItem.Message>().first()
 
-        assertEquals(setOf(MessageAction.Copy), outputMessage.actions, "wrong actions on message")
+        assertEquals(setOf(MessageAction.Copy, MessageAction.Reply), outputMessage.actions, "wrong actions on message")
     }
 }

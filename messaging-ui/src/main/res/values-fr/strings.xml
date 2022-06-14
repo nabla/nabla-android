@@ -7,8 +7,6 @@
 
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Messages non lus</string>
 
-    <string name="nabla_display_name_unknown_user">Utilisateur inconnu</string>
-    <string name="nabla_display_name_deleted_provider">Praticien supprimé</string>
     <string name="nabla_conversation_message_copy_label">Message copié</string>
 
     <string name="nabla_conversation_message_sending_status">Envoi en cours…</string>
@@ -36,6 +34,7 @@
     <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du message, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_clicked_url_parsing">Une erreur est survenue lors du traitement du lien, veuillez réessayer.</string>
 
+    <string name="nabla_conversation_message_action_reply">Répondre</string>
     <string name="nabla_conversation_message_action_copy">Copier</string>
     <string name="nabla_conversation_message_action_delete">Supprimer</string>
     <string name="nabla_conversation_full_screen_media_close_content_description">Fermer</string>
@@ -51,6 +50,8 @@
     <string name="nabla_conversation_composer_remove_attachment_content_description">Supprimer la pièce-jointe</string>
     <string name="nabla_conversation_composer_add_attachment_content_description">Ajouter une pièce-jointe</string>
     <string name="nabla_conversation_composer_send_content_description">Envoyer</string>
+    <string name="nabla_conversation_composer_cancel_reply_content_description">Annuler la réponse</string>
+    <string name="nabla_conversation_composer_replying_to_title_author">Répondre à %1$s</string>
     <string name="nabla_conversation_header_loading">Chargement</string>
     <string name="nabla_conversation_header_error">Erreur</string>
     <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Partager</string>
@@ -69,4 +70,10 @@
     <string name="nabla_conversation_error_recording_voice_message">Une erreur est survenue lors de l’enregistrement audio</string>
     <string name="nabla_conversation_voice_message_audio_permission_rational_title">Autorisation d’utiliser le microphone</string>
     <string name="nabla_conversation_voice_message_audio_permission_rational_description">Pour enregistrer un message vocal, nous avons besoin de votre autorisation d’utiliser le micro.</string>
+
+    <string name="nabla_conversation_replied_to_message_author_patient">Toi</string>
+    <string name="nabla_conversation_replied_to_message_description_deleted">Message supprimé</string>
+    <string name="nabla_conversation_replied_to_message_description_voice">🔊 Message vocal</string>
+    <string name="nabla_conversation_replied_to_message_description_document">📁 Document</string>
+    <string name="nabla_conversation_replied_to_message_description_photo">📷 Photo</string>
 </resources>

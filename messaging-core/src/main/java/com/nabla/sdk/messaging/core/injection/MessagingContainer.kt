@@ -58,6 +58,7 @@ internal class MessagingContainer(
         fileUploadRepository = fileUploadRepository,
         clock = clock,
         uuidGenerator = uuidGenerator,
+        logger = logger,
     )
 
     val conversationRepository: ConversationRepository = conversationRepositoryImpl

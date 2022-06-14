@@ -89,6 +89,7 @@ dependencies {
     implementation libs.exoplayer
 
     implementation libs.mimeTypeDetector
+    implementation project(':messaging-core-test-fixtures')
 
     testImplementation libs.junit
     testImplementation libs.kotlin.test

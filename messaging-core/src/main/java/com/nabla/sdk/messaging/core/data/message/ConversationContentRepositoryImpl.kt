@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.kotlin.SharedSingle
@@ -30,6 +31,7 @@ internal class ConversationContentRepositoryImpl(
     private val fileUploadRepository: FileUploadRepository,
     private val clock: Clock,
     private val uuidGenerator: UuidGenerator,
+    private val logger: Logger,
 ) : ConversationContentRepository {
 
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
@@ -99,9 +101,23 @@ internal class ConversationContentRepositoryImpl(
         loadMoreConversationMessagesSharedSingle.await()
     }
 
-    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
-        val baseMessage =
-            BaseMessage(MessageId.Local(uuidGenerator.generate()), clock.now(), MessageAuthor.Patient, SendStatus.Sending, conversationId)
+    override suspend fun sendMessage(
+        input: MessageInput,
+        conversationId: ConversationId,
+        replyTo: MessageId.Remote?,
+    ): MessageId.Local {
+        val baseMessage = BaseMessage(
+            MessageId.Local(uuidGenerator.generate()),
+            clock.now(),
+            MessageAuthor.Patient,
+            SendStatus.Sending,
+            conversationId,
+            replyTo = replyTo?.let {
+                gqlConversationContentDataSource.findMessageInConversationCache(conversationId, it).also { message ->
+                    if (message == null) logger.warn("Reply to message not found in cache: $it")
+                }
+            },
+        )
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
@@ -109,7 +125,10 @@ internal class ConversationContentRepositoryImpl(
             is MessageInput.Media.Audio -> Message.Media.Audio(baseMessage, input.mediaSource)
         }
 
-        return sendMessage(message)
+        return sendMessage(
+            message,
+            replyTo = replyTo, // prefer the id param over [message.replyTo] as we might have not found it in the cache
+        )
     }
 
     override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
@@ -121,7 +140,7 @@ internal class ConversationContentRepositoryImpl(
         }
     }
 
-    private suspend fun sendMessage(message: Message): MessageId.Local {
+    private suspend fun sendMessage(message: Message, replyTo: MessageId? = message.replyTo?.id): MessageId.Local {
         val messageId = message.id as? MessageId.Local
             ?: throw NablaException.InvalidMessage("Can't send a message that is not a local one")
 
@@ -131,7 +150,7 @@ internal class ConversationContentRepositoryImpl(
             when (message) {
                 is Message.Deleted -> throw NablaException.InvalidMessage("Can't send a deleted message")
                 is Message.Media<*, *> -> sendMediaMessageOp(message, messageId)
-                is Message.Text -> sendTextMessageOp(message, messageId)
+                is Message.Text -> sendTextMessageOp(message, messageId, replyTo = replyTo)
             }
         }.onFailure { throwable ->
             when (throwable) {
@@ -146,9 +165,7 @@ internal class ConversationContentRepositoryImpl(
             throw throwable
         }.onSuccess {
             val sentMessage = message.modify(SendStatus.Sent)
-            localMessageDataSource.putMessage(
-                sentMessage
-            )
+            localMessageDataSource.putMessage(sentMessage)
         }
 
         return messageId
@@ -179,9 +196,10 @@ internal class ConversationContentRepositoryImpl(
         when (mediaMessage) {
             is Message.Media.Document -> {
                 gqlConversationContentDataSource.sendDocumentMessage(
-                    mediaMessage.baseMessage.conversationId,
-                    messageId.clientId,
-                    fileUploadId,
+                    conversationId = mediaMessage.baseMessage.conversationId,
+                    clientId = messageId.clientId,
+                    fileUploadId = fileUploadId,
+                    replyToMessageId = mediaMessage.baseMessage.replyTo?.id?.remoteId,
                 )
             }
             is Message.Media.Image -> {
@@ -189,6 +207,7 @@ internal class ConversationContentRepositoryImpl(
                     mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
                     fileUploadId,
+                    replyToMessageId = mediaMessage.baseMessage.replyTo?.id?.remoteId,
                 )
             }
             is Message.Media.Audio -> {
@@ -196,16 +215,18 @@ internal class ConversationContentRepositoryImpl(
                     mediaMessage.baseMessage.conversationId,
                     messageId.clientId,
                     fileUploadId,
+                    replyToMessageId = mediaMessage.baseMessage.replyTo?.id?.remoteId,
                 )
             }
         }
     }
 
-    private suspend fun sendTextMessageOp(message: Message.Text, messageId: MessageId.Local) {
+    private suspend fun sendTextMessageOp(message: Message.Text, messageId: MessageId.Local, replyTo: MessageId?) {
         gqlConversationContentDataSource.sendTextMessage(
-            message.baseMessage.conversationId,
-            messageId.clientId,
-            message.text
+            conversationId = message.baseMessage.conversationId,
+            clientId = messageId.clientId,
+            text = message.text,
+            replyToMessageId = replyTo?.remoteId,
         )
     }
 }

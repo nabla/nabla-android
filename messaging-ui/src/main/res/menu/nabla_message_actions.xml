@@ -2,6 +2,10 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/messageActionReply"
+        android:title="@string/nabla_conversation_message_action_reply"
+        />
+    <item
         android:id="@+id/messageActionCopy"
         android:title="@string/nabla_conversation_message_action_copy"
         />

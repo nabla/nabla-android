@@ -92,15 +92,23 @@ public interface NablaMessagingClient {
      *
      * @param input input of the message to send, check `MessageInput.**` to create new messages.
      * @param conversationId the id of the conversation to send the message to.
+     * @param replyTo the id of the message to reply to, or null if not a reply.
+     *                Please note that the replied-to message should be already successfully sent,
+     *                thus have a [MessageId.Remote] id.
      *
      * @see MessageInput.Text
      * @see MessageInput.Media.Image
      * @see MessageInput.Media.Document
+     * @see MessageInput.Media.Audio
      *
      * @return [Result] of the operation containing the id of the message created, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): Result<MessageId.Local>
+    public suspend fun sendMessage(
+        input: MessageInput,
+        conversationId: ConversationId,
+        replyTo: MessageId.Remote? = null,
+    ): Result<MessageId.Local>
 
     /**
      * Retry sending a message for which [Message.sendStatus] is [SendStatus.ErrorSending].

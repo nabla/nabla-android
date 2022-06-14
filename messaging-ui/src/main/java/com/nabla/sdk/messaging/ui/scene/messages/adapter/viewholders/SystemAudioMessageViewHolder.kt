@@ -26,7 +26,7 @@ internal class SystemAudioMessageViewHolder(
                 inflateSystemMessageContentCard(inflater, binding.chatSystemMessageContentContainer) { contentParent ->
                     AudioMessageContentBinder.create(
                         contentTextAppearanceAttr = R.attr.nablaMessaging_conversationProviderMessageAppearance,
-                        surfaceColorAttr = R.attr.nablaMessaging_patientMessageBackgroundColor,
+                        surfaceColorAttr = R.attr.nablaMessaging_providerMessageBackgroundColor,
                         progressBackgroundDrawableRes = R.drawable.nabla_patient_audio_message_progress_bar,
                         inflater = inflater,
                         parent = contentParent,

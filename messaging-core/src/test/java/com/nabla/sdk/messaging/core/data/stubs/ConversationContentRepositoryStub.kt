@@ -34,6 +34,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 internal class ConversationContentRepositoryStub(
     private val idlingRes: CountingIdlingResource,
@@ -87,9 +88,11 @@ internal class ConversationContentRepositoryStub(
         }
     }
 
-    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId): MessageId.Local {
+    override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId, replyTo: MessageId.Remote?): MessageId.Local {
         val localId = MessageId.Local(uuid4())
-        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient, SendStatus.Sending, conversationId)
+        val conversationFlow = messagesFlowPerConversation[conversationId]!!
+        val repliedToMessage = conversationFlow.value.firstOrNull { it.id == replyTo }
+        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient, SendStatus.Sending, conversationId, repliedToMessage)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
@@ -97,12 +100,15 @@ internal class ConversationContentRepositoryStub(
             is MessageInput.Media.Audio -> Message.Media.Audio(baseMessage, input.mediaSource)
         }
 
-        val conversationFlow = messagesFlowPerConversation[conversationId]!!
         flowMutex.withLock { conversationFlow.value = messagesOf(conversationId) + listOf(message) }
         delayWithIdlingRes(idlingRes, 100.milliseconds)
         flowMutex.withLock {
-            val newStatus = if ((message as? Message.Text)?.text?.contains("fail") == true) SendStatus.ErrorSending else SendStatus.Sent
-            conversationFlow.value = messagesOf(conversationId) - setOf(message) + listOf(message.modify(newStatus))
+            val (newStatus, newId) = if ((message as? Message.Text)?.text?.contains("fail") == true) {
+                SendStatus.ErrorSending to message.id
+            } else {
+                SendStatus.Sent to MessageId.Remote(message.id.clientId, remoteId = uuid4())
+            }
+            conversationFlow.value = messagesOf(conversationId) - setOf(message) + listOf(message.modify(newStatus, newId))
         }.also {
             if ((message as? Message.Text)?.text?.contains("reply") == true) {
                 fakeProviderReplying(conversationId, conversationFlow)
@@ -190,13 +196,20 @@ internal class ConversationContentRepositoryStub(
                     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                 )
                 add(firstMessage)
-                addAll((9 downTo 4).map { Message.Text.fake(sentAt = Clock.System.now().minus(it.minutes)) })
+                addAll((9 downTo 5).map { Message.Text.fake(sentAt = Clock.System.now().minus(it.minutes)) })
+                val providerReply = Message.Text.fake(
+                    author = MessageAuthor.Provider(provider),
+                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                    sentAt = Clock.System.now().minus(3.minutes),
+                    replyTo = firstMessage,
+                )
+                add(providerReply)
                 add(
                     Message.Text.fake(
-                        author = MessageAuthor.Provider(provider),
+                        author = MessageAuthor.Patient,
                         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-                        sentAt = Clock.System.now().minus(3.minutes),
-                        replyTo = firstMessage,
+                        sentAt = Clock.System.now().minus(2.minutes + 30.seconds),
+                        replyTo = providerReply,
                     )
                 )
 
@@ -208,5 +221,13 @@ internal class ConversationContentRepositoryStub(
 
     companion object {
         private const val MOCK_ERRORS = false
+
+        private fun Message.modify(newStatus: SendStatus, newId: MessageId) = when (this) {
+            is Message.Deleted -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+            is Message.Media.Audio -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+            is Message.Media.Document -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+            is Message.Media.Image -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+            is Message.Text -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+        }
     }
 }

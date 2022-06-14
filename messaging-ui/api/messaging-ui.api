@@ -203,6 +203,19 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimel
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemProviderTypingIndicatorBinding;
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemRepliedMessageViewBinding : androidx/viewbinding/ViewBinding {
+	public final field authorRepliedToTextView Landroid/widget/TextView;
+	public final field repliedToImagePreview Landroidx/constraintlayout/utils/widget/ImageFilterView;
+	public final field repliedToIndentView Landroid/view/View;
+	public final field repliedToTextContainer Landroidx/constraintlayout/widget/ConstraintLayout;
+	public final field repliedToTextView Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemRepliedMessageViewBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemRepliedMessageViewBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemRepliedMessageViewBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemSystemMessageBinding : androidx/viewbinding/ViewBinding {
 	public final field chatSystemMessageAuthorTextView Landroid/widget/TextView;
 	public final field chatSystemMessageAvatarView Lcom/nabla/sdk/core/ui/components/NablaAvatarView;
@@ -234,6 +247,7 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimel
 
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemTextMessageBinding : androidx/viewbinding/ViewBinding {
 	public final field chatTextMessageTextView Landroid/widget/TextView;
+	public final field repliedMessage Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemRepliedMessageViewBinding;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemTextMessageBinding;
 	public synthetic fun getRoot ()Landroid/view/View;
 	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
@@ -276,6 +290,11 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversat
 	public final field conversationToolbarContentContainer Landroidx/constraintlayout/widget/ConstraintLayout;
 	public final field conversationToolbarSubtitle Landroid/widget/TextView;
 	public final field conversationToolbarTitle Landroid/widget/TextView;
+	public final field currentlyReplyingToBody Landroid/widget/TextView;
+	public final field currentlyReplyingToCancel Landroid/widget/ImageView;
+	public final field currentlyReplyingToLayout Landroidx/constraintlayout/widget/ConstraintLayout;
+	public final field currentlyReplyingToThumbnail Landroidx/constraintlayout/utils/widget/ImageFilterView;
+	public final field currentlyReplyingToTitle Landroid/widget/TextView;
 	public final field guidelineBottom Landroidx/constraintlayout/widget/Guideline;
 	public final field guidelineControlsBottom Landroidx/constraintlayout/widget/Guideline;
 	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding;
@@ -368,11 +387,13 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Cont
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1-9Mbh8_A ()Ljava/lang/String;
-	public final fun copy-tuorwt8 (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;
-	public static synthetic fun copy-tuorwt8$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;
+	public final fun component2-fMOd5P8 ()Ljava/lang/String;
+	public final fun copy-f_CKVvY (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;
+	public static synthetic fun copy-f_CKVvY$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Document;
 	public fun equals (Ljava/lang/Object;)Z
+	public final fun getThumbnailUri-fMOd5P8 ()Ljava/lang/String;
 	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

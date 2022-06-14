@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:showIn="@layout/nabla_conversation_timeline_item_text_message"
+    >
+
+    <View
+        android:id="@+id/repliedToIndentView"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="12dp"
+        android:alpha=".72"
+        app:layout_constraintBottom_toBottomOf="@id/repliedToTextContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/repliedToTextContainer"
+        app:layout_goneMarginTop="6dp"
+        android:background="?colorPrimaryDark"
+        tools:background="?colorPrimaryDark"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/repliedToTextContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="vertical"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/repliedToImagePreview"
+        app:layout_constraintStart_toEndOf="@id/repliedToIndentView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="12dp"
+        >
+
+        <TextView
+            android:id="@+id/authorRepliedToTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:alpha=".8"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textAppearance="?nablaMessaging_conversationRepliedMessageAuthorAppearance"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/repliedToTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/repliedToTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Dr Marie-Laure Bry"
+            />
+
+        <TextView
+            android:id="@+id/repliedToTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:alpha=".7"
+            android:autoLink="all"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textAppearance="?nablaMessaging_conversationRepliedMessageBodyAppearance"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/authorRepliedToTextView"
+            tools:text="What do you have ? What do you have ? What do you have ? What do you have ? What do you have ? What do you have ? What do you have ? What do you have ? What do you have ? "
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/repliedToImagePreview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:scaleType="centerCrop"
+        app:roundPercent="0.5"
+        android:alpha=".72"
+        app:layout_constraintBottom_toBottomOf="@id/repliedToIndentView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/repliedToTextContainer"
+        app:layout_constraintTop_toTopOf="@id/repliedToIndentView"
+        tools:ignore="ContentDescription"
+        tools:background="?colorAccent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
