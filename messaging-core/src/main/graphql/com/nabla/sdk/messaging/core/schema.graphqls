@@ -130,6 +130,7 @@ type ConversationItemsPage {
 union MessageContent =
     TextMessageContent
   | ImageMessageContent
+  | VideoMessageContent
   | DocumentMessageContent
   | DeletedMessageContent
   | AudioMessageContent
@@ -157,6 +158,18 @@ type ImageFileUpload implements IFileUpload {
   height: Int
 }
 
+type VideoFileUpload implements IFileUpload {
+  id: UUID!
+
+  url: EphemeralUrl!
+  fileName: String!
+  mimeType: String!
+
+  durationMs: Int
+  width: Int
+  height: Int
+}
+
 type DocumentFileUpload implements IFileUpload {
   id: UUID!
 
@@ -179,6 +192,10 @@ type AudioFileUpload implements IFileUpload {
 
 type ImageMessageContent {
   imageFileUpload: ImageFileUpload!
+}
+
+type VideoMessageContent {
+  videoFileUpload: VideoFileUpload!
 }
 
 type DocumentMessageContent {
@@ -221,6 +238,7 @@ type ConversationOutput {
 input SendMessageContentInput {
   textInput: SendTextMessageInput
   imageInput: SendImageMessageInput
+  videoInput: SendVideoMessageInput
   documentInput: SendDocumentMessageInput
   audioInput: SendAudioMessageInput
 }
@@ -234,6 +252,10 @@ input UploadInput {
 }
 
 input SendImageMessageInput {
+  upload: UploadInput!
+}
+
+input SendVideoMessageInput {
   upload: UploadInput!
 }
 
