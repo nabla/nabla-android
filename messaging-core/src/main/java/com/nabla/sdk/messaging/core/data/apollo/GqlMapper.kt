@@ -23,6 +23,7 @@ import com.nabla.sdk.graphql.fragment.MessageSummaryFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
 import com.nabla.sdk.graphql.fragment.SystemFragment
+import com.nabla.sdk.graphql.fragment.VideoFileUploadFragment
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -114,6 +115,15 @@ internal class GqlMapper(private val logger: Logger) {
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
                     fileUpload = mapToFileUploadImage(it.imageFileUpload.imageFileUploadFragment),
+                ),
+            )
+        }
+        summaryFragment.messageContent.messageContentFragment.onVideoMessageContent?.videoMessageContentFragment?.let {
+            return Message.Media.Video(
+                baseMessage = baseMessage,
+                mediaSource = FileSource.Uploaded(
+                    fileLocal = null,
+                    fileUpload = mapToFileUploadVideo(it.videoFileUpload.videoFileUploadFragment),
                 ),
             )
         }
@@ -219,7 +229,26 @@ internal class GqlMapper(private val logger: Logger) {
         )
     }
 
+    private fun mapToFileUploadVideo(
+        videoFileUploadFragment: VideoFileUploadFragment,
+    ): FileUpload.Video {
+        return FileUpload.Video(
+            size = videoFileUploadFragment.size(),
+            durationMs = videoFileUploadFragment.durationMs?.toLong(),
+            fileUpload = BaseFileUpload(
+                id = videoFileUploadFragment.id,
+                url = mapToEphemeralUrl(videoFileUploadFragment.url.ephemeralUrlFragment),
+                fileName = videoFileUploadFragment.fileName,
+                mimeType = mapToMimeType(videoFileUploadFragment.mimeType)
+            )
+        )
+    }
+
     private fun ImageFileUploadFragment.size(): Size? {
+        return if (width != null && height != null) Size(width, height) else null
+    }
+
+    private fun VideoFileUploadFragment.size(): Size? {
         return if (width != null && height != null) Size(width, height) else null
     }
 

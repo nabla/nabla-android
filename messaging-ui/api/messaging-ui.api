@@ -255,6 +255,17 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimel
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemTextMessageBinding;
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemVideoMessageBinding : androidx/viewbinding/ViewBinding {
+	public final field conversationVideoMessageImageView Landroid/widget/ImageView;
+	public final field conversationVideoMessageLoadingProgressBar Landroid/widget/ProgressBar;
+	public final field conversationVideoMessagePlayIconImageView Landroid/widget/ImageView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemVideoMessageBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemVideoMessageBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemVideoMessageBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding : androidx/viewbinding/ViewBinding {
 	public final field errorContainer Landroid/view/ViewGroup;
 	public final field nablaErrorBodyTextView Landroid/widget/TextView;
@@ -417,6 +428,17 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Cont
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Video : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-tuorwt8 (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Video;
+	public static synthetic fun copy-tuorwt8$default (Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Video;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Video;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

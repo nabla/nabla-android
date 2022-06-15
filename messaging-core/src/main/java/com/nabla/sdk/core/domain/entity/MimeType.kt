@@ -1,12 +1,12 @@
 package com.nabla.sdk.core.domain.entity
 
-public sealed class MimeType(public val type: String) {
+public sealed class MimeType private constructor(public val type: String) {
     public abstract val subtype: String
 
     public val stringRepresentation: String
         get() = "$type/$subtype"
 
-    public sealed class Image(public override val subtype: String) : MimeType(TYPE) {
+    public sealed class Image private constructor(public override val subtype: String) : MimeType(TYPE) {
         public object Jpeg : Image("jpeg")
         public object Png : Image("png")
         public data class Other(public override val subtype: String) : Image(subtype)
@@ -22,7 +22,21 @@ public sealed class MimeType(public val type: String) {
         }
     }
 
-    public sealed class Application(public override val subtype: String) : MimeType(TYPE) {
+    public sealed class Video private constructor(public override val subtype: String) : MimeType(TYPE) {
+        public object Mp4 : Video("mp4")
+        public data class Other(public override val subtype: String) : Video(subtype)
+
+        internal companion object {
+            internal const val TYPE = "video"
+
+            fun fromSubtype(subtype: String) = when (subtype) {
+                Mp4.subtype -> Mp4
+                else -> Other(subtype)
+            }
+        }
+    }
+
+    public sealed class Application private constructor(public override val subtype: String) : MimeType(TYPE) {
         public object Pdf : Application("pdf")
         public data class Other(public override val subtype: String) : Application(subtype)
 
@@ -36,7 +50,7 @@ public sealed class MimeType(public val type: String) {
         }
     }
 
-    public sealed class Audio(public override val subtype: String) : MimeType(TYPE) {
+    public sealed class Audio private constructor(public override val subtype: String) : MimeType(TYPE) {
         public object Mp3 : Audio("mp3")
         public data class Other(public override val subtype: String) : Audio(subtype)
 
@@ -57,6 +71,7 @@ public sealed class MimeType(public val type: String) {
                 val (type, subtype) = representation.split("/")
                 when (type) {
                     Image.TYPE -> Image.fromSubtype(subtype)
+                    Video.TYPE -> Video.fromSubtype(subtype)
                     Application.TYPE -> Application.fromSubtype(subtype)
                     Audio.TYPE -> Audio.fromSubtype(subtype)
                     else -> throw IllegalStateException("Unhandled mimeType: $representation")

@@ -15,6 +15,14 @@ public sealed class FileUpload {
         public companion object
     }
 
+    public data class Video(
+        val size: Size?,
+        val durationMs: Long?,
+        override val fileUpload: BaseFileUpload,
+    ) : FileUpload() {
+        public companion object
+    }
+
     public data class Document(
         val thumbnail: Image?,
         override val fileUpload: BaseFileUpload,

@@ -53,6 +53,9 @@ private fun Message.toMessageContent(
     is Message.Media.Image -> TimelineItem.Message.Image(
         uri = stableUri,
     )
+    is Message.Media.Video -> TimelineItem.Message.Video(
+        uri = stableUri,
+    )
     is Message.Text -> TimelineItem.Message.Text(
         text = text,
         repliedMessage = replyTo?.toRepliedMessage(),
@@ -71,6 +74,7 @@ private fun Message.toRepliedMessage() = RepliedMessage(
         is Message.Media.Audio -> RepliedMessage.Content.Audio(stableUri)
         is Message.Media.Document -> RepliedMessage.Content.Document(stableUri, thumbnailUri)
         is Message.Media.Image -> RepliedMessage.Content.Image(stableUri)
+        is Message.Media.Video -> RepliedMessage.Content.Video(stableUri)
         is Message.Text -> RepliedMessage.Content.Text(text)
     },
     author = author,
@@ -83,6 +87,7 @@ internal fun TimelineItem.Message.toRepliedMessage() = RepliedMessage(
         is TimelineItem.Message.Audio -> RepliedMessage.Content.Audio(content.uri)
         is TimelineItem.Message.File -> RepliedMessage.Content.Document(content.uri, content.thumbnailUri)
         is TimelineItem.Message.Image -> RepliedMessage.Content.Image(content.uri)
+        is TimelineItem.Message.Video -> RepliedMessage.Content.Video(content.uri)
         is TimelineItem.Message.Text -> RepliedMessage.Content.Text(content.text)
     },
     author = author,

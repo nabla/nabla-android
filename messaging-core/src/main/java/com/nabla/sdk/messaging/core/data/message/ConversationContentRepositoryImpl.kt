@@ -210,6 +210,14 @@ internal class ConversationContentRepositoryImpl(
                     replyToMessageId = mediaMessage.baseMessage.replyTo?.id?.remoteId,
                 )
             }
+            is Message.Media.Video -> {
+                gqlConversationContentDataSource.sendVideoMessage(
+                    mediaMessage.baseMessage.conversationId,
+                    messageId.clientId,
+                    fileUploadId,
+                    replyToMessageId = mediaMessage.baseMessage.replyTo?.id?.remoteId,
+                )
+            }
             is Message.Media.Audio -> {
                 gqlConversationContentDataSource.sendAudioMessage(
                     mediaMessage.baseMessage.conversationId,

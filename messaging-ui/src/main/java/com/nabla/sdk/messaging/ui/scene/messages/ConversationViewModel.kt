@@ -448,6 +448,9 @@ internal class ConversationViewModel(
             is TimelineItem.Message.Image -> {
                 navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenImage(item.content.uri.toJvmUri()))
             }
+            is TimelineItem.Message.Video -> {
+                // TODO-video-message: open video
+            }
             is TimelineItem.Message.File -> {
                 val fileContent = item.content
                 when (fileContent.mimeType) {
@@ -576,6 +579,10 @@ internal class ConversationViewModel(
 
     fun onCancelReplyToMessage() {
         currentlyReplyingToMutableFlow.value = null
+    }
+
+    fun onErrorFetchingVideoThumbnail(error: Throwable) {
+        messagingClient.logger.error("failed to load video thumbnail", error)
     }
 
     sealed interface State {

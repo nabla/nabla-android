@@ -36,6 +36,7 @@ import com.nabla.sdk.graphql.type.SendDocumentMessageInput
 import com.nabla.sdk.graphql.type.SendImageMessageInput
 import com.nabla.sdk.graphql.type.SendMessageContentInput
 import com.nabla.sdk.graphql.type.SendTextMessageInput
+import com.nabla.sdk.graphql.type.SendVideoMessageInput
 import com.nabla.sdk.graphql.type.UploadInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
@@ -239,6 +240,23 @@ internal class GqlConversationContentDataSource(
         }
     }
 
+    suspend fun sendVideoMessage(
+        conversationId: ConversationId,
+        clientId: Uuid,
+        fileUploadId: Uuid,
+        replyToMessageId: Uuid?,
+    ) {
+        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
+            SendMessageContentInput(
+                videoInput = Optional.presentIfNotNull(
+                    SendVideoMessageInput(
+                        UploadInput(fileUploadId),
+                    ),
+                ),
+            )
+        }
+    }
+
     suspend fun sendAudioMessage(
         conversationId: ConversationId,
         clientId: Uuid,
@@ -307,6 +325,7 @@ internal class GqlConversationContentDataSource(
                             __typename = DeletedMessageContent.type.name,
                             onTextMessageContent = null,
                             onImageMessageContent = null,
+                            onVideoMessageContent = null,
                             onDocumentMessageContent = null,
                             onAudioMessageContent = null,
                             onDeletedMessageContent = MessageContentFragment.OnDeletedMessageContent(

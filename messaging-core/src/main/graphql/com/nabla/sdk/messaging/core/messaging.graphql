@@ -232,6 +232,9 @@ fragment MessageContentFragment on MessageContent {
     ... on ImageMessageContent {
         ...ImageMessageContentFragment
     }
+    ... on VideoMessageContent {
+        ...VideoMessageContentFragment
+    }
     ... on DocumentMessageContent {
         ...DocumentMessageContentFragment
     }
@@ -291,6 +294,12 @@ fragment ImageMessageContentFragment on ImageMessageContent {
     }
 }
 
+fragment VideoMessageContentFragment on VideoMessageContent {
+    videoFileUpload {
+        ...VideoFileUploadFragment
+    }
+}
+
 fragment DocumentMessageContentFragment on DocumentMessageContent {
     title
     documentFileUpload {
@@ -311,6 +320,18 @@ fragment ImageFileUploadFragment on ImageFileUpload {
     }
     fileName
     mimeType
+    width
+    height
+}
+
+fragment VideoFileUploadFragment on VideoFileUpload {
+    id
+    url {
+        ...EphemeralUrlFragment
+    }
+    fileName
+    mimeType
+    durationMs
     width
     height
 }

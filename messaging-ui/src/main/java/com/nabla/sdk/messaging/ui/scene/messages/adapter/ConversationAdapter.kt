@@ -26,6 +26,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientFile
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientImageMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientTextMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PatientVideoMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.PopUpMenuHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderAudioMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderDeletedMessageViewHolder
@@ -33,10 +34,12 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderFil
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderImageMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderTextMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderTypingIndicatorViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderVideoMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemAudioMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemFileMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemImageMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemTextMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.SystemVideoMessageViewHolder
 
 internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapter<TimelineItem, ChatViewHolder>(ConversationDiffCallback) {
 
@@ -49,13 +52,16 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PROVIDER_VIDEO_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PROVIDER_TEXT_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.PATIENT_VIDEO_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.PATIENT_TEXT_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
+                ViewType.SYSTEM_VIDEO_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.SYSTEM_TEXT_MESSAGE_VIEW_TYPE.ordinal,
             )
         ) { viewHolder ->
@@ -83,6 +89,13 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                             is MessageAuthor.Patient -> ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE.ordinal
                             is MessageAuthor.Provider -> ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE.ordinal
                             else -> ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE.ordinal
+                        }
+                    }
+                    is TimelineItem.Message.Video -> {
+                        when (item.author) {
+                            is MessageAuthor.Patient -> ViewType.PATIENT_VIDEO_MESSAGE_VIEW_TYPE.ordinal
+                            is MessageAuthor.Provider -> ViewType.PROVIDER_VIDEO_MESSAGE_VIEW_TYPE.ordinal
+                            else -> ViewType.SYSTEM_VIDEO_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
                     is TimelineItem.Message.File -> {
@@ -128,6 +141,12 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             )
             ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE -> ProviderFileMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
             ViewType.PROVIDER_IMAGE_MESSAGE_VIEW_TYPE -> ProviderImageMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
+            ViewType.PROVIDER_VIDEO_MESSAGE_VIEW_TYPE -> ProviderVideoMessageViewHolder.create(
+                inflater,
+                parent,
+                callbacks::onProviderClicked,
+                callbacks::onErrorFetchingVideoThumbnail,
+            )
             ViewType.PROVIDER_AUDIO_MESSAGE_VIEW_TYPE -> ProviderAudioMessageViewHolder.create(
                 inflater,
                 parent,
@@ -144,6 +163,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             )
             ViewType.PATIENT_FILE_MESSAGE_VIEW_TYPE -> PatientFileMessageViewHolder.create(inflater, parent)
             ViewType.PATIENT_IMAGE_MESSAGE_VIEW_TYPE -> PatientImageMessageViewHolder.create(inflater, parent)
+            ViewType.PATIENT_VIDEO_MESSAGE_VIEW_TYPE -> PatientVideoMessageViewHolder.create(
+                inflater,
+                parent,
+                callbacks::onErrorFetchingVideoThumbnail,
+            )
             ViewType.PATIENT_AUDIO_MESSAGE_VIEW_TYPE -> PatientAudioMessageViewHolder.create(inflater, parent, callbacks::onToggleAudioMessagePlay)
             ViewType.SYSTEM_TEXT_MESSAGE_VIEW_TYPE -> SystemTextMessageViewHolder.create(
                 inflater,
@@ -153,6 +177,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             )
             ViewType.SYSTEM_FILE_MESSAGE_VIEW_TYPE -> SystemFileMessageViewHolder.create(inflater, parent)
             ViewType.SYSTEM_IMAGE_MESSAGE_VIEW_TYPE -> SystemImageMessageViewHolder.create(inflater, parent)
+            ViewType.SYSTEM_VIDEO_MESSAGE_VIEW_TYPE -> SystemVideoMessageViewHolder.create(inflater, parent, callbacks::onErrorFetchingVideoThumbnail)
             ViewType.LOADING_MORE_VIEW_TYPE -> LoadingMoreViewHolder(NablaConversationTimelineItemLoadingMoreBinding.inflate(inflater, parent, false))
             ViewType.DATE_VIEW_TYPE -> DateSeparatorViewHolder.create(inflater, parent)
             ViewType.CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE -> ConversationActivityTextMessageViewHolder.create(inflater, parent)
@@ -221,6 +246,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.Image
             )
+            is ProviderVideoMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.author as MessageAuthor.Provider,
+                item.content as TimelineItem.Message.Video
+            )
             is ProviderAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as MessageAuthor.Provider,
@@ -246,6 +276,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item.author as MessageAuthor.Patient,
                 item.content as TimelineItem.Message.Image
             )
+            is PatientVideoMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.author as MessageAuthor.Patient,
+                item.content as TimelineItem.Message.Video
+            )
             is PatientAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as MessageAuthor.Patient,
@@ -270,6 +305,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item as TimelineItem.Message,
                 item.author as MessageAuthor.System,
                 item.content as TimelineItem.Message.Image
+            )
+            is SystemVideoMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.author as MessageAuthor.System,
+                item.content as TimelineItem.Message.Video
             )
             is SystemAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
@@ -329,6 +369,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         fun onUrlClicked(url: String, isFromPatient: Boolean)
         fun onToggleAudioMessagePlay(audioMessageUri: Uri)
         fun onRepliedMessageClicked(messageId: MessageId)
+        fun onErrorFetchingVideoThumbnail(error: Throwable)
     }
 
     private enum class ViewType {
@@ -337,16 +378,19 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         PROVIDER_DELETED_MESSAGE_VIEW_TYPE,
         PROVIDER_FILE_MESSAGE_VIEW_TYPE,
         PROVIDER_IMAGE_MESSAGE_VIEW_TYPE,
+        PROVIDER_VIDEO_MESSAGE_VIEW_TYPE,
         PROVIDER_AUDIO_MESSAGE_VIEW_TYPE,
         PROVIDER_TEXT_MESSAGE_VIEW_TYPE,
         PROVIDER_TYPING_INDICATOR,
         PATIENT_DELETED_MESSAGE_VIEW_TYPE,
         PATIENT_FILE_MESSAGE_VIEW_TYPE,
         PATIENT_IMAGE_MESSAGE_VIEW_TYPE,
+        PATIENT_VIDEO_MESSAGE_VIEW_TYPE,
         PATIENT_AUDIO_MESSAGE_VIEW_TYPE,
         PATIENT_TEXT_MESSAGE_VIEW_TYPE,
         SYSTEM_FILE_MESSAGE_VIEW_TYPE,
         SYSTEM_IMAGE_MESSAGE_VIEW_TYPE,
+        SYSTEM_VIDEO_MESSAGE_VIEW_TYPE,
         SYSTEM_TEXT_MESSAGE_VIEW_TYPE,
         CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE,
     }

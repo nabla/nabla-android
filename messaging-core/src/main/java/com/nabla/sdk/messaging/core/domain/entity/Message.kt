@@ -38,6 +38,14 @@ public sealed interface FileLocal {
         public companion object
     }
 
+    public data class Video(
+        override val uri: Uri,
+        override val fileName: String?,
+        override val mimeType: MimeType.Video,
+    ) : FileLocal {
+        public companion object
+    }
+
     public data class Document(
         override val uri: Uri,
         override val fileName: String?,
@@ -163,6 +171,21 @@ public sealed class Message : ConversationItem {
                 copy(baseMessage = baseMessage.copy(sendStatus = status))
 
             internal fun modify(mediaSource: FileSource<FileLocal.Image, FileUpload.Image>): Image =
+                copy(mediaSource = mediaSource)
+
+            @VisibleForTesting
+            public companion object
+        }
+
+        public data class Video @VisibleForTesting public constructor(
+            override val baseMessage: BaseMessage,
+            override val mediaSource: FileSource<FileLocal.Video, FileUpload.Video>,
+        ) : Media<FileLocal.Video, FileUpload.Video>() {
+
+            override fun modify(status: SendStatus): Message =
+                copy(baseMessage = baseMessage.copy(sendStatus = status))
+
+            internal fun modify(mediaSource: FileSource<FileLocal.Video, FileUpload.Video>): Video =
                 copy(mediaSource = mediaSource)
 
             @VisibleForTesting

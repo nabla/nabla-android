@@ -83,6 +83,7 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.google.material
     implementation libs.coilCore
+    implementation libs.coilVideo
     implementation libs.androidx.fragment.ktx
     implementation libs.recyclerview
     implementation libs.touchImageView

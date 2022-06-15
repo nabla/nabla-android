@@ -17,6 +17,7 @@ internal fun RepliedMessage.repliedToContent(context: Context): String = when (c
     is RepliedMessage.Content.Audio -> context.getString(R.string.nabla_conversation_replied_to_message_description_voice)
     is RepliedMessage.Content.Document -> context.getString(R.string.nabla_conversation_replied_to_message_description_document)
     is RepliedMessage.Content.Image -> context.getString(R.string.nabla_conversation_replied_to_message_description_photo)
+    is RepliedMessage.Content.Video -> context.getString(R.string.nabla_conversation_replied_to_message_description_video)
 }
 
 internal fun RepliedMessage.repliedToAuthorName(context: Context): String = when (author) {
@@ -29,6 +30,10 @@ internal fun RepliedMessage.repliedToAuthorName(context: Context): String = when
 internal fun ImageView.loadReplyContentThumbnailOrHide(replyContent: RepliedMessage.Content) {
     isVisible = when {
         replyContent is RepliedMessage.Content.Image -> {
+            load(replyContent.uri.toAndroidUri())
+            true
+        }
+        replyContent is RepliedMessage.Content.Video -> {
             load(replyContent.uri.toAndroidUri())
             true
         }

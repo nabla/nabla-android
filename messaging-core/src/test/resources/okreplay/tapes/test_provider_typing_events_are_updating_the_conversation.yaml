@@ -1,7 +1,7 @@
 !tape
 name: test provider typing events are updating the conversation
 interactions:
-- recorded: 2022-06-09T16:08:53.084Z
+- recorded: 2022-06-15T13:22:19.551Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -15,7 +15,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Thu, 09 Jun 2022 16:08:53 GMT
+      Date: Wed, 15 Jun 2022 13:22:19 GMT
       connection: close
       content-length: '350'
       content-type: application/json; charset=UTF-8
@@ -23,8 +23,8 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: f98f61fb-c4b1-42c2-81da-ed202f5769fa
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"c2dee4a6-75b4-4c02-9e80-b5076f2a1414","title":null,"description":null,"createdAt":"2022-06-09T18:08:53.079+02:00","updatedAt":"2022-06-09T18:08:53.079+02:00","inboxPreviewTitle":"Nouvelle
+      x-request-id: f7f45dde-2ed5-4fee-b7b7-87cfab1ad834
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"8ec794b3-2cc4-4beb-8043-0aa408a01ae7","title":null,"description":null,"createdAt":"2022-06-15T15:22:19.458+02:00","updatedAt":"2022-06-15T15:22:19.458+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
 - recorded: 2022-06-09T12:51:39.666Z
   request:
@@ -120,4 +120,75 @@ interactions:
       x-nabla-minimum-ios-code-version: '0'
       x-request-id: bc55744d-c8f7-4709-bf6b-88a67dfc5b11
     body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"c2dee4a6-75b4-4c02-9e80-b5076f2a1414","title":null,"description":null,"createdAt":"2022-06-09T18:08:53.079+02:00","updatedAt":"2022-06-09T18:08:53.079+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-06-15T13:14:40.797Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/jwt/refresh
+    headers: { }
+    body: '{"refresh_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IlJlZnJlc2giLCJleHAiOjE2NjMwNzQxMDAsInNlc3Npb25fdXVpZCI6IjliM2NjMzZkLTFiOGUtNGMwMi05NzRlLTkwZjJhOGYxOTZlMiIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ.tw5O59WTXYSKkMNKaJ6iR02UV_0EWzLFyCLhEnpCFME"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Wed, 15 Jun 2022 13:14:40 GMT
+      connection: close
+      content-length: '703'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-request-id: d867ee99-39e0-4796-b449-a56a7ef5c0a8
+    body: |-
+      {
+          "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IkJlYXJlciIsImV4cCI6MTY1NTI5OTE4MCwic2Vzc2lvbl91dWlkIjoiOWIzY2MzNmQtMWI4ZS00YzAyLTk3NGUtOTBmMmE4ZjE5NmUyIiwib3JnYW5pemF0aW9uU3RyaW5nSWQiOiJuYWJsYSJ9.CDz4Fcnuu-kXK_CFiy6Lct1dfFGecFnjB3hcpcnWnzw",
+          "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IlJlZnJlc2giLCJleHAiOjE2NjMwNzQ4ODAsInNlc3Npb25fdXVpZCI6IjliM2NjMzZkLTFiOGUtNGMwMi05NzRlLTkwZjJhOGYxOTZlMiIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ.6HYEQ86pmO_LC-54Zn7kGq2vPMtfuGQDiy8CdVSyYlo"
+      }
+- recorded: 2022-06-15T13:14:41.107Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 5b7089e28d9c42992d08448bbc7d5c8d9b5165a817a48fc93ade3008af078795
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"ac39235b-ecd2-4bb8-abce-604ab34f8745"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Wed, 15 Jun 2022 13:14:41 GMT
+      connection: close
+      content-length: '344'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: 1ac715d0-3a02-4bd9-a738-8f0a0f57c8be
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"ac39235b-ecd2-4bb8-abce-604ab34f8745","title":null,"description":null,"createdAt":"2022-06-15T15:14:40.883+02:00","updatedAt":"2022-06-15T15:14:40.883+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-06-15T13:22:19.910Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 5b7089e28d9c42992d08448bbc7d5c8d9b5165a817a48fc93ade3008af078795
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"8ec794b3-2cc4-4beb-8043-0aa408a01ae7"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Wed, 15 Jun 2022 13:22:19 GMT
+      connection: close
+      content-length: '344'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: d6795b89-99b4-4623-b0c4-3457c9c15219
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"8ec794b3-2cc4-4beb-8043-0aa408a01ae7","title":null,"description":null,"createdAt":"2022-06-15T15:22:19.458+02:00","updatedAt":"2022-06-15T15:22:19.458+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

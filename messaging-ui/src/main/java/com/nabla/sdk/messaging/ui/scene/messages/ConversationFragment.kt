@@ -491,6 +491,10 @@ public open class ConversationFragment : Fragment() {
         override fun onRepliedMessageClicked(messageId: MessageId) {
             viewModel.onRepliedMessageClicked(messageId)
         }
+
+        override fun onErrorFetchingVideoThumbnail(error: Throwable) {
+            viewModel.onErrorFetchingVideoThumbnail(error)
+        }
     }
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {

@@ -227,6 +227,7 @@ internal class ConversationContentRepositoryStub(
             is Message.Media.Audio -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
             is Message.Media.Document -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
             is Message.Media.Image -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+            is Message.Media.Video -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
             is Message.Text -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
         }
     }

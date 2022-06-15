@@ -52,6 +52,7 @@
     <string name="nabla_conversation_composer_send_content_description">Send</string>
     <string name="nabla_conversation_composer_cancel_reply_content_description">Cancel reply</string>
     <string name="nabla_conversation_composer_replying_to_title_author">Reply to %1$s</string>
+    <string name="nabla_conversation_video_message_thumbnail_content_description">See the video</string>
     <string name="nabla_conversation_header_loading">Loading</string>
     <string name="nabla_conversation_header_error">Error</string>
     <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Share</string>
@@ -76,4 +77,5 @@
     <string name="nabla_conversation_replied_to_message_description_voice">🔊 Voice message</string>
     <string name="nabla_conversation_replied_to_message_description_document">📁 Document</string>
     <string name="nabla_conversation_replied_to_message_description_photo">📷 Photo</string>
+    <string name="nabla_conversation_replied_to_message_description_video">📹 Video</string>
 </resources>

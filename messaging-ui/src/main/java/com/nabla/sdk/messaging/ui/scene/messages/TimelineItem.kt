@@ -47,6 +47,14 @@ internal sealed interface TimelineItem {
             internal companion object
         }
 
+        data class Video(
+            val uri: Uri,
+        ) : Content {
+            override val repliedMessage: RepliedMessage? = null
+
+            internal companion object
+        }
+
         data class File(
             val uri: Uri,
             val fileName: String,
