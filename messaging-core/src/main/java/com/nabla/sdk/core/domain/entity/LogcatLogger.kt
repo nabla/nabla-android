@@ -13,7 +13,7 @@ public class LogcatLogger(
 ) : Logger {
     override fun debug(message: String, error: Throwable?, domain: String) {
         if (logLevel.isAtLeast(LogLevel.DEBUG)) {
-            Log.i(asSdkTag(domain), message, error)
+            Log.d(asSdkTag(domain), message, error)
         }
     }
 
