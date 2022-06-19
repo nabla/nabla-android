@@ -63,6 +63,11 @@ internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>()
                 newItem.content,
                 oldItem.content,
             )
+            oldItem.content is TimelineItem.Message.Video && newItem.content is TimelineItem.Message.Video -> getVideoMessageChangePayload(
+                newItem,
+                newItem.content,
+                oldItem.content,
+            )
             else -> null
         }
     }
@@ -108,6 +113,25 @@ internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>()
                 status = newItem.status,
                 actions = newItem.actions,
                 itemForCallback = newItem
+            )
+            else -> null
+        }
+    }
+
+    private fun getVideoMessageChangePayload(
+        newItem: TimelineItem.Message,
+        newContent: TimelineItem.Message.Video,
+        oldContent: TimelineItem.Message.Video,
+    ): BindingPayload.Video? {
+        val onlyVideoUriChanged = newContent == oldContent.copy(uri = newContent.uri)
+        return when {
+            onlyVideoUriChanged -> BindingPayload.Video(
+                itemId = newItem.listItemId,
+                uri = newContent.uri.toAndroidUri(),
+                showStatus = newItem.showStatus,
+                status = newItem.status,
+                actions = newItem.actions,
+                itemForCallback = newItem,
             )
             else -> null
         }

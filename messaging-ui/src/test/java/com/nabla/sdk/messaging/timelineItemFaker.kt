@@ -41,3 +41,7 @@ internal fun TimelineItem.Message.Text.Companion.fake() = TimelineItem.Message.T
 internal fun TimelineItem.Message.Image.Companion.fake() = TimelineItem.Message.Image(
     uri = UriFaker.remote()
 )
+
+internal fun TimelineItem.Message.Video.Companion.fake() = TimelineItem.Message.Video(
+    uri = UriFaker.remote()
+)

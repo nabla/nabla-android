@@ -17,6 +17,16 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaActivityFullScree
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenImageBinding;
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenVideoBinding : androidx/viewbinding/ViewBinding {
+	public final field fullScreenVideoBackButton Landroid/widget/ImageView;
+	public final field fullScreenVideoPlayerView Lcom/google/android/exoplayer2/ui/StyledPlayerView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenVideoBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenVideoBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenVideoBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/databinding/NablaComponentAvatarViewBinding : androidx/viewbinding/ViewBinding {
 	public final field componentAvatarImageView Landroid/widget/ImageView;
 	public final field componentAvatarPlaceholderTextView Landroid/widget/TextView;

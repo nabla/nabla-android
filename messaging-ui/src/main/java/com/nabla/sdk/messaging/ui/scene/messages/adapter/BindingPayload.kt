@@ -49,6 +49,15 @@ internal sealed class BindingPayload {
         override val itemForCallback: TimelineItem.Message,
     ) : BindingPayload(), ResetActions, StatusVisibility
 
+    data class Video(
+        val itemId: String,
+        val uri: Uri,
+        val status: SendStatus,
+        override val showStatus: Boolean,
+        override val actions: Set<MessageAction>,
+        override val itemForCallback: TimelineItem.Message,
+    ) : BindingPayload(), ResetActions, StatusVisibility
+
     data class Callbacks(
         override val actions: Set<MessageAction>,
         override val itemForCallback: TimelineItem.Message,

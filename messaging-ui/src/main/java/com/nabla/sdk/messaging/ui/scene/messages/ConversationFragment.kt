@@ -66,6 +66,7 @@ import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity
+import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenVideoActivity
 import com.nabla.sdk.messaging.ui.helper.PermissionRational
 import com.nabla.sdk.messaging.ui.helper.PermissionRequestLauncher
 import com.nabla.sdk.messaging.ui.helper.copyNewPlainText
@@ -323,7 +324,7 @@ public open class ConversationFragment : Fragment() {
                     startActivity(FullScreenImageActivity.newIntent(requireActivity(), event.imageUri))
                 }
                 is ConversationViewModel.NavigationEvent.OpenFullScreenVideo -> {
-                    // TODO-video-message: open video in fullscreen
+                    startActivity(FullScreenVideoActivity.newIntent(requireActivity(), event.videoUri))
                 }
                 ConversationViewModel.NavigationEvent.RequestVoiceMessagePermissions -> captureAudioPermissionsLauncher.launch()
                 is ConversationViewModel.NavigationEvent.ScrollToItem -> {

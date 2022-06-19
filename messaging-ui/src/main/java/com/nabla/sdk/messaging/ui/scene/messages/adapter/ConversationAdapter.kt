@@ -214,6 +214,16 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
 
                 (holder as? PatientImageMessageViewHolder)?.bindStatus(payload.status, payload.showStatus)
             }
+            is BindingPayload.Video -> {
+                (holder as? ProviderVideoMessageViewHolder ?: holder as? PatientVideoMessageViewHolder ?: holder as? SystemVideoMessageViewHolder)
+                    ?.contentBinder
+                    ?.loadVideo(
+                        uri = payload.uri,
+                        itemId = payload.itemId,
+                    )
+
+                (holder as? PatientImageMessageViewHolder)?.bindStatus(payload.status, payload.showStatus)
+            }
             is BindingPayload.Audio -> {
                 (holder as? ProviderAudioMessageViewHolder ?: holder as? PatientAudioMessageViewHolder ?: holder as? SystemAudioMessageViewHolder)
                     ?.contentBinder

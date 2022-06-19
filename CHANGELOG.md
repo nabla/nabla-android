@@ -10,8 +10,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Now `messaging-core` supports messages replying to other messages.
-- You can now pass your own instance of `Logger` via the `Configuration` when initializing the SDK.
+- Now `messaging-core` supports video messages.
 - Now on `ConversationFragment` you can reply to messages.
+- Now on `ConversationFragment` you can receive, play and send video messages, either from library or by recording a new one.
+- You can now pass your own instance of `Logger` via the `Configuration` when initializing the SDK.
 
 ### Changed
 

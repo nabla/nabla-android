@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="NablaFullScreenImageActivityTheme" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="NablaFullScreenMediaActivityTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/nabla_black</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>

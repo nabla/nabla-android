@@ -467,7 +467,7 @@ internal class ConversationViewModel(
                 navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenImage(item.content.uri.toJvmUri()))
             }
             is TimelineItem.Message.Video -> {
-                // TODO-video-message: open video in fullscreen
+                navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenVideo(item.content.uri.toJvmUri()))
             }
             is TimelineItem.Message.File -> {
                 val fileContent = item.content

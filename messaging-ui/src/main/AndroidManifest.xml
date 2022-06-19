@@ -11,7 +11,11 @@
     <application tools:ignore="RtlEnabled">
         <activity
             android:name="com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity"
-            android:theme="@style/NablaFullScreenImageActivityTheme"
+            android:theme="@style/NablaFullScreenMediaActivityTheme"
+            />
+        <activity
+            android:name="com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenVideoActivity"
+            android:theme="@style/NablaFullScreenMediaActivityTheme"
             />
 
         <provider
