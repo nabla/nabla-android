@@ -42,6 +42,8 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
 
 internal class CoreContainer(
     name: String,
@@ -77,6 +79,8 @@ internal class CoreContainer(
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
             .apply { networkConfiguration.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
+            .writeTimeout(2.minutes.toJavaDuration())
+            .readTimeout(2.minutes.toJavaDuration())
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(PublicApiKeyInterceptor(configuration.publicApiKey))
             .addInterceptor(SdkVersionInterceptor(BuildConfig.VERSION_NAME))

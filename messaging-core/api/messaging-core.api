@@ -1001,6 +1001,17 @@ public final class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Video : com/nabla/sdk/messaging/core/domain/entity/MessageInput$Media {
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Video;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Video;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput$Media$Video;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMediaSource ()Lcom/nabla/sdk/messaging/core/domain/entity/FileSource$Local;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/nabla/sdk/messaging/core/domain/entity/MessageInput$Text : com/nabla/sdk/messaging/core/domain/entity/MessageInput {
 	public fun <init> (Ljava/lang/String;)V
 	public final fun component1 ()Ljava/lang/String;

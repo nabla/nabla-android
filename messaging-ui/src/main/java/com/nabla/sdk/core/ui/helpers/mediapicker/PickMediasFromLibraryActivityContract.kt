@@ -32,16 +32,20 @@ internal class PickMediasFromLibraryActivityContract(private val context: Contex
                 throw RuntimeException("Activity result: $resultCode")
             }
 
+            val singleMimeTypeOrNull = if (result?.clipData?.description?.mimeTypeCount == 1) {
+                result.clipData?.description?.getMimeType(0)
+            } else null
+
             result?.clipData?.let { clipData ->
                 val urisWithMimeTypes = mutableListOf<Pair<Uri, String?>>()
                 for (i in 0 until clipData.itemCount) {
-                    urisWithMimeTypes.add(clipData.getItemAt(i).uri to clipData.description.getMimeType(i))
+                    urisWithMimeTypes.add(clipData.getItemAt(i).uri to singleMimeTypeOrNull)
                 }
                 return MediaPickingResult.Success(createMediasOrThrow(urisWithMimeTypes))
             }
 
             result?.data?.let { uri ->
-                return MediaPickingResult.Success(createMediasOrThrow(listOf(Pair(uri, null))))
+                return MediaPickingResult.Success(createMediasOrThrow(listOf(Pair(uri, singleMimeTypeOrNull))))
             }
 
             throw RuntimeException("Unable to get uri from result")

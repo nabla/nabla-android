@@ -38,8 +38,6 @@ internal class VideoMessageContentBinder(
             placeholderMemoryCacheKey(itemId)
             decoder(VideoFrameDecoder(binding.context))
 
-            // TODO-video-message: check if we need to set a VideoFrameFileFetcher/VideoFrameUriFetcher.
-
             listener(
                 onSuccess = { _, _ ->
                     binding.conversationVideoMessageImageView.visibility = View.VISIBLE

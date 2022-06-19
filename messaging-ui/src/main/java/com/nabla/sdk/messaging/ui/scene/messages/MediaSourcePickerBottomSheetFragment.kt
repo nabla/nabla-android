@@ -44,6 +44,11 @@ internal class MediaSourcePickerBottomSheetFragment : BottomSheetDialogFragment(
             dismiss()
         }
 
+        binding.chatMediaSourcePickerOptionCameraVideo.setOnClickListener {
+            setFragmentResult(REQUEST_KEY, generateResultBundle(MediaSource.CAMERA_VIDEO))
+            dismiss()
+        }
+
         binding.chatMediaSourcePickerOptionLibrary.setOnClickListener {
             setFragmentResult(REQUEST_KEY, generateResultBundle(MediaSource.GALLERY))
             dismiss()

@@ -19,34 +19,35 @@
     <attr name="nablaMessaging_conversationDateSeparatorAppearance" format="reference" />
     <attr name="nablaMessaging_conversationPatientMessageAppearance" format="reference" />
     <attr name="nablaMessaging_conversationProviderMessageAppearance" format="reference" />
-    <attr name="nablaMessaging_conversationRepliedMessageAuthorAppearance" format="reference" />
-    <attr name="nablaMessaging_conversationRepliedMessageBodyAppearance" format="reference" />
-    <attr name="nablaMessaging_conversationDeletedMessageAppearance" format="reference" />
-    <attr name="nablaMessaging_conversationMessageAuthorAppearance" format="reference" />
-    <attr name="nablaMessaging_conversationMessageStatusAppearance" format="reference" />
-    <attr name="nablaMessaging_conversationActivityAppearance" format="reference" />
+    <attr name="nablaMessaging_conversationRepliedMessageAuthorAppearance" format="reference"/>
+    <attr name="nablaMessaging_conversationRepliedMessageBodyAppearance" format="reference"/>
+    <attr name="nablaMessaging_conversationDeletedMessageAppearance" format="reference"/>
+    <attr name="nablaMessaging_conversationMessageAuthorAppearance" format="reference"/>
+    <attr name="nablaMessaging_conversationMessageStatusAppearance" format="reference"/>
+    <attr name="nablaMessaging_conversationActivityAppearance" format="reference"/>
 
-    <attr name="nablaMessaging_conversationComposerEditTextStyle" format="reference" />
-    <attr name="nablaMessaging_conversationComposerBackground" format="reference" />
+    <attr name="nablaMessaging_conversationComposerEditTextStyle" format="reference"/>
+    <attr name="nablaMessaging_conversationComposerBackground" format="reference"/>
 
-    <attr name="nablaMessaging_patientMessageBackgroundColor" format="reference|color" />
-    <attr name="nablaMessaging_providerMessageBackgroundColor" format="reference|color" />
-    <attr name="nablaMessaging_deletedMessageBackgroundColor" format="reference|color" />
+    <attr name="nablaMessaging_patientMessageBackgroundColor" format="reference|color"/>
+    <attr name="nablaMessaging_providerMessageBackgroundColor" format="reference|color"/>
+    <attr name="nablaMessaging_deletedMessageBackgroundColor" format="reference|color"/>
 
 
-    <attr name="nablaMessaging_sendMessageIconTint" format="reference|color" />
-    <attr name="nablaMessaging_sendMessageIcon" format="reference" />
-    <attr name="nablaMessaging_addMediaIcon" format="reference" />
-    <attr name="nablaMessaging_recordVoiceMessageIcon" format="reference" />
-    <attr name="nablaMessaging_cancelVoiceMessageIcon" format="reference" />
-    <attr name="nablaMessaging_mediaSourceCameraIcon" format="reference" />
-    <attr name="nablaMessaging_mediaSourceGalleryIcon" format="reference" />
-    <attr name="nablaMessaging_mediaSourceDocumentIcon" format="reference" />
+    <attr name="nablaMessaging_sendMessageIconTint" format="reference|color"/>
+    <attr name="nablaMessaging_sendMessageIcon" format="reference"/>
+    <attr name="nablaMessaging_addMediaIcon" format="reference"/>
+    <attr name="nablaMessaging_recordVoiceMessageIcon" format="reference"/>
+    <attr name="nablaMessaging_cancelVoiceMessageIcon" format="reference"/>
+    <attr name="nablaMessaging_mediaSourceCameraPhotoIcon" format="reference"/>
+    <attr name="nablaMessaging_mediaSourceCameraVideoIcon" format="reference"/>
+    <attr name="nablaMessaging_mediaSourceGalleryIcon" format="reference"/>
+    <attr name="nablaMessaging_mediaSourceDocumentIcon" format="reference"/>
 
-    <attr name="nablaMessaging_conversationBackgroundColor" format="reference|color" />
-    <attr name="nablaMessaging_conversationHeaderColor" format="reference|color" />
+    <attr name="nablaMessaging_conversationBackgroundColor" format="reference|color"/>
+    <attr name="nablaMessaging_conversationHeaderColor" format="reference|color"/>
 
-    <attr name="nablaMessaging_conversationMediaPickerTextAppearance" format="reference|color" />
-    <attr name="nablaMessaging_conversationMediaPickerIconBackground" format="reference|color" />
+    <attr name="nablaMessaging_conversationMediaPickerTextAppearance" format="reference|color"/>
+    <attr name="nablaMessaging_conversationMediaPickerIconBackground" format="reference|color"/>
 
 </resources>

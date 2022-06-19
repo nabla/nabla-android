@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.bitmap.BitmapPool
 import coil.decode.DataSource
 import coil.decode.Options
+import coil.decode.VideoFrameDecoder
 import coil.fetch.DrawableResult
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
@@ -31,10 +32,11 @@ import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaToSendBinding
 import kotlin.math.max
 
-internal class MediasToSendAdapter(
+internal class MediaToSendAdapter(
     private val onMediaClickedListener: (LocalMedia) -> Unit,
     private val onDeleteMediaToSendClickListener: (LocalMedia) -> Unit,
-) : ListAdapter<LocalMedia, MediasToSendAdapter.MediaViewHolder>(DIFF_UTIL_CALLBACK) {
+    private val onErrorLoadingVideoThumbnail: (Throwable) -> Unit,
+) : ListAdapter<LocalMedia, MediaToSendAdapter.MediaViewHolder>(DIFF_UTIL_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         return MediaViewHolder(
@@ -50,6 +52,7 @@ internal class MediasToSendAdapter(
         val media = getItem(position)
         when (media) {
             is LocalMedia.Image -> holder.bindImage(media)
+            is LocalMedia.Video -> holder.bindVideo(media, onErrorLoadingVideoThumbnail)
             is LocalMedia.Document -> holder.bindDocument(media)
         }
 
@@ -75,6 +78,25 @@ internal class MediasToSendAdapter(
                         binding.chatMediaToSendImageView.visibility = View.VISIBLE
                         binding.chatMediaToSendLoadingProgressBar.visibility = View.GONE
                     },
+                )
+            }
+        }
+
+        fun bindVideo(media: LocalMedia.Video, onErrorLoadingThumbnail: (Throwable) -> Unit) {
+            binding.chatMediaToSendImageView.visibility = View.INVISIBLE
+            binding.chatMediaToSendLoadingProgressBar.visibility = View.VISIBLE
+
+            binding.chatMediaToSendImageView.load(media.uri.toAndroidUri()) {
+                decoder(VideoFrameDecoder(binding.context))
+
+                listener(
+                    onSuccess = { _, _ ->
+                        binding.chatMediaToSendImageView.visibility = View.VISIBLE
+                        binding.chatMediaToSendLoadingProgressBar.visibility = View.GONE
+                    },
+                    onError = { _, error ->
+                        onErrorLoadingThumbnail(error)
+                    }
                 )
             }
         }

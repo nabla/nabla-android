@@ -96,6 +96,7 @@ internal class ConversationContentRepositoryStub(
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
+            is MessageInput.Media.Video -> Message.Media.Video(baseMessage, input.mediaSource)
             is MessageInput.Text -> Message.Text(baseMessage, input.text)
             is MessageInput.Media.Audio -> Message.Media.Audio(baseMessage, input.mediaSource)
         }

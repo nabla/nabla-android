@@ -7,5 +7,8 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @Parcelize
 internal enum class MediaSource : Parcelable {
-    CAMERA_PICTURE, GALLERY, DOCUMENT
+    CAMERA_PICTURE,
+    CAMERA_VIDEO,
+    GALLERY,
+    DOCUMENT,
 }

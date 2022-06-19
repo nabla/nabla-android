@@ -14,6 +14,11 @@ public sealed class MessageInput {
         public data class Image(val mediaSource: FileSource.Local<FileLocal.Image, FileUpload.Image>) : Media()
 
         /**
+         * Input for a video message, containing the local video to send.
+         */
+        public data class Video(val mediaSource: FileSource.Local<FileLocal.Video, FileUpload.Video>) : Media()
+
+        /**
          * Input for a document message, containing the local document to send.
          */
         public data class Document(val mediaSource: FileSource.Local<FileLocal.Document, FileUpload.Document>) : Media()

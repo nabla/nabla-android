@@ -34,21 +34,27 @@
         <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurface</item>
         <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurface</item>
         <item name="nablaMessaging_sendMessageIconTint">@color/nabla_conversation_send_message_selector</item>
-        <item name="nablaMessaging_conversationComposerEditTextStyle">@style/Nabla.Widget.Messaging.ComposerEditTextStyle</item>
-        <item name="nablaMessaging_conversationComposerBackground">@drawable/nabla_conversation_composer_background</item>
+        <item name="nablaMessaging_conversationComposerEditTextStyle">
+            @style/Nabla.Widget.Messaging.ComposerEditTextStyle
+        </item>
+        <item name="nablaMessaging_conversationComposerBackground">@drawable/nabla_conversation_composer_background
+        </item>
 
         <item name="nablaMessaging_sendMessageIcon">@drawable/nabla_ic_send</item>
         <item name="nablaMessaging_addMediaIcon">@drawable/nabla_ic_add</item>
         <item name="nablaMessaging_recordVoiceMessageIcon">@drawable/nabla_ic_mic</item>
         <item name="nablaMessaging_cancelVoiceMessageIcon">@drawable/nabla_ic_trash</item>
-        <item name="nablaMessaging_mediaSourceCameraIcon">@drawable/nabla_ic_camera</item>
+        <item name="nablaMessaging_mediaSourceCameraPhotoIcon">@drawable/nabla_ic_camera_photo</item>
+        <item name="nablaMessaging_mediaSourceCameraVideoIcon">@drawable/nabla_ic_camera_video</item>
         <item name="nablaMessaging_mediaSourceGalleryIcon">@drawable/nabla_ic_photo</item>
         <item name="nablaMessaging_mediaSourceDocumentIcon">@drawable/nabla_ic_pick_file</item>
         <item name="nablaMessaging_conversationBackgroundColor">?android:colorBackground</item>
         <item name="nablaMessaging_conversationHeaderColor">?colorSurface</item>
 
         <item name="nablaMessaging_conversationMediaPickerTextAppearance">?textAppearanceBodyLarge</item>
-        <item name="nablaMessaging_conversationMediaPickerIconBackground">@drawable/nabla_conversation_media_picker_icon_background</item>
+        <item name="nablaMessaging_conversationMediaPickerIconBackground">
+            @drawable/nabla_conversation_media_picker_icon_background
+        </item>
 
     </style>
 

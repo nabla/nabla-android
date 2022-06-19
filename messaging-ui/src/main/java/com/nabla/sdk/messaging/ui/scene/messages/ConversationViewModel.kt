@@ -189,10 +189,14 @@ internal class ConversationViewModel(
         navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenCameraPictureCapture)
     }
 
-    fun onImageSourceLibrarySelected() {
+    fun onMediaSourceCameraVideoSelectedAndPermissionsGranted() {
+        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenCameraVideoCapture)
+    }
+
+    fun onImageAndVideoSourceLibrarySelected() {
         navigationEventMutableFlow.emitIn(
             viewModelScope,
-            NavigationEvent.OpenMediaLibrary(listOf(MimeType.Image.Jpeg, MimeType.Image.Png))
+            NavigationEvent.OpenMediaLibrary(listOf(MimeType.Image.Jpeg, MimeType.Image.Png, MimeType.Video.Mp4))
         )
     }
 
@@ -208,6 +212,10 @@ internal class ConversationViewModel(
         mediasToSendMutableFlow.emitIn(viewModelScope, mediasToSendMutableFlow.value.plus(picture))
     }
 
+    fun onVideoCaptured(video: LocalMedia.Video) {
+        mediasToSendMutableFlow.emitIn(viewModelScope, mediasToSendMutableFlow.value.plus(video))
+    }
+
     fun onMediaToSendClicked(media: LocalMedia) {
         when (media) {
             is LocalMedia.Image -> navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenImage(media.uri))
@@ -221,6 +229,7 @@ internal class ConversationViewModel(
                     navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenUriExternally(media.uri))
                 }
             }
+            is LocalMedia.Video -> navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenVideo(media.uri))
         }
     }
 
@@ -238,7 +247,7 @@ internal class ConversationViewModel(
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentMediaPicker)
     }
 
-    fun onErrorWithPictureCapture(error: Exception) {
+    fun onErrorWithCameraCapture(error: Exception) {
         messagingClient.logger.warn(
             domain = LOGGING_DOMAIN,
             message = "Error in camera for new attachment",
@@ -248,7 +257,7 @@ internal class ConversationViewModel(
         errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.AttachmentCameraCapturing)
     }
 
-    fun onErrorLaunchingCameraForImageCapture(error: Throwable) {
+    fun onErrorLaunchingCameraCapture(error: Throwable) {
         messagingClient.logger.warn(
             domain = LOGGING_DOMAIN,
             message = "Failed open camera for new attachment",
@@ -328,7 +337,7 @@ internal class ConversationViewModel(
                         )
                     ),
                     conversationId,
-                ).getOrNull()
+                ).onFailure { messagingClient.logger.error("failed to send voice message", it) }
             } else {
 
                 mediasToSendMutableFlow.value = emptyList()
@@ -355,9 +364,18 @@ internal class ConversationViewModel(
                                         )
                                     )
                                 )
+                                is LocalMedia.Video -> MessageInput.Media.Video(
+                                    mediaSource = FileSource.Local(
+                                        FileLocal.Video(
+                                            Uri(mediaToSend.uri.toString()),
+                                            mediaToSend.name,
+                                            mediaToSend.mimeType,
+                                        )
+                                    )
+                                )
                             },
                             conversationId = conversationId,
-                        ).getOrNull()
+                        ).onFailure { messagingClient.logger.error("failed to send media message", it) }
                     }
                 }
 
@@ -375,7 +393,7 @@ internal class ConversationViewModel(
                         input = MessageInput.Text(text = textMessage),
                         conversationId = conversationId,
                         replyTo = replyTo,
-                    ).getOrNull()
+                    ).onFailure { messagingClient.logger.error("failed to send text message", it) }
                 }
 
                 mediaSendingJobs.forEach { it.join() }
@@ -449,7 +467,7 @@ internal class ConversationViewModel(
                 navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenImage(item.content.uri.toJvmUri()))
             }
             is TimelineItem.Message.Video -> {
-                // TODO-video-message: open video
+                // TODO-video-message: open video in fullscreen
             }
             is TimelineItem.Message.File -> {
                 val fileContent = item.content
@@ -607,10 +625,12 @@ internal class ConversationViewModel(
     sealed class NavigationEvent {
         object OpenMediaSourcePicker : NavigationEvent()
         data class OpenFullScreenImage(val imageUri: URI) : NavigationEvent()
+        data class OpenFullScreenVideo(val videoUri: URI) : NavigationEvent()
         data class OpenFullScreenPdf(val fileUri: URI) : NavigationEvent()
         data class OpenUriExternally(val uri: URI) : NavigationEvent()
         data class OpenWebBrowser(val url: URI) : NavigationEvent()
         object OpenCameraPictureCapture : NavigationEvent()
+        object OpenCameraVideoCapture : NavigationEvent()
         data class OpenMediaLibrary(val mimeTypes: List<MimeType>) : NavigationEvent()
         object RequestVoiceMessagePermissions : NavigationEvent()
         data class ScrollToItem(val position: Int) : NavigationEvent()

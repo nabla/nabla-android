@@ -13,6 +13,13 @@ internal sealed class LocalMedia {
     abstract override fun hashCode(): Int
 
     data class Image(override val uri: URI, override val name: String?, override val mimeType: MimeType.Image) : LocalMedia()
+    data class Video(
+        override val uri: URI,
+        override val name: String?,
+        override val mimeType: MimeType.Video,
+        // TODO-video-message: isFromCamera boolean (might be needed for fullscreen player)
+    ) : LocalMedia()
+
     data class Document(override val uri: URI, override val name: String?, override val mimeType: MimeType) : LocalMedia()
 
     companion object {
@@ -20,6 +27,7 @@ internal sealed class LocalMedia {
         fun create(uri: URI, mimeTypeRepresentation: String, name: String?): LocalMedia {
             return when (val mimeType = MimeType.fromStringRepresentation(mimeTypeRepresentation)) {
                 is MimeType.Image -> Image(uri, name, mimeType)
+                is MimeType.Video -> Video(uri, name, mimeType)
                 is MimeType.Application -> Document(uri, name, mimeType)
                 else -> throw NablaException.Internal(IllegalStateException("Unhandled mimeType: $mimeTypeRepresentation"))
             }

@@ -47,6 +47,7 @@ import com.nabla.sdk.core.ui.helpers.canScrollUp
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.mediapicker.CaptureImageFromCameraActivityContract
+import com.nabla.sdk.core.ui.helpers.mediapicker.CaptureVideoFromCameraActivityContract
 import com.nabla.sdk.core.ui.helpers.mediapicker.MediaPickingResult
 import com.nabla.sdk.core.ui.helpers.mediapicker.PickMediasFromLibraryActivityContract
 import com.nabla.sdk.core.ui.helpers.openPdfReader
@@ -77,7 +78,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.ConversationAdapter
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.loadReplyContentThumbnailOrHide
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToAuthorName
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToContent
-import com.nabla.sdk.messaging.ui.scene.messages.editor.MediasToSendAdapter
+import com.nabla.sdk.messaging.ui.scene.messages.editor.MediaToSendAdapter
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -110,9 +111,11 @@ public open class ConversationFragment : Fragment() {
 
     private lateinit var pickMediaFromGalleryLauncher: ActivityResultLauncher<Array<MimeType>>
     private lateinit var captureCameraPictureLauncher: ActivityResultLauncher<Unit>
+    private lateinit var captureCameraVideoLauncher: ActivityResultLauncher<Unit>
     private lateinit var captureCameraPicturePermissionsLauncher: PermissionRequestLauncher
+    private lateinit var captureCameraVideoPermissionsLauncher: PermissionRequestLauncher
     private lateinit var captureAudioPermissionsLauncher: PermissionRequestLauncher
-    private lateinit var mediasToSendAdapter: MediasToSendAdapter
+    private lateinit var mediasToSendAdapter: MediaToSendAdapter
     private var mediaRecorder: MediaRecorder? = null
     private var binding: NablaFragmentConversationBinding? = null
 
@@ -126,7 +129,8 @@ public open class ConversationFragment : Fragment() {
         setFragmentResultListener(MediaSourcePickerBottomSheetFragment.REQUEST_KEY) { _, result ->
             when (MediaSourcePickerBottomSheetFragment.getResult(result)) {
                 MediaSource.CAMERA_PICTURE -> captureCameraPicturePermissionsLauncher.launch()
-                MediaSource.GALLERY -> viewModel.onImageSourceLibrarySelected()
+                MediaSource.CAMERA_VIDEO -> captureCameraVideoPermissionsLauncher.launch()
+                MediaSource.GALLERY -> viewModel.onImageAndVideoSourceLibrarySelected()
                 MediaSource.DOCUMENT -> viewModel.onDocumentSourceLibrarySelected()
             }
         }
@@ -199,6 +203,18 @@ public open class ConversationFragment : Fragment() {
             }
         }
 
+        captureCameraVideoPermissionsLauncher = registerForPermissionsResult(
+            permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO),
+            rational = PermissionRational(
+                title = R.string.nabla_conversation_camera_video_permission_rational_title,
+                description = R.string.nabla_conversation_camera_video_permission_rational_description,
+            )
+        ) { grants ->
+            if (grants.values.all { it }) {
+                viewModel.onMediaSourceCameraVideoSelectedAndPermissionsGranted()
+            }
+        }
+
         captureAudioPermissionsLauncher = registerForPermissionsResult(
             permissions = arrayOf(Manifest.permission.RECORD_AUDIO),
             rational = PermissionRational(
@@ -240,7 +256,15 @@ public open class ConversationFragment : Fragment() {
         captureCameraPictureLauncher = registerForActivityResult(CaptureImageFromCameraActivityContract()) { result ->
             when (result) {
                 is MediaPickingResult.Success -> viewModel.onPictureCaptured(result.data)
-                is MediaPickingResult.Failure -> viewModel.onErrorWithPictureCapture(result.exception)
+                is MediaPickingResult.Failure -> viewModel.onErrorWithCameraCapture(result.exception)
+                is MediaPickingResult.Cancelled -> Unit // no-op
+            }
+        }
+
+        captureCameraVideoLauncher = registerForActivityResult(CaptureVideoFromCameraActivityContract()) { result ->
+            when (result) {
+                is MediaPickingResult.Success -> viewModel.onVideoCaptured(result.data)
+                is MediaPickingResult.Failure -> viewModel.onErrorWithCameraCapture(result.exception)
                 is MediaPickingResult.Cancelled -> Unit // no-op
             }
         }
@@ -259,7 +283,14 @@ public open class ConversationFragment : Fragment() {
                     try {
                         captureCameraPictureLauncher.launch(Unit)
                     } catch (t: Throwable) {
-                        viewModel.onErrorLaunchingCameraForImageCapture(t)
+                        viewModel.onErrorLaunchingCameraCapture(t)
+                    }
+                }
+                ConversationViewModel.NavigationEvent.OpenCameraVideoCapture -> {
+                    try {
+                        captureCameraVideoLauncher.launch(Unit)
+                    } catch (t: Throwable) {
+                        viewModel.onErrorLaunchingCameraCapture(t)
                     }
                 }
                 is ConversationViewModel.NavigationEvent.OpenMediaLibrary -> {
@@ -290,6 +321,9 @@ public open class ConversationFragment : Fragment() {
                 }
                 is ConversationViewModel.NavigationEvent.OpenFullScreenImage -> {
                     startActivity(FullScreenImageActivity.newIntent(requireActivity(), event.imageUri))
+                }
+                is ConversationViewModel.NavigationEvent.OpenFullScreenVideo -> {
+                    // TODO-video-message: open video in fullscreen
                 }
                 ConversationViewModel.NavigationEvent.RequestVoiceMessagePermissions -> captureAudioPermissionsLauncher.launch()
                 is ConversationViewModel.NavigationEvent.ScrollToItem -> {
@@ -428,12 +462,15 @@ public open class ConversationFragment : Fragment() {
     }
 
     private fun setupMediasToSendRecyclerView(binding: NablaFragmentConversationBinding) {
-        mediasToSendAdapter = MediasToSendAdapter(
+        mediasToSendAdapter = MediaToSendAdapter(
             onMediaClickedListener = { clickedMedia ->
                 viewModel.onMediaToSendClicked(clickedMedia)
             },
             onDeleteMediaToSendClickListener = { removedItem ->
                 viewModel.onMediaToSendRemoved(removedItem)
+            },
+            onErrorLoadingVideoThumbnail = { error ->
+                viewModel.onErrorFetchingVideoThumbnail(error)
             },
         )
 
