@@ -24,8 +24,20 @@ public sealed class NablaException private constructor(
     }
 
     public class Network internal constructor(cause: Throwable) : NablaException(cause = cause)
-    public class Server internal constructor(cause: Throwable, code: Int, serverMessage: String, requestId: String?) :
+    public class Server internal constructor(cause: Throwable, public val code: Int, serverMessage: String, requestId: String?) :
         NablaException(cause = cause, message = "Nabla server error. Code: $code, message: $serverMessage, requestId: $requestId")
+
+    public open class ProviderNotFound internal constructor(cause: Server) : NablaException(cause = cause) {
+        internal companion object {
+            internal const val ERROR_CODE = 20_000
+        }
+    }
+
+    public open class ProviderMissingPermission internal constructor(cause: Server) : NablaException(cause = cause) {
+        internal companion object {
+            internal const val ERROR_CODE = 10_001
+        }
+    }
 
     public class Internal constructor(cause: Throwable) : NablaException(cause = cause, message = cause.message)
 

@@ -6,6 +6,7 @@ import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
@@ -117,9 +118,17 @@ internal class GqlConversationDataSource constructor(
         apolloClient.mutation(MaskAsSeenMutation(conversationId.value)).execute()
     }
 
-    suspend fun createConversation(): Conversation {
+    suspend fun createConversation(
+        title: String?,
+        providerIdToAssign: Uuid?,
+    ): Conversation {
         return mapper.mapToConversation(
-            apolloClient.mutation(CreateConversationMutation()).execute()
+            apolloClient.mutation(
+                CreateConversationMutation(
+                    Optional.presentIfNotNull(title),
+                    Optional.presentIfNotNull(providerIdToAssign),
+                )
+            ).execute()
                 .dataAssertNoErrors
                 .createConversation
                 .conversation

@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.data.conversation
 
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
@@ -24,8 +25,11 @@ internal class ConversationRepositoryImpl(
         gqlConversationDataSource.loadMoreConversationsInCache()
     }
 
-    override suspend fun createConversation(): Conversation {
-        return gqlConversationDataSource.createConversation()
+    override suspend fun createConversation(
+        title: String?,
+        providerIdToAssign: Uuid?,
+    ): Conversation {
+        return gqlConversationDataSource.createConversation(title, providerIdToAssign)
     }
 
     @OptIn(FlowPreview::class)

@@ -406,7 +406,14 @@ public final class com/nabla/sdk/core/domain/entity/NablaException$MissingConver
 public final class com/nabla/sdk/core/domain/entity/NablaException$Network : com/nabla/sdk/core/domain/entity/NablaException {
 }
 
+public class com/nabla/sdk/core/domain/entity/NablaException$ProviderMissingPermission : com/nabla/sdk/core/domain/entity/NablaException {
+}
+
+public class com/nabla/sdk/core/domain/entity/NablaException$ProviderNotFound : com/nabla/sdk/core/domain/entity/NablaException {
+}
+
 public final class com/nabla/sdk/core/domain/entity/NablaException$Server : com/nabla/sdk/core/domain/entity/NablaException {
+	public final fun getCode ()I
 }
 
 public final class com/nabla/sdk/core/domain/entity/NablaException$Unknown : com/nabla/sdk/core/domain/entity/NablaException {
@@ -503,7 +510,7 @@ public final class com/nabla/sdk/messaging/core/BuildConfig {
 
 public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClient {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/NablaMessagingClient$Companion;
-	public abstract fun createConversation-IoAF18A (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun createConversation-0E7RQCE (Ljava/lang/String;Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun deleteMessage--tBrw7Y (Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
 	public abstract fun markConversationAsRead-0PoKK-I (Ljava/util/UUID;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -521,6 +528,7 @@ public final class com/nabla/sdk/messaging/core/NablaMessagingClient$Companion {
 }
 
 public final class com/nabla/sdk/messaging/core/NablaMessagingClient$DefaultImpls {
+	public static synthetic fun createConversation-0E7RQCE$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/UUID;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun sendMessage-HBPqEjA$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 

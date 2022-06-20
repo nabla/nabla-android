@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.data.stubs
 
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
@@ -30,7 +31,10 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
 
     val newlyCreatedConversationIds = mutableSetOf<ConversationId>()
 
-    override suspend fun createConversation(): Conversation {
+    override suspend fun createConversation(
+        title: String?,
+        providerIdToAssign: Uuid?,
+    ): Conversation {
         delayWithIdlingRes(idlingRes, 300.milliseconds)
 
         val newConversation = Conversation.fake(

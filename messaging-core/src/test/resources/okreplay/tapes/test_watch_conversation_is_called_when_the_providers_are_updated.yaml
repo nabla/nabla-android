@@ -192,3 +192,79 @@ interactions:
       x-request-id: f42aa728-07aa-47d5-b998-145461593783
     body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"3ea15e4a-3f0a-4b03-bf80-adcef5e33b84","title":null,"description":null,"createdAt":"2022-06-15T15:22:14.926+02:00","updatedAt":"2022-06-15T15:22:14.926+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-06-20T14:03:20.302Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 1fa2e4d0890e5c01edb42cc28154b90fd3832cedbde6e09c83fa7ed8d05e740f
+      X-APOLLO-OPERATION-NAME: CreateConversation
+    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation($title: String, $providerIdToAssign: UUID) { createConversation(title: $title, providerIdToAssign: $providerIdToAssign) { conversation { __typename ...ConversationFragment
+      } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation
+      { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
+      } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Mon, 20 Jun 2022 14:03:20 GMT
+      connection: close
+      content-length: '350'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: e9cbb5e5-118f-4443-a969-a8d8cabd5258
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"bcb2a9c3-6059-4a0e-95b2-9f196dddfa18","title":null,"description":null,"createdAt":"2022-06-20T16:03:20.286+02:00","updatedAt":"2022-06-20T16:03:20.286+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-06-20T14:02:28.948Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 5b7089e28d9c42992d08448bbc7d5c8d9b5165a817a48fc93ade3008af078795
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"aae6c689-28a4-419b-96d6-f8a4e075b6d3"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Mon, 20 Jun 2022 14:02:28 GMT
+      connection: close
+      content-length: '344'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: 8ea29609-427a-4dfc-a9bb-5553abd9ce57
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"aae6c689-28a4-419b-96d6-f8a4e075b6d3","title":null,"description":null,"createdAt":"2022-06-20T16:02:28.490+02:00","updatedAt":"2022-06-20T16:02:28.490+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-06-20T14:03:20.419Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 5b7089e28d9c42992d08448bbc7d5c8d9b5165a817a48fc93ade3008af078795
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"bcb2a9c3-6059-4a0e-95b2-9f196dddfa18"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Mon, 20 Jun 2022 14:03:20 GMT
+      connection: close
+      content-length: '344'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: 3fda6549-7fbd-48bb-9398-5db22265eb3b
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"bcb2a9c3-6059-4a0e-95b2-9f196dddfa18","title":null,"description":null,"createdAt":"2022-06-20T16:03:20.286+02:00","updatedAt":"2022-06-20T16:03:20.286+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

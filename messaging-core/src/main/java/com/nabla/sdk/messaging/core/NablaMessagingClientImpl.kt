@@ -1,7 +1,9 @@
 package com.nabla.sdk.messaging.core
 
 import androidx.annotation.CheckResult
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
+import com.nabla.sdk.core.data.exception.mapFailure
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.NablaException
@@ -66,11 +68,23 @@ internal class NablaMessagingClientImpl internal constructor(
     }
 
     @CheckResult
-    override suspend fun createConversation(): Result<Conversation> {
+    override suspend fun createConversation(
+        title: String?,
+        providerIdToAssign: Uuid?,
+    ): Result<Conversation> {
         return runCatchingCancellable {
             ensureAuthenticatedOrThrow()
-            conversationRepository.createConversation()
+            conversationRepository.createConversation(title, providerIdToAssign)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
+            .mapFailure { error ->
+                if (error is NablaException.Server) {
+                    when (error.code) {
+                        NablaException.ProviderNotFound.ERROR_CODE -> NablaException.ProviderNotFound(cause = error)
+                        NablaException.ProviderMissingPermission.ERROR_CODE -> NablaException.ProviderMissingPermission(cause = error)
+                        else -> error
+                    }
+                } else error
+            }
     }
 
     override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {

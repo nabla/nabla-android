@@ -1,5 +1,11 @@
-mutation CreateConversation {
-    createConversation {
+mutation CreateConversation(
+    $title: String,
+    $providerIdToAssign: UUID,
+) {
+    createConversation(
+        title: $title,
+        providerIdToAssign: $providerIdToAssign,
+    ) {
         conversation {
             ...ConversationFragment
         }

@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.data.stubs
 
 import androidx.test.espresso.idling.CountingIdlingResource
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.LogcatLogger
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -44,9 +45,12 @@ class NablaMessagingClientStub(
             }
     }
 
-    override suspend fun createConversation(): Result<Conversation> {
+    override suspend fun createConversation(
+        title: String?,
+        providerIdToAssign: Uuid?,
+    ): Result<Conversation> {
         return runCatchingCancellable {
-            conversationRepository.createConversation()
+            conversationRepository.createConversation(title, providerIdToAssign)
         }
     }
 
