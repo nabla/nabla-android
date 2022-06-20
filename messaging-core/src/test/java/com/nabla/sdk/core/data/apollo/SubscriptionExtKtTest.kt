@@ -9,6 +9,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.test.TestClock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -81,7 +82,8 @@ internal class SubscriptionExtKtTest {
                 throw networkError
             } else {
                 val response = mockk<ApolloResponse<Operation.Data>> {
-                    every { dataAssertNoErrors } returns mockk()
+                    mockkStatic("com.nabla.sdk.core.data.apollo.ApolloResponseExtKt")
+                    every { dataOrThrowOnError } returns mockk()
                 }
                 emit(response)
             }

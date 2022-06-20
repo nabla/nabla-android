@@ -28,6 +28,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix duplicate activity item when a provider joins a conversation.
 - Fix voice message recording on Android API < 26.
 - Fix IndexOutOfBound when adding multiple media from gallery (as message attachment) with different mime types.
+- Fix error handling where the SDK would return a `NablaError.Unknown` instead of `NablaError.Server` in some cases.
 
 ## [1.0-alpha04] - 2022-05-31
 

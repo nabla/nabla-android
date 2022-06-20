@@ -9,8 +9,8 @@ internal fun <T> Result<T>.mapFailureAsNablaException(exceptionMapper: NablaExce
 
 internal fun <T> Result<T>.mapFailure(exceptionMapper: (Throwable) -> Throwable): Result<T> {
     return fold(
-        onFailure = { Result.failure<T>(exceptionMapper(it)) },
-        onSuccess = { Result.success<T>(it) }
+        onFailure = { Result.failure(exceptionMapper(it)) },
+        onSuccess = { Result.success(it) }
     )
 }
 

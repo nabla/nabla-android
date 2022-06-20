@@ -56,6 +56,7 @@ import java.io.FileNotFoundException
 import java.io.FileReader
 import java.util.Properties
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
@@ -146,6 +147,26 @@ internal class IntegrationTest {
                 updatedPageOfConversations.content.map { it.id }
             )
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    @OkReplay
+    fun `test conversation creation with custom title`() = runTest {
+        val (nablaMessagingClient) = setupClient()
+
+        val title = "Test custom title"
+        val createdConversation = nablaMessagingClient.createConversation(title = title).getOrThrow()
+        assertEquals(title, createdConversation.title)
+    }
+
+    @Test
+    @OkReplay
+    fun `test conversation creation with unknown provider`() = runTest {
+        val (nablaMessagingClient) = setupClient()
+
+        assertFailsWith<NablaException.ProviderNotFound> {
+            nablaMessagingClient.createConversation(providerIdToAssign = Uuid.fromString("01234567-0000-0000-0000-000000000000")).getOrThrow()
         }
     }
 

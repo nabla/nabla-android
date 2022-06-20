@@ -1,0 +1,28 @@
+!tape
+name: test conversation creation with unknown provider
+interactions:
+- recorded: 2022-06-20T16:49:48.901Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 1fa2e4d0890e5c01edb42cc28154b90fd3832cedbde6e09c83fa7ed8d05e740f
+      X-APOLLO-OPERATION-NAME: CreateConversation
+    body: '{"operationName":"CreateConversation","variables":{"providerIdToAssign":"01234567-0000-0000-0000-000000000000"},"query":"mutation CreateConversation($title: String, $providerIdToAssign: UUID) { createConversation(title: $title, providerIdToAssign:
+      $providerIdToAssign) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName
+      lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle
+      lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Mon, 20 Jun 2022 16:49:48 GMT
+      connection: close
+      content-length: '250'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: 6ef96072-3a8a-4b68-b70a-2110872f7e26
+    body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'

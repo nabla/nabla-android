@@ -8,6 +8,7 @@ import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
+import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
 import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
@@ -47,7 +48,7 @@ internal class GqlConversationDataSource constructor(
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach {
                 logger.debug(domain = GQL_DOMAIN, message = "Event $it")
-                it.dataAssertNoErrors.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
+                it.dataOrThrowOnError.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
                     insertConversationToConversationsListCache(it)
                 }
             }
@@ -87,7 +88,7 @@ internal class GqlConversationDataSource constructor(
             val freshQueryData = apolloClient.query(updatedQuery)
                 .fetchPolicy(FetchPolicy.NetworkOnly)
                 .execute()
-                .dataAssertNoErrors
+                .dataOrThrowOnError
             val mergedConversations =
                 (cachedQueryData.conversations.conversations + freshQueryData.conversations.conversations)
                     .distinctBy { it.conversationFragment.id }
@@ -102,7 +103,7 @@ internal class GqlConversationDataSource constructor(
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
-            .map { response -> response.dataAssertNoErrors }
+            .map { response -> response.dataOrThrowOnError }
             .map { queryData ->
                 val items = queryData.conversations.conversations.map {
                     mapper.mapToConversation(it.conversationFragment)
@@ -129,7 +130,7 @@ internal class GqlConversationDataSource constructor(
                     Optional.presentIfNotNull(providerIdToAssign),
                 )
             ).execute()
-                .dataAssertNoErrors
+                .dataOrThrowOnError
                 .createConversation
                 .conversation
                 .conversationFragment
@@ -141,7 +142,7 @@ internal class GqlConversationDataSource constructor(
         val watcher = apolloClient.query(ConversationQuery(conversationId.value))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
-            .map { response -> response.dataAssertNoErrors }
+            .map { response -> response.dataOrThrowOnError }
             .notifyTypingUpdates(clock = clock) { data ->
                 data.conversation.conversation.conversationFragment.providers
                     .map { it.providerInConversationFragment }

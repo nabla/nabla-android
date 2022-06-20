@@ -9,6 +9,7 @@ import com.apollographql.apollo3.cache.normalized.optimisticUpdates
 import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
+import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
 import com.nabla.sdk.core.data.apollo.readFromCache
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
@@ -79,10 +80,10 @@ internal class GqlConversationContentDataSource(
             .retryOnNetworkErrorAndShareIn(coroutineScope)
             .onEach {
                 logger.debug(domain = GQL_DOMAIN, message = "Event $it")
-                it.dataAssertNoErrors.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
+                it.dataOrThrowOnError.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
                     insertMessageToConversationCache(messageFragment)
                 }
-                it.dataAssertNoErrors.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
+                it.dataOrThrowOnError.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
                     insertConversationActivityToConversationCache(conversationActivityFragment)
                 }
             }.filterIsInstance()
@@ -162,7 +163,7 @@ internal class GqlConversationContentDataSource(
             val freshQueryData = apolloClient.query(updatedQuery)
                 .fetchPolicy(FetchPolicy.NetworkOnly)
                 .execute()
-                .dataAssertNoErrors
+                .dataOrThrowOnError
             val mergedData =
                 (cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.data + freshQueryData.conversation.conversation.conversationItemsPageFragment.items.data)
                     .distinctBy { it?.messageFragment?.messageSummaryFragment?.id }
@@ -287,7 +288,7 @@ internal class GqlConversationContentDataSource(
             clientId = clientId,
             replyToMessageId = Optional.presentIfNotNull(replyToMessageId),
         )
-        apolloClient.mutation(mutation).execute().dataAssertNoErrors
+        apolloClient.mutation(mutation).execute().dataOrThrowOnError
     }
 
     suspend fun sendTextMessage(
@@ -306,7 +307,7 @@ internal class GqlConversationContentDataSource(
             replyToMessageId = Optional.presentIfNotNull(replyToMessageId),
         )
 
-        apolloClient.mutation(mutation).execute().dataAssertNoErrors
+        apolloClient.mutation(mutation).execute().dataOrThrowOnError
     }
 
     suspend fun deleteMessage(conversationId: ConversationId, remoteMessageId: MessageId.Remote) {
@@ -350,7 +351,7 @@ internal class GqlConversationContentDataSource(
         apolloClient.mutation(mutation)
             .optimisticUpdates(optimisticData)
             .execute()
-            .dataAssertNoErrors
+            .dataOrThrowOnError
     }
 
     @VisibleForTesting

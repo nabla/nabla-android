@@ -1,0 +1,29 @@
+!tape
+name: test conversation creation with custom title
+interactions:
+- recorded: 2022-06-20T15:07:47.620Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 1fa2e4d0890e5c01edb42cc28154b90fd3832cedbde6e09c83fa7ed8d05e740f
+      X-APOLLO-OPERATION-NAME: CreateConversation
+    body: '{"operationName":"CreateConversation","variables":{"title":"Test custom title"},"query":"mutation CreateConversation($title: String, $providerIdToAssign: UUID) { createConversation(title: $title, providerIdToAssign: $providerIdToAssign) { conversation
+      { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment
+      on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title description createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers
+      { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Mon, 20 Jun 2022 15:07:47 GMT
+      connection: close
+      content-length: '361'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: fe24e7af-8f70-436b-934f-56b85d934f84
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"03ec9f3a-6c0a-4f20-8826-b7e355176984","title":"Test custom title","description":null,"createdAt":"2022-06-20T17:07:47.478+02:00","updatedAt":"2022-06-20T17:07:47.478+02:00","inboxPreviewTitle":"Test
+      custom title","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
