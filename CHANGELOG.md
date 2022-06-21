@@ -10,7 +10,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [1.0-alpha06] - 2022-06-21
 
 ### Fixed
+
 - Fix test fixtures being imported outside of tests, causing Gradle sync to fail on 1.0.0-alpha05 release.
+
+### Changed
+
+- Use `colorPrimary` in `NablaAvatarView` when no user instead of hardcoded color.
 
 ## [1.0-alpha05] - 2022-06-21
 

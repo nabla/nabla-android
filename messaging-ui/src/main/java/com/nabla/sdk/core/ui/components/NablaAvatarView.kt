@@ -24,6 +24,7 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
+import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.initials
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
@@ -85,9 +86,14 @@ internal class NablaAvatarView : ConstraintLayout {
 
     fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userId: Uuid?) {
         val placeholderTextComputed = placeholderText ?: ""
-        val indexBackground = userId?.let { (it.hashCode() % backgroundColors.size).absoluteValue } ?: 0
-        val placeholderBackgroundColor = backgroundColors[indexBackground]
-        val placeholderBackground = ColorDrawable(context.getColor(placeholderBackgroundColor))
+        val placeholderBackgroundColor = if (userId != null) {
+            val indexBackground = (userId.hashCode() % backgroundColors.size).absoluteValue
+            context.getColor(backgroundColors[indexBackground])
+        } else {
+            context.getThemeColor(androidx.appcompat.R.attr.colorPrimary)
+        }
+
+        val placeholderBackground = ColorDrawable(placeholderBackgroundColor)
         if (avatarUrl == null) {
             showPlaceholder(placeholderTextComputed, placeholderBackground)
             binding.componentAvatarImageView.clear()
