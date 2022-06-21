@@ -15,6 +15,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Now on `ConversationFragment` you can receive, play and send video messages, either from library or by recording a new one.
 - You can now pass your own instance of `Logger` via the `Configuration` when initializing the SDK.
 - Added optional `title` and `providerIdToAssign` arguments to `NablaMessagingClient.createConversation`.
+- `NablaClient.initialize` now logs a `warning` in case of multiple calls.
 
 ### Changed
 

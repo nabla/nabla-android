@@ -88,8 +88,22 @@ public class NablaClient private constructor(
         ): NablaClient {
             synchronized(this) {
                 return if (name == null) {
-                    defaultSingletonInstance
-                        ?: NablaClient(DEFAULT_NAMESPACE, configuration, networkConfiguration).also { defaultSingletonInstance = it }
+                    val defaultInstance = defaultSingletonInstance
+                    if (defaultInstance != null) {
+                        defaultInstance
+                            .configuration
+                            .logger
+                            .warn(
+                                "NablaClient.initialize() with no specified name should only be called once. " +
+                                    "Ignoring this call and using the previously created shared instance. " +
+                                    "Use getInstance() to get the previously created instance"
+                            )
+
+                        defaultInstance
+                    } else {
+                        NablaClient(DEFAULT_NAMESPACE, configuration, networkConfiguration)
+                            .also { defaultSingletonInstance = it }
+                    }
                 } else {
                     NablaClient(name, configuration, networkConfiguration)
                 }
