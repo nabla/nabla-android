@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha06] - 2022-06-21
+
+### Fixed
+- Fix test fixtures being imported outside of tests, causing Gradle sync to fail on 1.0.0-alpha05 release.
+
 ## [1.0-alpha05] - 2022-06-21
 
 ### Added
