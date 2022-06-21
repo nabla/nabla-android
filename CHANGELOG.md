@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha05] - 2022-06-21
+
 ### Added
 
 - Now `messaging-core` supports messages replying to other messages.
