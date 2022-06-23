@@ -405,7 +405,6 @@ public open class ConversationFragment : Fragment() {
 
             when (state) {
                 is ConversationViewModel.State.ConversationLoaded -> {
-
                     updateLoadedDisplay(binding, state)
                 }
                 ConversationViewModel.State.Loading -> {
@@ -537,8 +536,8 @@ public open class ConversationFragment : Fragment() {
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
         binding.updateToolbar(
-            title = state.conversation.inboxPreviewTitle,
-            subtitle = state.conversation.lastMessagePreview,
+            title = state.conversation.title ?: state.conversation.inboxPreviewTitle,
+            subtitle = state.conversation.subtitle,
             providers = state.conversation.providersInConversation.map { it.provider },
             displayAvatar = true,
         )

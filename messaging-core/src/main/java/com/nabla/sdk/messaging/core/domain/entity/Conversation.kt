@@ -12,7 +12,7 @@ public fun Uuid.toConversationId(): ConversationId = ConversationId(this)
 public data class Conversation(
     val id: ConversationId,
     val title: String?,
-    val description: String?,
+    val subtitle: String?,
     val inboxPreviewTitle: String,
     val lastMessagePreview: String?,
     val lastModified: Instant,

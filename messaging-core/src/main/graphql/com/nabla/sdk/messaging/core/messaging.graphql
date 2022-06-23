@@ -139,7 +139,7 @@ subscription ConversationEvents($conversationId: UUID!) {
 fragment ConversationFragment on Conversation {
     id
     title
-    description
+    subtitle
     createdAt
     updatedAt
     inboxPreviewTitle

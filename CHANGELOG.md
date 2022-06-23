@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Remove the `description` field from `Conversation` and replace it by a `subtitle` that is displayed by the `ConversationFragment`
+
 ## [1.0-alpha06] - 2022-06-21
 
 ### Fixed

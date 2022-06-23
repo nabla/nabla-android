@@ -567,13 +567,13 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Conversation {
 	public final fun copy-4VvGseU (Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
 	public static synthetic fun copy-4VvGseU$default (Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;Ljava/util/UUID;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDescription ()Ljava/lang/String;
 	public final fun getId-qJUv34w ()Ljava/util/UUID;
 	public final fun getInboxPreviewTitle ()Ljava/lang/String;
 	public final fun getLastMessagePreview ()Ljava/lang/String;
 	public final fun getLastModified ()Lkotlinx/datetime/Instant;
 	public final fun getPatientUnreadMessageCount ()I
 	public final fun getProvidersInConversation ()Ljava/util/List;
+	public final fun getSubtitle ()Ljava/lang/String;
 	public final fun getTitle ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

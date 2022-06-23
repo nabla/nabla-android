@@ -99,6 +99,7 @@ type Conversation {
 
   title: String
   description: String
+  subtitle: String
   createdAt: DateTime!
   updatedAt: DateTime!
 

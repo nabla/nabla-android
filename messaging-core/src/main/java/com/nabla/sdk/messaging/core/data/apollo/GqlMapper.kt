@@ -42,7 +42,7 @@ internal class GqlMapper(private val logger: Logger) {
         return Conversation(
             id = fragment.id.toConversationId(),
             title = fragment.title,
-            description = fragment.description,
+            subtitle = fragment.subtitle,
             inboxPreviewTitle = fragment.inboxPreviewTitle,
             lastMessagePreview = fragment.lastMessagePreview,
             lastModified = fragment.updatedAt,
