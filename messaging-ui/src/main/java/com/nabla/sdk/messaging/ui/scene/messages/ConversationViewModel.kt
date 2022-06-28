@@ -26,6 +26,7 @@ import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.showComposerFromSavedStateHandle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
@@ -90,6 +92,7 @@ internal class ConversationViewModel(
     private var isViewForeground = false
 
     private val conversationId: ConversationId = conversationIdFromSavedStateHandleOrThrow(savedStateHandle)
+    private val showComposer: Boolean = showComposerFromSavedStateHandle(savedStateHandle)
 
     init {
         stateFlow = makeStateFlow(
@@ -101,11 +104,16 @@ internal class ConversationViewModel(
         )
 
         editorStateFlow = combine(
+            flowOf(showComposer),
             currentMessageStateFlow,
             mediasToSendMutableFlow,
             currentlyRecordingVoiceMutableFlow,
             currentlyReplyingToMutableFlow,
-        ) { currentMessage, mediasToSend, ongoingVoiceRecording, replyingTo ->
+        ) { showComposer, currentMessage, mediasToSend, ongoingVoiceRecording, replyingTo ->
+            if (!showComposer) {
+                return@combine EditorState.Hidden
+            }
+
             when {
                 ongoingVoiceRecording != null -> {
                     EditorState.RecordingVoice(recordProgressSeconds = ongoingVoiceRecording.secondsSoFar)
@@ -614,6 +622,8 @@ internal class ConversationViewModel(
     }
 
     sealed interface EditorState {
+        object Hidden : EditorState
+
         data class EditingText(
             val canSubmit: Boolean,
             val replyingTo: RepliedMessage?,

@@ -357,7 +357,10 @@ public open class ConversationFragment : Fragment() {
             binding.conversationCancelRecordingButton.isVisible = editorState is RecordingVoice
             binding.conversationRecordingVoiceProgress.isVisible = editorState is RecordingVoice
 
+            binding.conversationComposerLayout.isVisible = editorState != ConversationViewModel.EditorState.Hidden
+
             when (editorState) {
+                ConversationViewModel.EditorState.Hidden -> Unit /* no-op */
                 is RecordingVoice -> {
                     val minutes = editorState.recordProgressSeconds / 60
                     val seconds = editorState.recordProgressSeconds % 60
@@ -715,27 +718,49 @@ public open class ConversationFragment : Fragment() {
     @Suppress("UNUSED")
     public class Builder internal constructor(private val conversationId: ConversationId) {
         private var customFragment: ConversationFragment? = null
+        private var showComposer = true
 
+        /**
+         * Call this to pass a custom child class of [ConversationFragment] you want to use
+         * instead of the base one. This is useful if you want to override the default [NablaMessagingClient]
+         * used by the fragment.
+         */
         public fun setFragment(fragment: ConversationFragment) {
             customFragment = fragment
         }
 
+        /**
+         * Call this method if you want to hide the message composer for the patient. By doing so,
+         * they won't be able to send a message in the conversation. By default, the composer is shown.
+         */
+        public fun setShowComposer(showComposer: Boolean) {
+            this.showComposer = showComposer
+        }
+
         internal fun build(): ConversationFragment {
             return (customFragment ?: ConversationFragment()).apply {
-                arguments = newArgsBundle(conversationId)
+                arguments = newArgsBundle(conversationId, showComposer)
             }
         }
 
         internal companion object {
             private const val CONVERSATION_ID_ARG_KEY = "conversationId"
+            private const val SHOW_COMPOSER_ARG_KEY = "showComposer"
 
-            private fun newArgsBundle(conversationId: ConversationId): Bundle = Bundle().apply {
+            private fun newArgsBundle(
+                conversationId: ConversationId,
+                showComposer: Boolean,
+            ): Bundle = Bundle().apply {
                 putSerializable(CONVERSATION_ID_ARG_KEY, conversationId.value)
+                putBoolean(SHOW_COMPOSER_ARG_KEY, showComposer)
             }
 
             internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId =
                 savedStateHandle.get<Uuid>(CONVERSATION_ID_ARG_KEY)?.toConversationId()
                     ?: throw NablaException.MissingConversationId
+
+            internal fun showComposerFromSavedStateHandle(savedStateHandle: SavedStateHandle): Boolean =
+                savedStateHandle.get<Boolean>(SHOW_COMPOSER_ARG_KEY) ?: true
         }
     }
 

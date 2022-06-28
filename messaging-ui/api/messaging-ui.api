@@ -368,6 +368,7 @@ public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : an
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Builder {
 	public final fun setFragment (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;)V
+	public final fun setShowComposer (Z)V
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion {

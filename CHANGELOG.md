@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Added a new `setShowComposer` method to `ConversationFragment.Builder` that you can call to hide the message composer for the patient.
+
 ### Changed
 
 - Remove the `description` field from `Conversation` and replace it by a `subtitle` that is displayed by the `ConversationFragment`
