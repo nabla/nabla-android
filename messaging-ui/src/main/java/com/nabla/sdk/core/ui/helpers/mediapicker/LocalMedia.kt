@@ -1,7 +1,7 @@
 package com.nabla.sdk.core.ui.helpers.mediapicker
 
+import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.NablaException
 import java.net.URI
 
 internal sealed class LocalMedia {
@@ -29,7 +29,7 @@ internal sealed class LocalMedia {
                 is MimeType.Image -> Image(uri, name, mimeType)
                 is MimeType.Video -> Video(uri, name, mimeType)
                 is MimeType.Application -> Document(uri, name, mimeType)
-                else -> throw NablaException.Internal(IllegalStateException("Unhandled mimeType: $mimeTypeRepresentation"))
+                else -> throw InternalException(IllegalStateException("Unhandled mimeType: $mimeTypeRepresentation"))
             }
         }
     }

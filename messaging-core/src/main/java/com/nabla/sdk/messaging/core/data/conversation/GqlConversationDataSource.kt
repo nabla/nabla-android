@@ -9,7 +9,6 @@ import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
-import com.nabla.sdk.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
@@ -24,6 +23,7 @@ import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
+import com.nabla.sdk.messaging.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.CoroutineScope

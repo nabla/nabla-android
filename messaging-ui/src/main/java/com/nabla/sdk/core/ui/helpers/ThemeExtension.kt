@@ -7,7 +7,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
-import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.messaging.core.domain.entity.InvalidAppThemeException
 
 @ColorInt
 internal fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
@@ -30,7 +30,7 @@ internal fun Context.getThemeDrawable(@AttrRes themeAttr: Int): Int? {
 
 @StyleRes
 internal fun Context.getThemeStyle(@AttrRes themeAttr: Int): Int {
-    return resolveThemeResourceId(themeAttr) ?: throw NablaException.InvalidAppTheme("theme style attribute not found $themeAttr")
+    return resolveThemeResourceId(themeAttr) ?: throw InvalidAppThemeException("theme style attribute not found $themeAttr")
 }
 
 private fun Context.resolveThemeResourceId(themeAttr: Int): Int? {

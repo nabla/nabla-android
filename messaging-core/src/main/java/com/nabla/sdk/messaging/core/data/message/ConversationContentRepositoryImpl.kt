@@ -3,7 +3,6 @@ package com.nabla.sdk.messaging.core.data.message
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
-import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
@@ -11,10 +10,12 @@ import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
+import com.nabla.sdk.messaging.core.domain.entity.InvalidMessageException
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
+import com.nabla.sdk.messaging.core.domain.entity.MessageNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -137,19 +138,19 @@ internal class ConversationContentRepositoryImpl(
         if (localMessage != null) {
             sendMessage(localMessage)
         } else {
-            throw NablaException.MessageNotFound(conversationId, localMessageId)
+            throw MessageNotFoundException(conversationId, localMessageId)
         }
     }
 
     private suspend fun sendMessage(message: Message, replyTo: MessageId? = message.replyTo?.id): MessageId.Local {
         val messageId = message.id as? MessageId.Local
-            ?: throw NablaException.InvalidMessage("Can't send a message that is not a local one")
+            ?: throw InvalidMessageException("Can't send a message that is not a local one")
 
         localMessageDataSource.putMessage(message.modify(SendStatus.Sending))
 
         runCatching { // we're interested in cancellations
             when (message) {
-                is Message.Deleted -> throw NablaException.InvalidMessage("Can't send a deleted message")
+                is Message.Deleted -> throw InvalidMessageException("Can't send a deleted message")
                 is Message.Media<*, *> -> sendMediaMessageOp(message, messageId)
                 is Message.Text -> sendTextMessageOp(message, messageId, replyTo = replyTo)
             }
@@ -189,7 +190,7 @@ internal class ConversationContentRepositoryImpl(
     ) {
         val mediaSource = mediaMessage.mediaSource
         if (mediaSource !is FileSource.Local) {
-            throw NablaException.InvalidMessage("Can't send a media message with a media source that is not local")
+            throw InvalidMessageException("Can't send a media message with a media source that is not local")
         }
 
         val fileUploadId = fileUploadRepository.uploadFile(mediaSource.fileLocal.uri, mediaMessage.fileName, mediaMessage.mimeType)

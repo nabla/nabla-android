@@ -6,7 +6,8 @@ import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
 import com.nabla.sdk.core.data.exception.mapFailure
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.core.domain.entity.AuthenticationException
+import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
@@ -16,6 +17,8 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
+import com.nabla.sdk.messaging.core.domain.entity.ProviderMissingPermissionException
+import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
@@ -77,10 +80,10 @@ internal class NablaMessagingClientImpl internal constructor(
             conversationRepository.createConversation(title, providerIdToAssign)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
             .mapFailure { error ->
-                if (error is NablaException.Server) {
+                if (error is ServerException) {
                     when (error.code) {
-                        NablaException.ProviderNotFound.ERROR_CODE -> NablaException.ProviderNotFound(cause = error)
-                        NablaException.ProviderMissingPermission.ERROR_CODE -> NablaException.ProviderMissingPermission(cause = error)
+                        ProviderNotFoundException.ERROR_CODE -> ProviderNotFoundException(cause = error)
+                        ProviderMissingPermissionException.ERROR_CODE -> ProviderMissingPermissionException(cause = error)
                         else -> error
                     }
                 } else error
@@ -162,7 +165,7 @@ internal class NablaMessagingClientImpl internal constructor(
 
     private fun ensureAuthenticatedOrThrow() {
         if (!messagingContainer.sessionClient.isSessionInitialized()) {
-            throw NablaException.Authentication.NotAuthenticated
+            throw AuthenticationException.NotAuthenticated
         }
     }
 }

@@ -39,7 +39,6 @@ import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
 import com.nabla.sdk.core.ui.helpers.canScrollDown
@@ -61,6 +60,7 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.core.domain.entity.MissingConversationIdException
 import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
@@ -757,7 +757,7 @@ public open class ConversationFragment : Fragment() {
 
             internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId =
                 savedStateHandle.get<Uuid>(CONVERSATION_ID_ARG_KEY)?.toConversationId()
-                    ?: throw NablaException.MissingConversationId
+                    ?: throw MissingConversationIdException
 
             internal fun showComposerFromSavedStateHandle(savedStateHandle: SavedStateHandle): Boolean =
                 savedStateHandle.get<Boolean>(SHOW_COMPOSER_ARG_KEY) ?: true

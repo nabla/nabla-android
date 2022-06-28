@@ -8,13 +8,12 @@ import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.core.data.logger.StdLogger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
@@ -32,8 +31,10 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation.Companion.TYPING_TIME_WINDOW
+import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.test.apollo.FlowTestNetworkTransport
+import com.nabla.sdk.test.logger.StdLogger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
@@ -165,7 +166,7 @@ internal class IntegrationTest {
     fun `test conversation creation with unknown provider`() = runTest {
         val (nablaMessagingClient) = setupClient()
 
-        assertFailsWith<NablaException.ProviderNotFound> {
+        assertFailsWith<ProviderNotFoundException> {
             nablaMessagingClient.createConversation(providerIdToAssign = Uuid.fromString("01234567-0000-0000-0000-000000000000")).getOrThrow()
         }
     }
@@ -738,47 +739,47 @@ internal class IntegrationTest {
         )
 
         nablaMessagingClient.watchConversations().test {
-            assertEquals(NablaException.Authentication.NotAuthenticated, awaitError())
+            assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
         nablaMessagingClient.watchConversation(ConversationId(Uuid.randomUUID())).test {
-            assertEquals(NablaException.Authentication.NotAuthenticated, awaitError())
+            assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
         nablaMessagingClient.watchConversationItems(ConversationId(Uuid.randomUUID())).test {
-            assertEquals(NablaException.Authentication.NotAuthenticated, awaitError())
+            assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
-        assertEquals(NablaException.Authentication.NotAuthenticated, nablaMessagingClient.createConversation().exceptionOrNull())
+        assertEquals(AuthenticationException.NotAuthenticated, nablaMessagingClient.createConversation().exceptionOrNull())
         assertEquals(
-            NablaException.Authentication.NotAuthenticated,
+            AuthenticationException.NotAuthenticated,
             nablaMessagingClient.deleteMessage(
                 ConversationId(Uuid.randomUUID()),
                 MessageId.Local(Uuid.randomUUID()),
             ).exceptionOrNull()
         )
         assertEquals(
-            NablaException.Authentication.NotAuthenticated,
+            AuthenticationException.NotAuthenticated,
             nablaMessagingClient.markConversationAsRead(
                 ConversationId(Uuid.randomUUID())
             ).exceptionOrNull()
         )
         assertEquals(
-            NablaException.Authentication.NotAuthenticated,
+            AuthenticationException.NotAuthenticated,
             nablaMessagingClient.retrySendingMessage(
                 MessageId.Local(Uuid.randomUUID()),
                 ConversationId(Uuid.randomUUID()),
             ).exceptionOrNull()
         )
         assertEquals(
-            NablaException.Authentication.NotAuthenticated,
+            AuthenticationException.NotAuthenticated,
             nablaMessagingClient.setTyping(
                 ConversationId(Uuid.randomUUID()),
                 isTyping = true,
             ).exceptionOrNull()
         )
         assertEquals(
-            NablaException.Authentication.NotAuthenticated,
+            AuthenticationException.NotAuthenticated,
             nablaMessagingClient.sendMessage(
                 MessageInput.Text(""),
                 ConversationId(Uuid.randomUUID()),

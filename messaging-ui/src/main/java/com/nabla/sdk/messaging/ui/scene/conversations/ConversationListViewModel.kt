@@ -3,7 +3,7 @@ package com.nabla.sdk.messaging.ui.scene.conversations
 import androidx.annotation.CheckResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
@@ -45,7 +45,7 @@ public class ConversationListViewModel(
                 )
 
                 emit(
-                    State.Error(if (cause is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic)
+                    State.Error(if (cause is NetworkException) ErrorUiModel.Network else ErrorUiModel.Generic)
                 )
 
                 retryAfterErrorTriggerFlow.first()

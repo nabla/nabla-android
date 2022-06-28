@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.data.helper.toJvmUri
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -153,7 +153,7 @@ internal class ConversationViewModel(
 
                 emit(
                     State.Error(
-                        if (throwable is NablaException.Network) ErrorUiModel.Network else ErrorUiModel.Generic
+                        if (throwable is NetworkException) ErrorUiModel.Network else ErrorUiModel.Generic
                     )
                 )
 
