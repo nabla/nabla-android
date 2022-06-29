@@ -76,6 +76,7 @@ type Message {
   createdAt: DateTime!
 
   content: MessageContent!
+  actionRequest: ActionRequest
 
   clientId: UUID
   replyTo: Message
@@ -347,4 +348,32 @@ type TypingEvent {
 
 type ProviderJoinedConversation {
   provider: MaybeProvider!
+}
+
+# --- Action request
+type ActionRequest {
+  uuid: UUID!
+  content: ActionRequestContent!
+}
+
+union ActionRequestContent = ActionRequestContentLivekitRoom
+
+# --- Livekit
+type ActionRequestContentLivekitRoom {
+  livekitRoom: LivekitRoom!
+}
+
+type LivekitRoom {
+  uuid: UUID!
+  status: LivekitRoomStatus!
+}
+
+union LivekitRoomStatus = LivekitRoomOpenStatus | LivekitRoomClosedStatus
+
+type LivekitRoomOpenStatus {
+  token: String!
+}
+
+type LivekitRoomClosedStatus {
+  _: EmptyObject!
 }
