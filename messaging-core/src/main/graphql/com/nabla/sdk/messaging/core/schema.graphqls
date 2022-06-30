@@ -14,7 +14,11 @@ type Query {
 }
 
 type Mutation {
-  createConversation(title: String, providerIdToAssign: UUID): CreateConversationOutput!
+  createConversation(
+    title: String
+    providerIdToAssign: UUID # Use providerIds instead
+    providerIds: [UUID!]
+  ): CreateConversationOutput!
 
   sendMessage(
     conversationId: UUID!
