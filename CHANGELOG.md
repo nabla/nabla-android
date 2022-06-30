@@ -10,6 +10,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Added a new `setShowComposer` method to `ConversationFragment.Builder` that you can call to hide the message composer for the patient.
+- `InboxFragment` a standalone fragment for displaying the list of conversations with a button to create a new conversation.
+- `ConversationActivity` a lightweight wrapper around `ConversationFragment`, convenient for default navigation behavior.
 
 ### Changed
 

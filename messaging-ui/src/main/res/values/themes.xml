@@ -19,6 +19,8 @@
         <item name="nablaMessaging_unreadMessagesIndicatorDrawable">@drawable/nabla_ic_unread_dot</item>
         <item name="nablaMessaging_conversationPreviewBackgroundDrawable">@drawable/nabla_conversation_preview_background</item>
         <item name="nablaMessaging_conversationPreviewBackgroundElevation">1dp</item>
+        <item name="nablaMessaging_conversationListBackgroundColor">?android:colorBackground</item>
+        <item name="nablaMessaging_conversationListHeaderColor">?colorSurface</item>
         <item name="nablaMessaging_conversationHeaderTitleAppearance">?textAppearanceTitleMedium</item>
         <item name="nablaMessaging_conversationHeaderSubtitleAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationDateSeparatorAppearance">?textAppearanceLabelMedium</item>

@@ -33,6 +33,7 @@
     <string name="nabla_error_message_conversation_link_opening">An error occurred while opening the link, please try again.</string>
     <string name="nabla_error_message_conversation_deleting_message">An error occurred while deleting the message, please try again.</string>
     <string name="nabla_error_message_conversation_clicked_url_parsing">An error occurred while processing the link, please try again.</string>
+    <string name="nabla_error_message_conversation_creation">An error occurred while creating the conversation, please try again.</string>
 
     <string name="nabla_conversation_message_action_reply">Reply</string>
     <string name="nabla_conversation_message_action_copy">Copy</string>
@@ -81,4 +82,7 @@
     <string name="nabla_conversation_replied_to_message_description_document">📁 Document</string>
     <string name="nabla_conversation_replied_to_message_description_photo">📷 Photo</string>
     <string name="nabla_conversation_replied_to_message_description_video">📹 Video</string>
+
+    <string name="nabla_conversation_list_toolbar_title">Medical Chat</string>
+    <string name="nabla_conversation_list_create_cta_text">Start a conversation</string>
 </resources>

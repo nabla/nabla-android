@@ -5,6 +5,15 @@ public final class com/nabla/sdk/messaging/ui/BuildConfig {
 	public fun <init> ()V
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaActivityConversationBinding : androidx/viewbinding/ViewBinding {
+	public final field fragmentContainer Landroidx/fragment/app/FragmentContainerView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityConversationBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityConversationBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityConversationBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenImageBinding : androidx/viewbinding/ViewBinding {
 	public final field fullScreenImageBackButton Landroid/widget/ImageView;
 	public final field fullScreenImageProgressBar Landroid/widget/ProgressBar;
@@ -328,6 +337,21 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversat
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationBinding;
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding : androidx/viewbinding/ViewBinding {
+	public final field conversationListView Lcom/nabla/sdk/messaging/ui/scene/conversations/ConversationListView;
+	public final field createConversationCta Landroid/widget/LinearLayout;
+	public final field createConversationCtaIcon Landroid/widget/ImageView;
+	public final field createConversationCtaProgressBar Landroid/widget/ProgressBar;
+	public final field createConversationCtaText Landroid/widget/TextView;
+	public final field nablaLinearlayoutcompat Landroidx/constraintlayout/widget/ConstraintLayout;
+	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/helper/ConversationListViewModelFactory : androidx/lifecycle/AbstractSavedStateViewModelFactory {
 	public fun <init> (Landroidx/savedstate/SavedStateRegistryOwner;Lcom/nabla/sdk/messaging/core/NablaMessagingClient;)V
 	public synthetic fun <init> (Landroidx/savedstate/SavedStateRegistryOwner;Lcom/nabla/sdk/messaging/core/NablaMessagingClient;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -348,9 +372,29 @@ public final class com/nabla/sdk/messaging/ui/scene/conversations/DefaultOffsets
 	public fun getItemOffsets (Landroid/graphics/Rect;Landroid/view/View;Landroidx/recyclerview/widget/RecyclerView;Landroidx/recyclerview/widget/RecyclerView$State;)V
 }
 
+public class com/nabla/sdk/messaging/ui/scene/conversations/InboxFragment : androidx/fragment/app/Fragment {
+	public fun <init> ()V
+	public fun getMessagingClient ()Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
+	public fun getShouldShowBackButton ()Z
+	public final fun onCreateView (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;
+	public fun onDestroyView ()V
+	public final fun onGetLayoutInflater (Landroid/os/Bundle;)Landroid/view/LayoutInflater;
+	public fun onViewCreated (Landroid/view/View;Landroid/os/Bundle;)V
+	protected fun openConversationScreen-osbTWhs (Ljava/util/UUID;)V
+}
+
 public final class com/nabla/sdk/messaging/ui/scene/conversations/ViewModelBindingKt {
 	public static final fun bindViewModel (Lcom/nabla/sdk/messaging/ui/scene/conversations/ConversationListView;Lcom/nabla/sdk/messaging/ui/scene/conversations/ConversationListViewModel;Lkotlin/jvm/functions/Function1;Landroidx/recyclerview/widget/RecyclerView$ItemDecoration;)V
 	public static synthetic fun bindViewModel$default (Lcom/nabla/sdk/messaging/ui/scene/conversations/ConversationListView;Lcom/nabla/sdk/messaging/ui/scene/conversations/ConversationListViewModel;Lkotlin/jvm/functions/Function1;Landroidx/recyclerview/widget/RecyclerView$ItemDecoration;ILjava/lang/Object;)V
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivity : androidx/appcompat/app/AppCompatActivity {
+	public static final field Companion Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion {
+	public final fun newIntent-q-6fel8 (Landroid/content/Context;Ljava/util/UUID;)Landroid/content/Intent;
 }
 
 public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : androidx/fragment/app/Fragment {

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nablaLinearlayoutcompat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?nablaMessaging_conversationListBackgroundColor"
+    tools:context=".scene.messages.ConversationFragment"
+    tools:ignore="Overdraw"
+    >
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?nablaMessaging_conversationListHeaderColor"
+        android:elevation="0.5dp"
+        app:layout_constraintBottom_toTopOf="@+id/conversationListView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="@string/nabla_conversation_list_toolbar_title"
+        />
+
+    <com.nabla.sdk.messaging.ui.scene.conversations.ConversationListView
+        android:id="@+id/conversationListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        />
+
+    <LinearLayout
+        android:id="@+id/createConversationCta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@drawable/nabla_conversations_list_cta_background"
+        android:elevation="6dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/createConversationCtaIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginVertical="16dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/nabla_ic_pen"
+            app:tint="?colorOnPrimary"
+            tools:ignore="ContentDescription"
+            />
+
+        <TextView
+            android:id="@+id/createConversationCtaText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="18dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/nabla_conversation_list_create_cta_text"
+            android:textAppearance="?textAppearanceTitleSmall"
+            android:textColor="?colorOnPrimary"
+            />
+
+        <ProgressBar
+            android:id="@+id/createConversationCtaProgressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminateTint="?colorPrimary"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

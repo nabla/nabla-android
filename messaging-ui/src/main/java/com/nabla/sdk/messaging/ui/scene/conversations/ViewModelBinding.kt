@@ -1,6 +1,5 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
-import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import android.widget.Toast
@@ -14,8 +13,6 @@ import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.ui.R
-import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.ErrorAlert
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch
 
@@ -55,17 +52,9 @@ private fun ConversationListView.setupRecyclerAdapter(
 private fun ConversationListView.bindViewModelAlerts(viewModel: ConversationListViewModel) {
     findViewTreeLifecycleOwner()?.launchCollect(viewModel.errorAlertEventFlow) { errorAlert ->
         context?.let { context ->
-            Toast.makeText(context, errorAlert.defaultMessage(context), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, errorAlert.errorMessageRes, Toast.LENGTH_SHORT).show()
         }
     }
-}
-
-private fun ErrorAlert.defaultMessage(context: Context): String {
-    val resId = when (this) {
-        is ErrorAlert.LoadingMoreConversations -> R.string.nabla_error_message_conversations_loading_more
-    }
-
-    return context.getString(resId)
 }
 
 private fun ConversationListView.bindViewModelState(

@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.conversations
 
 import androidx.annotation.CheckResult
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.domain.entity.NetworkException
@@ -9,6 +10,7 @@ import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.ui.R
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -69,13 +71,13 @@ public class ConversationListViewModel(
                         message = "Error while loading more conversations",
                         error = error,
                     )
-                    errorAlertMutableFlow.emit(ErrorAlert.LoadingMoreConversations(error))
+                    errorAlertMutableFlow.emit(ErrorAlert.LoadingMoreConversations)
                 }
         }
     }
 
-    internal sealed interface ErrorAlert {
-        data class LoadingMoreConversations(val throwable: Throwable) : ErrorAlert
+    internal sealed class ErrorAlert(@StringRes val errorMessageRes: Int) {
+        object LoadingMoreConversations : ErrorAlert(R.string.nabla_error_message_conversations_loading_more)
     }
 
     internal sealed interface State {

@@ -47,6 +47,7 @@ dependencies {
     implementation libs.androidx.fragment.ktx
     implementation libs.espressoIdlingResource
     implementation project(path: ':messaging-core', configuration: 'test-helpers')
+    implementation project(':messaging-core-test-fixtures')
 
     androidTestImplementation libs.espressoCore
     androidTestImplementation libs.espressoContrib

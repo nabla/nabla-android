@@ -8,26 +8,15 @@
     tools:context=".scene.MainActivity"
     >
 
-    <com.nabla.sdk.messaging.ui.scene.conversations.ConversationListView
-        android:id="@+id/conversationListView"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nablaInboxFragment"
+        android:name="com.nabla.sdk.messaging.ui.scene.conversations.InboxFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/createConversation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <Button
-        android:id="@+id/createConversation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="Create conversation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/conversationListView"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

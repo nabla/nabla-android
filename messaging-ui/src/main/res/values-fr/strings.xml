@@ -24,33 +24,16 @@
     <string name="nabla_error_message_generic_body">Si elle persiste, contactez-nous.</string>
     <string name="nabla_error_retry_cta">Réessayer</string>
 
-    <string name="nabla_error_message_conversations_loading_more">Une erreur est survenue lors du chargement des
-        conversations, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_loading_more">Une erreur est survenue lors du chargement des
-        messages, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_attachment_media_picker">Une erreur est survenue lors de l’ouverture
-        du selecteur de media, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_attachment_camera_capturing">Une erreur est survenue lors de la
-        capture de photo, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_attachment_camera_opening">Une erreur est survenue lors de
-        l’ouverture de l’appareil photo, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_attachment_library_opening">Une erreur est survenue lors de
-        l’ouverture de la bibliothèque, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_link_opening">Une erreur est survenue lors de l’ouverture du lien,
-        veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du
-        message, veuillez réessayer.
-    </string>
-    <string name="nabla_error_message_conversation_clicked_url_parsing">Une erreur est survenue lors du traitement du
-        lien, veuillez réessayer.
-    </string>
+    <string name="nabla_error_message_conversations_loading_more">Une erreur est survenue lors du chargement des conversations, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_loading_more">Une erreur est survenue lors du chargement des messages, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_media_picker">Une erreur est survenue lors de l’ouverture du selecteur de media, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_capturing">Une erreur est survenue lors de la capture de photo, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_opening">Une erreur est survenue lors de l’ouverture de l’appareil photo, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_attachment_library_opening">Une erreur est survenue lors de l’ouverture de la bibliothèque, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_link_opening">Une erreur est survenue lors de l’ouverture du lien, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du message, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_clicked_url_parsing">Une erreur est survenue lors du traitement du lien, veuillez réessayer.</string>
+    <string name="nabla_error_message_conversation_creation">Une erreur est survenue lors de la création de conversation, veuillez réessayer.</string>
 
     <string name="nabla_conversation_message_action_reply">Répondre</string>
     <string name="nabla_conversation_message_action_copy">Copier</string>
@@ -76,40 +59,22 @@
     <string name="nabla_conversation_header_error">Erreur</string>
     <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Partager</string>
     <string name="nabla_conversation_conversation_activity_provider_joined">%1$s a rejoint la conversation</string>
-    <string name="nabla_conversation_conversation_activity_deleted_provider_joined">Un praticien a rejoint la
-        conversation
-    </string>
+    <string name="nabla_conversation_conversation_activity_deleted_provider_joined">Un praticien a rejoint la conversation</string>
 
-    <string name="nabla_conversation_camera_picture_permission_rational_title">Autorisation d’utiliser l’appareil
-        photo
-    </string>
-    <string name="nabla_conversation_camera_picture_permission_rational_description">Pour prendre une photo, nous avons
-        besoin de votre autorisation d’utiliser l’appareil photo.
-    </string>
+    <string name="nabla_conversation_camera_picture_permission_rational_title">Autorisation d’utiliser l’appareil photo</string>
+    <string name="nabla_conversation_camera_picture_permission_rational_description">Pour prendre une photo, nous avons besoin de votre autorisation d’utiliser l’appareil photo.</string>
     <string name="nabla_conversation_camera_video_permission_rational_title">Autorisation d’utiliser la caméra</string>
-    <string name="nabla_conversation_camera_video_permission_rational_description">Pour enregistrer une vidéo, nous
-        avons besoin de votre autorisation d’utiliser l’appareil photo et le micro.
-    </string>
+    <string name="nabla_conversation_camera_video_permission_rational_description">Pour enregistrer une vidéo, nous avons besoin de votre autorisation d’utiliser l’appareil photo et le micro.</string>
     <string name="nabla_permission_rational_default_accept">Accepter</string>
     <string name="nabla_permission_rational_default_decline">Refuser</string>
 
     <string name="nabla_conversation_audio_message_player_title">Message vocal</string>
     <string name="nabla_conversation_audio_message_play_pause_content_description">Lire/Arrêter</string>
-    <string name="nabla_conversation_button_record_audio_message_content_description">Commencer l’enregistrement d’un
-        message vocal
-    </string>
-    <string name="nabla_conversation_button_cancel_audio_message_content_description">Arrêter l’enregistrement d’un
-        message vocal
-    </string>
-    <string name="nabla_conversation_error_recording_voice_message">Une erreur est survenue lors de l’enregistrement
-        audio
-    </string>
-    <string name="nabla_conversation_voice_message_audio_permission_rational_title">Autorisation d’utiliser le
-        microphone
-    </string>
-    <string name="nabla_conversation_voice_message_audio_permission_rational_description">Pour enregistrer un message
-        vocal, nous avons besoin de votre autorisation d’utiliser le micro.
-    </string>
+    <string name="nabla_conversation_button_record_audio_message_content_description">Commencer l’enregistrement d’un message vocal</string>
+    <string name="nabla_conversation_button_cancel_audio_message_content_description">Arrêter l’enregistrement d’un message vocal</string>
+    <string name="nabla_conversation_error_recording_voice_message">Une erreur est survenue lors de l’enregistrement audio</string>
+    <string name="nabla_conversation_voice_message_audio_permission_rational_title">Autorisation d’utiliser le microphone</string>
+    <string name="nabla_conversation_voice_message_audio_permission_rational_description">Pour enregistrer un message vocal, nous avons besoin de votre autorisation d’utiliser le micro.</string>
 
     <string name="nabla_conversation_replied_to_message_author_patient">Toi</string>
     <string name="nabla_conversation_replied_to_message_description_deleted">Message supprimé</string>
@@ -117,4 +82,7 @@
     <string name="nabla_conversation_replied_to_message_description_document">📁 Document</string>
     <string name="nabla_conversation_replied_to_message_description_photo">📷 Photo</string>
     <string name="nabla_conversation_replied_to_message_description_video">📹 Vidéo</string>
+
+    <string name="nabla_conversation_list_toolbar_title">Chat Médical</string>
+    <string name="nabla_conversation_list_create_cta_text">Commencer une conversation</string>
 </resources>
