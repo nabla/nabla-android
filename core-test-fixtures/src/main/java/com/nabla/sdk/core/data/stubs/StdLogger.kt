@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.data.logger
+package com.nabla.sdk.core.data.stubs
 
 import com.nabla.sdk.core.domain.boundary.Logger
 

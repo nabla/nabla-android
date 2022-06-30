@@ -14,9 +14,9 @@ import com.nabla.sdk.graphql.test.ConversationItemsQuery_TestBuilder.Data
 import com.nabla.sdk.graphql.test.ConversationsEventsSubscription_TestBuilder.Data
 import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder
 import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder.Data
+import com.nabla.sdk.messaging.core.data.apollo.CustomTestResolver
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.test.apollo.CustomTestResolver
 import kotlinx.datetime.Instant
 
 @OptIn(ApolloExperimental::class)
@@ -86,7 +86,9 @@ internal object GqlData {
             }
         }
 
-        fun conversationCreated(conversationId: ConversationId? = null) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
+        fun conversationCreated(conversationId: ConversationId? = null) = ConversationsEventsSubscription.Data(
+            CustomTestResolver()
+        ) {
             conversations = conversations {
                 event = conversationCreatedEventEvent {
                     conversation = conversation {

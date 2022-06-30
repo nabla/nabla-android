@@ -18,8 +18,6 @@ android {
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
 
-        versionName getGitDescribe()
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro', 'serialization-rules.pro'
 
@@ -27,7 +25,7 @@ android {
             minCompileSdk buildConfig.compileSdk
         }
 
-        buildConfigField 'String', 'VERSION_NAME', "\"${defaultConfig.versionName}\""
+        buildConfigField 'String', 'VERSION_NAME', "\"${getGitDescribe()}\""
     }
 
     compileOptions {
@@ -73,6 +71,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     if (!it.name.contains("Test")) {
         kotlinOptions.freeCompilerArgs += "-Xexplicit-api=strict"
     }
+
+    kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
 }
 
 afterEvaluate {
@@ -100,14 +100,5 @@ dependencies {
     api libs.kotlin.datetime
     api libs.uuid
 
-    testImplementation libs.junit
-    testImplementation libs.turbine
-    testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.mockk
-    testImplementation libs.apollo.testingSupport
-    testImplementation libs.kotlin.test
-    testImplementation libs.roboelectric
-    testImplementation libs.android.junit
-    testImplementation project(':messaging-core-test-fixtures')
-    testImplementation libs.espressoIdlingResource
+    testImplementation project(':core-test-fixtures')
 }

@@ -11,6 +11,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.nabla.sdk.core.BuildConfig
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NetworkConfiguration
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
@@ -45,12 +46,12 @@ import retrofit2.Retrofit
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
+@NablaInternal
 public class CoreContainer(
     name: String,
     configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
 ) {
-
     public val logger: Logger = configuration.logger
 
     public val clock: Clock = overriddenClock ?: Clock.System
@@ -96,7 +97,8 @@ public class CoreContainer(
                     configuration.context,
                     "nabla_cache_apollo_$name.db"
                 )
-            ).serverUrl(networkConfiguration.baseUrl + "v1/patient/graphql/sdk/authenticated")
+            )
+            .serverUrl(networkConfiguration.baseUrl + "v1/patient/graphql/sdk/authenticated")
             .httpEngine(DefaultHttpEngine(okHttpClient))
             .apply {
                 val overriddenApolloWsConfig = overriddenApolloWsConfig

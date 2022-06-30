@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = 'com.nabla.sdk.messaging.core.testing.support'
+    namespace = 'com.nabla.sdk.core.testing.support'
 
     compileSdk buildConfig.compileSdk
 
@@ -26,6 +26,15 @@ android {
 }
 
 dependencies {
-    api project(':core-test-fixtures')
-    api project(':messaging-core')
+    api project(':core')
+    api libs.kotlin.coroutines.test
+    api libs.apollo.testingSupport
+    api libs.junit
+    api libs.turbine
+    api libs.mockk
+    api libs.kotlin.test
+    api libs.roboelectric
+    api libs.android.junit
+    api libs.okreplay
+    api libs.espressoIdlingResource
 }

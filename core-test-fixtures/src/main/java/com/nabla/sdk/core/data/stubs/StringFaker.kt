@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.core.data.stubs
+package com.nabla.sdk.core.data.stubs
 
 import kotlin.math.absoluteValue
 import kotlin.random.Random

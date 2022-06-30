@@ -4,7 +4,9 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.cache.normalized.apolloStore
 import com.apollographql.apollo3.exception.CacheMissException
+import com.nabla.sdk.core.annotation.NablaInternal
 
+@NablaInternal
 public suspend fun <D : Operation.Data> ApolloClient.updateCache(
     operation: Operation<D>,
     update: suspend (D?) -> CacheUpdateOperation<D>,
@@ -17,6 +19,7 @@ public suspend fun <D : Operation.Data> ApolloClient.updateCache(
     }
 }
 
+@NablaInternal
 public suspend fun <D : Operation.Data> ApolloClient.readFromCache(
     operation: Operation<D>,
 ): D? = try {
@@ -32,6 +35,7 @@ internal suspend fun <D : Operation.Data> ApolloClient.writeToCache(
     apolloStore.writeOperation(operation, operationData)
 }
 
+@NablaInternal
 public sealed class CacheUpdateOperation<D> {
     public data class Write<D>(val data: D) : CacheUpdateOperation<D>()
     public class Ignore<D> : CacheUpdateOperation<D>()

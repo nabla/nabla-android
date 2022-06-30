@@ -2,7 +2,8 @@ package com.nabla.sdk.messaging.core.data.stubs
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
-import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.core.data.stubs.StringFaker.randomText
+import com.nabla.sdk.core.data.stubs.UriFaker
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
@@ -10,7 +11,6 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.messaging.core.data.stubs.StringFaker.randomText
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -105,7 +105,7 @@ fun FileSource.Local.Companion.fakeImage(
 fun FileSource.Uploaded.Companion.fakeImage(
     fileLocal: FileLocal.Image? = FileLocal.Image.fake(),
     fileUpload: FileUpload.Image = FileUpload.Image.fake(),
-) = FileSource.Uploaded<FileLocal.Image, FileUpload.Image>(
+) = FileSource.Uploaded(
     fileLocal = fileLocal,
     fileUpload = fileUpload,
 )
@@ -257,11 +257,6 @@ fun ConversationActivity.Companion.fakeProviderJoined() = ConversationActivity(
     content = ConversationActivityContent.ProviderJoinedConversation(
         maybeProvider = Provider.fake()
     )
-)
-
-fun AuthTokens.Companion.fake() = AuthTokens(
-    refreshToken = JwtFaker.expiredIn2050,
-    accessToken = JwtFaker.expiredIn2050_2,
 )
 
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)

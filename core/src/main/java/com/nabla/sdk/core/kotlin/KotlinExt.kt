@@ -1,5 +1,6 @@
 package com.nabla.sdk.core.kotlin
 
+import com.nabla.sdk.core.annotation.NablaInternal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlin.coroutines.cancellation.CancellationException
 
+@NablaInternal
 public suspend inline fun <R> runCatchingCancellable(crossinline block: suspend () -> R): Result<R> {
     return try {
         Result.success(block())
@@ -20,6 +22,7 @@ public suspend inline fun <R> runCatchingCancellable(crossinline block: suspend 
     }
 }
 
+@NablaInternal
 public fun <R> sharedSingleIn(
     coroutineScope: CoroutineScope,
     block: suspend () -> R,
@@ -40,6 +43,7 @@ public fun <R> sharedSingleIn(
     }
 }
 
+@NablaInternal
 public interface SharedSingle<R> {
     public suspend fun await(): R
 }

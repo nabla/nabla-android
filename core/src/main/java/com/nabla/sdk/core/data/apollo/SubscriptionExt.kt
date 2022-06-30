@@ -2,6 +2,7 @@ package com.nabla.sdk.core.data.apollo
 
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.isNetworkError
 import com.nabla.sdk.core.kotlin.shareInWithMaterializedErrors
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,7 @@ internal fun <D : Operation.Data> Flow<ApolloResponse<D>>.retryOnNetworkErrorWit
     }
 }
 
+@NablaInternal
 public fun <D : Operation.Data> Flow<ApolloResponse<D>>.retryOnNetworkErrorAndShareIn(
     coroutineScope: CoroutineScope,
 ): Flow<ApolloResponse<D>> = retryOnNetworkErrorWithExponentialBackoff()

@@ -1,4 +1,4 @@
-package com.nabla.sdk.test
+package com.nabla.sdk.core.data.stubs
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope

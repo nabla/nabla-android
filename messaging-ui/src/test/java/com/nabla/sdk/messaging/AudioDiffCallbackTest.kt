@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nabla.sdk.messaging.core.data.stubs.UriFaker
+import com.nabla.sdk.core.data.stubs.UriFaker
 import com.nabla.sdk.messaging.ui.scene.messages.PlaybackProgress
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.BindingPayload

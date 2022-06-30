@@ -1,4 +1,4 @@
-package com.nabla.sdk.test
+package com.nabla.sdk.messaging.core.data.test
 
 import android.content.ContentProvider
 import android.content.ContentValues

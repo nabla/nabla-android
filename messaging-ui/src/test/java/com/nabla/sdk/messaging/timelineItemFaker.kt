@@ -1,8 +1,8 @@
 package com.nabla.sdk.messaging
 
 import com.benasher44.uuid.uuid4
-import com.nabla.sdk.messaging.core.data.stubs.StringFaker.randomText
-import com.nabla.sdk.messaging.core.data.stubs.UriFaker
+import com.nabla.sdk.core.data.stubs.StringFaker.randomText
+import com.nabla.sdk.core.data.stubs.UriFaker
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus

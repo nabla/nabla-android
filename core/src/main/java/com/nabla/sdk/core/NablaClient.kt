@@ -3,6 +3,7 @@ package com.nabla.sdk.core
 import android.annotation.SuppressLint
 import com.nabla.sdk.core.NablaClient.Companion.getInstance
 import com.nabla.sdk.core.NablaClient.Companion.initialize
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.ConfigurationException
@@ -27,6 +28,8 @@ public class NablaClient private constructor(
     private val coreContainerDelegate = lazy {
         CoreContainer(name, configuration, networkConfiguration)
     }
+
+    @NablaInternal
     public val coreContainer: CoreContainer by coreContainerDelegate
 
     /**

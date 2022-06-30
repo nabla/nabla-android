@@ -61,6 +61,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     if (!it.name.contains("Test")) {
         kotlinOptions.freeCompilerArgs += "-Xexplicit-api=strict"
     }
+
+    kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
 }
 
 afterEvaluate {
@@ -90,10 +92,6 @@ dependencies {
     implementation libs.exoplayer
     implementation libs.mimeTypeDetector
 
-    testImplementation libs.junit
-    testImplementation libs.kotlin.test
-    testImplementation libs.mockk
     testImplementation project(':messaging-core-test-fixtures')
     testImplementation libs.roboelectric
-    testImplementation libs.android.junit
 }

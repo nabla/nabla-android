@@ -1,4 +1,4 @@
-package com.nabla.sdk.test.apollo
+package com.nabla.sdk.messaging.core.data.apollo
 
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.CompiledType

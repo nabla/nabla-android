@@ -1,10 +1,10 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
 import app.cash.turbine.test
+import com.nabla.sdk.core.data.stubs.TestClock
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
-import com.nabla.sdk.test.TestClock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest

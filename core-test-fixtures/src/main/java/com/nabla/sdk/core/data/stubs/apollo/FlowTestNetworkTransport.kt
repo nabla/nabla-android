@@ -1,4 +1,4 @@
-package com.nabla.sdk.test.apollo
+package com.nabla.sdk.core.data.stubs.apollo
 
 import com.apollographql.apollo3.api.ApolloRequest
 import com.apollographql.apollo3.api.ApolloResponse
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
  * A network transport used for test, that can be used to emit response from a hot flow. Typical
  * use case is controlling subscription emission during a test.
  */
-internal class FlowTestNetworkTransport : NetworkTransport {
+class FlowTestNetworkTransport : NetworkTransport {
 
     private var isDisposed = false
     private val operationsToResponses = mutableMapOf<Operation<out Operation.Data>, Flow<ApolloResponse<out Operation.Data>>>()
