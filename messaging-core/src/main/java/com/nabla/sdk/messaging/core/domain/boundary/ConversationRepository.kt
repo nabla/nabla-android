@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 internal interface ConversationRepository {
     suspend fun createConversation(
         title: String?,
-        providerIdToAssign: Uuid?,
+        providerIds: List<Uuid>?,
     ): Conversation
 
     fun watchConversation(conversationId: ConversationId): Flow<Conversation>

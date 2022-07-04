@@ -73,11 +73,11 @@ internal class NablaMessagingClientImpl internal constructor(
     @CheckResult
     override suspend fun createConversation(
         title: String?,
-        providerIdToAssign: Uuid?,
+        providerIds: List<Uuid>?,
     ): Result<Conversation> {
         return runCatchingCancellable {
             ensureAuthenticatedOrThrow()
-            conversationRepository.createConversation(title, providerIdToAssign)
+            conversationRepository.createConversation(title, providerIds)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
             .mapFailure { error ->
                 if (error is ServerException) {

@@ -1,7 +1,7 @@
 !tape
 name: test conversation creation and conversations & conversation watching
 interactions:
-- recorded: 2022-06-22T13:19:15.215Z
+- recorded: 2022-07-04T08:36:21.560Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -15,7 +15,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 22 Jun 2022 13:19:15 GMT
+      Date: Mon, 04 Jul 2022 08:36:21 GMT
       connection: close
       content-length: '391'
       content-type: application/json; charset=UTF-8
@@ -23,25 +23,25 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: cce64fc8-4c7a-4b9e-9417-ab2746c87328
-    body: '{"data":{"conversations":{"conversations":[{"__typename":"Conversation","id":"e0f15308-751b-426b-8930-858831bf420b","title":"Test custom title","subtitle":null,"createdAt":"2022-06-22T15:19:13.675+02:00","updatedAt":"2022-06-22T15:19:13.675+02:00","inboxPreviewTitle":"Test
+      x-request-id: 3a0a78b3-5606-4f4a-8604-a47ae678cd95
+    body: '{"data":{"conversations":{"conversations":[{"__typename":"Conversation","id":"aefcfb27-8bfa-42e6-b37e-6d087ee53a42","title":"Test custom title","subtitle":null,"createdAt":"2022-07-04T10:36:20.663+02:00","updatedAt":"2022-07-04T10:36:20.663+02:00","inboxPreviewTitle":"Test
       custom title","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}],"hasMore":false,"nextCursor":"100"}}}'
-- recorded: 2022-06-22T13:19:15.337Z
+- recorded: 2022-07-04T08:36:21.603Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
-      X-APOLLO-OPERATION-ID: d0766bc56bfc5d51f74b24b8fb6fd0f2cad0a6c915bb2a2980c8a327d80bf04d
+      X-APOLLO-OPERATION-ID: 2e2943f457e85118963f0df17174d09f1a9d1c11f87b58f49d13ddd38b60e3a2
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation($title: String, $providerIdToAssign: UUID) { createConversation(title: $title, providerIdToAssign: $providerIdToAssign) { conversation { __typename ...ConversationFragment
-      } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation
+    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!]) { createConversation(title: $title, providerIds: $providerIds) { conversation { __typename ...ConversationFragment } }
+      }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation
       { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
       } }"}'
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 22 Jun 2022 13:19:15 GMT
+      Date: Mon, 04 Jul 2022 08:36:21 GMT
       connection: close
       content-length: '347'
       content-type: application/json; charset=UTF-8
@@ -49,6 +49,6 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: c0cac283-0616-46ec-b99e-4e864ed26735
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"81370362-a067-4ce8-9989-1fbab0379e11","title":null,"subtitle":null,"createdAt":"2022-06-22T15:19:15.312+02:00","updatedAt":"2022-06-22T15:19:15.312+02:00","inboxPreviewTitle":"Nouvelle
+      x-request-id: cc23c436-9d44-4059-971b-f95143b58aa5
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"e3f6548c-c00a-406b-91d1-dad21187308e","title":null,"subtitle":null,"createdAt":"2022-07-04T10:36:21.591+02:00","updatedAt":"2022-07-04T10:36:21.591+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

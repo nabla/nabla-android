@@ -121,13 +121,13 @@ internal class GqlConversationDataSource constructor(
 
     suspend fun createConversation(
         title: String?,
-        providerIdToAssign: Uuid?,
+        providerIds: List<Uuid>?,
     ): Conversation {
         return mapper.mapToConversation(
             apolloClient.mutation(
                 CreateConversationMutation(
                     Optional.presentIfNotNull(title),
-                    Optional.presentIfNotNull(providerIdToAssign),
+                    Optional.presentIfNotNull(providerIds),
                 )
             ).execute()
                 .dataOrThrowOnError

@@ -27,9 +27,9 @@ internal class ConversationRepositoryImpl(
 
     override suspend fun createConversation(
         title: String?,
-        providerIdToAssign: Uuid?,
+        providerIds: List<Uuid>?,
     ): Conversation {
-        return gqlConversationDataSource.createConversation(title, providerIdToAssign)
+        return gqlConversationDataSource.createConversation(title, providerIds)
     }
 
     @OptIn(FlowPreview::class)

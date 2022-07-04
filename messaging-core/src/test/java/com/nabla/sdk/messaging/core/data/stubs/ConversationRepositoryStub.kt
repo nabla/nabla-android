@@ -33,7 +33,7 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
 
     override suspend fun createConversation(
         title: String?,
-        providerIdToAssign: Uuid?,
+        providerIds: List<Uuid>?,
     ): Conversation {
         delayWithIdlingRes(idlingRes, 300.milliseconds)
 

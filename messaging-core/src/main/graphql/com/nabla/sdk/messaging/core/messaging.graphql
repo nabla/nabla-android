@@ -1,10 +1,10 @@
 mutation CreateConversation(
     $title: String,
-    $providerIdToAssign: UUID,
+    $providerIds: [UUID!],
 ) {
     createConversation(
         title: $title,
-        providerIdToAssign: $providerIdToAssign,
+        providerIds: $providerIds,
     ) {
         conversation {
             ...ConversationFragment

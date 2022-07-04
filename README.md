@@ -1,13 +1,13 @@
 #  Nabla Android SDK
 [![Release](https://jitpack.io/v/nabla/nabla-android.svg)](https://jitpack.io/#Nabla/nabla-android)
 
-The [Nabla](https://www.nabla.dev/) Android SDK makes it quick and easy to build an excellent healthcare communication experience in your Android app. We provide powerful and customizable UI elements that can be used out-of-the-box to create a full healthcare communication experience. We also expose the low-level APIs that power those UIs so that you can build fully custom experiences.
+The [Nabla](https://www.nabla.com/) Android SDK makes it quick and easy to build an excellent healthcare communication experience in your Android app. We provide powerful and customizable UI elements that can be used out-of-the-box to create a full healthcare communication experience. We also expose the low-level APIs that power those UIs so that you can build fully custom experiences.
 
 Right now the library is in alpha, meaning all core features are here and ready to be used but API might change during the journey to a stable 1.0 version.
 
 ## Documentation
 
-Check our [documentation portal](https://docs.nabla.dev/docs/setup) for in depth documentation about integrating the SDK.
+Check our [documentation portal](https://docs.nabla.com/docs/setup) for in depth documentation about integrating the SDK.
 
 ## Getting started
 

@@ -50,17 +50,17 @@ public interface NablaMessagingClient {
      * Reference the returned [Conversation.id] for further actions on that freshly created conversation: send message, mark as read, etc.
      *
      * @param title optional - title for the conversation
-     * @param providerIdToAssign optional - [com.nabla.sdk.core.domain.entity.Provider.id] of a provider
-     *                           to which the conversation should be assigned.
-     *                           Make sure the specified provider has enough rights to be assigned a conversation.
-     *                           See [Roles and Permissions](https://docs.nabla.com/docs/roles-and-permissions).
+     * @param providerIds optional - List of [com.nabla.sdk.core.domain.entity.Provider.id], providers that will
+     *                    participate to the conversation.
+     *                    Make sure the specified providers have enough rights to participate to a conversation.
+     *                    See [Roles and Permissions](https://docs.nabla.com/docs/roles-and-permissions).
      *
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
     public suspend fun createConversation(
         title: String? = null,
-        providerIdToAssign: Uuid? = null,
+        providerIds: List<Uuid>? = null,
     ): Result<Conversation>
 
     /**

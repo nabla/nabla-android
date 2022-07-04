@@ -1,22 +1,22 @@
 !tape
 name: test new deleted provider in conversation activity watching
 interactions:
-- recorded: 2022-06-22T13:19:21.452Z
+- recorded: 2022-07-04T08:36:24.798Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
-      X-APOLLO-OPERATION-ID: d0766bc56bfc5d51f74b24b8fb6fd0f2cad0a6c915bb2a2980c8a327d80bf04d
+      X-APOLLO-OPERATION-ID: 2e2943f457e85118963f0df17174d09f1a9d1c11f87b58f49d13ddd38b60e3a2
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation($title: String, $providerIdToAssign: UUID) { createConversation(title: $title, providerIdToAssign: $providerIdToAssign) { conversation { __typename ...ConversationFragment
-      } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation
+    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!]) { createConversation(title: $title, providerIds: $providerIds) { conversation { __typename ...ConversationFragment } }
+      }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation
       { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
       } }"}'
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 22 Jun 2022 13:19:21 GMT
+      Date: Mon, 04 Jul 2022 08:36:24 GMT
       connection: close
       content-length: '347'
       content-type: application/json; charset=UTF-8
@@ -24,17 +24,17 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: cac1e3ca-5443-4c75-a519-07fca5f0f8e3
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"8c59c88d-4284-48af-90f3-f6abf5e84b2e","title":null,"subtitle":null,"createdAt":"2022-06-22T15:19:21.420+02:00","updatedAt":"2022-06-22T15:19:21.420+02:00","inboxPreviewTitle":"Nouvelle
+      x-request-id: 4421d6f9-2b17-46d5-a801-029591b9ebaa
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"b216aa0b-4a36-4984-b402-fa01debf30e4","title":null,"subtitle":null,"createdAt":"2022-07-04T10:36:24.791+02:00","updatedAt":"2022-07-04T10:36:24.791+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
-- recorded: 2022-06-22T13:19:21.534Z
+- recorded: 2022-07-04T08:36:24.821Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
       X-APOLLO-OPERATION-ID: bc0b76ea66f18e678ff10ff23bbcd85aecbd88a54cf1848916b9381ffc5fbf1a
       X-APOLLO-OPERATION-NAME: ConversationItems
-    body: '{"operationName":"ConversationItems","variables":{"id":"8c59c88d-4284-48af-90f3-f6abf5e84b2e","pageInfo":{}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
+    body: '{"operationName":"ConversationItems","variables":{"id":"b216aa0b-4a36-4984-b402-fa01debf30e4","pageInfo":{}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename id ...ConversationItemsPageFragment
       } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment MaybeProviderFragment on MaybeProvider { __typename
       ... on Provider { __typename ...ProviderFragment } ... on DeletedProvider { empty: _ } }  fragment ConversationActivityContentFragment on ConversationActivityContent { __typename ... on ProviderJoinedConversation { provider { __typename ...MaybeProviderFragment
       } } }  fragment ConversationActivityFragment on ConversationActivity { id conversation { id } createdAt activityTime conversationActivityContent: content { __typename ...ConversationActivityContentFragment } }  fragment PatientFragment on Patient { id
@@ -52,7 +52,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 22 Jun 2022 13:19:21 GMT
+      Date: Mon, 04 Jul 2022 08:36:24 GMT
       connection: close
       content-length: '170'
       content-type: application/json; charset=UTF-8
@@ -60,5 +60,5 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: eaccba8e-41d9-424f-b216-2fc61bcf7cf2
-    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"8c59c88d-4284-48af-90f3-f6abf5e84b2e","items":{"data":[],"hasMore":false,"nextCursor":null}}}}}'
+      x-request-id: 60747324-71be-48f3-8add-ad6822ea5780
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"b216aa0b-4a36-4984-b402-fa01debf30e4","items":{"data":[],"hasMore":false,"nextCursor":null}}}}}'

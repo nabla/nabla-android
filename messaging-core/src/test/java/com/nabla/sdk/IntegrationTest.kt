@@ -167,7 +167,7 @@ internal class IntegrationTest {
         val (nablaMessagingClient) = setupClient()
 
         assertFailsWith<ProviderNotFoundException> {
-            nablaMessagingClient.createConversation(providerIdToAssign = Uuid.fromString("01234567-0000-0000-0000-000000000000")).getOrThrow()
+            nablaMessagingClient.createConversation(providerIds = listOf(Uuid.fromString("01234567-0000-0000-0000-000000000000"))).getOrThrow()
         }
     }
 

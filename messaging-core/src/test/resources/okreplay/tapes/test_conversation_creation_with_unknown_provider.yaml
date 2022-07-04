@@ -1,22 +1,22 @@
 !tape
 name: test conversation creation with unknown provider
 interactions:
-- recorded: 2022-06-22T13:19:21.335Z
+- recorded: 2022-07-04T08:36:24.766Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
     headers:
-      X-APOLLO-OPERATION-ID: d0766bc56bfc5d51f74b24b8fb6fd0f2cad0a6c915bb2a2980c8a327d80bf04d
+      X-APOLLO-OPERATION-ID: 2e2943f457e85118963f0df17174d09f1a9d1c11f87b58f49d13ddd38b60e3a2
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"providerIdToAssign":"01234567-0000-0000-0000-000000000000"},"query":"mutation CreateConversation($title: String, $providerIdToAssign: UUID) { createConversation(title: $title, providerIdToAssign:
-      $providerIdToAssign) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName
-      lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle
-      lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"]},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!]) { createConversation(title: $title, providerIds: $providerIds) {
+      conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment
+      ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount
+      providers { __typename ...ProviderInConversationFragment } }"}'
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Wed, 22 Jun 2022 13:19:21 GMT
+      Date: Mon, 04 Jul 2022 08:36:24 GMT
       connection: close
       content-length: '250'
       content-type: application/json; charset=UTF-8
@@ -24,5 +24,5 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 15f66ff0-74b0-45d2-8b8c-462519f05566
+      x-request-id: 02b43225-55cf-40b4-b3f9-e10a94994221
     body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'

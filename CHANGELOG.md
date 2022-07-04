@@ -16,6 +16,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Remove the `description` field from `Conversation` and replace it by a `subtitle` that is displayed by the `ConversationFragment`
+- Replaced `providerIdToAssign` by a list a `providerIds` in `NablaMessagingClient.createConversation`.
 
 ## [1.0-alpha06] - 2022-06-21
 
