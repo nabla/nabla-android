@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha07] - 2022-07-04
+
 ### Added
 
 - Added a new `setShowComposer` method to `ConversationFragment.Builder` that you can call to hide the message composer for the patient.

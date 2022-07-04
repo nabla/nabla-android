@@ -26,8 +26,8 @@ import com.nabla.sdk.uitests.createImageGallerySetResultStub
 import com.nabla.sdk.uitests.first
 import com.nabla.sdk.uitests.savePickedImage
 import com.nabla.sdk.uitests.withCousin
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.not
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

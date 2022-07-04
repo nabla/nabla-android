@@ -4,9 +4,9 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.test.espresso.matcher.ViewMatchers
 import org.hamcrest.BaseMatcher
+import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
 
 fun <T> first(matcher: Matcher<T>): Matcher<T> {
     return object : BaseMatcher<T>() {
