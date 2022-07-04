@@ -16,7 +16,7 @@ type Query {
 type Mutation {
   createConversation(
     title: String
-    providerIdToAssign: UUID # Use providerIds instead
+    providerIdToAssign: UUID # Deprecated: Remove once unused and use providerIds instead
     providerIds: [UUID!]
   ): CreateConversationOutput!
 
