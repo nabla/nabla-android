@@ -93,4 +93,5 @@ dependencies {
     implementation libs.kotlin.coroutines.android
 
     testImplementation project(':messaging-core-test-fixtures')
+    testImplementation libs.roboelectric
 }

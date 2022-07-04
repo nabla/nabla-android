@@ -54,6 +54,7 @@ dependencies {
     androidTestImplementation libs.espressoIntents
     androidTestImplementation libs.espressoIdlingResource
     androidTestImplementation libs.testRules
+    androidTestImplementation libs.hamcrest
     androidTestImplementation project(path: ':messaging-core', configuration: 'test-helpers')
     androidTestImplementation project(':messaging-core-test-fixtures')
     

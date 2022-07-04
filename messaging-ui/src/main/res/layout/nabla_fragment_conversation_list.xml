@@ -43,9 +43,10 @@
         android:background="@drawable/nabla_conversations_list_cta_background"
         android:elevation="6dp"
         android:orientation="horizontal"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/createConversationCtaIcon"

@@ -34,7 +34,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertEquals
 import com.nabla.sdk.messaging.ui.R as SdkR
-import com.nabla.sdk.uitests.R as TestsR
 
 @RunWith(AndroidJUnit4::class)
 class MessageSendingTests {
@@ -57,12 +56,9 @@ class MessageSendingTests {
 
     @Test
     fun create_empty_conversation_and_send_messages_test() {
-        // create new conversation
-        onView(first(withId(TestsR.id.createConversation))).perform(click())
-        onView(first(allOf(withId(SdkR.id.conversationInboxTitle)))).check(matches(withText("New conversation")))
+        // create new conversation & open it
+        onView(first(withId(SdkR.id.createConversationCta))).perform(click())
 
-        // open it
-        onView(first(withId(SdkR.id.conversationInboxTitle))).perform(click())
         onView(withId(SdkR.id.conversationToolbarTitle)).check(matches(withText("New conversation")))
         onView(withId(SdkR.id.conversationEditText)).check(matches(withText("")))
         onView(withId(SdkR.id.conversationSendButton)).check(matches(not(isEnabled())))

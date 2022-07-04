@@ -17,7 +17,7 @@ class StubbedInboxFragment : InboxFragment() {
             .replace(
                 containerId,
                 ConversationFragment.newInstance(conversationId) {
-                    setFragment(StubbedConversionFragment())
+                    setFragment(StubbedConversationFragment())
                 },
             )
             .addToBackStack(null)

@@ -33,7 +33,6 @@ dependencies {
     api libs.turbine
     api libs.mockk
     api libs.kotlin.test
-    api libs.roboelectric
     api libs.android.junit
     api libs.okreplay
     api libs.espressoIdlingResource
