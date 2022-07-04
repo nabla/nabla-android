@@ -362,7 +362,8 @@ type ActionRequest {
 
 union ActionRequestContent = ActionRequestContentLivekitRoom
 
-# --- Livekit
+# --- LiveKit rooms.
+
 type ActionRequestContentLivekitRoom {
   livekitRoom: LivekitRoom!
 }
@@ -375,6 +376,7 @@ type LivekitRoom {
 union LivekitRoomStatus = LivekitRoomOpenStatus | LivekitRoomClosedStatus
 
 type LivekitRoomOpenStatus {
+  url: String!
   token: String!
 }
 
