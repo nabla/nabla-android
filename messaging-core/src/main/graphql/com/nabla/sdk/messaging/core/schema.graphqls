@@ -14,11 +14,7 @@ type Query {
 }
 
 type Mutation {
-  createConversation(
-    title: String
-    providerIdToAssign: UUID # Deprecated: Remove once unused and use providerIds instead
-    providerIds: [UUID!]
-  ): CreateConversationOutput!
+  createConversation(title: String, providerIds: [UUID!]): CreateConversationOutput!
 
   sendMessage(
     conversationId: UUID!
