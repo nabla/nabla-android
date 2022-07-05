@@ -90,8 +90,17 @@ dependencies {
     implementation libs.apollo.cache
     implementation libs.apollo.cache.sqlite
     implementation libs.apollo.adapters
-    implementation libs.kotlin.coroutines.android
 
+    runtimeOnly libs.kotlin.coroutines.android
+
+    testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')
+    testImplementation libs.junit
+    testImplementation libs.android.junit
+    testImplementation libs.espressoIdlingResource
+    testImplementation libs.turbine
+    testImplementation libs.okreplay
+    testImplementation libs.kotlin.test
+    testImplementation libs.mockk
     testImplementation libs.roboelectric
 }

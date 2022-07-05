@@ -77,21 +77,25 @@ afterEvaluate {
 
 dependencies {
     api project(':messaging-core')
+    api libs.androidx.constraintlayout
+    api libs.androidx.lifecycle.viewmodel.savedstate
+    api libs.recyclerview
+    api libs.touchImageView
+    api libs.google.material
+    api libs.androidx.appcompat
 
     implementation libs.androidx.lifecycle.viewmodel
-    implementation libs.androidx.lifecycle.viewmodel.savedstate
-    implementation libs.androidx.constraintlayout
     implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
-    implementation libs.google.material
     implementation libs.coilCore
     implementation libs.coilVideo
     implementation libs.androidx.fragment.ktx
-    implementation libs.recyclerview
-    implementation libs.touchImageView
     implementation libs.exoplayer
     implementation libs.mimeTypeDetector
 
+    testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')
     testImplementation libs.roboelectric
+    testImplementation libs.junit
+    testImplementation libs.android.junit
+    testImplementation libs.kotlin.test
 }

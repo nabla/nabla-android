@@ -21,13 +21,44 @@ buildscript {
         classpath libs.apollo.pluginGradle
         classpath libs.ktlint.pluginGradle
         classpath libs.kotlin.binaryCompatibilityValidator.pluginGradle
+        classpath libs.gradle.dependencyAnalysis.pluginGradle
     }
 }
 
+// binary-compatibility-validator configuration
 apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
 
 apiValidation {
     ignoredProjects += ["demo", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures"]
+}
+
+// dependencies-analysis configuration
+// run './gradlew buildHealth' to check the whole project dependencies
+apply plugin: 'com.autonomousapps.dependency-analysis'
+
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity('fail')
+            }
+            onUsedTransitiveDependencies {
+                severity('ignore')
+            }
+            ignoreKtx(true)
+        }
+    }
+    dependencies {
+        bundle("apollo-normalized-cache-sqlite") {
+            includeGroup("com.apollographql.apollo3")
+        }
+        bundle("robolectric") {
+            includeGroup("org.robolectric")
+        }
+        bundle("exoplayer") {
+            includeGroup("com.google.android.exoplayer")
+        }
+    }
 }
 
 subprojects {

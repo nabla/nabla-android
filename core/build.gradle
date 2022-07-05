@@ -86,7 +86,10 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation libs.okhttp
+    api libs.kotlin.datetime
+    api libs.uuid
+    api libs.okhttp
+
     implementation libs.okhttp.logging
     implementation libs.retrofit
     implementation libs.retrofit.kotlin.serialization
@@ -94,11 +97,14 @@ dependencies {
     implementation libs.apollo.runtime
     implementation libs.apollo.cache
     implementation libs.apollo.cache.sqlite
-    implementation libs.apollo.adapters
     implementation libs.androidx.startup
     implementation libs.kotlin.serialization.json
-    api libs.kotlin.datetime
-    api libs.uuid
+
+    compileOnly libs.androidx.annotation
 
     testImplementation project(':core-test-fixtures')
+    testImplementation libs.turbine
+    testImplementation libs.junit
+    testImplementation libs.kotlin.test
+    testImplementation libs.mockk
 }

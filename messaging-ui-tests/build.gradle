@@ -41,13 +41,11 @@ android {
 dependencies {
     implementation project(':messaging-ui')
 
-    implementation libs.androidx.activity
     implementation libs.androidx.material
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.fragment.ktx
     implementation libs.espressoIdlingResource
     implementation project(path: ':messaging-core', configuration: 'test-helpers')
-    implementation project(':messaging-core-test-fixtures')
 
     androidTestImplementation libs.espressoCore
     androidTestImplementation libs.espressoContrib
@@ -57,6 +55,8 @@ dependencies {
     androidTestImplementation libs.hamcrest
     androidTestImplementation project(path: ':messaging-core', configuration: 'test-helpers')
     androidTestImplementation project(':messaging-core-test-fixtures')
-    
+    androidTestImplementation libs.android.junit
+    androidTestImplementation libs.kotlin.test
+
     coreLibraryDesugaring libs.desugaring
 }
