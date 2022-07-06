@@ -107,7 +107,8 @@ internal class GqlConversationDataSource constructor(
             .map { queryData ->
                 val items = queryData.conversations.conversations.map {
                     mapper.mapToConversation(it.conversationFragment)
-                }
+                }.sortedByDescending { conversation -> conversation.lastModified }
+
                 return@map PaginatedList(items, queryData.conversations.hasMore)
             }
         return flowOf(conversationsEventsFlow, dataFlow)

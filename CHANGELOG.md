@@ -7,6 +7,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- Conversations in `watchConversations()` are now correctly sorted by their `lastModified` date.
+
 ## [1.0-alpha07] - 2022-07-04
 
 ### Added
