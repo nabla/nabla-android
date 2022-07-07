@@ -1,6 +1,5 @@
 package com.nabla.sdk.core
 
-import android.annotation.SuppressLint
 import com.nabla.sdk.core.NablaClient.Companion.getInstance
 import com.nabla.sdk.core.NablaClient.Companion.initialize
 import com.nabla.sdk.core.annotation.NablaInternal
@@ -53,63 +52,77 @@ public class NablaClient private constructor(
     }
 
     public companion object {
-        private const val DEFAULT_NAMESPACE = "nabla-core"
+        private const val DEFAULT_NAME = "default-nabla-sdk"
 
-        @SuppressLint("StaticFieldLeak")
-        private var defaultSingletonInstance: NablaClient? = null
+        private val INSTANCES = mutableMapOf<String, NablaClient>()
 
         /**
-         * Getter for the singleton instance created by [initialize] with a null name.
-         * If all your previous calls to [initialize] did specify a name, you're supposed to keep a reference
-         * to their returned [NablaClient] instances.
+         * Getter for the default instance created by [initialize].
          *
-         * @throws NablaException.Configuration.MissingInitialize If you didn't call [initialize] with a null
-         * name before.
+         * @throws NablaException.Configuration.MissingInitialize If you didn't call [initialize] before.
          *
          * @see initialize
          */
         public fun getInstance(): NablaClient {
-            return defaultSingletonInstance ?: throw ConfigurationException.MissingInitialize
+            return getInstance(DEFAULT_NAME)
         }
 
         /**
-         * Mandatory call to create an instance of [NablaClient].
+         * Getter for a named instance created by [initialize].
          *
-         * You either:
-         *  - Don't specify a [name] and a singleton instance will be created and exposed in [getInstance].
-         *  - Or do specify a [name] but then will be responsible of maintaining the returned reference
-         *   and passing it to other components of the SDK relying on [NablaClient],
-         *   for instance [com.nabla.sdk.messaging.core.NablaMessagingClient.initialize].
+         * @param name name of the instance to get, as provided to [initialize].
          *
-         * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults
-         * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app
-         * @param name optional name to create your own instance to manage
+         * @throws NablaException.Configuration.MissingInitialize If you didn't call [initialize] with the corresponding name before.
+         *
+         * @see initialize
+         */
+        public fun getInstance(name: String): NablaClient {
+            return INSTANCES[name] ?: throw ConfigurationException.MissingInitialize
+        }
+
+        /**
+         * Mandatory call to create the default instance of [NablaClient].
+         * A default instance will be created and exposed in [getInstance].
+         *
+         * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
+         * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
          */
         public fun initialize(
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
-            name: String? = null,
+        ): NablaClient {
+            return initialize(configuration, networkConfiguration, DEFAULT_NAME)
+        }
+
+        /**
+         * Mandatory call to create a named instance of [NablaClient].
+         * The instance will be created and exposed using the same name in [getInstance].
+         *
+         * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
+         * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
+         * @param name name to create your own instance, if not specified a default name is used.
+         */
+        public fun initialize(
+            configuration: Configuration = Configuration(),
+            networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
+            name: String,
         ): NablaClient {
             synchronized(this) {
-                return if (name == null) {
-                    val defaultInstance = defaultSingletonInstance
-                    if (defaultInstance != null) {
-                        defaultInstance
-                            .configuration
-                            .logger
-                            .warn(
-                                "NablaClient.initialize() with no specified name should only be called once. " +
-                                    "Ignoring this call and using the previously created shared instance. " +
-                                    "Use getInstance() to get the previously created instance"
-                            )
-
-                        defaultInstance
-                    } else {
-                        NablaClient(DEFAULT_NAMESPACE, configuration, networkConfiguration)
-                            .also { defaultSingletonInstance = it }
-                    }
-                } else {
+                val alreadyInitializedInstance = INSTANCES[name]
+                return if (alreadyInitializedInstance == null) {
                     NablaClient(name, configuration, networkConfiguration)
+                        .also { INSTANCES[name] = it }
+                } else {
+                    alreadyInitializedInstance
+                        .configuration
+                        .logger
+                        .warn(
+                            "NablaClient.initialize() should only be called once per instance name. " +
+                                "Ignoring this call and using the previously created shared instance. " +
+                                "Use getInstance(name) to get the previously created instance"
+                        )
+
+                    alreadyInitializedInstance
                 }
             }
         }

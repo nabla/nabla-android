@@ -60,7 +60,7 @@ public class CoreContainer(
     }
 
     private val kvStorage = configuration.context.getSharedPreferences(
-        "nabla_kv_$name.sp", Context.MODE_PRIVATE
+        "nabla_kv_${name.hashCode()}.sp", Context.MODE_PRIVATE
     )
 
     public val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {

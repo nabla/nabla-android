@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 - Conversations in `watchConversations()` are now correctly sorted by their `lastModified` date.
+- `NablaClient` is exposed through static call `NablaClient.getInstance(name)`.
 
 ## [1.0-alpha07] - 2022-07-04
 

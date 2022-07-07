@@ -38,7 +38,10 @@ public final class com/nabla/sdk/core/NablaClient {
 
 public final class com/nabla/sdk/core/NablaClient$Companion {
 	public final fun getInstance ()Lcom/nabla/sdk/core/NablaClient;
+	public final fun getInstance (Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
+	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;)Lcom/nabla/sdk/core/NablaClient;
 	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
+	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
 	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
 }
 
