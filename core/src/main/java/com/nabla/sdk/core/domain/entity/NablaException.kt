@@ -19,6 +19,9 @@ public sealed class AuthenticationException constructor(cause: Throwable?, messa
 
     public class UnableToGetFreshSessionToken(cause: Throwable) :
         AuthenticationException(cause = cause, message = "Unable to get session token from the SessionTokenProvider")
+
+    public class AuthorizationDenied(cause: Throwable) :
+        AuthenticationException(cause = cause, message = "Authorization denied")
 }
 
 public class NetworkException internal constructor(cause: Throwable) : NablaException(cause = cause)

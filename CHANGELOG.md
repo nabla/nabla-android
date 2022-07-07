@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Added `AuthenticationException.AuthorizationDenied` exception that can be return if the patient is not
+authorized to access the data. This should not happen in the current implementation.
+
 ### Changed
 - Conversations in `watchConversations()` are now correctly sorted by their `lastModified` date.
 - `NablaClient` is exposed through static call `NablaClient.getInstance(name)`.

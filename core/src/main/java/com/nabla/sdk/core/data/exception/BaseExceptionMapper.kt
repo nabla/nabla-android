@@ -1,9 +1,11 @@
 package com.nabla.sdk.core.data.exception
 
 import com.nabla.sdk.core.data.apollo.ApolloNoDataException
+import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.ServerException
+import retrofit2.HttpException
 
 internal class BaseExceptionMapper : ExceptionMapper {
     override fun map(exception: Throwable): NablaException? {
@@ -27,6 +29,20 @@ internal class BaseExceptionMapper : ExceptionMapper {
                 exception.serverMessage,
                 exception.requestId,
             )
+            exception is HttpException -> {
+                when (exception.code()) {
+                    401 -> AuthenticationException.AuthorizationDenied(
+                        cause = exception,
+                    )
+                    in 400..499 -> NetworkException(exception)
+                    else -> ServerException(
+                        exception,
+                        code = exception.code(),
+                        serverMessage = "HTTP error code ${exception.code()}",
+                        requestId = "null",
+                    )
+                }
+            }
             else -> null
         }
     }

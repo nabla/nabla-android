@@ -201,6 +201,10 @@ public abstract class com/nabla/sdk/core/domain/entity/AuthenticationException :
 	public synthetic fun <init> (Ljava/lang/Throwable;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
+public final class com/nabla/sdk/core/domain/entity/AuthenticationException$AuthorizationDenied : com/nabla/sdk/core/domain/entity/AuthenticationException {
+	public fun <init> (Ljava/lang/Throwable;)V
+}
+
 public final class com/nabla/sdk/core/domain/entity/AuthenticationException$NotAuthenticated : com/nabla/sdk/core/domain/entity/AuthenticationException {
 	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/AuthenticationException$NotAuthenticated;
 }
