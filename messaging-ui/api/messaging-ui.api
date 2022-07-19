@@ -394,7 +394,8 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivit
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion {
-	public final fun newIntent-q-6fel8 (Landroid/content/Context;Ljava/util/UUID;)Landroid/content/Intent;
+	public final fun newIntent-BHUjK5M (Landroid/content/Context;Ljava/util/UUID;Z)Landroid/content/Intent;
+	public static synthetic fun newIntent-BHUjK5M$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Ljava/util/UUID;ZILjava/lang/Object;)Landroid/content/Intent;
 }
 
 public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : androidx/fragment/app/Fragment {

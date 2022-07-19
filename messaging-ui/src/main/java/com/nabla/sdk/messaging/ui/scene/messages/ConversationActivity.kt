@@ -25,17 +25,32 @@ public class ConversationActivity : AppCompatActivity() {
             val conversationId = (intent.getSerializableExtra(CONVERSATION_ID_EXTRA) as? Uuid)?.toConversationId()
                 ?: throw InternalException(RuntimeException("Failed to find/parse conversationId in ConversationActivity: ${intent.extras}"))
 
+            val showComposer = intent.getBooleanExtra(SHOW_COMPOSER_EXTRA, true)
+
             supportFragmentManager.commit {
-                replace(R.id.fragmentContainer, ConversationFragment.newInstance(conversationId))
+                replace(
+                    R.id.fragmentContainer,
+                    ConversationFragment.newInstance(conversationId) {
+                        setShowComposer(showComposer)
+                    }
+                )
             }
         }
     }
 
     public companion object {
-        public fun newIntent(context: Context, conversationId: ConversationId): Intent =
+        public fun newIntent(
+            context: Context,
+            conversationId: ConversationId,
+            showComposer: Boolean = true,
+        ): Intent =
             Intent(context, ConversationActivity::class.java)
-                .apply { putExtra(CONVERSATION_ID_EXTRA, conversationId.value) }
+                .apply {
+                    putExtra(CONVERSATION_ID_EXTRA, conversationId.value)
+                    putExtra(SHOW_COMPOSER_EXTRA, showComposer)
+                }
 
         private const val CONVERSATION_ID_EXTRA = "conversationId"
+        private const val SHOW_COMPOSER_EXTRA = "showComposer"
     }
 }
