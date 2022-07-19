@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha08] - 2022-07-19
+
 ### Added
 - Added `AuthenticationException.AuthorizationDenied` exception that can be return if the patient is not
 authorized to access the data. This should not happen in the current implementation.
