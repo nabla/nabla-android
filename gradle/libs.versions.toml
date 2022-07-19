@@ -3,7 +3,7 @@ kotlin = "1.6.10"
 coroutines = "1.6.0"
 androidxlifecycle = "2.4.1"
 okhttp = "4.9.3"
-apollo = "3.2.1"
+apollo = "3.4.0"
 coil = "1.4.0"
 ktlint = "0.45.1"
 espresso = "3.4.0"
@@ -53,8 +53,8 @@ jwtdecode = "com.auth0.android:jwtdecode:2.0.1"
 
 apollo-pluginGradle = { group = "com.apollographql.apollo3", name = "apollo-gradle-plugin", version.ref = "apollo" }
 apollo-runtime = { group = "com.apollographql.apollo3", name = "apollo-runtime", version.ref = "apollo" }
-apollo-cache = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache", version.ref = "apollo" }
-apollo-cache-sqlite = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache-sqlite", version.ref = "apollo" }
+apollo-cache = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache-incubating", version.ref = "apollo" }
+apollo-cache-sqlite = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache-sqlite-incubating", version.ref = "apollo" }
 apollo-adapters = { group = "com.apollographql.apollo3", name = "apollo-adapters", version.ref = "apollo" }
 apollo-testingSupport = { group = "com.apollographql.apollo3", name = "apollo-testing-support", version.ref = "apollo" }
 
