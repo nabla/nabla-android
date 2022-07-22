@@ -1,7 +1,7 @@
 !tape
 name: test watch conversation is called when the providers are updated
 interactions:
-- recorded: 2022-07-04T08:36:21.711Z
+- recorded: 2022-07-21T16:09:28.354Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -16,7 +16,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Mon, 04 Jul 2022 08:36:21 GMT
+      Date: Thu, 21 Jul 2022 16:09:28 GMT
       connection: close
       content-length: '347'
       content-type: application/json; charset=UTF-8
@@ -24,8 +24,8 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 062526b2-e75b-4794-999e-17094e558b33
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"c351bdb0-62df-4928-8d90-79b3e3f16613","title":null,"subtitle":null,"createdAt":"2022-07-04T10:36:21.700+02:00","updatedAt":"2022-07-04T10:36:21.700+02:00","inboxPreviewTitle":"Nouvelle
+      x-request-id: 051d1790-7e55-462e-865c-caacc66affd4
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"a9123451-a57b-4ab7-90f2-d253cd2a4f00","title":null,"subtitle":null,"createdAt":"2022-07-21T18:09:28.306+02:00","updatedAt":"2022-07-21T18:09:28.306+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
 - recorded: 2022-07-04T08:36:21.754Z
   request:
@@ -51,4 +51,29 @@ interactions:
       x-nabla-minimum-ios-code-version: '0'
       x-request-id: 17a41582-be71-45b8-9558-d64189d38500
     body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"c351bdb0-62df-4928-8d90-79b3e3f16613","title":null,"subtitle":null,"createdAt":"2022-07-04T10:36:21.700+02:00","updatedAt":"2022-07-04T10:36:21.700+02:00","inboxPreviewTitle":"Nouvelle
+      conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-07-21T16:09:28.463Z
+  request:
+    method: POST
+    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 8039d8277285df2b2a85ccc5e77068982c48539d9d9e1ac36829cd835d0e2c1a
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"a9123451-a57b-4ab7-90f2-d253cd2a4f00"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Date: Thu, 21 Jul 2022 16:09:28 GMT
+      connection: close
+      content-length: '341'
+      content-type: application/json; charset=UTF-8
+      vary: Origin
+      x-nabla-minimum-android-code-version: '0'
+      x-nabla-minimum-code-version: '323'
+      x-nabla-minimum-ios-code-version: '0'
+      x-request-id: 16f46b75-2bcb-41e7-8875-4463e7d8ab5f
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"a9123451-a57b-4ab7-90f2-d253cd2a4f00","title":null,"subtitle":null,"createdAt":"2022-07-21T18:09:28.306+02:00","updatedAt":"2022-07-21T18:09:28.306+02:00","inboxPreviewTitle":"Nouvelle
       conversation","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

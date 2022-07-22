@@ -1,7 +1,7 @@
 !tape
 name: test conversation creation with custom title
 interactions:
-- recorded: 2022-07-04T08:36:20.731Z
+- recorded: 2022-07-21T16:09:26.469Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -16,7 +16,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Mon, 04 Jul 2022 08:36:20 GMT
+      Date: Thu, 21 Jul 2022 16:09:26 GMT
       connection: close
       content-length: '358'
       content-type: application/json; charset=UTF-8
@@ -24,6 +24,6 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: a764722e-f5c4-463b-9840-67ff62f3fd9e
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"aefcfb27-8bfa-42e6-b37e-6d087ee53a42","title":"Test custom title","subtitle":null,"createdAt":"2022-07-04T10:36:20.663+02:00","updatedAt":"2022-07-04T10:36:20.663+02:00","inboxPreviewTitle":"Test
+      x-request-id: 07e34e8d-95ac-4e6e-bdb8-f5d5a298bed9
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"f24c1a3e-82bc-43d4-9e39-f62e5637c9a0","title":"Test custom title","subtitle":null,"createdAt":"2022-07-21T18:09:26.443+02:00","updatedAt":"2022-07-21T18:09:26.443+02:00","inboxPreviewTitle":"Test
       custom title","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

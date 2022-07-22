@@ -1,7 +1,7 @@
 !tape
 name: test conversation creation with unknown provider
 interactions:
-- recorded: 2022-07-04T08:36:24.766Z
+- recorded: 2022-07-21T16:09:32.478Z
   request:
     method: POST
     uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
@@ -16,7 +16,7 @@ interactions:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
-      Date: Mon, 04 Jul 2022 08:36:24 GMT
+      Date: Thu, 21 Jul 2022 16:09:32 GMT
       connection: close
       content-length: '250'
       content-type: application/json; charset=UTF-8
@@ -24,5 +24,5 @@ interactions:
       x-nabla-minimum-android-code-version: '0'
       x-nabla-minimum-code-version: '323'
       x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 02b43225-55cf-40b4-b3f9-e10a94994221
+      x-request-id: a0e8fa59-1a79-43b7-bd06-1fd5b72159d3
     body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'

@@ -14,14 +14,16 @@ type Query {
 }
 
 type Mutation {
-  createConversation(title: String, providerIds: [UUID!]): CreateConversationOutput!
+  createConversation(title: String, providerIds: [UUID!], initialMessage: SendMessageInput): CreateConversationOutput!
+
+  sendMessageV2(conversationId: UUID!, input: SendMessageInput!): SendMessageOutput!
 
   sendMessage(
     conversationId: UUID!
     content: SendMessageContentInput!
     clientId: UUID!
     replyToMessageId: UUID
-  ): SendMessageOutput!
+  ): SendMessageOutput! @deprecated
 
   deleteMessage(id: UUID!): DeleteMessageOutput!
 
@@ -234,6 +236,12 @@ type ConversationsOutput {
 
 type ConversationOutput {
   conversation: Conversation!
+}
+
+input SendMessageInput {
+  content: SendMessageContentInput!
+  clientId: UUID!
+  replyToMessageId: UUID
 }
 
 # This is a oneOf input, i.e. there is _exactly one_ non null attribute.
