@@ -42,7 +42,7 @@ internal class AudioMessageContentBinder(
         binding.audioMessageTitle.setTextColor(colorOnBubble)
         binding.audioMessageSecondsText.setTextColor(colorOnBubble)
         binding.audioPlayPauseButton.backgroundTintList = colorOnBubble
-        binding.audioPlayPauseButton.imageTintList = colorBubble.asColorStateList()
+        binding.audioPlayPauseButton.imageTintList = colorBubble.asColorStateList(binding.context)
     }
 
     override fun bind(messageId: String, item: TimelineItem.Message.Audio) {

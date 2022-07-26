@@ -1,30 +1,34 @@
 package com.nabla.sdk.core.ui.helpers
 
+import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.ColorStateListDrawable
-import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 
 internal sealed interface ColorIntOrStateList {
-    fun asDrawable(): Drawable
-    fun asColorStateList(): ColorStateList
+    fun asColorStateList(context: Context): ColorStateList
 }
 
 internal data class ColorIntWrapper(@ColorInt val value: Int) : ColorIntOrStateList {
-    override fun asDrawable() = ColorDrawable(value)
-    override fun asColorStateList() = ColorStateList.valueOf(value)
+    override fun asColorStateList(context: Context) = ColorStateList.valueOf(value)
 }
 
-internal data class ColorStateListWrapper(val value: ColorStateList) : ColorIntOrStateList {
-    override fun asDrawable() = ColorStateListDrawable(value)
-    override fun asColorStateList() = value
+internal data class ColorStateListWrapper(@DrawableRes val res: Int) : ColorIntOrStateList {
+    override fun asColorStateList(context: Context) = context.getColorStateList(res)
 }
 
 internal fun TextView.setTextColor(color: ColorIntOrStateList) {
     when (color) {
         is ColorIntWrapper -> setTextColor(color.value)
-        is ColorStateListWrapper -> setTextColor(color.value)
+        is ColorStateListWrapper -> setTextColor(color.asColorStateList(context))
+    }
+}
+
+internal fun View.setBackgroundColor(color: ColorIntOrStateList) {
+    when (color) {
+        is ColorIntWrapper -> setBackgroundColor(color.value)
+        is ColorStateListWrapper -> setBackgroundResource(color.res)
     }
 }

@@ -13,7 +13,7 @@ internal fun Context.getThemeColor(@AttrRes themeAttr: Int): ColorIntOrStateList
     return if (theme.resolveAttribute(themeAttr, typedValue, true)) {
         // resourceId is used when the final value is ColorStateList
         if (typedValue.resourceId != 0) {
-            ColorStateListWrapper(getColorStateList(typedValue.resourceId))
+            ColorStateListWrapper(typedValue.resourceId)
         } else ColorIntWrapper(typedValue.data)
     } else {
         // failed to resolve, returning the flashiest color.

@@ -11,6 +11,7 @@ import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.setBackgroundColor
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemFileMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
@@ -34,7 +35,7 @@ internal class FileMessageContentBinder(
         } else {
             binding.chatFileMessagePreviewImageView.setImageResource(R.drawable.nabla_file_placeholder)
         }
-        binding.chatFileMessageTitleContainer.background = surfaceColor.asDrawable()
+        binding.chatFileMessageTitleContainer.setBackgroundColor(surfaceColor)
         binding.chatFileMessageIconImageView.imageTintList = contentAppearance.textColor
         binding.chatFileMessageTitleTextView.setTextColor(contentAppearance.textColor)
         binding.chatFileMessageTitleTextView.text = item.fileName

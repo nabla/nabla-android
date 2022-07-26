@@ -2,7 +2,6 @@ package com.nabla.sdk.core.ui.components
 
 import android.content.Context
 import android.graphics.Outline
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -23,9 +22,11 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
+import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
 import com.nabla.sdk.core.ui.helpers.ColorIntWrapper
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.initials
+import com.nabla.sdk.core.ui.helpers.setBackgroundColor
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
 import kotlin.math.absoluteValue
@@ -93,9 +94,8 @@ internal class NablaAvatarView : ConstraintLayout {
             context.getThemeColor(androidx.appcompat.R.attr.colorPrimary)
         }
 
-        val placeholderBackground = placeholderBackgroundColor.asDrawable()
         if (avatarUrl == null) {
-            showPlaceholder(placeholderTextComputed, placeholderBackground)
+            showPlaceholder(placeholderTextComputed, placeholderBackgroundColor)
             binding.componentAvatarImageView.clear()
             return
         }
@@ -108,14 +108,14 @@ internal class NablaAvatarView : ConstraintLayout {
                     hidePlaceholder()
                 },
                 onError = { _, _ ->
-                    showPlaceholder(placeholderTextComputed, placeholderBackground)
+                    showPlaceholder(placeholderTextComputed, placeholderBackgroundColor)
                 }
             )
         }
     }
 
-    private fun showPlaceholder(text: String, background: Drawable) {
-        binding.componentAvatarRoot.background = background
+    private fun showPlaceholder(text: String, background: ColorIntOrStateList) {
+        binding.componentAvatarRoot.setBackgroundColor(background)
         binding.componentAvatarImageView.visibility = View.INVISIBLE
         binding.componentAvatarPlaceholderTextView.text = text
         binding.componentAvatarPlaceholderTextView.visibility = View.VISIBLE
