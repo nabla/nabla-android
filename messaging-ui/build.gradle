@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
     id 'maven-publish'
+    id 'app.cash.paparazzi'
 }
 
 group buildConfig.groupId
@@ -63,6 +64,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     }
 
     kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
+}
+
+// Paparazzi requires Java 11 for unit test while https://github.com/cashapp/paparazzi/issues/409 is open
+tasks.withType(Test).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    })
 }
 
 afterEvaluate {

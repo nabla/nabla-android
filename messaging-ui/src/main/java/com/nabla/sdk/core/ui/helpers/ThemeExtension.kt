@@ -4,22 +4,20 @@ import android.content.Context
 import android.graphics.Color
 import android.util.TypedValue
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
 import com.nabla.sdk.messaging.core.domain.entity.InvalidAppThemeException
 
-@ColorInt
-internal fun Context.getThemeColor(@AttrRes themeAttr: Int): Int {
+internal fun Context.getThemeColor(@AttrRes themeAttr: Int): ColorIntOrStateList {
     val typedValue = TypedValue()
     return if (theme.resolveAttribute(themeAttr, typedValue, true)) {
         // resourceId is used when the final value is ColorStateList
         if (typedValue.resourceId != 0) {
-            getColor(typedValue.resourceId)
-        } else typedValue.data
+            ColorStateListWrapper(getColorStateList(typedValue.resourceId))
+        } else ColorIntWrapper(typedValue.data)
     } else {
         // failed to resolve, returning the flashiest color.
-        Color.MAGENTA
+        ColorIntWrapper(Color.MAGENTA)
     }
 }
 

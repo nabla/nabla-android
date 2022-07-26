@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import coil.load
 import com.google.android.material.resources.TextAppearance
 import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.getThemeStyle
@@ -24,8 +24,7 @@ internal class FileMessageContentBinder(
 
     private val contentAppearance = TextAppearance(binding.context, binding.context.getThemeStyle(contentTextAppearanceAttr))
 
-    @ColorInt
-    private val surfaceColor: Int = binding.context.getThemeColor(surfaceColorAttr)
+    private val surfaceColor: ColorIntOrStateList = binding.context.getThemeColor(surfaceColorAttr)
 
     override fun bind(messageId: String, item: TimelineItem.Message.File) {
         if (item.thumbnailUri != null) {
@@ -35,7 +34,7 @@ internal class FileMessageContentBinder(
         } else {
             binding.chatFileMessagePreviewImageView.setImageResource(R.drawable.nabla_file_placeholder)
         }
-        binding.chatFileMessageTitleContainer.setBackgroundColor(surfaceColor)
+        binding.chatFileMessageTitleContainer.background = surfaceColor.asDrawable()
         binding.chatFileMessageIconImageView.imageTintList = contentAppearance.textColor
         binding.chatFileMessageTitleTextView.setTextColor(contentAppearance.textColor)
         binding.chatFileMessageTitleTextView.text = item.fileName

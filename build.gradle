@@ -22,6 +22,7 @@ buildscript {
         classpath libs.ktlint.pluginGradle
         classpath libs.kotlin.binaryCompatibilityValidator.pluginGradle
         classpath libs.gradle.dependencyAnalysis.pluginGradle
+        classpath libs.paparazzi.pluginGradle
     }
 }
 

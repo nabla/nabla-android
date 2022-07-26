@@ -2,7 +2,6 @@ package com.nabla.sdk.core.ui.components
 
 import android.content.Context
 import android.graphics.Outline
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -24,6 +23,7 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
+import com.nabla.sdk.core.ui.helpers.ColorIntWrapper
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.initials
 import com.nabla.sdk.messaging.ui.R
@@ -88,12 +88,12 @@ internal class NablaAvatarView : ConstraintLayout {
         val placeholderTextComputed = placeholderText ?: ""
         val placeholderBackgroundColor = if (userId != null) {
             val indexBackground = (userId.hashCode() % backgroundColors.size).absoluteValue
-            context.getColor(backgroundColors[indexBackground])
+            ColorIntWrapper(context.getColor(backgroundColors[indexBackground]))
         } else {
             context.getThemeColor(androidx.appcompat.R.attr.colorPrimary)
         }
 
-        val placeholderBackground = ColorDrawable(placeholderBackgroundColor)
+        val placeholderBackground = placeholderBackgroundColor.asDrawable()
         if (avatarUrl == null) {
             showPlaceholder(placeholderTextComputed, placeholderBackground)
             binding.componentAvatarImageView.clear()

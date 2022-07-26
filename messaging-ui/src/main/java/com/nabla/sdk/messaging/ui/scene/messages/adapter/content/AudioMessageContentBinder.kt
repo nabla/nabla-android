@@ -2,16 +2,15 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.content
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.resources.TextAppearance
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.getThemeStyle
@@ -32,8 +31,7 @@ internal class AudioMessageContentBinder(
 
     private val contentAppearance = TextAppearance(binding.context, binding.context.getThemeStyle(contentTextAppearanceAttr))
 
-    @ColorInt
-    private val surfaceColor: Int = binding.context.getThemeColor(surfaceColorAttr)
+    private val surfaceColor: ColorIntOrStateList = binding.context.getThemeColor(surfaceColorAttr)
 
     init {
         binding.audioMessageProgress.progressDrawable = AppCompatResources.getDrawable(binding.context, progressBackgroundDrawableRes)
@@ -44,7 +42,7 @@ internal class AudioMessageContentBinder(
         binding.audioMessageTitle.setTextColor(colorOnBubble)
         binding.audioMessageSecondsText.setTextColor(colorOnBubble)
         binding.audioPlayPauseButton.backgroundTintList = colorOnBubble
-        binding.audioPlayPauseButton.imageTintList = ColorStateList.valueOf(colorBubble)
+        binding.audioPlayPauseButton.imageTintList = colorBubble.asColorStateList()
     }
 
     override fun bind(messageId: String, item: TimelineItem.Message.Audio) {

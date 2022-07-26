@@ -11,6 +11,7 @@ espresso = "3.4.0"
 [libraries]
 android-pluginGradle = "com.android.tools.build:gradle:7.2.1"
 gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.9.0"
+paparazzi-pluginGradle = "app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0"
 
 androidx-core = "androidx.core:core-ktx:1.7.0"
 androidx-activity = "androidx.activity:activity-ktx:1.4.0"
