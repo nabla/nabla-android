@@ -78,7 +78,6 @@ type Message {
   createdAt: DateTime!
 
   content: MessageContent!
-  actionRequest: ActionRequest
 
   clientId: UUID
   replyTo: Message
@@ -138,6 +137,7 @@ union MessageContent =
   | DocumentMessageContent
   | DeletedMessageContent
   | AudioMessageContent
+  | LivekitRoomMessageContent
 
 type TextMessageContent {
   text: String!
@@ -218,6 +218,10 @@ enum EmptyObject {
 
 type DeletedMessageContent {
   _: EmptyObject!
+}
+
+type LivekitRoomMessageContent {
+  livekitRoom: LivekitRoom!
 }
 
 input OpaqueCursorPage {
@@ -358,19 +362,7 @@ type ProviderJoinedConversation {
   provider: MaybeProvider!
 }
 
-# --- Action request
-type ActionRequest {
-  uuid: UUID!
-  content: ActionRequestContent!
-}
-
-union ActionRequestContent = ActionRequestContentLivekitRoom
-
 # --- LiveKit rooms.
-
-type ActionRequestContentLivekitRoom {
-  livekitRoom: LivekitRoom!
-}
 
 type LivekitRoom {
   uuid: UUID!
