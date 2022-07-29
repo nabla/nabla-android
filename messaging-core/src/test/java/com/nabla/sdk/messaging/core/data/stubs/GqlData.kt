@@ -42,7 +42,7 @@ internal object GqlData {
             ConversationItemsQuery.Data(CustomTestResolver()) {
                 conversation = conversation {
                     conversation = conversation {
-                        id = conversationId.value.toString()
+                        id = conversationId.stableId.toString()
                         items = items {
                             data = emptyList()
                         }
@@ -56,7 +56,7 @@ internal object GqlData {
         ) = ConversationItemsQuery.Data(CustomTestResolver()) {
             conversation = conversation {
                 conversation = conversation {
-                    id = conversationId.value.toString()
+                    id = conversationId.stableId.toString()
                     items = items {
                         data = listOf(
                             messageData {
@@ -79,7 +79,7 @@ internal object GqlData {
             conversations = conversations {
                 event = conversationUpdatedEventEvent {
                     conversation = conversation {
-                        id = conversationId.value.toString()
+                        id = conversationId.stableId.toString()
                         unreadMessageCount = patientUnreadMessageCount
                     }
                 }
@@ -92,7 +92,7 @@ internal object GqlData {
             conversations = conversations {
                 event = conversationCreatedEventEvent {
                     conversation = conversation {
-                        conversationId?.let { id = conversationId.value.toString() }
+                        conversationId?.let { id = conversationId.stableId.toString() }
                     }
                 }
             }
@@ -107,7 +107,7 @@ internal object GqlData {
             conversations = conversations {
                 event = conversationUpdatedEventEvent {
                     conversation = conversation {
-                        id = conversationId.value.toString()
+                        id = conversationId.stableId.toString()
                         providers = listOf(
                             provider {
                                 id = providerInConversationId.toString()
@@ -128,7 +128,7 @@ internal object GqlData {
             conversations = conversations {
                 event = conversationUpdatedEventEvent {
                     conversation = conversation {
-                        id = conversationId.value.toString()
+                        id = conversationId.stableId.toString()
                         providers = listOf()
                     }
                 }
@@ -169,7 +169,7 @@ internal object GqlData {
                             clientId = messageId.clientId.toString()
                             messageContent = deletedMessageContentMessageContent { }
                             conversation = conversation {
-                                id = conversationId.value.toString()
+                                id = conversationId.stableId.toString()
                             }
                             author = patientAuthor {}
                             replyTo = null
@@ -188,7 +188,7 @@ internal object GqlData {
                     event = conversationActivityCreatedEvent {
                         activity = activity {
                             conversation = conversation {
-                                id = conversationId.value.toString()
+                                id = conversationId.stableId.toString()
                             }
                             conversationActivityContent = providerJoinedConversationConversationActivityContent {
                                 provider = providerProvider {
@@ -207,7 +207,7 @@ internal object GqlData {
                     event = conversationActivityCreatedEvent {
                         activity = activity {
                             conversation = conversation {
-                                id = conversationId.value.toString()
+                                id = conversationId.stableId.toString()
                             }
                             conversationActivityContent = providerJoinedConversationConversationActivityContent {
                                 provider = deletedProviderProvider { }
@@ -229,7 +229,7 @@ internal object GqlData {
                             clientId = localMessageId.clientId.toString()
                             messageContent = textMessageContentMessageContent { }
                             conversation = conversation {
-                                id = conversationId.value.toString()
+                                id = conversationId.stableId.toString()
                             }
                             author = patientAuthor {}
                             replyTo = null
@@ -252,7 +252,7 @@ internal object GqlData {
                                 }
                             }
                             conversation = conversation {
-                                id = conversationId.value.toString()
+                                id = conversationId.stableId.toString()
                             }
                             author = patientAuthor {}
                             replyTo = null
@@ -278,7 +278,7 @@ internal object GqlData {
                                 }
                             }
                             conversation = conversation {
-                                id = conversationId.value.toString()
+                                id = conversationId.stableId.toString()
                             }
                             author = patientAuthor {}
                             replyTo = null

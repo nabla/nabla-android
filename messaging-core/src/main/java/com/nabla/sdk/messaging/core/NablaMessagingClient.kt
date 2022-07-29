@@ -54,6 +54,7 @@ public interface NablaMessagingClient {
      *                    participate to the conversation.
      *                    Make sure the specified providers have enough rights to participate to a conversation.
      *                    See [Roles and Permissions](https://docs.nabla.com/docs/roles-and-permissions).
+     * @param initialMessage optional - initial message to be sent to the conversation.
      *
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
@@ -61,7 +62,20 @@ public interface NablaMessagingClient {
     public suspend fun createConversation(
         title: String? = null,
         providerIds: List<Uuid>? = null,
+        initialMessage: MessageInput? = null,
     ): Result<Conversation>
+
+    /**
+     * Create a new draft conversation on behalf of the current user. This conversation will not be
+     * created server side and visible from the console until a first message is sent in it.
+     *
+     * Check [createConversation] for more details.
+     */
+    @CheckResult
+    public fun createDraftConversation(
+        title: String? = null,
+        providerIds: List<Uuid>? = null,
+    ): ConversationId
 
     /**
      * Watch a conversation details.

@@ -5,20 +5,28 @@ import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
+import com.nabla.sdk.messaging.core.data.message.LocalConversation
+import com.nabla.sdk.messaging.core.data.message.MessageFileUploader
+import com.nabla.sdk.messaging.core.data.message.MessageMapper
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 
 internal class ConversationRepositoryImpl(
     repoScope: CoroutineScope,
+    private val localConversationDataSource: LocalConversationDataSource,
     private val gqlConversationDataSource: GqlConversationDataSource,
     private val gqlConversationContentDataSource: GqlConversationContentDataSource,
+    private val messageMapper: MessageMapper,
+    private val messageFileUploader: MessageFileUploader,
 ) : ConversationRepository {
 
     private val loadMoreConversationSharedSingle: SharedSingle<Unit> = sharedSingleIn(repoScope) {
@@ -28,12 +36,43 @@ internal class ConversationRepositoryImpl(
     override suspend fun createConversation(
         title: String?,
         providerIds: List<Uuid>?,
+        initialMessage: MessageInput?
     ): Conversation {
-        return gqlConversationDataSource.createConversation(title, providerIds)
+        val message = initialMessage?.let { messageMapper.messageInputToNewMessage(it) }
+        val gqlMessageInput = message?.let {
+            messageMapper.messageToGqlSendMessageInput(message) {
+                messageFileUploader.uploadFile(this)
+            }
+        }
+        return gqlConversationDataSource.createConversation(title, providerIds, gqlMessageInput)
+    }
+
+    override fun createLocalConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
+        return localConversationDataSource.create(title, providerIds)
+    }
+
+    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+        return when (conversationId) {
+            is ConversationId.Local -> localConversationDataSource.watch(conversationId).flatMapLatest { localConversation ->
+                when (localConversation.creationState) {
+                    LocalConversation.CreationState.Creating,
+                    LocalConversation.CreationState.ErrorCreating,
+                    LocalConversation.CreationState.ToBeCreated -> flowOf(
+                        localConversation.asConversation()
+                    )
+                    is LocalConversation.CreationState.Created -> {
+                        watchRemoteConversationConversation(localConversation.creationState.remoteId)
+                    }
+                }
+            }
+            is ConversationId.Remote -> watchRemoteConversationConversation(conversationId)
+        }
     }
 
     @OptIn(FlowPreview::class)
-    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+    private fun watchRemoteConversationConversation(
+        conversationId: ConversationId.Remote
+    ): Flow<Conversation> {
         return flowOf(
             gqlConversationContentDataSource.conversationEventsFlow(conversationId),
             gqlConversationDataSource.watchConversation(conversationId)
@@ -51,6 +90,9 @@ internal class ConversationRepositoryImpl(
     }
 
     override suspend fun markConversationAsRead(conversationId: ConversationId) {
-        gqlConversationDataSource.markConversationAsRead(conversationId)
+        when (conversationId) {
+            is ConversationId.Local -> { /* no-op */ }
+            is ConversationId.Remote -> gqlConversationDataSource.markConversationAsRead(conversationId)
+        }
     }
 }

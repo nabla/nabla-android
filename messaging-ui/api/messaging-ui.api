@@ -380,7 +380,7 @@ public class com/nabla/sdk/messaging/ui/scene/conversations/InboxFragment : andr
 	public fun onDestroyView ()V
 	public final fun onGetLayoutInflater (Landroid/os/Bundle;)Landroid/view/LayoutInflater;
 	public fun onViewCreated (Landroid/view/View;Landroid/os/Bundle;)V
-	protected fun openConversationScreen-osbTWhs (Ljava/util/UUID;)V
+	protected fun openConversationScreen (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)V
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/conversations/ViewModelBindingKt {
@@ -394,8 +394,8 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivit
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion {
-	public final fun newIntent-BHUjK5M (Landroid/content/Context;Ljava/util/UUID;Z)Landroid/content/Intent;
-	public static synthetic fun newIntent-BHUjK5M$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Ljava/util/UUID;ZILjava/lang/Object;)Landroid/content/Intent;
+	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Z)Landroid/content/Intent;
+	public static synthetic fun newIntent$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;ZILjava/lang/Object;)Landroid/content/Intent;
 }
 
 public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : androidx/fragment/app/Fragment {
@@ -417,8 +417,8 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragmen
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion {
-	public final fun newInstance-mdLlEGU (Ljava/util/UUID;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
-	public static synthetic fun newInstance-mdLlEGU$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;Ljava/util/UUID;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
+	public final fun newInstance (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
+	public static synthetic fun newInstance$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage {

@@ -1,13 +1,44 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
-import androidx.annotation.VisibleForTesting
+import android.os.Parcelable
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.annotation.NablaInternal
+import com.nabla.sdk.core.domain.entity.InternalException
 import kotlinx.datetime.Instant
+import kotlinx.parcelize.Parcelize
 
-@JvmInline
-public value class ConversationId @VisibleForTesting public constructor(public val value: Uuid)
+public sealed interface ConversationId : Parcelable {
+    public val clientId: Uuid?
+    public val remoteId: Uuid?
+    public val stableId: Uuid
 
-public fun Uuid.toConversationId(): ConversationId = ConversationId(this)
+    @Parcelize
+    public data class Local(
+        override val clientId: Uuid,
+        override val remoteId: Uuid? = null,
+        override val stableId: Uuid = clientId
+    ) : ConversationId
+
+    @Parcelize
+    public data class Remote(
+        override val clientId: Uuid?,
+        override val remoteId: Uuid,
+        override val stableId: Uuid = remoteId
+    ) : ConversationId
+
+    @NablaInternal
+    public fun requireRemote(): Remote {
+        return this as? Remote ?: throw InternalException(
+            IllegalStateException("Require remote but $this is ${javaClass.simpleName}")
+        )
+    }
+}
+
+@NablaInternal
+public fun Uuid.toRemoteConversationId(clientId: Uuid? = null): ConversationId.Remote = ConversationId.Remote(
+    clientId = clientId,
+    remoteId = this
+)
 
 public data class Conversation(
     val id: ConversationId,

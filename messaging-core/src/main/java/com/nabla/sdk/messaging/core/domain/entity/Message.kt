@@ -3,6 +3,7 @@ package com.nabla.sdk.messaging.core.domain.entity
 import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.FileUpload
+import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageId.Local
@@ -15,7 +16,6 @@ public data class BaseMessage(
     val createdAt: Instant,
     val author: MessageAuthor,
     val sendStatus: SendStatus,
-    val conversationId: ConversationId,
     val replyTo: Message?,
 )
 
@@ -107,6 +107,12 @@ public sealed interface MessageId {
     ) : MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
+
+    public fun requireLocal(): Local {
+        return this as? Local ?: throw InternalException(
+            IllegalStateException("Require local but $this is ${javaClass.simpleName}")
+        )
+    }
 }
 
 public sealed class Message : ConversationItem {
@@ -117,7 +123,6 @@ public sealed class Message : ConversationItem {
     public val sentAt: Instant get() = baseMessage.createdAt
     public val author: MessageAuthor get() = baseMessage.author
     public val sendStatus: SendStatus get() = baseMessage.sendStatus
-    public val conversationId: ConversationId get() = baseMessage.conversationId
 
     /**
      * the message that this message is a reply to, or null if this is a root message.

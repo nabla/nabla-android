@@ -35,12 +35,12 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
-import com.nabla.sdk.messaging.core.domain.entity.toConversationId
+import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 
 internal class GqlMapper(private val logger: Logger) {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
-            id = fragment.id.toConversationId(),
+            id = fragment.id.toRemoteConversationId(),
             title = fragment.title,
             subtitle = fragment.subtitle,
             inboxPreviewTitle = fragment.inboxPreviewTitle,
@@ -73,7 +73,7 @@ internal class GqlMapper(private val logger: Logger) {
         }
         return ConversationActivity(
             id = conversationActivityFragment.id.toConversationActivityId(),
-            conversationId = conversationActivityFragment.conversation.id.toConversationId(),
+            conversationId = conversationActivityFragment.conversation.id.toRemoteConversationId(),
             createdAt = conversationActivityFragment.createdAt,
             activityTime = conversationActivityFragment.activityTime,
             content = content,
@@ -166,7 +166,6 @@ internal class GqlMapper(private val logger: Logger) {
             createdAt = summaryFragment.createdAt,
             author = author,
             sendStatus = sendStatus,
-            conversationId = summaryFragment.conversation.id.toConversationId(),
             replyTo = replyTo?.let {
                 mapToMessage(
                     summaryFragment = replyTo,

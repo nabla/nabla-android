@@ -15,7 +15,6 @@ import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
-import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
@@ -25,7 +24,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
-import com.nabla.sdk.messaging.core.domain.entity.toConversationId
+import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
@@ -52,7 +51,6 @@ fun Message.Text.Companion.fake(
         createdAt = sentAt,
         author = author,
         sendStatus = status,
-        conversationId = uuid4().toConversationId(),
         replyTo = replyTo,
     ),
     text = text,
@@ -63,7 +61,6 @@ fun Message.Media.Image.Companion.fake(
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
-    conversationId: ConversationId = ConversationId(uuid4()),
     mediaSource: FileSource<FileLocal.Image, FileUpload.Image> = FileSource.Uploaded.fakeImage(),
 ) = Message.Media.Image(
     baseMessage = BaseMessage(
@@ -71,7 +68,6 @@ fun Message.Media.Image.Companion.fake(
         createdAt = sentAt,
         author = author,
         sendStatus = status,
-        conversationId = conversationId,
         replyTo = null,
     ),
     mediaSource = mediaSource,
@@ -82,7 +78,6 @@ fun Message.Media.Audio.Companion.fake(
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
-    conversationId: ConversationId = ConversationId(uuid4()),
     mediaSource: FileSource<FileLocal.Audio, FileUpload.Audio> = FileSource.Uploaded.fakeAudio(),
 ) = Message.Media.Audio(
     baseMessage = BaseMessage(
@@ -90,7 +85,6 @@ fun Message.Media.Audio.Companion.fake(
         createdAt = sentAt,
         author = author,
         sendStatus = status,
-        conversationId = conversationId,
         replyTo = null,
     ),
     mediaSource = mediaSource,
@@ -161,7 +155,6 @@ fun Message.Media.Document.Companion.fake(
     sentAt: Instant = Clock.System.now().minus(20.minutes),
     author: MessageAuthor = MessageAuthor.Patient,
     status: SendStatus = SendStatus.Sent,
-    conversationId: ConversationId = ConversationId(uuid4()),
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
     mimeType: MimeType = MimeType.Application.Pdf,
     fileName: String = "filename.pdf",
@@ -172,7 +165,6 @@ fun Message.Media.Document.Companion.fake(
         createdAt = sentAt,
         author = author,
         sendStatus = status,
-        conversationId = conversationId,
         replyTo = null,
     ),
     mediaSource = FileSource.Uploaded(
@@ -231,7 +223,7 @@ fun Conversation.Companion.fake(
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
 ) = Conversation(
-    id = id.toConversationId(),
+    id = id.toRemoteConversationId(),
     lastModified = lastModified,
     title = title,
     inboxPreviewTitle = inboxPreviewTitle,
@@ -251,7 +243,7 @@ fun EphemeralUrl.Companion.fake(
 
 fun ConversationActivity.Companion.fakeProviderJoined() = ConversationActivity(
     id = uuid4().toConversationActivityId(),
-    conversationId = uuid4().toConversationId(),
+    conversationId = uuid4().toRemoteConversationId(),
     createdAt = Clock.System.now(),
     activityTime = Clock.System.now(),
     content = ConversationActivityContent.ProviderJoinedConversation(

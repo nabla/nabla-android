@@ -7,6 +7,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Added draft conversation.
+
 ## [1.0-alpha08] - 2022-07-19
 
 ### Added

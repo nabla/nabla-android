@@ -30,3 +30,7 @@ dependencies {
 
     implementation project(':core-test-fixtures')
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
+}

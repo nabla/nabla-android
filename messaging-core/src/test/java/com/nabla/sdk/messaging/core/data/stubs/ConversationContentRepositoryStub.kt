@@ -92,7 +92,7 @@ internal class ConversationContentRepositoryStub(
         val localId = MessageId.Local(uuid4())
         val conversationFlow = messagesFlowPerConversation[conversationId]!!
         val repliedToMessage = conversationFlow.value.firstOrNull { it.id == replyTo }
-        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient, SendStatus.Sending, conversationId, repliedToMessage)
+        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient, SendStatus.Sending, repliedToMessage)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)

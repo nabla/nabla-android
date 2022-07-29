@@ -15,7 +15,7 @@ import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.Message
-import com.nabla.sdk.messaging.core.domain.entity.toConversationId
+import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -42,14 +42,14 @@ class GqlConversationContentDataSourceTest {
     fun `created message event is notified to conversations watcher`() = runTest {
         val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
 
-        val conversationId = uuid4().toConversationId()
+        val conversationId = uuid4().toRemoteConversationId()
         testNetworkTransport.register(
             gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
             GqlData.ConversationItems.empty(conversationId)
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
         testNetworkTransport.register(
-            ConversationEventsSubscription(conversationId.value),
+            ConversationEventsSubscription(conversationId.stableId),
             gqlEventEmitter.filterNotNull()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
@@ -67,7 +67,7 @@ class GqlConversationContentDataSourceTest {
     fun `load more message is notified to conversation watcher`() = runTest {
         val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
 
-        val conversationId = uuid4().toConversationId()
+        val conversationId = uuid4().toRemoteConversationId()
         val cursor = uuid4().toString()
         testNetworkTransport.register(
             gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
@@ -78,7 +78,7 @@ class GqlConversationContentDataSourceTest {
         )
         testNetworkTransport.register(
             ConversationItemsQuery(
-                conversationId.value,
+                conversationId.stableId,
                 OpaqueCursorPage(cursor = Optional.Present(cursor))
             ),
             GqlData.ConversationItems.single(conversationId) {
@@ -87,7 +87,7 @@ class GqlConversationContentDataSourceTest {
             }
         )
         testNetworkTransport.register(
-            ConversationEventsSubscription(conversationId.value),
+            ConversationEventsSubscription(conversationId.stableId),
             emptyFlow()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
@@ -108,7 +108,7 @@ class GqlConversationContentDataSourceTest {
     fun `deleted message is notified to conversation watcher`() = runTest {
         val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
 
-        val conversationId = uuid4().toConversationId()
+        val conversationId = uuid4().toRemoteConversationId()
         testNetworkTransport.register(
             gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
             GqlData.ConversationItems.single(conversationId) {
@@ -118,7 +118,7 @@ class GqlConversationContentDataSourceTest {
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
         testNetworkTransport.register(
-            ConversationEventsSubscription(conversationId.value),
+            ConversationEventsSubscription(conversationId.stableId),
             gqlEventEmitter.filterNotNull()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
@@ -140,7 +140,7 @@ class GqlConversationContentDataSourceTest {
     fun `deleted message is notified in replier message conversation watcher`() = runTest {
         val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
 
-        val conversationId = uuid4().toConversationId()
+        val conversationId = uuid4().toRemoteConversationId()
         val replyToMessageId = uuid4()
         testNetworkTransport.register(
             gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
@@ -164,7 +164,7 @@ class GqlConversationContentDataSourceTest {
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
         testNetworkTransport.register(
-            ConversationEventsSubscription(conversationId.value),
+            ConversationEventsSubscription(conversationId.stableId),
             gqlEventEmitter.filterNotNull()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
@@ -192,7 +192,7 @@ class GqlConversationContentDataSourceTest {
     fun `receiving a duplicate new timeline item is idempotent`() = runTest {
         val (testNetworkTransport, job, gqlConversationContentDataSource) = setupTest(this)
 
-        val conversationId = uuid4().toConversationId()
+        val conversationId = uuid4().toRemoteConversationId()
         testNetworkTransport.register(
             gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
             GqlData.ConversationItems.single(conversationId) {
@@ -204,7 +204,7 @@ class GqlConversationContentDataSourceTest {
         val gqlEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
 
         testNetworkTransport.register(
-            ConversationEventsSubscription(conversationId.value),
+            ConversationEventsSubscription(conversationId.stableId),
             gqlEventEmitter,
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {

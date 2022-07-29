@@ -25,7 +25,6 @@ import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
-import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -35,6 +34,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation.Companion.TYPING_TIME_WINDOW
 import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
@@ -179,7 +179,7 @@ internal class IntegrationTest {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000000")
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000020")
             },
         )
 
@@ -187,7 +187,7 @@ internal class IntegrationTest {
 
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
+            ConversationEventsSubscription(createdConversation.id.stableId),
             replayEventEmitter
         )
 
@@ -207,7 +207,6 @@ internal class IntegrationTest {
             val message = secondEmit.content.items.first()
             assertIs<Message.Text>(message)
             assertEquals("Hello", message.text)
-            assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
@@ -219,7 +218,6 @@ internal class IntegrationTest {
             val message2 = thirdEmit.content.items.first()
             assertIs<Message.Text>(message2)
             assertEquals("Hello", message2.text)
-            assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
@@ -237,7 +235,6 @@ internal class IntegrationTest {
             val lastEmit = awaitItem()
             val message3 = lastEmit.content.items.first()
             assertIs<Message.Text>(message3)
-            assertEquals(createdConversation.id, message3.conversationId)
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
@@ -258,14 +255,14 @@ internal class IntegrationTest {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000001")
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000021")
             },
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
+            ConversationEventsSubscription(createdConversation.id.stableId),
             replayEventEmitter
         )
 
@@ -299,7 +296,6 @@ internal class IntegrationTest {
             assertIs<Message.Media.Image>(message)
             assertEquals(mediaSource, message.mediaSource)
             assertEquals(uri, message.stableUri)
-            assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
@@ -312,7 +308,6 @@ internal class IntegrationTest {
             assertIs<Message.Media.Image>(message2)
             assertEquals(mediaSource, message2.mediaSource)
             assertEquals(uri, message2.stableUri)
-            assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
@@ -330,7 +325,6 @@ internal class IntegrationTest {
             val lastEmit = awaitItem()
             val message3 = lastEmit.content.items.first()
             assertIs<Message.Media.Image>(message3)
-            assertEquals(createdConversation.id, message3.conversationId)
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
@@ -351,14 +345,14 @@ internal class IntegrationTest {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000002")
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000022")
             },
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
+            ConversationEventsSubscription(createdConversation.id.stableId),
             replayEventEmitter
         )
 
@@ -396,7 +390,6 @@ internal class IntegrationTest {
             assertEquals(uri, message.stableUri)
             assertEquals(mimeType, message.mimeType)
             assertEquals(docName, message.fileName)
-            assertEquals(createdConversation.id, message.conversationId)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
@@ -411,7 +404,6 @@ internal class IntegrationTest {
             assertEquals(uri, message2.stableUri)
             assertEquals(mimeType, message2.mimeType)
             assertEquals(docName, message2.fileName)
-            assertEquals(createdConversation.id, message2.conversationId)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
@@ -429,7 +421,6 @@ internal class IntegrationTest {
             val lastEmit = awaitItem()
             val message3 = lastEmit.content.items.first()
             assertIs<Message.Media.Document>(message3)
-            assertEquals(createdConversation.id, message3.conversationId)
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
@@ -450,7 +441,7 @@ internal class IntegrationTest {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
             uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000003")
+                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000023")
             },
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
@@ -540,7 +531,7 @@ internal class IntegrationTest {
 
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
+            ConversationEventsSubscription(createdConversation.id.stableId),
             replayEventEmitter
         )
 
@@ -632,7 +623,7 @@ internal class IntegrationTest {
 
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
+            ConversationEventsSubscription(createdConversation.id.stableId),
             replayEventEmitter
         )
 
@@ -705,7 +696,7 @@ internal class IntegrationTest {
 
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
-            ConversationEventsSubscription(createdConversation.id.value),
+            ConversationEventsSubscription(createdConversation.id.stableId),
             replayEventEmitter
         )
 
@@ -742,11 +733,11 @@ internal class IntegrationTest {
             assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
-        nablaMessagingClient.watchConversation(ConversationId(Uuid.randomUUID())).test {
+        nablaMessagingClient.watchConversation(Uuid.randomUUID().toRemoteConversationId()).test {
             assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
-        nablaMessagingClient.watchConversationItems(ConversationId(Uuid.randomUUID())).test {
+        nablaMessagingClient.watchConversationItems(Uuid.randomUUID().toRemoteConversationId()).test {
             assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
@@ -754,27 +745,27 @@ internal class IntegrationTest {
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.deleteMessage(
-                ConversationId(Uuid.randomUUID()),
+                Uuid.randomUUID().toRemoteConversationId(),
                 MessageId.Local(Uuid.randomUUID()),
             ).exceptionOrNull()
         )
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.markConversationAsRead(
-                ConversationId(Uuid.randomUUID())
+                Uuid.randomUUID().toRemoteConversationId()
             ).exceptionOrNull()
         )
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.retrySendingMessage(
                 MessageId.Local(Uuid.randomUUID()),
-                ConversationId(Uuid.randomUUID()),
+                Uuid.randomUUID().toRemoteConversationId(),
             ).exceptionOrNull()
         )
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.setTyping(
-                ConversationId(Uuid.randomUUID()),
+                Uuid.randomUUID().toRemoteConversationId(),
                 isTyping = true,
             ).exceptionOrNull()
         )
@@ -782,7 +773,7 @@ internal class IntegrationTest {
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.sendMessage(
                 MessageInput.Text(""),
-                ConversationId(Uuid.randomUUID()),
+                Uuid.randomUUID().toRemoteConversationId(),
             ).exceptionOrNull()
         )
     }
@@ -836,7 +827,7 @@ internal class IntegrationTest {
     }
 
     companion object {
-        private const val DUMMY_BASE_URL = "https://dummy-base-url/api/"
+        private const val DUMMY_BASE_URL = "https://dummy-base-url/"
 
         // Valid JWT token from https://www.javainuse.com/jwtgenerator
         private const val DUMMY_TOKEN =

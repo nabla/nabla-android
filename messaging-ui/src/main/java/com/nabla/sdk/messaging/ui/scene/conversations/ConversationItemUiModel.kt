@@ -25,7 +25,7 @@ internal sealed class ItemUiModel(val listId: String) {
         val lastModified: Instant,
         val hasUnreadMessages: Boolean,
         val providers: List<Provider>,
-    ) : ItemUiModel(listId = id.value.toString()) {
+    ) : ItemUiModel(listId = id.stableId.toString()) {
 
         fun formatLastModified(context: Context): String {
             val date = lastModified.toJavaDate()

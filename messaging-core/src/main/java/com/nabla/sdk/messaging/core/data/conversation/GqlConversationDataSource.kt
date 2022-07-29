@@ -21,6 +21,7 @@ import com.nabla.sdk.graphql.CreateConversationMutation
 import com.nabla.sdk.graphql.MaskAsSeenMutation
 import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
+import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.data.apollo.notifyTypingUpdates
@@ -116,19 +117,21 @@ internal class GqlConversationDataSource constructor(
             .filterIsInstance()
     }
 
-    suspend fun markConversationAsRead(conversationId: ConversationId) {
-        apolloClient.mutation(MaskAsSeenMutation(conversationId.value)).execute()
+    suspend fun markConversationAsRead(conversationId: ConversationId.Remote) {
+        apolloClient.mutation(MaskAsSeenMutation(conversationId.stableId)).execute()
     }
 
     suspend fun createConversation(
         title: String?,
         providerIds: List<Uuid>?,
+        initialMessage: SendMessageInput?
     ): Conversation {
         return mapper.mapToConversation(
             apolloClient.mutation(
                 CreateConversationMutation(
-                    Optional.presentIfNotNull(title),
-                    Optional.presentIfNotNull(providerIds),
+                    title = Optional.presentIfNotNull(title),
+                    providerIds = Optional.presentIfNotNull(providerIds),
+                    initialMessage = Optional.presentIfNotNull(initialMessage),
                 )
             ).execute()
                 .dataOrThrowOnError
@@ -139,8 +142,8 @@ internal class GqlConversationDataSource constructor(
     }
 
     @OptIn(FlowPreview::class)
-    fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
-        val watcher = apolloClient.query(ConversationQuery(conversationId.value))
+    fun watchConversation(conversationId: ConversationId.Remote): Flow<Conversation> {
+        val watcher = apolloClient.query(ConversationQuery(conversationId.remoteId))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
             .map { response -> response.dataOrThrowOnError }

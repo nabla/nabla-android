@@ -3,11 +3,13 @@ package com.nabla.sdk.messaging.core.data.stubs
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +36,7 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
     override suspend fun createConversation(
         title: String?,
         providerIds: List<Uuid>?,
+        initialMessage: MessageInput?,
     ): Conversation {
         delayWithIdlingRes(idlingRes, 300.milliseconds)
 
@@ -46,6 +49,10 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
         conversationsFlow.value = conversationsFlow.value.copy(items = listOf(newConversation) + conversationsFlow.value.items)
 
         return newConversation
+    }
+
+    override fun createLocalConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
+        return ConversationId.Local(uuid4())
     }
 
     override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {

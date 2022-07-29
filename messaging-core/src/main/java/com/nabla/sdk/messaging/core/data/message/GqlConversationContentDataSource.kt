@@ -32,20 +32,14 @@ import com.nabla.sdk.graphql.type.DeletedMessageContent
 import com.nabla.sdk.graphql.type.EmptyObject
 import com.nabla.sdk.graphql.type.Message
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
-import com.nabla.sdk.graphql.type.SendAudioMessageInput
-import com.nabla.sdk.graphql.type.SendDocumentMessageInput
-import com.nabla.sdk.graphql.type.SendImageMessageInput
-import com.nabla.sdk.graphql.type.SendMessageContentInput
-import com.nabla.sdk.graphql.type.SendTextMessageInput
-import com.nabla.sdk.graphql.type.SendVideoMessageInput
-import com.nabla.sdk.graphql.type.UploadInput
+import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.messaging.core.domain.entity.toConversationId
+import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -64,9 +58,9 @@ internal class GqlConversationContentDataSource(
     private val mapper: GqlMapper,
 ) {
 
-    private val conversationEventsFlowMap = mutableMapOf<ConversationId, Flow<Unit>>()
+    private val conversationEventsFlowMap = mutableMapOf<ConversationId.Remote, Flow<Unit>>()
 
-    internal fun conversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
+    internal fun conversationEventsFlow(conversationId: ConversationId.Remote): Flow<Unit> {
         return synchronized(this) {
             return@synchronized conversationEventsFlowMap.getOrPut(conversationId) {
                 createConversationEventsFlow(conversationId)
@@ -74,8 +68,8 @@ internal class GqlConversationContentDataSource(
         }
     }
 
-    private fun createConversationEventsFlow(conversationId: ConversationId): Flow<Unit> {
-        return apolloClient.subscription(ConversationEventsSubscription(conversationId.value))
+    private fun createConversationEventsFlow(conversationId: ConversationId.Remote): Flow<Unit> {
+        return apolloClient.subscription(ConversationEventsSubscription(conversationId.stableId))
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope)
             .onEach {
@@ -92,7 +86,7 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertMessageToConversationCache(
         newMessageFragment: MessageFragment,
     ) {
-        val query = firstItemsPageQuery(newMessageFragment.messageSummaryFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(newMessageFragment.messageSummaryFragment.conversation.id.toRemoteConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             Message.type.name,
             null,
@@ -104,7 +98,7 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertConversationActivityToConversationCache(
         newConversationActivityFragment: ConversationActivityFragment,
     ) {
-        val query = firstItemsPageQuery(newConversationActivityFragment.conversation.id.toConversationId())
+        val query = firstItemsPageQuery(newConversationActivityFragment.conversation.id.toRemoteConversationId())
         val newItem = ConversationItemsPageFragment.Data(
             ConversationActivity.type.name,
             newConversationActivityFragment,
@@ -131,7 +125,7 @@ internal class GqlConversationContentDataSource(
     }
 
     internal suspend fun findMessageInConversationCache(
-        conversationId: ConversationId,
+        conversationId: ConversationId.Remote,
         messageId: MessageId,
     ): DomainEntityMessage? {
         val cacheData = apolloClient.readFromCache(firstItemsPageQuery(conversationId))
@@ -148,7 +142,7 @@ internal class GqlConversationContentDataSource(
             }
     }
 
-    suspend fun loadMoreConversationItemsInCache(conversationId: ConversationId) {
+    suspend fun loadMoreConversationItemsInCache(conversationId: ConversationId.Remote) {
         val query = firstItemsPageQuery(conversationId)
         apolloClient.updateCache(query) { cachedQueryData ->
             if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.hasMore) {
@@ -173,7 +167,7 @@ internal class GqlConversationContentDataSource(
     }
 
     @OptIn(FlowPreview::class)
-    fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
+    fun watchConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedConversationItems> {
         val query = firstItemsPageQuery(conversationId)
         val dataFlow = apolloClient.query(query)
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
@@ -195,7 +189,7 @@ internal class GqlConversationContentDataSource(
                 }
                 PaginatedConversationItems(
                     conversationItems = ConversationItems(
-                        conversationId = queryData.conversation.conversation.id.toConversationId(),
+                        conversationId = queryData.conversation.conversation.id.toRemoteConversationId(),
                         items = items,
                     ),
                     hasMore = page.hasMore,
@@ -207,113 +201,21 @@ internal class GqlConversationContentDataSource(
         ).flattenMerge().filterIsInstance()
     }
 
-    suspend fun sendDocumentMessage(
-        conversationId: ConversationId,
-        clientId: Uuid,
-        fileUploadId: Uuid,
-        replyToMessageId: Uuid?,
+    suspend fun sendMessage(
+        conversationId: ConversationId.Remote,
+        input: SendMessageInput,
     ) {
-        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
-            SendMessageContentInput(
-                documentInput = Optional.presentIfNotNull(
-                    SendDocumentMessageInput(
-                        UploadInput(fileUploadId),
-                    ),
-                ),
-            )
-        }
-    }
-
-    suspend fun sendImageMessage(
-        conversationId: ConversationId,
-        clientId: Uuid,
-        fileUploadId: Uuid,
-        replyToMessageId: Uuid?,
-    ) {
-        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
-            SendMessageContentInput(
-                imageInput = Optional.presentIfNotNull(
-                    SendImageMessageInput(
-                        UploadInput(fileUploadId),
-                    ),
-                ),
-            )
-        }
-    }
-
-    suspend fun sendVideoMessage(
-        conversationId: ConversationId,
-        clientId: Uuid,
-        fileUploadId: Uuid,
-        replyToMessageId: Uuid?,
-    ) {
-        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
-            SendMessageContentInput(
-                videoInput = Optional.presentIfNotNull(
-                    SendVideoMessageInput(
-                        UploadInput(fileUploadId),
-                    ),
-                ),
-            )
-        }
-    }
-
-    suspend fun sendAudioMessage(
-        conversationId: ConversationId,
-        clientId: Uuid,
-        fileUploadId: Uuid,
-        replyToMessageId: Uuid?,
-    ) {
-        sendMediaMessage(conversationId, clientId, replyToMessageId = replyToMessageId) {
-            SendMessageContentInput(
-                audioInput = Optional.presentIfNotNull(
-                    SendAudioMessageInput(
-                        UploadInput(fileUploadId),
-                    ),
-                ),
-            )
-        }
-    }
-
-    private suspend fun sendMediaMessage(
-        conversationId: ConversationId,
-        clientId: Uuid,
-        replyToMessageId: Uuid?,
-        inputFactoryBlock: () -> SendMessageContentInput,
-    ) {
-        val input = inputFactoryBlock()
         val mutation = SendMessageMutation(
-            conversationId = conversationId.value,
-            content = input,
-            clientId = clientId,
-            replyToMessageId = Optional.presentIfNotNull(replyToMessageId),
+            conversationId = conversationId.stableId,
+            input = input,
         )
         apolloClient.mutation(mutation).execute().dataOrThrowOnError
     }
 
-    suspend fun sendTextMessage(
-        conversationId: ConversationId,
-        clientId: Uuid,
-        text: String,
-        replyToMessageId: Uuid?,
-    ) {
-        val input = SendMessageContentInput(
-            textInput = Optional.presentIfNotNull(SendTextMessageInput(text = text)),
-        )
-        val mutation = SendMessageMutation(
-            conversationId = conversationId.value,
-            content = input,
-            clientId = clientId,
-            replyToMessageId = Optional.presentIfNotNull(replyToMessageId),
-        )
-
-        apolloClient.mutation(mutation).execute().dataOrThrowOnError
-    }
-
-    suspend fun deleteMessage(conversationId: ConversationId, remoteMessageId: MessageId.Remote) {
+    suspend fun deleteMessage(conversationId: ConversationId.Remote, remoteMessageId: MessageId.Remote) {
         val mutation = DeleteMessageMutation(remoteMessageId.remoteId)
 
-        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationId.value))
+        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationId.stableId))
             ?.conversation?.conversation?.conversationFragment
 
         val optimisticData = DeleteMessageMutation.Data(
@@ -337,7 +239,7 @@ internal class GqlConversationContentDataSource(
                     conversation = DeleteMessageMutation.Conversation(
                         __typename = Conversation.type.name,
                         conversationPreviewFragment = ConversationPreviewFragment(
-                            id = conversationId.value,
+                            id = conversationId.stableId,
                             updatedAt = Clock.System.now(),
                             inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
                             lastMessagePreview = cachedConversationFragment?.lastMessagePreview,
@@ -355,10 +257,10 @@ internal class GqlConversationContentDataSource(
     }
 
     @VisibleForTesting
-    internal fun firstItemsPageQuery(id: ConversationId) =
-        ConversationItemsQuery(id.value, OpaqueCursorPage(cursor = Optional.Absent))
+    internal fun firstItemsPageQuery(id: ConversationId.Remote) =
+        ConversationItemsQuery(id.stableId, OpaqueCursorPage(cursor = Optional.Absent))
 
-    suspend fun setTyping(conversationId: ConversationId, typing: Boolean) {
-        apolloClient.mutation(SetTypingMutation(conversationId.value, typing)).execute()
+    suspend fun setTyping(conversationId: ConversationId.Remote, typing: Boolean) {
+        apolloClient.mutation(SetTypingMutation(conversationId.stableId, typing)).execute()
     }
 }

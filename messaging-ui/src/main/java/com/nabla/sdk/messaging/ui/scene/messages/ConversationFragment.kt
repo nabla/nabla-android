@@ -61,7 +61,6 @@ import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MissingConversationIdException
-import com.nabla.sdk.messaging.core.domain.entity.toConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
@@ -751,13 +750,13 @@ public open class ConversationFragment : Fragment() {
                 conversationId: ConversationId,
                 showComposer: Boolean,
             ): Bundle = Bundle().apply {
-                putSerializable(CONVERSATION_ID_ARG_KEY, conversationId.value)
+                putParcelable(CONVERSATION_ID_ARG_KEY, conversationId)
                 putBoolean(SHOW_COMPOSER_ARG_KEY, showComposer)
             }
 
-            internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId =
-                savedStateHandle.get<Uuid>(CONVERSATION_ID_ARG_KEY)?.toConversationId()
-                    ?: throw MissingConversationIdException
+            internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId {
+                return savedStateHandle.get(CONVERSATION_ID_ARG_KEY) ?: throw MissingConversationIdException
+            }
 
             internal fun showComposerFromSavedStateHandle(savedStateHandle: SavedStateHandle): Boolean =
                 savedStateHandle.get<Boolean>(SHOW_COMPOSER_ARG_KEY) ?: true

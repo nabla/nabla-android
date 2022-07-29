@@ -28,14 +28,8 @@ internal class InboxViewModel(
         viewModelScope.launch {
             isCreatingConversationMutableFlow.emit(true)
 
-            messagingClient.createConversation()
-                .onFailure { error ->
-                    messagingClient.logger.warn("Error while creating conversation", error)
-                    errorAlertMutableFlow.emit(ErrorAlert.CreatingConversation)
-                }
-                .onSuccess { conversation ->
-                    openConversationMutableFlow.emit(conversation.id)
-                }
+            val draftId = messagingClient.createDraftConversation()
+            openConversationMutableFlow.emit(draftId)
 
             isCreatingConversationMutableFlow.emit(false)
         }
