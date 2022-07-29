@@ -25,6 +25,7 @@ import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -34,7 +35,6 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation.Companion.TYPING_TIME_WINDOW
 import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
@@ -733,11 +733,11 @@ internal class IntegrationTest {
             assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
-        nablaMessagingClient.watchConversation(Uuid.randomUUID().toRemoteConversationId()).test {
+        nablaMessagingClient.watchConversation(ConversationId.Remote(remoteId = uuid4())).test {
             assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
-        nablaMessagingClient.watchConversationItems(Uuid.randomUUID().toRemoteConversationId()).test {
+        nablaMessagingClient.watchConversationItems(ConversationId.Remote(remoteId = uuid4())).test {
             assertEquals(AuthenticationException.NotAuthenticated, awaitError())
         }
 
@@ -745,27 +745,27 @@ internal class IntegrationTest {
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.deleteMessage(
-                Uuid.randomUUID().toRemoteConversationId(),
-                MessageId.Local(Uuid.randomUUID()),
+                ConversationId.Remote(remoteId = uuid4()),
+                MessageId.Local(uuid4()),
             ).exceptionOrNull()
         )
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.markConversationAsRead(
-                Uuid.randomUUID().toRemoteConversationId()
+                ConversationId.Remote(remoteId = uuid4())
             ).exceptionOrNull()
         )
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.retrySendingMessage(
-                MessageId.Local(Uuid.randomUUID()),
-                Uuid.randomUUID().toRemoteConversationId(),
+                MessageId.Local(uuid4()),
+                ConversationId.Remote(remoteId = uuid4()),
             ).exceptionOrNull()
         )
         assertEquals(
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.setTyping(
-                Uuid.randomUUID().toRemoteConversationId(),
+                ConversationId.Remote(remoteId = uuid4()),
                 isTyping = true,
             ).exceptionOrNull()
         )
@@ -773,7 +773,7 @@ internal class IntegrationTest {
             AuthenticationException.NotAuthenticated,
             nablaMessagingClient.sendMessage(
                 MessageInput.Text(""),
-                Uuid.randomUUID().toRemoteConversationId(),
+                ConversationId.Remote(remoteId = uuid4()),
             ).exceptionOrNull()
         )
     }
@@ -799,7 +799,7 @@ internal class IntegrationTest {
         }
 
         val nablaClient = NablaClient.initialize(
-            name = Uuid.randomUUID().toString(),
+            name = uuid4().toString(),
             configuration = Configuration(
                 context = RuntimeEnvironment.getApplication(),
                 publicApiKey = "dummy-api-key",

@@ -24,6 +24,7 @@ import com.nabla.sdk.graphql.fragment.ProviderFragment
 import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
 import com.nabla.sdk.graphql.fragment.SystemFragment
 import com.nabla.sdk.graphql.fragment.VideoFileUploadFragment
+import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -35,12 +36,14 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
-import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 
-internal class GqlMapper(private val logger: Logger) {
+internal class GqlMapper(
+    private val logger: Logger,
+    private val localConversationDataSource: LocalConversationDataSource,
+) {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
-            id = fragment.id.toRemoteConversationId(),
+            id = localConversationDataSource.findLocalConversationId(fragment.id),
             title = fragment.title,
             subtitle = fragment.subtitle,
             inboxPreviewTitle = fragment.inboxPreviewTitle,
@@ -73,7 +76,7 @@ internal class GqlMapper(private val logger: Logger) {
         }
         return ConversationActivity(
             id = conversationActivityFragment.id.toConversationActivityId(),
-            conversationId = conversationActivityFragment.conversation.id.toRemoteConversationId(),
+            conversationId = localConversationDataSource.findLocalConversationId(conversationActivityFragment.conversation.id),
             createdAt = conversationActivityFragment.createdAt,
             activityTime = conversationActivityFragment.activityTime,
             content = content,

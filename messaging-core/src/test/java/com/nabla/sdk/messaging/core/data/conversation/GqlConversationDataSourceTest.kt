@@ -115,7 +115,7 @@ internal class GqlConversationDataSourceTest {
             logger = logger,
             coroutineScope = scope,
             apolloClient = apolloClient,
-            mapper = GqlMapper(logger),
+            mapper = GqlMapper(logger, LocalConversationDataSource()),
             clock = TestClock(testScope),
         )
     }

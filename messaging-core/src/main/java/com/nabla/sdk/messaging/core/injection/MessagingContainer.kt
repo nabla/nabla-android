@@ -33,15 +33,16 @@ internal class MessagingContainer(
     uuidGenerator: UuidGenerator,
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val gqlMapper = GqlMapper(logger)
-    private val localMessageDataSource = LocalMessageDataSource()
     private val localConversationDataSource = LocalConversationDataSource()
+    private val gqlMapper = GqlMapper(logger, localConversationDataSource)
+    private val localMessageDataSource = LocalMessageDataSource()
     private val messageFileUploader = MessageFileUploader(fileUploadRepository)
     private val gqlConversationContentDataSource = GqlConversationContentDataSource(
         logger = logger,
         apolloClient = apolloClient,
         mapper = gqlMapper,
-        coroutineScope = repoScope
+        coroutineScope = repoScope,
+        localConversationDataSource = localConversationDataSource,
     )
     private val gqlConversationDataSource = GqlConversationDataSource(
         logger = logger,

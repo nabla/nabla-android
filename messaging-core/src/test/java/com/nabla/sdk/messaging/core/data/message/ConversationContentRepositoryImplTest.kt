@@ -6,11 +6,11 @@ import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.data.stubs.fakeImage
 import com.nabla.sdk.messaging.core.data.stubs.fakeProviderJoined
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
-import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ class ConversationContentRepositoryImplTest {
 
     @Test
     fun `combineGqlAndLocalInfo is combining data sources`() = runTest {
-        val conversationId = uuid4().toRemoteConversationId()
+        val conversationId = ConversationId.Remote(remoteId = uuid4())
 
         val localMessageToKeep = Message.Text.Companion.fake(
             id = MessageId.Local(

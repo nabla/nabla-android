@@ -38,7 +38,7 @@ internal class ConversationContentRepositoryImpl(
                 localConversationDataSource.watch(conversationId).flatMapLatest { localConversation ->
                     when (localConversation.creationState) {
                         LocalConversation.CreationState.Creating,
-                        LocalConversation.CreationState.ErrorCreating,
+                        is LocalConversation.CreationState.ErrorCreating,
                         LocalConversation.CreationState.ToBeCreated -> {
                             localMessageDataSource.watchLocalMessages(conversationId).map {
                                 val conversationItems = ConversationItems(
@@ -142,7 +142,7 @@ internal class ConversationContentRepositoryImpl(
         replyTo: MessageId.Remote?,
     ): MessageId.Local {
         val message = messageMapper.messageInputToNewMessage(input, conversationId as? ConversationId.Remote, replyTo)
-        return sendMessageOrchestrator.sendMessage(message, conversationId, replyTo)
+        return sendMessageOrchestrator.sendMessage(message, conversationId)
     }
 
     override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
@@ -150,9 +150,7 @@ internal class ConversationContentRepositoryImpl(
         if (localMessage != null) {
             sendMessageOrchestrator.sendMessage(
                 localMessage,
-                conversationId,
-                replyTo = localMessage.replyTo?.id as? MessageId.Remote,
-                isRetried = true
+                conversationId
             )
         } else {
             throw MessageNotFoundException(conversationId, localMessageId)

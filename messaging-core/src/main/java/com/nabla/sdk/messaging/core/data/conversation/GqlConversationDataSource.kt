@@ -118,27 +118,28 @@ internal class GqlConversationDataSource constructor(
     }
 
     suspend fun markConversationAsRead(conversationId: ConversationId.Remote) {
-        apolloClient.mutation(MaskAsSeenMutation(conversationId.stableId)).execute()
+        apolloClient.mutation(MaskAsSeenMutation(conversationId.remoteId)).execute()
     }
 
     suspend fun createConversation(
         title: String?,
         providerIds: List<Uuid>?,
-        initialMessage: SendMessageInput?
+        initialMessage: SendMessageInput?,
+        onSuccessSideEffect: ((remoteConversationUuid: Uuid) -> Unit)? = null,
     ): Conversation {
-        return mapper.mapToConversation(
-            apolloClient.mutation(
-                CreateConversationMutation(
-                    title = Optional.presentIfNotNull(title),
-                    providerIds = Optional.presentIfNotNull(providerIds),
-                    initialMessage = Optional.presentIfNotNull(initialMessage),
-                )
-            ).execute()
-                .dataOrThrowOnError
-                .createConversation
-                .conversation
-                .conversationFragment
+        val data = apolloClient.mutation(
+            CreateConversationMutation(
+                title = Optional.presentIfNotNull(title),
+                providerIds = Optional.presentIfNotNull(providerIds),
+                initialMessage = Optional.presentIfNotNull(initialMessage),
+            )
+        ).execute().dataOrThrowOnError
+
+        onSuccessSideEffect?.invoke(
+            data.createConversation.conversation.conversationFragment.id
         )
+
+        return mapper.mapToConversation(data.createConversation.conversation.conversationFragment)
     }
 
     @OptIn(FlowPreview::class)

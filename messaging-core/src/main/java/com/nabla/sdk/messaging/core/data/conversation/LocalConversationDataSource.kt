@@ -13,16 +13,18 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 internal class LocalConversationDataSource {
-    private val conversations = MutableStateFlow(emptyMap<Uuid, LocalConversation>())
+    private val localIdToConversations = MutableStateFlow(emptyMap<Uuid, LocalConversation>())
+    private val remoteIdToLocalId = mutableMapOf<Uuid, Uuid>()
 
     fun watch(conversationId: ConversationId.Local): Flow<LocalConversation> {
-        return conversations.map { it[conversationId.clientId] }.filterNotNull()
+        return localIdToConversations.map { it[conversationId.clientId] }.filterNotNull()
     }
 
     suspend fun waitConversationCreated(conversationId: ConversationId.Local): ConversationId.Remote {
         return watch(conversationId).map { it.creationState }
             .filterIsInstance<LocalConversation.CreationState.Created>()
-            .first().remoteId
+            .first()
+            .remoteId
     }
 
     fun create(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
@@ -37,10 +39,21 @@ internal class LocalConversationDataSource {
     }
 
     fun update(conversation: LocalConversation) {
-        conversations.update { it + (conversation.localId.clientId to conversation) }
+        localIdToConversations.update { it + (conversation.localId.clientId to conversation) }
+        if (conversation.creationState is LocalConversation.CreationState.Created) {
+            remoteIdToLocalId[conversation.creationState.remoteId.remoteId] = conversation.localId.clientId
+        }
     }
 
     fun remove(conversationId: ConversationId.Local) {
-        conversations.update { it - conversationId.clientId }
+        localIdToConversations.update { it - conversationId.clientId }
+    }
+
+    fun findLocalConversationId(remoteId: Uuid): ConversationId {
+        val localId = remoteIdToLocalId[remoteId]
+        return ConversationId.Remote(
+            clientId = localId,
+            remoteId = remoteId
+        )
     }
 }

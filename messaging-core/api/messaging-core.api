@@ -209,11 +209,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationItems 
 public final class com/nabla/sdk/messaging/core/domain/entity/ConversationItems$Companion {
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/ConversationKt {
-	public static final fun toRemoteConversationId (Ljava/util/UUID;Ljava/util/UUID;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
-	public static synthetic fun toRemoteConversationId$default (Ljava/util/UUID;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
-}
-
 public abstract interface class com/nabla/sdk/messaging/core/domain/entity/FileLocal {
 	public abstract fun getFileName ()Ljava/lang/String;
 	public abstract fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;

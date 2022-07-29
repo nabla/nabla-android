@@ -27,7 +27,7 @@ internal data class LocalConversation(
     sealed interface CreationState {
         object ToBeCreated : CreationState
         object Creating : CreationState
-        object ErrorCreating : CreationState
+        data class ErrorCreating(val cause: Throwable) : CreationState
         data class Created(val remoteId: ConversationId.Remote) : CreationState
     }
 }

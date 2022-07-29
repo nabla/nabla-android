@@ -15,6 +15,7 @@ import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
+import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
@@ -24,7 +25,6 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
-import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
@@ -223,7 +223,7 @@ fun Conversation.Companion.fake(
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
 ) = Conversation(
-    id = id.toRemoteConversationId(),
+    id = ConversationId.Remote(remoteId = id),
     lastModified = lastModified,
     title = title,
     inboxPreviewTitle = inboxPreviewTitle,
@@ -243,7 +243,7 @@ fun EphemeralUrl.Companion.fake(
 
 fun ConversationActivity.Companion.fakeProviderJoined() = ConversationActivity(
     id = uuid4().toConversationActivityId(),
-    conversationId = uuid4().toRemoteConversationId(),
+    conversationId = ConversationId.Remote(remoteId = uuid4()),
     createdAt = Clock.System.now(),
     activityTime = Clock.System.now(),
     content = ConversationActivityContent.ProviderJoinedConversation(

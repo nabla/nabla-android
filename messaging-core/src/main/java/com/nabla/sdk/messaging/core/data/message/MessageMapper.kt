@@ -57,12 +57,11 @@ internal class MessageMapper constructor(
 
     suspend fun messageToGqlSendMessageInput(
         message: Message,
-        replyToId: MessageId? = message.replyTo?.id,
         fileUploader: suspend Message.Media<*, *>.() -> Uuid,
     ): SendMessageInput {
         return SendMessageInput(
             clientId = message.id.requireLocal().clientId,
-            replyToMessageId = Optional.presentIfNotNull(replyToId?.remoteId),
+            replyToMessageId = Optional.presentIfNotNull(message.replyTo?.id?.remoteId),
             content = when (message) {
                 is Message.Media.Audio -> SendMessageContentInput(
                     audioInput = Optional.presentIfNotNull(

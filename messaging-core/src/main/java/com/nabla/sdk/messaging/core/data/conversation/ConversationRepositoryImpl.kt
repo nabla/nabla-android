@@ -56,7 +56,7 @@ internal class ConversationRepositoryImpl(
             is ConversationId.Local -> localConversationDataSource.watch(conversationId).flatMapLatest { localConversation ->
                 when (localConversation.creationState) {
                     LocalConversation.CreationState.Creating,
-                    LocalConversation.CreationState.ErrorCreating,
+                    is LocalConversation.CreationState.ErrorCreating,
                     LocalConversation.CreationState.ToBeCreated -> flowOf(
                         localConversation.asConversation()
                     )

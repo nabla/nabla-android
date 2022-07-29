@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 internal class LocalMessageDataSource {
-    private val conversationToLocalMessagesFlows = mutableMapOf<ConversationId, MutableStateFlow<Map<Uuid, Message>>>()
+    private val conversationToLocalMessagesFlows = mutableMapOf<Uuid, MutableStateFlow<Map<Uuid, Message>>>()
 
     fun watchLocalMessages(conversationId: ConversationId): Flow<Collection<Message>> {
         return getLocalMessagesMutableFlow(conversationId).map { it.values }
@@ -19,7 +19,7 @@ internal class LocalMessageDataSource {
         conversationId: ConversationId
     ): MutableStateFlow<Map<Uuid, Message>> {
         return synchronized(this) {
-            conversationToLocalMessagesFlows.getOrPut(conversationId) {
+            conversationToLocalMessagesFlows.getOrPut(conversationId.stableId) {
                 MutableStateFlow(emptyMap())
             }
         }

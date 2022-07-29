@@ -35,11 +35,11 @@ import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
+import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.messaging.core.domain.entity.toRemoteConversationId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -56,6 +56,7 @@ internal class GqlConversationContentDataSource(
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
+    private val localConversationDataSource: LocalConversationDataSource,
 ) {
 
     private val conversationEventsFlowMap = mutableMapOf<ConversationId.Remote, Flow<Unit>>()
@@ -69,7 +70,7 @@ internal class GqlConversationContentDataSource(
     }
 
     private fun createConversationEventsFlow(conversationId: ConversationId.Remote): Flow<Unit> {
-        return apolloClient.subscription(ConversationEventsSubscription(conversationId.stableId))
+        return apolloClient.subscription(ConversationEventsSubscription(conversationId.remoteId))
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope)
             .onEach {
@@ -86,7 +87,11 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertMessageToConversationCache(
         newMessageFragment: MessageFragment,
     ) {
-        val query = firstItemsPageQuery(newMessageFragment.messageSummaryFragment.conversation.id.toRemoteConversationId())
+        val query = firstItemsPageQuery(
+            ConversationId.Remote(
+                remoteId = newMessageFragment.messageSummaryFragment.conversation.id
+            )
+        )
         val newItem = ConversationItemsPageFragment.Data(
             Message.type.name,
             null,
@@ -98,7 +103,11 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertConversationActivityToConversationCache(
         newConversationActivityFragment: ConversationActivityFragment,
     ) {
-        val query = firstItemsPageQuery(newConversationActivityFragment.conversation.id.toRemoteConversationId())
+        val query = firstItemsPageQuery(
+            ConversationId.Remote(
+                remoteId = newConversationActivityFragment.conversation.id
+            )
+        )
         val newItem = ConversationItemsPageFragment.Data(
             ConversationActivity.type.name,
             newConversationActivityFragment,
@@ -189,7 +198,7 @@ internal class GqlConversationContentDataSource(
                 }
                 PaginatedConversationItems(
                     conversationItems = ConversationItems(
-                        conversationId = queryData.conversation.conversation.id.toRemoteConversationId(),
+                        conversationId = localConversationDataSource.findLocalConversationId(queryData.conversation.conversation.id),
                         items = items,
                     ),
                     hasMore = page.hasMore,
@@ -206,7 +215,7 @@ internal class GqlConversationContentDataSource(
         input: SendMessageInput,
     ) {
         val mutation = SendMessageMutation(
-            conversationId = conversationId.stableId,
+            conversationId = conversationId.remoteId,
             input = input,
         )
         apolloClient.mutation(mutation).execute().dataOrThrowOnError
@@ -215,7 +224,7 @@ internal class GqlConversationContentDataSource(
     suspend fun deleteMessage(conversationId: ConversationId.Remote, remoteMessageId: MessageId.Remote) {
         val mutation = DeleteMessageMutation(remoteMessageId.remoteId)
 
-        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationId.stableId))
+        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationId.remoteId))
             ?.conversation?.conversation?.conversationFragment
 
         val optimisticData = DeleteMessageMutation.Data(
@@ -239,7 +248,7 @@ internal class GqlConversationContentDataSource(
                     conversation = DeleteMessageMutation.Conversation(
                         __typename = Conversation.type.name,
                         conversationPreviewFragment = ConversationPreviewFragment(
-                            id = conversationId.stableId,
+                            id = conversationId.remoteId,
                             updatedAt = Clock.System.now(),
                             inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
                             lastMessagePreview = cachedConversationFragment?.lastMessagePreview,
@@ -258,9 +267,9 @@ internal class GqlConversationContentDataSource(
 
     @VisibleForTesting
     internal fun firstItemsPageQuery(id: ConversationId.Remote) =
-        ConversationItemsQuery(id.stableId, OpaqueCursorPage(cursor = Optional.Absent))
+        ConversationItemsQuery(id.remoteId, OpaqueCursorPage(cursor = Optional.Absent))
 
     suspend fun setTyping(conversationId: ConversationId.Remote, typing: Boolean) {
-        apolloClient.mutation(SetTypingMutation(conversationId.stableId, typing)).execute()
+        apolloClient.mutation(SetTypingMutation(conversationId.remoteId, typing)).execute()
     }
 }

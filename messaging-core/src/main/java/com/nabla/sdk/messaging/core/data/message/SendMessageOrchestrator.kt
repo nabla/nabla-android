@@ -1,15 +1,20 @@
 package com.nabla.sdk.messaging.core.data.message
 
+import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
+import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.cancellation.CancellationException
 
 internal class SendMessageOrchestrator constructor(
     private val localConversationDataSource: LocalConversationDataSource,
@@ -25,8 +30,6 @@ internal class SendMessageOrchestrator constructor(
     suspend fun sendMessage(
         message: Message,
         conversationId: ConversationId,
-        replyTo: MessageId.Remote?,
-        isRetried: Boolean = false,
     ): MessageId.Local {
         val messageId = message.id.requireLocal()
         localMessageDataSource.putMessage(conversationId, message.modify(SendStatus.Sending))
@@ -38,23 +41,19 @@ internal class SendMessageOrchestrator constructor(
         runCatching { // we're interested in cancellations
             when (val creationState = localConversation?.creationState) {
                 null -> {
-                    sendMessageOp(conversationId.requireRemote(), message, replyTo)
+                    sendMessageOp(conversationId.requireRemote(), message)
                 }
                 is LocalConversation.CreationState.Created -> {
-                    sendMessageOp(creationState.remoteId, message, replyTo)
+                    sendMessageOp(creationState.remoteId, message)
                 }
-                LocalConversation.CreationState.ErrorCreating -> {
-                    if (isRetried) {
-                        createConversationWithMessage(localConversation, message, replyTo)
-                    } else {
-                        awaitConversationCreatedThenSendMessage(localConversation, message, replyTo)
-                    }
+                is LocalConversation.CreationState.ErrorCreating -> {
+                    createConversationWithMessage(localConversation, message)
                 }
                 LocalConversation.CreationState.Creating -> {
-                    awaitConversationCreatedThenSendMessage(localConversation, message, replyTo)
+                    awaitConversationCreatedThenSendMessage(localConversation, message)
                 }
                 LocalConversation.CreationState.ToBeCreated -> {
-                    createConversationWithMessage(localConversation, message, replyTo)
+                    createConversationWithMessage(localConversation, message)
                 }
             }
         }.onFailure { throwable ->
@@ -77,8 +76,7 @@ internal class SendMessageOrchestrator constructor(
 
     private suspend fun createConversationWithMessage(
         localConversation: LocalConversation,
-        message: Message,
-        replyTo: MessageId.Remote?
+        message: Message
     ) {
         runCatching {
             localConversationDataSource.update(
@@ -86,21 +84,26 @@ internal class SendMessageOrchestrator constructor(
                     creationState = LocalConversation.CreationState.Creating
                 )
             )
-            val sendMessageInput = messageMapper.messageToGqlSendMessageInput(message, replyTo) {
+
+            val sendMessageInput = messageMapper.messageToGqlSendMessageInput(message) {
                 messageFileUploader.uploadFile(this)
             }
-            val conversation = gqlConversationDataSource.createConversation(
+            gqlConversationDataSource.createConversation(
                 localConversation.title,
                 localConversation.providerIds,
-                sendMessageInput
-            )
-            localConversationDataSource.update(
-                localConversation.copy(
-                    creationState = LocalConversation.CreationState.Created(
-                        conversation.id.requireRemote()
-                    ),
+                sendMessageInput,
+            ) { remoteConversationUuid ->
+                localConversationDataSource.update(
+                    localConversation.copy(
+                        creationState = LocalConversation.CreationState.Created(
+                            ConversationId.Remote(
+                                clientId = localConversation.localId.clientId,
+                                remoteId = remoteConversationUuid,
+                            )
+                        ),
+                    )
                 )
-            )
+            }
         }.onFailure { throwable ->
             when (throwable) {
                 is CancellationException -> {
@@ -109,36 +112,53 @@ internal class SendMessageOrchestrator constructor(
                 else -> {
                     localConversationDataSource.update(
                         localConversation.copy(
-                            creationState = LocalConversation.CreationState.ErrorCreating
+                            creationState = LocalConversation.CreationState.ErrorCreating(throwable)
                         )
                     )
                 }
             }
             throw throwable
+        }.onSuccess {
+            retryFailedLocalMessages(it)
         }
+    }
+
+    private suspend fun retryFailedLocalMessages(conversation: Conversation) {
+        localMessageDataSource.watchLocalMessages(conversation.id).first()
+            .filter { it.sendStatus == SendStatus.ErrorSending }
+            .onEach {
+                sendMessage(it, conversation.id)
+            }
     }
 
     private suspend fun awaitConversationCreatedThenSendMessage(
         localConversation: LocalConversation,
         message: Message,
-        replyTo: MessageId.Remote?
     ) {
         // Only to keep order of messages instead of send all messages when conversation is created.
         fairAwaitConversationCreatedMutex.withLock {
             val remoteConversationId =
-                localConversationDataSource.waitConversationCreated(localConversation.localId)
-            sendMessageOp(remoteConversationId, message, replyTo)
+                localConversationDataSource.watch(localConversation.localId)
+                    .map { it.creationState }
+                    .onEach {
+                        if (it is LocalConversation.CreationState.ErrorCreating) {
+                            throw InternalException(it.cause)
+                        }
+                    }
+                    .filterIsInstance<LocalConversation.CreationState.Created>()
+                    .first()
+                    .remoteId
+            sendMessageOp(remoteConversationId, message)
         }
     }
 
     private suspend fun sendMessageOp(
         remoteConversationId: ConversationId.Remote,
         message: Message,
-        replyTo: MessageId.Remote?
     ) {
         gqlConversationContentDataSource.sendMessage(
             remoteConversationId,
-            messageMapper.messageToGqlSendMessageInput(message, replyTo) {
+            messageMapper.messageToGqlSendMessageInput(message) {
                 messageFileUploader.uploadFile(this)
             }
         )

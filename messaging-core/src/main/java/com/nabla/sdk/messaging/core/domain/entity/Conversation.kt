@@ -21,9 +21,9 @@ public sealed interface ConversationId : Parcelable {
 
     @Parcelize
     public data class Remote(
-        override val clientId: Uuid?,
+        override val clientId: Uuid? = null,
         override val remoteId: Uuid,
-        override val stableId: Uuid = remoteId
+        override val stableId: Uuid = clientId ?: remoteId
     ) : ConversationId
 
     @NablaInternal
@@ -33,12 +33,6 @@ public sealed interface ConversationId : Parcelable {
         )
     }
 }
-
-@NablaInternal
-public fun Uuid.toRemoteConversationId(clientId: Uuid? = null): ConversationId.Remote = ConversationId.Remote(
-    clientId = clientId,
-    remoteId = this
-)
 
 public data class Conversation(
     val id: ConversationId,
