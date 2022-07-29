@@ -29,6 +29,7 @@ import com.nabla.sdk.uitests.withCousin
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,7 +55,7 @@ class MessageSendingTests {
         savePickedImage(context)
     }
 
-    @Test
+    @Test @Ignore("issues/20984")
     fun create_empty_conversation_and_send_messages_test() {
         // create new conversation & open it
         onView(first(withId(SdkR.id.createConversationCta))).perform(click())
