@@ -29,6 +29,7 @@ dependencies {
     api project(':messaging-core')
 
     implementation project(':core-test-fixtures')
+    api libs.espressoIdlingResource
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {

@@ -40,23 +40,23 @@ android {
 
 dependencies {
     implementation project(':messaging-ui')
+    implementation project(':messaging-core-test-fixtures')
 
     implementation libs.androidx.material
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.fragment.ktx
-    implementation libs.espressoIdlingResource
-    implementation project(path: ':messaging-core', configuration: 'test-helpers')
 
     androidTestImplementation libs.espressoCore
     androidTestImplementation libs.espressoContrib
     androidTestImplementation libs.espressoIntents
-    androidTestImplementation libs.espressoIdlingResource
     androidTestImplementation libs.testRules
     androidTestImplementation libs.hamcrest
-    androidTestImplementation project(path: ':messaging-core', configuration: 'test-helpers')
-    androidTestImplementation project(':messaging-core-test-fixtures')
     androidTestImplementation libs.android.junit
     androidTestImplementation libs.kotlin.test
 
     coreLibraryDesugaring libs.desugaring
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
 }

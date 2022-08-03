@@ -7,8 +7,6 @@ plugins {
 
 group buildConfig.groupId
 
-apply from: rootProject.file('gradle/export-test-helpers-workaround.gradle')
-
 android {
     namespace = 'com.nabla.sdk.core'
 

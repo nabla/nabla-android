@@ -118,8 +118,10 @@ public sealed interface MessageId {
 }
 
 public sealed class Message : ConversationItem {
-    internal abstract val baseMessage: BaseMessage
-    internal abstract fun modify(status: SendStatus): Message
+    @NablaInternal
+    public abstract val baseMessage: BaseMessage
+    @NablaInternal
+    public abstract fun modify(status: SendStatus): Message
 
     public val id: MessageId get() = baseMessage.id
     public val sentAt: Instant get() = baseMessage.createdAt
@@ -232,7 +234,7 @@ public sealed class Message : ConversationItem {
         }
     }
 
-    public data class Deleted internal constructor(override val baseMessage: BaseMessage) : Message() {
+    public data class Deleted @VisibleForTesting public constructor(override val baseMessage: BaseMessage) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }

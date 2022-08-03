@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.datetime.Clock
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
@@ -31,7 +32,7 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
         )
     )
 
-    val newlyCreatedConversationIds = mutableSetOf<ConversationId>()
+    val newlyCreatedConversationIds = mutableSetOf<Uuid>()
 
     override suspend fun createConversation(
         title: String?,
@@ -45,18 +46,27 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
             inboxPreviewTitle = "New conversation",
             providersInConversation = emptyList(),
         )
-        newlyCreatedConversationIds.add(newConversation.id)
-        conversationsFlow.value = conversationsFlow.value.copy(items = listOf(newConversation) + conversationsFlow.value.items)
+        newlyCreatedConversationIds.add(newConversation.id.stableId)
+        conversationsFlow.update { it.copy(items = listOf(newConversation) + it.items) }
 
         return newConversation
     }
 
     override fun createLocalConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
-        return ConversationId.Local(uuid4())
+        val newConversation = Conversation.fake(
+            id = ConversationId.Remote(uuid4(), uuid4()),
+            title = "New conversation",
+            inboxPreviewTitle = "New conversation",
+            providersInConversation = emptyList(),
+        )
+        newlyCreatedConversationIds.add(newConversation.id.stableId)
+        conversationsFlow.update { it.copy(items = listOf(newConversation) + it.items) }
+
+        return ConversationId.Local(newConversation.id.clientId!!)
     }
 
     override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
-        return conversationsFlow.map { it.items.first { it.id == conversationId } }
+        return conversationsFlow.map { it.items.first { it.id.stableId == conversationId.stableId } }
     }
 
     override fun watchConversations(): Flow<PaginatedList<Conversation>> {

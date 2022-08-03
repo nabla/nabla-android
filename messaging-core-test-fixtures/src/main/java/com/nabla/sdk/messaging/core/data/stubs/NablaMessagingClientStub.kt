@@ -20,8 +20,8 @@ class NablaMessagingClientStub(
 ) : NablaMessagingClient {
     var isTyping = false
 
-    internal val conversationRepository = ConversationRepositoryStub(idlingRes)
-    internal val messageRepository = ConversationContentRepositoryStub(idlingRes, conversationRepository)
+    private val conversationRepository = ConversationRepositoryStub(idlingRes)
+    private val messageRepository = ConversationContentRepositoryStub(idlingRes, conversationRepository)
 
     override val logger: Logger = LogcatLogger(logLevel = LogcatLogger.LogLevel.DEBUG)
 

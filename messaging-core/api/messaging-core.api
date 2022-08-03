@@ -31,6 +31,37 @@ public final class com/nabla/sdk/messaging/core/NablaMessagingClient$DefaultImpl
 	public static synthetic fun sendMessage-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
+public final class com/nabla/sdk/messaging/core/data/message/PaginatedConversationItems {
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;Z)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;
+	public final fun component2 ()Z
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;Z)Lcom/nabla/sdk/messaging/core/data/message/PaginatedConversationItems;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/data/message/PaginatedConversationItems;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;ZILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/data/message/PaginatedConversationItems;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConversationItems ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationItems;
+	public final fun getHasMore ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/boundary/ConversationContentRepository {
+	public abstract fun deleteMessage (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun loadMoreMessages (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun retrySendingMessage (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun sendMessage (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun setTyping (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun watchConversationItems (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/domain/boundary/ConversationRepository {
+	public abstract fun createConversation (Ljava/lang/String;Ljava/util/List;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun createLocalConversation (Ljava/lang/String;Ljava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
+	public abstract fun loadMoreConversations (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun markConversationAsRead (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun watchConversation (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun watchConversations ()Lkotlinx/coroutines/flow/Flow;
+}
+
 public final class com/nabla/sdk/messaging/core/domain/entity/BaseMessage {
 	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;Lcom/nabla/sdk/messaging/core/domain/entity/Message;)V
 	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
@@ -330,11 +361,13 @@ public final class com/nabla/sdk/messaging/core/domain/entity/InvalidMessageExce
 public abstract class com/nabla/sdk/messaging/core/domain/entity/Message : com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Companion;
 	public final fun getAuthor ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
+	public abstract fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public fun getCreatedAt ()Lkotlinx/datetime/Instant;
 	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
 	public final fun getReplyTo ()Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public final fun getSendStatus ()Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;
 	public final fun getSentAt ()Lkotlinx/datetime/Instant;
+	public abstract fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Companion {
@@ -342,10 +375,14 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Companion 
 
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted : com/nabla/sdk/messaging/core/domain/entity/Message {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted$Companion;
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted;
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -361,11 +398,14 @@ public abstract class com/nabla/sdk/messaging/core/domain/entity/Message$Media :
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Audio : com/nabla/sdk/messaging/core/domain/entity/Message$Media {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Audio$Companion;
 	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Audio;
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Audio;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Audio;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun getDurationMs ()Ljava/lang/Long;
 	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -375,11 +415,14 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Audi
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Document : com/nabla/sdk/messaging/core/domain/entity/Message$Media {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document$Companion;
 	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document;
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Document;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun getThumbnailUri-fMOd5P8 ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -389,10 +432,13 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Docu
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Image : com/nabla/sdk/messaging/core/domain/entity/Message$Media {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image$Companion;
 	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image;
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Image;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -402,10 +448,13 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Imag
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Video : com/nabla/sdk/messaging/core/domain/entity/Message$Media {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Video$Companion;
 	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Video;
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Video;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Lcom/nabla/sdk/messaging/core/domain/entity/FileSource;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Media$Video;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -415,12 +464,15 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Media$Vide
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Text : com/nabla/sdk/messaging/core/domain/entity/Message {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text$Companion;
 	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/lang/String;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/lang/String;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text;
 	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$Text;
 	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public final fun getText ()Ljava/lang/String;
 	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -623,6 +675,7 @@ public final class com/nabla/sdk/messaging/core/domain/entity/SendStatus$Sent : 
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/WatchPaginatedResponse {
+	public fun <init> (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)V
 	public final fun component1 ()Ljava/lang/Object;
 	public final fun component2 ()Lkotlin/jvm/functions/Function1;
 	public final fun copy (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/messaging/core/domain/entity/WatchPaginatedResponse;

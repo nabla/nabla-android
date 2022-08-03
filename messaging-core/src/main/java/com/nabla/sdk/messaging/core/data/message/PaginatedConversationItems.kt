@@ -1,8 +1,10 @@
 package com.nabla.sdk.messaging.core.data.message
 
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 
-internal data class PaginatedConversationItems(
+@NablaInternal
+public data class PaginatedConversationItems(
     val conversationItems: ConversationItems,
     val hasMore: Boolean,
 )

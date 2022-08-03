@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
 import androidx.annotation.CheckResult
+import com.nabla.sdk.core.annotation.NablaInternal
 
 /**
  * Typically used in Flow to wrap paginated content and the callback to load the next page.
@@ -13,7 +14,7 @@ import androidx.annotation.CheckResult
  * @param content the data being watched, grows after each new page successful loading.
  * @param loadMore the callback to trigger loading of the next page, will eventually result in a new emission in the Flow.
  */
-public data class WatchPaginatedResponse<T> internal constructor(
+public data class WatchPaginatedResponse<T> @NablaInternal public constructor(
     val content: T,
     val loadMore: (@CheckResult suspend () -> Result<Unit>)?,
 )

@@ -214,7 +214,7 @@ fun ProviderInConversation.Companion.fake(
 )
 
 fun Conversation.Companion.fake(
-    id: Uuid = uuid4(),
+    id: ConversationId = ConversationId.Remote(remoteId = uuid4()),
     title: String = randomText(maxWords = 10),
     inboxPreviewTitle: String = randomText(maxWords = 10),
     subtitle: String = listOf("", "You: oh great!", "You: image", "Doctor is typing...").random(),
@@ -223,7 +223,7 @@ fun Conversation.Companion.fake(
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
 ) = Conversation(
-    id = ConversationId.Remote(remoteId = id),
+    id = id,
     lastModified = lastModified,
     title = title,
     inboxPreviewTitle = inboxPreviewTitle,

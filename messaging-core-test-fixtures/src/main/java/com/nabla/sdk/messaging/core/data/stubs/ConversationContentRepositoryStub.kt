@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.data.stubs
 
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
+import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
@@ -44,17 +45,17 @@ internal class ConversationContentRepositoryStub(
 
     private val provider = Provider.fake()
     private val flowMutex = Mutex()
-    private val messagesFlowPerConversation = mutableMapOf<ConversationId, MutableStateFlow<List<Message>>>()
+    private val messagesFlowPerConversation = mutableMapOf<Uuid, MutableStateFlow<List<Message>>>()
 
     override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
-        val isNewlyCreated = conversationId in conversationRepositoryStub.newlyCreatedConversationIds
-        return messagesFlowPerConversation.getOrPut(conversationId) {
+        val isNewlyCreated = conversationId.stableId in conversationRepositoryStub.newlyCreatedConversationIds
+        return messagesFlowPerConversation.getOrPut(conversationId.stableId) {
             conversationItemsStateFlow(prepopulate = !isNewlyCreated)
         }
             .map { messages ->
                 PaginatedConversationItems(
                     conversationItems = ConversationItems.fake(
-                        conversation = conversationRepositoryStub.conversationsFlow.value.items.first { it.id == conversationId },
+                        conversation = conversationRepositoryStub.conversationsFlow.value.items.first { it.id.stableId == conversationId.stableId },
                         messages = messages.sortedByDescending { it.baseMessage.createdAt }
                     ),
                     hasMore = !isNewlyCreated,
@@ -62,7 +63,7 @@ internal class ConversationContentRepositoryStub(
             }
             .onStart {
                 delayWithIdlingRes(idlingRes, 100.milliseconds)
-                if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
+                if (MOCK_ERRORS && Random.nextBoolean()) throw ApolloNetworkException()
             }
     }
 
@@ -73,7 +74,7 @@ internal class ConversationContentRepositoryStub(
         flowMutex.withLock {
             val messages = messagesOf(conversationId)
             val oldestInstant = messages.minOf { it.baseMessage.createdAt }
-            messagesFlowPerConversation[conversationId]!!.value =
+            messagesFlowPerConversation[conversationId.stableId]!!.value =
                 messages + (1..10).map { Message.randomFake(sentAt = oldestInstant.minus(12.hours).minus(it.minutes)) }
         }
     }
@@ -90,7 +91,7 @@ internal class ConversationContentRepositoryStub(
 
     override suspend fun sendMessage(input: MessageInput, conversationId: ConversationId, replyTo: MessageId.Remote?): MessageId.Local {
         val localId = MessageId.Local(uuid4())
-        val conversationFlow = messagesFlowPerConversation[conversationId]!!
+        val conversationFlow = messagesFlowPerConversation[conversationId.stableId]!!
         val repliedToMessage = conversationFlow.value.firstOrNull { it.id == replyTo }
         val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient, SendStatus.Sending, repliedToMessage)
         val message = when (input) {
@@ -124,7 +125,7 @@ internal class ConversationContentRepositoryStub(
     ) {
         println("faking provider reply")
         val conversationsFlow = conversationRepositoryStub.conversationsFlow
-        val conversation = conversationsFlow.value.items.first { it.id == conversationId }
+        val conversation = conversationsFlow.value.items.first { it.id.stableId == conversationId.stableId }
         var provider = ProviderInConversation.fake(typingAt = Clock.System.now())
         setProviderInConversation(conversationsFlow, conversation, provider)
 
@@ -147,7 +148,7 @@ internal class ConversationContentRepositoryStub(
         println("setProviderInConversation - typingAt: ${provider.typingAt}")
         conversationsFlow.value = conversationsFlow.value.copy(
             conversationsFlow.value.items.map {
-                if (it.id == conversation.id) {
+                if (it.id.stableId == conversation.id.stableId) {
                     it.copy(providersInConversation = listOf(provider))
                 } else it
             }
@@ -156,7 +157,7 @@ internal class ConversationContentRepositoryStub(
 
     override suspend fun retrySendingMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
         flowMutex.withLock {
-            messagesFlowPerConversation[conversationId]!!.value = messagesOf(conversationId).map {
+            messagesFlowPerConversation[conversationId.stableId]!!.value = messagesOf(conversationId).map {
                 if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.ErrorSending) {
                     it.modify(SendStatus.Sending)
                 } else it
@@ -164,7 +165,7 @@ internal class ConversationContentRepositoryStub(
         }
         delayWithIdlingRes(idlingRes, 100.milliseconds)
         flowMutex.withLock {
-            messagesFlowPerConversation[conversationId]!!.value = messagesOf(conversationId).map {
+            messagesFlowPerConversation[conversationId.stableId]!!.value = messagesOf(conversationId).map {
                 if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.Sending) {
                     it.modify(SendStatus.Sent)
                 } else it
@@ -178,7 +179,7 @@ internal class ConversationContentRepositoryStub(
 
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         flowMutex.withLock {
-            messagesFlowPerConversation[conversationId]!!.value = messagesOf(conversationId).map {
+            messagesFlowPerConversation[conversationId.stableId]!!.value = messagesOf(conversationId).map {
                 if (it.baseMessage.id == messageId) {
                     Message.Deleted(it.baseMessage)
                 } else it
@@ -187,7 +188,7 @@ internal class ConversationContentRepositoryStub(
     }
 
     private fun messagesOf(conversationId: ConversationId) =
-        messagesFlowPerConversation[conversationId]!!.value
+        messagesFlowPerConversation[conversationId.stableId]!!.value
 
     private fun conversationItemsStateFlow(prepopulate: Boolean): MutableStateFlow<List<Message>> = MutableStateFlow(
         buildList {
