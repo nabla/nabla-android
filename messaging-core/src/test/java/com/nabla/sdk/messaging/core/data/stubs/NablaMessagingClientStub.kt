@@ -55,7 +55,7 @@ class NablaMessagingClientStub(
         }
     }
 
-    override fun createDraftConversation(title: String?, providerIds: List<Uuid>?): ConversationId {
+    override fun createDraftConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
         return conversationRepository.createLocalConversation(title, providerIds)
     }
 

@@ -67,15 +67,17 @@ public interface NablaMessagingClient {
 
     /**
      * Create a new draft conversation on behalf of the current user. This conversation will not be
-     * created server side and visible from the console until a first message is sent in it.
+     * created server-side nor visible from the console until a first message is sent in it.
      *
      * Check [createConversation] for more details.
+     *
+     * @return The id to use to reference the draft conversation in other endpoints, notably in [sendMessage].
      */
     @CheckResult
     public fun createDraftConversation(
         title: String? = null,
         providerIds: List<Uuid>? = null,
-    ): ConversationId
+    ): ConversationId.Local
 
     /**
      * Watch a conversation details.

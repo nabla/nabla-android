@@ -7,6 +7,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 
 internal class LocalMessageDataSource {
     private val conversationToLocalMessagesFlows = mutableMapOf<Uuid, MutableStateFlow<Map<Uuid, Message>>>()
@@ -27,15 +28,15 @@ internal class LocalMessageDataSource {
 
     fun putMessage(conversationId: ConversationId, message: Message) {
         val stateFlow = getLocalMessagesMutableFlow(conversationId)
-        stateFlow.value = stateFlow.value.toMutableMap().apply {
-            put(message.baseMessage.id.stableId, message)
+        stateFlow.update {
+            it + (message.baseMessage.id.stableId to message)
         }
     }
 
     fun removeMessage(conversationId: ConversationId, localMessageId: MessageId.Local) {
         val stateFlow = getLocalMessagesMutableFlow(conversationId)
-        stateFlow.value = stateFlow.value.toMutableMap().apply {
-            remove(localMessageId.clientId)
+        stateFlow.update {
+            it - localMessageId.clientId
         }
     }
 

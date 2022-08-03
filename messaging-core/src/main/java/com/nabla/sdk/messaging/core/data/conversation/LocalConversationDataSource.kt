@@ -6,6 +6,7 @@ import com.nabla.sdk.messaging.core.data.message.LocalConversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -13,11 +14,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 internal class LocalConversationDataSource {
-    private val localIdToConversations = MutableStateFlow(emptyMap<Uuid, LocalConversation>())
+    private val localIdToConversations = MutableStateFlow(emptyMap<ConversationId.Local, LocalConversation>())
     private val remoteIdToLocalId = mutableMapOf<Uuid, Uuid>()
 
     fun watch(conversationId: ConversationId.Local): Flow<LocalConversation> {
-        return localIdToConversations.map { it[conversationId.clientId] }.filterNotNull()
+        return localIdToConversations.map { it[conversationId] }.filterNotNull().distinctUntilChanged()
     }
 
     suspend fun waitConversationCreated(conversationId: ConversationId.Local): ConversationId.Remote {
@@ -39,14 +40,14 @@ internal class LocalConversationDataSource {
     }
 
     fun update(conversation: LocalConversation) {
-        localIdToConversations.update { it + (conversation.localId.clientId to conversation) }
+        localIdToConversations.update { it + (conversation.localId to conversation) }
         if (conversation.creationState is LocalConversation.CreationState.Created) {
             remoteIdToLocalId[conversation.creationState.remoteId.remoteId] = conversation.localId.clientId
         }
     }
 
     fun remove(conversationId: ConversationId.Local) {
-        localIdToConversations.update { it - conversationId.clientId }
+        localIdToConversations.update { it - conversationId }
     }
 
     fun findLocalConversationId(remoteId: Uuid): ConversationId {

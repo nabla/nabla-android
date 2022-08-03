@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.cancellation.CancellationException
 
 internal class SendMessageOrchestrator constructor(
@@ -25,6 +26,8 @@ internal class SendMessageOrchestrator constructor(
     private val messageFileUploader: MessageFileUploader,
 ) {
 
+    // To lock between reading of CreationState.ToBeCreated and its update to Creating.
+    private val conversationIdToCreationMutex = ConcurrentHashMap<ConversationId, Mutex>()
     private val fairAwaitConversationCreatedMutex: Mutex = Mutex()
 
     suspend fun sendMessage(
@@ -34,29 +37,35 @@ internal class SendMessageOrchestrator constructor(
         val messageId = message.id.requireLocal()
         localMessageDataSource.putMessage(conversationId, message.modify(SendStatus.Sending))
 
-        val localConversation = if (conversationId is ConversationId.Local) {
-            localConversationDataSource.watch(conversationId).first()
-        } else null
+        val creationStateMutex = conversationIdToCreationMutex.getOrPut(conversationId) { Mutex() }
 
         runCatching { // we're interested in cancellations
+            creationStateMutex.lock()
+
+            val localConversation = if (conversationId is ConversationId.Local) {
+                localConversationDataSource.watch(conversationId).first()
+            } else null
+
             when (val creationState = localConversation?.creationState) {
                 null -> {
+                    creationStateMutex.unlock()
                     sendMessageOp(conversationId.requireRemote(), message)
                 }
                 is LocalConversation.CreationState.Created -> {
+                    creationStateMutex.unlock()
                     sendMessageOp(creationState.remoteId, message)
                 }
-                is LocalConversation.CreationState.ErrorCreating -> {
-                    createConversationWithMessage(localConversation, message)
-                }
                 LocalConversation.CreationState.Creating -> {
+                    creationStateMutex.unlock()
                     awaitConversationCreatedThenSendMessage(localConversation, message)
                 }
-                LocalConversation.CreationState.ToBeCreated -> {
-                    createConversationWithMessage(localConversation, message)
+                is LocalConversation.CreationState.ErrorCreating, is LocalConversation.CreationState.ToBeCreated -> {
+                    createConversationWithMessage(localConversation, message, creationStateMutex)
                 }
             }
         }.onFailure { throwable ->
+            if (creationStateMutex.isLocked) creationStateMutex.unlock()
+
             when (throwable) {
                 is CancellationException -> {
                     localMessageDataSource.removeMessage(conversationId, messageId)
@@ -76,7 +85,8 @@ internal class SendMessageOrchestrator constructor(
 
     private suspend fun createConversationWithMessage(
         localConversation: LocalConversation,
-        message: Message
+        message: Message,
+        creatingStatusLock: Mutex,
     ) {
         runCatching {
             localConversationDataSource.update(
@@ -84,6 +94,7 @@ internal class SendMessageOrchestrator constructor(
                     creationState = LocalConversation.CreationState.Creating
                 )
             )
+            creatingStatusLock.unlock()
 
             val sendMessageInput = messageMapper.messageToGqlSendMessageInput(message) {
                 messageFileUploader.uploadFile(this)
@@ -93,13 +104,14 @@ internal class SendMessageOrchestrator constructor(
                 localConversation.providerIds,
                 sendMessageInput,
             ) { remoteConversationUuid ->
+                val newId = ConversationId.Remote(
+                    clientId = localConversation.localId.clientId,
+                    remoteId = remoteConversationUuid,
+                )
                 localConversationDataSource.update(
                     localConversation.copy(
                         creationState = LocalConversation.CreationState.Created(
-                            ConversationId.Remote(
-                                clientId = localConversation.localId.clientId,
-                                remoteId = remoteConversationUuid,
-                            )
+                            newId
                         ),
                     )
                 )

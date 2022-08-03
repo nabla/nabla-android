@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.domain.entity
 
 import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.entity.MimeType
@@ -108,6 +109,7 @@ public sealed interface MessageId {
         override val stableId: Uuid = clientId ?: remoteId
     }
 
+    @NablaInternal
     public fun requireLocal(): Local {
         return this as? Local ?: throw InternalException(
             IllegalStateException("Require local but $this is ${javaClass.simpleName}")
