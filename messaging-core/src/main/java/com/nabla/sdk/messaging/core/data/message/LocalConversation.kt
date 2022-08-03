@@ -1,6 +1,8 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.domain.boundary.StringResolver
+import com.nabla.sdk.messaging.core.R
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import kotlinx.datetime.Clock
@@ -11,12 +13,12 @@ internal data class LocalConversation(
     val title: String?,
     val providerIds: List<Uuid>?,
 ) {
-    fun asConversation(): Conversation {
+    fun asConversation(stringResolver: StringResolver): Conversation {
         return Conversation(
             id = localId,
             title = title,
             subtitle = null,
-            inboxPreviewTitle = "",
+            inboxPreviewTitle = stringResolver.resolve(R.string.nabla_draft_conversation_title_placeholder),
             lastMessagePreview = null,
             lastModified = Clock.System.now(),
             patientUnreadMessageCount = 0,

@@ -159,6 +159,10 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenP
 	public abstract fun fetchNewSessionAuthTokens-f_-3YFY (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract interface class com/nabla/sdk/core/domain/boundary/StringResolver {
+	public abstract fun resolve (I)Ljava/lang/String;
+}
+
 public abstract interface class com/nabla/sdk/core/domain/boundary/UuidGenerator {
 	public abstract fun generate ()Ljava/util/UUID;
 }
@@ -591,6 +595,7 @@ public final class com/nabla/sdk/core/injection/CoreContainer {
 	public final fun getFileUploadRepository ()Lcom/nabla/sdk/core/domain/boundary/FileUploadRepository;
 	public final fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
 	public final fun getSessionClient ()Lcom/nabla/sdk/core/domain/boundary/SessionClient;
+	public final fun getStringResolver ()Lcom/nabla/sdk/core/domain/boundary/StringResolver;
 	public final fun getUuidGenerator ()Lcom/nabla/sdk/core/domain/boundary/UuidGenerator;
 }
 

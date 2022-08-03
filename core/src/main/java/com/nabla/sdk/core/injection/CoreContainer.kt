@@ -34,6 +34,7 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
+import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
@@ -57,6 +58,9 @@ public class CoreContainer(
     public val clock: Clock = overriddenClock ?: Clock.System
     public val uuidGenerator: UuidGenerator = overriddenUuidGenerator ?: object : UuidGenerator {
         override fun generate(): Uuid = Uuid.randomUUID()
+    }
+    public val stringResolver: StringResolver = object : StringResolver {
+        override fun resolve(resId: Int): String = configuration.context.getString(resId)
     }
 
     private val kvStorage = configuration.context.getSharedPreferences(
