@@ -13,6 +13,7 @@ import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.apollo.ApolloFactory
+import com.nabla.sdk.core.data.auth.AcceptLanguageInterceptor
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
 import com.nabla.sdk.core.data.auth.PublicApiKeyInterceptor
@@ -86,6 +87,7 @@ public class CoreContainer(
             .apply { networkConfiguration.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
             .writeTimeout(2.minutes.toJavaDuration())
             .readTimeout(2.minutes.toJavaDuration())
+            .addInterceptor(AcceptLanguageInterceptor())
             .addInterceptor(AuthorizationInterceptor(logger, tokenRepositoryLazy))
             .addInterceptor(PublicApiKeyInterceptor(configuration.publicApiKey))
             .addInterceptor(SdkVersionInterceptor(BuildConfig.VERSION_NAME))
