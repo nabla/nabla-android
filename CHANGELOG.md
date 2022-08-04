@@ -7,9 +7,17 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha09] - 2022-08-04
+
+### Changed
+
+- Clicking new conversation in `InboxFragment` does not immediately create a conversation anymore. It now opens a draft conversation that won't be created until a first message is sent.
+- `ConversationId` is now a sealed class that can be either `Local` or `Remote`
+
 ### Added
 
-- Added draft conversation.
+- Added draft conversations: You can now create a draft conversation and reference it by the returned id as you used to reference a normal conversation. The draft conversation will exist only locally until a first message is sent — it will then be created for real.
+
 - Server-made i18n will now follow user's device language.
 
 ### Fixed
