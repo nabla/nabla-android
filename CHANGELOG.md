@@ -8,16 +8,23 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+
 - Added draft conversation.
 - Server-made i18n will now follow user's device language.
+
+### Fixed
+
+- Default color for hyperlinks had a bad contrast with the default background color of patient messages.
 
 ## [1.0-alpha08] - 2022-07-19
 
 ### Added
+
 - Added `AuthenticationException.AuthorizationDenied` exception that can be return if the patient is not
 authorized to access the data. This should not happen in the current implementation.
 
 ### Changed
+
 - Conversations in `watchConversations()` are now correctly sorted by their `lastModified` date.
 - `NablaClient` is exposed through static call `NablaClient.getInstance(name)`.
 
