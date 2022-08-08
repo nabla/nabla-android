@@ -30,6 +30,8 @@ type Mutation {
   markAsSeen(conversationId: UUID!): MarkConversationAsSeenOutput!
 
   setTyping(conversationId: UUID!, isTyping: Boolean!): SetTypingOutput!
+
+  registerOrUpdateDevice(deviceId: UUID, device: DeviceInput!): UpdateDeviceOutput!
 }
 
 type Subscription {
@@ -378,4 +380,24 @@ type LivekitRoomOpenStatus {
 
 type LivekitRoomClosedStatus {
   _: EmptyObject!
+}
+
+input DeviceInput {
+  deviceModel: String!
+  os: DeviceOs!
+  osVersion: String!
+  codeVersion: Int!
+}
+
+type UpdateDeviceOutput {
+  status: MutationStatus!
+}
+
+enum DeviceOs {
+  ANDROID
+  IOS
+}
+
+enum MutationStatus {
+  SUCCESS
 }
