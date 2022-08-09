@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.data.message
 
 import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
@@ -72,16 +73,24 @@ internal class GqlConversationContentDataSource(
     private fun createConversationEventsFlow(conversationId: ConversationId.Remote): Flow<Unit> {
         return apolloClient.subscription(ConversationEventsSubscription(conversationId.remoteId))
             .toFlow()
+            .onEach { putInsertEventToCache(it) }
             .retryOnNetworkErrorAndShareIn(coroutineScope)
-            .onEach {
-                logger.debug(domain = GQL_DOMAIN, message = "Event $it")
-                it.dataOrThrowOnError.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
-                    insertMessageToConversationCache(messageFragment)
-                }
-                it.dataOrThrowOnError.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
-                    insertConversationActivityToConversationCache(conversationActivityFragment)
-                }
-            }.filterIsInstance()
+            .filterIsInstance()
+    }
+
+    private suspend fun putInsertEventToCache(
+        it: ApolloResponse<ConversationEventsSubscription.Data>
+    ) {
+        logger.debug(
+            domain = GQL_DOMAIN,
+            message = "Event ${it.dataOrThrowOnError.conversation?.event?.__typename}"
+        )
+        it.dataOrThrowOnError.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
+            insertMessageToConversationCache(messageFragment)
+        }
+        it.dataOrThrowOnError.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
+            insertConversationActivityToConversationCache(conversationActivityFragment)
+        }
     }
 
     private suspend fun insertMessageToConversationCache(
