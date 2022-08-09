@@ -19,8 +19,6 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
-import com.nabla.sdk.graphql.ConversationEventsSubscription
-import com.nabla.sdk.graphql.ConversationsEventsSubscription
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -35,6 +33,8 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation.Companion.TYPING_TIME_WINDOW
 import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
+import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest

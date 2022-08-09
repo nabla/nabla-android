@@ -1,7 +1,6 @@
 package com.nabla.sdk.core.data.auth
 
 import android.util.Base64
-import com.apollographql.apollo3.testing.runTest
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.stubs.JwtFaker
@@ -23,12 +22,15 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SessionClientImplTest {
 
     private val tokenLocalDataSource = mockk<TokenLocalDataSource>()

@@ -10,11 +10,11 @@ import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.stubs.TestClock
 import com.nabla.sdk.core.data.stubs.apollo.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.graphql.ConversationsEventsSubscription
-import com.nabla.sdk.graphql.ConversationsQuery
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
+import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.messaging.graphql.ConversationsQuery
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope

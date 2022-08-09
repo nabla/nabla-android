@@ -14,12 +14,6 @@ import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
 import com.nabla.sdk.core.domain.entity.PaginatedList
-import com.nabla.sdk.graphql.ConversationQuery
-import com.nabla.sdk.graphql.ConversationsEventsSubscription
-import com.nabla.sdk.graphql.ConversationsQuery
-import com.nabla.sdk.graphql.CreateConversationMutation
-import com.nabla.sdk.graphql.MaskAsSeenMutation
-import com.nabla.sdk.graphql.fragment.ConversationFragment
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
@@ -27,6 +21,12 @@ import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.messaging.core.data.apollo.notifyTypingUpdates
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.graphql.ConversationQuery
+import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.messaging.graphql.ConversationsQuery
+import com.nabla.sdk.messaging.graphql.CreateConversationMutation
+import com.nabla.sdk.messaging.graphql.MaskAsSeenMutation
+import com.nabla.sdk.messaging.graphql.fragment.ConversationFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow

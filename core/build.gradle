@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'com.apollographql.apollo3'
     id 'maven-publish'
 }
 
@@ -81,6 +82,13 @@ afterEvaluate {
             }
         }
     }
+}
+
+apollo {
+    packageName.set("com.nabla.sdk.graphql")
+    mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
+    mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
+    generateApolloMetadata.set(true)
 }
 
 dependencies {

@@ -4,19 +4,19 @@ import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.graphql.ConversationEventsSubscription
-import com.nabla.sdk.graphql.ConversationItemsQuery
-import com.nabla.sdk.graphql.ConversationsEventsSubscription
-import com.nabla.sdk.graphql.ConversationsQuery
-import com.nabla.sdk.graphql.test.ConversationEventsSubscription_TestBuilder.Data
-import com.nabla.sdk.graphql.test.ConversationItemsQuery_TestBuilder
-import com.nabla.sdk.graphql.test.ConversationItemsQuery_TestBuilder.Data
-import com.nabla.sdk.graphql.test.ConversationsEventsSubscription_TestBuilder.Data
-import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder
-import com.nabla.sdk.graphql.test.ConversationsQuery_TestBuilder.Data
 import com.nabla.sdk.messaging.core.data.apollo.CustomTestResolver
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
+import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
+import com.nabla.sdk.messaging.graphql.ConversationItemsQuery
+import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.messaging.graphql.ConversationsQuery
+import com.nabla.sdk.messaging.graphql.test.ConversationEventsSubscription_TestBuilder.Data
+import com.nabla.sdk.messaging.graphql.test.ConversationItemsQuery_TestBuilder
+import com.nabla.sdk.messaging.graphql.test.ConversationItemsQuery_TestBuilder.Data
+import com.nabla.sdk.messaging.graphql.test.ConversationsEventsSubscription_TestBuilder.Data
+import com.nabla.sdk.messaging.graphql.test.ConversationsQuery_TestBuilder
+import com.nabla.sdk.messaging.graphql.test.ConversationsQuery_TestBuilder.Data
 import kotlinx.datetime.Instant
 
 @OptIn(ApolloExperimental::class)

@@ -11,19 +11,6 @@ import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.graphql.fragment.AudioFileUploadFragment
-import com.nabla.sdk.graphql.fragment.ConversationActivityContentFragment
-import com.nabla.sdk.graphql.fragment.ConversationActivityFragment
-import com.nabla.sdk.graphql.fragment.ConversationFragment
-import com.nabla.sdk.graphql.fragment.DocumentFileUploadFragment
-import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
-import com.nabla.sdk.graphql.fragment.ImageFileUploadFragment
-import com.nabla.sdk.graphql.fragment.MaybeProviderFragment
-import com.nabla.sdk.graphql.fragment.MessageSummaryFragment
-import com.nabla.sdk.graphql.fragment.ProviderFragment
-import com.nabla.sdk.graphql.fragment.ProviderInConversationFragment
-import com.nabla.sdk.graphql.fragment.SystemFragment
-import com.nabla.sdk.graphql.fragment.VideoFileUploadFragment
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -36,6 +23,19 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.toConversationActivityId
+import com.nabla.sdk.messaging.graphql.fragment.AudioFileUploadFragment
+import com.nabla.sdk.messaging.graphql.fragment.ConversationActivityContentFragment
+import com.nabla.sdk.messaging.graphql.fragment.ConversationActivityFragment
+import com.nabla.sdk.messaging.graphql.fragment.ConversationFragment
+import com.nabla.sdk.messaging.graphql.fragment.DocumentFileUploadFragment
+import com.nabla.sdk.messaging.graphql.fragment.EphemeralUrlFragment
+import com.nabla.sdk.messaging.graphql.fragment.ImageFileUploadFragment
+import com.nabla.sdk.messaging.graphql.fragment.MaybeProviderFragment
+import com.nabla.sdk.messaging.graphql.fragment.MessageSummaryFragment
+import com.nabla.sdk.messaging.graphql.fragment.ProviderFragment
+import com.nabla.sdk.messaging.graphql.fragment.ProviderInConversationFragment
+import com.nabla.sdk.messaging.graphql.fragment.SystemFragment
+import com.nabla.sdk.messaging.graphql.fragment.VideoFileUploadFragment
 
 internal class GqlMapper(
     private val logger: Logger,

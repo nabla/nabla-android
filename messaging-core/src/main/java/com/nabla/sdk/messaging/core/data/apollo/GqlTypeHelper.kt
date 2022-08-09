@@ -1,8 +1,8 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
-import com.nabla.sdk.graphql.ConversationItemsQuery
-import com.nabla.sdk.graphql.ConversationsQuery
-import com.nabla.sdk.graphql.fragment.ConversationItemsPageFragment
+import com.nabla.sdk.messaging.graphql.ConversationItemsQuery
+import com.nabla.sdk.messaging.graphql.ConversationsQuery
+import com.nabla.sdk.messaging.graphql.fragment.ConversationItemsPageFragment
 
 internal object GqlTypeHelper {
 

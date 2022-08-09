@@ -619,3 +619,66 @@ public abstract interface class com/nabla/sdk/core/kotlin/SharedSingle {
 	public abstract fun await (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class com/nabla/sdk/graphql/type/DateTime {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/DateTime$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/DateTime$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLBoolean {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLBoolean$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLBoolean$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLFloat {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLFloat$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLFloat$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLID {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLID$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLID$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLInt {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLInt$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLInt$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLString {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLString$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/GraphQLString$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+
+public final class com/nabla/sdk/graphql/type/UUID {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/UUID$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/UUID$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
+}
+

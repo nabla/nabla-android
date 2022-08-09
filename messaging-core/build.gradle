@@ -76,15 +76,14 @@ afterEvaluate {
 }
 
 apollo {
-    packageName.set("com.nabla.sdk.graphql")
-    mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
-    mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
+    packageName.set("com.nabla.sdk.messaging.graphql")
     generateTestBuilders.set(true)
     generateAsInternal.set(true)
 }
 
 dependencies {
     api project(':core')
+    apolloMetadata(project(":core"))
 
     implementation libs.apollo.runtime
     implementation libs.apollo.cache
