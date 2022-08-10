@@ -20,13 +20,13 @@ import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationListBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
+import com.nabla.sdk.messaging.ui.scene.getNablaInstanceByName
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationActivity
-import com.nabla.sdk.messaging.ui.scene.requireSdkName
 import com.nabla.sdk.messaging.ui.scene.setSdkName
 
 public open class InboxFragment : Fragment() {
     private val messagingClient: NablaMessagingClient
-        get() = NablaClient.getInstance(requireSdkName()).messagingClient
+        get() = getNablaInstanceByName().messagingClient
 
     private var binding: NablaFragmentConversationListBinding? = null
 
@@ -111,7 +111,7 @@ public open class InboxFragment : Fragment() {
     }
 
     @CallSuper
-    open override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
 
         binding = null

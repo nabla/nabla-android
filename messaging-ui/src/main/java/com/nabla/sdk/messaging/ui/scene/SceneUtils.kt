@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.entity.InternalException
 
 internal fun Fragment.setSdkName(sdkName: String) {
@@ -14,6 +15,17 @@ internal fun Fragment.setSdkName(sdkName: String) {
 
 internal fun Fragment.requireSdkName(): String {
     return requireSdkName(arguments?.getString(ARG_SDK_NAME))
+}
+
+internal fun Fragment.sdkNameOrNull() = arguments?.getString(ARG_SDK_NAME)
+
+internal fun Fragment.getNablaInstanceByName(): NablaClient {
+    val sdkName = sdkNameOrNull()
+    return if (sdkName != null) {
+        NablaClient.getInstance(sdkName)
+    } else {
+        NablaClient.getInstance()
+    }
 }
 
 internal fun Intent.setSdkName(sdkName: String) {
