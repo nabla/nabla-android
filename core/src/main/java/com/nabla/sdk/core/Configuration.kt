@@ -1,6 +1,7 @@
 package com.nabla.sdk.core
 
 import android.content.Context
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.ConfigurationException
 import com.nabla.sdk.core.domain.entity.LogcatLogger
@@ -16,9 +17,10 @@ import com.nabla.sdk.core.domain.entity.LogcatLogger
 public class Configuration(
     context: Context = defaultAppContext ?: throw ConfigurationException.MissingContext,
     internal val publicApiKey: String = defaultPublicApiKey ?: throw ConfigurationException.MissingApiKey,
-    internal val logger: Logger = LogcatLogger(),
+    public val logger: Logger = LogcatLogger(),
 ) {
-    internal val context: Context = context.applicationContext
+    @NablaInternal
+    public val context: Context = context.applicationContext
 
     internal companion object {
         internal var defaultAppContext: Context? = null

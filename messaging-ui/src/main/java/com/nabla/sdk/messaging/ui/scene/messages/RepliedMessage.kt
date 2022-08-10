@@ -16,5 +16,6 @@ public data class RepliedMessage(
         public data class Audio(val uri: Uri) : Content
         public data class Document(val uri: Uri, val thumbnailUri: Uri?) : Content
         public object Deleted : Content
+        public object LivekitRoom : Content
     }
 }

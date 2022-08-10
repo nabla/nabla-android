@@ -231,6 +231,7 @@ internal class ConversationContentRepositoryStub(
             is Message.Media.Image -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
             is Message.Media.Video -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
             is Message.Text -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
+            is Message.LivekitRoom -> copy(baseMessage.copy(sendStatus = newStatus, id = newId))
         }
     }
 }

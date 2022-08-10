@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Just a theme for IDE preview -->
+    <style name="Nabla.Preview.VideoCall" parent="Theme.Material3.DayNight.NoActionBar" tools:ignore="UnusedResources">
+        <item name="nablaVideoCallThemeOverlay">@style/Nabla.ThemeOverlay.VideoCall</item>
+    </style>
+</resources>

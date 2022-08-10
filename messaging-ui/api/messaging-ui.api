@@ -153,6 +153,18 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimel
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemImageMessageBinding;
 }
 
+public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemLivekitRoomMessageBinding : androidx/viewbinding/ViewBinding {
+	public final field icon Landroid/widget/ImageView;
+	public final field join Landroid/widget/Button;
+	public final field subtitle Landroid/widget/TextView;
+	public final field title Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemLivekitRoomMessageBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemLivekitRoomMessageBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemLivekitRoomMessageBinding;
+}
+
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemLoadingMoreBinding : androidx/viewbinding/ViewBinding {
 	public final field nablaConversationTimelineLoadingMoreRoot Landroidx/constraintlayout/widget/ConstraintLayout;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemLoadingMoreBinding;
@@ -373,14 +385,19 @@ public final class com/nabla/sdk/messaging/ui/scene/conversations/DefaultOffsets
 }
 
 public class com/nabla/sdk/messaging/ui/scene/conversations/InboxFragment : androidx/fragment/app/Fragment {
+	public static final field Companion Lcom/nabla/sdk/messaging/ui/scene/conversations/InboxFragment$Companion;
 	public fun <init> ()V
-	public fun getMessagingClient ()Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
 	public fun getShouldShowBackButton ()Z
 	public final fun onCreateView (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;
 	public fun onDestroyView ()V
 	public final fun onGetLayoutInflater (Landroid/os/Bundle;)Landroid/view/LayoutInflater;
 	public fun onViewCreated (Landroid/view/View;Landroid/os/Bundle;)V
 	protected fun openConversationScreen (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)V
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/conversations/InboxFragment$Companion {
+	public final fun newInstance ()Lcom/nabla/sdk/messaging/ui/scene/conversations/InboxFragment;
+	public final fun newInstance (Ljava/lang/String;)Lcom/nabla/sdk/messaging/ui/scene/conversations/InboxFragment;
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/conversations/ViewModelBindingKt {
@@ -394,14 +411,15 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivit
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion {
+	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Z)Landroid/content/Intent;
 	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Z)Landroid/content/Intent;
+	public static synthetic fun newIntent$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;ZILjava/lang/Object;)Landroid/content/Intent;
 	public static synthetic fun newIntent$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;ZILjava/lang/Object;)Landroid/content/Intent;
 }
 
 public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : androidx/fragment/app/Fragment {
 	public static final field Companion Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;
 	public fun <init> ()V
-	public fun getMessagingClient ()Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
 	public fun onCreate (Landroid/os/Bundle;)V
 	public final fun onCreateView (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;
 	public fun onDestroyView ()V
@@ -417,7 +435,9 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragmen
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion {
+	public final fun newInstance (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
 	public final fun newInstance (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
+	public static synthetic fun newInstance$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
 	public static synthetic fun newInstance$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
 }
 
@@ -476,6 +496,10 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Cont
 	public final fun getUri-9Mbh8_A ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$LivekitRoom : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$LivekitRoom;
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content$Text : com/nabla/sdk/messaging/ui/scene/messages/RepliedMessage$Content {

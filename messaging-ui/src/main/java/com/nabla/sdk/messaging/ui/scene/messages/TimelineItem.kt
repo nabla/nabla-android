@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
@@ -74,6 +75,24 @@ internal sealed interface TimelineItem {
             override val repliedMessage: RepliedMessage? = null
 
             internal companion object
+        }
+
+        data class LivekitRoom(
+            val roomId: Uuid,
+            val roomStatus: Status,
+        ) : Content {
+
+            override val repliedMessage: RepliedMessage? = null
+
+            sealed class Status {
+                data class LivekitOpenedRoom(
+                    val url: String,
+                    val token: String,
+                    val isCurrentVideoCall: Boolean,
+                ) : Status()
+
+                object LivekitClosedRoom : Status()
+            }
         }
 
         object Deleted : Content {

@@ -32,11 +32,14 @@ import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.MessagingModule
+import com.nabla.sdk.core.domain.boundary.Module
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
+import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
 import kotlinx.datetime.Clock
@@ -49,10 +52,11 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
 @NablaInternal
-public class CoreContainer(
-    name: String,
-    configuration: Configuration,
+public class CoreContainer internal constructor(
+    public val name: String,
+    public val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
+    private val modulesFactory: List<Module.Factory<out Module>>,
 ) {
     public val logger: Logger = configuration.logger
 
@@ -82,7 +86,7 @@ public class CoreContainer(
         )
     }
 
-    private val okHttpClient by lazy {
+    public val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .apply { networkConfiguration.additionalHeadersProvider?.let { addInterceptor(UserHeaderInterceptor(it)) } }
             .writeTimeout(2.minutes.toJavaDuration())
@@ -145,6 +149,14 @@ public class CoreContainer(
 
     internal fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
     internal fun loginInteractor() = LoginInteractor(patientRepository, sessionClient, logoutInteractor())
+
+    public val videoCallModule: VideoCallModule? by lazy {
+        modulesFactory.filterIsInstance<VideoCallModule.Factory>().firstOrNull()?.create(this)
+    }
+
+    public val messagingModule: MessagingModule? by lazy {
+        modulesFactory.filterIsInstance<MessagingModule.Factory>().firstOrNull()?.create(this)
+    }
 
     public companion object {
         @VisibleForTesting

@@ -85,4 +85,11 @@
 
     <string name="nabla_conversation_list_toolbar_title">Chat Médical</string>
     <string name="nabla_conversation_list_create_cta_text">Commencer une conversation</string>
+
+    <string name="nabla_conversation_video_consultation">Consultation vidéo</string>
+    <string name="nabla_conversation_video_consultation_icon_content_description">Icône de consultation vidéo</string>
+    <string name="nabla_conversation_video_consultation_join">Rejoindre</string>
+    <string name="nabla_conversation_video_consultation_return_to_call">Revenir à l\'appel</string>
+    <string name="nabla_conversation_video_consultation_ended">Terminée</string>
+
 </resources>

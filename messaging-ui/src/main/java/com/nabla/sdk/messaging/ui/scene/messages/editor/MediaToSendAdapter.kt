@@ -31,6 +31,7 @@ import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaToSendBinding
 import kotlin.math.max
+import com.nabla.sdk.core.R as coreR
 
 internal class MediaToSendAdapter(
     private val onMediaClickedListener: (LocalMedia) -> Unit,
@@ -123,7 +124,7 @@ internal class MediaToSendAdapter(
                         is PixelSize -> size
                     }
                     val bitmap = pool.get(targetSize.width, targetSize.height, Bitmap.Config.ARGB_8888)
-                    bitmap.eraseColor(context.getColor(R.color.nabla_white))
+                    bitmap.eraseColor(context.getColor(coreR.color.nabla_white))
                     val xScale = targetSize.width.toFloat() / firstPage.width.toFloat()
                     val yScale = targetSize.height.toFloat() / firstPage.height.toFloat()
                     val cropScale = max(xScale, yScale)

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="nabla_black">#000000</color>
-    <color name="nabla_white">#FFFFFF</color>
     <color name="nabla_grey">#DFE2E8</color>
 
     <!-- AvatarView placeholder backgrounds -->
@@ -10,5 +9,4 @@
     <color name="nabla_indigo">#6716FB</color>
     <color name="nabla_stone">#6F787E</color>
     <color name="nabla_blue">#0052FF</color>
-    <color name="nabla_red">#F84082</color>
 </resources>

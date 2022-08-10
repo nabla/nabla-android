@@ -37,10 +37,13 @@ import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
+import com.nabla.sdk.core.ui.helpers.PermissionRational
+import com.nabla.sdk.core.ui.helpers.PermissionRequestLauncher
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.canScrollUp
 import com.nabla.sdk.core.ui.helpers.context
@@ -51,13 +54,14 @@ import com.nabla.sdk.core.ui.helpers.mediapicker.MediaPickingResult
 import com.nabla.sdk.core.ui.helpers.mediapicker.PickMediasFromLibraryActivityContract
 import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.player.createMediaPlayersCoordinator
+import com.nabla.sdk.core.ui.helpers.registerForPermissionResult
+import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
 import com.nabla.sdk.core.ui.helpers.scrollToTop
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.toKtUri
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
-import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MissingConversationIdException
@@ -66,11 +70,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenVideoActivity
-import com.nabla.sdk.messaging.ui.helper.PermissionRational
-import com.nabla.sdk.messaging.ui.helper.PermissionRequestLauncher
 import com.nabla.sdk.messaging.ui.helper.copyNewPlainText
-import com.nabla.sdk.messaging.ui.helper.registerForPermissionResult
-import com.nabla.sdk.messaging.ui.helper.registerForPermissionsResult
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.EditingText
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.RecordingVoice
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.ErrorAlert
@@ -79,6 +79,8 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.loadReplyConten
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToAuthorName
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToContent
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediaToSendAdapter
+import com.nabla.sdk.messaging.ui.scene.requireSdkName
+import com.nabla.sdk.messaging.ui.scene.setSdkName
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -87,11 +89,13 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import com.nabla.sdk.core.R as CoreR
 import com.nabla.sdk.core.domain.entity.Uri as KtUri
 
 public open class ConversationFragment : Fragment() {
-    public open val messagingClient: NablaMessagingClient
-        get() = NablaMessagingClient.getInstance()
+
+    private val nablaClient: NablaClient
+        get() = NablaClient.getInstance(requireSdkName())
 
     private val viewModel: ConversationViewModel by viewModels {
         object : AbstractSavedStateViewModelFactory(this, arguments) {
@@ -102,7 +106,7 @@ public open class ConversationFragment : Fragment() {
                 handle: SavedStateHandle,
             ): T {
                 return ConversationViewModel(
-                    messagingClient = messagingClient,
+                    nablaClient = nablaClient,
                     savedStateHandle = handle,
                 ) as T
             }
@@ -194,8 +198,8 @@ public open class ConversationFragment : Fragment() {
         captureCameraPicturePermissionsLauncher = registerForPermissionResult(
             permission = Manifest.permission.CAMERA,
             rational = PermissionRational(
-                title = R.string.nabla_conversation_camera_picture_permission_rational_title,
-                description = R.string.nabla_conversation_camera_picture_permission_rational_description,
+                title = CoreR.string.nabla_conversation_camera_picture_permission_rational_title,
+                description = CoreR.string.nabla_conversation_camera_picture_permission_rational_description,
             )
         ) { isGranted ->
             if (isGranted) {
@@ -206,8 +210,8 @@ public open class ConversationFragment : Fragment() {
         captureCameraVideoPermissionsLauncher = registerForPermissionsResult(
             permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO),
             rational = PermissionRational(
-                title = R.string.nabla_conversation_camera_video_permission_rational_title,
-                description = R.string.nabla_conversation_camera_video_permission_rational_description,
+                title = CoreR.string.nabla_conversation_camera_video_permission_rational_title,
+                description = CoreR.string.nabla_conversation_camera_video_permission_rational_description,
             )
         ) { grants ->
             if (grants.values.all { it }) {
@@ -534,6 +538,15 @@ public open class ConversationFragment : Fragment() {
         override fun onErrorFetchingVideoThumbnail(error: Throwable) {
             viewModel.onErrorFetchingVideoThumbnail(error)
         }
+
+        override fun onJoinLivekitRoomClicked(url: String, roomId: String, accessToken: String) {
+            nablaClient.coreContainer.videoCallModule?.openVideoCall(
+                requireActivity(),
+                url,
+                roomId,
+                accessToken
+            )
+        }
     }
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
@@ -721,8 +734,7 @@ public open class ConversationFragment : Fragment() {
 
         /**
          * Call this to pass a custom child class of [ConversationFragment] you want to use
-         * instead of the base one. This is useful if you want to override the default [NablaMessagingClient]
-         * used by the fragment.
+         * instead of the base one.
          */
         public fun setFragment(fragment: ConversationFragment) {
             customFragment = fragment
@@ -770,9 +782,19 @@ public open class ConversationFragment : Fragment() {
             conversationId: ConversationId,
             init: (Builder.() -> Unit)? = null,
         ): ConversationFragment {
+            return newInstance(conversationId, NablaClient.DEFAULT_NAME, init)
+        }
+
+        public fun newInstance(
+            conversationId: ConversationId,
+            sdkName: String,
+            init: (Builder.() -> Unit)? = null,
+        ): ConversationFragment {
             val builder = Builder(conversationId)
             init?.invoke(builder)
-            return builder.build()
+            return builder.build().also {
+                it.setSdkName(sdkName)
+            }
         }
     }
 }

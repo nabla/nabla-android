@@ -3,11 +3,15 @@ package com.nabla.sdk.demo
 import android.app.Application
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.messaging.core.NablaMessagingModule
+import com.nabla.sdk.videocall.NablaVideoCallModule
 
 class DemoApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        NablaClient.initialize()
+        NablaClient.initialize(
+            modules = listOf(NablaMessagingModule(), NablaVideoCallModule())
+        )
         NablaClient.getInstance().authenticate(
             userId = "dummy-user-id",
             sessionTokenProvider = {

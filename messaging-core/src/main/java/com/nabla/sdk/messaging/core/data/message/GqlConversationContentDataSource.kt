@@ -249,6 +249,7 @@ internal class GqlConversationContentDataSource(
                             onVideoMessageContent = null,
                             onDocumentMessageContent = null,
                             onAudioMessageContent = null,
+                            onLivekitRoomMessageContent = null,
                             onDeletedMessageContent = MessageContentFragment.OnDeletedMessageContent(
                                 empty = EmptyObject.EMPTY
                             ),

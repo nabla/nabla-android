@@ -11,6 +11,8 @@ public sealed class ConfigurationException(message: String) : NablaException(mes
         ConfigurationException("Missing API key. Make sure to add \"com.nabla.sdk.PUBLIC_API_KEY\" in your manifest or pass a Context to \"NablaClient.initialize\" in the \"Configuration\" argument.")
 
     public object MissingContext : ConfigurationException("Missing context. Make sure you follow the doc to integrate the SDK properly.")
+
+    public class ModuleNotInitialized(moduleName: String) : ConfigurationException("The $moduleName module is not initialized properly. Please make sure you call \"NablaClient.initialize\" with it included as a module.")
 }
 
 public sealed class AuthenticationException constructor(cause: Throwable?, message: String) : NablaException(cause = cause, message = message) {

@@ -32,6 +32,7 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderAud
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderDeletedMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderFileMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderImageMessageViewHolder
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderLivekitRoomMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderTextMessageViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderTypingIndicatorViewHolder
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders.ProviderVideoMessageViewHolder
@@ -119,6 +120,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                             ViewType.PROVIDER_DELETED_MESSAGE_VIEW_TYPE.ordinal
                         }
                     }
+                    is TimelineItem.Message.LivekitRoom -> ViewType.PROVIDER_LIVEKIT_OPEN_ROOM_INTERACTIVE_MESSAGE_VIEW_TYPE.ordinal
                 }
             }
             is TimelineItem.LoadingMore -> ViewType.LOADING_MORE_VIEW_TYPE.ordinal
@@ -181,6 +183,12 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             ViewType.LOADING_MORE_VIEW_TYPE -> LoadingMoreViewHolder(NablaConversationTimelineItemLoadingMoreBinding.inflate(inflater, parent, false))
             ViewType.DATE_VIEW_TYPE -> DateSeparatorViewHolder.create(inflater, parent)
             ViewType.CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE -> ConversationActivityTextMessageViewHolder.create(inflater, parent)
+            ViewType.PROVIDER_LIVEKIT_OPEN_ROOM_INTERACTIVE_MESSAGE_VIEW_TYPE -> ProviderLivekitRoomMessageViewHolder.create(
+                inflater,
+                parent,
+                callbacks::onProviderClicked,
+                callbacks::onJoinLivekitRoomClicked
+            )
         }
     }
 
@@ -270,6 +278,11 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item as TimelineItem.Message,
                 item.author as MessageAuthor.Provider,
                 item.content as TimelineItem.Message.Text
+            )
+            is ProviderLivekitRoomMessageViewHolder -> holder.bind(
+                item as TimelineItem.Message,
+                item.author as MessageAuthor.Provider,
+                item.content as TimelineItem.Message.LivekitRoom
             )
             is PatientDeletedMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
@@ -380,6 +393,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         fun onToggleAudioMessagePlay(audioMessageUri: Uri)
         fun onRepliedMessageClicked(messageId: MessageId)
         fun onErrorFetchingVideoThumbnail(error: Throwable)
+        fun onJoinLivekitRoomClicked(url: String, roomId: String, accessToken: String)
     }
 
     private enum class ViewType {
@@ -403,5 +417,6 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
         SYSTEM_VIDEO_MESSAGE_VIEW_TYPE,
         SYSTEM_TEXT_MESSAGE_VIEW_TYPE,
         CONVERSATION_ACTIVITY_TEXT_MESSAGE_VIEW_TYPE,
+        PROVIDER_LIVEKIT_OPEN_ROOM_INTERACTIVE_MESSAGE_VIEW_TYPE,
     }
 }

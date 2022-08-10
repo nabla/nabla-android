@@ -17,6 +17,7 @@ import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
+import com.nabla.sdk.messaging.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -30,6 +31,7 @@ import com.nabla.sdk.messaging.graphql.fragment.ConversationFragment
 import com.nabla.sdk.messaging.graphql.fragment.DocumentFileUploadFragment
 import com.nabla.sdk.messaging.graphql.fragment.EphemeralUrlFragment
 import com.nabla.sdk.messaging.graphql.fragment.ImageFileUploadFragment
+import com.nabla.sdk.messaging.graphql.fragment.LivekitRoomMessageContentFragment
 import com.nabla.sdk.messaging.graphql.fragment.MaybeProviderFragment
 import com.nabla.sdk.messaging.graphql.fragment.MessageSummaryFragment
 import com.nabla.sdk.messaging.graphql.fragment.ProviderFragment
@@ -147,6 +149,17 @@ internal class GqlMapper(
                     fileUpload = mapToFileUploadAudio(it.audioFileUpload.audioFileUploadFragment),
                 )
             )
+        }
+        summaryFragment.messageContent.messageContentFragment.onLivekitRoomMessageContent?.let {
+            val livekitRoomId = it.livekitRoomMessageContentFragment.livekitRoom.uuid
+            val livekitRoomStatus = mapToLivekitRoomStatus(it.livekitRoomMessageContentFragment.livekitRoom.status)
+            livekitRoomStatus?.let {
+                return Message.LivekitRoom(
+                    baseMessage = baseMessage,
+                    livekitRoomId = livekitRoomId,
+                    livekitRoomStatus = livekitRoomStatus
+                )
+            }
         }
         summaryFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {
             return Message.Deleted(baseMessage = baseMessage)
@@ -282,5 +295,19 @@ internal class GqlMapper(
                 mimeType = mapToMimeType(audioFileUploadFragment.mimeType)
             )
         )
+    }
+
+    private fun mapToLivekitRoomStatus(status: LivekitRoomMessageContentFragment.Status): LivekitRoomStatus? {
+        status.onLivekitRoomClosedStatus?.let {
+            return LivekitRoomStatus.Closed
+        }
+        status.onLivekitRoomOpenStatus?.let {
+            return LivekitRoomStatus.Open(
+                url = it.url,
+                token = it.token
+            )
+        }
+        logger.error("Unknown livekit room status mapping for $status")
+        return null
     }
 }

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    tools:theme="@style/Nabla.ThemeOverlay.VideoCall">
+
+<io.livekit.android.renderer.TextureViewRenderer
+        android:id="@+id/fullScreenVideoRenderer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/videoCallBackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/nabla_circle_ripple_background"
+        android:contentDescription="@string/nabla_video_call_back_button_content_description"
+        android:padding="12dp"
+        android:src="@drawable/nabla_ic_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/connectionInfoBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/nabla_video_call_text_banner_background"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="@string/nabla_video_call_banner_reconnecting"
+        android:textAppearance="?textAppearanceTitleSmall"
+        android:textColor="@color/nabla_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/videoCallFloatingRendererContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toTopOf="@id/videoCallControlHangUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.22"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <io.livekit.android.renderer.TextureViewRenderer
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/floatingVideoRenderer"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                tools:layout_width="100dp"
+                />
+
+            <ImageView
+                android:id="@+id/floatingMicIconOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/nabla_video_call_content_description_mic_off"
+                android:src="@drawable/nabla_video_call_ic_mic_floating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineControlsBottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="22dp"
+        />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/videoCallControls"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="videoCallControlMic,videoCallControlCamera,videoCallControlFlip,videoCallControlHangUp"
+        />
+
+    <ImageView
+        android:id="@+id/videoCallControlMic"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/nabla_video_call_control_background"
+        android:contentDescription="@string/nabla_video_call_controls_content_description_mic_on"
+        android:padding="16dp"
+        android:src="?nablaVideoCall_micIcon"
+        app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
+        app:layout_constraintEnd_toStartOf="@id/videoCallControlCamera"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/nabla_video_call_control_content_color"
+        />
+
+    <ImageView
+        android:id="@+id/videoCallControlCamera"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/nabla_video_call_control_background"
+        android:contentDescription="@string/nabla_video_call_controls_content_description_camera_on"
+        android:padding="16dp"
+        android:src="?nablaVideoCall_cameraIcon"
+        app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
+        app:layout_constraintEnd_toStartOf="@id/videoCallControlFlip"
+        app:layout_constraintStart_toEndOf="@id/videoCallControlMic"
+        app:tint="@color/nabla_video_call_control_content_color"
+        />
+
+    <ImageView
+        android:id="@+id/videoCallControlFlip"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/nabla_video_call_control_background"
+        android:contentDescription="@string/nabla_video_call_controls_content_description_flip_camera"
+        android:padding="16dp"
+        android:src="?nablaVideoCall_flipIcon"
+        app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
+        app:layout_constraintEnd_toStartOf="@id/videoCallControlHangUp"
+        app:layout_constraintStart_toEndOf="@id/videoCallControlCamera"
+        app:tint="@color/nabla_video_call_control_content_color"
+        />
+
+    <ImageView
+        android:id="@+id/videoCallControlHangUp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/nabla_video_call_control_background"
+        android:backgroundTint="@color/nabla_red"
+        android:contentDescription="@string/nabla_video_call_controls_content_description_hang_up"
+        android:padding="16dp"
+        android:src="?nablaVideoCall_hangupIcon"
+        app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/videoCallControlFlip"
+        app:tint="@color/nabla_white"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

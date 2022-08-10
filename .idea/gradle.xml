@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/messaging-core-test-fixtures" />
             <option value="$PROJECT_DIR$/messaging-ui" />
             <option value="$PROJECT_DIR$/messaging-ui-tests" />
+            <option value="$PROJECT_DIR$/video-call" />
           </set>
         </option>
       </GradleProjectSettings>

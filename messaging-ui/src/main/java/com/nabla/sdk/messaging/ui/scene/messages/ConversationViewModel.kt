@@ -5,16 +5,18 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toJvmUri
+import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.kotlin.combine
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
@@ -24,6 +26,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.showComposerFromSavedStateHandle
@@ -37,6 +40,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
@@ -51,11 +55,12 @@ import java.net.URI
 import kotlin.time.Duration.Companion.seconds
 
 internal class ConversationViewModel(
-    private val messagingClient: NablaMessagingClient,
+    private val nablaClient: NablaClient,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (@CheckResult suspend () -> Result<Unit>)? = null
 
+    private val messagingClient = nablaClient.messagingClient
     private val retryAfterErrorTriggerFlow = MutableSharedFlow<Unit>()
     private val selectedMessageIdFlow = MutableStateFlow<MessageId?>(null)
     private val currentlyReplyingToMutableFlow = MutableStateFlow<TimelineItem.Message?>(null)
@@ -136,12 +141,16 @@ internal class ConversationViewModel(
         conversationDataFlow: Flow<Conversation>,
         conversationItemsFlow: Flow<WatchPaginatedResponse<ConversationItems>>,
     ): StateFlow<State> {
+
+        val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: emptyFlow()
+
         return combine(
             conversationDataFlow,
             conversationItemsFlow,
             selectedMessageIdFlow,
             voiceMessagesProgressMutableFlow,
             nowPlayingVoiceMessageMutableFlow,
+            currentCallFlow,
             StateMapper()::mapToState,
         )
             .retryWhen { throwable, _ ->
@@ -491,6 +500,7 @@ internal class ConversationViewModel(
             }
             is TimelineItem.Message.Audio -> Unit
             is TimelineItem.Message.Deleted -> Unit // Nothing to do when taping on deleted message
+            is TimelineItem.Message.LivekitRoom -> Unit
         }
     }
 
@@ -667,6 +677,7 @@ internal class ConversationViewModel(
             selectedMessageId: MessageId?,
             audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
             nowPlayingAudio: Uri?,
+            currentVideoCall: VideoCall?,
         ): State {
             return State.ConversationLoaded(
                 conversation = conversation,
@@ -677,6 +688,7 @@ internal class ConversationViewModel(
                     selectedMessageId = selectedMessageId,
                     audioPlaybackProgressMap = audioPlaybackProgressMap,
                     nowPlayingAudioUri = nowPlayingAudio,
+                    currentVideoCall = currentVideoCall,
                 ),
             )
         }

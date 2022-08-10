@@ -1,0 +1,15 @@
+<resources>
+    <string name="nabla_video_call_activity_label">Appel vidéo</string>
+    <string name="nabla_video_call_controls_content_description_mic_on">Micro activé — Cliquer pour couper</string>
+    <string name="nabla_video_call_controls_content_description_mic_off">Micro désactivé — Cliquer pour activer</string>
+    <string name="nabla_video_call_controls_content_description_camera_on">Camera activée — Cliquer pour couper</string>
+    <string name="nabla_video_call_controls_content_description_camera_off">Camera désactivée — Cliquer pour activer</string>
+    <string name="nabla_video_call_controls_content_description_flip_camera">Changer de caméra</string>
+    <string name="nabla_video_call_controls_content_description_hang_up">Raccrocher</string>
+    <string name="nabla_video_call_back_button_content_description">Revenir</string>
+    <string name="nabla_video_call_banner_connecting">Connection…</string>
+    <string name="nabla_video_call_banner_reconnecting">Reconnexion…</string>
+    <string name="nabla_video_call_error_failed_to_join">Impossible de rejoindre l’appel, veuillez vérifier votre connexion et réessayer.</string>
+    <string name="nabla_video_call_content_description_mic_off">Micro désactivé</string>
+    <string name="nabla_video_call_ended">Appel terminé</string>
+</resources>

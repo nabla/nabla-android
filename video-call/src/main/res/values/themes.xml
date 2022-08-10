@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="nablaHasValidVideoCallOverlays" format="boolean" />
+    <attr name="nablaVideoCallThemeOverlay" format="reference" />
+    <style name="Nabla.ThemeOverlay.VideoCall" parent="">
+        <item name="nablaHasValidVideoCallOverlays">true</item>
+        <item name="nablaVideoCall_micIcon">@drawable/nabla_video_call_ic_mic</item>
+        <item name="nablaVideoCall_cameraIcon">@drawable/nabla_video_call_ic_camera</item>
+        <item name="nablaVideoCall_flipIcon">@drawable/nabla_video_call_ic_flip_camera</item>
+        <item name="nablaVideoCall_hangupIcon">@drawable/nabla_video_call_ic_hang_up</item>
+    </style>
+
+</resources>

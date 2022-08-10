@@ -4,6 +4,7 @@ import com.nabla.sdk.core.NablaClient.Companion.getInstance
 import com.nabla.sdk.core.NablaClient.Companion.initialize
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
+import com.nabla.sdk.core.domain.boundary.Module
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.ConfigurationException
 import com.nabla.sdk.core.domain.entity.NablaException
@@ -22,10 +23,16 @@ public class NablaClient private constructor(
     private val name: String,
     private val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
+    modulesFactory: List<Module.Factory<out Module>>,
 ) {
 
     private val coreContainerDelegate = lazy {
-        CoreContainer(name, configuration, networkConfiguration)
+        CoreContainer(
+            name,
+            configuration,
+            networkConfiguration,
+            modulesFactory,
+        )
     }
 
     @NablaInternal
@@ -52,7 +59,10 @@ public class NablaClient private constructor(
     }
 
     public companion object {
-        private const val DEFAULT_NAME = "default-nabla-sdk"
+        /**
+         * The name of the default instance.
+         */
+        public const val DEFAULT_NAME: String = "default-nabla-sdk"
 
         private val INSTANCES = mutableMapOf<String, NablaClient>()
 
@@ -84,25 +94,29 @@ public class NablaClient private constructor(
          * Mandatory call to create the default instance of [NablaClient].
          * A default instance will be created and exposed in [getInstance].
          *
+         * @param modules list of modules to be used by the SDK.
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
          * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
          */
         public fun initialize(
+            modules: List<Module.Factory<out Module>>,
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
         ): NablaClient {
-            return initialize(configuration, networkConfiguration, DEFAULT_NAME)
+            return initialize(modules, configuration, networkConfiguration, DEFAULT_NAME)
         }
 
         /**
          * Mandatory call to create a named instance of [NablaClient].
          * The instance will be created and exposed using the same name in [getInstance].
          *
+         * @param modules list of modules to be used by the SDK.
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
          * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
          * @param name name to create your own instance, if not specified a default name is used.
          */
         public fun initialize(
+            modules: List<Module.Factory<out Module>>,
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
             name: String,
@@ -110,7 +124,7 @@ public class NablaClient private constructor(
             synchronized(this) {
                 val alreadyInitializedInstance = INSTANCES[name]
                 return if (alreadyInitializedInstance == null) {
-                    NablaClient(name, configuration, networkConfiguration)
+                    NablaClient(name, configuration, networkConfiguration, modules)
                         .also { INSTANCES[name] = it }
                 } else {
                     alreadyInitializedInstance

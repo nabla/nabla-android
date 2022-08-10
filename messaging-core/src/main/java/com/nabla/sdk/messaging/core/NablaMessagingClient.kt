@@ -3,10 +3,10 @@ package com.nabla.sdk.messaging.core
 import androidx.annotation.CheckResult
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.NablaException
-import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.getInstance
-import com.nabla.sdk.messaging.core.NablaMessagingClient.Companion.initialize
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
@@ -27,12 +27,13 @@ import kotlinx.coroutines.flow.Flow
  * We recommend you reuse the same instance for all interactions,
  * check documentation of [initialize] and [getInstance].
  */
-public interface NablaMessagingClient {
+public interface NablaMessagingClient : MessagingModule {
 
     /**
      * Exposed for internal usage by Nabla Messaging UI.
      * You're not expected to use it.
      */
+    @NablaInternal
     public val logger: Logger
 
     /**
@@ -198,35 +199,4 @@ public interface NablaMessagingClient {
      */
     @CheckResult
     public suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit>
-
-    public companion object {
-        private var defaultSingletonInstance: NablaMessagingClient? = null
-
-        /**
-         * Lazy initializer for the singleton of [NablaMessagingClient].
-         * Relies on the singleton in [NablaClient.getInstance].
-         *
-         * Use for all interactions with the messaging SDK,
-         * unless you prefer maintaining your own instances.
-         * @see initialize
-         */
-        public fun getInstance(): NablaMessagingClient {
-            synchronized(this) {
-                return defaultSingletonInstance ?: run {
-                    val instance = initialize(NablaClient.getInstance())
-                    defaultSingletonInstance = instance
-                    instance
-                }
-            }
-        }
-
-        /**
-         * Creator of a custom instance of [NablaMessagingClient].
-         *
-         * Unlike the singleton provided in [getInstance], you have the responsibility
-         * of maintaining a reference to the returned instance.
-         */
-        public fun initialize(nablaClient: NablaClient): NablaMessagingClient =
-            NablaMessagingClientImpl(nablaClient.coreContainer)
-    }
 }

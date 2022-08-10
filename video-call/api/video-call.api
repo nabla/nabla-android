@@ -1,0 +1,46 @@
+public final class com/nabla/sdk/videocall/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public abstract interface class com/nabla/sdk/videocall/NablaVideoCallModule : com/nabla/sdk/core/domain/boundary/VideoCallModule {
+	public static final field Factory Lcom/nabla/sdk/videocall/NablaVideoCallModule$Factory;
+}
+
+public final class com/nabla/sdk/videocall/NablaVideoCallModule$Factory {
+	public final fun invoke ()Lcom/nabla/sdk/core/domain/boundary/VideoCallModule$Factory;
+}
+
+public final class com/nabla/sdk/videocall/NablaVideoCallModuleKt {
+	public static final fun getVideoCallModule (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/core/domain/boundary/VideoCallModule;
+}
+
+public final class com/nabla/sdk/videocall/VideoCallActivity : androidx/appcompat/app/AppCompatActivity {
+	public fun <init> ()V
+	public fun onBackPressed ()V
+	public fun onPictureInPictureModeChanged (ZLandroid/content/res/Configuration;)V
+	public fun onPictureInPictureRequested ()Z
+}
+
+public final class com/nabla/sdk/videocall/databinding/NablaActivityVideoCallBinding : androidx/viewbinding/ViewBinding {
+	public final field connectionInfoBanner Landroid/widget/TextView;
+	public final field floatingMicIconOff Landroid/widget/ImageView;
+	public final field floatingVideoRenderer Lio/livekit/android/renderer/TextureViewRenderer;
+	public final field fullScreenVideoRenderer Lio/livekit/android/renderer/TextureViewRenderer;
+	public final field guidelineControlsBottom Landroidx/constraintlayout/widget/Guideline;
+	public final field videoCallBackButton Landroid/widget/ImageView;
+	public final field videoCallControlCamera Landroid/widget/ImageView;
+	public final field videoCallControlFlip Landroid/widget/ImageView;
+	public final field videoCallControlHangUp Landroid/widget/ImageView;
+	public final field videoCallControlMic Landroid/widget/ImageView;
+	public final field videoCallControls Landroidx/constraintlayout/widget/Group;
+	public final field videoCallFloatingRendererContainer Landroidx/cardview/widget/CardView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/videocall/databinding/NablaActivityVideoCallBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/videocall/databinding/NablaActivityVideoCallBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/videocall/databinding/NablaActivityVideoCallBinding;
+}
+

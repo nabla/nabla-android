@@ -2,17 +2,15 @@ package com.nabla.sdk.core.ui.helpers
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.whenStateAtLeast
-import kotlinx.coroutines.CoroutineScope
+import com.nabla.sdk.core.annotation.NablaInternal
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 /**
  * A [Lifecycle] aware Flow that buffers values until at least one collector is subscribed with a
- * lifecycle that is at least [Lifecycle.State.STARTED]
+ * lifecycle that is at least [Lifecycle.State.STARTED] by default.
  *
  * Sample usage:
  *
@@ -36,18 +34,20 @@ import kotlinx.coroutines.launch
  * NB: If multiple subscribers are collecting this flow at the same time, only the first one will get
  * the events buffered while there was nobody subscribed
  */
-internal interface LiveFlow<T> {
-    suspend fun collect(liveCollector: BaseLiveFlowCollector<T>)
+@NablaInternal
+public interface LiveFlow<T> {
+    public suspend fun collect(liveCollector: BaseLiveFlowCollector<T>)
 
-    abstract class BaseLiveFlowCollector<T> : FlowCollector<T>
+    public abstract class BaseLiveFlowCollector<T> : FlowCollector<T>
 
-    class LiveFlowCollector<T>(
+    public class LiveFlowCollector<T>(
         private val lifecycle: Lifecycle,
+        private val minState: Lifecycle.State = Lifecycle.State.STARTED,
         private val action: suspend (T) -> Unit,
     ) : BaseLiveFlowCollector<T>() {
 
         override suspend fun emit(value: T) {
-            lifecycle.whenStateAtLeast(Lifecycle.State.STARTED) {
+            lifecycle.whenStateAtLeast(minState) {
                 action(value)
             }
         }
@@ -57,7 +57,8 @@ internal interface LiveFlow<T> {
 /**
  * Mutable implementation of [LiveFlow]
  */
-internal class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
+@NablaInternal
+public class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
     private val wrapped = Channel<T>(Channel.BUFFERED)
 
     @OptIn(InternalCoroutinesApi::class)
@@ -68,11 +69,4 @@ internal class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
     override suspend fun emit(value: T) {
         wrapped.send(value)
     }
-}
-
-internal fun <T> Flow<T>.liveFlowIn(scope: CoroutineScope): LiveFlow<T> {
-    val upstream = this
-    val downstream = MutableLiveFlow<T>()
-    scope.launch { upstream.collect { downstream.emit(it) } }
-    return downstream
 }

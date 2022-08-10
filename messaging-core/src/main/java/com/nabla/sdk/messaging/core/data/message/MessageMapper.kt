@@ -95,6 +95,7 @@ internal class MessageMapper constructor(
                     textInput = Optional.presentIfNotNull(SendTextMessageInput(text = message.text)),
                 )
                 is Message.Deleted -> throw InvalidMessageException("Can't send a deleted message")
+                is Message.LivekitRoom -> throw InvalidMessageException("Can't send a livekit room message")
             }
         )
     }

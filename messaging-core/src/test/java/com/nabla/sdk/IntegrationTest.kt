@@ -20,7 +20,9 @@ import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.core.NablaMessagingModule
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
+import com.nabla.sdk.messaging.core.data.test.StableRandomIdGenerator
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -33,6 +35,7 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation.Companion.TYPING_TIME_WINDOW
 import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
 import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -178,9 +181,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000020")
-            },
+            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000000", tapeMode),
         )
 
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
@@ -254,9 +255,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000021")
-            },
+            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000001", tapeMode),
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -344,9 +343,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000022")
-            },
+            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000002", tapeMode),
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -440,9 +437,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = object : UuidGenerator {
-                override fun generate(): Uuid = Uuid.fromString("00000000-0000-0000-0000-000000000023")
-            },
+            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000003", tapeMode),
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -807,10 +802,9 @@ internal class IntegrationTest {
             ),
             networkConfiguration = NetworkConfiguration(
                 baseUrl = baseUrl,
-            )
+            ),
+            modules = listOf(NablaMessagingModule())
         )
-
-        val nablaMessagingClient = NablaMessagingClient.initialize(nablaClient)
 
         if (authenticate) {
             nablaClient.authenticate("dummy-user") {
@@ -823,7 +817,7 @@ internal class IntegrationTest {
             }
         }
 
-        return ComponentUnderTest(nablaMessagingClient, mockSubscriptionNetworkTransport)
+        return ComponentUnderTest(nablaClient.messagingClient, mockSubscriptionNetworkTransport)
     }
 
     companion object {

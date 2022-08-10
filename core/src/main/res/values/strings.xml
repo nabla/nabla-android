@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_conversation_camera_picture_permission_rational_title">Authorisation to access camera</string>
+    <string name="nabla_conversation_camera_picture_permission_rational_description">To take a photo, we need authorisation to access your camera</string>
+    <string name="nabla_conversation_camera_video_permission_rational_title">Authorisation to use camera</string>
+    <string name="nabla_conversation_camera_video_permission_rational_description">To record a video, we need your authorisation to use your camera and microphone.</string>
+    <string name="nabla_permission_rational_default_accept">Accept</string>
+    <string name="nabla_permission_rational_default_decline">Decline</string>
+</resources>

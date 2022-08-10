@@ -95,6 +95,7 @@ dependencies {
     api libs.kotlin.datetime
     api libs.uuid
     api libs.okhttp
+    api libs.androidx.appcompat
 
     implementation libs.okhttp.logging
     implementation libs.retrofit
@@ -104,7 +105,11 @@ dependencies {
     implementation libs.apollo.cache
     implementation libs.apollo.cache.sqlite
     implementation libs.androidx.startup
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.google.material
     implementation libs.kotlin.serialization.json
+    implementation libs.kotlin.coroutines.core
 
     compileOnly libs.androidx.annotation
 

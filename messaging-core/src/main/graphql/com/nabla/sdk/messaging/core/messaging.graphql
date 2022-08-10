@@ -208,6 +208,21 @@ fragment MessageFragment on Message {
     }
 }
 
+fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent {
+    livekitRoom {
+        uuid
+        status {
+            ... on LivekitRoomOpenStatus {
+                url
+                token
+            }
+            ... on LivekitRoomClosedStatus {
+                empty: _
+            }
+        }
+    }
+}
+
 fragment MessageSummaryFragment on Message {
     id
     author {
@@ -249,6 +264,9 @@ fragment MessageContentFragment on MessageContent {
     }
     ... on AudioMessageContent {
         ...AudioMessageContentFragment
+    }
+    ... on LivekitRoomMessageContent {
+        ...LivekitRoomMessageContentFragment
     }
     ... on DeletedMessageContent {
         empty: _

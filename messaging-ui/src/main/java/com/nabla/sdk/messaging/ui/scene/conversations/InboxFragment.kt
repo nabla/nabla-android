@@ -9,20 +9,24 @@ import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getThemeDrawable
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
+import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationListBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationActivity
+import com.nabla.sdk.messaging.ui.scene.requireSdkName
+import com.nabla.sdk.messaging.ui.scene.setSdkName
 
 public open class InboxFragment : Fragment() {
-    public open val messagingClient: NablaMessagingClient
-        get() = NablaMessagingClient.getInstance()
+    private val messagingClient: NablaMessagingClient
+        get() = NablaClient.getInstance(requireSdkName()).messagingClient
 
     private var binding: NablaFragmentConversationListBinding? = null
 
@@ -113,7 +117,15 @@ public open class InboxFragment : Fragment() {
         binding = null
     }
 
-    private companion object {
+    public companion object {
         private const val CTA_ELEVATION = 8f
+
+        public fun newInstance(): InboxFragment {
+            return newInstance(NablaClient.DEFAULT_NAME)
+        }
+
+        public fun newInstance(sdkName: String): InboxFragment {
+            return InboxFragment().apply { setSdkName(sdkName) }
+        }
     }
 }

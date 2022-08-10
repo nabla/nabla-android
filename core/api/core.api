@@ -10,6 +10,8 @@ public final class com/nabla/sdk/core/Configuration {
 	public fun <init> ()V
 	public fun <init> (Landroid/content/Context;Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/Logger;)V
 	public synthetic fun <init> (Landroid/content/Context;Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/Logger;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getContext ()Landroid/content/Context;
+	public final fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
 }
 
 public final class com/nabla/sdk/core/Header {
@@ -31,7 +33,8 @@ public abstract interface class com/nabla/sdk/core/HeaderProvider {
 
 public final class com/nabla/sdk/core/NablaClient {
 	public static final field Companion Lcom/nabla/sdk/core/NablaClient$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static final field DEFAULT_NAME Ljava/lang/String;
+	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun authenticate (Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
 	public final fun getCoreContainer ()Lcom/nabla/sdk/core/injection/CoreContainer;
 }
@@ -39,10 +42,10 @@ public final class com/nabla/sdk/core/NablaClient {
 public final class com/nabla/sdk/core/NablaClient$Companion {
 	public final fun getInstance ()Lcom/nabla/sdk/core/NablaClient;
 	public final fun getInstance (Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
-	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;)Lcom/nabla/sdk/core/NablaClient;
-	public final fun initialize (Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
-	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
-	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
+	public final fun initialize (Ljava/util/List;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;)Lcom/nabla/sdk/core/NablaClient;
+	public final fun initialize (Ljava/util/List;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;)Lcom/nabla/sdk/core/NablaClient;
+	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Ljava/util/List;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
+	public static synthetic fun initialize$default (Lcom/nabla/sdk/core/NablaClient$Companion;Ljava/util/List;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/NablaClient;
 }
 
 public final class com/nabla/sdk/core/NetworkConfiguration {
@@ -92,6 +95,11 @@ public final class com/nabla/sdk/core/data/apollo/SubscriptionExtKt {
 
 public final class com/nabla/sdk/core/data/apollo/adapter/UuidAdapterKt {
 	public static final fun getUuidAdapter ()Lcom/apollographql/apollo3/api/Adapter;
+}
+
+public final class com/nabla/sdk/core/data/auth/UserHeaderInterceptor : okhttp3/Interceptor {
+	public fun <init> (Lcom/nabla/sdk/core/HeaderProvider;)V
+	public fun intercept (Lokhttp3/Interceptor$Chain;)Lokhttp3/Response;
 }
 
 public final class com/nabla/sdk/core/data/exception/CoroutineHelpersKt {
@@ -144,6 +152,19 @@ public final class com/nabla/sdk/core/domain/boundary/Logger$DefaultImpls {
 	public static synthetic fun warn$default (Lcom/nabla/sdk/core/domain/boundary/Logger;Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;ILjava/lang/Object;)V
 }
 
+public abstract interface class com/nabla/sdk/core/domain/boundary/MessagingModule : com/nabla/sdk/core/domain/boundary/Module {
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/MessagingModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/Module {
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/Module$Factory {
+	public abstract fun create (Lcom/nabla/sdk/core/injection/CoreContainer;)Lcom/nabla/sdk/core/domain/boundary/Module;
+}
+
 public abstract interface class com/nabla/sdk/core/domain/boundary/SessionClient {
 	public abstract fun clearSession ()V
 	public abstract fun getFreshAccessToken (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -165,6 +186,25 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/StringResolve
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/UuidGenerator {
 	public abstract fun generate ()Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/core/domain/boundary/VideoCall {
+	public fun <init> (Ljava/util/UUID;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun copy (Ljava/util/UUID;)Lcom/nabla/sdk/core/domain/boundary/VideoCall;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/boundary/VideoCall;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/boundary/VideoCall;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule : com/nabla/sdk/core/domain/boundary/Module {
+	public abstract fun openVideoCall (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun watchCurrentVideoCall ()Lkotlinx/coroutines/flow/Flow;
+}
+
+public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
 }
 
 public final class com/nabla/sdk/core/domain/entity/Attachment {
@@ -248,6 +288,10 @@ public final class com/nabla/sdk/core/domain/entity/ConfigurationException$Missi
 
 public final class com/nabla/sdk/core/domain/entity/ConfigurationException$MissingInitialize : com/nabla/sdk/core/domain/entity/ConfigurationException {
 	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/ConfigurationException$MissingInitialize;
+}
+
+public final class com/nabla/sdk/core/domain/entity/ConfigurationException$ModuleNotInitialized : com/nabla/sdk/core/domain/entity/ConfigurationException {
+	public fun <init> (Ljava/lang/String;)V
 }
 
 public final class com/nabla/sdk/core/domain/entity/DeletedProvider : com/nabla/sdk/core/domain/entity/MaybeProvider {
@@ -588,15 +632,19 @@ public final class com/nabla/sdk/core/domain/entity/Uri {
 
 public final class com/nabla/sdk/core/injection/CoreContainer {
 	public static final field Companion Lcom/nabla/sdk/core/injection/CoreContainer$Companion;
-	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;)V
 	public final fun getApolloClient ()Lcom/apollographql/apollo3/ApolloClient;
 	public final fun getClock ()Lkotlinx/datetime/Clock;
+	public final fun getConfiguration ()Lcom/nabla/sdk/core/Configuration;
 	public final fun getExceptionMapper ()Lcom/nabla/sdk/core/data/exception/NablaExceptionMapper;
 	public final fun getFileUploadRepository ()Lcom/nabla/sdk/core/domain/boundary/FileUploadRepository;
 	public final fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
+	public final fun getMessagingModule ()Lcom/nabla/sdk/core/domain/boundary/MessagingModule;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getOkHttpClient ()Lokhttp3/OkHttpClient;
 	public final fun getSessionClient ()Lcom/nabla/sdk/core/domain/boundary/SessionClient;
 	public final fun getStringResolver ()Lcom/nabla/sdk/core/domain/boundary/StringResolver;
 	public final fun getUuidGenerator ()Lcom/nabla/sdk/core/domain/boundary/UuidGenerator;
+	public final fun getVideoCallModule ()Lcom/nabla/sdk/core/domain/boundary/VideoCallModule;
 }
 
 public final class com/nabla/sdk/core/injection/CoreContainer$Companion {
@@ -611,12 +659,88 @@ public final class com/nabla/sdk/core/injection/CoreContainer$Companion {
 }
 
 public final class com/nabla/sdk/core/kotlin/KotlinExtKt {
+	public static final fun combine (Lkotlinx/coroutines/flow/Flow;Lkotlinx/coroutines/flow/Flow;Lkotlinx/coroutines/flow/Flow;Lkotlinx/coroutines/flow/Flow;Lkotlinx/coroutines/flow/Flow;Lkotlinx/coroutines/flow/Flow;Lkotlin/jvm/functions/Function7;)Lkotlinx/coroutines/flow/Flow;
 	public static final fun runCatchingCancellable (Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static final fun sharedSingleIn (Lkotlinx/coroutines/CoroutineScope;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/kotlin/SharedSingle;
 }
 
 public abstract interface class com/nabla/sdk/core/kotlin/SharedSingle {
 	public abstract fun await (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/CoroutineScopeExtensionKt {
+	public static final fun launchCollect (Landroidx/lifecycle/LifecycleOwner;Lcom/nabla/sdk/core/ui/helpers/LiveFlow;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/CoroutineStart;Landroidx/lifecycle/Lifecycle$State;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/Job;
+	public static final fun launchCollect (Lkotlinx/coroutines/CoroutineScope;Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/CoroutineStart;Lkotlinx/coroutines/flow/FlowCollector;)Lkotlinx/coroutines/Job;
+	public static synthetic fun launchCollect$default (Landroidx/lifecycle/LifecycleOwner;Lcom/nabla/sdk/core/ui/helpers/LiveFlow;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/CoroutineStart;Landroidx/lifecycle/Lifecycle$State;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+	public static synthetic fun launchCollect$default (Lkotlinx/coroutines/CoroutineScope;Lkotlinx/coroutines/flow/Flow;Lkotlin/coroutines/CoroutineContext;Lkotlinx/coroutines/CoroutineStart;Lkotlinx/coroutines/flow/FlowCollector;ILjava/lang/Object;)Lkotlinx/coroutines/Job;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/FlowCollectorExtensionKt {
+	public static final fun emitIn (Lkotlinx/coroutines/flow/FlowCollector;Lkotlinx/coroutines/CoroutineScope;Ljava/lang/Object;Lkotlin/coroutines/CoroutineContext;)V
+	public static synthetic fun emitIn$default (Lkotlinx/coroutines/flow/FlowCollector;Lkotlinx/coroutines/CoroutineScope;Ljava/lang/Object;Lkotlin/coroutines/CoroutineContext;ILjava/lang/Object;)V
+}
+
+public abstract interface class com/nabla/sdk/core/ui/helpers/LiveFlow {
+	public abstract fun collect (Lcom/nabla/sdk/core/ui/helpers/LiveFlow$BaseLiveFlowCollector;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class com/nabla/sdk/core/ui/helpers/LiveFlow$BaseLiveFlowCollector : kotlinx/coroutines/flow/FlowCollector {
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/core/ui/helpers/LiveFlow$LiveFlowCollector : com/nabla/sdk/core/ui/helpers/LiveFlow$BaseLiveFlowCollector {
+	public fun <init> (Landroidx/lifecycle/Lifecycle;Landroidx/lifecycle/Lifecycle$State;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun <init> (Landroidx/lifecycle/Lifecycle;Landroidx/lifecycle/Lifecycle$State;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun emit (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/MutableLiveFlow : com/nabla/sdk/core/ui/helpers/LiveFlow, kotlinx/coroutines/flow/FlowCollector {
+	public fun <init> ()V
+	public fun collect (Lcom/nabla/sdk/core/ui/helpers/LiveFlow$BaseLiveFlowCollector;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun emit (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/PermissionExtensionKt {
+	public static final fun registerForPermissionResult (Landroidx/fragment/app/Fragment;Ljava/lang/String;Lcom/nabla/sdk/core/ui/helpers/PermissionRational;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/ui/helpers/PermissionRequestLauncher;
+	public static final fun registerForPermissionsResult (Landroidx/appcompat/app/AppCompatActivity;[Ljava/lang/String;Lcom/nabla/sdk/core/ui/helpers/PermissionRational;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/ui/helpers/PermissionRequestLauncher;
+	public static final fun registerForPermissionsResult (Landroidx/fragment/app/Fragment;[Ljava/lang/String;Lcom/nabla/sdk/core/ui/helpers/PermissionRational;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/ui/helpers/PermissionRequestLauncher;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/PermissionRational {
+	public fun <init> (IIII)V
+	public synthetic fun <init> (IIIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()I
+	public final fun copy (IIII)Lcom/nabla/sdk/core/ui/helpers/PermissionRational;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/PermissionRational;IIIIILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/PermissionRational;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccept ()I
+	public final fun getDecline ()I
+	public final fun getDescription ()I
+	public final fun getTitle ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/nabla/sdk/core/ui/helpers/PermissionRequestLauncher {
+	public abstract fun launch ()V
+}
+
+public final class com/nabla/sdk/core/ui/helpers/StyleOverlay {
+	public fun <init> (Landroid/util/AttributeSet;[I)V
+	public final fun getAttrs ()Landroid/util/AttributeSet;
+	public final fun getThemeOverlayStyle ()[I
+}
+
+public final class com/nabla/sdk/core/ui/helpers/ThemeOverlayExtensionKt {
+	public static final fun withNablaThemeOverlay (Landroid/content/Context;IILcom/nabla/sdk/core/ui/helpers/StyleOverlay;I)Landroid/content/Context;
+	public static synthetic fun withNablaThemeOverlay$default (Landroid/content/Context;IILcom/nabla/sdk/core/ui/helpers/StyleOverlay;IILjava/lang/Object;)Landroid/content/Context;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/ViewModelExtensionKt {
+	public static final fun factoryFor (Lkotlin/jvm/functions/Function0;)Landroidx/lifecycle/ViewModelProvider$Factory;
 }
 
 public final class com/nabla/sdk/graphql/type/DateTime {

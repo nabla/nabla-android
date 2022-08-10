@@ -5,10 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityConversationBinding
+import com.nabla.sdk.messaging.ui.scene.requireSdkName
+import com.nabla.sdk.messaging.ui.scene.setSdkName
 
 public class ConversationActivity : AppCompatActivity() {
 
@@ -28,7 +31,7 @@ public class ConversationActivity : AppCompatActivity() {
             supportFragmentManager.commit {
                 replace(
                     R.id.fragmentContainer,
-                    ConversationFragment.newInstance(conversationId) {
+                    ConversationFragment.newInstance(conversationId, requireSdkName()) {
                         setShowComposer(showComposer)
                     }
                 )
@@ -46,6 +49,20 @@ public class ConversationActivity : AppCompatActivity() {
                 .apply {
                     putExtra(CONVERSATION_ID_EXTRA, conversationId)
                     putExtra(SHOW_COMPOSER_EXTRA, showComposer)
+                    setSdkName(NablaClient.DEFAULT_NAME)
+                }
+
+        public fun newIntent(
+            context: Context,
+            conversationId: ConversationId,
+            sdkName: String,
+            showComposer: Boolean = true,
+        ): Intent =
+            Intent(context, ConversationActivity::class.java)
+                .apply {
+                    putExtra(CONVERSATION_ID_EXTRA, conversationId)
+                    putExtra(SHOW_COMPOSER_EXTRA, showComposer)
+                    setSdkName(sdkName)
                 }
 
         private const val CONVERSATION_ID_EXTRA = "conversationId"

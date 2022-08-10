@@ -234,6 +234,16 @@ public sealed class Message : ConversationItem {
         }
     }
 
+    public data class LivekitRoom(
+        override val baseMessage: BaseMessage,
+        val livekitRoomId: Uuid,
+        val livekitRoomStatus: LivekitRoomStatus,
+    ) : Message() {
+        override fun modify(status: SendStatus): Message {
+            return copy(baseMessage = baseMessage.copy(sendStatus = status))
+        }
+    }
+
     public data class Deleted @VisibleForTesting public constructor(override val baseMessage: BaseMessage) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))

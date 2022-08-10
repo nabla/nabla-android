@@ -4,12 +4,14 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
+import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.messaging.core.NablaMessagingClient
+import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel
 
 public class ConversationListViewModelFactory(
     owner: SavedStateRegistryOwner,
-    private val messagingClient: NablaMessagingClient = NablaMessagingClient.getInstance(),
+    private val messagingClient: NablaMessagingClient = NablaClient.getInstance().messagingClient,
 ) : AbstractSavedStateViewModelFactory(owner, null) {
     override fun <T : ViewModel> create(
         key: String,

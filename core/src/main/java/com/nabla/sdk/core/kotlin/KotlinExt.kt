@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -61,5 +62,29 @@ internal fun <T> Flow<T>.shareInWithMaterializedErrors(
         scope, started, replay
     ).map {
         it.getOrThrow()
+    }
+}
+
+@NablaInternal
+public fun <T1, T2, T3, T4, T5, T6, R> combine(
+    flow: Flow<T1>,
+    flow2: Flow<T2>,
+    flow3: Flow<T3>,
+    flow4: Flow<T4>,
+    flow5: Flow<T5>,
+    flow6: Flow<T6>,
+    transform: suspend (T1, T2, T3, T4, T5, T6) -> R
+): Flow<R> {
+    val tripleFlow1 = combine(flow, flow2, flow3, ::Triple)
+    val tripleFlow2 = combine(flow4, flow5, flow6, ::Triple)
+    return combine(tripleFlow1, tripleFlow2) { triple1, triple2 ->
+        transform(
+            triple1.first,
+            triple1.second,
+            triple1.third,
+            triple2.first,
+            triple2.second,
+            triple2.third
+        )
     }
 }

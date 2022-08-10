@@ -1,8 +1,10 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
+import com.nabla.sdk.messaging.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -13,7 +15,8 @@ internal fun Message.toTimelineItem(
     showStatus: Boolean,
     audioPlaybackProgressMap: Map<Uri, PlaybackProgress> = emptyMap(),
     nowPlayingAudioUri: Uri? = null,
-): TimelineItem.Message {
+    currentVideoCall: VideoCall?,
+): TimelineItem {
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
     val actions: Set<MessageAction> = when {
         this is Message.Deleted -> emptySet()
@@ -35,6 +38,7 @@ internal fun Message.toTimelineItem(
         content = toMessageContent(
             nowPlayingAudio = nowPlayingAudioUri,
             audioPlaybackProgressMap = audioPlaybackProgressMap,
+            currentVideoCall = currentVideoCall,
         ),
     )
 }
@@ -42,6 +46,7 @@ internal fun Message.toTimelineItem(
 private fun Message.toMessageContent(
     nowPlayingAudio: Uri?,
     audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
+    currentVideoCall: VideoCall?,
 ): TimelineItem.Message.Content = when (this) {
     is Message.Deleted -> TimelineItem.Message.Deleted
     is Message.Media.Document -> TimelineItem.Message.File(
@@ -65,6 +70,20 @@ private fun Message.toMessageContent(
         isPlaying = nowPlayingAudio == stableUri,
         progress = audioPlaybackProgressMap[stableUri] ?: PlaybackProgress(currentPositionMillis = 0, durationMs),
     )
+    is Message.LivekitRoom -> {
+        val status = when (val livekitRoomStatus = livekitRoomStatus) {
+            LivekitRoomStatus.Closed -> TimelineItem.Message.LivekitRoom.Status.LivekitClosedRoom
+            is LivekitRoomStatus.Open -> TimelineItem.Message.LivekitRoom.Status.LivekitOpenedRoom(
+                url = livekitRoomStatus.url,
+                token = livekitRoomStatus.token,
+                isCurrentVideoCall = livekitRoomId == currentVideoCall?.id
+            )
+        }
+        TimelineItem.Message.LivekitRoom(
+            roomId = livekitRoomId,
+            roomStatus = status
+        )
+    }
 }
 
 private fun Message.toRepliedMessage() = RepliedMessage(
@@ -76,6 +95,7 @@ private fun Message.toRepliedMessage() = RepliedMessage(
         is Message.Media.Image -> RepliedMessage.Content.Image(stableUri)
         is Message.Media.Video -> RepliedMessage.Content.Video(stableUri)
         is Message.Text -> RepliedMessage.Content.Text(text)
+        is Message.LivekitRoom -> RepliedMessage.Content.LivekitRoom
     },
     author = author,
 )
@@ -89,6 +109,7 @@ internal fun TimelineItem.Message.toRepliedMessage() = RepliedMessage(
         is TimelineItem.Message.Image -> RepliedMessage.Content.Image(content.uri)
         is TimelineItem.Message.Video -> RepliedMessage.Content.Video(content.uri)
         is TimelineItem.Message.Text -> RepliedMessage.Content.Text(content.text)
+        is TimelineItem.Message.LivekitRoom -> RepliedMessage.Content.LivekitRoom
     },
     author = author,
 )

@@ -31,6 +31,7 @@ import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaComponentAvatarViewBinding
 import kotlin.math.absoluteValue
 import kotlin.math.min
+import com.nabla.sdk.core.R as coreR
 
 internal class NablaAvatarView : ConstraintLayout {
     private lateinit var binding: NablaComponentAvatarViewBinding
@@ -142,7 +143,7 @@ internal class NablaAvatarView : ConstraintLayout {
     private val backgroundColors: List<Int> = listOf(
         R.color.nabla_turquoise,
         R.color.nabla_blue,
-        R.color.nabla_red,
+        coreR.color.nabla_red,
         R.color.nabla_orange,
         R.color.nabla_indigo,
         R.color.nabla_stone,

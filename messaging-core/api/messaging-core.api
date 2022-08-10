@@ -5,8 +5,7 @@ public final class com/nabla/sdk/messaging/core/BuildConfig {
 	public fun <init> ()V
 }
 
-public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClient {
-	public static final field Companion Lcom/nabla/sdk/messaging/core/NablaMessagingClient$Companion;
+public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClient : com/nabla/sdk/core/domain/boundary/MessagingModule {
 	public abstract fun createConversation-BWLJW6A (Ljava/lang/String;Ljava/util/List;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun createDraftConversation (Ljava/lang/String;Ljava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
 	public abstract fun deleteMessage-0E7RQCE (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -20,15 +19,22 @@ public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClien
 	public abstract fun watchConversations ()Lkotlinx/coroutines/flow/Flow;
 }
 
-public final class com/nabla/sdk/messaging/core/NablaMessagingClient$Companion {
-	public final fun getInstance ()Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
-	public final fun initialize (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
-}
-
 public final class com/nabla/sdk/messaging/core/NablaMessagingClient$DefaultImpls {
 	public static synthetic fun createConversation-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/List;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static synthetic fun createDraftConversation$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
 	public static synthetic fun sendMessage-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingModule : com/nabla/sdk/core/domain/boundary/MessagingModule {
+	public static final field Factory Lcom/nabla/sdk/messaging/core/NablaMessagingModule$Factory;
+}
+
+public final class com/nabla/sdk/messaging/core/NablaMessagingModule$Factory {
+	public final fun invoke ()Lcom/nabla/sdk/core/domain/boundary/MessagingModule$Factory;
+}
+
+public final class com/nabla/sdk/messaging/core/NablaMessagingModuleKt {
+	public static final fun getMessagingClient (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
 }
 
 public final class com/nabla/sdk/messaging/core/data/message/PaginatedConversationItems {
@@ -358,6 +364,26 @@ public final class com/nabla/sdk/messaging/core/domain/entity/InvalidMessageExce
 	public fun <init> (Ljava/lang/String;)V
 }
 
+public abstract class com/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus$Closed : com/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus {
+	public static final field INSTANCE Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus$Closed;
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus$Open : com/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus$Open;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus$Open;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus$Open;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getToken ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract class com/nabla/sdk/messaging/core/domain/entity/Message : com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Companion;
 	public final fun getAuthor ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
@@ -387,6 +413,22 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted : 
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted$Companion {
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/Message$LivekitRoom : com/nabla/sdk/messaging/core/domain/entity/Message {
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus;)V
+	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
+	public final fun component2 ()Ljava/util/UUID;
+	public final fun component3 ()Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$LivekitRoom;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Message$LivekitRoom;Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Message$LivekitRoom;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
+	public final fun getLivekitRoomId ()Ljava/util/UUID;
+	public final fun getLivekitRoomStatus ()Lcom/nabla/sdk/messaging/core/domain/entity/LivekitRoomStatus;
+	public fun hashCode ()I
+	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract class com/nabla/sdk/messaging/core/domain/entity/Message$Media : com/nabla/sdk/messaging/core/domain/entity/Message {
