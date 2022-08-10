@@ -387,6 +387,7 @@ input DeviceInput {
   os: DeviceOs!
   osVersion: String!
   codeVersion: Int!
+  sdkModules: [SdkModule!]!
 }
 
 type UpdateDeviceOutput {
@@ -401,3 +402,11 @@ enum DeviceOs {
 enum MutationStatus {
   SUCCESS
 }
+
+enum SdkModule {
+  MESSAGING
+  VIDEO_CALL
+  VIDEO_CALL_SCHEDULING
+}
+
+#
