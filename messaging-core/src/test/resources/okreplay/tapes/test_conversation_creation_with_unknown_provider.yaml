@@ -1,73 +1,7 @@
 !tape
 name: test conversation creation with unknown provider
 interactions:
-- recorded: 2022-07-08T12:08:29.665Z
-  request:
-    method: POST
-    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
-    headers:
-      X-APOLLO-OPERATION-ID: 2e2943f457e85118963f0df17174d09f1a9d1c11f87b58f49d13ddd38b60e3a2
-      X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"]},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!]) { createConversation(title: $title, providerIds: $providerIds) {
-      conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment
-      ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount
-      providers { __typename ...ProviderInConversationFragment } }"}'
-  response:
-    status: 200
-    headers:
-      Access-Control-Allow-Origin: '*'
-      Date: Fri, 08 Jul 2022 12:08:29 GMT
-      connection: close
-      content-length: '250'
-      content-type: application/json; charset=UTF-8
-      vary: Origin
-      x-nabla-minimum-android-code-version: '0'
-      x-nabla-minimum-code-version: '323'
-      x-nabla-minimum-ios-code-version: '0'
-      x-request-id: 8969dfab-cfd2-485f-b92e-fd2760b6cc30
-    body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'
-- recorded: 2022-08-01T15:30:39.929Z
-  request:
-    method: POST
-    uri: http://localhost:8080/v1/patient/jwt/refresh
-    body: '{"refresh_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZWI2OWRkZC0zNWE1LTRjZTktODhlMi04MzE5NTY3OTkzYTIiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IlJlZnJlc2giLCJleHAiOjE2NjcxNDIwMjQsInNlc3Npb25fdXVpZCI6ImE1OWFhNGE0LWEzY2UtNDNhMC04MjYyLTNmODJlNWE0Y2EyMyIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ.dUL5cyb-YX7KHLZej7v4QN91M-2Z3HZ-WNqJqIcBA60"}'
-  response:
-    status: 200
-    headers:
-      Connection: keep-alive
-      Content-Length: '703'
-      Content-Type: application/json; charset=UTF-8
-      Vary: Origin
-      X-Request-ID: 45ef5932-7bcd-4ca3-8f41-5f56b3e288f9
-    body: |-
-      {
-          "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZWI2OWRkZC0zNWE1LTRjZTktODhlMi04MzE5NTY3OTkzYTIiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IkJlYXJlciIsImV4cCI6MTY1OTM2ODEzOSwic2Vzc2lvbl91dWlkIjoiYTU5YWE0YTQtYTNjZS00M2EwLTgyNjItM2Y4MmU1YTRjYTIzIiwib3JnYW5pemF0aW9uU3RyaW5nSWQiOiJuYWJsYSJ9._ttnOu-2tuTQe__M-hlH8haQt2N4cLA2Zry51TX8pvU",
-          "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZWI2OWRkZC0zNWE1LTRjZTktODhlMi04MzE5NTY3OTkzYTIiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IlJlZnJlc2giLCJleHAiOjE2NjcxNDM4MzksInNlc3Npb25fdXVpZCI6ImE1OWFhNGE0LWEzY2UtNDNhMC04MjYyLTNmODJlNWE0Y2EyMyIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ.5ukOhzj4kvkmuemVZQ96EPqXwOjYw2wcYul-RUbD6rs"
-      }
-- recorded: 2022-08-01T15:31:08.747Z
-  request:
-    method: POST
-    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
-    headers:
-      X-APOLLO-OPERATION-ID: 2e2943f457e85118963f0df17174d09f1a9d1c11f87b58f49d13ddd38b60e3a2
-      X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"]},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!]) { createConversation(title: $title, providerIds: $providerIds) {
-      conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment
-      ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount
-      providers { __typename ...ProviderInConversationFragment } }"}'
-  response:
-    status: 200
-    headers:
-      Connection: keep-alive
-      Content-Length: '250'
-      Content-Type: application/json; charset=UTF-8
-      Vary: Origin
-      X-Nabla-Minimum-Android-Code-Version: '0'
-      X-Nabla-Minimum-Code-Version: '323'
-      X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 9b70300f-b376-48d0-88e5-c3624d89ccac
-    body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'
-- recorded: 2022-08-01T15:38:19.265Z
+- recorded: 2022-08-11T09:52:22.409Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -98,59 +32,5 @@ interactions:
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '323'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 13591168-be97-4b72-8695-2a91eb87a739
-    body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'
-- recorded: 2022-08-03T06:48:16.447Z
-  request:
-    method: POST
-    uri: http://localhost:3000/api/v1/patient/jwt/refresh
-    body: '{"refresh_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IlJlZnJlc2giLCJleHAiOjE2NjcyODQxMDEsInNlc3Npb25fdXVpZCI6ImFkNjNlOWEwLWYzOTktNDI4MS1iZjA5LTM2Nzc3NTc5NmJmMyIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ._8tG_PRKBCz_t1A4l69YT-4aGB2hSCNpNb7y23tKjiY"}'
-  response:
-    status: 200
-    headers:
-      Access-Control-Allow-Origin: '*'
-      Date: Wed, 03 Aug 2022 06:48:16 GMT
-      connection: close
-      content-length: '703'
-      content-type: application/json; charset=UTF-8
-      vary: Origin
-      x-request-id: 3be338d5-8f7b-4108-8b92-18516b876d76
-    body: |-
-      {
-          "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IkJlYXJlciIsImV4cCI6MTY1OTUwOTU5Niwic2Vzc2lvbl91dWlkIjoiYWQ2M2U5YTAtZjM5OS00MjgxLWJmMDktMzY3Nzc1Nzk2YmYzIiwib3JnYW5pemF0aW9uU3RyaW5nSWQiOiJuYWJsYSJ9.Auw95uX7mtcHlPfQk6zGnI-QdD6ZXunKl9cjN_4v_X4",
-          "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJkZXYtcGF0aWVudCIsInR5cCI6IlJlZnJlc2giLCJleHAiOjE2NjcyODUyOTYsInNlc3Npb25fdXVpZCI6ImFkNjNlOWEwLWYzOTktNDI4MS1iZjA5LTM2Nzc3NTc5NmJmMyIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ.zt4oakRuj_ir-CZJAD0ltuZB8xD45DPJN-tVW4jCwDw"
-      }
-- recorded: 2022-08-03T06:48:16.458Z
-  request:
-    method: POST
-    uri: http://localhost:3000/api/v1/patient/graphql/sdk/authenticated
-    headers:
-      X-APOLLO-OPERATION-ID: 748b292cf65eb84eba7c3cd47fd7ac17e7d4cf86a20998102a550790943279fa
-      X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"]},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!], $initialMessage: SendMessageInput) { createConversation(title: $title,
-      providerIds: $providerIds, initialMessage: $initialMessage) { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems: 1 } ) { data { __typename ...MessageFragment } } } } }  fragment EphemeralUrlFragment on EphemeralUrl
-      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
-      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }  fragment PatientFragment
-      on Patient { id }  fragment SystemFragment on System { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload { id url { __typename
-      ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment on ImageMessageContent { imageFileUpload { __typename ...ImageFileUploadFragment } }  fragment VideoFileUploadFragment on VideoFileUpload { id url { __typename
-      ...EphemeralUrlFragment } fileName mimeType durationMs width height }  fragment VideoMessageContentFragment on VideoMessageContent { videoFileUpload { __typename ...VideoFileUploadFragment } }  fragment DocumentFileUploadFragment on DocumentFileUpload
-      { id url { __typename ...EphemeralUrlFragment } fileName mimeType thumbnail { __typename ...ImageFileUploadFragment } }  fragment DocumentMessageContentFragment on DocumentMessageContent { title documentFileUpload { __typename ...DocumentFileUploadFragment
-      } }  fragment AudioFileUploadFragment on AudioFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs }  fragment AudioMessageContentFragment on AudioMessageContent { audioFileUpload { __typename ...AudioFileUploadFragment
-      } }  fragment MessageContentFragment on MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on VideoMessageContent { __typename
-      ...VideoMessageContentFragment } ... on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ... on AudioMessageContent { __typename ...AudioMessageContentFragment } ... on DeletedMessageContent { empty: _ } }  fragment MessageSummaryFragment
-      on Message { id author { __typename ... on Provider { __typename ...ProviderFragment } ... on Patient { __typename ...PatientFragment } ... on System { __typename ...SystemFragment } ... on DeletedProvider { empty: _ } } messageContent: content { __typename
-      ...MessageContentFragment } clientId conversation { id } createdAt }  fragment MessageFragment on Message { __typename ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }"}'
-  response:
-    status: 200
-    headers:
-      Access-Control-Allow-Origin: '*'
-      Date: Wed, 03 Aug 2022 06:48:16 GMT
-      connection: close
-      content-length: '250'
-      content-type: application/json; charset=UTF-8
-      vary: Origin
-      x-nabla-minimum-android-code-version: '0'
-      x-nabla-minimum-code-version: '323'
-      x-nabla-minimum-ios-code-version: '0'
-      x-request-id: fa7a77a8-ec9c-4d6f-aeac-fe941af8df2e
-    body: '{"errors":[{"message":"Une entité demandée est introuvable.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'
+      X-Request-ID: 9b0e4779-6f0c-4299-a916-fd5417c37121
+    body: '{"errors":[{"message":"A specified entity could not be found.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'

@@ -22,6 +22,10 @@ import com.nabla.sdk.core.data.auth.SessionClientImpl
 import com.nabla.sdk.core.data.auth.TokenLocalDataSource
 import com.nabla.sdk.core.data.auth.TokenRemoteDataSource
 import com.nabla.sdk.core.data.auth.UserHeaderInterceptor
+import com.nabla.sdk.core.data.device.DeviceDataSource
+import com.nabla.sdk.core.data.device.DeviceRepositoryImpl
+import com.nabla.sdk.core.data.device.InstallationDataSource
+import com.nabla.sdk.core.data.device.SdkApiVersionDataSource
 import com.nabla.sdk.core.data.exception.BaseExceptionMapper
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.file.FileService
@@ -30,6 +34,7 @@ import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
+import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.MessagingModule
@@ -40,8 +45,10 @@ import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
+import com.nabla.sdk.core.graphql.type.SdkModule
 import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -147,8 +154,21 @@ public class CoreContainer internal constructor(
         tokenLocalDataSource,
     )
 
+    private val deviceDataSource = DeviceDataSource()
+    private val installationDataSource = InstallationDataSource(kvStorage)
+    private val sdkApiVersionDataSource = SdkApiVersionDataSource()
+    private val deviceRepository: DeviceRepository = DeviceRepositoryImpl(
+        deviceDataSource,
+        installationDataSource,
+        sdkApiVersionDataSource,
+        apolloClient,
+        logger,
+    )
+
     internal fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
-    internal fun loginInteractor() = LoginInteractor(patientRepository, sessionClient, logoutInteractor())
+    internal fun loginInteractor() = LoginInteractor(patientRepository, deviceRepository, sessionClient, logoutInteractor(), activeModules())
+
+    // ⚠️ When adding a new module, you need to update activeModules() function here
 
     public val videoCallModule: VideoCallModule? by lazy {
         modulesFactory.filterIsInstance<VideoCallModule.Factory>().firstOrNull()?.create(this)
@@ -156,6 +176,14 @@ public class CoreContainer internal constructor(
 
     public val messagingModule: MessagingModule? by lazy {
         modulesFactory.filterIsInstance<MessagingModule.Factory>().firstOrNull()?.create(this)
+    }
+
+    private fun activeModules(): List<SdkModule> = modulesFactory.map {
+        when (it) {
+            is VideoCallModule.Factory -> SdkModule.VIDEO_CALL
+            is MessagingModule.Factory -> SdkModule.MESSAGING
+            else -> throw InternalException(IllegalStateException("Unknown module $it"))
+        }
     }
 
     public companion object {

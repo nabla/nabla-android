@@ -70,8 +70,6 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 internal class IntegrationTest {
-
-    private val baseUrl: String
     private val refreshToken: String
     private val accessToken: String
     private val tapeMode: TapeMode
@@ -104,7 +102,6 @@ internal class IntegrationTest {
             )
             TapeMode.READ_ONLY
         }
-        baseUrl = properties.getProperty("baseUrl", DUMMY_BASE_URL)
         refreshToken = properties.getProperty("refreshToken", DUMMY_TOKEN)
         accessToken = properties.getProperty("accessToken", DUMMY_TOKEN)
     }
@@ -821,7 +818,7 @@ internal class IntegrationTest {
     }
 
     companion object {
-        private const val DUMMY_BASE_URL = "https://dummy-base-url/"
+        private const val baseUrl = "http://localhost:8080/"
 
         // Valid JWT token from https://www.javainuse.com/jwtgenerator
         private const val DUMMY_TOKEN =

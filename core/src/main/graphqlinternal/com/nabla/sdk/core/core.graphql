@@ -1,0 +1,5 @@
+mutation RegisterOrUpdateDevice($deviceId: UUID, $device: DeviceInput!) {
+    registerOrUpdateDevice(deviceId: $deviceId, device: $device) {
+        deviceId
+    }
+}

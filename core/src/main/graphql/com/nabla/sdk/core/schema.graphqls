@@ -391,7 +391,7 @@ input DeviceInput {
 }
 
 type UpdateDeviceOutput {
-  status: MutationStatus!
+  deviceId: UUID!
 }
 
 enum DeviceOs {

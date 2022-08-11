@@ -25,6 +25,7 @@ android {
         }
 
         buildConfigField 'String', 'VERSION_NAME', "\"${getGitDescribe()}\""
+        buildConfigField 'int', 'API_VERSION', getSdkApiVersion()
     }
 
     compileOptions {
@@ -74,6 +75,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
 }
 
+String getSdkApiVersion() {
+    def jsonFile = file('versions.json')
+    def parsedJson = new groovy.json.JsonSlurper().parseText(jsonFile.text)
+
+    return parsedJson.code_version
+}
+
 afterEvaluate {
     publishing {
         publications {
@@ -85,10 +93,21 @@ afterEvaluate {
 }
 
 apollo {
-    packageName.set("com.nabla.sdk.graphql")
-    mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
-    mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
-    generateApolloMetadata.set(true)
+    service("service") {
+        packageName.set("com.nabla.sdk.graphql")
+        mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
+        mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
+        generateApolloMetadata.set(true)
+    }
+
+    service("internal") {
+        srcDir("src/main/graphqlinternal")
+        schemaFile.set(file("src/main/graphql/com/nabla/sdk/core/schema.graphqls"))
+        mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
+        mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
+        packageName.set("com.nabla.sdk.core.graphql")
+        generateAsInternal.set(true)
+    }
 }
 
 dependencies {
