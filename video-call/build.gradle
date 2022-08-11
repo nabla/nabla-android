@@ -44,7 +44,7 @@ android {
     lintOptions {
         warningsAsErrors true
         abortOnError true
-        disable 'RtlEnabled,VisibleForTests'
+        disable 'RtlEnabled','VisibleForTests'
     }
 
     testOptions {

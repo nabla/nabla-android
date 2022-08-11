@@ -46,6 +46,8 @@ public fun Context.withNablaThemeOverlay(
         )
         val nablaOverlayInAttrs = themeOverlayApplierInAttrs.getResourceId(0, -1)
 
+        themeOverlayApplierInAttrs.recycle()
+
         if (nablaOverlayInAttrs != -1) {
             return ContextThemeWrapper(this, nablaOverlayInAttrs)
         }

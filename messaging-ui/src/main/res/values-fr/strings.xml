@@ -61,13 +61,6 @@
     <string name="nabla_conversation_conversation_activity_provider_joined">%1$s a rejoint la conversation</string>
     <string name="nabla_conversation_conversation_activity_deleted_provider_joined">Un praticien a rejoint la conversation</string>
 
-    <string name="nabla_conversation_camera_picture_permission_rational_title">Autorisation d’utiliser l’appareil photo</string>
-    <string name="nabla_conversation_camera_picture_permission_rational_description">Pour prendre une photo, nous avons besoin de votre autorisation d’utiliser l’appareil photo.</string>
-    <string name="nabla_conversation_camera_video_permission_rational_title">Autorisation d’utiliser la caméra</string>
-    <string name="nabla_conversation_camera_video_permission_rational_description">Pour enregistrer une vidéo, nous avons besoin de votre autorisation d’utiliser l’appareil photo et le micro.</string>
-    <string name="nabla_permission_rational_default_accept">Accepter</string>
-    <string name="nabla_permission_rational_default_decline">Refuser</string>
-
     <string name="nabla_conversation_audio_message_player_title">Message vocal</string>
     <string name="nabla_conversation_audio_message_play_pause_content_description">Lire/Arrêter</string>
     <string name="nabla_conversation_button_record_audio_message_content_description">Commencer l’enregistrement d’un message vocal</string>

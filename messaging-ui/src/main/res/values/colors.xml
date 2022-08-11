@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="nabla_black">#000000</color>
-    <color name="nabla_grey">#DFE2E8</color>
 
     <!-- AvatarView placeholder backgrounds -->
     <color name="nabla_turquoise">#21DBD1</color>

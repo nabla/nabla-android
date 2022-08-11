@@ -1,6 +1,7 @@
 package com.nabla.sdk.videocall
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
@@ -83,7 +84,17 @@ public class VideoCallActivity : AppCompatActivity() {
             binding.videoCallBackButton.isVisible = controls != null && controls.controlsVisible
             binding.videoCallControls.isVisible = controls != null && controls.controlsVisible
             binding.videoCallControlMic.isActivated = controls != null && controls.micEnabled
+            binding.videoCallControlMic.contentDescription = if (controls?.micEnabled == true) {
+                getString(R.string.nabla_video_call_controls_content_description_mic_on)
+            } else {
+                getString(R.string.nabla_video_call_controls_content_description_mic_off)
+            }
             binding.videoCallControlCamera.isActivated = controls != null && controls.cameraEnabled
+            binding.videoCallControlCamera.contentDescription = if (controls?.cameraEnabled == true) {
+                getString(R.string.nabla_video_call_controls_content_description_camera_on)
+            } else {
+                getString(R.string.nabla_video_call_controls_content_description_camera_off)
+            }
             binding.videoCallControlFlip.isEnabled = controls != null && controls.cameraEnabled
 
             binding.floatingMicIconOff.isVisible = controls != null && !controls.micEnabled
@@ -161,6 +172,7 @@ public class VideoCallActivity : AppCompatActivity() {
         }
     }
 
+    @TargetApi(26)
     private fun getPictureInPictureParams(): PictureInPictureParams {
         val sourceRectHint = Rect()
         binding.fullScreenVideoRenderer.getGlobalVisibleRect(sourceRectHint)
