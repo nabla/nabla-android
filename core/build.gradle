@@ -93,6 +93,8 @@ afterEvaluate {
 }
 
 apollo {
+    // This service needs to be named "service" for "generateApolloMetadata" to work correctly
+    // See https://github.com/apollographql/apollo-kotlin/issues/4334
     service("service") {
         packageName.set("com.nabla.sdk.graphql")
         mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
