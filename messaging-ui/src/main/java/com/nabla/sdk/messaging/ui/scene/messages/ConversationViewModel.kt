@@ -40,7 +40,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
@@ -142,7 +141,7 @@ internal class ConversationViewModel(
         conversationItemsFlow: Flow<WatchPaginatedResponse<ConversationItems>>,
     ): StateFlow<State> {
 
-        val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: emptyFlow()
+        val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
 
         return combine(
             conversationDataFlow,
