@@ -7,6 +7,19 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- `video-call` module is now available to add Video calls  to your messaging experience
+
+### Changed
+- A new `modules` parameter is now required when calling `NablaClient.initialize()`:
+```kotlin
+NablaClient.initialize(
+    modules = listOf(
+        NablaMessagingModule(),
+    ),
+)
+```
+
 ## [1.0-alpha09] - 2022-08-04
 
 ### Changed
