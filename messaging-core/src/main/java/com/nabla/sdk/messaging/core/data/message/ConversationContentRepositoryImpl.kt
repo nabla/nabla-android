@@ -27,6 +27,7 @@ internal class ConversationContentRepositoryImpl(
     private val gqlConversationContentDataSource: GqlConversationContentDataSource,
     private val sendMessageOrchestrator: SendMessageOrchestrator,
     private val messageMapper: MessageMapper,
+    private val isVideoCallModuleActive: Boolean,
 ) : ConversationContentRepository {
 
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
@@ -58,6 +59,18 @@ internal class ConversationContentRepositoryImpl(
                 }
             }
             is ConversationId.Remote -> watchRemoteConversationItems(conversationId)
+        }.map { paginatedConversationItems ->
+            paginatedConversationItems.copy(
+                conversationItems = paginatedConversationItems.conversationItems.copy(
+                    items = paginatedConversationItems.conversationItems.items.filter {
+                        if (it is Message.LivekitRoom && !isVideoCallModuleActive) {
+                            return@filter false
+                        }
+
+                        return@filter true
+                    }
+                )
+            )
         }
     }
 

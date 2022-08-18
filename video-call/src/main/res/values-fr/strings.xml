@@ -9,7 +9,8 @@
     <string name="nabla_video_call_back_button_content_description">Revenir</string>
     <string name="nabla_video_call_banner_connecting">Connection…</string>
     <string name="nabla_video_call_banner_reconnecting">Reconnexion…</string>
-    <string name="nabla_video_call_error_failed_to_join">Impossible de rejoindre l’appel, veuillez vérifier votre connexion et réessayer.</string>
     <string name="nabla_video_call_content_description_mic_off">Micro désactivé</string>
     <string name="nabla_video_call_ended">Appel terminé</string>
+    <string name="nabla_video_call_error_permission_refused">Veuillez accepter les permissions de Microphone, Caméra et Bluetooth pour pouvoir rejoindre l’appel.</string>
+    <string name="nabla_video_call_error_failed_to_join">Impossible de rejoindre l’appel, veuillez vérifier votre connexion et réessayer.</string>
 </resources>

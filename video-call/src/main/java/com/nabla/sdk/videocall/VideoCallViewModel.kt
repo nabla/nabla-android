@@ -38,11 +38,8 @@ internal class VideoCallViewModel(
     // this could have been avoided if tracks were observable, see https://github.com/livekit/client-sdk-android/issues/101
     private val mutableIsSelfMirrorFlow = MutableStateFlow(true)
 
-    private val mutableFinishFlow = MutableLiveFlow<Unit>()
-    internal val finishFlow: LiveFlow<Unit> = mutableFinishFlow
-
-    private val errorAlertMutableFlow = MutableLiveFlow<ErrorAlert>()
-    val errorAlertEventFlow: LiveFlow<ErrorAlert> = errorAlertMutableFlow
+    private val mutableFinishFlow = MutableLiveFlow<FinishReason>()
+    internal val finishFlow: LiveFlow<FinishReason> = mutableFinishFlow
 
     private val mutableConnectedRoomFlow = MutableStateFlow<Room?>(null)
     internal val connectedRoomFlow: StateFlow<Room?> = mutableConnectedRoomFlow
@@ -138,8 +135,7 @@ internal class VideoCallViewModel(
                 }
             }.onFailure {
                 videoCallClient.logger.warn("Failed to join room", domain = VIDEO_CALL_DOMAIN)
-                errorAlertMutableFlow.emit(ErrorAlert.FailedToJoin)
-                mutableFinishFlow.emit(Unit)
+                mutableFinishFlow.emit(FinishReason.UnableToConnect)
             }
         }
     }
@@ -152,7 +148,7 @@ internal class VideoCallViewModel(
     }
 
     fun onPermissionsRefused() {
-        mutableFinishFlow.emitIn(viewModelScope, Unit)
+        mutableFinishFlow.emitIn(viewModelScope, FinishReason.PermissionsRefused)
     }
 
     private fun onTrackSubscribed(trackSubscribed: RoomEvent.TrackSubscribed) {
@@ -211,7 +207,7 @@ internal class VideoCallViewModel(
 
     private fun hangUp() {
         mutableConnectedRoomFlow.value?.disconnect()
-        mutableFinishFlow.emitIn(viewModelScope, Unit)
+        mutableFinishFlow.emitIn(viewModelScope, FinishReason.CallEnded)
     }
 
     fun onPictureInPictureChanged(inPictureInPictureMode: Boolean) {
@@ -270,6 +266,12 @@ internal class VideoCallViewModel(
         Connecting,
         Connected,
         ReConnecting,
+    }
+
+    enum class FinishReason {
+        CallEnded,
+        PermissionsRefused,
+        UnableToConnect,
     }
 
     companion object {

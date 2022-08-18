@@ -9,7 +9,8 @@
     <string name="nabla_video_call_back_button_content_description">Back</string>
     <string name="nabla_video_call_banner_connecting">Connecting…</string>
     <string name="nabla_video_call_banner_reconnecting">Reconnecting…</string>
-    <string name="nabla_video_call_error_failed_to_join">Failed to join the call, please check your internet and try again.</string>
     <string name="nabla_video_call_content_description_mic_off">Mic is muted</string>
     <string name="nabla_video_call_ended">Call ended</string>
+    <string name="nabla_video_call_error_permission_refused">Microphone, Camera and Bluetooth permissions are mandatory to join a video call.</string>
+    <string name="nabla_video_call_error_failed_to_join">Failed to join the call, please check your network and try again.</string>
 </resources>

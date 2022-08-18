@@ -24,7 +24,6 @@ import com.nabla.sdk.core.ui.helpers.PermissionRational
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
-import com.nabla.sdk.videocall.VideoCallViewModel.ErrorAlert
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.Both
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.None
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.RemoteOnly
@@ -71,12 +70,13 @@ public class VideoCallActivity : AppCompatActivity() {
         binding.videoCallControlHangUp.setOnClickListener { viewModel.onHangUpClicked() }
         binding.videoCallControlFlip.isActivated = true
 
-        launchCollect(viewModel.errorAlertEventFlow) { errorAlert ->
-            showErrorAlert(errorAlert)
-        }
+        launchCollect(viewModel.finishFlow, minState = Lifecycle.State.CREATED) { finishReason ->
+            when (finishReason) {
+                VideoCallViewModel.FinishReason.CallEnded -> Toast.makeText(this, R.string.nabla_video_call_ended, Toast.LENGTH_SHORT).show()
+                VideoCallViewModel.FinishReason.PermissionsRefused -> Toast.makeText(this, R.string.nabla_video_call_error_permission_refused, Toast.LENGTH_SHORT).show()
+                VideoCallViewModel.FinishReason.UnableToConnect -> Toast.makeText(this, R.string.nabla_video_call_error_failed_to_join, Toast.LENGTH_SHORT).show()
+            }
 
-        launchCollect(viewModel.finishFlow, minState = Lifecycle.State.CREATED) {
-            Toast.makeText(this, R.string.nabla_video_call_ended, Toast.LENGTH_SHORT).show()
             finish()
         }
 
@@ -232,10 +232,6 @@ public class VideoCallActivity : AppCompatActivity() {
             } else {
                 emptyList()
             }
-
-    private fun showErrorAlert(errorAlert: ErrorAlert) {
-        Toast.makeText(this, getString(errorAlert.errorMessageRes), Toast.LENGTH_SHORT).show()
-    }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

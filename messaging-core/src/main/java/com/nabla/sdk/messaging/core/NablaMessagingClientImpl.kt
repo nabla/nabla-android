@@ -38,6 +38,7 @@ internal class NablaMessagingClientImpl internal constructor(
         coreContainer.clock,
         coreContainer.uuidGenerator,
         coreContainer.stringResolver,
+        coreContainer.videoCallModule,
     )
 
     private val conversationRepository: ConversationRepository by lazy {

@@ -150,6 +150,7 @@ internal class GqlMapper(
                 )
             )
         }
+
         summaryFragment.messageContent.messageContentFragment.onLivekitRoomMessageContent?.let {
             val livekitRoomId = it.livekitRoomMessageContentFragment.livekitRoom.uuid
             val livekitRoomStatus = mapToLivekitRoomStatus(it.livekitRoomMessageContentFragment.livekitRoom.status)

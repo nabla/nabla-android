@@ -100,6 +100,7 @@ class ConversationContentRepositoryImplTest {
             gqlConversationContentDataSource,
             mockk(),
             mockk(),
+            isVideoCallModuleActive = false,
         )
         repo.watchConversationItems(conversationId).test {
             val item = awaitItem()
