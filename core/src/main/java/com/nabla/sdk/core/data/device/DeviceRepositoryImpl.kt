@@ -4,6 +4,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.ModuleType
 import com.nabla.sdk.core.graphql.RegisterOrUpdateDeviceMutation
 import com.nabla.sdk.core.graphql.type.DeviceInput
 import com.nabla.sdk.core.graphql.type.DeviceOs
@@ -23,11 +24,17 @@ internal class DeviceRepositoryImpl(
 ) : DeviceRepository {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    override fun sendDeviceInfoAsync(activeModules: List<SdkModule>) {
+    override fun sendDeviceInfoAsync(activeModules: List<ModuleType>) {
         coroutineScope.launch {
             runCatchingCancellable {
                 logger.debug("Identifying current device", domain = "Device")
                 val device = deviceDataSource.getDevice()
+                val gqlActiveModules = activeModules.map {
+                    when (it) {
+                        ModuleType.VIDEO_CALL -> SdkModule.VIDEO_CALL
+                        ModuleType.MESSAGING -> SdkModule.MESSAGING
+                    }
+                }
                 val deviceId = apolloClient.mutation(
                     RegisterOrUpdateDeviceMutation(
                         deviceId = Optional.presentIfNotNull(installationDataSource.getInstallIdOrNull()),
@@ -36,7 +43,7 @@ internal class DeviceRepositoryImpl(
                             os = DeviceOs.ANDROID,
                             osVersion = device.osVersion,
                             codeVersion = sdkApiVersionDataSource.getSdkApiVersion(),
-                            sdkModules = activeModules,
+                            sdkModules = gqlActiveModules,
                         )
                     )
                 ).execute().dataAssertNoErrors.registerOrUpdateDevice.deviceId

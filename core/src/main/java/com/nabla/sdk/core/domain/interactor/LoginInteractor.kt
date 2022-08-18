@@ -4,15 +4,15 @@ import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
+import com.nabla.sdk.core.domain.entity.ModuleType
 import com.nabla.sdk.core.domain.entity.StringId
-import com.nabla.sdk.core.graphql.type.SdkModule
 
 internal class LoginInteractor(
     private val patientRepository: PatientRepository,
     private val deviceRepository: DeviceRepository,
     private val sessionClient: SessionClient,
     private val logoutInteractor: LogoutInteractor,
-    private val activeModules: List<SdkModule>,
+    private val activeModules: List<ModuleType>,
 ) {
     fun login(
         patientId: StringId,

@@ -1,6 +1,9 @@
 package com.nabla.sdk.core.domain.boundary
 
-public interface MessagingModule : Module {
+import com.nabla.sdk.core.domain.entity.ModuleType
 
-    public fun interface Factory : Module.Factory<MessagingModule>
+public interface MessagingModule : Module {
+    public fun interface Factory : Module.Factory<MessagingModule> {
+        override fun type(): ModuleType = ModuleType.MESSAGING
+    }
 }

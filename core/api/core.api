@@ -157,6 +157,11 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/MessagingModu
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/MessagingModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
+	public abstract fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
+}
+
+public final class com/nabla/sdk/core/domain/boundary/MessagingModule$Factory$DefaultImpls {
+	public static fun type (Lcom/nabla/sdk/core/domain/boundary/MessagingModule$Factory;)Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/Module {
@@ -164,6 +169,7 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/Module {
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/Module$Factory {
 	public abstract fun create (Lcom/nabla/sdk/core/injection/CoreContainer;)Lcom/nabla/sdk/core/domain/boundary/Module;
+	public abstract fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SessionClient {
@@ -206,6 +212,11 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModu
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
+	public abstract fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
+}
+
+public final class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory$DefaultImpls {
+	public static fun type (Lcom/nabla/sdk/core/domain/boundary/VideoCallModule$Factory;)Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public final class com/nabla/sdk/core/domain/entity/Attachment {
@@ -514,6 +525,13 @@ public final class com/nabla/sdk/core/domain/entity/MimeType$Video$Other : com/n
 	public fun getSubtype ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/ModuleType : java/lang/Enum {
+	public static final field MESSAGING Lcom/nabla/sdk/core/domain/entity/ModuleType;
+	public static final field VIDEO_CALL Lcom/nabla/sdk/core/domain/entity/ModuleType;
+	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/ModuleType;
+	public static fun values ()[Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public class com/nabla/sdk/core/domain/entity/NablaException : java/lang/Exception {
