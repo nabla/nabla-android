@@ -92,6 +92,12 @@ afterEvaluate {
     }
 }
 
+publishing.publications.all {
+    if (it.name == 'apollo') {
+        alias true
+    }
+}
+
 apollo {
     // This service needs to be named "service" for "generateApolloMetadata" to work correctly
     // See https://github.com/apollographql/apollo-kotlin/issues/4334

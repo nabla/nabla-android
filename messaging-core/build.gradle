@@ -75,6 +75,12 @@ afterEvaluate {
     }
 }
 
+publishing.publications.all {
+    if (it.name == 'apollo') {
+        alias true
+    }
+}
+
 apollo {
     packageName.set("com.nabla.sdk.messaging.graphql")
     generateTestBuilders.set(true)
