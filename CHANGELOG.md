@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0-alpha10] - 2022-08-19
+
 ### Added
 - `video-call` module is now available to add Video calls  to your messaging experience
 
