@@ -43,6 +43,7 @@ android {
     }
 
     lintOptions {
+        checkDependencies true
         warningsAsErrors true
         abortOnError true
         disable 'RtlEnabled','VisibleForTests'

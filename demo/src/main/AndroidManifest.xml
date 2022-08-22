@@ -7,7 +7,6 @@
 
     <application
         android:name=".DemoApp"
-        android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nabla.Sdk.Demo"
@@ -23,8 +22,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity android:name=".scene.ConversationActivity" />
 
         <meta-data
             android:name="com.nabla.sdk.PUBLIC_API_KEY"

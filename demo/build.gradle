@@ -30,6 +30,13 @@ android {
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget
     }
+
+    lintOptions {
+        checkDependencies true
+        warningsAsErrors true
+        abortOnError true
+        baseline file("lint-baseline.xml")
+    }
 }
 
 dependencies {
