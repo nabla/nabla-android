@@ -1,5 +1,6 @@
 scalar DateTime
 scalar UUID
+scalar TimeZone
 
 schema {
   query: Query
@@ -11,6 +12,10 @@ type Query {
   conversations(page: OpaqueCursorPage!): ConversationsOutput!
 
   conversation(id: UUID!): ConversationOutput!
+
+  pastAppointments(page: OpaqueCursorPage!): AppointmentsPage!
+  upcomingAppointments(page: OpaqueCursorPage!): AppointmentsPage!
+  appointmentCategories: AppointmentCategoriesOutput!
 }
 
 type Mutation {
@@ -32,6 +37,14 @@ type Mutation {
   setTyping(conversationId: UUID!, isTyping: Boolean!): SetTypingOutput!
 
   registerOrUpdateDevice(deviceId: UUID, device: DeviceInput!): UpdateDeviceOutput!
+
+  scheduleAppointment(
+    categoryId: UUID!
+    providerId: UUID!
+    slot: DateTime!
+    timeZone: TimeZone!
+  ): ScheduleAppointmentOutput!
+  cancelAppointment(id: UUID!): CancelAppointmentOutput!
 }
 
 type Subscription {
@@ -407,6 +420,64 @@ enum SdkModule {
   MESSAGING
   VIDEO_CALL
   VIDEO_CALL_SCHEDULING
+}
+
+# --- Appointment Scheduling
+
+type AppointmentCategoriesOutput {
+  categories: [AppointmentCategory!]!
+}
+
+type ScheduleAppointmentOutput {
+  appointment: Appointment!
+}
+
+type CancelAppointmentOutput {
+  appointmentUuid: UUID!
+}
+
+type AppointmentsPage {
+  data: [Appointment!]!
+
+  hasMore: Boolean!
+  nextCursor: String
+}
+
+type Appointment {
+  id: UUID!
+  provider: Provider!
+  scheduledAt: DateTime!
+  state: AppointmentState!
+}
+
+union AppointmentState = UpcomingAppointment | FinalizedAppointment
+
+type UpcomingAppointment {
+  livekitRoom: LivekitRoom
+}
+
+type FinalizedAppointment {
+  _: EmptyObject!
+}
+
+type AppointmentCategory {
+  id: UUID!
+  name: String!
+  callDurationMinutes: Int!
+  availableSlots(page: OpaqueCursorPage!): AvailableSlotsPage!
+}
+
+type AvailableSlotsPage {
+  slots: [AvailabilitySlot!]!
+
+  hasMore: Boolean!
+  nextCursor: String
+}
+
+type AvailabilitySlot {
+  startAt: DateTime!
+  endAt: DateTime!
+  provider: Provider!
 }
 
 #
