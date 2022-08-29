@@ -16,6 +16,7 @@ type Query {
   pastAppointments(page: OpaqueCursorPage!): AppointmentsPage!
   upcomingAppointments(page: OpaqueCursorPage!): AppointmentsPage!
   appointmentCategories: AppointmentCategoriesOutput!
+  appointmentCategory(id: UUID!): AppointmentCategoryOutput!
 }
 
 type Mutation {
@@ -423,6 +424,10 @@ enum SdkModule {
 }
 
 # --- Appointment Scheduling
+
+type AppointmentCategoryOutput {
+  category: AppointmentCategory!
+}
 
 type AppointmentCategoriesOutput {
   categories: [AppointmentCategory!]!
