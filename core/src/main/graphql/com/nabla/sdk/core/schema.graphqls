@@ -52,6 +52,8 @@ type Subscription {
   conversations: ConversationsEventOutput
 
   conversation(id: UUID!): ConversationEventOutput
+
+  appointments: AppointmentsEventOutput
 }
 
 type Patient {
@@ -370,6 +372,30 @@ type MessageUpdatedEvent {
 
 type TypingEvent {
   provider: ProviderInConversation!
+}
+
+# --- Appointment Events
+
+type AppointmentsEventOutput {
+  event: AppointmentsEvent!
+}
+
+union AppointmentsEvent =
+    SubscriptionReadinessEvent
+  | AppointmentCreatedEvent
+  | AppointmentUpdatedEvent
+  | AppointmentCancelledEvent
+
+type AppointmentCreatedEvent {
+  appointment: Appointment!
+}
+
+type AppointmentUpdatedEvent {
+  appointment: Appointment!
+}
+
+type AppointmentCancelledEvent {
+  appointmentId: UUID!
 }
 
 # --- Conversation Activity Contents
