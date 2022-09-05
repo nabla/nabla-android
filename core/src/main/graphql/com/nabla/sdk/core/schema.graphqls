@@ -17,6 +17,7 @@ type Query {
   upcomingAppointments(page: OpaqueCursorPage!): AppointmentsPage!
   appointmentCategories: AppointmentCategoriesOutput!
   appointmentCategory(id: UUID!): AppointmentCategoryOutput!
+  provider(id: UUID!): ProviderOutput!
 }
 
 type Mutation {
@@ -76,6 +77,7 @@ type Provider {
   prefix: String
   firstName: String!
   lastName: String!
+  title: String
 
   avatarUrl: EphemeralUrl
 }
@@ -447,6 +449,10 @@ enum SdkModule {
   MESSAGING
   VIDEO_CALL
   VIDEO_CALL_SCHEDULING
+}
+
+type ProviderOutput {
+  provider: Provider!
 }
 
 # --- Appointment Scheduling
