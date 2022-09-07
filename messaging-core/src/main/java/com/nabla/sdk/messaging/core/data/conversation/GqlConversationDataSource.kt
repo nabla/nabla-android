@@ -58,8 +58,7 @@ internal class GqlConversationDataSource constructor(
     private suspend fun insertConversationToConversationsListCache(
         conversation: ConversationFragment,
     ) {
-        val query = FIRST_CONVERSATIONS_PAGE_QUERY
-        apolloClient.updateCache(query) { cachedQueryData ->
+        apolloClient.updateCache(conversationsQuery()) { cachedQueryData ->
             if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
             val isAlreadyInCache = cachedQueryData.conversations.conversations.any { it.conversationFragment.id == conversation.id }
 
@@ -76,16 +75,12 @@ internal class GqlConversationDataSource constructor(
     }
 
     suspend fun loadMoreConversationsInCache() {
-        val firstPageQuery = FIRST_CONVERSATIONS_PAGE_QUERY
-        apolloClient.updateCache(firstPageQuery) { cachedQueryData ->
+        apolloClient.updateCache(conversationsQuery()) { cachedQueryData ->
             if (cachedQueryData == null || !cachedQueryData.conversations.hasMore) {
                 return@updateCache CacheUpdateOperation.Ignore()
             }
-            val updatedQuery = firstPageQuery.copy(
-                pageInfo = OpaqueCursorPage(
-                    cursor = Optional.presentIfNotNull(cachedQueryData.conversations.nextCursor)
-                )
-            )
+            val updatedQuery = conversationsQuery(cachedQueryData.conversations.nextCursor)
+
             val freshQueryData = apolloClient.query(updatedQuery)
                 .fetchPolicy(FetchPolicy.NetworkOnly)
                 .execute()
@@ -100,8 +95,7 @@ internal class GqlConversationDataSource constructor(
 
     @OptIn(FlowPreview::class)
     fun watchConversations(): Flow<PaginatedList<Conversation>> {
-        val query = FIRST_CONVERSATIONS_PAGE_QUERY
-        val dataFlow = apolloClient.query(query)
+        val dataFlow = apolloClient.query(conversationsQuery())
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
             .map { response -> response.dataOrThrowOnError }
@@ -162,6 +156,11 @@ internal class GqlConversationDataSource constructor(
 
     companion object {
         @VisibleForTesting
-        internal val FIRST_CONVERSATIONS_PAGE_QUERY = ConversationsQuery(OpaqueCursorPage(cursor = Optional.Absent))
+        internal fun conversationsQuery(pageCursor: String? = null) = ConversationsQuery(
+            OpaqueCursorPage(
+                cursor = Optional.presentIfNotNull(pageCursor),
+                numberOfItems = Optional.Present(50),
+            )
+        )
     }
 }

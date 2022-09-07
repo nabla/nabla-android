@@ -2,21 +2,18 @@ package com.nabla.sdk.messaging.core.data.message
 
 import app.cash.turbine.test
 import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.stubs.apollo.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
-import com.nabla.sdk.messaging.graphql.ConversationItemsQuery
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +42,7 @@ class GqlConversationContentDataSourceTest {
 
         val conversationId = ConversationId.Remote(remoteId = uuid4())
         testNetworkTransport.register(
-            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlConversationContentDataSource.conversationItemsQuery(conversationId),
             GqlData.ConversationItems.empty(conversationId)
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
@@ -71,16 +68,16 @@ class GqlConversationContentDataSourceTest {
         val conversationId = ConversationId.Remote(remoteId = uuid4())
         val cursor = uuid4().toString()
         testNetworkTransport.register(
-            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlConversationContentDataSource.conversationItemsQuery(conversationId),
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = cursor
                 hasMore = true
             }
         )
         testNetworkTransport.register(
-            ConversationItemsQuery(
-                conversationId.remoteId,
-                OpaqueCursorPage(cursor = Optional.Present(cursor))
+            GqlConversationContentDataSource.conversationItemsQuery(
+                conversationId,
+                cursor,
             ),
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = null
@@ -111,7 +108,7 @@ class GqlConversationContentDataSourceTest {
 
         val conversationId = ConversationId.Remote(remoteId = uuid4())
         testNetworkTransport.register(
-            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlConversationContentDataSource.conversationItemsQuery(conversationId),
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = uuid4().toString()
                 hasMore = false
@@ -144,7 +141,7 @@ class GqlConversationContentDataSourceTest {
         val conversationId = ConversationId.Remote(remoteId = uuid4())
         val replyToMessageId = uuid4()
         testNetworkTransport.register(
-            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlConversationContentDataSource.conversationItemsQuery(conversationId),
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = uuid4().toString()
                 hasMore = false
@@ -195,7 +192,7 @@ class GqlConversationContentDataSourceTest {
 
         val conversationId = ConversationId.Remote(remoteId = uuid4())
         testNetworkTransport.register(
-            gqlConversationContentDataSource.firstItemsPageQuery(conversationId),
+            GqlConversationContentDataSource.conversationItemsQuery(conversationId),
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = uuid4().toString()
                 hasMore = false

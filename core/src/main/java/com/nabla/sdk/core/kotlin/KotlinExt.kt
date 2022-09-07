@@ -27,10 +27,10 @@ public suspend inline fun <R> runCatchingCancellable(crossinline block: suspend 
 public fun <R> sharedSingleIn(
     coroutineScope: CoroutineScope,
     block: suspend () -> R,
-): SharedSingle<R> {
-    return object : SharedSingle<R> {
+): SharedSingle<R, Result<R>> {
+    return object : SharedSingle<R, Result<R>> {
         val sharedFlow = flow {
-            val result = block()
+            val result = runCatchingCancellable { block() }
             emit(result)
         }.shareIn(
             scope = coroutineScope,
@@ -39,13 +39,13 @@ public fun <R> sharedSingleIn(
         )
 
         override suspend fun await(): R {
-            return sharedFlow.first()
+            return sharedFlow.first().getOrThrow()
         }
     }
 }
 
 @NablaInternal
-public interface SharedSingle<R> {
+public interface SharedSingle<out R, out T : Result<R>> {
     public suspend fun await(): R
 }
 

@@ -1,7 +1,7 @@
 !tape
 name: test conversation creation with unknown provider
 interactions:
-- recorded: 2022-08-11T09:52:22.409Z
+- recorded: 2022-09-07T08:29:48.014Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -26,11 +26,11 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '250'
+      Content-Length: '227'
       Content-Type: application/json; charset=UTF-8
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '323'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 9b0e4779-6f0c-4299-a916-fd5417c37121
-    body: '{"errors":[{"message":"A specified entity could not be found.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","detailedMessage":null,"classification":"DataFetchingException"}}],"data":null}'
+      X-Request-ID: 8d6cea21-8fb1-45ac-bd51-07224447cbe8
+    body: '{"errors":[{"message":"A specified entity could not be found.","locations":[],"path":["createConversation"],"extensions":{"errorCode":20000,"errorName":"ENTITY_NOT_FOUND","classification":"DataFetchingException"}}],"data":null}'

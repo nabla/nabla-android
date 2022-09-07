@@ -1,7 +1,7 @@
 !tape
 name: test watch conversation is called when the providers are updated
 interactions:
-- recorded: 2022-08-11T09:52:19.574Z
+- recorded: 2022-09-07T08:29:45.020Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -32,8 +32,8 @@ interactions:
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '323'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 5bb5493e-0e19-44ae-b0bb-2acc7be9d869
-    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"ed71849a-1439-4ce9-8473-62ed19dd4e54","title":null,"subtitle":null,"createdAt":"2022-08-11T11:52:19.563+02:00","updatedAt":"2022-08-11T11:52:19.563+02:00","inboxPreviewTitle":"Ask
+      X-Request-ID: e746f069-d61e-4386-af96-3d0d3140c294
+    body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"f0561651-cd52-4fd3-be2d-03c199a9b573","title":null,"subtitle":null,"createdAt":"2022-09-07T10:29:45.003+02:00","updatedAt":"2022-09-07T10:29:45.003+02:00","inboxPreviewTitle":"Ask
       us anything","lastMessagePreview":null,"unreadMessageCount":0,"providers":[],"items":{"data":[]}}}}}'
 - recorded: 2022-08-11T09:52:19.585Z
   request:
@@ -78,4 +78,48 @@ interactions:
       X-Nabla-Minimum-iOS-Code-Version: '0'
       X-Request-ID: 58a305e9-ca77-45e8-acd9-5418ca33191a
     body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"ed71849a-1439-4ce9-8473-62ed19dd4e54","title":null,"subtitle":null,"createdAt":"2022-08-11T11:52:19.563+02:00","updatedAt":"2022-08-11T11:52:19.563+02:00","inboxPreviewTitle":"Ask
+      us anything","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'
+- recorded: 2022-09-07T08:29:45.054Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: db81d0cf3f5b5d7dc0929536df121ff34573176eb344e4087c00ea6a56464fa6
+      X-APOLLO-OPERATION-NAME: RegisterOrUpdateDevice
+    body: '{"operationName":"RegisterOrUpdateDevice","variables":{"device":{"deviceModel":"robolectric - robolectric (robolectric)","os":"ANDROID","osVersion":"12 (32)","codeVersion":428,"sdkModules":["MESSAGING"]}},"query":"mutation RegisterOrUpdateDevice($deviceId:
+      UUID, $device: DeviceInput!) { registerOrUpdateDevice(deviceId: $deviceId, device: $device) { deviceId } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '87'
+      Content-Type: application/json; charset=UTF-8
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '323'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 9f34716b-483a-422c-a2ad-04d63e1805e3
+    body: '{"data":{"registerOrUpdateDevice":{"deviceId":"4561ab69-1f6c-49ba-9e71-6b8428a1ab9e"}}}'
+- recorded: 2022-09-07T08:29:45.061Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 8039d8277285df2b2a85ccc5e77068982c48539d9d9e1ac36829cd835d0e2c1a
+      X-APOLLO-OPERATION-NAME: Conversation
+    body: '{"operationName":"Conversation","variables":{"id":"f0561651-cd52-4fd3-be2d-03c199a9b573"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+      { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '335'
+      Content-Type: application/json; charset=UTF-8
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '323'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 5f912788-2f45-49fc-a9b1-9784eef050bb
+    body: '{"data":{"conversation":{"conversation":{"__typename":"Conversation","id":"f0561651-cd52-4fd3-be2d-03c199a9b573","title":null,"subtitle":null,"createdAt":"2022-09-07T10:29:45.003+02:00","updatedAt":"2022-09-07T10:29:45.003+02:00","inboxPreviewTitle":"Ask
       us anything","lastMessagePreview":null,"unreadMessageCount":0,"providers":[]}}}}'

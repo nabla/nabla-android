@@ -2,7 +2,6 @@ package com.nabla.sdk.messaging.core.data.conversation
 
 import app.cash.turbine.test
 import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
@@ -10,11 +9,9 @@ import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.stubs.TestClock
 import com.nabla.sdk.core.data.stubs.apollo.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
-import com.nabla.sdk.messaging.graphql.ConversationsQuery
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +35,7 @@ internal class GqlConversationDataSourceTest {
         val (testNetworkTransport, job, gqlConversationDataSource) = setupTest(this)
 
         testNetworkTransport.register(
-            GqlConversationDataSource.FIRST_CONVERSATIONS_PAGE_QUERY,
+            GqlConversationDataSource.conversationsQuery(),
             GqlData.Conversations.empty()
         )
         val conversationsEventsSubscriptionResponseFlow =
@@ -66,14 +63,14 @@ internal class GqlConversationDataSourceTest {
 
         val cursor = uuid4().toString()
         testNetworkTransport.register(
-            GqlConversationDataSource.FIRST_CONVERSATIONS_PAGE_QUERY,
+            GqlConversationDataSource.conversationsQuery(),
             GqlData.Conversations.single {
                 nextCursor = cursor
                 hasMore = true
             }
         )
         testNetworkTransport.register(
-            ConversationsQuery(OpaqueCursorPage(cursor = Optional.Present(cursor))),
+            GqlConversationDataSource.conversationsQuery(cursor),
             GqlData.Conversations.single {
                 nextCursor = null
                 hasMore = false

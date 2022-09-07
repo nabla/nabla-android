@@ -31,7 +31,7 @@ internal class ConversationContentRepositoryImpl(
 ) : ConversationContentRepository {
 
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
-    private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit>>()
+    private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit, Result<Unit>>>()
 
     override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
         return when (conversationId) {
@@ -40,7 +40,8 @@ internal class ConversationContentRepositoryImpl(
                     when (localConversation.creationState) {
                         LocalConversation.CreationState.Creating,
                         is LocalConversation.CreationState.ErrorCreating,
-                        LocalConversation.CreationState.ToBeCreated -> {
+                        LocalConversation.CreationState.ToBeCreated,
+                        -> {
                             localMessageDataSource.watchLocalMessages(conversationId).map {
                                 val conversationItems = ConversationItems(
                                     conversationId = conversationId,
@@ -172,7 +173,8 @@ internal class ConversationContentRepositoryImpl(
 
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean) {
         when (conversationId) {
-            is ConversationId.Local -> { /* no-op */ }
+            is ConversationId.Local -> { /* no-op */
+            }
             is ConversationId.Remote -> gqlConversationContentDataSource.setTyping(conversationId, isTyping)
         }
     }

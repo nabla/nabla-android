@@ -79,7 +79,7 @@ internal class GqlConversationContentDataSource(
     }
 
     private suspend fun putInsertEventToCache(
-        it: ApolloResponse<ConversationEventsSubscription.Data>
+        it: ApolloResponse<ConversationEventsSubscription.Data>,
     ) {
         logger.debug(
             domain = GQL_DOMAIN,
@@ -96,7 +96,7 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertMessageToConversationCache(
         newMessageFragment: MessageFragment,
     ) {
-        val query = firstItemsPageQuery(
+        val query = conversationItemsQuery(
             ConversationId.Remote(
                 remoteId = newMessageFragment.messageSummaryFragment.conversation.id
             )
@@ -112,7 +112,7 @@ internal class GqlConversationContentDataSource(
     private suspend fun insertConversationActivityToConversationCache(
         newConversationActivityFragment: ConversationActivityFragment,
     ) {
-        val query = firstItemsPageQuery(
+        val query = conversationItemsQuery(
             ConversationId.Remote(
                 remoteId = newConversationActivityFragment.conversation.id
             )
@@ -146,7 +146,7 @@ internal class GqlConversationContentDataSource(
         conversationId: ConversationId.Remote,
         messageId: MessageId,
     ): DomainEntityMessage? {
-        val cacheData = apolloClient.readFromCache(firstItemsPageQuery(conversationId))
+        val cacheData = apolloClient.readFromCache(conversationItemsQuery(conversationId))
 
         return cacheData?.conversation?.conversation?.conversationItemsPageFragment?.items?.data
             ?.firstOrNull { item -> item?.messageFragment?.messageSummaryFragment?.id == messageId.remoteId }
@@ -161,17 +161,13 @@ internal class GqlConversationContentDataSource(
     }
 
     suspend fun loadMoreConversationItemsInCache(conversationId: ConversationId.Remote) {
-        val query = firstItemsPageQuery(conversationId)
-        apolloClient.updateCache(query) { cachedQueryData ->
+        apolloClient.updateCache(conversationItemsQuery(conversationId)) { cachedQueryData ->
             if (cachedQueryData == null || !cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.hasMore) {
                 return@updateCache CacheUpdateOperation.Ignore()
             }
             val nextCursor = requireNotNull(cachedQueryData.conversation.conversation.conversationItemsPageFragment.items.nextCursor)
-            val updatedQuery = query.copy(
-                pageInfo = OpaqueCursorPage(
-                    cursor = Optional.presentIfNotNull(nextCursor)
-                )
-            )
+            val updatedQuery = conversationItemsQuery(conversationId, nextCursor)
+
             val freshQueryData = apolloClient.query(updatedQuery)
                 .fetchPolicy(FetchPolicy.NetworkOnly)
                 .execute()
@@ -186,8 +182,7 @@ internal class GqlConversationContentDataSource(
 
     @OptIn(FlowPreview::class)
     fun watchConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedConversationItems> {
-        val query = firstItemsPageQuery(conversationId)
-        val dataFlow = apolloClient.query(query)
+        val dataFlow = apolloClient.query(conversationItemsQuery(conversationId))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
             .map { response -> requireNotNull(response.data) }
@@ -275,11 +270,13 @@ internal class GqlConversationContentDataSource(
             .dataOrThrowOnError
     }
 
-    @VisibleForTesting
-    internal fun firstItemsPageQuery(id: ConversationId.Remote) =
-        ConversationItemsQuery(id.remoteId, OpaqueCursorPage(cursor = Optional.Absent))
-
     suspend fun setTyping(conversationId: ConversationId.Remote, typing: Boolean) {
         apolloClient.mutation(SetTypingMutation(conversationId.remoteId, typing)).execute()
+    }
+
+    companion object {
+        @VisibleForTesting
+        internal fun conversationItemsQuery(id: ConversationId.Remote, cursorPage: String? = null) =
+            ConversationItemsQuery(id.remoteId, OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(50)))
     }
 }

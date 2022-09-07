@@ -3,7 +3,6 @@ package com.nabla.sdk.messaging.core.data.conversation
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.entity.PaginatedList
-import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
 import com.nabla.sdk.messaging.core.data.message.LocalConversation
@@ -31,14 +30,14 @@ internal class ConversationRepositoryImpl(
     private val stringResolver: StringResolver,
 ) : ConversationRepository {
 
-    private val loadMoreConversationSharedSingle: SharedSingle<Unit> = sharedSingleIn(repoScope) {
+    private val loadMoreConversationSharedSingle = sharedSingleIn(repoScope) {
         gqlConversationDataSource.loadMoreConversationsInCache()
     }
 
     override suspend fun createConversation(
         title: String?,
         providerIds: List<Uuid>?,
-        initialMessage: MessageInput?
+        initialMessage: MessageInput?,
     ): Conversation {
         val message = initialMessage?.let { messageMapper.messageInputToNewMessage(it) }
         val gqlMessageInput = message?.let {
