@@ -7,7 +7,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## Fixed
+## [1.0-alpha11] - 2022-09-12
+
+### Fixed
 - Pagination for conversations and messages now has a more reasonable value (i.e. 50) and errors in page loading are properly handled.
 
 ## [1.0-alpha10] - 2022-08-19
