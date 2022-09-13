@@ -16,6 +16,7 @@ import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
+import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.type.Conversation
 import com.nabla.sdk.graphql.type.ConversationActivity
 import com.nabla.sdk.graphql.type.DeletedMessageContent
@@ -25,9 +26,8 @@ import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
-import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
@@ -57,7 +57,6 @@ internal class GqlConversationContentDataSource(
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
-    private val localConversationDataSource: LocalConversationDataSource,
 ) {
 
     private val conversationEventsFlowMap = mutableMapOf<ConversationId.Remote, Flow<Unit>>()
@@ -181,7 +180,7 @@ internal class GqlConversationContentDataSource(
     }
 
     @OptIn(FlowPreview::class)
-    fun watchConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedConversationItems> {
+    fun watchConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedList<ConversationItem>> {
         val dataFlow = apolloClient.query(conversationItemsQuery(conversationId))
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
@@ -200,11 +199,8 @@ internal class GqlConversationContentDataSource(
                         return@mapNotNull mapper.mapToConversationActivity(it)
                     }
                 }
-                PaginatedConversationItems(
-                    conversationItems = ConversationItems(
-                        conversationId = localConversationDataSource.findLocalConversationId(queryData.conversation.conversation.id),
-                        items = items,
-                    ),
+                PaginatedList(
+                    items = items,
                     hasMore = page.hasMore,
                 )
             }

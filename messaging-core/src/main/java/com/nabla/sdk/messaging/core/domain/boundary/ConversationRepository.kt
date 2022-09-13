@@ -15,7 +15,6 @@ public interface ConversationRepository {
         providerIds: List<Uuid>?,
         initialMessage: MessageInput?,
     ): Conversation
-
     public fun createLocalConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local
     public fun watchConversation(conversationId: ConversationId): Flow<Conversation>
     public fun watchConversations(): Flow<PaginatedList<Conversation>>

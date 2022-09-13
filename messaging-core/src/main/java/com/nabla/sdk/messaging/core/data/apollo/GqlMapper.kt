@@ -1,23 +1,20 @@
 package com.nabla.sdk.messaging.core.data.apollo
 
+import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.DeletedProvider
-import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.SystemUser
-import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
-import com.nabla.sdk.messaging.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -29,12 +26,9 @@ import com.nabla.sdk.messaging.graphql.fragment.ConversationActivityContentFragm
 import com.nabla.sdk.messaging.graphql.fragment.ConversationActivityFragment
 import com.nabla.sdk.messaging.graphql.fragment.ConversationFragment
 import com.nabla.sdk.messaging.graphql.fragment.DocumentFileUploadFragment
-import com.nabla.sdk.messaging.graphql.fragment.EphemeralUrlFragment
 import com.nabla.sdk.messaging.graphql.fragment.ImageFileUploadFragment
-import com.nabla.sdk.messaging.graphql.fragment.LivekitRoomMessageContentFragment
 import com.nabla.sdk.messaging.graphql.fragment.MaybeProviderFragment
 import com.nabla.sdk.messaging.graphql.fragment.MessageSummaryFragment
-import com.nabla.sdk.messaging.graphql.fragment.ProviderFragment
 import com.nabla.sdk.messaging.graphql.fragment.ProviderInConversationFragment
 import com.nabla.sdk.messaging.graphql.fragment.SystemFragment
 import com.nabla.sdk.messaging.graphql.fragment.VideoFileUploadFragment
@@ -42,6 +36,7 @@ import com.nabla.sdk.messaging.graphql.fragment.VideoFileUploadFragment
 internal class GqlMapper(
     private val logger: Logger,
     private val localConversationDataSource: LocalConversationDataSource,
+    private val coreGqlMapper: CoreGqlMapper,
 ) {
     fun mapToConversation(fragment: ConversationFragment): Conversation {
         return Conversation(
@@ -62,7 +57,7 @@ internal class GqlMapper(
         fragment: ProviderInConversationFragment,
     ): ProviderInConversation {
         return ProviderInConversation(
-            provider = mapToProvider(fragment.provider.providerFragment),
+            provider = coreGqlMapper.mapToProvider(fragment.provider.providerFragment),
             typingAt = fragment.typingAt,
             seenUntil = fragment.seenUntil,
         )
@@ -96,7 +91,7 @@ internal class GqlMapper(
     }
 
     private fun mapToMaybeProvider(maybeProviderFragment: MaybeProviderFragment): MaybeProvider? {
-        maybeProviderFragment.onProvider?.let { return mapToProvider(it.providerFragment) }
+        maybeProviderFragment.onProvider?.let { return coreGqlMapper.mapToProvider(it.providerFragment) }
         maybeProviderFragment.onDeletedProvider?.let { return DeletedProvider }
         return null
     }
@@ -152,15 +147,11 @@ internal class GqlMapper(
         }
 
         summaryFragment.messageContent.messageContentFragment.onLivekitRoomMessageContent?.let {
-            val livekitRoomId = it.livekitRoomMessageContentFragment.livekitRoom.uuid
-            val livekitRoomStatus = mapToLivekitRoomStatus(it.livekitRoomMessageContentFragment.livekitRoom.status)
-            livekitRoomStatus?.let {
-                return Message.LivekitRoom(
-                    baseMessage = baseMessage,
-                    livekitRoomId = livekitRoomId,
-                    livekitRoomStatus = livekitRoomStatus
-                )
-            }
+            val livekitRoom = coreGqlMapper.mapToLivekitRoom(it.livekitRoomMessageContentFragment.livekitRoom.livekitRoomFragment)
+            return Message.LivekitRoom(
+                baseMessage = baseMessage,
+                livekitRoom = livekitRoom,
+            )
         }
         summaryFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {
             return Message.Deleted(baseMessage = baseMessage)
@@ -195,35 +186,17 @@ internal class GqlMapper(
 
     private fun mapToMessageAuthor(author: MessageSummaryFragment.Author): MessageAuthor {
         author.onPatient?.let { return MessageAuthor.Patient }
-        author.onProvider?.providerFragment?.let { return MessageAuthor.Provider(mapToProvider(it)) }
+        author.onProvider?.providerFragment?.let { return MessageAuthor.Provider(coreGqlMapper.mapToProvider(it)) }
         author.onSystem?.let { return MessageAuthor.System(mapToSystem(it.systemFragment)) }
         author.onDeletedProvider?.let { return MessageAuthor.DeletedProvider }
         return MessageAuthor.Unknown
     }
 
-    private fun mapToProvider(providerFragment: ProviderFragment): Provider {
-        val avatarUrl = providerFragment.avatarUrl?.ephemeralUrlFragment?.let { mapToEphemeralUrl(it) }
-        return Provider(
-            id = providerFragment.id,
-            avatar = avatarUrl,
-            firstName = providerFragment.firstName,
-            lastName = providerFragment.lastName,
-            prefix = providerFragment.prefix,
-        )
-    }
-
     private fun mapToSystem(systemFragment: SystemFragment): SystemUser {
-        val avatarUrl = systemFragment.avatar?.url?.ephemeralUrlFragment?.let { mapToEphemeralUrl(it) }
+        val avatarUrl = systemFragment.avatar?.url?.ephemeralUrlFragment?.let { coreGqlMapper.mapToEphemeralUrl(it) }
         return SystemUser(
             name = systemFragment.name,
             avatar = avatarUrl,
-        )
-    }
-
-    private fun mapToEphemeralUrl(ephemeralUrlFragment: EphemeralUrlFragment): EphemeralUrl {
-        return EphemeralUrl(
-            expiresAt = ephemeralUrlFragment.expiresAt,
-            url = Uri(ephemeralUrlFragment.url)
         )
     }
 
@@ -238,7 +211,7 @@ internal class GqlMapper(
             size = imageFileUploadFragment.size(),
             fileUpload = BaseFileUpload(
                 id = imageFileUploadFragment.id,
-                url = mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
+                url = coreGqlMapper.mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = imageFileUploadFragment.fileName,
                 mimeType = mapToMimeType(imageFileUploadFragment.mimeType)
             )
@@ -253,7 +226,7 @@ internal class GqlMapper(
             durationMs = videoFileUploadFragment.durationMs?.toLong(),
             fileUpload = BaseFileUpload(
                 id = videoFileUploadFragment.id,
-                url = mapToEphemeralUrl(videoFileUploadFragment.url.ephemeralUrlFragment),
+                url = coreGqlMapper.mapToEphemeralUrl(videoFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = videoFileUploadFragment.fileName,
                 mimeType = mapToMimeType(videoFileUploadFragment.mimeType)
             )
@@ -277,7 +250,7 @@ internal class GqlMapper(
             },
             fileUpload = BaseFileUpload(
                 id = documentFileUploadFragment.id,
-                url = mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
+                url = coreGqlMapper.mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
                 mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
             )
@@ -291,24 +264,10 @@ internal class GqlMapper(
             durationMs = audioFileUploadFragment.durationMs?.toLong(),
             fileUpload = BaseFileUpload(
                 id = audioFileUploadFragment.id,
-                url = mapToEphemeralUrl(audioFileUploadFragment.url.ephemeralUrlFragment),
+                url = coreGqlMapper.mapToEphemeralUrl(audioFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = audioFileUploadFragment.fileName,
                 mimeType = mapToMimeType(audioFileUploadFragment.mimeType)
             )
         )
-    }
-
-    private fun mapToLivekitRoomStatus(status: LivekitRoomMessageContentFragment.Status): LivekitRoomStatus? {
-        status.onLivekitRoomClosedStatus?.let {
-            return LivekitRoomStatus.Closed
-        }
-        status.onLivekitRoomOpenStatus?.let {
-            return LivekitRoomStatus.Open(
-                url = it.url,
-                token = it.token
-            )
-        }
-        logger.error("Unknown livekit room status mapping for $status")
-        return null
     }
 }

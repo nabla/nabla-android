@@ -10,9 +10,10 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nablaInboxFragment"
-        android:name="com.nabla.sdk.messaging.ui.scene.conversations.InboxFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:name="com.nabla.sdk.messaging.ui.scene.conversations.InboxFragment"
+        android:background="?android:colorBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

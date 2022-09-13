@@ -90,4 +90,5 @@ private fun Context.permissionRequestLauncher(
     }
 }
 
-internal class PermissionException(message: String) : Exception(message)
+@NablaInternal
+public class PermissionException(message: String) : Exception(message)

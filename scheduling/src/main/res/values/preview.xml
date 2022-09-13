@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Just a theme for IDE preview -->
+    <style name="Nabla.Preview.Scheduling" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="nablaSchedulingThemeOverlay">@style/Nabla.ThemeOverlay.Scheduling</item>
+    </style>
+</resources>

@@ -6,12 +6,11 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.messaging.core.data.message.PaginatedConversationItems
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -47,18 +46,15 @@ internal class ConversationContentRepositoryStub(
     private val flowMutex = Mutex()
     private val messagesFlowPerConversation = mutableMapOf<Uuid, MutableStateFlow<List<Message>>>()
 
-    override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedList<ConversationItem>> {
         val isNewlyCreated = conversationId.stableId in conversationRepositoryStub.newlyCreatedConversationIds
         return messagesFlowPerConversation.getOrPut(conversationId.stableId) {
             conversationItemsStateFlow(prepopulate = !isNewlyCreated)
         }
             .map { messages ->
-                PaginatedConversationItems(
-                    conversationItems = ConversationItems.fake(
-                        conversation = conversationRepositoryStub.conversationsFlow.value.items.first { it.id.stableId == conversationId.stableId },
-                        messages = messages.sortedByDescending { it.baseMessage.createdAt }
-                    ),
-                    hasMore = !isNewlyCreated,
+                PaginatedList.fakeConversationsItems(
+                    messages = messages.sortedByDescending { it.baseMessage.createdAt },
+                    hasMore = !isNewlyCreated
                 )
             }
             .onStart {

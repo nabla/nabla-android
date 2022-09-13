@@ -1,6 +1,6 @@
 package com.nabla.sdk.core.domain.entity
 
-public data class PaginatedList<T>(
+public data class PaginatedList<out T>(
     val items: List<T>,
     val hasMore: Boolean,
 ) {

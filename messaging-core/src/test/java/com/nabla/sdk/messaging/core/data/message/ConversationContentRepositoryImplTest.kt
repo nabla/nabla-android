@@ -2,12 +2,12 @@ package com.nabla.sdk.messaging.core.data.message
 
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
+import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.data.stubs.fakeImage
 import com.nabla.sdk.messaging.core.data.stubs.fakeProviderJoined
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -73,11 +73,8 @@ class ConversationContentRepositoryImplTest {
             gqlMessageToMerge,
             gqlConversationActivity
         )
-        val paginatedConversationItems = PaginatedConversationItems(
-            conversationItems = ConversationItems(
-                conversationId = conversationId,
-                items = conversationItems
-            ),
+        val paginatedConversationItems = PaginatedList(
+            items = conversationItems,
             hasMore = false
         )
 
@@ -104,7 +101,7 @@ class ConversationContentRepositoryImplTest {
         )
         repo.watchConversationItems(conversationId).test {
             val item = awaitItem()
-            item.conversationItems.items.apply {
+            item.items.apply {
                 assertTrue(contains(localMessageToKeep))
                 assertFalse(contains(localMessageToReplace))
                 assertFalse(contains(localMessageToMerge))

@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.ui.helpers.factoryFor
+import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.getThemeDrawable
 import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -20,9 +22,7 @@ import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationListBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
-import com.nabla.sdk.messaging.ui.scene.getNablaInstanceByName
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationActivity
-import com.nabla.sdk.messaging.ui.scene.setSdkName
 
 public open class InboxFragment : Fragment() {
     private val messagingClient: NablaMessagingClient

@@ -2,20 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
-to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+
+- New scheduling feature module.
+- New 'title' field on Provider.
+
+### Changed
+
+- Data class `WatchPaginatedResponse` moved from messaging to core package.
+- Deleting `ConversationItems` and replacing usage with a `List<ConversationItem>`.
 
 ## [1.0-alpha11] - 2022-09-12
 
 ### Fixed
+
 - Pagination for conversations and messages now has a more reasonable value (i.e. 50) and errors in page loading are properly handled.
 
 ## [1.0-alpha10] - 2022-08-19
 
 ### Added
-- `video-call` module is now available to add Video calls  to your messaging experience
+
+- `video-call` module is now available to add Video calls to your messaging experience
 
 ### Changed
 - A new `modules` parameter is now required when calling `NablaClient.initialize()`:

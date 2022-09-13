@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.nabla.sdk.core.databinding.NablaErrorLayoutBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewBinding
-import com.nabla.sdk.messaging.ui.databinding.NablaErrorLayoutBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 
 public class ConversationListView : FrameLayout {

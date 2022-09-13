@@ -27,9 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
@@ -39,6 +37,7 @@ import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.toKtUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
@@ -56,10 +55,11 @@ import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.player.createMediaPlayersCoordinator
 import com.nabla.sdk.core.ui.helpers.registerForPermissionResult
 import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
+import com.nabla.sdk.core.ui.helpers.requireSdkName
+import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.scrollToTop
+import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
-import com.nabla.sdk.core.ui.helpers.toAndroidUri
-import com.nabla.sdk.core.ui.helpers.toKtUri
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -79,8 +79,6 @@ import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.loadReplyConten
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToAuthorName
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.repliedToContent
 import com.nabla.sdk.messaging.ui.scene.messages.editor.MediaToSendAdapter
-import com.nabla.sdk.messaging.ui.scene.requireSdkName
-import com.nabla.sdk.messaging.ui.scene.setSdkName
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -98,18 +96,11 @@ public open class ConversationFragment : Fragment() {
         get() = NablaClient.getInstance(requireSdkName())
 
     private val viewModel: ConversationViewModel by viewModels {
-        object : AbstractSavedStateViewModelFactory(this, arguments) {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(
-                key: String,
-                modelClass: Class<T>,
-                handle: SavedStateHandle,
-            ): T {
-                return ConversationViewModel(
-                    nablaClient = nablaClient,
-                    savedStateHandle = handle,
-                ) as T
-            }
+        savedStateFactoryFor { handle ->
+            ConversationViewModel(
+                nablaClient = nablaClient,
+                savedStateHandle = handle,
+            )
         }
     }
 

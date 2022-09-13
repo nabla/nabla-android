@@ -6,11 +6,8 @@
     </declare-styleable>
 
     <!-- Theme overlay adding Nabla UI customization attrs with their defaults, see attrs.xml -->
-    <style name="Nabla.ThemeOverlay.Messaging" parent="">
+    <style name="Nabla.ThemeOverlay.Messaging" parent="Nabla.ThemeOverlay.Base">
         <item name="nablaHasValidMessagingOverlays">true</item>
-
-        <item name="nablaAvatarViewStyle">@style/Nabla.Widget.AvatarView</item>
-        <item name="nablaRoundedCornersRadius">12dp</item>
 
         <item name="nablaMessaging_conversationPreviewTitleAppearance">?textAppearanceBodyLarge</item>
         <item name="nablaMessaging_conversationPreviewSubtitleAppearance">?textAppearanceBodyMedium</item>

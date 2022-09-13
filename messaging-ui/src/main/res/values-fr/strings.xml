@@ -2,9 +2,6 @@
 <resources>
     <string name="nabla_conversation_composer_placeholder_default">Tapez votre message</string>
 
-    <string name="nabla_avatar_state_description_placeholder">Avatar sans photo</string>
-    <string name="nabla_avatar_state_description_no_placeholder">Avatar avec photo</string>
-
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Messages non lus</string>
 
     <string name="nabla_conversation_message_copy_label">Message copié</string>
@@ -17,12 +14,6 @@
     <string name="nabla_conversation_no_pdf_third_party_app_info_message">Aucun lecteur de PDF n’a été trouvé sur votre téléphone, voulez-vous installer Google Drive pour ouvrir le PDF ?</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Installer</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Annuler</string>
-
-    <string name="nabla_error_message_network_title">Une erreur réseau est survenue</string>
-    <string name="nabla_error_message_network_body">Veuillez vérifier votre connexion internet et réessayer.</string>
-    <string name="nabla_error_message_generic_title">Une erreur est survenue</string>
-    <string name="nabla_error_message_generic_body">Si elle persiste, contactez-nous.</string>
-    <string name="nabla_error_retry_cta">Réessayer</string>
 
     <string name="nabla_error_message_conversations_loading_more">Une erreur est survenue lors du chargement des conversations, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_loading_more">Une erreur est survenue lors du chargement des messages, veuillez réessayer.</string>

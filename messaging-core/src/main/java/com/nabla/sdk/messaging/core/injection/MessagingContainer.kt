@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.injection
 
 import com.apollographql.apollo3.ApolloClient
+import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
@@ -27,6 +28,7 @@ import kotlinx.datetime.Clock
 
 internal class MessagingContainer(
     logger: Logger,
+    coreGqlMapper: CoreGqlMapper,
     apolloClient: ApolloClient,
     fileUploadRepository: FileUploadRepository,
     val nablaExceptionMapper: NablaExceptionMapper,
@@ -38,7 +40,7 @@ internal class MessagingContainer(
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val localConversationDataSource = LocalConversationDataSource()
-    private val gqlMapper = GqlMapper(logger, localConversationDataSource)
+    private val gqlMapper = GqlMapper(logger, localConversationDataSource, coreGqlMapper)
     private val localMessageDataSource = LocalMessageDataSource()
     private val messageFileUploader = MessageFileUploader(fileUploadRepository)
     private val gqlConversationContentDataSource = GqlConversationContentDataSource(
@@ -46,7 +48,6 @@ internal class MessagingContainer(
         apolloClient = apolloClient,
         mapper = gqlMapper,
         coroutineScope = repoScope,
-        localConversationDataSource = localConversationDataSource,
     )
     private val gqlConversationDataSource = GqlConversationDataSource(
         logger = logger,

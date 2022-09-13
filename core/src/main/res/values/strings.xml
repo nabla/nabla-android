@@ -6,4 +6,13 @@
     <string name="nabla_conversation_camera_video_permission_rational_description">To record a video, we need your authorisation to use your camera and microphone.</string>
     <string name="nabla_permission_rational_default_accept">Accept</string>
     <string name="nabla_permission_rational_default_decline">Decline</string>
+
+    <string name="nabla_error_message_network_title">There was a network error</string>
+    <string name="nabla_error_message_network_body">Please check your internet and try again.</string>
+    <string name="nabla_error_message_generic_title">There was an error</string>
+    <string name="nabla_error_message_generic_body">Please try again later.</string>
+    <string name="nabla_error_retry_cta">Retry</string>
+
+    <string name="nabla_avatar_state_description_placeholder">Avatar without picture</string>
+    <string name="nabla_avatar_state_description_no_placeholder">Avatar with picture</string>
 </resources>

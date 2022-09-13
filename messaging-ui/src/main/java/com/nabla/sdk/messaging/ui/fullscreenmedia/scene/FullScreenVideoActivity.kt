@@ -9,9 +9,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.ui.helpers.dpToPx
-import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityFullScreenVideoBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.sanitize
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays

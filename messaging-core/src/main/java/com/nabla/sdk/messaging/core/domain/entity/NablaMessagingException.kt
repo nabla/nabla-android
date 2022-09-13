@@ -12,9 +12,6 @@ public class InvalidMessageException(message: String) : NablaException(message =
 public object MissingConversationIdException :
     NablaException(message = "Missing conversationId parameter, make sure you follow the documentation to integrate ConversationFragment.")
 
-public class InvalidAppThemeException(message: String) :
-    NablaException(message = "$message. Please make sure you're using \"Theme.Material3\" on your app theme or at least for activities containing Nabla UI components.")
-
 public open class ProviderNotFoundException internal constructor(cause: ServerException) : NablaException(cause = cause) {
     internal companion object {
         internal const val ERROR_CODE = 20_000

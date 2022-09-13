@@ -6,6 +6,7 @@ import com.apollographql.apollo3.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.apollo.ApolloFactory
+import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.core.data.stubs.TestClock
 import com.nabla.sdk.core.data.stubs.apollo.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.Logger
@@ -112,7 +113,7 @@ internal class GqlConversationDataSourceTest {
             logger = logger,
             coroutineScope = scope,
             apolloClient = apolloClient,
-            mapper = GqlMapper(logger, LocalConversationDataSource()),
+            mapper = GqlMapper(logger, LocalConversationDataSource(), CoreGqlMapper(logger)),
             clock = TestClock(testScope),
         )
     }

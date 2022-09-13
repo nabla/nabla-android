@@ -8,15 +8,17 @@ import com.nabla.sdk.core.domain.entity.BaseFileUpload
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.ui.helpers.capitalize
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -30,13 +32,10 @@ import kotlinx.datetime.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-fun ConversationItems.Companion.fake(
-    conversation: Conversation = Conversation.fake(),
+fun PaginatedList.Companion.fakeConversationsItems(
     messages: List<Message> = ((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }),
-) = ConversationItems(
-    conversationId = conversation.id,
-    items = messages,
-)
+    hasMore: Boolean = false
+): PaginatedList<ConversationItem> = PaginatedList(items = messages, hasMore = hasMore)
 
 fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
@@ -183,9 +182,10 @@ fun Message.Media.Document.Companion.fake(
 
 fun Provider.Companion.fake(
     id: Uuid = uuid4(),
-    firstName: String = "Véronique",
-    lastName: String = "Cayol",
+    firstName: String = randomText(2, punctuation = false).capitalize(),
+    lastName: String = randomText(2, punctuation = false).capitalize(),
     prefix: String? = "Dr",
+    title: String? = "Gynécologue",
     avatar: EphemeralUrl? = EphemeralUrl(
         expiresAt = Instant.DISTANT_FUTURE,
         url = Uri("https://i.pravatar.cc/300"),
@@ -196,6 +196,7 @@ fun Provider.Companion.fake(
     firstName = firstName,
     lastName = lastName,
     prefix = prefix,
+    title = title,
 )
 
 fun SystemUser.Companion.fake() = SystemUser(

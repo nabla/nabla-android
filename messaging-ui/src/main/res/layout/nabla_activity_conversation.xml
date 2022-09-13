@@ -11,6 +11,7 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?android:colorBackground"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

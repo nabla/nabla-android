@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="nablaHasValidSchedulingOverlays" format="boolean" />
+    <attr name="nablaSchedulingThemeOverlay" format="reference" />
+    <style name="Nabla.ThemeOverlay.Scheduling" parent="Nabla.ThemeOverlay.Base">
+        <item name="nablaHasValidSchedulingOverlays">true</item>
+    </style>
+
+</resources>

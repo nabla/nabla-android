@@ -36,21 +36,6 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaActivityFullScree
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaActivityFullScreenVideoBinding;
 }
 
-public final class com/nabla/sdk/messaging/ui/databinding/NablaComponentAvatarViewBinding : androidx/viewbinding/ViewBinding {
-	public final field componentAvatarImageView Landroid/widget/ImageView;
-	public final field componentAvatarPlaceholderTextView Landroid/widget/TextView;
-	public final field componentAvatarPlaceholderTextViewBottomMargin Landroidx/constraintlayout/widget/Guideline;
-	public final field componentAvatarPlaceholderTextViewEndMargin Landroidx/constraintlayout/widget/Guideline;
-	public final field componentAvatarPlaceholderTextViewStartMargin Landroidx/constraintlayout/widget/Guideline;
-	public final field componentAvatarPlaceholderTextViewTopMargin Landroidx/constraintlayout/widget/Guideline;
-	public final field componentAvatarRoot Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaComponentAvatarViewBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaComponentAvatarViewBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaComponentAvatarViewBinding;
-}
-
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationItemLoadingMoreBinding : androidx/viewbinding/ViewBinding {
 	public final field nablaConversationItemLoadingMoreRoot Landroidx/constraintlayout/widget/ConstraintLayout;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationItemLoadingMoreBinding;
@@ -63,7 +48,7 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationItemL
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationListViewBinding : androidx/viewbinding/ViewBinding {
 	public final field conversationsLoadingProgressBar Landroid/widget/ProgressBar;
 	public final field conversationsRecyclerView Landroidx/recyclerview/widget/RecyclerView;
-	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding;
+	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationListViewBinding;
 	public fun getRoot ()Landroid/view/View;
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationListViewBinding;
@@ -298,18 +283,6 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimel
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationTimelineItemVideoMessageBinding;
 }
 
-public final class com/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding : androidx/viewbinding/ViewBinding {
-	public final field errorContainer Landroid/view/ViewGroup;
-	public final field nablaErrorBodyTextView Landroid/widget/TextView;
-	public final field nablaErrorRetryButton Landroid/widget/Button;
-	public final field nablaErrorTitleTextView Landroid/widget/TextView;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroid/view/ViewGroup;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding;
-}
-
 public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationBinding : androidx/viewbinding/ViewBinding {
 	public final field appbar Lcom/google/android/material/appbar/AppBarLayout;
 	public final field conversationAddMediaButton Landroid/widget/ImageView;
@@ -340,7 +313,7 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversat
 	public final field currentlyReplyingToTitle Landroid/widget/TextView;
 	public final field guidelineBottom Landroidx/constraintlayout/widget/Guideline;
 	public final field guidelineControlsBottom Landroidx/constraintlayout/widget/Guideline;
-	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/messaging/ui/databinding/NablaErrorLayoutBinding;
+	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
 	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationBinding;
 	public synthetic fun getRoot ()Landroid/view/View;

@@ -193,34 +193,30 @@ internal class IntegrationTest {
 
         messagesFlow.test {
             val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.content.items.size)
-
-            assertEquals(createdConversation.id, firstEmit.content.conversationId)
+            assertEquals(0, firstEmit.content.size)
             assertNull(firstEmit.loadMore)
 
             val messageToSend = "Hello"
             nablaMessagingClient.sendMessage(MessageInput.Text(messageToSend), createdConversation.id).getOrThrow()
 
             val secondEmit = awaitItem()
-            val message = secondEmit.content.items.first()
+            val message = secondEmit.content.first()
             assertIs<Message.Text>(message)
             assertEquals("Hello", message.text)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
-            assertEquals(createdConversation.id, secondEmit.content.conversationId)
-            assertEquals(secondEmit.content.items.size, 1)
+            assertEquals(secondEmit.content.size, 1)
             assertNull(secondEmit.loadMore)
 
             val thirdEmit = awaitItem()
-            val message2 = thirdEmit.content.items.first()
+            val message2 = thirdEmit.content.first()
             assertIs<Message.Text>(message2)
             assertEquals("Hello", message2.text)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
-            assertEquals(createdConversation.id, thirdEmit.content.conversationId)
-            assertEquals(thirdEmit.content.items.size, 1)
+            assertEquals(thirdEmit.content.size, 1)
             assertNull(thirdEmit.loadMore)
 
             replayEventEmitter.emit(
@@ -231,14 +227,13 @@ internal class IntegrationTest {
             )
 
             val lastEmit = awaitItem()
-            val message3 = lastEmit.content.items.first()
+            val message3 = lastEmit.content.first()
             assertIs<Message.Text>(message3)
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
             assertEquals(MessageAuthor.Patient, message3.author)
-            assertEquals(createdConversation.id, lastEmit.content.conversationId)
-            assertEquals(lastEmit.content.items.size, 1)
+            assertEquals(lastEmit.content.size, 1)
             assertNull(lastEmit.loadMore)
 
             cancelAndIgnoreRemainingEvents()
@@ -266,9 +261,7 @@ internal class IntegrationTest {
 
         messagesFlow.test {
             val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.content.items.size)
-
-            assertEquals(createdConversation.id, firstEmit.content.conversationId)
+            assertEquals(0, firstEmit.content.size)
             assertNull(firstEmit.loadMore)
 
             val uri = Uri("content://image_test")
@@ -288,27 +281,25 @@ internal class IntegrationTest {
             ).getOrThrow()
 
             val secondEmit = awaitItem()
-            val message = secondEmit.content.items.first()
+            val message = secondEmit.content.first()
             assertIs<Message.Media.Image>(message)
             assertEquals(mediaSource, message.mediaSource)
             assertEquals(uri, message.stableUri)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
-            assertEquals(createdConversation.id, secondEmit.content.conversationId)
-            assertEquals(secondEmit.content.items.size, 1)
+            assertEquals(secondEmit.content.size, 1)
             assertNull(secondEmit.loadMore)
 
             val thirdEmit = awaitItem()
-            val message2 = thirdEmit.content.items.first()
+            val message2 = thirdEmit.content.first()
             assertIs<Message.Media.Image>(message2)
             assertEquals(mediaSource, message2.mediaSource)
             assertEquals(uri, message2.stableUri)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
-            assertEquals(createdConversation.id, thirdEmit.content.conversationId)
-            assertEquals(thirdEmit.content.items.size, 1)
+            assertEquals(thirdEmit.content.size, 1)
             assertNull(thirdEmit.loadMore)
 
             replayEventEmitter.emit(
@@ -319,14 +310,13 @@ internal class IntegrationTest {
             )
 
             val lastEmit = awaitItem()
-            val message3 = lastEmit.content.items.first()
+            val message3 = lastEmit.content.first()
             assertIs<Message.Media.Image>(message3)
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
             assertEquals(MessageAuthor.Patient, message3.author)
-            assertEquals(createdConversation.id, lastEmit.content.conversationId)
-            assertEquals(lastEmit.content.items.size, 1)
+            assertEquals(lastEmit.content.size, 1)
             assertNull(lastEmit.loadMore)
 
             cancelAndIgnoreRemainingEvents()
@@ -354,9 +344,7 @@ internal class IntegrationTest {
 
         messagesFlow.test {
             val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.content.items.size)
-
-            assertEquals(createdConversation.id, firstEmit.content.conversationId)
+            assertEquals(0, firstEmit.content.size)
             assertNull(firstEmit.loadMore)
 
             val uri = Uri("content://document_test")
@@ -378,7 +366,7 @@ internal class IntegrationTest {
             ).getOrThrow()
 
             val secondEmit = awaitItem()
-            val message = secondEmit.content.items.first()
+            val message = secondEmit.content.first()
             assertIs<Message.Media.Document>(message)
             assertEquals(mediaSource, message.mediaSource)
             assertEquals(uri, message.stableUri)
@@ -387,12 +375,11 @@ internal class IntegrationTest {
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
             assertEquals(MessageAuthor.Patient, message.author)
-            assertEquals(createdConversation.id, secondEmit.content.conversationId)
-            assertEquals(secondEmit.content.items.size, 1)
+            assertEquals(secondEmit.content.size, 1)
             assertNull(secondEmit.loadMore)
 
             val thirdEmit = awaitItem()
-            val message2 = thirdEmit.content.items.first()
+            val message2 = thirdEmit.content.first()
             assertIs<Message.Media.Document>(message2)
             assertEquals(mediaSource, message2.mediaSource)
             assertEquals(uri, message2.stableUri)
@@ -401,8 +388,7 @@ internal class IntegrationTest {
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
             assertEquals(MessageAuthor.Patient, message2.author)
-            assertEquals(createdConversation.id, thirdEmit.content.conversationId)
-            assertEquals(thirdEmit.content.items.size, 1)
+            assertEquals(thirdEmit.content.size, 1)
             assertNull(thirdEmit.loadMore)
 
             replayEventEmitter.emit(
@@ -413,14 +399,13 @@ internal class IntegrationTest {
             )
 
             val lastEmit = awaitItem()
-            val message3 = lastEmit.content.items.first()
+            val message3 = lastEmit.content.first()
             assertIs<Message.Media.Document>(message3)
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
             assertEquals(MessageAuthor.Patient, message3.author)
-            assertEquals(createdConversation.id, lastEmit.content.conversationId)
-            assertEquals(lastEmit.content.items.size, 1)
+            assertEquals(lastEmit.content.size, 1)
             assertNull(lastEmit.loadMore)
 
             cancelAndIgnoreRemainingEvents()
@@ -447,7 +432,7 @@ internal class IntegrationTest {
             val messageId = nablaMessagingClient.sendMessage(MessageInput.Text(messageToSend), createdConversation.id).getOrThrow()
 
             val firstEmit = awaitItem()
-            val message = firstEmit.content.items.first()
+            val message = firstEmit.content.first()
             assertIs<Message.Text>(message)
             assertEquals("Hello", message.text)
 
@@ -456,7 +441,7 @@ internal class IntegrationTest {
             nablaMessagingClient.deleteMessage(createdConversation.id, messageId).getOrThrow()
 
             val secondEmit = awaitItem()
-            assertEquals(0, secondEmit.content.items.size)
+            assertEquals(0, secondEmit.content.size)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -531,7 +516,7 @@ internal class IntegrationTest {
 
         messagesFlow.test {
             val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.content.items.size)
+            assertEquals(0, firstEmit.content.size)
 
             val providerId = uuid4()
             replayEventEmitter.emit(
@@ -542,8 +527,8 @@ internal class IntegrationTest {
             )
 
             val secondEmit = awaitItem()
-            assertEquals(1, secondEmit.content.items.size)
-            val activityItem = secondEmit.content.items.first()
+            assertEquals(1, secondEmit.content.size)
+            val activityItem = secondEmit.content.first()
             assertIs<ConversationActivity>(activityItem)
             val activityContent = activityItem.content
             assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)
@@ -696,7 +681,7 @@ internal class IntegrationTest {
 
         messagesFlow.test {
             val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.content.items.size)
+            assertEquals(0, firstEmit.content.size)
 
             replayEventEmitter.emit(
                 GqlData.ConversationEvents.Activity.deletedProviderJoinedActivity(
@@ -705,8 +690,8 @@ internal class IntegrationTest {
             )
 
             val secondEmit = awaitItem()
-            assertEquals(1, secondEmit.content.items.size)
-            val activityItem = secondEmit.content.items.first()
+            assertEquals(1, secondEmit.content.size)
+            val activityItem = secondEmit.content.first()
             assertIs<ConversationActivity>(activityItem)
             val activityContent = activityItem.content
             assertIs<ConversationActivityContent.ProviderJoinedConversation>(activityContent)

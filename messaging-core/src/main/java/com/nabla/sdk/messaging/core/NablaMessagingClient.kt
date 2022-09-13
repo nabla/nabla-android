@@ -7,15 +7,14 @@ import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -105,7 +104,7 @@ public interface NablaMessagingClient : MessagingModule {
      *
      * @param conversationId the id from [Conversation.id].
      */
-    public fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>>
+    public fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<List<ConversationItem>>>
 
     /**
      * Send a new message in the conversation.

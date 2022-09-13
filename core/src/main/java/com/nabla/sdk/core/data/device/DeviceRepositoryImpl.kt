@@ -33,6 +33,7 @@ internal class DeviceRepositoryImpl(
                     when (it) {
                         ModuleType.VIDEO_CALL -> SdkModule.VIDEO_CALL
                         ModuleType.MESSAGING -> SdkModule.MESSAGING
+                        ModuleType.SCHEDULING -> SdkModule.VIDEO_CALL_SCHEDULING
                     }
                 }
                 val deviceId = apolloClient.mutation(

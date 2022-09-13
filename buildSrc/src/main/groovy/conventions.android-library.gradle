@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+}
+
+group buildConfig.groupId
+
+android {
+    compileSdk buildConfig.compileSdk
+
+    resourcePrefix "nabla"
+
+    defaultConfig {
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        aarMetadata {
+            minCompileSdk buildConfig.compileSdk
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility buildConfig.jvmTarget
+        targetCompatibility buildConfig.jvmTarget
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'RtlEnabled','VisibleForTests'
+        checkDependencies true
+    }
+
+    testOptions {
+        unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed"
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}
+
+publishing.publications.all {
+    if (it.name == 'apollo') {
+        alias true
+    }
+}

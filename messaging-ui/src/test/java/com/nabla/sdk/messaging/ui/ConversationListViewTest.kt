@@ -32,7 +32,8 @@ internal class ConversationListViewTest {
         val providerInConversation = ProviderInConversation.fake(
             provider = Provider.fake(
                 id = UUID.fromString("6cf6bdbf-a0ea-437c-b668-2236e02f1a07"),
-                avatar = null
+                lastName = "Cayol",
+                avatar = null,
             )
         )
         adapter.submitList(

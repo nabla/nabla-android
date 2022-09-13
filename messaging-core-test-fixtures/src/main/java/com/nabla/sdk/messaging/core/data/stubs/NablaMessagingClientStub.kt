@@ -4,14 +4,14 @@ import androidx.test.espresso.idling.CountingIdlingResource
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.LogcatLogger
+import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
-import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -63,7 +63,7 @@ class NablaMessagingClientStub(
         return conversationRepository.watchConversation(conversationId)
     }
 
-    override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<ConversationItems>> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<List<ConversationItem>>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 messageRepository.loadMoreMessages(conversationId)
@@ -73,7 +73,7 @@ class NablaMessagingClientStub(
         return messageRepository.watchConversationItems(conversationId)
             .map { paginatedConversationItems ->
                 WatchPaginatedResponse(
-                    content = paginatedConversationItems.conversationItems,
+                    content = paginatedConversationItems.items,
                     loadMore = if (paginatedConversationItems.hasMore) {
                         loadMoreCallback
                     } else null

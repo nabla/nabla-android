@@ -10,7 +10,7 @@ espresso = "3.4.0"
 
 [libraries]
 android-pluginGradle = "com.android.tools.build:gradle:7.2.2"
-gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.9.0"
+gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.12.0"
 paparazzi-pluginGradle = "app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0"
 
 androidx-core = "androidx.core:core-ktx:1.7.0"
@@ -18,7 +18,6 @@ androidx-activity = "androidx.activity:activity-ktx:1.4.0"
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxlifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxlifecycle" }
 androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidxlifecycle" }
-androidx-material = "com.google.android.material:material:1.5.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
 androidx-startup = "androidx.startup:startup-runtime:1.1.1"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.7.0" }
@@ -32,6 +31,7 @@ touchImageView = { group = "com.github.MikeOrtiz", name = "TouchImageView", vers
 exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", version = "2.16.0" }
 
 google-material = { group = "com.google.android.material", name = "material", version = "1.5.0" }
+flexBoxLayout = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
 
 kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }

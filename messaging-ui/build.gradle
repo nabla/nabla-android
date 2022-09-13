@@ -1,70 +1,11 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
+    id 'conventions.android-library'
     id 'kotlin-parcelize'
-    id 'maven-publish'
     id 'app.cash.paparazzi'
 }
 
-group buildConfig.groupId
-
 android {
     namespace = 'com.nabla.sdk.messaging.ui'
-
-    compileSdk buildConfig.compileSdk
-
-    resourcePrefix "nabla"
-
-    defaultConfig {
-        minSdk buildConfig.minSdk
-        targetSdk buildConfig.targetSdk
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-
-        aarMetadata {
-            minCompileSdk buildConfig.compileSdk
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility buildConfig.jvmTarget
-        targetCompatibility buildConfig.jvmTarget
-    }
-
-    buildFeatures {
-        viewBinding true
-    }
-
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
-    }
-
-    lintOptions {
-        checkDependencies true
-        warningsAsErrors true
-        abortOnError true
-        disable 'RtlEnabled','VisibleForTests'
-    }
-
-    testOptions {
-        unitTests.all {
-            testLogging {
-                events "passed", "skipped", "failed"
-            }
-        }
-    }
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    // we don't want it for test src, see https://stackoverflow.com/questions/64267076
-    if (!it.name.contains("Test")) {
-        kotlinOptions.freeCompilerArgs += "-Xexplicit-api=strict"
-    }
-
-    kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
 }
 
 // Paparazzi requires Java 11 for unit test while https://github.com/cashapp/paparazzi/issues/409 is open
@@ -72,16 +13,6 @@ tasks.withType(Test).configureEach {
     javaLauncher.set(javaToolchains.launcherFor {
         languageVersion.set(JavaLanguageVersion.of(11))
     })
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-            }
-        }
-    }
 }
 
 dependencies {

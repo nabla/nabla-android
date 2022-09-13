@@ -1,0 +1,118 @@
+query PastAppointments($page: OpaqueCursorPage!) {
+    pastAppointments(page: $page) {
+        ...AppointmentsPageFragment
+    }
+}
+
+query UpcomingAppointments($page: OpaqueCursorPage!) {
+    upcomingAppointments(page: $page) {
+        ...AppointmentsPageFragment
+    }
+}
+
+query AppointmentCategories {
+    appointmentCategories {
+        categories {
+            ...AppointmentCategoryFragment
+        }
+    }
+}
+
+query AvailabilitySlots($categoryId: UUID!, $page: OpaqueCursorPage!) {
+    appointmentCategory(id: $categoryId) {
+        category {
+            availableSlots(page: $page) {
+                ...AvailabilitySlotsPageFragment
+            }
+        }
+    }
+}
+
+mutation ScheduleAppointment(
+    $categoryId: UUID!,
+    $providerId: UUID!,
+    $slot: DateTime!,
+    $timezone: TimeZone!,
+) {
+    scheduleAppointment(categoryId: $categoryId, providerId: $providerId, slot: $slot, timeZone: $timezone) {
+        appointment {
+            ...AppointmentFragment
+        }
+    }
+}
+
+mutation CancelAppointment($appointmentId: UUID!) {
+    cancelAppointment(id: $appointmentId) {
+        appointmentUuid
+    }
+}
+
+fragment AvailabilitySlotsPageFragment on AvailableSlotsPage {
+    hasMore
+    nextCursor
+
+    slots {
+        ...AvailabilitySlotFragment
+    }
+}
+
+fragment AvailabilitySlotFragment on AvailabilitySlot {
+    startAt
+    endAt
+    provider {
+        id
+    }
+}
+
+subscription AppointmentsEvents {
+    appointments {
+        event {
+            ... on AppointmentCreatedEvent {
+                appointment {
+                    ...AppointmentFragment
+                }
+            }
+            ... on AppointmentUpdatedEvent {
+                appointment {
+                    ...AppointmentFragment
+                }
+            }
+            ... on AppointmentCancelledEvent {
+                appointmentId
+            }
+        }
+    }
+}
+
+fragment AppointmentsPageFragment on AppointmentsPage {
+    hasMore
+    nextCursor
+
+    data {
+        ...AppointmentFragment
+    }
+}
+
+fragment AppointmentCategoryFragment on AppointmentCategory {
+    id
+    name
+    callDurationMinutes
+}
+
+fragment AppointmentFragment on Appointment {
+    id
+    provider {
+        ...ProviderFragment
+    }
+    scheduledAt
+    state {
+        ... on UpcomingAppointment {
+            livekitRoom {
+                ...LivekitRoomFragment
+            }
+        }
+        ... on FinalizedAppointment {
+            empty: _
+        }
+    }
+}

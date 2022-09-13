@@ -23,11 +23,11 @@ import coil.loadAny
 import coil.size.OriginalSize
 import coil.size.PixelSize
 import coil.size.Size
+import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
-import com.nabla.sdk.core.ui.helpers.toAndroidUri
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaToSendBinding
 import kotlin.math.max

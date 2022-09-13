@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources translatable="false">
+    <string name="nabla_display_name_initials_format">%1$.1s%2$.1s</string>
+    <string name="nabla_display_lastname_initials_format">%1$.1s</string>
+    <string name="nabla_display_name_full_name_format">%1$s %2$s</string>
+    <string name="nabla_display_name_full_name_and_prefix">%1$s %2$s</string>
+</resources>

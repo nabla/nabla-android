@@ -46,6 +46,11 @@ dependencyAnalysis {
             onUsedTransitiveDependencies {
                 severity('ignore')
             }
+            onIncorrectConfiguration {
+                severity('fail')
+                // We allow api config for :core dependency to support use case where consumer is just importing feature module.
+                exclude(':core')
+            }
             ignoreKtx(true)
         }
     }
@@ -62,18 +67,24 @@ dependencyAnalysis {
     }
 }
 
-subprojects {
+subprojects { project ->
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     ktlint {
         setVersion(libs.versions.ktlint.get())
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach { task ->
         kotlinOptions {
             allWarningsAsErrors = true
             jvmTarget = buildConfig.jvmTarget
             freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+            freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
+            def projectsIgnoringStrictApi = ["ui-tests", "test-fixtures"]
+            def projectIgnoresStrictApi = projectsIgnoringStrictApi.any { project.name.contains(it) }
+            if (!task.name.contains("Test") && !projectIgnoresStrictApi) {
+                freeCompilerArgs += "-Xexplicit-api=strict"
+            }
         }
     }
 }

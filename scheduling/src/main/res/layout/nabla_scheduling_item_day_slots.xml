@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nabla_bg_outline_rounded_corners"
+    android:paddingBottom="6dp"
+    android:paddingTop="12dp"
+    >
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:paddingEnd="4dp"
+        android:textAppearance="?textAppearanceTitleMedium"
+        app:drawableTint="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Tomorrow"
+        />
+
+    <TextView
+        android:id="@+id/availabilitiesCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="6dp"
+        android:textAppearance="?textAppearanceBodySmall"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date"
+        tools:text="4 availabilities"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/availabilitiesContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date"
+        tools:listitem="@layout/nabla_scheduling_item_time_slot"
+        tools:spanCount="3"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

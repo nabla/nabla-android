@@ -1,0 +1,31 @@
+plugins {
+    id 'conventions.android-library'
+    id 'com.apollographql.apollo3'
+    id 'kotlin-parcelize'
+}
+
+android {
+    namespace = 'com.nabla.sdk.scheduling'
+
+    kotlinOptions.freeCompilerArgs += ["-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"]
+    kotlinOptions.freeCompilerArgs += ["-opt-in=kotlinx.coroutines.FlowPreview"]
+}
+
+apollo {
+    packageName.set("com.nabla.sdk.scheduling.graphql")
+    generateTestBuilders.set(true)
+    generateAsInternal.set(true)
+}
+
+dependencies {
+    api project(':core')
+    apolloMetadata(project(":core"))
+    api libs.google.material
+    implementation libs.androidx.fragment.ktx
+    implementation libs.kotlin.datetime
+    implementation libs.apollo.runtime
+    implementation libs.apollo.cache
+    implementation libs.apollo.cache.sqlite
+    implementation libs.apollo.adapters
+    implementation libs.flexBoxLayout
+}

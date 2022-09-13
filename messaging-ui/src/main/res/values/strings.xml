@@ -2,9 +2,6 @@
 <resources>
     <string name="nabla_conversation_composer_placeholder_default">Type your message</string>
 
-    <string name="nabla_avatar_state_description_placeholder">Avatar without picture</string>
-    <string name="nabla_avatar_state_description_no_placeholder">Avatar with picture</string>
-
     <string name="nabla_conversation_list_view_unread_indicator_content_description">Unread messages</string>
 
     <string name="nabla_conversation_message_copy_label">Copied message</string>
@@ -17,12 +14,6 @@
     <string name="nabla_conversation_no_pdf_third_party_app_info_message">No PDF reader was found on your phone, do you want to install Google Drive to open the PDF file?</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Install</string>
     <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Cancel</string>
-
-    <string name="nabla_error_message_network_title">There was a network error</string>
-    <string name="nabla_error_message_network_body">Please check your internet and try again.</string>
-    <string name="nabla_error_message_generic_title">There was an error</string>
-    <string name="nabla_error_message_generic_body">If this keeps happening, please reach out to us.</string>
-    <string name="nabla_error_retry_cta">Retry</string>
 
     <string name="nabla_error_message_conversations_loading_more">An error occurred while loading more conversations, please try again.</string>
     <string name="nabla_error_message_conversation_loading_more">An error occurred while loading more messages, please try again.</string>

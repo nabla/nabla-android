@@ -26,8 +26,11 @@ public sealed class AuthenticationException constructor(cause: Throwable?, messa
         AuthenticationException(cause = cause, message = "Authorization denied")
 }
 
+public class InvalidAppThemeException(message: String) :
+    NablaException(message = "$message. Please make sure you're using \"Theme.Material3\" on your app theme or at least for activities containing Nabla UI components.")
+
 public class NetworkException internal constructor(cause: Throwable) : NablaException(cause = cause)
-public class ServerException internal constructor(cause: Throwable, public val code: Int, serverMessage: String, requestId: String?) :
+public class ServerException internal constructor(cause: Throwable, public val code: Int, public val serverMessage: String, requestId: String?) :
     NablaException(cause = cause, message = "Nabla server error. Code: $code, message: $serverMessage, requestId: $requestId")
 
 public class InternalException constructor(cause: Throwable) : NablaException(cause = cause, message = cause.message)

@@ -210,16 +210,7 @@ fragment MessageFragment on Message {
 
 fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent {
     livekitRoom {
-        uuid
-        status {
-            ... on LivekitRoomOpenStatus {
-                url
-                token
-            }
-            ... on LivekitRoomClosedStatus {
-                empty: _
-            }
-        }
+        ...LivekitRoomFragment
     }
 }
 
@@ -282,16 +273,6 @@ fragment ProviderInConversationFragment on ProviderInConversation {
     seenUntil
 }
 
-fragment ProviderFragment on Provider {
-    id
-    avatarUrl {
-        ...EphemeralUrlFragment
-    }
-    prefix
-    firstName
-    lastName
-}
-
 fragment SystemFragment on System {
     name
     avatar {
@@ -304,11 +285,6 @@ fragment SystemFragment on System {
 
 fragment PatientFragment on Patient {
     id
-}
-
-fragment EphemeralUrlFragment on EphemeralUrl {
-    expiresAt
-    url
 }
 
 fragment TextMessageContentFragment on TextMessageContent {

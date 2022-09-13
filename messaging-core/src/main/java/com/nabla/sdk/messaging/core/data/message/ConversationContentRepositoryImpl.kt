@@ -1,12 +1,12 @@
 package com.nabla.sdk.messaging.core.data.message
 
+import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -33,8 +33,8 @@ internal class ConversationContentRepositoryImpl(
     private val loadMoreConversationMessagesSharedSingleLock = Mutex()
     private val loadMoreConversationMessagesSharedSingleMap = mutableMapOf<ConversationId, SharedSingle<Unit, Result<Unit>>>()
 
-    override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedConversationItems> {
-        return when (conversationId) {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedList<ConversationItem>> {
+        val typedFlow: Flow<PaginatedList<ConversationItem>> = when (conversationId) {
             is ConversationId.Local -> {
                 localConversationDataSource.watch(conversationId).flatMapLatest { localConversation ->
                     when (localConversation.creationState) {
@@ -43,12 +43,8 @@ internal class ConversationContentRepositoryImpl(
                         LocalConversation.CreationState.ToBeCreated,
                         -> {
                             localMessageDataSource.watchLocalMessages(conversationId).map {
-                                val conversationItems = ConversationItems(
-                                    conversationId = conversationId,
-                                    items = it.toList()
-                                )
-                                PaginatedConversationItems(
-                                    conversationItems = conversationItems,
+                                PaginatedList(
+                                    items = it.toList(),
                                     hasMore = false
                                 )
                             }
@@ -60,22 +56,19 @@ internal class ConversationContentRepositoryImpl(
                 }
             }
             is ConversationId.Remote -> watchRemoteConversationItems(conversationId)
-        }.map { paginatedConversationItems ->
-            paginatedConversationItems.copy(
-                conversationItems = paginatedConversationItems.conversationItems.copy(
-                    items = paginatedConversationItems.conversationItems.items.filter {
-                        if (it is Message.LivekitRoom && !isVideoCallModuleActive) {
-                            return@filter false
-                        }
-
-                        return@filter true
-                    }
-                )
-            )
         }
+        return typedFlow.map { filterLivekitMessagesIfNeeded(it) }
     }
 
-    private fun watchRemoteConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedConversationItems> {
+    private fun filterLivekitMessagesIfNeeded(paginatedConversationItems: PaginatedList<ConversationItem>): PaginatedList<ConversationItem> {
+        return paginatedConversationItems.copy(
+            items = paginatedConversationItems.items.filter {
+                it !is Message.LivekitRoom || isVideoCallModuleActive
+            }
+        )
+    }
+
+    private fun watchRemoteConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedList<ConversationItem>> {
         val gqlConversationAndMessagesFlow = gqlConversationContentDataSource.watchConversationItems(conversationId)
         val localMessagesFlow = localMessageDataSource.watchLocalMessages(conversationId)
         val messageFlow = gqlConversationAndMessagesFlow.combine(localMessagesFlow) { gqlConversationAndMessages, localMessages ->
@@ -86,9 +79,9 @@ internal class ConversationContentRepositoryImpl(
 
     private fun combineGqlAndLocalInfo(
         localMessages: Collection<Message>,
-        gqlPaginatedConversationAndMessages: PaginatedConversationItems,
-    ): PaginatedConversationItems {
-        val (gqlConversationItemMessages, gqlConversationItemNotMessages) = gqlPaginatedConversationAndMessages.conversationItems.items.partition { conversationItem ->
+        gqlPaginatedConversationAndMessages: PaginatedList<ConversationItem>,
+    ): PaginatedList<ConversationItem> {
+        val (gqlConversationItemMessages, gqlConversationItemNotMessages) = gqlPaginatedConversationAndMessages.items.partition { conversationItem ->
             conversationItem is Message
         }
         val gqlMessages = gqlConversationItemMessages.map { it as Message }
@@ -105,11 +98,7 @@ internal class ConversationContentRepositoryImpl(
         val allItems: List<ConversationItem> = (allMessages + gqlConversationItemNotMessages).sortedByDescending { conversationItem ->
             conversationItem.createdAt
         }
-        return gqlPaginatedConversationAndMessages.copy(
-            conversationItems = gqlPaginatedConversationAndMessages.conversationItems.copy(
-                items = allItems,
-            ),
-        )
+        return gqlPaginatedConversationAndMessages.copy(items = allItems)
     }
 
     private fun mergeMessage(gqlMessage: Message, localMessage: Message): Message? {

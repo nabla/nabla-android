@@ -42,7 +42,7 @@ dependencies {
     implementation project(':messaging-ui')
     implementation project(':messaging-core-test-fixtures')
 
-    implementation libs.androidx.material
+    implementation libs.google.material
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.fragment.ktx
 

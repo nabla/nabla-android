@@ -43,7 +43,7 @@ dependencies {
     implementation project(':messaging-ui')
     implementation project(':video-call')
 
-    implementation libs.androidx.material
+    implementation libs.google.material
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.fragment.ktx
 

@@ -1,0 +1,40 @@
+query Provider($id: UUID!) {
+    provider(id: $id) {
+        provider {
+            ...ProviderFragment
+        }
+    }
+}
+
+fragment LivekitRoomFragment on LivekitRoom {
+    uuid
+    status {
+        ...LivekitRoomStatusFragment
+    }
+}
+
+fragment LivekitRoomStatusFragment on LivekitRoomStatus {
+    ... on LivekitRoomOpenStatus {
+        url
+        token
+    }
+    ... on LivekitRoomClosedStatus {
+        empty: _
+    }
+}
+
+fragment ProviderFragment on Provider {
+    id
+    avatarUrl {
+        ...EphemeralUrlFragment
+    }
+    prefix
+    firstName
+    lastName
+    title
+}
+
+fragment EphemeralUrlFragment on EphemeralUrl {
+    expiresAt
+    url
+}

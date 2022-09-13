@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Nabla.ThemeOverlay.Base" parent="">
+        <item name="nablaAvatarViewStyle">@style/Nabla.Widget.AvatarView</item>
+        <item name="nablaRoundedCornersRadius">12dp</item>
+    </style>
+</resources>

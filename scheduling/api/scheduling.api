@@ -1,0 +1,228 @@
+public final class com/nabla/sdk/scheduling/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingModule : com/nabla/sdk/core/domain/boundary/SchedulingModule {
+	public static final field Factory Lcom/nabla/sdk/scheduling/NablaSchedulingModule$Factory;
+}
+
+public final class com/nabla/sdk/scheduling/NablaSchedulingModule$Factory {
+	public final fun invoke ()Lcom/nabla/sdk/core/domain/boundary/SchedulingModule$Factory;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingActivityBookAppointmentHostBinding : androidx/viewbinding/ViewBinding {
+	public final field fragmentContainer Landroidx/fragment/app/FragmentContainerView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingActivityBookAppointmentHostBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/fragment/app/FragmentContainerView;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingActivityBookAppointmentHostBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingActivityBookAppointmentHostBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemBinding : androidx/viewbinding/ViewBinding {
+	public final field appointmentAvatar Lcom/nabla/sdk/core/ui/components/NablaAvatarView;
+	public final field appointmentSubtitle Landroid/widget/TextView;
+	public final field appointmentTitle Landroid/widget/TextView;
+	public final field joinCallButton Landroid/widget/Button;
+	public final field optionsButton Landroid/widget/ImageView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemLoadingMoreBinding : androidx/viewbinding/ViewBinding {
+	public final field nablaConversationItemLoadingMoreRoot Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemLoadingMoreBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemLoadingMoreBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingAppointmentItemLoadingMoreBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentConfirmationBinding : androidx/viewbinding/ViewBinding {
+	public final field errorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
+	public final field nablaConfirmAppointmentAvatar Lcom/nabla/sdk/core/ui/components/NablaAvatarView;
+	public final field nablaConfirmAppointmentButton Landroid/widget/Button;
+	public final field nablaConfirmAppointmentDatePill Landroid/widget/TextView;
+	public final field nablaConfirmAppointmentSubtitle Landroid/widget/TextView;
+	public final field nablaConfirmAppointmentTitle Landroid/widget/TextView;
+	public final field nablaConfirmCheckbox1 Lcom/google/android/material/checkbox/MaterialCheckBox;
+	public final field nablaConfirmCheckbox2 Lcom/google/android/material/checkbox/MaterialCheckBox;
+	public final field nablaConfirmLoadedGroup Landroidx/constraintlayout/widget/Group;
+	public final field nablaProviderInfo Landroidx/appcompat/widget/LinearLayoutCompat;
+	public final field progressBar Lcom/google/android/material/progressindicator/CircularProgressIndicator;
+	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentConfirmationBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentConfirmationBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentConfirmationBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsBinding : androidx/viewbinding/ViewBinding {
+	public final field nablaAppointmentsPager Landroidx/viewpager2/widget/ViewPager2;
+	public final field nablaAppointmentsTabLayout Lcom/google/android/material/tabs/TabLayout;
+	public final field nablaBookAppointmentButton Landroid/widget/Button;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsContentBinding : androidx/viewbinding/ViewBinding {
+	public final field nablaAppointmentsRecyclerView Landroidx/recyclerview/widget/RecyclerView;
+	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
+	public final field nablaLoadingProgressBar Landroid/widget/ProgressBar;
+	public final field nablaNoAppointmentText Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsContentBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsContentBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentAppointmentsContentBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding : androidx/viewbinding/ViewBinding {
+	public final field errorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
+	public final field nablaNoCategoryText Landroid/widget/TextView;
+	public final field progressBar Lcom/google/android/material/progressindicator/CircularProgressIndicator;
+	public final field recyclerView Landroidx/recyclerview/widget/RecyclerView;
+	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentTimeSlotsBinding : androidx/viewbinding/ViewBinding {
+	public final field errorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
+	public final field nablaNoAvailabilityText Landroid/widget/TextView;
+	public final field nablaSlotsContinueButton Landroid/widget/Button;
+	public final field progressBar Lcom/google/android/material/progressindicator/CircularProgressIndicator;
+	public final field recyclerView Landroidx/recyclerview/widget/RecyclerView;
+	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentTimeSlotsBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentTimeSlotsBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentTimeSlotsBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentCategoryBinding : androidx/viewbinding/ViewBinding {
+	public final field name Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentCategoryBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroid/widget/TextView;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentCategoryBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentCategoryBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemDaySlotsBinding : androidx/viewbinding/ViewBinding {
+	public final field availabilitiesContainer Landroidx/recyclerview/widget/RecyclerView;
+	public final field availabilitiesCount Landroid/widget/TextView;
+	public final field date Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemDaySlotsBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemDaySlotsBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemDaySlotsBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemLoadingBinding : androidx/viewbinding/ViewBinding {
+	public final field progressBar Lcom/google/android/material/progressindicator/CircularProgressIndicator;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemLoadingBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroid/widget/FrameLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemLoadingBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemLoadingBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemTimeSlotBinding : androidx/viewbinding/ViewBinding {
+	public final field time Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemTimeSlotBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroid/widget/TextView;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemTimeSlotBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemTimeSlotBinding;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentCategory {
+	public synthetic fun <init> (Ljava/util/UUID;Ljava/lang/String;JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-Sher8hM ()Ljava/util/UUID;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3-UwyO8pc ()J
+	public final fun copy-0P5y_Zo (Ljava/util/UUID;Ljava/lang/String;J)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentCategory;
+	public static synthetic fun copy-0P5y_Zo$default (Lcom/nabla/sdk/scheduling/domain/entity/AppointmentCategory;Ljava/util/UUID;Ljava/lang/String;JILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentCategory;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCallDuration-UwyO8pc ()J
+	public final fun getId-Sher8hM ()Ljava/util/UUID;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentId {
+	public static final synthetic fun box-impl (Ljava/util/UUID;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentId;
+	public static fun constructor-impl (Ljava/util/UUID;)Ljava/util/UUID;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/UUID;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/UUID;Ljava/util/UUID;)Z
+	public final fun getUuid ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/UUID;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/UUID;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/CategoryId {
+	public static final synthetic fun box-impl (Ljava/util/UUID;)Lcom/nabla/sdk/scheduling/domain/entity/CategoryId;
+	public static fun constructor-impl (Ljava/util/UUID;)Ljava/util/UUID;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/util/UUID;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/util/UUID;Ljava/util/UUID;)Z
+	public final fun getValue ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/util/UUID;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/util/UUID;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/util/UUID;
+}
+
+public final class com/nabla/sdk/scheduling/scene/BookAppointmentActivity : androidx/appcompat/app/AppCompatActivity {
+	public static final field Companion Lcom/nabla/sdk/scheduling/scene/BookAppointmentActivity$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/scheduling/scene/BookAppointmentActivity$Companion {
+	public final fun newIntent (Landroid/content/Context;Ljava/lang/String;)Landroid/content/Intent;
+}
+
+public abstract class com/nabla/sdk/scheduling/scene/SchedulingBaseFragment : androidx/fragment/app/Fragment {
+	public fun <init> ()V
+	public fun <init> (I)V
+	public final fun onGetLayoutInflater (Landroid/os/Bundle;)Landroid/view/LayoutInflater;
+}
+
+public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment : com/nabla/sdk/scheduling/scene/SchedulingBaseFragment {
+	public static final field Companion Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Companion;
+	public fun <init> ()V
+	public fun onCreateView (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;
+	public fun onViewCreated (Landroid/view/View;Landroid/os/Bundle;)V
+}
+
+public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Companion {
+	public final fun newInstance ()Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
+	public final fun newInstance (Ljava/lang/String;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
+}
+
+public final class com/nabla/sdk/scheduling/scene/slots/ViewHoldersKt {
+	public static final fun formatDate (Lkotlinx/datetime/LocalDate;Landroid/content/Context;)Ljava/lang/String;
+}
+

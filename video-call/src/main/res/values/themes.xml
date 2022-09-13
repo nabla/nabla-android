@@ -3,7 +3,7 @@
 
     <attr name="nablaHasValidVideoCallOverlays" format="boolean" />
     <attr name="nablaVideoCallThemeOverlay" format="reference" />
-    <style name="Nabla.ThemeOverlay.VideoCall" parent="">
+    <style name="Nabla.ThemeOverlay.VideoCall" parent="Nabla.ThemeOverlay.Base">
         <item name="nablaHasValidVideoCallOverlays">true</item>
         <item name="nablaVideoCall_micIcon">@drawable/nabla_video_call_ic_mic</item>
         <item name="nablaVideoCall_cameraIcon">@drawable/nabla_video_call_ic_camera</item>

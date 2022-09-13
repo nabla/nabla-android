@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Generic -->
-    <attr name="nablaAvatarViewStyle" format="reference" />
-    <attr name="nablaRoundedCornersRadius" format="dimension" />
-
     <!-- Conversations list -->
     <attr name="nablaMessaging_conversationPreviewTitleAppearance" format="reference" />
     <attr name="nablaMessaging_conversationPreviewSubtitleAppearance" format="reference" />

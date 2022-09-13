@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Generic -->
+    <attr name="nablaAvatarViewStyle" format="reference" />
+    <attr name="nablaRoundedCornersRadius" format="dimension" />
+</resources>

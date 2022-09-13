@@ -13,6 +13,7 @@ import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.apollo.ApolloFactory
+import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.core.data.auth.AcceptLanguageInterceptor
 import com.nabla.sdk.core.data.auth.AuthService
 import com.nabla.sdk.core.data.auth.AuthorizationInterceptor
@@ -33,6 +34,7 @@ import com.nabla.sdk.core.data.file.FileUploadRepositoryImpl
 import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
+import com.nabla.sdk.core.data.patient.ProviderRepositoryImpl
 import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
 import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
@@ -40,6 +42,8 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.boundary.Module
 import com.nabla.sdk.core.domain.boundary.PatientRepository
+import com.nabla.sdk.core.domain.boundary.ProviderRepository
+import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.StringResolver
@@ -65,6 +69,7 @@ public class CoreContainer internal constructor(
     private val modulesFactory: List<Module.Factory<out Module>>,
 ) {
     public val logger: Logger = configuration.logger
+    public val coreGqlMapper: CoreGqlMapper = CoreGqlMapper(logger)
 
     public val clock: Clock = overriddenClock ?: Clock.System
     public val uuidGenerator: UuidGenerator = overriddenUuidGenerator ?: object : UuidGenerator {
@@ -147,6 +152,10 @@ public class CoreContainer internal constructor(
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     public val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context, uuidGenerator)
 
+    public val providerRepository: ProviderRepository by lazy {
+        ProviderRepositoryImpl(apolloClient, coreGqlMapper)
+    }
+
     private val sessionLocalDataCleaner: SessionLocalDataCleaner = SessionLocalDataCleanerImpl(
         apolloClient,
         localPatientDataSource,
@@ -169,6 +178,10 @@ public class CoreContainer internal constructor(
 
     public val videoCallModule: VideoCallModule? by lazy {
         modulesFactory.filterIsInstance<VideoCallModule.Factory>().firstOrNull()?.create(this)
+    }
+
+    public val schedulingModule: SchedulingModule? by lazy {
+        modulesFactory.filterIsInstance<SchedulingModule.Factory>().firstOrNull()?.create(this)
     }
 
     public val messagingModule: MessagingModule? by lazy {

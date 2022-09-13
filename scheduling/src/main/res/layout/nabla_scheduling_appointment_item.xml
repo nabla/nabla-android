@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/nabla_scheduling_appointment_item_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    >
+
+    <com.nabla.sdk.core.ui.components.NablaAvatarView
+        android:id="@+id/appointmentAvatar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/appointmentSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        />
+
+    <TextView
+        android:id="@+id/appointmentTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?textAppearanceTitleMedium"
+        app:layout_constraintBottom_toTopOf="@id/appointmentSubtitle"
+        app:layout_constraintEnd_toStartOf="@id/optionsButton"
+        app:layout_constraintStart_toEndOf="@id/appointmentAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Dr Véronique Cayol"
+        />
+
+    <TextView
+        android:id="@+id/appointmentSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAppearance="?textAppearanceBodyMedium"
+        app:layout_constraintBottom_toTopOf="@id/joinCallButton"
+        app:layout_constraintEnd_toStartOf="@id/optionsButton"
+        app:layout_constraintStart_toEndOf="@id/appointmentAvatar"
+        app:layout_constraintTop_toBottomOf="@id/appointmentTitle"
+        tools:text="Mardi 1 juillet 2022 à 16:00"
+        />
+
+    <ImageView
+        android:id="@+id/optionsButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/nabla_scheduling_appointment_item_options_content_description"
+        android:foreground="?selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="@drawable/nabla_ic_dots_horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/appointmentAvatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/appointmentAvatar"
+        app:tint="?colorOnSurface"
+        />
+
+    <Button
+        android:id="@+id/joinCallButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        style="?materialButtonOutlinedStyle"
+        android:text="@string/nabla_scheduling_appointment_item_join_cta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appointmentSubtitle"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

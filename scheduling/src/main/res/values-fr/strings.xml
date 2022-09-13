@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_scheduling_upcoming_appointments">Prévus</string>
+    <string name="nabla_scheduling_past_appointments">Passés</string>
+    <string name="nabla_scheduling_no_upcoming_appointments">Pas de rendez-vous prévu</string>
+    <string name="nabla_scheduling_no_past_appointments">Pas de rendez-vous passé</string>
+    <string name="nabla_scheduling_book_appointment">Prendre rendez-vous</string>
+    <string name="nabla_scheduling_continue_cta">Continuer</string>
+    <string name="nabla_scheduling_confirm_cta">Confirmer</string>
+    <string name="nabla_scheduling_appointments_pagination_error">Une erreur est survenue lors du chargement des réservations.</string>
+
+    <string name="nabla_scheduling_category_selection_title">Choisissez une catégorie</string>
+    <string name="nabla_scheduling_time_slot_selection_title">Choisissez une date</string>
+    <string name="nabla_scheduling_confirmation_title">Confirmez votre rendez-vous</string>
+    <string name="nabla_scheduling_time_slot_selection_no_category">Pas de catégories disponibles</string>
+    <string name="nabla_scheduling_time_slot_selection_no_availability">Pas de créneaux disponibles</string>
+
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Annuler le rendez-vous ?</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Confirmer l’annulation</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Conserver le rendez-vous</string>
+    <string name="nabla_scheduling_appointment_item_options_content_description">Options</string>
+    <string name="nabla_scheduling_appointment_item_join_cta">Rejoindre l’appel</string>
+    <string name="nabla_scheduling_appointment_item_return_cta">Revenir à l’appel</string>
+    <string name="nabla_scheduling_appointment_item_cancel_action">Annuler le rendez-vous</string>
+    <string name="nabla_scheduling_appointment_item_full_date_pattern">EEEE d MMMM yyyy \'à\' kk:mm</string>
+    <plurals name="nabla_scheduling_appointment_item_relative_future_minutes_pattern">
+        <item quantity="one">Dans %d minute</item>
+        <item quantity="many">Dans %1$d minutes</item>
+        <item quantity="other">Dans %1$d minutes</item>
+    </plurals>
+    <plurals name="nabla_scheduling_appointment_item_relative_past_minutes_pattern">
+        <item quantity="one">Il y a %d minute</item>
+        <item quantity="many">Il y a %1$d minutes</item>
+        <item quantity="other">Il y a %1$d minutes</item>
+    </plurals>
+    <plurals name="nabla_scheduling_time_slot_count">
+        <item quantity="one">%1$d disponibilité</item>
+        <item quantity="many">%1$d disponibilités</item>
+        <item quantity="other">%1$d disponibilités</item>
+    </plurals>
+    <string name="nabla_scheduling_time_slot_pagination_error">Une erreur est survenue lors du chargement des disponibilités.</string>
+
+    <string name="nabla_scheduling_confirmation_consent_checkbox_first">Je consens à réaliser un appel vidéo.</string>
+    <string name="nabla_scheduling_confirmation_consent_checkbox_second">Je consens au traitement de mes données personnelles.</string>
+
+    <string name="nabla_scheduling_date_pill_format_today">Rendez-vous prévu aujourd’hui à %1$s</string>
+    <string name="nabla_scheduling_date_pill_format_future">Rendez-vous prévu le %1$s à %2$s</string>
+    <string name="nabla_scheduling_time_format">HH\'h\'mm</string>
+    <string name="nabla_scheduling_date_pill_format_date">d MMM</string>
+</resources>

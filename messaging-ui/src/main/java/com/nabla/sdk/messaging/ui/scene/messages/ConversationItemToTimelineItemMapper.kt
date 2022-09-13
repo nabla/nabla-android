@@ -1,10 +1,10 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import com.nabla.sdk.core.domain.boundary.VideoCall
+import com.nabla.sdk.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
-import com.nabla.sdk.messaging.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -71,16 +71,16 @@ private fun Message.toMessageContent(
         progress = audioPlaybackProgressMap[stableUri] ?: PlaybackProgress(currentPositionMillis = 0, durationMs),
     )
     is Message.LivekitRoom -> {
-        val status = when (val livekitRoomStatus = livekitRoomStatus) {
+        val status = when (val livekitRoomStatus = livekitRoom.status) {
             LivekitRoomStatus.Closed -> TimelineItem.Message.LivekitRoom.Status.LivekitClosedRoom
             is LivekitRoomStatus.Open -> TimelineItem.Message.LivekitRoom.Status.LivekitOpenedRoom(
                 url = livekitRoomStatus.url,
                 token = livekitRoomStatus.token,
-                isCurrentVideoCall = livekitRoomId == currentVideoCall?.id
+                isCurrentVideoCall = livekitRoom.id == currentVideoCall?.id
             )
         }
         TimelineItem.Message.LivekitRoom(
-            roomId = livekitRoomId,
+            roomId = livekitRoom.id,
             roomStatus = status
         )
     }

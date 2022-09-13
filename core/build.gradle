@@ -1,59 +1,14 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'conventions.android-library'
     id 'com.apollographql.apollo3'
-    id 'maven-publish'
 }
-
-group buildConfig.groupId
 
 android {
     namespace = 'com.nabla.sdk.core'
 
-    compileSdk buildConfig.compileSdk
-
     defaultConfig {
-        minSdk buildConfig.minSdk
-        targetSdk buildConfig.targetSdk
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro', 'serialization-rules.pro'
-
-        aarMetadata {
-            minCompileSdk buildConfig.compileSdk
-        }
-
         buildConfigField 'String', 'VERSION_NAME', "\"${getGitDescribe()}\""
         buildConfigField 'int', 'API_VERSION', getSdkApiVersion()
-    }
-
-    compileOptions {
-        sourceCompatibility buildConfig.jvmTarget
-        targetCompatibility buildConfig.jvmTarget
-    }
-
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
-    }
-
-    lintOptions {
-        warningsAsErrors true
-        abortOnError true
-        disable 'VisibleForTests'
-    }
-
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-        unitTests.all {
-            testLogging {
-                events "passed", "skipped", "failed"
-            }
-        }
     }
 }
 
@@ -66,36 +21,11 @@ String getGitDescribe() {
     return stdout.toString().trim()
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    // we don't want it for test src, see https://stackoverflow.com/questions/64267076
-    if (!it.name.contains("Test")) {
-        kotlinOptions.freeCompilerArgs += "-Xexplicit-api=strict"
-    }
-
-    kotlinOptions.freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
-}
-
 String getSdkApiVersion() {
     def jsonFile = file('versions.json')
     def parsedJson = new groovy.json.JsonSlurper().parseText(jsonFile.text)
 
     return parsedJson.code_version
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-            }
-        }
-    }
-}
-
-publishing.publications.all {
-    if (it.name == 'apollo') {
-        alias true
-    }
 }
 
 apollo {
@@ -104,10 +34,12 @@ apollo {
     service("service") {
         packageName.set("com.nabla.sdk.graphql")
         mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
+        mapScalar("TimeZone", "kotlinx.datetime.TimeZone", "com.nabla.sdk.core.data.apollo.adapter.timeZoneAdapter")
         mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
         generateApolloMetadata.set(true)
+        alwaysGenerateTypesMatching.set(["OpaqueCursorPage", "Query", "Subscription", "Mutation", "SubscriptionReadinessEvent"])
     }
-
+    // purpose: https://github.com/nabla/health/pull/21296#discussion_r942216224
     service("internal") {
         srcDir("src/main/graphqlinternal")
         schemaFile.set(file("src/main/graphql/com/nabla/sdk/core/schema.graphqls"))
@@ -131,6 +63,8 @@ dependencies {
     implementation libs.apollo.runtime
     implementation libs.apollo.cache
     implementation libs.apollo.cache.sqlite
+    implementation libs.apollo.adapters
+    implementation libs.coilCore
     implementation libs.androidx.startup
     implementation libs.androidx.core.ktx
     implementation libs.androidx.fragment.ktx

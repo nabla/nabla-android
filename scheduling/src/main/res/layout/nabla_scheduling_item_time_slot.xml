@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:background="@drawable/nabla_time_slot_background"
+    android:gravity="center"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="6dp"
+    android:textAppearance="?textAppearanceBodyLarge"
+    android:textColor="@color/nabla_color_time_slot_on_container"
+    tools:text="10:10"
+    />

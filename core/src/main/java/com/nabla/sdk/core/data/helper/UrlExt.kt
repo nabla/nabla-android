@@ -29,3 +29,8 @@ internal fun android.net.Uri.toJvmURI(): URI {
 public fun android.net.Uri.toKtUri(): Uri {
     return toJvmURI().toKtUri()
 }
+
+@NablaInternal
+public fun URI.toAndroidUri(): android.net.Uri {
+    return android.net.Uri.parse(toString())
+}

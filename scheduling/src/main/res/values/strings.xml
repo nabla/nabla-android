@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_scheduling_upcoming_appointments">Scheduled</string>
+    <string name="nabla_scheduling_past_appointments">Past</string>
+    <string name="nabla_scheduling_no_upcoming_appointments">No appointments scheduled</string>
+    <string name="nabla_scheduling_no_past_appointments">No past appointments</string>
+    <string name="nabla_scheduling_book_appointment">Schedule an appointment</string>
+    <string name="nabla_scheduling_continue_cta">Continue</string>
+    <string name="nabla_scheduling_confirm_cta">Confirm</string>
+    <string name="nabla_scheduling_appointments_pagination_error">An error occurred while loading more appointments.</string>
+
+    <string name="nabla_scheduling_category_selection_title">Select a category</string>
+    <string name="nabla_scheduling_time_slot_selection_title">Select a date</string>
+    <string name="nabla_scheduling_confirmation_title">Confirm your appointment</string>
+    <string name="nabla_scheduling_time_slot_selection_no_category">No categories available</string>
+    <string name="nabla_scheduling_time_slot_selection_no_availability">No availabilities</string>
+
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Cancel appointment</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Confirm cancellation</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Keep appointment</string>
+    <string name="nabla_scheduling_appointment_item_options_content_description">Options</string>
+    <string name="nabla_scheduling_appointment_item_join_cta">Join the call</string>
+    <string name="nabla_scheduling_appointment_item_return_cta">Return to the call</string>
+    <string name="nabla_scheduling_appointment_item_cancel_action">Cancel appointment</string>
+    <string name="nabla_scheduling_appointment_item_full_date_pattern">EEEE, MMMM d, yyyy \'at\' hh:mm a</string>
+    <plurals name="nabla_scheduling_appointment_item_relative_future_minutes_pattern">
+        <item quantity="one">In one minute</item>
+        <item quantity="other">In %1$d minutes</item>
+    </plurals>
+    <plurals name="nabla_scheduling_appointment_item_relative_past_minutes_pattern">
+        <item quantity="one">One minute ago</item>
+        <item quantity="other">%1$d minutes ago</item>
+    </plurals>
+    <plurals name="nabla_scheduling_time_slot_count">
+        <item quantity="one">One available slot</item>
+        <item quantity="other">%1$d available slots</item>
+    </plurals>
+    <string name="nabla_scheduling_time_slot_pagination_error">An error occurred while loading more availabilities.</string>
+
+    <string name="nabla_scheduling_confirmation_consent_checkbox_first">I consent to do a video consultation.</string>
+    <string name="nabla_scheduling_confirmation_consent_checkbox_second">I consent to the data processing policy.</string>
+
+    <string name="nabla_scheduling_date_pill_format_today">Consultation planned today at %1$s</string>
+    <string name="nabla_scheduling_date_pill_format_future">Consultation planned on %1$s at %2$s</string>
+    <string name="nabla_scheduling_time_format">hh:mm aa</string>
+    <string name="nabla_scheduling_date_pill_format_date">MMM d</string>
+</resources>

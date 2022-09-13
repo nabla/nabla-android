@@ -6,7 +6,7 @@ import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.messaging.core.NablaMessagingModule
 import com.nabla.sdk.videocall.NablaVideoCallModule
 
-class DemoApp : Application() {
+internal class DemoApp : Application() {
     override fun onCreate() {
         super.onCreate()
         NablaClient.initialize(

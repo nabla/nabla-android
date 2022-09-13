@@ -24,6 +24,8 @@ import com.nabla.sdk.core.ui.helpers.PermissionRational
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
+import com.nabla.sdk.core.ui.helpers.requireSdkName
+import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.Both
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.None
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.RemoteOnly
@@ -266,7 +268,6 @@ public class VideoCallActivity : AppCompatActivity() {
         private const val ARG_URL = "VIDEO_CALL_URL"
         private const val ARG_ROOM_ID = "VIDEO_CALL_ROOM_ID"
         private const val ARG_TOKEN = "VIDEO_CALL_TOKEN"
-        private const val ARG_SDK_NAME = "SDK_NAME"
 
         private fun Intent.getUrl(): String {
             return extras?.getString(ARG_URL)
@@ -284,10 +285,7 @@ public class VideoCallActivity : AppCompatActivity() {
         }
 
         private fun Intent.getVideoCallClient(): NablaVideoCallClient {
-            val sdkName = extras?.getString(ARG_SDK_NAME) ?: throw InternalException(
-                IllegalStateException("SDK name is required")
-            )
-            return NablaClient.getInstance(sdkName).videoCallClient
+            return NablaClient.getInstance(requireSdkName()).videoCallClient
         }
 
         fun newIntent(
@@ -301,7 +299,7 @@ public class VideoCallActivity : AppCompatActivity() {
             putExtra(ARG_URL, url)
             putExtra(ARG_ROOM_ID, roomId)
             putExtra(ARG_TOKEN, token)
-            putExtra(ARG_SDK_NAME, name)
+            setSdkName(name)
         }
     }
 }

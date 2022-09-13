@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <corners android:radius="?cardCornerRadius" />
+            <corners android:radius="?nablaRoundedCornersRadius" />
             <solid android:color="?nablaMessaging_patientMessageBackgroundColor" />
         </shape>
     </item>
@@ -11,8 +11,8 @@
         <scale android:scaleWidth="100%">
             <shape android:shape="rectangle">
                 <corners
-                    android:bottomLeftRadius="?cardCornerRadius"
-                    android:topLeftRadius="?cardCornerRadius"
+                    android:bottomLeftRadius="?nablaRoundedCornersRadius"
+                    android:topLeftRadius="?nablaRoundedCornersRadius"
                     />
                 <solid android:color="@color/nabla_surface_alpha_50" />
             </shape>

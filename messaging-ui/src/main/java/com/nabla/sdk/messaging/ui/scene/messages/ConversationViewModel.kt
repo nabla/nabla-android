@@ -11,6 +11,7 @@ import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.kotlin.combine
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -19,13 +20,12 @@ import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
-import com.nabla.sdk.messaging.core.domain.entity.ConversationItems
+import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.FileLocal
 import com.nabla.sdk.messaging.core.domain.entity.FileSource
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
-import com.nabla.sdk.messaging.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
@@ -138,7 +138,7 @@ internal class ConversationViewModel(
 
     private fun makeStateFlow(
         conversationDataFlow: Flow<Conversation>,
-        conversationItemsFlow: Flow<WatchPaginatedResponse<ConversationItems>>,
+        conversationItemsFlow: Flow<WatchPaginatedResponse<List<ConversationItem>>>,
     ): StateFlow<State> {
 
         val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
@@ -177,7 +177,7 @@ internal class ConversationViewModel(
             conversation.markConversationAsReadIfNeeded()
         }
 
-    private fun Flow<WatchPaginatedResponse<ConversationItems>>.handleConversationMessagesSideEffects() =
+    private fun Flow<WatchPaginatedResponse<List<ConversationItem>>>.handleConversationMessagesSideEffects() =
         onEach { response ->
             latestLoadMoreCallback = response.loadMore
         }
@@ -672,7 +672,7 @@ internal class ConversationViewModel(
 
         fun mapToState(
             conversation: Conversation,
-            conversationItemsResponse: WatchPaginatedResponse<ConversationItems>,
+            conversationItemsResponse: WatchPaginatedResponse<List<ConversationItem>>,
             selectedMessageId: MessageId?,
             audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
             nowPlayingAudio: Uri?,
@@ -681,7 +681,7 @@ internal class ConversationViewModel(
             return State.ConversationLoaded(
                 conversation = conversation,
                 items = timelineBuilder.buildTimeline(
-                    items = conversationItemsResponse.content.items,
+                    items = conversationItemsResponse.content,
                     hasMore = conversationItemsResponse.loadMore != null,
                     providersInConversation = conversation.providersInConversation,
                     selectedMessageId = selectedMessageId,
