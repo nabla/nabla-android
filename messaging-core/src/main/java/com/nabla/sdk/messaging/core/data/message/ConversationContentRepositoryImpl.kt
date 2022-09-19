@@ -63,7 +63,7 @@ internal class ConversationContentRepositoryImpl(
     private fun filterLivekitMessagesIfNeeded(paginatedConversationItems: PaginatedList<ConversationItem>): PaginatedList<ConversationItem> {
         return paginatedConversationItems.copy(
             items = paginatedConversationItems.items.filter {
-                it !is Message.LivekitRoom || isVideoCallModuleActive
+                it !is Message.VideoCallRoom || isVideoCallModuleActive
             }
         )
     }

@@ -147,10 +147,10 @@ internal class GqlMapper(
         }
 
         summaryFragment.messageContent.messageContentFragment.onLivekitRoomMessageContent?.let {
-            val livekitRoom = coreGqlMapper.mapToLivekitRoom(it.livekitRoomMessageContentFragment.livekitRoom.livekitRoomFragment)
-            return Message.LivekitRoom(
+            val livekitRoom = coreGqlMapper.mapToVideoCallRoom(it.livekitRoomMessageContentFragment.livekitRoom.livekitRoomFragment)
+            return Message.VideoCallRoom(
                 baseMessage = baseMessage,
-                livekitRoom = livekitRoom,
+                videoCallRoom = livekitRoom,
             )
         }
         summaryFragment.messageContent.messageContentFragment.onDeletedMessageContent?.let {

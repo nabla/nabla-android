@@ -93,9 +93,9 @@ public final class com/nabla/sdk/core/data/apollo/CacheUpdateOperation$Write : c
 public final class com/nabla/sdk/core/data/apollo/CoreGqlMapper {
 	public fun <init> (Lcom/nabla/sdk/core/domain/boundary/Logger;)V
 	public final fun mapToEphemeralUrl (Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;)Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
-	public final fun mapToLivekitRoom (Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;)Lcom/nabla/sdk/core/domain/entity/LivekitRoom;
-	public final fun mapToLivekitRoomStatus (Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;)Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus;
 	public final fun mapToProvider (Lcom/nabla/sdk/graphql/fragment/ProviderFragment;)Lcom/nabla/sdk/core/domain/entity/Provider;
+	public final fun mapToVideoCallRoom (Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;
+	public final fun mapToVideoCallRoomStatus (Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;
 }
 
 public final class com/nabla/sdk/core/data/apollo/SubscriptionExtKt {
@@ -473,39 +473,6 @@ public final class com/nabla/sdk/core/domain/entity/InvalidAppThemeException : c
 	public fun <init> (Ljava/lang/String;)V
 }
 
-public final class com/nabla/sdk/core/domain/entity/LivekitRoom {
-	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus;)V
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus;
-	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus;)Lcom/nabla/sdk/core/domain/entity/LivekitRoom;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/LivekitRoom;Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/LivekitRoom;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getId ()Ljava/util/UUID;
-	public final fun getStatus ()Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public abstract class com/nabla/sdk/core/domain/entity/LivekitRoomStatus {
-}
-
-public final class com/nabla/sdk/core/domain/entity/LivekitRoomStatus$Closed : com/nabla/sdk/core/domain/entity/LivekitRoomStatus {
-	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus$Closed;
-}
-
-public final class com/nabla/sdk/core/domain/entity/LivekitRoomStatus$Open : com/nabla/sdk/core/domain/entity/LivekitRoomStatus {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus$Open;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus$Open;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/LivekitRoomStatus$Open;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getToken ()Ljava/lang/String;
-	public final fun getUrl ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class com/nabla/sdk/core/domain/entity/LogcatLogger : com/nabla/sdk/core/domain/boundary/Logger {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/LogcatLogger$Companion;
 	public fun <init> ()V
@@ -752,6 +719,39 @@ public final class com/nabla/sdk/core/domain/entity/Uri {
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/VideoCallRoom {
+	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;
+	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/util/UUID;
+	public final fun getStatus ()Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
+}
+
+public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Closed : com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Closed;
+}
+
+public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open : com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getToken ()Ljava/lang/String;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/WatchPaginatedResponse {

@@ -5,7 +5,6 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.InternalException
-import com.nabla.sdk.core.domain.entity.LivekitRoom
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageId.Local
@@ -235,9 +234,9 @@ public sealed class Message : ConversationItem {
         }
     }
 
-    public data class LivekitRoom(
+    public data class VideoCallRoom(
         override val baseMessage: BaseMessage,
-        val livekitRoom: com.nabla.sdk.core.domain.entity.LivekitRoom,
+        val videoCallRoom: com.nabla.sdk.core.domain.entity.VideoCallRoom,
     ) : Message() {
         override fun modify(status: SendStatus): Message {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))

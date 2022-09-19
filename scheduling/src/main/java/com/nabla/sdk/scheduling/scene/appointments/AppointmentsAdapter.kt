@@ -4,12 +4,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.core.domain.entity.LivekitRoom
-import com.nabla.sdk.core.domain.entity.LivekitRoomStatus
+import com.nabla.sdk.core.domain.entity.VideoCallRoom
+import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 
 internal class AppointmentsAdapter(
     private val onCancelClicked: (appointment: ItemUiModel.AppointmentUiModel.Upcoming) -> Unit,
-    private val onJoinClicked: (room: LivekitRoom, roomStatus: LivekitRoomStatus.Open) -> Unit,
+    private val onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
 ) : ListAdapter<ItemUiModel, RecyclerView.ViewHolder>(
     object : DiffUtil.ItemCallback<ItemUiModel>() {
         override fun areItemsTheSame(

@@ -22,7 +22,7 @@ internal class GqlMapper(
                     AppointmentId(fragment.id),
                     coreGqlMapper.mapToProvider(fragment.provider.providerFragment),
                     fragment.scheduledAt,
-                    upcoming.livekitRoom?.livekitRoomFragment?.let(coreGqlMapper::mapToLivekitRoom),
+                    upcoming.livekitRoom?.livekitRoomFragment?.let(coreGqlMapper::mapToVideoCallRoom),
                 )
             }
             else -> {

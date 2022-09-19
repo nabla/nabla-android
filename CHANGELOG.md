@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Messaging Core `LivekitRoom` message type has been renamed to `VideoCallRoom`.
+
 ## [1.0-alpha12] - 2022-09-14
 
 ### Added

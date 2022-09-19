@@ -10,8 +10,8 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.nabla.sdk.core.domain.entity.LivekitRoom
-import com.nabla.sdk.core.domain.entity.LivekitRoomStatus
+import com.nabla.sdk.core.domain.entity.VideoCallRoom
+import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.core.ui.helpers.capitalize
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
@@ -49,7 +49,7 @@ internal class LoadingMoreViewHolder(val binding: NablaSchedulingAppointmentItem
 internal class AppointmentViewHolder(
     private val binding: NablaSchedulingAppointmentItemBinding,
     private val onCancelClicked: (appointment: AppointmentUiModel.Upcoming) -> Unit,
-    private val onJoinClicked: (room: LivekitRoom, roomStatus: LivekitRoomStatus.Open) -> Unit,
+    private val onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val context
         get() = binding.context
@@ -82,10 +82,10 @@ internal class AppointmentViewHolder(
             is Finalized -> Unit /* no-op */
             is SoonOrOngoing -> {
                 if (uiModel.callButtonStatus is Present) {
-                    val status = uiModel.callButtonStatus.livekitRoom.status
-                    if (status is LivekitRoomStatus.Open) {
+                    val status = uiModel.callButtonStatus.videoCallRoom.status
+                    if (status is VideoCallRoomStatus.Open) {
                         binding.joinCallButton.setOnClickListener {
-                            onJoinClicked(uiModel.callButtonStatus.livekitRoom, status)
+                            onJoinClicked(uiModel.callButtonStatus.videoCallRoom, status)
                         }
                     }
                 }
@@ -167,7 +167,7 @@ internal class AppointmentViewHolder(
         fun create(
             parent: ViewGroup,
             onCancelClicked: (appointment: AppointmentUiModel.Upcoming) -> Unit,
-            onJoinClicked: (room: LivekitRoom, roomStatus: LivekitRoomStatus.Open) -> Unit,
+            onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
         ): AppointmentViewHolder {
             val binding = NablaSchedulingAppointmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return AppointmentViewHolder(binding, onCancelClicked, onJoinClicked)

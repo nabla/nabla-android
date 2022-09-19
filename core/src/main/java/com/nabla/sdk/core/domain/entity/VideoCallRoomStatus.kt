@@ -1,10 +1,10 @@
 package com.nabla.sdk.core.domain.entity
 
-public sealed class LivekitRoomStatus {
+public sealed class VideoCallRoomStatus {
     public data class Open(
         val url: String,
         val token: String
-    ) : LivekitRoomStatus()
+    ) : VideoCallRoomStatus()
 
-    public object Closed : LivekitRoomStatus()
+    public object Closed : VideoCallRoomStatus()
 }

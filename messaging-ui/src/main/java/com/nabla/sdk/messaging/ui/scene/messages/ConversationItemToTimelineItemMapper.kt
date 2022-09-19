@@ -1,8 +1,8 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import com.nabla.sdk.core.domain.boundary.VideoCall
-import com.nabla.sdk.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.Message
@@ -70,18 +70,18 @@ private fun Message.toMessageContent(
         isPlaying = nowPlayingAudio == stableUri,
         progress = audioPlaybackProgressMap[stableUri] ?: PlaybackProgress(currentPositionMillis = 0, durationMs),
     )
-    is Message.LivekitRoom -> {
-        val status = when (val livekitRoomStatus = livekitRoom.status) {
-            LivekitRoomStatus.Closed -> TimelineItem.Message.LivekitRoom.Status.LivekitClosedRoom
-            is LivekitRoomStatus.Open -> TimelineItem.Message.LivekitRoom.Status.LivekitOpenedRoom(
-                url = livekitRoomStatus.url,
-                token = livekitRoomStatus.token,
-                isCurrentVideoCall = livekitRoom.id == currentVideoCall?.id
+    is Message.VideoCallRoom -> {
+        val status = when (val videoCallRoomStatus = videoCallRoom.status) {
+            VideoCallRoomStatus.Closed -> TimelineItem.Message.LivekitRoom.Status.LivekitClosedRoom
+            is VideoCallRoomStatus.Open -> TimelineItem.Message.LivekitRoom.Status.LivekitOpenedRoom(
+                url = videoCallRoomStatus.url,
+                token = videoCallRoomStatus.token,
+                isCurrentVideoCall = videoCallRoom.id == currentVideoCall?.id,
             )
         }
         TimelineItem.Message.LivekitRoom(
-            roomId = livekitRoom.id,
-            roomStatus = status
+            roomId = videoCallRoom.id,
+            roomStatus = status,
         )
     }
 }
@@ -95,7 +95,7 @@ private fun Message.toRepliedMessage() = RepliedMessage(
         is Message.Media.Image -> RepliedMessage.Content.Image(stableUri)
         is Message.Media.Video -> RepliedMessage.Content.Video(stableUri)
         is Message.Text -> RepliedMessage.Content.Text(text)
-        is Message.LivekitRoom -> RepliedMessage.Content.LivekitRoom
+        is Message.VideoCallRoom -> RepliedMessage.Content.LivekitRoom
     },
     author = author,
 )

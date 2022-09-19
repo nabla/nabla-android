@@ -1,8 +1,8 @@
 package com.nabla.sdk.scheduling.domain.entity
 
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.entity.LivekitRoom
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import kotlinx.datetime.Instant
 
 @JvmInline
@@ -17,7 +17,7 @@ internal sealed interface Appointment {
         override val id: AppointmentId,
         override val provider: Provider,
         override val scheduledAt: Instant,
-        val livekitRoom: LivekitRoom?,
+        val videoCallRoom: VideoCallRoom?,
     ) : Appointment {
         override fun toString(): String = "Upcoming at $scheduledAt with id ${id.uuid}"
 

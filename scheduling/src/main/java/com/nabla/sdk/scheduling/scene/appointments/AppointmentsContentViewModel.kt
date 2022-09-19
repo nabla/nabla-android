@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.entity.LivekitRoom
-import com.nabla.sdk.core.domain.entity.LivekitRoomStatus
 import com.nabla.sdk.core.domain.entity.ServerException
+import com.nabla.sdk.core.domain.entity.VideoCallRoom
+import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -96,7 +96,7 @@ internal class AppointmentsContentViewModel(
         }
     }
 
-    fun onJoinClicked(room: LivekitRoom, roomStatus: LivekitRoomStatus.Open) {
+    fun onJoinClicked(room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) {
         val videoCallModule = nablaClient.coreContainer.videoCallModule ?: run {
             nablaClient.coreContainer.logger.error("You need to add the video-call module to be able to join a call.", domain = Logger.SCHEDULING_DOMAIN.UI)
             return
