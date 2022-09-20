@@ -45,8 +45,12 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         }
     }
 
+    private lateinit var dateFormatter: SimpleDateFormat
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dateFormatter = SimpleDateFormat(getString(R.string.nabla_scheduling_time_format), Locale.getDefault())
 
         binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
         binding.nablaConfirmAppointmentButton.setOnClickListener { viewModel.onConfirmClicked() }
@@ -90,8 +94,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val isToday = today == toLocalDateTime(TimeZone.currentSystemDefault()).date
 
-        val formattedTime = SimpleDateFormat(getString(R.string.nabla_scheduling_time_format), Locale.getDefault())
-            .format(toJavaDate())
+        val formattedTime = dateFormatter.format(toJavaDate())
 
         return if (isToday) {
             getString(R.string.nabla_scheduling_date_pill_format_today, formattedTime)

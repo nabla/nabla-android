@@ -31,6 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.ceil
 import kotlin.time.Duration.Companion.seconds
@@ -143,13 +144,18 @@ internal class AppointmentViewHolder(
         return when (this) {
             is SoonOrOngoing -> {
                 val minutesFromNow = scheduledAt.minus(Clock.System.now()).inWholeMinutes.toInt()
-                context.resources.getQuantityString(
-                    if (minutesFromNow >= 0) {
-                        R.plurals.nabla_scheduling_appointment_item_relative_future_minutes_pattern
-                    } else R.plurals.nabla_scheduling_appointment_item_relative_past_minutes_pattern,
-                    minutesFromNow.absoluteValue,
-                    minutesFromNow.absoluteValue,
-                )
+
+                if (abs(minutesFromNow) <= 59) {
+                    context.resources.getQuantityString(
+                        if (minutesFromNow >= 0) {
+                            R.plurals.nabla_scheduling_appointment_item_relative_future_minutes_pattern
+                        } else R.plurals.nabla_scheduling_appointment_item_relative_past_minutes_pattern,
+                        minutesFromNow.absoluteValue,
+                        minutesFromNow.absoluteValue,
+                    )
+                } else {
+                    dateFormatter.format(scheduledAt.toJavaDate()).capitalize()
+                }
             }
             is AppointmentUiModel.Upcoming,
             is Finalized,

@@ -22,7 +22,7 @@
     <string name="nabla_scheduling_appointment_item_join_cta">Join the call</string>
     <string name="nabla_scheduling_appointment_item_return_cta">Return to the call</string>
     <string name="nabla_scheduling_appointment_item_cancel_action">Cancel appointment</string>
-    <string name="nabla_scheduling_appointment_item_full_date_pattern">EEEE, MMMM d, yyyy \'at\' hh:mm a</string>
+    <string name="nabla_scheduling_appointment_item_full_date_pattern">MMMM d, yyyy \'at\' hh:mm aa</string>
     <plurals name="nabla_scheduling_appointment_item_relative_future_minutes_pattern">
         <item quantity="one">In one minute</item>
         <item quantity="other">In %1$d minutes</item>
@@ -43,5 +43,5 @@
     <string name="nabla_scheduling_date_pill_format_today">Consultation planned today at %1$s</string>
     <string name="nabla_scheduling_date_pill_format_future">Consultation planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_time_format">hh:mm aa</string>
-    <string name="nabla_scheduling_date_pill_format_date">MMM d</string>
+    <string name="nabla_scheduling_date_pill_format_date">MMMM d, yyyy</string>
 </resources>
