@@ -7,6 +7,6 @@ internal open class BookAppointmentBaseFragment(
     @LayoutRes contentLayoutId: Int
 ) : SchedulingBaseFragment(contentLayoutId) {
 
-    internal fun hostActivity() = activity as? BookAppointmentActivity
+    internal fun hostActivity() = activity as? ScheduleAppointmentActivity
         ?: throw InternalException(IllegalStateException("Host activity $activity is not a BookAppointmentActivity"))
 }

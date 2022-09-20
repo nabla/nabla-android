@@ -12,7 +12,7 @@ import com.nabla.sdk.core.ui.helpers.sdkNameOrDefault
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsBinding
-import com.nabla.sdk.scheduling.scene.BookAppointmentActivity
+import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 
 public class AppointmentsFragment : SchedulingBaseFragment() {
@@ -33,7 +33,7 @@ public class AppointmentsFragment : SchedulingBaseFragment() {
         setupViewPager()
 
         binding.nablaBookAppointmentButton.setOnClickListener {
-            startActivity(BookAppointmentActivity.newIntent(requireContext(), sdkNameOrDefault()))
+            startActivity(ScheduleAppointmentActivity.newIntent(requireContext(), sdkNameOrDefault()))
         }
     }
 

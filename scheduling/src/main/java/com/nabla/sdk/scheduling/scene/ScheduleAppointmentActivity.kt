@@ -13,14 +13,14 @@ import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.scheduling.R
-import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityBookAppointmentHostBinding
+import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
 import kotlinx.datetime.Instant
 
-public class BookAppointmentActivity : AppCompatActivity() {
+public class ScheduleAppointmentActivity : AppCompatActivity() {
 
-    private val binding by viewBinding(NablaSchedulingActivityBookAppointmentHostBinding::inflate)
+    private val binding by viewBinding(NablaSchedulingActivityScheduleAppointmentHostBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,7 @@ public class BookAppointmentActivity : AppCompatActivity() {
     }
 
     public companion object {
-        public fun newIntent(context: Context, name: String): Intent = Intent(context, BookAppointmentActivity::class.java).apply {
+        public fun newIntent(context: Context, name: String): Intent = Intent(context, ScheduleAppointmentActivity::class.java).apply {
             setSdkName(name)
         }
     }
