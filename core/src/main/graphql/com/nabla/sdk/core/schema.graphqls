@@ -1,12 +1,15 @@
-scalar DateTime
-scalar UUID
-scalar TimeZone
-
 schema {
   query: Query
   mutation: Mutation
   subscription: Subscription
 }
+
+scalar DateTime
+scalar UUID
+scalar TimeZone
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Queries.
 
 type Query {
   conversations(page: OpaqueCursorPage!): ConversationsOutput!
@@ -19,6 +22,8 @@ type Query {
   appointmentCategory(id: UUID!): AppointmentCategoryOutput!
   provider(id: UUID!): ProviderOutput!
 }
+# ----------------------------------------------------------------------------------------------------------------------
+# Mutations.
 
 type Mutation {
   createConversation(title: String, providerIds: [UUID!], initialMessage: SendMessageInput): CreateConversationOutput!
@@ -49,6 +54,9 @@ type Mutation {
   cancelAppointment(id: UUID!): CancelAppointmentOutput!
 }
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Subscriptions.
+
 type Subscription {
   conversations: ConversationsEventOutput
 
@@ -56,6 +64,9 @@ type Subscription {
 
   appointments: AppointmentsEventOutput
 }
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Other types.
 
 type Patient {
   id: UUID!
@@ -441,10 +452,6 @@ enum DeviceOs {
   IOS
 }
 
-enum MutationStatus {
-  SUCCESS
-}
-
 enum SdkModule {
   MESSAGING
   VIDEO_CALL
@@ -516,5 +523,3 @@ type AvailabilitySlot {
   endAt: DateTime!
   provider: Provider!
 }
-
-#
