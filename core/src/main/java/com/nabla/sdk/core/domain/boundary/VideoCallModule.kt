@@ -6,7 +6,6 @@ import com.nabla.sdk.core.domain.entity.ModuleType
 import kotlinx.coroutines.flow.Flow
 
 public interface VideoCallModule : Module {
-    @NablaInternal
     public fun openVideoCall(context: Context, url: String, roomId: String, token: String)
 
     @NablaInternal

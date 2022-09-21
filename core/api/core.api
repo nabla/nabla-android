@@ -226,6 +226,7 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/ProviderRepos
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingModule : com/nabla/sdk/core/domain/boundary/Module {
+	public abstract fun openScheduleAppointmentActivity (Landroid/content/Context;)V
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {

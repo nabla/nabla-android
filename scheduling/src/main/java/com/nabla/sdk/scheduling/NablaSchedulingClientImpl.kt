@@ -1,5 +1,8 @@
 package com.nabla.sdk.scheduling
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
@@ -13,6 +16,7 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.injection.SchedulingContainer
+import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import java.util.UUID
@@ -23,6 +27,7 @@ internal class NablaSchedulingClientImpl(
 
     private val schedulingContainer = SchedulingContainer(coreContainer)
     private val appointmentRepository = schedulingContainer.appointmentRepository
+    private val name = coreContainer.name
 
     override suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>> {
         return runCatchingCancellable {
@@ -70,5 +75,18 @@ internal class NablaSchedulingClientImpl(
         return runCatchingCancellable {
             appointmentRepository.cancelAppointment(id)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
+    }
+
+    override fun openScheduleAppointmentActivity(context: Context) {
+        context.startActivity(
+            ScheduleAppointmentActivity.newIntent(
+                context,
+                name,
+            ).apply {
+                if (context !is Activity) {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            }
+        )
     }
 }

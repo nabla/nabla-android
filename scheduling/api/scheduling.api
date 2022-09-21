@@ -13,6 +13,10 @@ public final class com/nabla/sdk/scheduling/NablaSchedulingModule$Factory {
 	public final fun invoke ()Lcom/nabla/sdk/core/domain/boundary/SchedulingModule$Factory;
 }
 
+public final class com/nabla/sdk/scheduling/NablaSchedulingModuleKt {
+	public static final fun getSchedulingModule (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/core/domain/boundary/SchedulingModule;
+}
+
 public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingActivityScheduleAppointmentHostBinding : androidx/viewbinding/ViewBinding {
 	public final field fragmentContainer Landroidx/fragment/app/FragmentContainerView;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingActivityScheduleAppointmentHostBinding;
@@ -196,12 +200,7 @@ public final class com/nabla/sdk/scheduling/domain/entity/CategoryId {
 }
 
 public final class com/nabla/sdk/scheduling/scene/ScheduleAppointmentActivity : androidx/appcompat/app/AppCompatActivity {
-	public static final field Companion Lcom/nabla/sdk/scheduling/scene/ScheduleAppointmentActivity$Companion;
 	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/scheduling/scene/ScheduleAppointmentActivity$Companion {
-	public final fun newIntent (Landroid/content/Context;Ljava/lang/String;)Landroid/content/Intent;
 }
 
 public abstract class com/nabla/sdk/scheduling/scene/SchedulingBaseFragment : androidx/fragment/app/Fragment {

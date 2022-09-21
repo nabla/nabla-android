@@ -19,6 +19,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.ui.helpers.PermissionRational
 import com.nabla.sdk.core.ui.helpers.factoryFor
@@ -37,6 +38,7 @@ import io.livekit.android.renderer.TextureViewRenderer
 import io.livekit.android.room.track.VideoTrack
 import com.nabla.sdk.core.R as CoreR
 
+@NablaInternal
 public class VideoCallActivity : AppCompatActivity() {
     private lateinit var binding: NablaActivityVideoCallBinding
 

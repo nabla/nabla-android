@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - `BookAppointmentActivity` has been renamed to `ScheduleAppointmentActivity`.
+- `ScheduleAppointmentActivity.newIntent` is now internal. You can launch it using `nablaClient.schedulingModule.openScheduleAppointmentActivity(Context)`.
 - Messaging Core `LivekitRoom` message type has been renamed to `VideoCallRoom`.
 
 ## [1.0-alpha12] - 2022-09-14
