@@ -83,9 +83,7 @@ internal class VideoCallViewModel(
 
         viewModelScope.launch {
             runCatchingCancellable {
-                mutableConnectionInfoFlow.value = ConnectionInfoState.Connecting
                 val room = videoCallClient.connectRoom(url, token)
-                mutableConnectionInfoFlow.value = ConnectionInfoState.Connected
                 val localParticipant = room.localParticipant
 
                 localParticipant.setMicrophoneEnabled(true)
@@ -107,8 +105,34 @@ internal class VideoCallViewModel(
                 }
 
                 viewModelScope.launch {
+                    room::state.flow.collect { roomState ->
+                        videoCallClient.logger.debug(
+                            "new state for room ${room.name}: $roomState",
+                            domain = VIDEO_CALL_DOMAIN
+                        )
+                        when (roomState) {
+                            Room.State.CONNECTING -> {
+                                mutableConnectionInfoFlow.value = ConnectionInfoState.Connecting
+                            }
+                            Room.State.CONNECTED -> {
+                                mutableConnectionInfoFlow.value = ConnectionInfoState.Connected
+                            }
+                            Room.State.DISCONNECTED -> {
+                                hangUp()
+                            }
+                            Room.State.RECONNECTING -> {
+                                mutableConnectionInfoFlow.value = ConnectionInfoState.ReConnecting
+                            }
+                        }
+                    }
+                }
+
+                viewModelScope.launch {
                     room.events.collect { event ->
-                        videoCallClient.logger.debug("new event in room ${room.name}: ${event.javaClass.simpleName}", domain = VIDEO_CALL_DOMAIN)
+                        videoCallClient.logger.debug(
+                            "new event in room ${room.name}: ${event.javaClass.simpleName}",
+                            domain = VIDEO_CALL_DOMAIN
+                        )
                         when (event) {
                             is RoomEvent.TrackSubscribed -> onTrackSubscribed(event)
                             is RoomEvent.TrackUnsubscribed -> onTrackUnsubscribed(event)
@@ -118,18 +142,10 @@ internal class VideoCallViewModel(
                             is RoomEvent.TrackUnmuted -> {
                                 (event.participant as? LocalParticipant)?.updateControlsState()
                             }
-                            is RoomEvent.Reconnecting -> {
-                                mutableConnectionInfoFlow.value = ConnectionInfoState.ReConnecting
+                            else -> {
+                                /* Room events for state like reconnecting are buggy, prefer using room::state for handling state.
+                                See https://github.com/livekit/client-sdk-android/issues/105#issuecomment-1250796210 */
                             }
-                            // LiveKit `RoomEvent.Reconnected` not always triggered so we rely on RoomEvent.TrackPublished
-                            // see https://github.com/livekit/client-sdk-android/issues/105
-                            is RoomEvent.TrackPublished, is RoomEvent.Reconnected -> {
-                                mutableConnectionInfoFlow.value = ConnectionInfoState.Connected
-                            }
-                            is RoomEvent.Disconnected -> {
-                                hangUp()
-                            }
-                            else -> Unit /* no-op */
                         }
                     }
                 }

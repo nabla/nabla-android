@@ -73,7 +73,7 @@ roboelectric = "org.robolectric:robolectric:4.8"
 android-junit = "androidx.test.ext:junit-ktx:1.1.3"
 okreplay = 'com.airbnb.okreplay:junit:1.6.0'
 hamcrest = 'org.hamcrest:hamcrest:2.2'
-liveKit = 'io.livekit:livekit-android:1.1.1'
+liveKit = 'io.livekit:livekit-android:1.1.3'
 
 espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 espressoContrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
