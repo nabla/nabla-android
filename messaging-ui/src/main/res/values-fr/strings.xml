@@ -72,7 +72,7 @@
 
     <string name="nabla_conversation_video_consultation">Consultation vidéo</string>
     <string name="nabla_conversation_video_consultation_icon_content_description">Icône de consultation vidéo</string>
-    <string name="nabla_conversation_video_consultation_join">Rejoindre</string>
+    <string name="nabla_conversation_video_consultation_join">Rejoindre l’appel</string>
     <string name="nabla_conversation_video_consultation_return_to_call">Revenir à l\'appel</string>
     <string name="nabla_conversation_video_consultation_ended">Terminée</string>
 

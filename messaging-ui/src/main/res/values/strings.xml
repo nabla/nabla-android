@@ -72,7 +72,7 @@
 
     <string name="nabla_conversation_video_consultation">Video consultation</string>
     <string name="nabla_conversation_video_consultation_icon_content_description">Video call icon</string>
-    <string name="nabla_conversation_video_consultation_join">Join</string>
+    <string name="nabla_conversation_video_consultation_join">Join the call</string>
     <string name="nabla_conversation_video_consultation_return_to_call">Return to call</string>
     <string name="nabla_conversation_video_consultation_ended">Ended</string>
 
