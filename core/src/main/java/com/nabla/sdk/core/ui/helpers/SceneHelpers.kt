@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.NablaClient.Companion.DEFAULT_NAME
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 
 @NablaInternal
 public fun Fragment.setSdkName(sdkName: String) {
@@ -42,5 +42,5 @@ public fun Intent.sdkNameOrDefault(): String = extras?.getString(ARG_SDK_NAME) ?
 private const val ARG_SDK_NAME = "sdkName"
 
 private fun requireSdkName(sdkName: String?): String {
-    return sdkName ?: throw InternalException(IllegalStateException("Missing SDK name"))
+    return sdkName ?: throw IllegalStateException("Missing SDK name").asNablaInternal()
 }

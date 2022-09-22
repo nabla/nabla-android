@@ -467,7 +467,12 @@ public final class com/nabla/sdk/core/domain/entity/FileUpload$Video$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/InternalException : com/nabla/sdk/core/domain/entity/NablaException {
-	public fun <init> (Ljava/lang/Throwable;)V
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/InternalException$Companion;
+	public synthetic fun <init> (Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/nabla/sdk/core/domain/entity/InternalException$Companion {
+	public final fun asNablaInternal (Ljava/lang/Throwable;)Lcom/nabla/sdk/core/domain/entity/InternalException;
 }
 
 public final class com/nabla/sdk/core/domain/entity/InvalidAppThemeException : com/nabla/sdk/core/domain/entity/NablaException {

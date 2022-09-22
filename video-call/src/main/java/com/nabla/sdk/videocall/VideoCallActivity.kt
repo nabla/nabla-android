@@ -20,7 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.ui.helpers.PermissionRational
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.launchCollect
@@ -44,10 +44,12 @@ public class VideoCallActivity : AppCompatActivity() {
 
     private val viewModel: VideoCallViewModel by viewModels {
         factoryFor {
+            val client = NablaClient.getInstance(intent.requireSdkName())
             VideoCallViewModel(
-                videoCallClient = intent.getVideoCallClient(),
+                videoCallClient = client.videoCallClient,
                 url = intent.getUrl(),
                 token = intent.getToken(),
+                cameraService = client.videoCallInternalModule.cameraService,
             )
         }
     }
@@ -129,8 +131,8 @@ public class VideoCallActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launchCollect(viewModel.videoStateFlow) { state ->
-            releaseRemoteTrack()
-            releaseSelfTrack()
+            removeRemoteTrackRenderer()
+            removeSelfTrackRenderer()
 
             when (state) {
                 is Both -> {
@@ -144,18 +146,18 @@ public class VideoCallActivity : AppCompatActivity() {
                     )
                 }
                 None -> {
-                    releaseSelfTrack()
-                    releaseRemoteTrack()
+                    removeSelfTrackRenderer()
+                    removeRemoteTrackRenderer()
                 }
                 is RemoteOnly -> {
-                    releaseSelfTrack()
+                    removeSelfTrackRenderer()
                     bindRemoteTrack(
                         state,
                         renderer = binding.fullScreenVideoRenderer
                     )
                 }
                 is SelfOnly -> {
-                    releaseRemoteTrack()
+                    removeRemoteTrackRenderer()
                     bindSelfTrack(
                         state,
                         renderer = binding.fullScreenVideoRenderer
@@ -198,13 +200,13 @@ public class VideoCallActivity : AppCompatActivity() {
         currentSelfTrack = selfVideo.selfTrack
     }
 
-    private fun releaseRemoteTrack() {
+    private fun removeRemoteTrackRenderer() {
         currentRemoteTrack?.removeRenderer(binding.floatingVideoRenderer)
         currentRemoteTrack?.removeRenderer(binding.fullScreenVideoRenderer)
         currentRemoteTrack = null
     }
 
-    private fun releaseSelfTrack() {
+    private fun removeSelfTrackRenderer() {
         currentSelfTrack?.removeRenderer(binding.floatingVideoRenderer)
         currentSelfTrack?.removeRenderer(binding.fullScreenVideoRenderer)
         currentSelfTrack = null
@@ -261,8 +263,10 @@ public class VideoCallActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        releaseSelfTrack()
-        releaseRemoteTrack()
+        removeSelfTrackRenderer()
+        removeRemoteTrackRenderer()
+        binding.floatingVideoRenderer.release()
+        binding.fullScreenVideoRenderer.release()
         super.onDestroy()
     }
 
@@ -273,21 +277,17 @@ public class VideoCallActivity : AppCompatActivity() {
 
         private fun Intent.getUrl(): String {
             return extras?.getString(ARG_URL)
-                ?: throw InternalException(IllegalStateException("Url is required"))
+                ?: throw IllegalStateException("Url is required").asNablaInternal()
         }
 
         private fun Intent.getRoomId(): String {
             return extras?.getString(ARG_ROOM_ID)
-                ?: throw InternalException(IllegalStateException("Room id is required"))
+                ?: throw IllegalStateException("Room id is required").asNablaInternal()
         }
 
         private fun Intent.getToken(): String {
             return extras?.getString(ARG_TOKEN)
-                ?: throw InternalException(IllegalStateException("Token is required"))
-        }
-
-        private fun Intent.getVideoCallClient(): NablaVideoCallClient {
-            return NablaClient.getInstance(requireSdkName()).videoCallClient
+                ?: throw IllegalStateException("Token is required").asNablaInternal()
         }
 
         fun newIntent(

@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.nabla.sdk.core.NablaClient
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -24,7 +24,7 @@ public class ConversationActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             val conversationId = (intent.getParcelableExtra<ConversationId>(CONVERSATION_ID_EXTRA))
-                ?: throw InternalException(RuntimeException("Failed to find/parse conversationId in ConversationActivity: ${intent.extras}"))
+                ?: throw RuntimeException("Failed to find/parse conversationId in ConversationActivity: ${intent.extras}").asNablaInternal()
 
             val showComposer = intent.getBooleanExtra(SHOW_COMPOSER_EXTRA, true)
 

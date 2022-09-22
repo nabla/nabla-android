@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 
 @NablaInternal
 public fun factoryFor(
@@ -14,7 +14,7 @@ public fun factoryFor(
 ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return builder() as? T ?: throw InternalException(IllegalStateException("ViewModel factory is not of type $modelClass"))
+        return builder() as? T ?: throw IllegalStateException("ViewModel factory is not of type $modelClass").asNablaInternal()
     }
 }
 
@@ -29,7 +29,7 @@ public fun <VM : ViewModel> Fragment.savedStateFactoryFor(
             modelClass: Class<T>,
             handle: SavedStateHandle,
         ): T {
-            return builder(handle) as? T ?: throw InternalException(IllegalStateException("ViewModel factory is not of type $modelClass"))
+            return builder(handle) as? T ?: throw IllegalStateException("ViewModel factory is not of type $modelClass").asNablaInternal()
         }
     }
 }

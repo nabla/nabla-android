@@ -5,14 +5,16 @@ import android.content.Context
 import android.content.Intent
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.VideoCall
+import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.injection.CoreContainer
+import com.nabla.sdk.videocall.domain.CameraService
 import com.nabla.sdk.videocall.injection.VideoCallContainer
 import io.livekit.android.room.Room
 import kotlinx.coroutines.flow.Flow
 
 internal class NablaVideoCallClientImpl internal constructor(
     coreContainer: CoreContainer,
-) : NablaVideoCallClient {
+) : NablaVideoCallClient, VideoCallModule, VideoCallInternalModule {
 
     private val name = coreContainer.name
 
@@ -44,7 +46,10 @@ internal class NablaVideoCallClientImpl internal constructor(
         return videoCallContainer.videoCallRepository.watchCurrentVideoCall()
     }
 
-    override suspend fun connectRoom(url: String, token: String): Room {
-        return videoCallContainer.videoCallRepository.connectRoom(url, token)
+    override suspend fun createCurrentRoom(): Room {
+        return videoCallContainer.videoCallRepository.createCurrentRoom()
     }
+
+    override val cameraService: CameraService
+        get() = videoCallContainer.cameraService
 }

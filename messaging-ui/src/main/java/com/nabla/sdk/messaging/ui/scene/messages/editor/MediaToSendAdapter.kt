@@ -24,7 +24,7 @@ import coil.size.OriginalSize
 import coil.size.PixelSize
 import coil.size.Size
 import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
@@ -134,7 +134,7 @@ internal class MediaToSendAdapter(
                     pdfRenderer.close()
                     return DrawableResult(drawable = bitmap.toDrawable(context.resources), isSampled = false, DataSource.DISK)
                 } else {
-                    throw InternalException(IllegalStateException("Can't get a file descriptor from $data"))
+                    throw IllegalStateException("Can't get a file descriptor from $data").asNablaInternal()
                 }
             }
 

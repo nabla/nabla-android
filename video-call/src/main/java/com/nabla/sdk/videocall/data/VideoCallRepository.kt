@@ -2,7 +2,9 @@ package com.nabla.sdk.videocall.data
 
 import android.content.Context
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.VideoCall
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.twilio.audioswitch.AudioDevice
 import io.livekit.android.LiveKit
 import io.livekit.android.LiveKitOverrides
@@ -18,6 +20,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -31,7 +34,8 @@ import okhttp3.OkHttpClient
 internal class VideoCallRepository(
     private val applicationContext: Context,
     private val okHttpClient: OkHttpClient,
-    private val repoScope: CoroutineScope
+    private val repoScope: CoroutineScope,
+    private val logger: Logger,
 ) {
 
     private val mutableCurrentRoomFlow = MutableStateFlow<Room?>(null)
@@ -40,11 +44,11 @@ internal class VideoCallRepository(
     private val currentRoomMutex = Mutex()
     private var currentRoomDisconnectListenerJob: Job? = null
 
-    suspend fun connectRoom(url: String, token: String): Room {
+    suspend fun createCurrentRoom(): Room {
         // Only supporting one connected room (the current room) atm
         return currentRoomMutex.withLock {
             mutableCurrentRoomFlow.value?.disconnect()
-            val newCurrentRoom = connectLiveKitRoom(url, token)
+            val newCurrentRoom = createLiveKitRoom()
             mutableCurrentRoomFlow.value = newCurrentRoom
             clearCurrentRoomOnDisconnected(newCurrentRoom)
             newCurrentRoom
@@ -63,7 +67,7 @@ internal class VideoCallRepository(
         }.also { currentRoomDisconnectListenerJob = it }
     }
 
-    private suspend fun connectLiveKitRoom(url: String, token: String): Room {
+    private fun createLiveKitRoom(): Room {
         val room = LiveKit.create(
             applicationContext,
             overrides = LiveKitOverrides(
@@ -83,12 +87,6 @@ internal class VideoCallRepository(
                 videoTrackCaptureDefaults = LocalVideoTrackOptions(position = CameraPosition.FRONT),
             ),
         )
-
-        room.connect(
-            url = url,
-            token = token,
-        )
-
         return room
     }
 
@@ -104,13 +102,16 @@ internal class VideoCallRepository(
     }
 
     private fun flowAsVideoCallWhileNotDisconnected(room: Room): Flow<VideoCall?> {
-        return room::state.flow.map { roomState ->
+        return room::state.flow.filter {
+            it == Room.State.CONNECTED || it == Room.State.CONNECTED
+        }.map { roomState ->
             when (roomState) {
                 Room.State.DISCONNECTED -> {
                     // Disconnected is a livekit terminal state after hangup.
                     return@map null
                 }
-                else -> return@map VideoCall(Uuid.fromString(requireNotNull(room.name)))
+                Room.State.CONNECTED -> { return@map VideoCall(Uuid.fromString(room.name)) }
+                else -> throw IllegalArgumentException("State $roomState should be filtered").asNablaInternal()
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.nabla.sdk.messaging.core.data.message
 
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -154,7 +154,7 @@ internal class SendMessageOrchestrator constructor(
                     .map { it.creationState }
                     .onEach {
                         if (it is LocalConversation.CreationState.ErrorCreating) {
-                            throw InternalException(it.cause)
+                            throw it.cause.asNablaInternal()
                         }
                     }
                     .filterIsInstance<LocalConversation.CreationState.Created>()

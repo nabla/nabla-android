@@ -13,8 +13,15 @@ public interface NablaVideoCallModule : VideoCallModule {
 
 public val NablaClient.videoCallModule: VideoCallModule
     get() = coreContainer.videoCallModule
-        ?: throw ConfigurationException.ModuleNotInitialized("NablaVideoCallModule")
+        ?: throw moduleNotInitialized()
+
+internal val NablaClient.videoCallInternalModule: VideoCallInternalModule
+    get() = coreContainer.videoCallModule as? VideoCallInternalModule
+        ?: throw moduleNotInitialized()
 
 internal val NablaClient.videoCallClient: NablaVideoCallClient
     get() = videoCallModule as? NablaVideoCallClient
-        ?: throw ConfigurationException.ModuleNotInitialized("NablaVideoCallModule")
+        ?: throw moduleNotInitialized()
+
+private fun moduleNotInitialized() =
+    ConfigurationException.ModuleNotInitialized("NablaVideoCallModule")

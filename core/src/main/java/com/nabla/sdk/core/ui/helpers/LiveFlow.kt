@@ -3,7 +3,6 @@ package com.nabla.sdk.core.ui.helpers
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.whenStateAtLeast
 import com.nabla.sdk.core.annotation.NablaInternal
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -61,7 +60,6 @@ public interface LiveFlow<T> {
 public class MutableLiveFlow<T> : LiveFlow<T>, FlowCollector<T> {
     private val wrapped = Channel<T>(Channel.BUFFERED)
 
-    @OptIn(InternalCoroutinesApi::class)
     override suspend fun collect(liveCollector: LiveFlow.BaseLiveFlowCollector<T>) {
         wrapped.receiveAsFlow().collect(liveCollector)
     }

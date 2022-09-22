@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.FileUpload
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageId.Local
@@ -111,9 +111,8 @@ public sealed interface MessageId {
 
     @NablaInternal
     public fun requireLocal(): Local {
-        return this as? Local ?: throw InternalException(
-            IllegalStateException("Require local but $this is ${javaClass.simpleName}")
-        )
+        return this as? Local ?: throw
+        IllegalStateException("Require local but $this is ${javaClass.simpleName}").asNablaInternal()
     }
 }
 

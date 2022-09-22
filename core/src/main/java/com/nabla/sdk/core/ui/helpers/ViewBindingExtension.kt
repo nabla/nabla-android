@@ -9,7 +9,7 @@ import androidx.viewbinding.ViewBinding
 import com.nabla.sdk.core.R
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.mapFailure
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -58,7 +58,7 @@ private class FragmentViewBindingDelegate<out ViewBindingT : ViewBinding>(
 }
 
 private fun Fragment.requireViewOrThrow(): View {
-    return runCatching { requireView() }.mapFailure { InternalException(it) }.getOrThrow()
+    return runCatching { requireView() }.mapFailure { it.asNablaInternal() }.getOrThrow()
 }
 
 @NablaInternal

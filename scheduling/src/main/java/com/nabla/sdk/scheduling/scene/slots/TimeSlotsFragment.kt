@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.NablaClient
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
@@ -90,9 +90,8 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     }
 
     private fun getCategoryId(): CategoryId {
-        val stringId = requireArguments().getString(ARG_CATEGORY_ID) ?: throw InternalException(
-            IllegalStateException("Missing Category Id")
-        )
+        val stringId = requireArguments().getString(ARG_CATEGORY_ID) ?: throw
+        IllegalStateException("Missing Category Id").asNablaInternal()
         return CategoryId(Uuid.fromString(stringId))
     }
 

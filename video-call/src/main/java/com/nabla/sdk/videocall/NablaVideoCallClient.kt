@@ -1,11 +1,10 @@
 package com.nabla.sdk.videocall
 
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import io.livekit.android.room.Room
 
-internal interface NablaVideoCallClient : VideoCallModule {
+internal interface NablaVideoCallClient {
     val logger: Logger
 
-    suspend fun connectRoom(url: String, token: String): Room
+    suspend fun createCurrentRoom(): Room
 }

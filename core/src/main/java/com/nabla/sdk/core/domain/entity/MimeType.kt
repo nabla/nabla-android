@@ -1,5 +1,7 @@
 package com.nabla.sdk.core.domain.entity
 
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
+
 public sealed class MimeType private constructor(public val type: String) {
     public abstract val subtype: String
 
@@ -77,7 +79,7 @@ public sealed class MimeType private constructor(public val type: String) {
                     else -> throw IllegalStateException("Unhandled mimeType: $representation")
                 }
             } catch (exception: Exception) {
-                throw InternalException(exception)
+                throw exception.asNablaInternal()
             }
         }
     }

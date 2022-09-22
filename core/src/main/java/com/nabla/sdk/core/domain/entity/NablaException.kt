@@ -1,5 +1,7 @@
 package com.nabla.sdk.core.domain.entity
 
+import com.nabla.sdk.core.annotation.NablaInternal
+
 public open class NablaException(
     message: String? = null,
     cause: Throwable? = null,
@@ -33,6 +35,12 @@ public class NetworkException internal constructor(cause: Throwable) : NablaExce
 public class ServerException internal constructor(cause: Throwable, public val code: Int, public val serverMessage: String, requestId: String?) :
     NablaException(cause = cause, message = "Nabla server error. Code: $code, message: $serverMessage, requestId: $requestId")
 
-public class InternalException constructor(cause: Throwable) : NablaException(cause = cause, message = cause.message)
+@NablaInternal
+public class InternalException private constructor(cause: Throwable) : NablaException(cause = cause, message = cause.message) {
+    public companion object {
+        @NablaInternal
+        public fun Throwable.asNablaInternal(): InternalException = InternalException(this)
+    }
+}
 
 public class UnknownException internal constructor(cause: Throwable) : NablaException(message = cause.message, cause = cause)

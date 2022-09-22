@@ -10,7 +10,7 @@ import androidx.core.view.updateLayoutParams
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityFullScreenVideoBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.sanitize
@@ -23,7 +23,7 @@ internal class FullScreenVideoActivity : AppCompatActivity() {
     private var player: ExoPlayer? = null
 
     private val videoUri by lazy {
-        (intent.extras?.get(VIDEO_URI_ARG) as? URI ?: throw InternalException(IllegalStateException("missing video uri arg")))
+        (intent.extras?.get(VIDEO_URI_ARG) as? URI ?: throw IllegalStateException("missing video uri arg").asNablaInternal())
             .toAndroidUri()
             .sanitize()
     }

@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.core.domain.entity.InternalException
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import kotlinx.datetime.Instant
 
 internal class TimeSlotsAdapter(
@@ -52,7 +52,7 @@ internal class TimeSlotsAdapter(
         return when (getItem(position)) {
             is TimeSlotsUiItem.DaySlots -> ViewType.DAY_SLOTS.ordinal
             is TimeSlotsUiItem.Loading -> ViewType.LOADING.ordinal
-            else -> throw InternalException(IllegalStateException("Unknown item type ${getItem(position)}"))
+            else -> throw IllegalStateException("Unknown item type ${getItem(position)}").asNablaInternal()
         }
     }
 }
