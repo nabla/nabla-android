@@ -7,7 +7,7 @@ Right now the library is in alpha, meaning all core features are here and ready 
 
 ## Documentation
 
-Check our [documentation portal](https://docs.nabla.com/docs/setup) for in depth documentation about integrating the SDK.
+Check our [documentation portal](https://docs.nabla.com/docs/concepts-android) for in depth documentation about integrating the SDK.
 
 ## Getting started
 
