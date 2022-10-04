@@ -11,7 +11,7 @@ Check our [documentation portal](https://docs.nabla.com/docs/concepts-android) f
 
 ## Getting started
 
-The Nabla Messaging UI SDK is compatible with Android 8 (API Level 23) and higher.
+The Nabla Messaging UI SDK is compatible with Android 6 (API Level 23) and higher.
 
 First add Jitpack repository to your build file if it's not already there:
 ```
