@@ -125,7 +125,7 @@ type ConversationActivity {
   content: ConversationActivityContent!
 }
 
-union ConversationActivityContent = ProviderJoinedConversation
+union ConversationActivityContent = ProviderJoinedConversation | ConversationClosed | ConversationReopened
 
 type Conversation {
   id: UUID!
@@ -415,6 +415,14 @@ type AppointmentCancelledEvent {
 
 type ProviderJoinedConversation {
   provider: MaybeProvider!
+}
+
+type ConversationClosed {
+  _: EmptyObject!
+}
+
+type ConversationReopened {
+  _: EmptyObject!
 }
 
 # --- LiveKit rooms.
