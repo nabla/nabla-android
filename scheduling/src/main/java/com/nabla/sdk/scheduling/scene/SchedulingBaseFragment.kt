@@ -17,4 +17,4 @@ public abstract class SchedulingBaseFragment : Fragment {
 }
 
 internal fun LayoutInflater.cloneWithNablaOverlay(): LayoutInflater =
-    cloneInContext(context?.withNablaVideoCallThemeOverlays())
+    cloneInContext(context?.withNablaSchedulingThemeOverlays())

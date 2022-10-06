@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- You can now define `nabla_defaultBackgroundColor` into `nablaAvatarViewStyle` in your theme to customize the default background color of avatars.
+
 ## [1.0-alpha13] - 2022-09-22
 
 ### Changed

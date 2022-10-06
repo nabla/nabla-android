@@ -4,7 +4,7 @@ import android.content.Context
 import com.nabla.sdk.core.ui.helpers.withNablaThemeOverlay
 import com.nabla.sdk.scheduling.R
 
-internal fun Context.withNablaVideoCallThemeOverlays(): Context {
+internal fun Context.withNablaSchedulingThemeOverlays(): Context {
     return this.withNablaThemeOverlay(
         hasValidOverlaysAttr = R.attr.nablaHasValidSchedulingOverlays,
         themeOverlayAttr = R.attr.nablaSchedulingThemeOverlay,

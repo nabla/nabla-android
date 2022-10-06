@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -39,6 +40,8 @@ public class NablaAvatarView : ConstraintLayout {
     private lateinit var binding: NablaComponentAvatarViewBinding
 
     private var useSingleLetterInPlaceHolder: Boolean = false
+    @ColorInt
+    private var defaultBackgroundColor: Int = 0
 
     public constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         init(context, attrs, defStyle)
@@ -75,6 +78,7 @@ public class NablaAvatarView : ConstraintLayout {
                 }
             }
             useSingleLetterInPlaceHolder = typedArray.getBoolean(R.styleable.NablaAvatarView_nabla_useSingleLetterInPlaceHolder, false)
+            defaultBackgroundColor = typedArray.getColor(R.styleable.NablaAvatarView_nabla_defaultBackgroundColor, context.getThemeColor(androidx.appcompat.R.attr.colorPrimary).asColorStateList(context).defaultColor)
         }
     }
 
@@ -94,7 +98,7 @@ public class NablaAvatarView : ConstraintLayout {
             val indexBackground = (userId.hashCode() % backgroundColors.size).absoluteValue
             ColorIntWrapper(context.getColor(backgroundColors[indexBackground]))
         } else {
-            context.getThemeColor(androidx.appcompat.R.attr.colorPrimary)
+            ColorIntWrapper(defaultBackgroundColor)
         }
 
         if (avatarUrl == null) {

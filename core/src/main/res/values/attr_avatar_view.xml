@@ -8,10 +8,12 @@
     <declare-styleable name="NablaAvatarView">
         <attr name="nabla_clipShape" />
         <attr name="nabla_useSingleLetterInPlaceHolder" format="boolean" />
+        <attr name="nabla_defaultBackgroundColor" format="reference|color" />
     </declare-styleable>
 
     <style name="Nabla.Widget.AvatarView" parent="">
         <item name="nabla_clipShape">oval</item>
         <item name="nabla_useSingleLetterInPlaceHolder">true</item>
+        <item name="nabla_defaultBackgroundColor">?attr/colorPrimary</item>
     </style>
 </resources>
