@@ -1,9 +1,9 @@
 {
-  "code_version": 445,
-  "doctor_min_version": 445,
+  "code_version": 446,
+  "doctor_min_version": 446,
   "webcall_min_version": 442,
   "patient_min_version": 398,
   "ios_min_version": 0,
   "android_min_version": 0,
-  "last_edited": "2022-10-06 at 13:27 by @marianne"
+  "last_edited": "2022-10-06 at 14:35 by @marianne"
 }
