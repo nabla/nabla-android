@@ -3,7 +3,7 @@
 
     <style name="Nabla.Widget.Messaging.ComposerEditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="android:textAppearance">?textAppearanceBodyLarge</item>
-        <item name="android:textColor">?colorPrimaryDark</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textColorHint">?colorOnSurface</item>
         <item name="android:lineSpacingExtra">3sp</item>
         <item name="android:hint">@string/nabla_conversation_composer_placeholder_default</item>
