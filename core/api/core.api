@@ -728,6 +728,7 @@ public final class com/nabla/sdk/core/domain/entity/Uri {
 }
 
 public final class com/nabla/sdk/core/domain/entity/VideoCallRoom {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/VideoCallRoom$Companion;
 	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;)V
 	public final fun component1 ()Ljava/util/UUID;
 	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;
@@ -740,11 +741,18 @@ public final class com/nabla/sdk/core/domain/entity/VideoCallRoom {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/nabla/sdk/core/domain/entity/VideoCallRoom$Companion {
+}
+
 public abstract class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Companion;
 }
 
 public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Closed : com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
 	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Closed;
+}
+
+public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open : com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {

@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.core.data.apollo
+package com.nabla.sdk.tests.common.apollo
 
 import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.apollographql.apollo3.api.CompiledType
@@ -13,12 +13,12 @@ import kotlinx.datetime.Clock
  * A wrapper around DefaultTestResolver that can generate custom scalar values.
  * See https://www.apollographql.com/docs/kotlin/essentials/custom-scalars
  */
-internal class CustomTestResolver : DefaultTestResolver() {
+class CustomTestResolver : DefaultTestResolver() {
     override fun <T> resolve(
         responseName: String,
         compiledType: CompiledType,
         enumValues: List<String>,
-        ctors: Array<out () -> Map<String, Any?>>?
+        ctors: Array<out () -> Map<String, Any?>>?,
     ): T {
         val customValue = when (compiledType.leafType().name) {
             UUID.type.name -> uuid4().toString()

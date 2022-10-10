@@ -75,6 +75,7 @@ dependencies {
     compileOnly libs.androidx.annotation
 
     testImplementation project(':core-test-fixtures')
+    testImplementation project(':tests-common')
     testImplementation libs.turbine
     testImplementation libs.junit
     testImplementation libs.kotlin.test

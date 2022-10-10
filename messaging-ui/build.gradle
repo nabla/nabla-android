@@ -34,6 +34,7 @@ dependencies {
 
     testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')
+    testImplementation project(':tests-common')
     testImplementation libs.roboelectric
     testImplementation libs.junit
     testImplementation libs.android.junit

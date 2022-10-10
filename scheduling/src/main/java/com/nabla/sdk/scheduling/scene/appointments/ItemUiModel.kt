@@ -51,13 +51,13 @@ internal sealed class ItemUiModel(val listId: String) {
     object Loading : ItemUiModel(listId = "loading_more")
 }
 
-internal fun Appointment.toUiModel(currentCallId: Uuid?) = when (this) {
+internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (this) {
     is Appointment.Finalized -> ItemUiModel.AppointmentUiModel.Finalized(
         id,
         provider,
         scheduledAt,
     )
-    is Appointment.Upcoming -> if (isAppointmentSoon(scheduledAt)) {
+    is Appointment.Upcoming -> if (clock.isAppointmentSoon(scheduledAt)) {
         ItemUiModel.AppointmentUiModel.SoonOrOngoing(
             id,
             provider,
@@ -87,6 +87,6 @@ internal fun Appointment.toUiModel(currentCallId: Uuid?) = when (this) {
     }
 }
 
-internal fun isAppointmentSoon(scheduledAt: Instant) = Clock.System.now() >= scheduledAt.minus(SOON_CONVERSATION_THRESHOLD)
+internal fun Clock.isAppointmentSoon(scheduledAt: Instant) = now() >= scheduledAt.minus(SOON_CONVERSATION_THRESHOLD)
 
 internal val SOON_CONVERSATION_THRESHOLD = 10.minutes

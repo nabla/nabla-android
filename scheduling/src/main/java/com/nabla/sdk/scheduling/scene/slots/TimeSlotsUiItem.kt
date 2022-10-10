@@ -8,15 +8,23 @@ internal sealed class TimeSlotsUiItem {
 
     data class DaySlots(
         val localDate: LocalDate,
-        val isExpanded: Boolean,
-        val slots: List<Slot>,
+        val expansionState: ExpansionState,
     ) : TimeSlotsUiItem() {
+        sealed interface ExpansionState {
+            data class Collapsed(val slotsCount: Int) : ExpansionState
+            data class Expanded(val slots: List<Slot>) : ExpansionState
+        }
+
         data class Slot(
             val startAt: Instant,
             val isSelected: Boolean,
-        )
+        ) {
+            companion object
+        }
 
         override val listId: String = "availabilities-per-day-$localDate"
+
+        companion object
     }
 
     object Loading : TimeSlotsUiItem() {

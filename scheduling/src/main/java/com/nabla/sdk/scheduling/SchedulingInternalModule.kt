@@ -1,5 +1,6 @@
 package com.nabla.sdk.scheduling
 
+import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import java.util.UUID
 
-internal interface SchedulingInternalModule {
+internal interface SchedulingInternalModule : SchedulingModule {
     suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>>
 
     fun watchAvailabilitySlots(

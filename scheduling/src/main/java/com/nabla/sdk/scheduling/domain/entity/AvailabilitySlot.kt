@@ -6,4 +6,6 @@ import kotlinx.datetime.Instant
 internal data class AvailabilitySlot(
     val startAt: Instant,
     val providerId: Uuid,
-)
+) {
+    companion object
+}

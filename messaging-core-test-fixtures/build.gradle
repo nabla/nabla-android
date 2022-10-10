@@ -30,6 +30,7 @@ dependencies {
 
     implementation project(':core-test-fixtures')
     api libs.espressoIdlingResource
+    api libs.apollo.testingSupport
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {

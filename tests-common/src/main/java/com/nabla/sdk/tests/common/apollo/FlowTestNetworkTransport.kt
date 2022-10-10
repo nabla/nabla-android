@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.data.stubs.apollo
+package com.nabla.sdk.tests.common.apollo
 
 import com.apollographql.apollo3.api.ApolloRequest
 import com.apollographql.apollo3.api.ApolloResponse

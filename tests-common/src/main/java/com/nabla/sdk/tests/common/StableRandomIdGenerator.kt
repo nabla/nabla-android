@@ -1,23 +1,22 @@
-package com.nabla.sdk.messaging.core.data.test
+package com.nabla.sdk.tests.common
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import okreplay.TapeMode
 import java.io.File
 
-internal class StableRandomIdGenerator(key: String, private val tapeMode: TapeMode) : UuidGenerator {
-    private val path = "src/test/resources/stable-random-ids/$key.txt"
+class StableRandomIdGenerator(private val idFile: File, private val tapeMode: TapeMode) : UuidGenerator {
     private var readUuids = mutableListOf<Uuid>()
 
     init {
         when (tapeMode) {
             TapeMode.WRITE_ONLY -> {
                 // Clear saved uuids in record mode
-                File(path).delete()
+                idFile.delete()
             }
             TapeMode.READ_ONLY -> {
                 // Load saved uuids in replay mode
-                readUuids = File(path).readLines().map { Uuid.fromString(it) }.toMutableList()
+                readUuids = idFile.readLines().map { Uuid.fromString(it) }.toMutableList()
             }
             else -> throw IllegalStateException("Unsupported tape mode")
         }
@@ -28,7 +27,7 @@ internal class StableRandomIdGenerator(key: String, private val tapeMode: TapeMo
             TapeMode.WRITE_ONLY -> {
                 val uuid = Uuid.randomUUID()
                 // Save uuid in record mode
-                File(path).apply {
+                idFile.apply {
                     appendText(uuid.toString())
                     appendText("\n")
                 }

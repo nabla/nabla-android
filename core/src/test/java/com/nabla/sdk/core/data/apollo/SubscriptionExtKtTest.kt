@@ -3,6 +3,7 @@ package com.nabla.sdk.core.data.apollo
 import app.cash.turbine.test
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.nabla.sdk.tests.common.BaseCoroutineTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -11,12 +12,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.plus
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.net.UnknownHostException
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class SubscriptionExtKtTest {
+internal class SubscriptionExtKtTest : BaseCoroutineTest() {
 
     @Test
     fun `retryOnNetworkErrorWithExponentialBackoff() retries on network error`() = runTest {

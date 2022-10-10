@@ -2,6 +2,7 @@ package com.nabla.sdk.core.kotlin
 
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
+import com.nabla.sdk.tests.common.BaseCoroutineTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -9,15 +10,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.plus
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class KotlinExtTest {
+internal class KotlinExtTest : BaseCoroutineTest() {
 
     @Test(expected = CancellationException::class)
     fun `runCatchingCancellable rethrow cancellation exception`() = runTest {
@@ -57,7 +58,8 @@ internal class KotlinExtTest {
     }
 
     @Test
-    fun `sharedSingleIn join new request if it occurs when computation completed`() = runTest {
+    // this level of precision requires an EmptyCoroutineContext
+    fun `sharedSingleIn join new request if it occurs when computation completes`() = kotlinx.coroutines.test.runTest(EmptyCoroutineContext) {
         val job = Job()
         val sharedSingleIn = sharedSingleIn(this + job) {
             delay(10_000)

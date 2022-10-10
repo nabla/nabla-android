@@ -42,8 +42,7 @@ internal class TimeSlotsAdapter(
         }
         payloads.forEach {
             when (val payload = it as Payload) {
-                Payload.Collapse -> (holder as DaySlotsViewHolder).collapse()
-                is Payload.Expand -> (holder as DaySlotsViewHolder).expand(payload.slots)
+                is Payload.ExpansionState -> (holder as DaySlotsViewHolder).bindExpansion(payload.expansionState)
             }
         }
     }
@@ -70,12 +69,9 @@ private val diffCallback = object : DiffUtil.ItemCallback<TimeSlotsUiItem>() {
 
     override fun getChangePayload(oldItem: TimeSlotsUiItem, newItem: TimeSlotsUiItem): Any? {
         if (oldItem is TimeSlotsUiItem.DaySlots && newItem is TimeSlotsUiItem.DaySlots) {
-            if (oldItem.isExpanded != newItem.isExpanded || oldItem.slots != newItem.slots) {
-                return if (newItem.isExpanded) {
-                    Payload.Expand(newItem.slots)
-                } else {
-                    Payload.Collapse
-                }
+            if (oldItem.copy(expansionState = newItem.expansionState) == newItem) {
+                // only expansion state changed
+                return Payload.ExpansionState(newItem.expansionState)
             }
         }
         return super.getChangePayload(oldItem, newItem)
@@ -83,8 +79,7 @@ private val diffCallback = object : DiffUtil.ItemCallback<TimeSlotsUiItem>() {
 }
 
 private sealed class Payload {
-    data class Expand(val slots: List<TimeSlotsUiItem.DaySlots.Slot>) : Payload()
-    object Collapse : Payload()
+    data class ExpansionState(val expansionState: TimeSlotsUiItem.DaySlots.ExpansionState) : Payload()
 }
 
 private enum class ViewType {

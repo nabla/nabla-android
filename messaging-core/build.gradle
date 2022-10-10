@@ -30,11 +30,11 @@ dependencies {
 
     testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')
-    testImplementation libs.junit
-    testImplementation libs.android.junit
-    testImplementation libs.turbine
-    testImplementation libs.okreplay
+    testImplementation project(':tests-common')
     testImplementation libs.kotlin.test
+    testImplementation libs.turbine
+    testImplementation libs.android.junit
     testImplementation libs.mockk
+    testImplementation libs.okreplay.junit
     testImplementation libs.roboelectric
 }

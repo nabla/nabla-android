@@ -7,11 +7,13 @@ apollo = "3.5.0"
 coil = "1.4.0"
 ktlint = "0.45.1"
 espresso = "3.4.0"
+okreplay = "1.6.0"
 
 [libraries]
 android-pluginGradle = "com.android.tools.build:gradle:7.3.0"
-gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.12.0"
+gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.13.1"
 paparazzi-pluginGradle = "app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0"
+paparazzi = "app.cash.paparazzi:paparazzi:1.0.0"
 
 androidx-core = "androidx.core:core-ktx:1.7.0"
 androidx-activity = "androidx.activity:activity-ktx:1.4.0"
@@ -64,6 +66,9 @@ apollo-testingSupport = { group = "com.apollographql.apollo3", name = "apollo-te
 coilCore = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coilVideo = { group = "io.coil-kt", name = "coil-video", version.ref = "coil" }
 
+okreplay-okreplay = { group = "com.airbnb.okreplay", name = "okreplay", version.ref = "okreplay" }
+okreplay-junit = { group = "com.airbnb.okreplay", name = "junit", version.ref = "okreplay" }
+
 uuid = "com.benasher44:uuid:0.4.0"
 
 junit = "junit:junit:4.13.2"
@@ -71,7 +76,6 @@ turbine = "app.cash.turbine:turbine:0.8.0"
 mockk = "io.mockk:mockk:1.12.4"
 roboelectric = "org.robolectric:robolectric:4.8"
 android-junit = "androidx.test.ext:junit-ktx:1.1.3"
-okreplay = 'com.airbnb.okreplay:junit:1.6.0'
 hamcrest = 'org.hamcrest:hamcrest:2.2'
 liveKit = 'io.livekit:livekit-android:1.1.3'
 

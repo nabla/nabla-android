@@ -30,7 +30,7 @@ buildscript {
 apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
 
 apiValidation {
-    ignoredProjects += ["demo", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures"]
+    ignoredProjects += ["demo", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures", "tests-common"]
 }
 
 // dependencies-analysis configuration
@@ -80,7 +80,7 @@ subprojects { project ->
             jvmTarget = buildConfig.jvmTarget
             freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
             freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
-            def projectsIgnoringStrictApi = ["ui-tests", "test-fixtures"]
+            def projectsIgnoringStrictApi = ["ui-tests", "test-fixtures", "tests-common"]
             def projectIgnoresStrictApi = projectsIgnoringStrictApi.any { project.name.contains(it) }
             if (!task.name.contains("Test") && !projectIgnoresStrictApi) {
                 freeCompilerArgs += "-Xexplicit-api=strict"

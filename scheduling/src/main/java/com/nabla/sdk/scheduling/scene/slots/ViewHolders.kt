@@ -89,34 +89,37 @@ internal class DaySlotsViewHolder(
     }
 
     fun bind(daySlots: TimeSlotsUiItem.DaySlots) {
+        binding.date.text = formatDate(daySlots.localDate, binding.context)
         binding.root.setOnClickListener {
             onDaySlotsClicked(adapterPosition)
         }
-        if (daySlots.isExpanded) {
-            expand(daySlots.slots)
-        } else {
-            collapse()
-        }
-        binding.date.text = formatDate(daySlots.localDate, binding.context)
-        binding.availabilitiesCount.text = binding.context.resources.getQuantityString(
-            R.plurals.nabla_scheduling_time_slot_count,
-            daySlots.slots.size,
-            daySlots.slots.size,
-        )
+        bindExpansion(daySlots.expansionState)
     }
 
-    fun collapse() {
+    fun bindExpansion(expansionState: TimeSlotsUiItem.DaySlots.ExpansionState) {
+        when (expansionState) {
+            is TimeSlotsUiItem.DaySlots.ExpansionState.Expanded -> expand(expansionState)
+            is TimeSlotsUiItem.DaySlots.ExpansionState.Collapsed -> collapse(expansionState)
+        }
+    }
+
+    private fun collapse(collapsedState: TimeSlotsUiItem.DaySlots.ExpansionState.Collapsed) {
         val arrowDrawable = ContextCompat.getDrawable(binding.context, R.drawable.nabla_ic_arrow_bottom)
         binding.date.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
         binding.availabilitiesCount.isVisible = true
+        binding.availabilitiesCount.text = binding.context.resources.getQuantityString(
+            R.plurals.nabla_scheduling_time_slot_count,
+            collapsedState.slotsCount,
+            collapsedState.slotsCount,
+        )
         slotAdapter.submitList(emptyList())
     }
 
-    fun expand(slots: List<TimeSlotsUiItem.DaySlots.Slot>) {
+    private fun expand(expandedState: TimeSlotsUiItem.DaySlots.ExpansionState.Expanded) {
         val arrowDrawable = ContextCompat.getDrawable(binding.context, R.drawable.nabla_ic_arrow_up)
         binding.date.setCompoundDrawablesWithIntrinsicBounds(null, null, arrowDrawable, null)
         binding.availabilitiesCount.isVisible = false
-        slotAdapter.submitList(slots)
+        slotAdapter.submitList(expandedState.slots)
     }
 
     companion object {

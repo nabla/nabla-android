@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging
 
+import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.messaging.core.data.stubs.fake

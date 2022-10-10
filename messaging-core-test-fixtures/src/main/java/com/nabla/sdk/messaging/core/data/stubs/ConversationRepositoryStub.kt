@@ -4,6 +4,7 @@ import androidx.test.espresso.idling.CountingIdlingResource
 import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository

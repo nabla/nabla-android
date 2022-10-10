@@ -19,8 +19,6 @@ internal sealed interface Appointment {
         override val scheduledAt: Instant,
         val videoCallRoom: VideoCallRoom?,
     ) : Appointment {
-        override fun toString(): String = "Upcoming at $scheduledAt with id ${id.uuid}"
-
         companion object
     }
 
@@ -29,8 +27,6 @@ internal sealed interface Appointment {
         override val provider: Provider,
         override val scheduledAt: Instant,
     ) : Appointment {
-        override fun toString(): String = "Finalized at $scheduledAt with id ${id.uuid}"
-
         companion object
     }
 }

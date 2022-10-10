@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.ui
 
 import androidx.core.view.isVisible
 import com.android.ide.common.rendering.api.SessionParams
+import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -10,6 +11,7 @@ import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListAdapter
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListView
 import com.nabla.sdk.messaging.ui.scene.conversations.DefaultOffsetsItemDecoration
 import com.nabla.sdk.messaging.ui.scene.conversations.toUiModel
+import com.nabla.sdk.tests.common.defaultPaparazzi
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn

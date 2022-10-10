@@ -12,6 +12,7 @@ import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.entity.StringId
+import com.nabla.sdk.tests.common.BaseCoroutineTest
 import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.clearAllMocks
@@ -23,7 +24,6 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -31,7 +31,7 @@ import org.junit.Test
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SessionClientImplTest {
+class SessionClientImplTest : BaseCoroutineTest() {
 
     private val tokenLocalDataSource = mockk<TokenLocalDataSource>()
     private val tokenRemoteDataSource = mockk<TokenRemoteDataSource>()

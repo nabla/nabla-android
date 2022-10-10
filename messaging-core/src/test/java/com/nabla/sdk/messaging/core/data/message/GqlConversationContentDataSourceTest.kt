@@ -7,7 +7,6 @@ import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.apollo.CoreGqlMapper
-import com.nabla.sdk.core.data.stubs.apollo.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
@@ -15,6 +14,8 @@ import com.nabla.sdk.messaging.core.data.stubs.GqlData
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
+import com.nabla.sdk.tests.common.BaseCoroutineTest
+import com.nabla.sdk.tests.common.apollo.FlowTestNetworkTransport
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -35,7 +35,7 @@ import kotlin.test.assertTrue
 
 @ApolloExperimental
 @OptIn(ExperimentalCoroutinesApi::class)
-class GqlConversationContentDataSourceTest {
+class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
 
     @Test
     fun `created message event is notified to conversations watcher`() = runTest {

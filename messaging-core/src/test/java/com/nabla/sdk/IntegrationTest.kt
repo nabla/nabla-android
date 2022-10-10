@@ -9,7 +9,6 @@ import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.data.stubs.StdLogger
-import com.nabla.sdk.core.data.stubs.apollo.FlowTestNetworkTransport
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
@@ -22,7 +21,6 @@ import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.NablaMessagingModule
 import com.nabla.sdk.messaging.core.data.stubs.GqlData
-import com.nabla.sdk.messaging.core.data.test.StableRandomIdGenerator
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -38,9 +36,11 @@ import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
 import com.nabla.sdk.messaging.graphql.ConversationsEventsSubscription
+import com.nabla.sdk.tests.common.BaseCoroutineTest
+import com.nabla.sdk.tests.common.StableRandomIdGenerator
+import com.nabla.sdk.tests.common.apollo.FlowTestNetworkTransport
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import okreplay.MatchRules
@@ -69,7 +69,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
-internal class IntegrationTest {
+internal class IntegrationTest : BaseCoroutineTest() {
     private val refreshToken: String
     private val accessToken: String
     private val tapeMode: TapeMode
@@ -178,7 +178,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000000", tapeMode),
+            uuidGenerator = StableRandomIdGenerator(idFile("00000000-0000-0000-0000-000000000000"), tapeMode),
         )
 
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
@@ -247,7 +247,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000001", tapeMode),
+            uuidGenerator = StableRandomIdGenerator(idFile("00000000-0000-0000-0000-000000000001"), tapeMode),
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -330,7 +330,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000002", tapeMode),
+            uuidGenerator = StableRandomIdGenerator(idFile("00000000-0000-0000-0000-000000000002"), tapeMode),
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -419,7 +419,7 @@ internal class IntegrationTest {
             clock = object : Clock {
                 override fun now(): Instant = Instant.parse("2020-01-01T00:00:00Z")
             },
-            uuidGenerator = StableRandomIdGenerator("00000000-0000-0000-0000-000000000003", tapeMode),
+            uuidGenerator = StableRandomIdGenerator(idFile("00000000-0000-0000-0000-000000000003"), tapeMode),
         )
         val createdConversation = nablaMessagingClient.createConversation().getOrThrow()
 
@@ -809,6 +809,8 @@ internal class IntegrationTest {
         private const val DUMMY_TOKEN =
             "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY1NTAzNTc1NCwiaWF0IjoxNjUyMzU3MzU0fQ.2cwXmXR_yYZHojuKHLqDAykPCPQCFJ1pEOsoKn_UeaA"
         private const val TEST_CONFIG_OVERRIDE_PATH = "src/test/record.properties"
+
+        private fun idFile(key: String) = File("src/test/resources/stable-random-ids/$key.txt")
     }
 }
 

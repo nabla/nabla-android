@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.ui
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewItemBinding
+import com.nabla.sdk.tests.common.defaultPaparazzi
 import org.junit.Rule
 import org.junit.Test
 

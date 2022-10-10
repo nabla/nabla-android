@@ -28,5 +28,4 @@ android {
 dependencies {
     api project(':core')
     api libs.kotlin.coroutines.test
-    api libs.apollo.testingSupport
 }

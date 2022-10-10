@@ -4,7 +4,6 @@ import com.apollographql.apollo3.annotations.ApolloExperimental
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.messaging.core.data.apollo.CustomTestResolver
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.graphql.ConversationEventsSubscription
@@ -17,6 +16,7 @@ import com.nabla.sdk.messaging.graphql.test.ConversationItemsQuery_TestBuilder.D
 import com.nabla.sdk.messaging.graphql.test.ConversationsEventsSubscription_TestBuilder.Data
 import com.nabla.sdk.messaging.graphql.test.ConversationsQuery_TestBuilder
 import com.nabla.sdk.messaging.graphql.test.ConversationsQuery_TestBuilder.Data
+import com.nabla.sdk.tests.common.apollo.CustomTestResolver
 import kotlinx.datetime.Instant
 
 @OptIn(ApolloExperimental::class)

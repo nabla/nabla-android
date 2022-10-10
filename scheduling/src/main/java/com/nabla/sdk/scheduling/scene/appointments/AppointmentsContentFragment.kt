@@ -23,6 +23,8 @@ import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.Companion.APPOINTMENT_TYPE_ARG
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.Event
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.State
+import com.nabla.sdk.scheduling.schedulingInternalModule
+import kotlinx.datetime.Clock
 
 internal class AppointmentsContentFragment : SchedulingBaseFragment() {
 
@@ -33,8 +35,13 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment() {
     private val viewModel: AppointmentsContentViewModel by viewModels {
         savedStateFactoryFor { handle ->
             AppointmentsContentViewModel(
-                nablaClient = nablaClient,
-                handle,
+                schedulingClient = nablaClient.schedulingInternalModule,
+                videoCallModule = nablaClient.coreContainer.videoCallModule,
+                logger = nablaClient.coreContainer.logger,
+                configuration = nablaClient.coreContainer.configuration,
+                stringResolver = nablaClient.coreContainer.stringResolver,
+                clock = Clock.System,
+                appointmentType = handle.get(APPOINTMENT_TYPE_ARG) ?: error("No appointment type specified"),
             )
         }
     }

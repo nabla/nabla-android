@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.ui.helpers.LiveFlow
@@ -14,9 +13,9 @@ import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
+import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
-import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,7 +32,8 @@ import kotlinx.datetime.toLocalDateTime
 
 internal class TimeSlotsViewModel(
     private val categoryId: CategoryId,
-    private val nablaClient: NablaClient,
+    private val schedulingModule: SchedulingInternalModule,
+    private val logger: Logger,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (suspend () -> Result<Unit>)? = null
     private var lastReceivedSlots: List<AvailabilitySlot>? = null
@@ -47,12 +47,12 @@ internal class TimeSlotsViewModel(
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
     val stateFlow: StateFlow<State> = combine(
-        nablaClient.schedulingInternalModule.watchAvailabilitySlots(categoryId).onEach { cacheLastResponse(it) },
+        schedulingModule.watchAvailabilitySlots(categoryId).onEach { cacheLastResponse(it) },
         expandedDaysPositionsFlow,
         selectedSlotFlow,
         ::mapToLoadedState,
     ).retryWhen { cause, _ ->
-        nablaClient.coreContainer.logger.warn(
+        logger.warn(
             message = "failed to get availability slots",
             error = cause,
             domain = Logger.SCHEDULING_DOMAIN.UI,
@@ -83,8 +83,13 @@ internal class TimeSlotsViewModel(
                     val (day, slots) = value
                     TimeSlotsUiItem.DaySlots(
                         localDate = day,
-                        isExpanded = index in expandedDaysPositions,
-                        slots = slots.map { TimeSlotsUiItem.DaySlots.Slot(it.startAt, isSelected = it.startAt == selectedSlot) },
+                        expansionState = if (index in expandedDaysPositions) {
+                            TimeSlotsUiItem.DaySlots.ExpansionState.Expanded(
+                                slots = slots.map { TimeSlotsUiItem.DaySlots.Slot(it.startAt, isSelected = it.startAt == selectedSlot) },
+                            )
+                        } else {
+                            TimeSlotsUiItem.DaySlots.ExpansionState.Collapsed(slotsCount = slots.size)
+                        }
                     )
                 }
         )
@@ -126,7 +131,7 @@ internal class TimeSlotsViewModel(
         viewModelScope.launch {
             loadMore()
                 .onFailure { error ->
-                    nablaClient.coreContainer.logger.warn(
+                    logger.warn(
                         domain = Logger.SCHEDULING_DOMAIN.UI,
                         message = "Error while loading more availability slots",
                         error = error,

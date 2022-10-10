@@ -22,6 +22,7 @@ import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentTimeSlotsBind
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.BookAppointmentBaseFragment
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
+import com.nabla.sdk.scheduling.schedulingInternalModule
 
 internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     R.layout.nabla_scheduling_fragment_time_slots
@@ -29,7 +30,13 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     private val nablaClient: NablaClient = getNablaInstanceByName()
     private val binding by viewBinding(NablaSchedulingFragmentTimeSlotsBinding::bind)
     private val viewModel: TimeSlotsViewModel by viewModels {
-        factoryFor { TimeSlotsViewModel(categoryId = getCategoryId(), nablaClient = nablaClient) }
+        factoryFor {
+            TimeSlotsViewModel(
+                categoryId = getCategoryId(),
+                schedulingModule = nablaClient.schedulingInternalModule,
+                logger = nablaClient.coreContainer.logger,
+            )
+        }
     }
     private val adapter by lazy {
         TimeSlotsAdapter(

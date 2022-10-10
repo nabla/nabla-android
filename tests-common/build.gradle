@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace = 'com.nabla.sdk.tests.common'
+
+    compileSdk buildConfig.compileSdk
+
+    defaultConfig {
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+    }
+
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'VisibleForTests'
+    }
+
+    compileOptions {
+        sourceCompatibility buildConfig.jvmTarget
+        targetCompatibility buildConfig.jvmTarget
+    }
+
+    kotlinOptions.freeCompilerArgs += ["-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"]
+}
+
+// Paparazzi requires Java 11 for unit test while https://github.com/cashapp/paparazzi/issues/409 is open
+tasks.withType(Test).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    })
+}
+
+dependencies {
+    api project(':core')
+    api libs.kotlin.coroutines.test
+    api libs.paparazzi
+    api libs.junit
+
+    implementation libs.apollo.runtime
+    implementation libs.apollo.cache
+    implementation libs.apollo.cache.sqlite
+    implementation libs.apollo.adapters
+    implementation libs.roboelectric
+    api libs.okreplay.okreplay
+}

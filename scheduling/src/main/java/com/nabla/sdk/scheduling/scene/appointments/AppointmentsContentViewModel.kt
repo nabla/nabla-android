@@ -1,11 +1,12 @@
 package com.nabla.sdk.scheduling.scene.appointments
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.StringResolver
+import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
@@ -16,8 +17,8 @@ import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
+import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.Appointment
-import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,16 +31,21 @@ import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 internal class AppointmentsContentViewModel(
-    private val nablaClient: NablaClient,
-    savedStateHandle: SavedStateHandle,
+    private val schedulingClient: SchedulingInternalModule,
+    private val videoCallModule: VideoCallModule?,
+    private val logger: Logger,
+    private val configuration: Configuration,
+    private val stringResolver: StringResolver,
+    clock: Clock,
+    delayCoroutineContext: CoroutineContext = EmptyCoroutineContext,
+    private val appointmentType: AppointmentType,
 ) : ViewModel() {
-    private val appointmentType: AppointmentType = savedStateHandle.get(APPOINTMENT_TYPE_ARG) ?: error("No appointment type specified")
-
-    private val schedulingClient = nablaClient.schedulingInternalModule
-
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
 
     private var loadMoreCallback: (suspend () -> Result<Unit>)? = null
@@ -47,23 +53,23 @@ internal class AppointmentsContentViewModel(
     private val eventsMutableFlow = MutableLiveFlow<Event>()
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
-    private val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
+    private val currentCallFlow = videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
 
     internal val stateFlow: StateFlow<State> = when (appointmentType) {
         AppointmentType.PAST -> schedulingClient.watchPastAppointments()
         AppointmentType.UPCOMING -> schedulingClient.watchUpcomingAppointments()
     }
-        .reTriggerWhenNextAppointmentIsSoon()
+        .reTriggerWhenNextAppointmentIsSoon(clock, delayCoroutineContext)
         .combine(currentCallFlow) { appointments, currentCall ->
             loadMoreCallback = appointments.loadMore
-            val items = appointments.content.map { it.toUiModel(currentCall?.id) }
+            val items = appointments.content.map { it.toUiModel(clock, currentCall?.id) }
 
             if (items.isEmpty()) {
                 State.Empty(appointmentType.emptyStateRes)
             } else State.Loaded(items)
         }
         .retryWhen { cause, _ ->
-            nablaClient.coreContainer.logger.warn(
+            logger.warn(
                 domain = Logger.SCHEDULING_DOMAIN.UI,
                 message = "Failed to fetch $appointmentType appointments list",
                 error = cause,
@@ -79,16 +85,16 @@ internal class AppointmentsContentViewModel(
 
     fun onCancelClicked(upcoming: ItemUiModel.AppointmentUiModel.Upcoming) {
         viewModelScope.launch {
-            nablaClient.schedulingInternalModule.cancelAppointment(upcoming.id)
+            schedulingClient.cancelAppointment(upcoming.id)
                 .onFailure { throwable ->
-                    nablaClient.coreContainer.logger.warn("failed cancelling appointment", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
+                    logger.warn("failed cancelling appointment", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
 
                     eventsMutableFlow.emit(
                         Event.FailedCancelling(
                             if (throwable is ServerException) {
                                 throwable.serverMessage
                             } else {
-                                nablaClient.coreContainer.stringResolver.resolve(throwable.asNetworkOrGeneric.titleRes)
+                                stringResolver.resolve(throwable.asNetworkOrGeneric.titleRes)
                             }
                         )
                     )
@@ -97,13 +103,13 @@ internal class AppointmentsContentViewModel(
     }
 
     fun onJoinClicked(room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) {
-        val videoCallModule = nablaClient.coreContainer.videoCallModule ?: run {
-            nablaClient.coreContainer.logger.error("You need to add the video-call module to be able to join a call.", domain = Logger.SCHEDULING_DOMAIN.UI)
+        val videoCallModule = videoCallModule ?: run {
+            logger.error("You need to add the video-call module to be able to join a call.", domain = Logger.SCHEDULING_DOMAIN.UI)
             return
         }
 
         videoCallModule.openVideoCall(
-            nablaClient.coreContainer.configuration.context,
+            configuration.context,
             roomStatus.url,
             room.id.toString(),
             roomStatus.token,
@@ -117,7 +123,7 @@ internal class AppointmentsContentViewModel(
     fun onListReachedBottom() {
         viewModelScope.launch {
             loadMoreCallback?.invoke()?.onFailure { throwable ->
-                nablaClient.coreContainer.logger.warn("failed loading more appointments", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
+                logger.warn("failed loading more appointments", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
                 eventsMutableFlow.emit(Event.FailedPagination)
             }
         }
@@ -150,11 +156,14 @@ internal class AppointmentsContentViewModel(
 /**
  * Emits immediately then re-emits each time an upcoming (but not soon) appointment becomes soon.
  */
-private fun Flow<WatchPaginatedResponse<List<Appointment>>>.reTriggerWhenNextAppointmentIsSoon() = transformLatest { appointments ->
+private fun Flow<WatchPaginatedResponse<List<Appointment>>>.reTriggerWhenNextAppointmentIsSoon(
+    clock: Clock,
+    delayCoroutineContext: CoroutineContext,
+) = transformLatest { appointments ->
     emit(appointments)
     val notSoonAppointments = appointments.content
         .filterIsInstance<Appointment.Upcoming>()
-        .filter { !isAppointmentSoon(it.scheduledAt) }
+        .filter { !clock.isAppointmentSoon(it.scheduledAt) }
         .toMutableList()
 
     while (notSoonAppointments.isNotEmpty()) {
@@ -162,7 +171,9 @@ private fun Flow<WatchPaginatedResponse<List<Appointment>>>.reTriggerWhenNextApp
             .minByOrNull { it.scheduledAt } ?: break
 
         notSoonAppointments.remove(nextNotSoonAppointment)
-        delay(nextNotSoonAppointment.scheduledAt.minus(SOON_CONVERSATION_THRESHOLD).minus(Clock.System.now()))
+        withContext(delayCoroutineContext) {
+            delay(nextNotSoonAppointment.scheduledAt - SOON_CONVERSATION_THRESHOLD - clock.now())
+        }
         emit(appointments)
     }
 }

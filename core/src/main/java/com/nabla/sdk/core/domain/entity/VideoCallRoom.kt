@@ -4,5 +4,7 @@ import com.benasher44.uuid.Uuid
 
 public data class VideoCallRoom(
     val id: Uuid,
-    val status: VideoCallRoomStatus
-)
+    val status: VideoCallRoomStatus,
+) {
+    public companion object
+}
