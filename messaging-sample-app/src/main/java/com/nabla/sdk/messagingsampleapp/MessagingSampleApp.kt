@@ -1,4 +1,4 @@
-package com.nabla.sdk.demo
+package com.nabla.sdk.messagingsampleapp
 
 import android.app.Application
 import com.nabla.sdk.core.NablaClient
@@ -6,7 +6,7 @@ import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.messaging.core.NablaMessagingModule
 import com.nabla.sdk.videocall.NablaVideoCallModule
 
-internal class DemoApp : Application() {
+internal class MessagingSampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
         NablaClient.initialize(
@@ -20,7 +20,7 @@ internal class DemoApp : Application() {
                 Result.success(
                     AuthTokens(
                         refreshToken = "dummy-refresh-token",
-                        accessToken = "dummy-access-token"
+                        accessToken = "dummy-access-token",
                     )
                 )
             }

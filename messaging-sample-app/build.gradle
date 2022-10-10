@@ -7,7 +7,7 @@ android {
     compileSdk buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "com.nabla.sdk.demo"
+        applicationId "com.nabla.sdk.messagingsampleapp"
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
         versionCode 1
@@ -40,8 +40,8 @@ android {
 }
 
 dependencies {
-    implementation project(':messaging-ui')
-    implementation project(':video-call')
+    implementation project(':messaging-ui') // In your app, replace this by the full dependency: implementation "com.nabla.nabla-android:messaging-ui:[version]"
+    implementation project(':video-call') // In your app, replace this by the full dependency: implementation "com.nabla.nabla-android:video-call:[version]"
 
     implementation libs.google.material
     implementation libs.androidx.constraintlayout

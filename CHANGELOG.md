@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Demo app has been renamed to `Messaging Sample App` to better reflect what it showcases.
+
 ### Added
 
 - You can now define `nabla_defaultBackgroundColor` into `nablaAvatarViewStyle` in your theme to customize the default background color of avatars.

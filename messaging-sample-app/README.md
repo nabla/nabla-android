@@ -1,4 +1,4 @@
-#  Nabla Android SDK demo app
+#  Nabla Android SDK Messaging sample app
 
 This app contains a basic setup of the Android Nabla SDK so that you can quickly 
 test the features using our setup guide in the console.
@@ -19,15 +19,15 @@ the app.
 
 > At this stage, you should have a mobile SDK API key and 2 tokens
 
-4. Paste your API key in place of the `dummy-public-api-key` in the [demo app Manifest](https://github.com/nabla/nabla-android/blob/main/demo/src/main/AndroidManifest.xml)
-5. Paste your `access_token` and `refresh_token` in place of the `dummy-access-token` and `dummy-refresh-token` in the [`DemoApp.kt` class](https://github.com/nabla/nabla-android/blob/main/demo/src/main/java/com/nabla/sdk/demo/DemoApp.kt)
+4. Paste your API key in place of the `dummy-public-api-key` in the [sample app Manifest](https://github.com/nabla/nabla-android/blob/main/messaging-sample-app/src/main/AndroidManifest.xml)
+5. Paste your `access_token` and `refresh_token` in place of the `dummy-access-token` and `dummy-refresh-token` in the [`MessagingSampleApp.kt` class](https://github.com/nabla/nabla-android/blob/main/messaging-sample-app/src/main/java/com/nabla/sdk/messagingsampleapp/MessagingSampleApp.kt)
 6. Build and run
 
-You should now be able to use the demo app to create a new conversation and send messages.
+You should now be able to use the sample app to create a new conversation and send messages.
 
 ## Next step: integrate the SDK in your app
 
-To integrate the SDK into your app, follow our [README](https://github.com/nabla/nabla-android) and get all the details in our [developer documentation](https://docs.nabla.com/docs/setup).
+To integrate the SDK into your app, follow our [README](https://github.com/nabla/nabla-android) and get all the details in our [developer documentation](https://docs.nabla.com/docs/concepts-android).
 
 ## Need more help?
 

@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.Nabla.Sdk.Demo" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Nabla.Sdk.MessagingSample" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#FF018786</item>
         <item name="colorPrimaryDark">#025353</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -26,10 +26,10 @@
         <!-- this color is used by material library as background drawable, which is not supported on Android < 29 if the color is a selector -->
         <item name="colorControlHighlight">@color/stone_alpha_12</item>
 
-        <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.Demo</item>
+        <item name="nablaMessagingThemeOverlay">@style/NablaOverlay.MessagingSample</item>
     </style>
 
-    <style name="NablaOverlay.Demo" parent="Nabla.ThemeOverlay.Messaging">
+    <style name="NablaOverlay.MessagingSample" parent="Nabla.ThemeOverlay.Messaging">
         <!-- keeping defaults for this one, check other demo themes for extensive customization -->
     </style>
 </resources>

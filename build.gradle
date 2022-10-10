@@ -30,7 +30,7 @@ buildscript {
 apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
 
 apiValidation {
-    ignoredProjects += ["demo", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures", "tests-common"]
+    ignoredProjects += ["messaging-sample-app", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures", "tests-common"]
 }
 
 // dependencies-analysis configuration

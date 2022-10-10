@@ -1,8 +1,8 @@
-package com.nabla.sdk.demo.scene
+package com.nabla.sdk.messagingsampleapp.scene
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.nabla.sdk.demo.databinding.ActivityMainBinding
+import com.nabla.sdk.messagingsampleapp.databinding.ActivityMainBinding
 
 internal class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
