@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0-alpha14] - 2022-10-11
+
 ### Changed
 
 - Demo app has been renamed to `Messaging Sample App` to better reflect what it showcases.
