@@ -14,6 +14,7 @@ import org.junit.Test
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
@@ -102,5 +103,19 @@ internal class KotlinExtTest : BaseCoroutineTest() {
             awaitError()
         }
         job.cancel()
+    }
+
+    private class TestException : Exception()
+
+    @Test
+    fun `errors thrown in sharedSingleIn are transmitted to await() caller`() = runTest {
+        val job = Job()
+        val sharedSingleIn = sharedSingleIn<Unit>(this + job) {
+            throw TestException()
+        }
+
+        assertFailsWith<TestException> {
+            sharedSingleIn.await()
+        }
     }
 }
