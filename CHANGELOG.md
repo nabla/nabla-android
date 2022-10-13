@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0-alpha15] - 2022-10-13
+
 ### Fixed
 
 - Authentication: Fix refresh token request broken since `1.0-alpha12` due to missing kotlinx.serialization.
