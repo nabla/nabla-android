@@ -115,6 +115,7 @@ internal class SessionClientImpl(
             logger.debug(
                 domain = AUTH_DOMAIN,
                 message = "fail refresh tokens, fallback to renew session",
+                error = refreshTokenError,
             )
 
             return runCatchingCancellable {
@@ -124,6 +125,7 @@ internal class SessionClientImpl(
                 logger.debug(
                     domain = AUTH_DOMAIN,
                     message = "fail renewing session",
+                    error = renewSessionError,
                 )
                 throw renewSessionError.apply { addSuppressed(refreshTokenError) }
             }
