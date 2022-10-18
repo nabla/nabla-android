@@ -46,9 +46,19 @@ internal class CaptureVideoFromCameraActivityContract : ActivityResultContract<U
             val mimeType = MimeTypeHelper.getFileMediaMimeType(file) as? MimeType.Video
                 ?: throw IllegalArgumentException("Mime type is not a supported video one")
 
+            // now that we know the mime type we can rename file to the right extension.
+            // some libraries like Coil rely on the file extension to guess the type and assign a fetcher/decoder.
+            // https://github.com/coil-kt/coil/issues/1510
+            val fileWithExtension = File(
+                file.path + if (mimeType !is MimeType.Video.Other) {
+                    ".${mimeType.subtype}"
+                } else ""
+            )
+            file.renameTo(fileWithExtension)
+
             return MediaPickingResult.Success(
                 LocalMedia.Video(
-                    file.toURI(),
+                    fileWithExtension.toURI(),
                     generateFileName(extension = mimeType.subtype),
                     mimeType,
                 )

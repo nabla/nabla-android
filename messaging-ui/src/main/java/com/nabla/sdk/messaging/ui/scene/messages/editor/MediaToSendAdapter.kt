@@ -11,18 +11,13 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.bitmap.BitmapPool
 import coil.decode.DataSource
-import coil.decode.Options
 import coil.decode.VideoFrameDecoder
 import coil.fetch.DrawableResult
-import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.load
-import coil.loadAny
-import coil.size.OriginalSize
-import coil.size.PixelSize
-import coil.size.Size
+import coil.request.Options
+import coil.size.Dimension
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.domain.entity.MimeType
@@ -88,7 +83,7 @@ internal class MediaToSendAdapter(
             binding.chatMediaToSendLoadingProgressBar.visibility = View.VISIBLE
 
             binding.chatMediaToSendImageView.load(media.uri.toAndroidUri()) {
-                decoder(VideoFrameDecoder(binding.context))
+                decoderFactory { result, options, _ -> VideoFrameDecoder(result.source, options) }
 
                 listener(
                     onSuccess = { _, _ ->
@@ -96,7 +91,7 @@ internal class MediaToSendAdapter(
                         binding.chatMediaToSendLoadingProgressBar.visibility = View.GONE
                     },
                     onError = { _, error ->
-                        onErrorLoadingThumbnail(error)
+                        onErrorLoadingThumbnail(error.throwable)
                     }
                 )
             }
@@ -104,41 +99,49 @@ internal class MediaToSendAdapter(
 
         fun bindDocument(media: LocalMedia.Document) {
             binding.chatMediaToSendLoadingProgressBar.visibility = View.GONE
-            binding.chatMediaToSendImageView.loadAny(media) {
+            binding.chatMediaToSendImageView.load(media) {
                 placeholder(R.drawable.nabla_file_placeholder)
                 error(R.drawable.nabla_file_placeholder)
                 if (media.mimeType == MimeType.Application.Pdf) {
-                    fetcher(makeLocalPdfPreviewFetcher(binding.context))
+                    fetcherFactory<LocalMedia.Document> { data, options, _ ->
+                        makeLocalPdfPreviewFetcher(binding.context, data, options)
+                    }
                 }
             }
         }
 
-        private fun makeLocalPdfPreviewFetcher(context: Context) = object : Fetcher<LocalMedia.Document> {
-            override suspend fun fetch(pool: BitmapPool, data: LocalMedia.Document, size: Size, options: Options): FetchResult {
-                val fileDescriptor = context.contentResolver.openFileDescriptor(data.uri.toAndroidUri(), "r")
-                if (fileDescriptor != null) {
-                    val pdfRenderer = PdfRenderer(fileDescriptor)
-                    val firstPage = pdfRenderer.openPage(0)
-                    val targetSize = when (size) {
-                        is OriginalSize -> PixelSize(firstPage.width, firstPage.height)
-                        is PixelSize -> size
-                    }
-                    val bitmap = pool.get(targetSize.width, targetSize.height, Bitmap.Config.ARGB_8888)
-                    bitmap.eraseColor(context.getColor(coreR.color.nabla_white))
-                    val xScale = targetSize.width.toFloat() / firstPage.width.toFloat()
-                    val yScale = targetSize.height.toFloat() / firstPage.height.toFloat()
-                    val cropScale = max(xScale, yScale)
-                    val keepAspectRatioMatrix = Matrix().apply { setScale(cropScale, cropScale) }
-                    firstPage.render(bitmap, null, keepAspectRatioMatrix, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                    firstPage.close()
-                    pdfRenderer.close()
-                    return DrawableResult(drawable = bitmap.toDrawable(context.resources), isSampled = false, DataSource.DISK)
+        private fun makeLocalPdfPreviewFetcher(
+            context: Context,
+            data: LocalMedia.Document,
+            options: Options,
+        ) = Fetcher {
+            val fileDescriptor = context.contentResolver.openFileDescriptor(data.uri.toAndroidUri(), "r")
+            if (fileDescriptor != null) {
+                val pdfRenderer = PdfRenderer(fileDescriptor)
+                val firstPage = pdfRenderer.openPage(0)
+                val (width, height) = options.size
+                val (targetWidth, targetHeight) = if (width is Dimension.Pixels && height is Dimension.Pixels) {
+                    width to height
                 } else {
-                    throw IllegalStateException("Can't get a file descriptor from $data").asNablaInternal()
+                    Dimension.Pixels(firstPage.width) to Dimension.Pixels(firstPage.height)
                 }
+                val bitmap = Bitmap.createBitmap(
+                    targetWidth.px,
+                    targetHeight.px,
+                    Bitmap.Config.ARGB_8888,
+                )
+                bitmap.eraseColor(context.getColor(coreR.color.nabla_white))
+                val xScale = targetWidth.px.toFloat() / firstPage.width.toFloat()
+                val yScale = targetHeight.px.toFloat() / firstPage.height.toFloat()
+                val cropScale = max(xScale, yScale)
+                val keepAspectRatioMatrix = Matrix().apply { setScale(cropScale, cropScale) }
+                firstPage.render(bitmap, null, keepAspectRatioMatrix, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                firstPage.close()
+                pdfRenderer.close()
+                DrawableResult(drawable = bitmap.toDrawable(context.resources), isSampled = false, DataSource.DISK)
+            } else {
+                throw IllegalStateException("Can't get a file descriptor from $data").asNablaInternal()
             }
-
-            override fun key(data: LocalMedia.Document): String = data.uri.toString()
         }
     }
 

@@ -36,7 +36,7 @@ internal class VideoMessageContentBinder(
         binding.conversationVideoMessageImageView.load(uri) {
             memoryCacheKey(itemId)
             placeholderMemoryCacheKey(itemId)
-            decoder(VideoFrameDecoder(binding.context))
+            decoderFactory { result, options, _ -> VideoFrameDecoder(result.source, options) }
 
             listener(
                 onSuccess = { _, _ ->
@@ -45,7 +45,7 @@ internal class VideoMessageContentBinder(
                     binding.conversationVideoMessageLoadingProgressBar.visibility = View.GONE
                 },
                 onError = { _, error ->
-                    onErrorFetchingVideoThumbnail(error)
+                    onErrorFetchingVideoThumbnail(error.throwable)
                 }
             )
         }

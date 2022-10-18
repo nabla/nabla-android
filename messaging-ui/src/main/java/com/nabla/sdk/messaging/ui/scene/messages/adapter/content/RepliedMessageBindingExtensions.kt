@@ -3,7 +3,7 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.content
 import android.content.Context
 import android.widget.ImageView
 import androidx.core.view.isVisible
-import coil.clear
+import coil.dispose
 import coil.load
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.abbreviatedNameWithPrefix
@@ -43,7 +43,7 @@ internal fun ImageView.loadReplyContentThumbnailOrHide(replyContent: RepliedMess
             true
         }
         else -> {
-            clear()
+            dispose()
             false
         }
     }

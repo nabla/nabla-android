@@ -13,7 +13,7 @@ import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
-import coil.clear
+import coil.dispose
 import coil.load
 import coil.size.Scale
 import com.benasher44.uuid.Uuid
@@ -103,7 +103,7 @@ public class NablaAvatarView : ConstraintLayout {
 
         if (avatarUrl == null) {
             showPlaceholder(placeholderTextComputed, placeholderBackgroundColor)
-            binding.componentAvatarImageView.clear()
+            binding.componentAvatarImageView.dispose()
             return
         }
 
