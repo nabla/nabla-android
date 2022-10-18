@@ -5,8 +5,9 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.startup.Initializer
 import com.nabla.sdk.core.Configuration
+import com.nabla.sdk.core.reporting.error.ErrorReportingInitializer
 
-internal class NablaCoreInitializer : Initializer<Unit> {
+public class NablaCoreInitializer : Initializer<Unit> {
     override fun create(context: Context) {
         Configuration.defaultAppContext = context
         val metaData: Bundle? = context.packageManager.getApplicationInfo(
@@ -18,6 +19,12 @@ internal class NablaCoreInitializer : Initializer<Unit> {
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {
-        return emptyList()
+        val dependencies = mutableListOf<Class<out Initializer<*>>>()
+        try {
+            dependencies.add(ErrorReportingInitializer::class.java)
+        } catch (noClassDefFoundError: NoClassDefFoundError) {
+            // reporting removed from runtime classpath
+        }
+        return dependencies.toList()
     }
 }

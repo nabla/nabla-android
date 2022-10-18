@@ -1,0 +1,13 @@
+plugins {
+    id 'conventions.android-library'
+}
+
+android {
+    namespace = 'com.nabla.sdk.core.reporting'
+}
+
+dependencies {
+    implementation project(':core-api')
+    implementation libs.sentry.java
+    api libs.androidx.startup
+}

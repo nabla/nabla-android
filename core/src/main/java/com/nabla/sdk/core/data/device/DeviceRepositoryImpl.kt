@@ -3,6 +3,7 @@ package com.nabla.sdk.core.data.device
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.nabla.sdk.core.domain.boundary.DeviceRepository
+import com.nabla.sdk.core.domain.boundary.ErrorReporter
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.ModuleType
 import com.nabla.sdk.core.graphql.RegisterOrUpdateDeviceMutation
@@ -21,6 +22,7 @@ internal class DeviceRepositoryImpl(
     private val sdkApiVersionDataSource: SdkApiVersionDataSource,
     private val apolloClient: ApolloClient,
     private val logger: Logger,
+    private val errorReporter: ErrorReporter,
 ) : DeviceRepository {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -36,7 +38,7 @@ internal class DeviceRepositoryImpl(
                         ModuleType.SCHEDULING -> SdkModule.VIDEO_CALL_SCHEDULING
                     }
                 }
-                val deviceId = apolloClient.mutation(
+                apolloClient.mutation(
                     RegisterOrUpdateDeviceMutation(
                         deviceId = Optional.presentIfNotNull(installationDataSource.getInstallIdOrNull()),
                         device = DeviceInput(
@@ -47,8 +49,15 @@ internal class DeviceRepositoryImpl(
                             sdkModules = gqlActiveModules,
                         )
                     )
-                ).execute().dataAssertNoErrors.registerOrUpdateDevice.deviceId
-                installationDataSource.storeInstallId(deviceId)
+                ).execute().dataAssertNoErrors.registerOrUpdateDevice.let {
+                    installationDataSource.storeInstallId(it.deviceId)
+                    val sentry = it.sentry
+                    if (sentry != null) {
+                        errorReporter.enable(dsn = sentry.dsn, env = sentry.env)
+                    } else {
+                        errorReporter.disable()
+                    }
+                }
             }.onFailure { exception ->
                 logger.warn("Unable to identify device. This is not important and will be retried next time the app restarts.", exception)
             }

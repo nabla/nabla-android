@@ -1,5 +1,9 @@
 mutation RegisterOrUpdateDevice($deviceId: UUID, $device: DeviceInput!) {
     registerOrUpdateDevice(deviceId: $deviceId, device: $device) {
         deviceId
+        sentry {
+            dsn
+            env
+        }
     }
 }

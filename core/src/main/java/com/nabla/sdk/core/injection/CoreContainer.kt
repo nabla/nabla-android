@@ -36,7 +36,10 @@ import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.ProviderRepositoryImpl
 import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
+import com.nabla.sdk.core.data.reporter.NoOpErrorReporter
 import com.nabla.sdk.core.domain.boundary.DeviceRepository
+import com.nabla.sdk.core.domain.boundary.ErrorReporter
+import com.nabla.sdk.core.domain.boundary.ErrorReporter.Companion.reporterFactory
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.MessagingModule
@@ -165,13 +168,16 @@ public class CoreContainer internal constructor(
     private val deviceDataSource = DeviceDataSource()
     private val installationDataSource = InstallationDataSource(kvStorage)
     private val sdkApiVersionDataSource = SdkApiVersionDataSource()
-    private val deviceRepository: DeviceRepository = DeviceRepositoryImpl(
-        deviceDataSource,
-        installationDataSource,
-        sdkApiVersionDataSource,
-        apolloClient,
-        logger,
-    )
+    private val deviceRepository: DeviceRepository by lazy {
+        DeviceRepositoryImpl(
+            deviceDataSource,
+            installationDataSource,
+            sdkApiVersionDataSource,
+            apolloClient,
+            logger,
+            errorReporter
+        )
+    }
 
     internal fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
     internal fun loginInteractor() = LoginInteractor(patientRepository, deviceRepository, sessionClient, logoutInteractor(), activeModules())
@@ -186,6 +192,14 @@ public class CoreContainer internal constructor(
 
     public val messagingModule: MessagingModule? by lazy {
         modulesFactory.filterIsInstance<MessagingModule.Factory>().firstOrNull()?.create(this)
+    }
+
+    public val errorReporter: ErrorReporter by lazy {
+        if (configuration.enableReporting) {
+            reporterFactory?.create(logger) ?: NoOpErrorReporter()
+        } else {
+            NoOpErrorReporter()
+        }
     }
 
     private fun activeModules(): List<ModuleType> = modulesFactory.map { it.type() }

@@ -453,6 +453,12 @@ input DeviceInput {
 
 type UpdateDeviceOutput {
   deviceId: UUID!
+  sentry: Sentry
+}
+
+type Sentry {
+  dsn: String!
+  env: String!
 }
 
 enum DeviceOs {

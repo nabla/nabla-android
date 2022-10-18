@@ -18,11 +18,13 @@ public class Configuration(
     context: Context = defaultAppContext ?: throw ConfigurationException.MissingContext,
     internal val publicApiKey: String = defaultPublicApiKey ?: throw ConfigurationException.MissingApiKey,
     public val logger: Logger = LogcatLogger(),
+    public val enableReporting: Boolean = true,
 ) {
     @NablaInternal
     public val context: Context = context.applicationContext
 
-    internal companion object {
+    @NablaInternal
+    public companion object {
         internal var defaultAppContext: Context? = null
         internal var defaultPublicApiKey: String? = null
     }

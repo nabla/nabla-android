@@ -1,0 +1,7 @@
+plugins {
+    id 'conventions.android-library'
+}
+
+android {
+    namespace = 'com.nabla.sdk.core.api'
+}

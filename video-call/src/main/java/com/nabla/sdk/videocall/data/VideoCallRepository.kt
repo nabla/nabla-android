@@ -2,9 +2,7 @@ package com.nabla.sdk.videocall.data
 
 import android.content.Context
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.VideoCall
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.twilio.audioswitch.AudioDevice
 import io.livekit.android.LiveKit
 import io.livekit.android.LiveKitOverrides
@@ -16,16 +14,15 @@ import io.livekit.android.room.track.LocalVideoTrackOptions
 import io.livekit.android.util.flow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -35,14 +32,24 @@ internal class VideoCallRepository(
     private val applicationContext: Context,
     private val okHttpClient: OkHttpClient,
     private val repoScope: CoroutineScope,
-    private val logger: Logger,
+    private val videoCallRepositoryReporterHelper: VideoCallRepositoryReporterHelper
 ) {
 
     private val mutableCurrentRoomFlow = MutableStateFlow<Room?>(null)
     private val currentVideoCallFlow: Flow<VideoCall?> =
         createCurrentVideoCallFlow().stateIn(repoScope, SharingStarted.WhileSubscribed(), null)
     private val currentRoomMutex = Mutex()
-    private var currentRoomDisconnectListenerJob: Job? = null
+
+    init {
+        repoScope.launch {
+            mutableCurrentRoomFlow.collectLatest { room ->
+                if (room == null) return@collectLatest
+                coroutineScope {
+                    videoCallRepositoryReporterHelper.installRoomReporter(this, room)
+                }
+            }
+        }
+    }
 
     suspend fun createCurrentRoom(): Room {
         // Only supporting one connected room (the current room) atm
@@ -50,21 +57,12 @@ internal class VideoCallRepository(
             mutableCurrentRoomFlow.value?.disconnect()
             val newCurrentRoom = createLiveKitRoom()
             mutableCurrentRoomFlow.value = newCurrentRoom
-            clearCurrentRoomOnDisconnected(newCurrentRoom)
             newCurrentRoom
         }
     }
 
     fun watchCurrentVideoCall(): Flow<VideoCall?> {
         return currentVideoCallFlow
-    }
-
-    private fun clearCurrentRoomOnDisconnected(room: Room) {
-        currentRoomDisconnectListenerJob?.cancel()
-        repoScope.launch {
-            room::state.flow.firstOrNull { roomState -> roomState == Room.State.DISCONNECTED }
-            currentRoomMutex.withLock { mutableCurrentRoomFlow.value = null }
-        }.also { currentRoomDisconnectListenerJob = it }
     }
 
     private fun createLiveKitRoom(): Room {
@@ -102,16 +100,17 @@ internal class VideoCallRepository(
     }
 
     private fun flowAsVideoCallWhileNotDisconnected(room: Room): Flow<VideoCall?> {
-        return room::state.flow.filter {
-            it == Room.State.CONNECTED || it == Room.State.CONNECTED
-        }.map { roomState ->
+        return room::state.flow.transform { roomState ->
             when (roomState) {
                 Room.State.DISCONNECTED -> {
                     // Disconnected is a livekit terminal state after hangup.
-                    return@map null
+                    emit(null)
                 }
-                Room.State.CONNECTED -> { return@map VideoCall(Uuid.fromString(room.name)) }
-                else -> throw IllegalArgumentException("State $roomState should be filtered").asNablaInternal()
+                Room.State.CONNECTED -> {
+                    emit(VideoCall(Uuid.fromString(room.name)))
+                }
+                else -> { /* no-op */
+                }
             }
         }
     }

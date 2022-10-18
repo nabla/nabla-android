@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
+- Reporting: Add a module to report anonymous events to nabla servers to help debug some features like video calls.
 - Upgraded dependency on Coil from 1.4.0 to 2.2.2.
 
 ### Fixed

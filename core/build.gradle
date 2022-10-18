@@ -51,10 +51,12 @@ apollo {
 }
 
 dependencies {
+    api project(':core-api')
     api libs.kotlin.datetime
     api libs.uuid
     api libs.okhttp
     api libs.androidx.appcompat
+    api libs.androidx.startup
 
     implementation libs.okhttp.logging
     implementation libs.retrofit
@@ -65,12 +67,12 @@ dependencies {
     implementation libs.apollo.cache.sqlite
     implementation libs.apollo.adapters
     implementation libs.coilCore
-    implementation libs.androidx.startup
     implementation libs.androidx.core.ktx
     implementation libs.androidx.fragment.ktx
     implementation libs.google.material
     implementation libs.kotlin.serialization.json
     implementation libs.kotlin.coroutines.core
+    implementation project(':core-error-reporting')
 
     compileOnly libs.androidx.annotation
 

@@ -22,6 +22,7 @@ internal class NablaVideoCallClientImpl internal constructor(
         baseOkHttpClient = coreContainer.okHttpClient,
         logger = coreContainer.logger,
         context = coreContainer.configuration.context,
+        errorReporter = coreContainer.errorReporter,
     )
 
     override val logger: Logger = videoCallContainer.logger
