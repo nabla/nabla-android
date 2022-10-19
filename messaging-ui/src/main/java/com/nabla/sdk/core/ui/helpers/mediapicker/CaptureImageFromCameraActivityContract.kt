@@ -7,10 +7,13 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.ui.helpers.mediapicker.mimetypedetector.MimeTypeHelper
 import com.nabla.sdk.messaging.ui.helper.CameraFileProvider
 import java.io.File
 
-internal class CaptureImageFromCameraActivityContract : ActivityResultContract<Unit, MediaPickingResult<LocalMedia.Image>>() {
+internal class CaptureImageFromCameraActivityContract(
+    private val context: Context,
+) : ActivityResultContract<Unit, MediaPickingResult<LocalMedia.Image>>() {
     private var currentFile: File? = null
 
     override fun createIntent(context: Context, input: Unit): Intent {
@@ -43,7 +46,7 @@ internal class CaptureImageFromCameraActivityContract : ActivityResultContract<U
 
             val file = currentFile ?: throw IllegalStateException("No file available")
 
-            val mimeType = MimeTypeHelper.getFileMediaMimeType(file) as? MimeType.Image
+            val mimeType = MimeTypeHelper.getInstance(context).getFileMediaMimeType(file) as? MimeType.Image
                 ?: throw IllegalArgumentException("Mime type is not a supported image one")
 
             return MediaPickingResult.Success(

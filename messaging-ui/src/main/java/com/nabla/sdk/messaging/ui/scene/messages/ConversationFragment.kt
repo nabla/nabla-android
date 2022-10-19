@@ -248,7 +248,7 @@ public open class ConversationFragment : Fragment() {
             }
         }
 
-        captureCameraPictureLauncher = registerForActivityResult(CaptureImageFromCameraActivityContract()) { result ->
+        captureCameraPictureLauncher = registerForActivityResult(CaptureImageFromCameraActivityContract(context)) { result ->
             when (result) {
                 is MediaPickingResult.Success -> viewModel.onPictureCaptured(result.data)
                 is MediaPickingResult.Failure -> viewModel.onErrorWithCameraCapture(result.exception)
@@ -256,7 +256,7 @@ public open class ConversationFragment : Fragment() {
             }
         }
 
-        captureCameraVideoLauncher = registerForActivityResult(CaptureVideoFromCameraActivityContract()) { result ->
+        captureCameraVideoLauncher = registerForActivityResult(CaptureVideoFromCameraActivityContract(context)) { result ->
             when (result) {
                 is MediaPickingResult.Success -> viewModel.onVideoCaptured(result.data)
                 is MediaPickingResult.Failure -> viewModel.onErrorWithCameraCapture(result.exception)

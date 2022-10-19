@@ -30,7 +30,7 @@ dependencies {
     implementation libs.coilVideo
     implementation libs.androidx.fragment.ktx
     implementation libs.exoplayer
-    implementation libs.mimeTypeDetector
+    implementation libs.juniversalchardet // Used by Mimetype detector
 
     testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')
