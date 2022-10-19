@@ -10,7 +10,7 @@ espresso = "3.4.0"
 okreplay = "1.6.0"
 
 [libraries]
-android-pluginGradle = "com.android.tools.build:gradle:7.3.0"
+android-pluginGradle = "com.android.tools.build:gradle:7.3.1"
 gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.13.1"
 paparazzi-pluginGradle = "app.cash.paparazzi:paparazzi-gradle-plugin:1.0.0"
 paparazzi = "app.cash.paparazzi:paparazzi:1.0.0"
