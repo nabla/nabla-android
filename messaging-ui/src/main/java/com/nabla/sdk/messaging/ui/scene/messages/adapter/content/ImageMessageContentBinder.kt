@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import coil.load
+import coil.size.Size
 import com.google.android.material.resources.TextAppearance
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.context
@@ -30,6 +31,7 @@ internal class ImageMessageContentBinder(
 
     fun loadImage(uri: Uri, itemId: String) {
         binding.chatImageMessageImageView.load(uri) {
+            size(Size(binding.context.resources.displayMetrics.widthPixels, binding.chatImageMessageImageView.maxHeight))
             memoryCacheKey(itemId)
             placeholderMemoryCacheKey(itemId)
             listener(onSuccess = { _, _ -> binding.chatImageMessageLoadingProgressBar.visibility = View.GONE })
