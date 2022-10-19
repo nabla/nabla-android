@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix a crash on Android 6 and 7 when taking a picture with the camera in messaging UI module.
+
 ## [1.0-alpha17] - 2022-10-19
 
 ### Fixed
