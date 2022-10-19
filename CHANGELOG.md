@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0-alpha17] - 2022-10-19
+
+### Fixed
+
+- Fix a crash introduced in alpha16 where sending or receiving a super large image could make the Conversation screen crash in messaging UI module.
+
 ## [1.0-alpha16] - 2022-10-18
 
 ### Changed
