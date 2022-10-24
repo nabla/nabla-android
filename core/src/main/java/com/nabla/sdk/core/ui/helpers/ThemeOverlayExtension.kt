@@ -7,6 +7,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
 import androidx.appcompat.view.ContextThemeWrapper
+import com.nabla.sdk.core.R
 import com.nabla.sdk.core.annotation.NablaInternal
 
 /**
@@ -22,6 +23,16 @@ public fun Context.withNablaThemeOverlay(
     @AttrRes hasValidOverlaysAttr: Int,
     @AttrRes themeOverlayAttr: Int,
     styleOverlay: StyleOverlay? = null,
+    @StyleRes defaultThemeOverlay: Int,
+): Context = withNablaThemeContextWrapper(hasValidOverlaysAttr, themeOverlayAttr, styleOverlay, defaultThemeOverlay).apply {
+    // Apply default values for Nabla_ThemeOverlay_Base without overriding anything defined in the theme
+    theme.applyStyle(R.style.Nabla_ThemeOverlay_Base_Default, false)
+}
+
+private fun Context.withNablaThemeContextWrapper(
+    @AttrRes hasValidOverlaysAttr: Int,
+    @AttrRes themeOverlayAttr: Int,
+    styleOverlay: StyleOverlay?,
     @StyleRes defaultThemeOverlay: Int,
 ): Context {
     val outValue = TypedValue()
