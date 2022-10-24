@@ -70,6 +70,7 @@ type Subscription {
 
 type Patient {
   id: UUID!
+  displayName: String!
 }
 
 type EphemeralUrl {
@@ -135,6 +136,7 @@ type Conversation {
   subtitle: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  pictureUrl: EphemeralUrl
 
   inboxPreviewTitle: String!
   lastMessagePreview: String
