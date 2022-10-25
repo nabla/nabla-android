@@ -11,4 +11,5 @@ internal enum class MediaSource : Parcelable {
     CAMERA_VIDEO,
     GALLERY,
     DOCUMENT,
+    DOCUMENT_SCAN,
 }

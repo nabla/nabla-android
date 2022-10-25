@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nabla.sdk.core.R
 import com.nabla.sdk.core.annotation.NablaInternal
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 
 public interface PermissionRequestLauncher {
     public fun launch()
@@ -39,7 +40,7 @@ public fun Fragment.registerForPermissionsResult(
     rational: PermissionRational,
     callback: (grants: Map<String, Boolean>) -> Unit,
 ): PermissionRequestLauncher {
-    val context = this.context ?: throw PermissionException("Attempted to request permissions from a fragment not connected to any context: $this")
+    val context = this.context ?: throwNablaInternalException("Attempted to request permissions from a fragment not connected to any context: $this")
     val underlyingLauncher = this.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(), callback)
     return context.permissionRequestLauncher(permissions, context, callback, rational, underlyingLauncher, ::shouldShowRequestPermissionRationale)
 }
@@ -89,6 +90,3 @@ private fun Context.permissionRequestLauncher(
         }
     }
 }
-
-@NablaInternal
-public class PermissionException(message: String) : Exception(message)

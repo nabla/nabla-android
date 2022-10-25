@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="nablaHasValidDocScannerOverlays" format="boolean" />
+    <attr name="nablaDocScannerThemeOverlay" format="reference" />
+
+    <style name="Nabla.ThemeOverlay.DocScanner" parent="Nabla.ThemeOverlay.Base">
+        <item name="nablaHasValidDocScannerOverlays">true</item>
+    </style>
+</resources>

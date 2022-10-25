@@ -24,13 +24,13 @@ dependencies {
     api libs.google.material
     api libs.androidx.appcompat
 
+    implementation project(':doc-scanner')
     implementation libs.androidx.lifecycle.viewmodel
     implementation libs.androidx.core.ktx
     implementation libs.coilCore
     implementation libs.coilVideo
     implementation libs.androidx.fragment.ktx
     implementation libs.exoplayer
-    implementation libs.juniversalchardet // Used by Mimetype detector
 
     testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')

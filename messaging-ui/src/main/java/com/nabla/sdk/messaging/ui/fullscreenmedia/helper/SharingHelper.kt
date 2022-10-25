@@ -10,7 +10,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 // This need to be in sync with manifest declaration
-private fun fileProviderAuthority(context: Context) = "${context.packageName}.fullscreenmedia.sharefileprovider"
+private fun fileProviderAuthority(context: Context) = "${context.packageName}.nabla.messaging.ui.sharefileprovider"
 
 internal fun Bitmap.createSharableJpegImage(
     id: String,

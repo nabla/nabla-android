@@ -7,7 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
@@ -126,17 +126,17 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
 
         private fun Bundle.getCategoryId() = CategoryId(
             Uuid.fromString(
-                getString(ARG_CATEGORY_ID) ?: throw IllegalStateException("Missing Category Id").asNablaInternal()
+                getString(ARG_CATEGORY_ID) ?: throwNablaInternalException("Missing Category Id")
             )
         )
 
         private fun Bundle.getProviderId() =
             Uuid.fromString(
-                getString(ARG_PROVIDER_ID) ?: throw IllegalStateException("Missing Provider Id").asNablaInternal()
+                getString(ARG_PROVIDER_ID) ?: throwNablaInternalException("Missing Provider Id")
             )
 
         private fun Bundle.getSlot() = Instant.fromEpochMilliseconds(
-            getLong(ARG_SLOT_INSTANT).also { if (it == 0L) throw IllegalStateException("Missing Slot Instant").asNablaInternal() }
+            getLong(ARG_SLOT_INSTANT).also { if (it == 0L) throwNablaInternalException("Missing Slot Instant") }
 
         )
     }

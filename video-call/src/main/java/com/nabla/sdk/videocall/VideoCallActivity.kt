@@ -20,7 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.ui.helpers.PermissionRational
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.launchCollect
@@ -79,8 +79,16 @@ public class VideoCallActivity : AppCompatActivity() {
         launchCollect(viewModel.finishFlow, minState = Lifecycle.State.CREATED) { finishReason ->
             when (finishReason) {
                 VideoCallViewModel.FinishReason.CallEnded -> Toast.makeText(this, R.string.nabla_video_call_ended, Toast.LENGTH_SHORT).show()
-                VideoCallViewModel.FinishReason.PermissionsRefused -> Toast.makeText(this, R.string.nabla_video_call_error_permission_refused, Toast.LENGTH_SHORT).show()
-                VideoCallViewModel.FinishReason.UnableToConnect -> Toast.makeText(this, R.string.nabla_video_call_error_failed_to_join, Toast.LENGTH_SHORT).show()
+                VideoCallViewModel.FinishReason.PermissionsRefused -> Toast.makeText(
+                    this,
+                    R.string.nabla_video_call_error_permission_refused,
+                    Toast.LENGTH_SHORT
+                ).show()
+                VideoCallViewModel.FinishReason.UnableToConnect -> Toast.makeText(
+                    this,
+                    R.string.nabla_video_call_error_failed_to_join,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             finish()
@@ -275,20 +283,9 @@ public class VideoCallActivity : AppCompatActivity() {
         private const val ARG_ROOM_ID = "VIDEO_CALL_ROOM_ID"
         private const val ARG_TOKEN = "VIDEO_CALL_TOKEN"
 
-        private fun Intent.getUrl(): String {
-            return extras?.getString(ARG_URL)
-                ?: throw IllegalStateException("Url is required").asNablaInternal()
-        }
-
-        private fun Intent.getRoomId(): String {
-            return extras?.getString(ARG_ROOM_ID)
-                ?: throw IllegalStateException("Room id is required").asNablaInternal()
-        }
-
-        private fun Intent.getToken(): String {
-            return extras?.getString(ARG_TOKEN)
-                ?: throw IllegalStateException("Token is required").asNablaInternal()
-        }
+        private fun Intent.getUrl(): String = extras?.getString(ARG_URL) ?: throwNablaInternalException("Url is required")
+        private fun Intent.getRoomId(): String = extras?.getString(ARG_ROOM_ID) ?: throwNablaInternalException("Room id is required")
+        private fun Intent.getToken(): String = extras?.getString(ARG_TOKEN) ?: throwNablaInternalException("Token is required")
 
         fun newIntent(
             context: Context,

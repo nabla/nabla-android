@@ -1,4 +1,4 @@
-package com.nabla.sdk.messaging.ui.helper
+package com.nabla.sdk.core.ui.providers
 
 import android.content.Context
 import android.net.Uri
@@ -8,7 +8,7 @@ import java.io.File
 internal class CameraFileProvider : FileProvider() {
 
     companion object {
-        private fun authority(context: Context) = "${context.packageName}.nabla.messaging.camerafileprovider"
+        private fun authority(context: Context) = "${context.packageName}.nabla.core.camerafileprovider"
 
         fun getUri(context: Context, file: File): Uri {
             return getUriForFile(

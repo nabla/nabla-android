@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_document_scan_edge_picker_title">Recadrer le document</string>
+    <string name="nabla_document_scan_edge_picker_crop_cta">Recadrer</string>
+    <string name="nabla_document_scan_builder_title">Éditer le document</string>
+    <string name="nabla_document_scan_builder_continue_cta">Valider</string>
+    <string name="nabla_document_scan_builder_add_cta">Ajouter</string>
+    <string name="nabla_document_scan_builder_crop_cta">Recadrer</string>
+    <string name="nabla_document_scan_builder_delete_cta">Supprimer</string>
+    <string name="nabla_document_scan_builder_confirm_delete_info">Voulez-vous supprimer cette page ?</string>
+    <string name="nabla_document_scan_builder_confirm_delete_yes_cta">Oui</string>
+    <string name="nabla_document_scan_builder_confirm_delete_no_cta">Non</string>
+    <string name="nabla_document_scan_new_document_name">Scan du %s</string>
+    <string name="nabla_document_scan_new_document_name_date_format">dd\'-\'MM\'-\'yyyy</string>
+    <string name="nabla_document_scan_processed_document_content_description">document</string>
+    <string name="nabla_document_scan_camera_picture_permission_rational_title">Autorisation d’utiliser l’appareil photo</string>
+    <string name="nabla_document_scan_camera_picture_permission_rational_description">Pour scanner un document, nous avons besoin de votre autorisation d’utiliser l’appareil photo.</string>
+</resources>

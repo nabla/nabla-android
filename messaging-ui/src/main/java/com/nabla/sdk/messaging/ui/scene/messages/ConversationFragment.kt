@@ -37,6 +37,7 @@ import com.google.android.exoplayer2.Player.STATE_ENDED
 import com.google.android.exoplayer2.Player.STATE_READY
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.toJvmURI
 import com.nabla.sdk.core.data.helper.toKtUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
@@ -49,6 +50,7 @@ import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.mediapicker.CaptureImageFromCameraActivityContract
 import com.nabla.sdk.core.ui.helpers.mediapicker.CaptureVideoFromCameraActivityContract
+import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.core.ui.helpers.mediapicker.MediaPickingResult
 import com.nabla.sdk.core.ui.helpers.mediapicker.PickMediasFromLibraryActivityContract
 import com.nabla.sdk.core.ui.helpers.openPdfReader
@@ -58,10 +60,12 @@ import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.scrollToTop
+import com.nabla.sdk.core.ui.helpers.sdkNameOrDefault
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.docscanner.ui.DocScannerActivityContract
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MissingConversationIdException
@@ -110,6 +114,7 @@ public open class ConversationFragment : Fragment() {
     private lateinit var captureCameraPicturePermissionsLauncher: PermissionRequestLauncher
     private lateinit var captureCameraVideoPermissionsLauncher: PermissionRequestLauncher
     private lateinit var captureAudioPermissionsLauncher: PermissionRequestLauncher
+    private lateinit var documentScannerLauncher: ActivityResultLauncher<String>
     private lateinit var mediasToSendAdapter: MediaToSendAdapter
     private var mediaRecorder: MediaRecorder? = null
     private var binding: NablaFragmentConversationBinding? = null
@@ -127,6 +132,7 @@ public open class ConversationFragment : Fragment() {
                 MediaSource.CAMERA_VIDEO -> captureCameraVideoPermissionsLauncher.launch()
                 MediaSource.GALLERY -> viewModel.onImageAndVideoSourceLibrarySelected()
                 MediaSource.DOCUMENT -> viewModel.onDocumentSourceLibrarySelected()
+                MediaSource.DOCUMENT_SCAN -> viewModel.onDocumentScanSelected()
             }
         }
 
@@ -263,6 +269,16 @@ public open class ConversationFragment : Fragment() {
                 is MediaPickingResult.Cancelled -> Unit // no-op
             }
         }
+
+        documentScannerLauncher = registerForActivityResult(DocScannerActivityContract()) { result ->
+            when (result) {
+                DocScannerActivityContract.Result.Cancelled -> Unit // No-op
+                is DocScannerActivityContract.Result.Failed -> viewModel.onDocumentScanFailed(result.error)
+                is DocScannerActivityContract.Result.Document -> viewModel.onDocumentScanResult(
+                    LocalMedia.Document(result.uri.toJvmURI(), result.uri.lastPathSegment, MimeType.Application.Pdf)
+                )
+            }
+        }
     }
 
     private fun collectAlertEvents() {
@@ -294,6 +310,9 @@ public open class ConversationFragment : Fragment() {
                     } catch (t: Throwable) {
                         viewModel.onErrorLaunchingLibrary(t)
                     }
+                }
+                is ConversationViewModel.NavigationEvent.OpenDocumentScanner -> {
+                    documentScannerLauncher.launch(sdkNameOrDefault())
                 }
                 ConversationViewModel.NavigationEvent.OpenMediaSourcePicker -> {
                     parentFragmentManager.commit {

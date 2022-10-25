@@ -73,6 +73,7 @@ dependencies {
     implementation libs.kotlin.serialization.json
     implementation libs.kotlin.coroutines.core
     implementation project(':core-error-reporting')
+    implementation libs.juniversalchardet // Used by Mimetype detector
 
     compileOnly libs.androidx.annotation
 

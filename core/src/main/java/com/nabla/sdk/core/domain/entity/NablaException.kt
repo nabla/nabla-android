@@ -40,6 +40,9 @@ public class InternalException private constructor(cause: Throwable) : NablaExce
     public companion object {
         @NablaInternal
         public fun Throwable.asNablaInternal(): InternalException = InternalException(this)
+
+        @NablaInternal
+        public fun throwNablaInternalException(message: String): Nothing = throw IllegalStateException(message).asNablaInternal()
     }
 }
 

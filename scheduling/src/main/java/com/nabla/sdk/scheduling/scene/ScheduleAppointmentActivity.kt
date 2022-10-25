@@ -13,11 +13,11 @@ import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
-import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
 import kotlinx.datetime.Instant
+import com.nabla.sdk.core.R as CoreR
 
 @NablaInternal
 public class ScheduleAppointmentActivity : AppCompatActivity() {
@@ -51,10 +51,10 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
             } else {
                 setTransition(TRANSIT_FRAGMENT_OPEN)
                 setCustomAnimations(
-                    R.anim.nabla_slide_in_right,
-                    R.anim.nabla_fade_out,
-                    R.anim.nabla_fade_in,
-                    R.anim.nabla_slide_out_right,
+                    CoreR.anim.nabla_slide_in_right,
+                    CoreR.anim.nabla_fade_out,
+                    CoreR.anim.nabla_fade_in,
+                    CoreR.anim.nabla_slide_out_right,
                 )
             }
             replace(binding.fragmentContainer.id, fragment)

@@ -9,7 +9,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.nabla.sdk.messaging.ui.R;
+import com.nabla.sdk.core.R;
+
+import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,8 +28,6 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import org.mozilla.universalchardet.UniversalDetector;
 
 /**
  * Determines the MIME type of files.

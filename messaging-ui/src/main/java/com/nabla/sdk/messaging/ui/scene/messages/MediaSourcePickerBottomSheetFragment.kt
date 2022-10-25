@@ -58,6 +58,11 @@ internal class MediaSourcePickerBottomSheetFragment : BottomSheetDialogFragment(
             setFragmentResult(REQUEST_KEY, generateResultBundle(MediaSource.DOCUMENT))
             dismiss()
         }
+
+        binding.chatMediaSourcePickerOptionDocScan.setOnClickListener {
+            setFragmentResult(REQUEST_KEY, generateResultBundle(MediaSource.DOCUMENT_SCAN))
+            dismiss()
+        }
     }
 
     override fun onDestroyView() {

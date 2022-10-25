@@ -220,6 +220,10 @@ internal class ConversationViewModel(
         navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenMediaLibrary(listOf(MimeType.Application.Pdf)))
     }
 
+    fun onDocumentScanSelected() {
+        navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenDocumentScanner)
+    }
+
     fun onMediasPickedFromGallery(medias: List<LocalMedia>) {
         mediasToSendMutableFlow.emitIn(viewModelScope, mediasToSendMutableFlow.value.plus(medias))
     }
@@ -230,6 +234,15 @@ internal class ConversationViewModel(
 
     fun onVideoCaptured(video: LocalMedia.Video) {
         mediasToSendMutableFlow.emitIn(viewModelScope, mediasToSendMutableFlow.value.plus(video))
+    }
+
+    fun onDocumentScanResult(document: LocalMedia.Document) {
+        mediasToSendMutableFlow.emitIn(viewModelScope, mediasToSendMutableFlow.value.plus(document))
+    }
+
+    fun onDocumentScanFailed(error: Throwable) {
+        messagingClient.logger.warn("An error occurred while scanning a document", error)
+        errorAlertMutableFlow.emitIn(viewModelScope, ErrorAlert.DocumentScanFailed)
     }
 
     fun onMediaToSendClicked(media: LocalMedia) {
@@ -651,6 +664,7 @@ internal class ConversationViewModel(
         object OpenCameraPictureCapture : NavigationEvent()
         object OpenCameraVideoCapture : NavigationEvent()
         data class OpenMediaLibrary(val mimeTypes: List<MimeType>) : NavigationEvent()
+        object OpenDocumentScanner : NavigationEvent()
         object RequestVoiceMessagePermissions : NavigationEvent()
         data class ScrollToItem(val position: Int) : NavigationEvent()
     }
@@ -665,6 +679,7 @@ internal class ConversationViewModel(
         object DeletingMessage : ErrorAlert(R.string.nabla_error_message_conversation_deleting_message)
         object ClickedUrlParsing : ErrorAlert(R.string.nabla_error_message_conversation_clicked_url_parsing)
         object RecordingVoiceMessage : ErrorAlert(R.string.nabla_conversation_error_recording_voice_message)
+        object DocumentScanFailed : ErrorAlert(R.string.nabla_conversation_document_scan_failure)
     }
 
     private class StateMapper {

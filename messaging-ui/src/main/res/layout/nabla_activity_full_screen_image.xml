@@ -36,10 +36,11 @@
         android:clickable="true"
         android:contentDescription="@string/nabla_conversation_full_screen_media_close_content_description"
         android:focusable="true"
-        android:padding="8dp"
-        android:src="@drawable/nabla_ic_fullscreen_media_view_close"
+        android:padding="14dp"
+        android:src="@drawable/nabla_ic_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorSurface"
         />
 
     <ImageView
@@ -55,6 +56,7 @@
         android:src="@drawable/nabla_ic_share"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorSurface"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

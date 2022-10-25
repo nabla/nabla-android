@@ -35,6 +35,7 @@
     <string name="nabla_conversation_attachment_media_picker_camera_video">Record a video</string>
     <string name="nabla_conversation_attachment_media_picker_photos_library">Photo &amp; video library</string>
     <string name="nabla_conversation_attachment_media_picker_documents">Files</string>
+    <string name="nabla_conversation_attachment_media_picker_document_scanner">Scan Document</string>
 
     <string name="nabla_conversation_deleted_message_placeholder">Deleted message</string>
     <string name="nabla_conversation_file_message_content_description">File message</string>
@@ -59,6 +60,7 @@
     <string name="nabla_conversation_error_recording_voice_message">Something went wrong while recording voice message</string>
     <string name="nabla_conversation_voice_message_audio_permission_rational_title">Authorisation to use microphone</string>
     <string name="nabla_conversation_voice_message_audio_permission_rational_description">To record a voice message, we need your authorisation to use your microphone.</string>
+    <string name="nabla_conversation_document_scan_failure">Failed to attach the scanned document.</string>
 
     <string name="nabla_conversation_replied_to_message_author_patient">You</string>
     <string name="nabla_conversation_replied_to_message_description_deleted">Deleted message</string>

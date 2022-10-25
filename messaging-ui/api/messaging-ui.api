@@ -71,6 +71,7 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationListV
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationMediaSourcePickerBinding : androidx/viewbinding/ViewBinding {
 	public final field chatMediaSourcePickerOptionCameraPicture Landroid/widget/LinearLayout;
 	public final field chatMediaSourcePickerOptionCameraVideo Landroid/widget/LinearLayout;
+	public final field chatMediaSourcePickerOptionDocScan Landroid/widget/LinearLayout;
 	public final field chatMediaSourcePickerOptionFile Landroid/widget/LinearLayout;
 	public final field chatMediaSourcePickerOptionLibrary Landroid/widget/LinearLayout;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationMediaSourcePickerBinding;

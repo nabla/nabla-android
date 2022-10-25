@@ -8,6 +8,7 @@ coil = "2.2.2"
 ktlint = "0.45.1"
 espresso = "3.4.0"
 okreplay = "1.6.0"
+tensorflow = "0.4.2"
 
 [libraries]
 android-pluginGradle = "com.android.tools.build:gradle:7.3.1"
@@ -87,3 +88,7 @@ espressoIdlingResource = { group = "androidx.test.espresso", name = "espresso-id
 testRules = { group = "androidx.test", name = "rules", version = "1.4.0" }
 
 desugaring = 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+tensorflowSupportApi = { group = "org.tensorflow", name = "tensorflow-lite-support-api", version.ref = "tensorflow" }
+tensorflowSupportImpl = { group = "org.tensorflow", name = "tensorflow-lite-support", version.ref = "tensorflow" }
+tensorflowMetadata = { group = "org.tensorflow", name = "tensorflow-lite-metadata", version.ref = "tensorflow" }

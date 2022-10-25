@@ -42,6 +42,7 @@
     <attr name="nablaMessaging_mediaSourceCameraVideoIcon" format="reference"/>
     <attr name="nablaMessaging_mediaSourceGalleryIcon" format="reference"/>
     <attr name="nablaMessaging_mediaSourceDocumentIcon" format="reference"/>
+    <attr name="nablaMessaging_mediaSourceDocumentScanIcon" format="reference"/>
 
     <attr name="nablaMessaging_conversationBackgroundColor" format="reference|color"/>
     <attr name="nablaMessaging_conversationHeaderColor" format="reference|color"/>

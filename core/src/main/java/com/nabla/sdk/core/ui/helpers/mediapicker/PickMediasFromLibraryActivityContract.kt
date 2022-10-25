@@ -6,10 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.result.contract.ActivityResultContract
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.MimeType
 import java.net.URI
 
-internal class PickMediasFromLibraryActivityContract(private val context: Context) :
+@NablaInternal
+public class PickMediasFromLibraryActivityContract(private val context: Context) :
     ActivityResultContract<Array<MimeType>, MediaPickingResult<List<LocalMedia>>>() {
 
     override fun createIntent(context: Context, mimeTypes: Array<MimeType>): Intent {

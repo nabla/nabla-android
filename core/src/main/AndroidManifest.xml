@@ -11,5 +11,17 @@
                 android:name="com.nabla.sdk.core.data.init.NablaCoreInitializer"
                 android:value="androidx.startup" />
         </provider>
+
+        <provider
+            android:name=".ui.providers.CameraFileProvider"
+            android:authorities="${applicationId}.nabla.core.camerafileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/nabla_media_picker_file_paths"
+                />
+        </provider>
     </application>
 </manifest>

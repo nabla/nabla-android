@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_document_scan_edge_picker_title">Crop the document</string>
+    <string name="nabla_document_scan_edge_picker_crop_cta">Crop</string>
+    <string name="nabla_document_scan_builder_title">Edit document</string>
+    <string name="nabla_document_scan_builder_continue_cta">Validate</string>
+    <string name="nabla_document_scan_builder_add_cta">Add</string>
+    <string name="nabla_document_scan_builder_crop_cta">Crop</string>
+    <string name="nabla_document_scan_builder_delete_cta">Delete</string>
+    <string name="nabla_document_scan_builder_confirm_delete_info">Do you want to delete the current document?</string>
+    <string name="nabla_document_scan_builder_confirm_delete_yes_cta">Yes</string>
+    <string name="nabla_document_scan_builder_confirm_delete_no_cta">No</string>
+    <string name="nabla_document_scan_new_document_name">%s scan</string>
+    <string name="nabla_document_scan_new_document_name_date_format">dd\'-\'MM\'-\'yyyy</string>
+    <string name="nabla_document_scan_processed_document_content_description">document</string>
+    <string name="nabla_document_scan_camera_picture_permission_rational_title">Authorisation to access camera</string>
+    <string name="nabla_document_scan_camera_picture_permission_rational_description">To scan a document, we need authorisation to access your camera</string>
+</resources>

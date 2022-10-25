@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- New Messaging UI feature: You can now scan (with the camera) and send multi-page documents in conversations.
+
+### Changed
+
+- Changed the default value for `nablaMessaging_cancelVoiceMessageIcon` icon to a Material trash bin icon.
+
 ### Fixed
 
 - Fix a crash on Android 6 and 7 when taking a picture with the camera in messaging UI module.

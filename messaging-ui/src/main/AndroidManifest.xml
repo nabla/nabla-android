@@ -21,25 +21,13 @@
 
         <provider
             android:name=".fullscreenmedia.provider.SharingProvider"
-            android:authorities="${applicationId}.fullscreenmedia.sharefileprovider"
+            android:authorities="${applicationId}.nabla.messaging.ui.sharefileprovider"
             android:exported="false"
             android:grantUriPermissions="true"
             >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/nabla_share_file_paths"
-                />
-        </provider>
-
-        <provider
-            android:name=".helper.CameraFileProvider"
-            android:authorities="${applicationId}.nabla.messaging.camerafileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            >
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/nabla_media_picker_file_paths"
                 />
         </provider>
     </application>

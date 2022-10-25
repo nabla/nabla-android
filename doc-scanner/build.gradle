@@ -1,0 +1,31 @@
+plugins {
+    id 'conventions.android-library'
+    id 'kotlin-parcelize'
+}
+
+android {
+    namespace = 'com.nabla.sdk.docscanner'
+
+    buildFeatures {
+        mlModelBinding = true
+    }
+}
+
+
+dependencies {
+    api project(':core')
+    api libs.androidx.appcompat
+    api libs.androidx.constraintlayout
+    api libs.google.material
+    api libs.tensorflowSupportApi
+
+    runtimeOnly libs.tensorflowSupportImpl
+
+    implementation libs.androidx.activity
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.androidx.lifecycle.viewmodel
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.tensorflowMetadata
+    implementation libs.coilCore
+}

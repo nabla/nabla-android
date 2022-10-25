@@ -7,7 +7,9 @@ import androidx.annotation.AttrRes
 import coil.load
 import com.google.android.material.resources.TextAppearance
 import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.toJvmUri
 import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
+import com.nabla.sdk.core.ui.helpers.coil.LocalPdfPreviewFetcher
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.getThemeStyle
@@ -30,10 +32,21 @@ internal class FileMessageContentBinder(
     override fun bind(messageId: String, item: TimelineItem.Message.File) {
         if (item.thumbnailUri != null) {
             binding.chatFileMessagePreviewImageView.load(item.thumbnailUri.toAndroidUri()) {
+                memoryCacheKey(messageId)
+                placeholderMemoryCacheKey(messageId)
                 placeholder(R.drawable.nabla_file_placeholder)
             }
         } else {
-            binding.chatFileMessagePreviewImageView.setImageResource(R.drawable.nabla_file_placeholder)
+            binding.chatFileMessagePreviewImageView.load(item) {
+                memoryCacheKey(messageId)
+                placeholderMemoryCacheKey(messageId)
+                placeholder(R.drawable.nabla_file_placeholder)
+                error(R.drawable.nabla_file_placeholder)
+
+                fetcherFactory<TimelineItem.Message.File> { data, options, _ ->
+                    LocalPdfPreviewFetcher(binding.context, data.uri.toJvmUri(), options)
+                }
+            }
         }
         binding.chatFileMessageTitleContainer.setBackgroundColor(surfaceColor)
         binding.chatFileMessageIconImageView.imageTintList = contentAppearance.textColor

@@ -139,6 +139,7 @@ public final class com/nabla/sdk/core/data/exception/NablaExceptionMapper {
 public final class com/nabla/sdk/core/data/helper/UrlExtKt {
 	public static final fun toAndroidUri (Ljava/net/URI;)Landroid/net/Uri;
 	public static final fun toAndroidUri-tuorwt8 (Ljava/lang/String;)Landroid/net/Uri;
+	public static final fun toJvmURI (Landroid/net/Uri;)Ljava/net/URI;
 	public static final fun toJvmUri-tuorwt8 (Ljava/lang/String;)Ljava/net/URI;
 	public static final fun toKtUri (Landroid/net/Uri;)Ljava/lang/String;
 	public static final fun toKtUri (Ljava/net/URI;)Ljava/lang/String;
@@ -458,6 +459,7 @@ public final class com/nabla/sdk/core/domain/entity/InternalException : com/nabl
 
 public final class com/nabla/sdk/core/domain/entity/InternalException$Companion {
 	public final fun asNablaInternal (Ljava/lang/Throwable;)Lcom/nabla/sdk/core/domain/entity/InternalException;
+	public final fun throwNablaInternalException (Ljava/lang/String;)Ljava/lang/Void;
 }
 
 public final class com/nabla/sdk/core/domain/entity/InvalidAppThemeException : com/nabla/sdk/core/domain/entity/NablaException {
@@ -933,10 +935,6 @@ public final class com/nabla/sdk/core/ui/helpers/MutableLiveFlow : com/nabla/sdk
 	public fun emit (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class com/nabla/sdk/core/ui/helpers/PermissionException : java/lang/Exception {
-	public fun <init> (Ljava/lang/String;)V
-}
-
 public final class com/nabla/sdk/core/ui/helpers/PermissionExtensionKt {
 	public static final fun registerForPermissionResult (Landroidx/fragment/app/Fragment;Ljava/lang/String;Lcom/nabla/sdk/core/ui/helpers/PermissionRational;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/ui/helpers/PermissionRequestLauncher;
 	public static final fun registerForPermissionsResult (Landroidx/appcompat/app/AppCompatActivity;[Ljava/lang/String;Lcom/nabla/sdk/core/ui/helpers/PermissionRational;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/ui/helpers/PermissionRequestLauncher;
@@ -1032,6 +1030,106 @@ public final class com/nabla/sdk/core/ui/helpers/ViewExtensionKt {
 public final class com/nabla/sdk/core/ui/helpers/ViewModelExtensionKt {
 	public static final fun factoryFor (Lkotlin/jvm/functions/Function0;)Landroidx/lifecycle/ViewModelProvider$Factory;
 	public static final fun savedStateFactoryFor (Landroidx/fragment/app/Fragment;Lkotlin/jvm/functions/Function1;)Landroidx/lifecycle/AbstractSavedStateViewModelFactory;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/CaptureImageFromCameraActivityContract : androidx/activity/result/contract/ActivityResultContract {
+	public fun <init> (Landroid/content/Context;)V
+	public synthetic fun createIntent (Landroid/content/Context;Ljava/lang/Object;)Landroid/content/Intent;
+	public fun createIntent (Landroid/content/Context;Lkotlin/Unit;)Landroid/content/Intent;
+	public fun parseResult (ILandroid/content/Intent;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult;
+	public synthetic fun parseResult (ILandroid/content/Intent;)Ljava/lang/Object;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/CaptureVideoFromCameraActivityContract : androidx/activity/result/contract/ActivityResultContract {
+	public fun <init> (Landroid/content/Context;)V
+	public synthetic fun createIntent (Landroid/content/Context;Ljava/lang/Object;)Landroid/content/Intent;
+	public fun createIntent (Landroid/content/Context;Lkotlin/Unit;)Landroid/content/Intent;
+	public fun parseResult (ILandroid/content/Intent;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult;
+	public synthetic fun parseResult (ILandroid/content/Intent;)Ljava/lang/Object;
+}
+
+public abstract class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
+	public static final field Companion Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Companion;
+	public abstract fun equals (Ljava/lang/Object;)Z
+	public abstract fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public abstract fun getName ()Ljava/lang/String;
+	public abstract fun getUri ()Ljava/net/URI;
+	public abstract fun hashCode ()I
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Companion {
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document : com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
+	public fun <init> (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)V
+	public final fun component1 ()Ljava/net/URI;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public final fun copy (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document;Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public fun getName ()Ljava/lang/String;
+	public fun getUri ()Ljava/net/URI;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image : com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
+	public fun <init> (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;)V
+	public final fun component1 ()Ljava/net/URI;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public final fun copy (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image;Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
+	public synthetic fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public fun getName ()Ljava/lang/String;
+	public fun getUri ()Ljava/net/URI;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video : com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
+	public fun <init> (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;)V
+	public final fun component1 ()Ljava/net/URI;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType$Video;
+	public final fun copy (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video;Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType$Video;
+	public synthetic fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
+	public fun getName ()Ljava/lang/String;
+	public fun getUri ()Ljava/net/URI;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult$Cancelled : com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult$Failure : com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
+	public fun <init> (Ljava/lang/Exception;)V
+	public final fun getException ()Ljava/lang/Exception;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult$Success : com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun getData ()Ljava/lang/Object;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/mediapicker/PickMediasFromLibraryActivityContract : androidx/activity/result/contract/ActivityResultContract {
+	public fun <init> (Landroid/content/Context;)V
+	public synthetic fun createIntent (Landroid/content/Context;Ljava/lang/Object;)Landroid/content/Intent;
+	public fun createIntent (Landroid/content/Context;[Lcom/nabla/sdk/core/domain/entity/MimeType;)Landroid/content/Intent;
+	public fun parseResult (ILandroid/content/Intent;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult;
+	public synthetic fun parseResult (ILandroid/content/Intent;)Ljava/lang/Object;
 }
 
 public final class com/nabla/sdk/core/ui/model/ErrorUiModel {
