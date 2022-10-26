@@ -71,6 +71,7 @@ type Subscription {
 type Patient {
   id: UUID!
   displayName: String!
+  isMe: Boolean!
 }
 
 type EphemeralUrl {
