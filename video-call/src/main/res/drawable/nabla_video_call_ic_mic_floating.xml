@@ -13,5 +13,6 @@
         android:height="18dp"
         android:drawable="?nablaVideoCall_micIcon"
         android:gravity="center"
-        tools:drawable="@drawable/nabla_video_call_ic_mic_off" />
+        tools:drawable="@drawable/nabla_video_call_ic_mic">
+    </item>
 </layer-list>

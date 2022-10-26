@@ -6,18 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+> ⚠️ You need to add `vectorDrawables.useSupportLibrary true` in your `build.gradle` file under `defaultConfig` for your app if you target API 23 or lower starting with this release.
+
 ### Added
 
 - New Messaging UI feature: You can now scan (with the camera) and send multi-page documents in conversations.
-
-### Changed
-
-- Changed the default value for `nablaMessaging_cancelVoiceMessageIcon` icon to a Material trash bin icon.
 
 ### Fixed
 
 - Messaging: Fix error when deleting a message on a freshly created draft conversation (i.e. with Local id).
 - Fix a crash on Android 6 and 7 when taking a picture with the camera in messaging UI module.
+- Messaging UI: Fix conversation scroll state not restored after configuration change.
+
+### Changed
+
+- Messaging UI: Changed the default value for `nablaMessaging_cancelVoiceMessageIcon` icon to a Material trash bin icon and fixed its ripple.
+- Messaging UI: Changed the default value of `nablaMessaging_conversationPreviewBackgroundDrawable` (background of a conversation item in the inbox) from a card to a transparent-with-ripple drawable.
+- Messaging UI: Changed default spacing behavior for conversations-list recycler item decoration (`DefaultOffsetsItemDecoration`).
+- Messaging UI: Replaced customization attribute `nablaMessaging_conversationListHeaderColor` by `nablaMessaging_conversationListHeaderStyle` which defaults to `?toolbarSurfaceStyle`.
+- Messaging UI and Scheduling UI: minor theme styles and colors usage adjustments to fully support dark mode contracts. 
 
 ## [1.0-alpha17] - 2022-10-19
 

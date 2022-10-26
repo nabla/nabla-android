@@ -19,7 +19,11 @@ import kotlinx.coroutines.launch
 public fun ConversationListView.bindViewModel(
     viewModel: ConversationListViewModel,
     onConversationClicked: (id: ConversationId) -> Unit,
-    itemDecoration: RecyclerView.ItemDecoration? = DefaultOffsetsItemDecoration(),
+    itemDecoration: RecyclerView.ItemDecoration? = DefaultOffsetsItemDecoration(
+        spacingBetweenItemsPx = context.dpToPx(12),
+        firstItemTopPaddingPx = context.dpToPx(12),
+        lastItemBottomPaddingPx = context.dpToPx(92),
+    ),
 ) {
     val conversationAdapter = setupRecyclerAdapter(viewModel, onConversationClicked, itemDecoration)
     bindViewModelState(viewModel, conversationAdapter)
@@ -83,18 +87,25 @@ private fun ConversationListView.bindViewModelState(
     }
 }
 
-public class DefaultOffsetsItemDecoration : RecyclerView.ItemDecoration() {
+public class DefaultOffsetsItemDecoration(
+    private val spacingBetweenItemsPx: Int = 0,
+    private val firstItemTopPaddingPx: Int = spacingBetweenItemsPx,
+    private val lastItemBottomPaddingPx: Int = 0,
+) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val adapterPosition = parent.getChildAdapterPosition(view)
 
-        val topOffset = if (adapterPosition > 0) parent.context.dpToPx(12) else 0
-        val horizontalOffset = parent.context.dpToPx(16)
-        val bottomOffset = 0
+        val topOffset = if (adapterPosition > 0) spacingBetweenItemsPx else 0
+        val bottomOffset = when (adapterPosition + 1) {
+            0 -> firstItemTopPaddingPx
+            parent.adapter?.itemCount ?: -1 -> lastItemBottomPaddingPx
+            else -> 0
+        }
 
         outRect.set(
-            horizontalOffset,
+            0,
             topOffset,
-            horizontalOffset,
+            0,
             bottomOffset
         )
     }

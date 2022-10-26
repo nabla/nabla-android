@@ -3,15 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:color="?colorControlHighlight"
     >
-    <item android:id="@android:id/background">
+    <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
-            <corners android:radius="?nablaRoundedCornersRadius" />
-            <solid android:color="?attr/colorSurface" />
+            <solid android:color="#FFF" />
             <padding
-                android:bottom="18dp"
-                android:left="14dp"
-                android:right="14dp"
-                android:top="18dp"
+                android:bottom="16dp"
+                android:left="16dp"
+                android:right="16dp"
+                android:top="16dp"
                 />
         </shape>
     </item>

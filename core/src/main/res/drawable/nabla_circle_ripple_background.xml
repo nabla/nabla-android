@@ -8,6 +8,12 @@
     <item android:id="@android:id/mask">
         <shape android:shape="oval">
             <solid android:color="#FFF" />
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp"
+                />
         </shape>
     </item>
 </ripple>

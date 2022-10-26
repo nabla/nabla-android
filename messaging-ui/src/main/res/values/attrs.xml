@@ -10,7 +10,7 @@
     <attr name="nablaMessaging_conversationPreviewBackgroundElevation" format="dimension" />
 
     <attr name="nablaMessaging_conversationListBackgroundColor" format="reference|color" />
-    <attr name="nablaMessaging_conversationListHeaderColor" format="reference|color" />
+    <attr name="nablaMessaging_conversationListHeaderStyle" format="reference" />
 
     <!-- Conversation messages -->
     <attr name="nablaMessaging_conversationHeaderTitleAppearance" format="reference" />

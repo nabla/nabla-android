@@ -53,6 +53,12 @@ dependencyAnalysis {
             }
             ignoreKtx(true)
         }
+        // We exclude messaging sample app as it relies on `:scheduling` for linter purposes for now.
+        project(':messaging-sample-app') {
+            onUnusedDependencies {
+                exclude(':scheduling')
+            }
+        }
     }
     dependencies {
         bundle("apollo-normalized-cache-sqlite") {

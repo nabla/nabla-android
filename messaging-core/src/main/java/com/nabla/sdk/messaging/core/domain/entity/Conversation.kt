@@ -3,7 +3,7 @@ package com.nabla.sdk.messaging.core.domain.entity
 import android.os.Parcelable
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import kotlinx.datetime.Instant
 import kotlinx.parcelize.Parcelize
 
@@ -33,8 +33,7 @@ public sealed interface ConversationId : Parcelable {
 
     @NablaInternal
     public fun requireRemote(): Remote {
-        return this as? Remote ?: throw
-        IllegalStateException("Require remote but $this is ${javaClass.simpleName}").asNablaInternal()
+        return this as? Remote ?: throwNablaInternalException("Require remote but $this is ${javaClass.simpleName}")
     }
 }
 

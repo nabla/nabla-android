@@ -8,6 +8,7 @@
     android:background="@drawable/nabla_bg_outline_rounded_corners"
     android:paddingBottom="6dp"
     android:paddingTop="12dp"
+    tools:ignore="RtlSymmetry"
     >
 
     <TextView

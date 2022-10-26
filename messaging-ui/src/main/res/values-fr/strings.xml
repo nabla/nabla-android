@@ -24,7 +24,6 @@
     <string name="nabla_error_message_conversation_link_opening">Une erreur est survenue lors de l’ouverture du lien, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_deleting_message">Une erreur est survenue lors de la suppression du message, veuillez réessayer.</string>
     <string name="nabla_error_message_conversation_clicked_url_parsing">Une erreur est survenue lors du traitement du lien, veuillez réessayer.</string>
-    <string name="nabla_error_message_conversation_creation">Une erreur est survenue lors de la création de conversation, veuillez réessayer.</string>
 
     <string name="nabla_conversation_message_action_reply">Répondre</string>
     <string name="nabla_conversation_message_action_copy">Copier</string>

@@ -5,7 +5,7 @@
     >
     <item android:id="@android:id/background">
         <shape android:shape="oval">
-            <solid android:color="@color/nabla_on_surface_alpha_12" />
+            <solid android:color="@color/nabla_surface_alpha_50" />
         </shape>
     </item>
 </ripple>

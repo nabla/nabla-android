@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -36,7 +35,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = NablaActivityFullScreenImageBinding.inflate(
-            LayoutInflater.from(applicationContext?.withNablaMessagingThemeOverlays())
+            layoutInflater.cloneInContext(withNablaMessagingThemeOverlays())
         )
         this.binding = binding
         setContentView(binding.root)

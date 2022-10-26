@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:ignore="RtlSymmetry"
     >
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -12,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="?toolbarSurfaceStyle"
-        android:elevation="0.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

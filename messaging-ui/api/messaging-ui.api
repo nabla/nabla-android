@@ -323,19 +323,16 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversat
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationBinding;
 }
 
-public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding : androidx/viewbinding/ViewBinding {
+public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentInboxBinding : androidx/viewbinding/ViewBinding {
 	public final field conversationListView Lcom/nabla/sdk/messaging/ui/scene/conversations/ConversationListView;
-	public final field createConversationCta Landroid/widget/LinearLayout;
-	public final field createConversationCtaIcon Landroid/widget/ImageView;
-	public final field createConversationCtaProgressBar Landroid/widget/ProgressBar;
-	public final field createConversationCtaText Landroid/widget/TextView;
+	public final field createConversationCta Lcom/google/android/material/floatingactionbutton/ExtendedFloatingActionButton;
 	public final field nablaLinearlayoutcompat Landroidx/constraintlayout/widget/ConstraintLayout;
 	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentInboxBinding;
 	public synthetic fun getRoot ()Landroid/view/View;
 	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationListBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentInboxBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/messaging/ui/databinding/NablaFragmentInboxBinding;
 }
 
 public final class com/nabla/sdk/messaging/ui/helper/ConversationListViewModelFactory : androidx/lifecycle/AbstractSavedStateViewModelFactory {
@@ -355,6 +352,8 @@ public final class com/nabla/sdk/messaging/ui/scene/conversations/ConversationLi
 
 public final class com/nabla/sdk/messaging/ui/scene/conversations/DefaultOffsetsItemDecoration : androidx/recyclerview/widget/RecyclerView$ItemDecoration {
 	public fun <init> ()V
+	public fun <init> (III)V
+	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getItemOffsets (Landroid/graphics/Rect;Landroid/view/View;Landroidx/recyclerview/widget/RecyclerView;Landroidx/recyclerview/widget/RecyclerView$State;)V
 }
 

@@ -4,6 +4,7 @@ import androidx.core.view.isVisible
 import com.android.ide.common.rendering.api.SessionParams
 import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
@@ -29,7 +30,14 @@ internal class ConversationListViewTest {
         val view = ConversationListView(paparazzi.context)
         val adapter = ConversationListAdapter {}
         view.recyclerView.adapter = adapter
-        view.recyclerView.addItemDecoration(DefaultOffsetsItemDecoration())
+        view.recyclerView.addItemDecoration(
+            DefaultOffsetsItemDecoration(
+                spacingBetweenItemsPx = view.context.dpToPx(12),
+                firstItemTopPaddingPx = view.context.dpToPx(12),
+                lastItemBottomPaddingPx = view.context.dpToPx(92),
+            )
+        )
+        view.recyclerView.isVisible = true
         view.errorView.root.isVisible = false
         val providerInConversation = ProviderInConversation.fake(
             provider = Provider.fake(

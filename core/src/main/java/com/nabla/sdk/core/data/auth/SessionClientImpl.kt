@@ -9,7 +9,7 @@ import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -87,7 +87,7 @@ internal class SessionClientImpl(
         val sessionTokenProvider =
             sessionTokenProvider ?: throw AuthenticationException.NotAuthenticated
         val patientId = patientRepository.getPatientId()
-            ?: throw RuntimeException("Session token provider available without patientId").asNablaInternal()
+            ?: throwNablaInternalException("Session token provider available without patientId")
 
         return sessionTokenProvider.fetchNewSessionAuthTokens(patientId)
             .getOrElse { exception ->

@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.CallSuper
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.getThemeDrawable
@@ -19,7 +22,7 @@ import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.messagingClient
-import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationListBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaFragmentInboxBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.helper.ConversationListViewModelFactory
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationActivity
@@ -28,10 +31,10 @@ public open class InboxFragment : Fragment() {
     private val messagingClient: NablaMessagingClient
         get() = getNablaInstanceByName().messagingClient
 
-    private var binding: NablaFragmentConversationListBinding? = null
+    private var binding: NablaFragmentInboxBinding? = null
 
     /**
-     * Should the back button been displayed in the toolbar. Defaults to false, you can override this
+     * Should the back button be displayed in the toolbar. Defaults to false, you can override this
      * to change the behavior
      */
     public open val shouldShowBackButton: Boolean = false
@@ -59,7 +62,7 @@ public open class InboxFragment : Fragment() {
             .cloneInContext(context?.withNablaMessagingThemeOverlays())
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val binding = NablaFragmentConversationListBinding.inflate(inflater, container, false)
+        val binding = NablaFragmentInboxBinding.inflate(inflater, container, false)
         this.binding = binding
         return binding.root
     }
@@ -78,11 +81,6 @@ public open class InboxFragment : Fragment() {
             binding.toolbar.navigationIcon = null
         }
 
-        binding.conversationListView.bindViewModel(
-            listViewModel,
-            onConversationClicked = ::openConversationScreen,
-        )
-
         viewLifeCycleScope.launchCollect(listViewModel.stateFlow) { state ->
             binding.createConversationCta.isVisible = state is ConversationListViewModel.State.Loaded
         }
@@ -91,22 +89,20 @@ public open class InboxFragment : Fragment() {
             openConversationScreen(conversationId)
         }
 
-        viewLifecycleOwner.launchCollect(inboxViewModel.errorAlertEventFlow) { errorAlert ->
-            context?.let { context ->
-                Toast.makeText(context, errorAlert.errorMessageRes, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        viewLifeCycleScope.launchCollect(inboxViewModel.isCreatingConversationFlow) { isCreating ->
-            binding.createConversationCta.isEnabled = !isCreating
-            binding.createConversationCta.elevation = if (isCreating) 0f else CTA_ELEVATION
-            binding.createConversationCtaText.isVisible = !isCreating
-            binding.createConversationCtaIcon.isVisible = !isCreating
-            binding.createConversationCtaProgressBar.isVisible = isCreating
-        }
-
         binding.createConversationCta.setOnClickListener {
             inboxViewModel.createConversation()
+        }
+
+        binding.createConversationCta.doOnNextLayout {
+            binding.conversationListView.bindViewModel(
+                listViewModel,
+                onConversationClicked = ::openConversationScreen,
+                itemDecoration = DefaultOffsetsItemDecoration(
+                    spacingBetweenItemsPx = binding.context.dpToPx(0),
+                    firstItemTopPaddingPx = binding.context.dpToPx(12),
+                    lastItemBottomPaddingPx = it.height + it.marginBottom + binding.context.dpToPx(8),
+                ),
+            )
         }
     }
 
@@ -118,8 +114,6 @@ public open class InboxFragment : Fragment() {
     }
 
     public companion object {
-        private const val CTA_ELEVATION = 8f
-
         public fun newInstance(): InboxFragment {
             return newInstance(NablaClient.DEFAULT_NAME)
         }

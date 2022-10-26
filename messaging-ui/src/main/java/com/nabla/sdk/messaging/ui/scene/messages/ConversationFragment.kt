@@ -567,9 +567,15 @@ public open class ConversationFragment : Fragment() {
             displayAvatar = true,
         )
 
-        // Only scroll down automatically if we're at the bottom of the conversation && there are new items OR if the view model tells us to
+        // Only scroll down automatically if:
+        // - we're at the bottom of the conversation && there are new items
+        // - OR if the view model tells us to
         val shouldScrollToBottomAfterSubmit =
-            (!binding.conversationRecyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size) ||
+            (
+                !binding.conversationRecyclerView.canScrollDown() &&
+                    conversationAdapter.itemCount != 0 && // scrolling when empty will miss up with recycler scroll state restore
+                    conversationAdapter.itemCount < state.items.size
+                ) ||
                 viewModel.shouldScrollToBottomAfterNextUpdate
 
         conversationAdapter.submitList(state.items) {

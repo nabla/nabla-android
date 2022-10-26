@@ -3,7 +3,6 @@ package com.nabla.sdk.messaging.ui.fullscreenmedia.scene
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -31,7 +30,7 @@ internal class FullScreenVideoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = NablaActivityFullScreenVideoBinding.inflate(
-            LayoutInflater.from(applicationContext?.withNablaMessagingThemeOverlays())
+            layoutInflater.cloneInContext(withNablaMessagingThemeOverlays())
         )
         this.binding = binding
         setContentView(binding.root)

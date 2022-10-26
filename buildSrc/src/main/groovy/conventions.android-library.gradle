@@ -22,6 +22,8 @@ android {
         aarMetadata {
             minCompileSdk buildConfig.compileSdk
         }
+
+        vectorDrawables.useSupportLibrary true
     }
 
     compileOptions {

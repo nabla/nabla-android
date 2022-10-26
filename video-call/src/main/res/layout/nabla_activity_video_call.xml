@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    tools:theme="@style/Nabla.ThemeOverlay.VideoCall">
+    tools:theme="@style/Nabla.ThemeOverlay.VideoCall"
+    >
 
-<io.livekit.android.renderer.TextureViewRenderer
+    <io.livekit.android.renderer.TextureViewRenderer
         android:id="@+id/fullScreenVideoRenderer"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -62,16 +64,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <io.livekit.android.renderer.TextureViewRenderer
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:id="@+id/floatingVideoRenderer"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:layout_width="100dp"
                 />
 
@@ -83,7 +86,8 @@
                 android:contentDescription="@string/nabla_video_call_content_description_mic_off"
                 android:src="@drawable/nabla_video_call_ic_mic_floating"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -117,7 +121,6 @@
         app:layout_constraintEnd_toStartOf="@id/videoCallControlCamera"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/nabla_video_call_control_content_color"
         />
 
     <ImageView
@@ -132,7 +135,6 @@
         app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
         app:layout_constraintEnd_toStartOf="@id/videoCallControlFlip"
         app:layout_constraintStart_toEndOf="@id/videoCallControlMic"
-        app:tint="@color/nabla_video_call_control_content_color"
         />
 
     <ImageView
@@ -147,7 +149,6 @@
         app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
         app:layout_constraintEnd_toStartOf="@id/videoCallControlHangUp"
         app:layout_constraintStart_toEndOf="@id/videoCallControlCamera"
-        app:tint="@color/nabla_video_call_control_content_color"
         />
 
     <ImageView
@@ -156,14 +157,14 @@
         android:layout_height="64dp"
         android:layout_marginHorizontal="12dp"
         android:background="@drawable/nabla_video_call_control_background"
-        android:backgroundTint="@color/nabla_red"
+        android:backgroundTint="?colorError"
         android:contentDescription="@string/nabla_video_call_controls_content_description_hang_up"
         android:padding="16dp"
         android:src="?nablaVideoCall_hangupIcon"
         app:layout_constraintBottom_toTopOf="@id/guidelineControlsBottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/videoCallControlFlip"
-        app:tint="@color/nabla_white"
+        app:tint="?colorOnError"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

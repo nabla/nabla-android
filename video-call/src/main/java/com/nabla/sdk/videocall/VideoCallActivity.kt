@@ -74,6 +74,7 @@ public class VideoCallActivity : AppCompatActivity() {
         binding.videoCallControlCamera.setOnClickListener { viewModel.onCameraClicked() }
         binding.videoCallControlFlip.setOnClickListener { viewModel.onFlipCameraClicked() }
         binding.videoCallControlHangUp.setOnClickListener { viewModel.onHangUpClicked() }
+        binding.videoCallControlHangUp.isActivated = true
         binding.videoCallControlFlip.isActivated = true
 
         launchCollect(viewModel.finishFlow, minState = Lifecycle.State.CREATED) { finishReason ->
