@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.core.data.message
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.StringResolver
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.messaging.core.R
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -31,5 +32,7 @@ internal data class LocalConversation(
         object Creating : CreationState
         data class ErrorCreating(val cause: Throwable) : CreationState
         data class Created(val remoteId: ConversationId.Remote) : CreationState
+
+        fun requireCreated(message: String): Created = this as? Created ?: throwNablaInternalException(message)
     }
 }

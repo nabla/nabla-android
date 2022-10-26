@@ -171,7 +171,7 @@ internal class ConversationContentRepositoryImpl(
     override suspend fun deleteMessage(conversationId: ConversationId, messageId: MessageId) {
         when (messageId) {
             is MessageId.Local -> localMessageDataSource.removeMessage(conversationId, messageId)
-            is MessageId.Remote -> gqlConversationContentDataSource.deleteMessage(conversationId.requireRemote(), messageId)
+            is MessageId.Remote -> gqlConversationContentDataSource.deleteMessage(conversationId, messageId)
         }
     }
 }

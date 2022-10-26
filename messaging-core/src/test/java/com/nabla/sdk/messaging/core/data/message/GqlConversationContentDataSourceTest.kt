@@ -254,6 +254,7 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             coroutineScope = scope,
             apolloClient = apolloClient,
             mapper = GqlMapper(logger, localConversationDataSource, coreGqlMapper),
+            localConversationDataSource = localConversationDataSource,
         )
     }
 }

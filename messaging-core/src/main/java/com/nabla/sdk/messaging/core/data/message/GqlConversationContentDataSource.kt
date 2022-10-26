@@ -26,6 +26,7 @@ import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.apollo.GqlTypeHelper.modify
+import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -45,6 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -57,6 +59,7 @@ internal class GqlConversationContentDataSource(
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
+    private val localConversationDataSource: LocalConversationDataSource,
 ) {
 
     private val conversationEventsFlowMap = mutableMapOf<ConversationId.Remote, Flow<Unit>>()
@@ -221,10 +224,20 @@ internal class GqlConversationContentDataSource(
         apolloClient.mutation(mutation).execute().dataOrThrowOnError
     }
 
-    suspend fun deleteMessage(conversationId: ConversationId.Remote, remoteMessageId: MessageId.Remote) {
+    suspend fun deleteMessage(conversationId: ConversationId, remoteMessageId: MessageId.Remote) {
         val mutation = DeleteMessageMutation(remoteMessageId.remoteId)
 
-        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationId.remoteId))
+        val conversationRemoteId = when (conversationId) {
+            is ConversationId.Local -> {
+                localConversationDataSource.watch(conversationId).first()
+                    .creationState
+                    .let { it.requireCreated("Deleting Remote message $remoteMessageId in a not Created conversation $it") }
+                    .remoteId
+            }
+            is ConversationId.Remote -> conversationId
+        }
+
+        val cachedConversationFragment = apolloClient.readFromCache(ConversationQuery(conversationRemoteId.remoteId))
             ?.conversation?.conversation?.conversationFragment
 
         val optimisticData = DeleteMessageMutation.Data(
@@ -249,7 +262,7 @@ internal class GqlConversationContentDataSource(
                     conversation = DeleteMessageMutation.Conversation(
                         __typename = Conversation.type.name,
                         conversationPreviewFragment = ConversationPreviewFragment(
-                            id = conversationId.remoteId,
+                            id = conversationRemoteId.remoteId,
                             updatedAt = Clock.System.now(),
                             inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
                             lastMessagePreview = cachedConversationFragment?.lastMessagePreview,

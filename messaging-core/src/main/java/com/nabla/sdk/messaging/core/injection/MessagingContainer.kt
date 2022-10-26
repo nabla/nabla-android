@@ -48,6 +48,7 @@ internal class MessagingContainer(
         apolloClient = apolloClient,
         mapper = gqlMapper,
         coroutineScope = repoScope,
+        localConversationDataSource = localConversationDataSource,
     )
     private val gqlConversationDataSource = GqlConversationDataSource(
         logger = logger,
