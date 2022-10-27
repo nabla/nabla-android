@@ -32,20 +32,11 @@ android {
         sourceCompatibility buildConfig.jvmTarget
         targetCompatibility buildConfig.jvmTarget
     }
-
-    lintOptions {
-        checkDependencies true
-        warningsAsErrors true
-        abortOnError true
-        baseline file("lint-baseline.xml")
-    }
 }
 
 dependencies {
     implementation project(':messaging-ui') // In your app, replace this by the full dependency: implementation "com.nabla.nabla-android:messaging-ui:[version]"
     implementation project(':video-call') // In your app, replace this by the full dependency: implementation "com.nabla.nabla-android:video-call:[version]"
-
-    implementation project(':scheduling') // Do not import that in your app if you don't want to use scheduling. If you do, replace this by the full dependency: implementation "com.nabla.nabla-android:scheduling:[version]"
 
     implementation libs.google.material
     implementation libs.androidx.constraintlayout
