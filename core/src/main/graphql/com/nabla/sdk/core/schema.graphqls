@@ -69,6 +69,8 @@ type Subscription {
 # Other types.
 
 type Patient {
+  ### WARNING: do not add any sensitive data here, as it will be accessible between patients in group chats
+  ### If you want to add sensitive data, we should have a type MePatient instead
   id: UUID!
   displayName: String!
   isMe: Boolean!
