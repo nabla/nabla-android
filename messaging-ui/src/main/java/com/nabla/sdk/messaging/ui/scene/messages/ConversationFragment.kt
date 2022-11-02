@@ -57,6 +57,7 @@ import com.nabla.sdk.core.ui.helpers.openPdfReader
 import com.nabla.sdk.core.ui.helpers.player.createMediaPlayersCoordinator
 import com.nabla.sdk.core.ui.helpers.registerForPermissionResult
 import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
+import com.nabla.sdk.core.ui.helpers.removeOnClickListener
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.scrollToTop
@@ -66,6 +67,7 @@ import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.docscanner.ui.DocScannerActivityContract
+import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.MissingConversationIdException
@@ -122,6 +124,13 @@ public open class ConversationFragment : Fragment() {
 
     private val conversationAdapter = ConversationAdapter(makeConversationAdapterCallbacks())
     private val voiceMessagesCoordinator = createMediaPlayersCoordinator(C.CONTENT_TYPE_SPEECH, pauseOnPause = false)
+
+    /**
+     * Callback for clicks on the header of a loaded conversation.
+     *
+     * Receives as argument the conversation that has been loaded and of which the clicked header is showing the picture/title/subtitle.
+     */
+    public open val onConversationHeaderClicked: ((conversation: Conversation) -> Unit)? = null
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -431,6 +440,7 @@ public open class ConversationFragment : Fragment() {
                         providers = null,
                         maybeConversationPicture = null,
                         displayAvatar = false,
+                        maybeConversationForCallback = null,
                     )
                 }
                 is ConversationViewModel.State.Error -> {
@@ -440,6 +450,7 @@ public open class ConversationFragment : Fragment() {
                         providers = null,
                         maybeConversationPicture = null,
                         displayAvatar = false,
+                        maybeConversationForCallback = null,
                     )
 
                     binding.nablaIncludedErrorLayout.bind(state.error, viewModel::onRetryClicked)
@@ -569,6 +580,7 @@ public open class ConversationFragment : Fragment() {
             providers = state.conversation.providersInConversation.map { it.provider },
             maybeConversationPicture = state.conversation.pictureUrl?.url,
             displayAvatar = true,
+            maybeConversationForCallback = state.conversation,
         )
 
         // Only scroll down automatically if:
@@ -729,11 +741,18 @@ public open class ConversationFragment : Fragment() {
         maybeConversationPicture: CoreUri?,
         providers: List<Provider>?,
         displayAvatar: Boolean,
+        maybeConversationForCallback: Conversation? = null,
     ) {
         conversationToolbarTitle.setTextOrHide(title)
         conversationToolbarSubtitle.setTextOrHide(subtitle)
 
         conversationToolbarAvatarView.bindConversationAvatar(maybeConversationPicture, providers?.firstOrNull(), displayAvatar)
+
+        if (maybeConversationForCallback != null && onConversationHeaderClicked != null) {
+            conversationToolbarContentContainer.setOnClickListener { onConversationHeaderClicked?.invoke(maybeConversationForCallback) }
+        } else {
+            conversationToolbarContentContainer.removeOnClickListener()
+        }
     }
 
     private fun showErrorAlert(errorAlert: ErrorAlert) {

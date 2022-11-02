@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - New Messaging UI feature: You can now scan (with the camera) and send multi-page documents in conversations.
 - Added support for group chats with multiple patients and providers.
+- Added `onConversationHeaderClicked` callback on `ConversationFragment`.
 
 ### Fixed
 
