@@ -11,6 +11,7 @@ import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationItemLoadingMoreBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewItemBinding
+import com.nabla.sdk.messaging.ui.helper.bindConversationAvatar
 
 internal class LoadingMoreViewHolder(val binding: NablaConversationItemLoadingMoreBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {
@@ -40,12 +41,7 @@ internal class ConversationViewHolder(
             applyConversationListSubtitleStyle(this, uiModel.hasUnreadMessages)
         }
 
-        val firstProvider = uiModel.providers.firstOrNull()
-        if (firstProvider != null) {
-            binding.conversationAvatarView.loadAvatar(firstProvider)
-        } else {
-            binding.conversationAvatarView.displayUnicolorPlaceholder()
-        }
+        binding.conversationAvatarView.bindConversationAvatar(uiModel.pictureUrl, uiModel.providers.firstOrNull(), displayAvatar = true)
 
         binding.unreadDot.visibility = if (uiModel.hasUnreadMessages) VISIBLE else INVISIBLE
         binding.lastMessageDate.text = uiModel.formatLastModified(context)

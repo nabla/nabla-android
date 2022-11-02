@@ -18,6 +18,7 @@
     <attr name="nablaMessaging_conversationDateSeparatorAppearance" format="reference" />
     <attr name="nablaMessaging_conversationPatientMessageAppearance" format="reference" />
     <attr name="nablaMessaging_conversationProviderMessageAppearance" format="reference" />
+    <attr name="nablaMessaging_conversationOtherMessageAppearance" format="reference" />
     <attr name="nablaMessaging_conversationRepliedMessageAuthorAppearance" format="reference"/>
     <attr name="nablaMessaging_conversationRepliedMessageBodyAppearance" format="reference"/>
     <attr name="nablaMessaging_conversationDeletedMessageAppearance" format="reference"/>
@@ -30,6 +31,7 @@
 
     <attr name="nablaMessaging_patientMessageBackgroundColor" format="reference|color"/>
     <attr name="nablaMessaging_providerMessageBackgroundColor" format="reference|color"/>
+    <attr name="nablaMessaging_otherMessageBackgroundColor" format="reference|color"/>
     <attr name="nablaMessaging_deletedMessageBackgroundColor" format="reference|color"/>
 
 

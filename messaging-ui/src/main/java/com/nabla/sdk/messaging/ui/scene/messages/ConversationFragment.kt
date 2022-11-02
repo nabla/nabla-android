@@ -74,6 +74,7 @@ import com.nabla.sdk.messaging.ui.databinding.NablaFragmentConversationBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenImageActivity
 import com.nabla.sdk.messaging.ui.fullscreenmedia.scene.FullScreenVideoActivity
+import com.nabla.sdk.messaging.ui.helper.bindConversationAvatar
 import com.nabla.sdk.messaging.ui.helper.copyNewPlainText
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.EditingText
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationViewModel.EditorState.RecordingVoice
@@ -92,7 +93,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import com.nabla.sdk.core.R as CoreR
-import com.nabla.sdk.core.domain.entity.Uri as KtUri
+import com.nabla.sdk.core.domain.entity.Uri as CoreUri
 
 public open class ConversationFragment : Fragment() {
 
@@ -428,6 +429,7 @@ public open class ConversationFragment : Fragment() {
                         title = getString(R.string.nabla_conversation_header_loading),
                         subtitle = null,
                         providers = null,
+                        maybeConversationPicture = null,
                         displayAvatar = false,
                     )
                 }
@@ -436,6 +438,7 @@ public open class ConversationFragment : Fragment() {
                         title = getString(R.string.nabla_conversation_header_error),
                         subtitle = null,
                         providers = null,
+                        maybeConversationPicture = null,
                         displayAvatar = false,
                     )
 
@@ -537,7 +540,7 @@ public open class ConversationFragment : Fragment() {
             viewModel.onUrlClicked(url)
         }
 
-        override fun onToggleAudioMessagePlay(audioMessageUri: KtUri) {
+        override fun onToggleAudioMessagePlay(audioMessageUri: CoreUri) {
             viewModel.onToggleVoiceMessagePlay(audioMessageUri)
         }
 
@@ -564,6 +567,7 @@ public open class ConversationFragment : Fragment() {
             title = state.conversation.title ?: state.conversation.inboxPreviewTitle,
             subtitle = state.conversation.subtitle,
             providers = state.conversation.providersInConversation.map { it.provider },
+            maybeConversationPicture = state.conversation.pictureUrl?.url,
             displayAvatar = true,
         )
 
@@ -681,7 +685,7 @@ public open class ConversationFragment : Fragment() {
         playbackProgressPollingJob?.cancel()
     }
 
-    private fun reportProgress(uri: KtUri, player: Player) {
+    private fun reportProgress(uri: CoreUri, player: Player) {
         viewModel.onVoiceMessagePlaybackProgress(
             voiceMessageUri = uri,
             position = player.currentPosition,
@@ -690,7 +694,7 @@ public open class ConversationFragment : Fragment() {
         )
     }
 
-    private fun getOrSetupPlayerForVoiceMessage(uri: KtUri): Player? {
+    private fun getOrSetupPlayerForVoiceMessage(uri: CoreUri): Player? {
         return voiceMessagesCoordinator.getOrCreatePlayerForUri(context ?: return null, uri.toAndroidUri()) {
             playWhenReady = false
             addListener(object : Player.Listener {
@@ -722,19 +726,14 @@ public open class ConversationFragment : Fragment() {
     private fun NablaFragmentConversationBinding.updateToolbar(
         title: String?,
         subtitle: String?,
+        maybeConversationPicture: CoreUri?,
         providers: List<Provider>?,
         displayAvatar: Boolean,
     ) {
         conversationToolbarTitle.setTextOrHide(title)
         conversationToolbarSubtitle.setTextOrHide(subtitle)
 
-        val firstProvider = providers?.firstOrNull()
-        if (firstProvider != null) {
-            conversationToolbarAvatarView.loadAvatar(firstProvider)
-        } else {
-            conversationToolbarAvatarView.displayUnicolorPlaceholder()
-        }
-        conversationToolbarAvatarView.isVisible = displayAvatar
+        conversationToolbarAvatarView.bindConversationAvatar(maybeConversationPicture, providers?.firstOrNull(), displayAvatar)
     }
 
     private fun showErrorAlert(errorAlert: ErrorAlert) {

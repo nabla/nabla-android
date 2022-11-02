@@ -7,6 +7,7 @@ import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.domain.entity.Patient
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
@@ -49,7 +50,8 @@ internal class GqlMapper(
             patientUnreadMessageCount = fragment.unreadMessageCount,
             providersInConversation = fragment.providers.map {
                 mapToProviderInConversation(it.providerInConversationFragment)
-            }
+            },
+            pictureUrl = fragment.pictureUrl?.ephemeralUrlFragment?.let(coreGqlMapper::mapToEphemeralUrl),
         )
     }
 
@@ -185,7 +187,12 @@ internal class GqlMapper(
     }
 
     private fun mapToMessageAuthor(author: MessageSummaryFragment.Author): MessageAuthor {
-        author.onPatient?.let { return MessageAuthor.Patient }
+        author.onPatient?.patientFragment?.let { patientFragment ->
+            return when (val patient = coreGqlMapper.mapToPatient(patientFragment)) {
+                Patient.Current -> MessageAuthor.Patient.Current
+                is Patient.Other -> MessageAuthor.Patient.Other(patient)
+            }
+        }
         author.onProvider?.providerFragment?.let { return MessageAuthor.Provider(coreGqlMapper.mapToProvider(it)) }
         author.onSystem?.let { return MessageAuthor.System(mapToSystem(it.systemFragment)) }
         author.onDeletedProvider?.let { return MessageAuthor.DeletedProvider }

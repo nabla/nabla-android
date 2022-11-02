@@ -24,6 +24,7 @@ internal data class LocalConversation(
             lastModified = Clock.System.now(),
             patientUnreadMessageCount = 0,
             providersInConversation = emptyList(),
+            pictureUrl = null,
         )
     }
 

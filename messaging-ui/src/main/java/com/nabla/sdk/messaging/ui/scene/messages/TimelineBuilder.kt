@@ -5,7 +5,6 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.Message
-import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -46,7 +45,7 @@ internal class TimelineBuilder {
         val allMessageItemsWithStatus = allMessageItems.mapIndexed { index, item ->
             if (item is TimelineItem.Message) {
                 val nextMessage = allMessageItems.getOrNull(index + 1)
-                val showAuthorAvatarAndName = item.author != MessageAuthor.Patient && (
+                val showAuthorAvatarAndName = item.author !is TimelineItem.Message.Author.CurrentPatient && (
                     nextMessage == null ||
                         nextMessage !is TimelineItem.Message ||
                         nextMessage.author != item.author
@@ -79,7 +78,7 @@ internal class TimelineBuilder {
                 val firstMessage = allItemsWithDates.firstOrNull()
                 val showProviderName = index > 0 ||
                     firstMessage == null ||
-                    (firstMessage is TimelineItem.Message && (firstMessage.author as? MessageAuthor.Provider)?.provider != typingProvider.provider) ||
+                    (firstMessage is TimelineItem.Message && (firstMessage.author as? TimelineItem.Message.Author.Provider)?.provider != typingProvider.provider) ||
                     firstMessage !is TimelineItem.Message
                 TimelineItem.ProviderTypingIndicator(
                     provider = typingProvider.provider,

@@ -3,6 +3,7 @@ package com.nabla.sdk.core.data.apollo
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
+import com.nabla.sdk.core.domain.entity.Patient
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
@@ -10,6 +11,7 @@ import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.graphql.fragment.EphemeralUrlFragment
 import com.nabla.sdk.graphql.fragment.LivekitRoomFragment
 import com.nabla.sdk.graphql.fragment.LivekitRoomStatusFragment
+import com.nabla.sdk.graphql.fragment.PatientFragment
 import com.nabla.sdk.graphql.fragment.ProviderFragment
 
 @NablaInternal
@@ -45,6 +47,13 @@ public class CoreGqlMapper(private val logger: Logger) {
             lastName = providerFragment.lastName,
             prefix = providerFragment.prefix,
             title = providerFragment.title,
+        )
+    }
+
+    public fun mapToPatient(patientFragment: PatientFragment): Patient {
+        return if (patientFragment.isMe) Patient.Current else Patient.Other(
+            id = patientFragment.id,
+            displayName = patientFragment.displayName,
         )
     }
 

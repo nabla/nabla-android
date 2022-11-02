@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemOtherMessageContentBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemPatientMessageContentBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderMessageContentBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
@@ -25,12 +26,11 @@ internal fun <ContentType : TimelineItem.Message.Content, BinderType : MessageCo
     return buildContentBinder(contentContainerBinding.chatPatientMessageContent)
 }
 
-internal fun <ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>> inflateSystemMessageContentCard(
+internal fun <ContentType : TimelineItem.Message.Content, BinderType : MessageContentBinder<ContentType>> inflateOtherMessageContentCard(
     inflater: LayoutInflater,
     parent: ViewGroup,
     buildContentBinder: (contentParent: ViewGroup) -> BinderType,
 ): BinderType {
-    val contentContainerBinding =
-        com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemSystemMessageContentBinding.inflate(inflater, parent, true)
-    return buildContentBinder(contentContainerBinding.chatSystemMessageContent)
+    val contentContainerBinding = NablaConversationTimelineItemOtherMessageContentBinding.inflate(inflater, parent, true)
+    return buildContentBinder(contentContainerBinding.chatOtherMessageContent)
 }

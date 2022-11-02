@@ -77,7 +77,7 @@ internal class ConversationContentRepositoryStub(
     }
 
     private fun Message.Companion.randomFake(sentAt: Instant): Message {
-        val author = if (Random.nextBoolean()) MessageAuthor.Patient else MessageAuthor.Provider(Provider.fake())
+        val author = if (Random.nextBoolean()) MessageAuthor.Patient.Current else MessageAuthor.Provider(Provider.fake())
         return when (Random.nextInt() % 100) {
             in 0..70 -> Message.Text.fake(author = author, sentAt = sentAt)
             in 71..80 -> Message.Media.Image.fake(author = author, sentAt = sentAt)
@@ -90,7 +90,7 @@ internal class ConversationContentRepositoryStub(
         val localId = MessageId.Local(uuid4())
         val conversationFlow = messagesFlowPerConversation[conversationId.stableId]!!
         val repliedToMessage = conversationFlow.value.firstOrNull { it.id == replyTo }
-        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient, SendStatus.Sending, repliedToMessage)
+        val baseMessage = BaseMessage(localId, Clock.System.now(), MessageAuthor.Patient.Current, SendStatus.Sending, repliedToMessage)
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
             is MessageInput.Media.Image -> Message.Media.Image(baseMessage, input.mediaSource)
@@ -205,7 +205,7 @@ internal class ConversationContentRepositoryStub(
                 add(providerReply)
                 add(
                     Message.Text.fake(
-                        author = MessageAuthor.Patient,
+                        author = MessageAuthor.Patient.Current,
                         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
                         sentAt = Clock.System.now().minus(2.minutes + 30.seconds),
                         replyTo = providerReply,

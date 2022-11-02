@@ -3,6 +3,7 @@ package com.nabla.sdk.messaging.core.domain.entity
 import android.os.Parcelable
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
+import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import kotlinx.datetime.Instant
 import kotlinx.parcelize.Parcelize
@@ -46,6 +47,7 @@ public data class Conversation(
     val lastModified: Instant,
     val patientUnreadMessageCount: Int,
     val providersInConversation: List<ProviderInConversation>,
+    val pictureUrl: EphemeralUrl?,
 ) {
     public companion object
 }

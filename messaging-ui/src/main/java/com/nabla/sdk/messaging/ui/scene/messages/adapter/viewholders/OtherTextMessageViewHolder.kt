@@ -4,28 +4,28 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.ui.R
-import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemSystemMessageBinding
+import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemOtherMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.content.TextMessageContentBinder
-import com.nabla.sdk.messaging.ui.scene.messages.adapter.inflateSystemMessageContentCard
+import com.nabla.sdk.messaging.ui.scene.messages.adapter.inflateOtherMessageContentCard
 
-internal class SystemTextMessageViewHolder(
-    binding: NablaConversationTimelineItemSystemMessageBinding,
+internal class OtherTextMessageViewHolder(
+    binding: NablaConversationTimelineItemOtherMessageBinding,
     contentBinder: TextMessageContentBinder,
-) : SystemMessageViewHolder<TimelineItem.Message.Text, TextMessageContentBinder>(binding, contentBinder) {
+) : OtherMessageViewHolder<TimelineItem.Message.Text, TextMessageContentBinder>(binding, contentBinder) {
     companion object {
         fun create(
             inflater: LayoutInflater,
             parent: ViewGroup,
             onUrlClicked: (url: String) -> Unit,
             onRepliedMessageClicked: (MessageId) -> Unit,
-        ): SystemTextMessageViewHolder {
-            val binding = NablaConversationTimelineItemSystemMessageBinding.inflate(inflater, parent, false)
-            return SystemTextMessageViewHolder(
+        ): OtherTextMessageViewHolder {
+            val binding = NablaConversationTimelineItemOtherMessageBinding.inflate(inflater, parent, false)
+            return OtherTextMessageViewHolder(
                 binding,
-                inflateSystemMessageContentCard(inflater, binding.chatSystemMessageContentContainer) { contentParent ->
+                inflateOtherMessageContentCard(inflater, binding.chatOtherMessageContentContainer) { contentParent ->
                     TextMessageContentBinder.create(
-                        R.attr.nablaMessaging_conversationProviderMessageAppearance,
+                        R.attr.nablaMessaging_conversationOtherMessageAppearance,
                         inflater,
                         contentParent,
                         onUrlClicked,

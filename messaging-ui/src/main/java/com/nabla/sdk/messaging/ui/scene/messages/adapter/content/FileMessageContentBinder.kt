@@ -26,6 +26,7 @@ internal class FileMessageContentBinder(
 ) : MessageContentBinder<TimelineItem.Message.File>() {
 
     private val contentAppearance = TextAppearance(binding.context, binding.context.getThemeStyle(contentTextAppearanceAttr))
+    private val contentAppearanceRes: Int = binding.context.getThemeStyle(contentTextAppearanceAttr)
 
     private val surfaceColor: ColorIntOrStateList = binding.context.getThemeColor(surfaceColorAttr)
 
@@ -50,7 +51,7 @@ internal class FileMessageContentBinder(
         }
         binding.chatFileMessageTitleContainer.setBackgroundColor(surfaceColor)
         binding.chatFileMessageIconImageView.imageTintList = contentAppearance.textColor
-        binding.chatFileMessageTitleTextView.setTextColor(contentAppearance.textColor)
+        binding.chatFileMessageTitleTextView.setTextAppearance(contentAppearanceRes)
         binding.chatFileMessageTitleTextView.text = item.fileName
     }
 

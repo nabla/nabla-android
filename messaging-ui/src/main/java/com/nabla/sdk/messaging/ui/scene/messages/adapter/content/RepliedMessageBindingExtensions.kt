@@ -3,13 +3,14 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.content
 import android.content.Context
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import coil.decode.VideoFrameDecoder
 import coil.dispose
 import coil.load
 import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.ui.helpers.abbreviatedNameWithPrefix
-import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.RepliedMessage
+import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
 internal fun RepliedMessage.repliedToContent(context: Context): String = when (content) {
     is RepliedMessage.Content.Text -> content.text
@@ -22,10 +23,9 @@ internal fun RepliedMessage.repliedToContent(context: Context): String = when (c
 }
 
 internal fun RepliedMessage.repliedToAuthorName(context: Context): String = when (author) {
-    is MessageAuthor.Provider -> author.provider.abbreviatedNameWithPrefix(context)
-    is MessageAuthor.System -> author.system.name
-    is MessageAuthor.Patient -> context.getString(R.string.nabla_conversation_replied_to_message_author_patient)
-    is MessageAuthor.DeletedProvider, MessageAuthor.Unknown -> ""
+    TimelineItem.Message.Author.CurrentPatient -> context.getString(R.string.nabla_conversation_replied_to_message_author_patient)
+    is TimelineItem.Message.Author.Provider -> author.provider.abbreviatedNameWithPrefix(context)
+    is TimelineItem.Message.Author.Other -> author.displayName
 }
 
 internal fun ImageView.loadReplyContentThumbnailOrHide(replyContent: RepliedMessage.Content) {
@@ -35,7 +35,9 @@ internal fun ImageView.loadReplyContentThumbnailOrHide(replyContent: RepliedMess
             true
         }
         replyContent is RepliedMessage.Content.Video -> {
-            load(replyContent.uri.toAndroidUri())
+            load(replyContent.uri.toAndroidUri()) {
+                decoderFactory { result, options, _ -> VideoFrameDecoder(result.source, options) }
+            }
             true
         }
         replyContent is RepliedMessage.Content.Document && replyContent.thumbnailUri != null -> {

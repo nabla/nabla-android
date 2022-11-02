@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.ui.helpers.abbreviatedNameWithPrefix
 import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
@@ -19,7 +18,7 @@ internal sealed class ProviderMessageViewHolder<ContentType : TimelineItem.Messa
     private val binding: NablaConversationTimelineItemProviderMessageBinding,
     private val onProviderClicked: (providerId: Uuid) -> Unit,
     contentBinder: BinderType,
-) : MessageViewHolder<ContentType, MessageAuthor.Provider, BinderType>(contentBinder, binding.root),
+) : MessageViewHolder<ContentType, TimelineItem.Message.Author.Provider, BinderType>(contentBinder, binding.root),
     ClickableItemHolder,
     PopUpMenuHolder {
 
@@ -34,7 +33,7 @@ internal sealed class ProviderMessageViewHolder<ContentType : TimelineItem.Messa
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
-    override fun bind(message: TimelineItem.Message, author: MessageAuthor.Provider, content: ContentType) {
+    override fun bind(message: TimelineItem.Message, author: TimelineItem.Message.Author.Provider, content: ContentType) {
         super.bind(message, author, content)
 
         binding.chatProviderMessageAuthorTextView.isVisible = message.showAuthorName

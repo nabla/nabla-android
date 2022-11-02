@@ -22,8 +22,8 @@ internal class ProviderFileMessageViewHolder(
                 onProviderClicked,
                 inflateProviderMessageContentCard(inflater, binding.chatProviderMessageContentContainer) { content ->
                     FileMessageContentBinder.create(
-                        R.attr.nablaMessaging_conversationProviderMessageAppearance,
-                        R.attr.nablaMessaging_providerMessageBackgroundColor,
+                        contentTextAppearanceAttr = R.attr.nablaMessaging_conversationProviderMessageAppearance,
+                        surfaceColorAttr = R.attr.nablaMessaging_providerMessageBackgroundColor,
                         inflater,
                         content
                     )

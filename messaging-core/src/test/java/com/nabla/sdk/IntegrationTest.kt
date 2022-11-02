@@ -205,7 +205,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertEquals("Hello", message.text)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
-            assertEquals(MessageAuthor.Patient, message.author)
+            assertEquals(MessageAuthor.Patient.Current, message.author)
             assertEquals(secondEmit.content.size, 1)
             assertNull(secondEmit.loadMore)
 
@@ -215,7 +215,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertEquals("Hello", message2.text)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
-            assertEquals(MessageAuthor.Patient, message2.author)
+            assertEquals(MessageAuthor.Patient.Current, message2.author)
             assertEquals(thirdEmit.content.size, 1)
             assertNull(thirdEmit.loadMore)
 
@@ -232,7 +232,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
-            assertEquals(MessageAuthor.Patient, message3.author)
+            assertIs<MessageAuthor.Patient>(message3.author)
             assertEquals(lastEmit.content.size, 1)
             assertNull(lastEmit.loadMore)
 
@@ -287,7 +287,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertEquals(uri, message.stableUri)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
-            assertEquals(MessageAuthor.Patient, message.author)
+            assertEquals(MessageAuthor.Patient.Current, message.author)
             assertEquals(secondEmit.content.size, 1)
             assertNull(secondEmit.loadMore)
 
@@ -298,7 +298,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertEquals(uri, message2.stableUri)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
-            assertEquals(MessageAuthor.Patient, message2.author)
+            assertEquals(MessageAuthor.Patient.Current, message2.author)
             assertEquals(thirdEmit.content.size, 1)
             assertNull(thirdEmit.loadMore)
 
@@ -315,7 +315,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
-            assertEquals(MessageAuthor.Patient, message3.author)
+            assertIs<MessageAuthor.Patient>(message3.author)
             assertEquals(lastEmit.content.size, 1)
             assertNull(lastEmit.loadMore)
 
@@ -374,7 +374,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertEquals(docName, message.fileName)
             assertIs<MessageId.Local>(message.id)
             assertEquals(SendStatus.Sending, message.sendStatus)
-            assertEquals(MessageAuthor.Patient, message.author)
+            assertEquals(MessageAuthor.Patient.Current, message.author)
             assertEquals(secondEmit.content.size, 1)
             assertNull(secondEmit.loadMore)
 
@@ -387,7 +387,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertEquals(docName, message2.fileName)
             assertIs<MessageId.Local>(message2.id)
             assertEquals(SendStatus.Sent, message2.sendStatus)
-            assertEquals(MessageAuthor.Patient, message2.author)
+            assertEquals(MessageAuthor.Patient.Current, message2.author)
             assertEquals(thirdEmit.content.size, 1)
             assertNull(thirdEmit.loadMore)
 
@@ -404,7 +404,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             assertIs<MessageId.Remote>(message3.id)
             assertEquals(message2.id.clientId, message3.id.clientId)
             assertEquals(SendStatus.Sent, message3.sendStatus)
-            assertEquals(MessageAuthor.Patient, message3.author)
+            assertIs<MessageAuthor.Patient>(message3.author)
             assertEquals(lastEmit.content.size, 1)
             assertNull(lastEmit.loadMore)
 

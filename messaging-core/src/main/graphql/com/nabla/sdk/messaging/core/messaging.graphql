@@ -151,6 +151,9 @@ fragment ConversationFragment on Conversation {
     providers {
         ...ProviderInConversationFragment
     }
+    pictureUrl {
+        ...EphemeralUrlFragment
+    }
 }
 
 fragment ConversationPreviewFragment on Conversation {
@@ -281,10 +284,6 @@ fragment SystemFragment on System {
             ...EphemeralUrlFragment
         }
     }
-}
-
-fragment PatientFragment on Patient {
-    id
 }
 
 fragment TextMessageContentFragment on TextMessageContent {

@@ -34,6 +34,12 @@ fragment ProviderFragment on Provider {
     title
 }
 
+fragment PatientFragment on Patient {
+    id
+    displayName
+    isMe
+}
+
 fragment EphemeralUrlFragment on EphemeralUrl {
     expiresAt
     url

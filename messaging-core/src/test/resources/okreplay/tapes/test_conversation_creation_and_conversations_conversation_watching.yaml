@@ -343,3 +343,1096 @@ interactions:
       x-nabla-cloudregion: EU_WEST1
     body: '{"data":{"createConversation":{"conversation":{"__typename":"Conversation","id":"8b75689d-32a1-42bf-81af-4d1b059e1dfb","title":null,"subtitle":null,"createdAt":"2022-09-11T20:26:58.488+02:00","updatedAt":"2022-09-11T20:26:58.488+02:00","inboxPreviewTitle":"Ask
       us anything","lastMessagePreview":null,"unreadMessageCount":0,"providers":[],"items":{"data":[]}}}}}'
+- recorded: 2022-11-01T22:02:31.293Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: 49e8f2a08ad3c6fafd2d228daf84bdab54db0fec21439d1c7174ef1b075feb0c
+      X-APOLLO-OPERATION-NAME: RegisterOrUpdateDevice
+    body: '{"operationName":"RegisterOrUpdateDevice","variables":{"device":{"deviceModel":"unknown - robolectric (robolectric)","os":"ANDROID","osVersion":"4.1.2 (16)","codeVersion":463,"sdkModules":["MESSAGING"]}},"query":"mutation RegisterOrUpdateDevice($deviceId:
+      UUID, $device: DeviceInput!) { registerOrUpdateDevice(deviceId: $deviceId, device: $device) { deviceId sentry { dsn env } } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '287'
+      Content-Type: application/json; charset=UTF-8
+      Date: Tue, 01 Nov 2022 22:02:30 GMT
+      Server: ktor-server-core/1.6.2
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '398'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 2cd96df6-6af8-4af9-bc01-30d43c67fba0
+      x-nabla-cloudregion: EU_WEST1
+    body: |-
+      {
+          "data": {
+              "registerOrUpdateDevice": {
+                  "deviceId": "5ee61cd2-220b-4562-9daf-daaa8adc6958",
+                  "sentry": {
+                      "dsn": "https://861687c1c61047f7b7efa5cfdb38be0b@sentry.nabla.com/10",
+                      "env": "dev"
+                  }
+              }
+          }
+      }
+- recorded: 2022-11-01T22:02:31.433Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: bb195ccbcd522a84f2ffeecd4256e8f3690665892c4cb8763b310a8225102caa
+      X-APOLLO-OPERATION-NAME: Conversations
+    body: '{"operationName":"Conversations","variables":{"pageInfo":{"numberOfItems":50}},"query":"query Conversations($pageInfo: OpaqueCursorPage!) { conversations(page: $pageInfo) { conversations { __typename ...ConversationFragment } hasMore nextCursor }
+      }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment ProviderInConversationFragment on ProviderInConversation
+      { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
+      } pictureUrl { __typename ...EphemeralUrlFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '45596'
+      Content-Type: application/json; charset=UTF-8
+      Date: Tue, 01 Nov 2022 22:02:30 GMT
+      Server: ktor-server-core/1.6.2
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '398'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 58926e2c-861f-436f-8448-085b57299b7b
+      x-nabla-cloudregion: EU_WEST1
+    body: |-
+      {
+          "data": {
+              "conversations": {
+                  "conversations": [
+                      {
+                          "__typename": "Conversation",
+                          "id": "e29938e3-2337-4ba0-978f-c9121735db2b",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-11-01T22:50:34.620+01:00",
+                          "updatedAt": "2022-11-01T22:50:34.720+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "32b49c93-5906-4b33-acd0-86dae09e3a5e",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-11-01T22:50:33.613+01:00",
+                          "updatedAt": "2022-11-01T22:50:34.181+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "d90aec8f-998d-4fa2-8097-2ebc1b426ca8",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-11-01T22:50:33.336+01:00",
+                          "updatedAt": "2022-11-01T22:50:33.441+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "5544d0d8-a2e9-46f3-becd-8452c532077f",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-11-01T22:50:31.395+01:00",
+                          "updatedAt": "2022-11-01T22:50:32.477+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "0dd92293-cccd-4280-a262-8202ce4aff19",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:16.200+01:00",
+                          "updatedAt": "2022-10-31T18:06:08.396+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "faa3b889-8659-4ecb-bad0-3e5fbd709a9c",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:15.328+01:00",
+                          "updatedAt": "2022-10-31T17:02:15.860+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "4481a6cb-9b49-4f19-a014-605cb114a2a5",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:15.132+01:00",
+                          "updatedAt": "2022-10-31T17:02:15.200+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "c4b79059-2be0-431e-a977-4aff6429d898",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:13.836+01:00",
+                          "updatedAt": "2022-10-31T17:02:14.484+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "046ee744-e782-4a28-9007-d9f10b86e51c",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:05.848+01:00",
+                          "updatedAt": "2022-10-31T17:02:05.909+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "5398658e-dc89-4d0d-a9e8-74dc2c53aea5",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:05.088+01:00",
+                          "updatedAt": "2022-10-31T17:02:05.619+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "82773c1f-a611-4d37-a662-9d7c2249be3f",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:02:03.824+01:00",
+                          "updatedAt": "2022-10-31T17:02:04.563+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "66c84ced-feeb-49ba-9c0e-07547e251116",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:00:15.777+01:00",
+                          "updatedAt": "2022-10-31T17:00:15.868+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "7f77812f-4793-4a2f-a517-7cae3460c87c",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:00:14.884+01:00",
+                          "updatedAt": "2022-10-31T17:00:15.526+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "e65f79ff-f372-48b2-9747-923dd110d407",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T17:00:13.280+01:00",
+                          "updatedAt": "2022-10-31T17:00:14.258+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "99e0bf41-a750-4707-83b1-19533d757f29",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:57:34.565+01:00",
+                          "updatedAt": "2022-10-31T16:57:34.703+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "ab42047b-c788-4b25-a470-3553d4f0e231",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:57:33.647+01:00",
+                          "updatedAt": "2022-10-31T16:57:34.126+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "f8a5abf9-737a-45ba-a98d-c4b562f62853",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:57:33.332+01:00",
+                          "updatedAt": "2022-10-31T16:57:33.419+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "2f4399d1-2143-4d9a-b9b8-053e2094c83b",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:57:31.530+01:00",
+                          "updatedAt": "2022-10-31T16:57:32.469+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "967cd448-0389-481e-9d5e-27329bc4f3d7",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:30:31.134+01:00",
+                          "updatedAt": "2022-10-31T16:30:31.233+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "2c8df39f-63a8-4beb-bc13-801a26740afa",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:30:29.947+01:00",
+                          "updatedAt": "2022-10-31T16:30:30.556+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "46319e6e-0bf7-40b4-a9d9-b476e3171f87",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:30:29.655+01:00",
+                          "updatedAt": "2022-10-31T16:30:29.766+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "8d53c9e1-d852-4f39-b8c2-fd88a6d6ccba",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T16:30:27.769+01:00",
+                          "updatedAt": "2022-10-31T16:30:28.862+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "54ccd285-a0be-4a37-90da-020b14b6ce70",
+                          "title": "Group Chat Demo",
+                          "subtitle": "Dr Cayol",
+                          "createdAt": "2022-10-28T17:45:25.974+02:00",
+                          "updatedAt": "2022-10-31T14:14:27.919+01:00",
+                          "inboxPreviewTitle": "Group Chat Demo",
+                          "lastMessagePreview": "Dr Cayol: yoooo",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "8fdf3d1c-3a7b-4fcc-8a24-0aa2c96fbec6",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-11-01T21:31:29.994+01:00"
+                              }
+                          ],
+                          "pictureUrl": {
+                              "__typename": "EphemeralUrl",
+                              "expiresAt": "2038-01-19T00:00:00.000+01:00",
+                              "url": "https://storage.googleapis.com/nabla-public/assets-04c0ce71e3754e8db203b812fd258c88/group_chat_avatar.svg"
+                          }
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "48b1bac8-5d82-46c7-82e0-40906d46a1cd",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T11:30:36.569+01:00",
+                          "updatedAt": "2022-10-31T11:30:41.628+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Wtf",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "6681d658-6d53-4181-9b01-fcf04e44862e",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-31T11:30:18.129+01:00",
+                          "updatedAt": "2022-10-31T11:30:25.688+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Not working",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "5899ae44-7be4-49c2-8c17-c2c8cb3a7865",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T15:44:44.534+02:00",
+                          "updatedAt": "2022-10-31T11:30:14.355+01:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Test",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "eee6441e-d301-4755-867c-a10a7fda4192",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-27T15:51:18.458+02:00",
+                          "updatedAt": "2022-10-31T11:29:45.835+01:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You: Test",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "8adf8ea6-0cab-44b2-94a3-a053da6a7525",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-31T11:31:57.340+01:00"
+                              }
+                          ],
+                          "pictureUrl": {
+                              "__typename": "EphemeralUrl",
+                              "expiresAt": "2038-01-19T00:00:00.000+01:00",
+                              "url": "https://storage.googleapis.com/nabla-public/assets-04c0ce71e3754e8db203b812fd258c88/group_chat_avatar.svg"
+                          }
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "89604b38-e622-416a-a561-5976ed752e83",
+                          "title": "My group chat",
+                          "subtitle": "Dr Cayol",
+                          "createdAt": "2022-10-28T16:51:19.435+02:00",
+                          "updatedAt": "2022-10-31T11:15:35.207+01:00",
+                          "inboxPreviewTitle": "My group chat",
+                          "lastMessagePreview": "You sent a voice message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "d2f0169c-a5bb-45ce-91af-9a9112c5adea",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-31T11:31:40.690+01:00"
+                              }
+                          ],
+                          "pictureUrl": {
+                              "__typename": "EphemeralUrl",
+                              "expiresAt": "2038-01-19T00:00:00.000+01:00",
+                              "url": "https://storage.googleapis.com/nabla-public/assets-04c0ce71e3754e8db203b812fd258c88/group_chat_avatar.svg"
+                          }
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "da7fbc95-1231-4276-84a5-3ebb866444cb",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T17:14:13.781+02:00",
+                          "updatedAt": "2022-10-27T16:51:34.603+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You: Hey",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "ac601ec6-7ba9-4ad6-b51f-d288f73e3bfd",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-27T16:34:51.650+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "866e009c-62ea-4d63-88e2-630689550f15",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T17:13:26.816+02:00",
+                          "updatedAt": "2022-10-26T17:13:27.028+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "1f34c67e-eede-4a1b-87d6-3a4ba6fff05c",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T17:09:13.441+02:00",
+                          "updatedAt": "2022-10-26T17:09:13.957+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "c56d0f54-8782-4651-9f63-c52056988904",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T16:58:00.431+02:00",
+                          "updatedAt": "2022-10-26T16:58:00.747+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "c180b1a6-eb8f-4b3a-a860-18a55ec530af",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T16:04:23.375+02:00",
+                          "updatedAt": "2022-10-26T16:04:23.740+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "19c418e1-0106-40c6-879d-f4820797afae",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T16:01:34.275+02:00",
+                          "updatedAt": "2022-10-26T16:01:34.620+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Hello",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "d63f2d9f-74c0-41c5-9c20-8a8b669ef16b",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T13:30:49.434+02:00",
+                          "updatedAt": "2022-10-26T13:30:49.517+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: Yo!",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "a4570384-ff08-43c4-b9bc-80b5abd8e5a4",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T12:02:59.336+02:00",
+                          "updatedAt": "2022-10-26T13:30:40.375+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You: Hey!",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "0e6b2fdf-87e8-4a29-9241-1d8454582bb9",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-26T12:45:45.693+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "f8f3ac2d-e8fc-4b8f-9df3-faa04f625905",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T13:26:20.565+02:00",
+                          "updatedAt": "2022-10-26T13:26:20.622+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: deleted message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "8b36e13a-7c33-4d3a-a529-c3be9a572a86",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-26T13:23:53.226+02:00",
+                          "updatedAt": "2022-10-26T13:23:53.315+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: deleted message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "117d65d4-8810-4ffd-ae62-0c0d30b5c74c",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-25T17:19:38.442+02:00",
+                          "updatedAt": "2022-10-25T17:44:12.637+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent an image",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "5e77bcef-d386-4e30-a807-b1f6d12fa320",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-25T17:18:20.375+02:00",
+                          "updatedAt": "2022-10-25T17:19:27.294+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: deleted message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "1d215718-4061-4077-9e0c-0764eb4d07ad",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-25T17:02:45.585+02:00",
+                          "updatedAt": "2022-10-25T17:03:50.151+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a voice message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "2e2e492a-98f2-4de9-982b-cded3c0735a4",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-06-15T15:14:41.477+02:00",
+                          "updatedAt": "2022-10-25T16:44:59.418+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You: Bggg",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "597cdc86-1b29-4378-9a87-e29ca411ed80",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-09-30T12:45:41.281+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "71d06844-e6fe-483c-b3e6-442cd0cce9ae",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-25T15:16:23.756+02:00",
+                          "updatedAt": "2022-10-25T15:16:32.655+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You: deleted message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "2f6a489e-d437-49ef-8fbc-d2506fff3ad1",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-20T23:15:03.951+02:00",
+                          "updatedAt": "2022-10-24T16:59:24.794+02:00",
+                          "inboxPreviewTitle": "Ask us anything",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "fde988d8-f7fb-452e-9096-20f6c0f42010",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-14T11:38:51.347+02:00",
+                          "updatedAt": "2022-10-20T18:19:37.321+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "ab2200ad-5784-40c8-ae31-b5b45f41b061",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-14T11:38:51.981+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "f4afb09e-30e8-4729-aff4-f4d92a61d710",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-06T15:58:33.853+02:00",
+                          "updatedAt": "2022-10-10T18:14:24.638+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You: deleted message",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "aec1270b-392f-4c0a-b064-73051e023c22",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-14T11:38:18.694+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "e0f22687-2006-4c38-9496-dce65c6fc211",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-10-06T11:04:03.472+02:00",
+                          "updatedAt": "2022-10-06T15:58:41.137+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "Dr Cayol: bjknl,lkn",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "8ceed84b-482e-494b-8a46-228e2396c571",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-27T16:34:29.433+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "a13ff7ef-b8a3-49ba-8dbd-48036e3edf8e",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-09-30T13:00:37.054+02:00",
+                          "updatedAt": "2022-10-06T11:02:04.722+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "You: Hey hey ",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "54a0cbfa-e1ff-4e7b-82f1-55c0afc01d76",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-10-14T11:38:06.946+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "e039215e-5fe3-48e9-b1d1-8828e0c23fb2",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-09-30T12:46:15.980+02:00",
+                          "updatedAt": "2022-09-30T12:48:50.565+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "Dr Cayol sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "af9f7ccc-8762-48b4-93f8-1f2fbbeba25f",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-09-30T12:48:50.559+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      },
+                      {
+                          "__typename": "Conversation",
+                          "id": "869e543e-7043-49f4-a68c-c916c646b638",
+                          "title": null,
+                          "subtitle": null,
+                          "createdAt": "2022-09-09T15:46:09.581+02:00",
+                          "updatedAt": "2022-09-09T15:55:09.342+02:00",
+                          "inboxPreviewTitle": "Dr Cayol",
+                          "lastMessagePreview": "Dr Cayol sent a document",
+                          "unreadMessageCount": 0,
+                          "providers": [
+                              {
+                                  "__typename": "ProviderInConversation",
+                                  "id": "45ec24cb-f050-4f71-9435-e075df7e33dc",
+                                  "provider": {
+                                      "__typename": "Provider",
+                                      "id": "8d249000-69b8-48e9-8552-68d33402cefa",
+                                      "avatarUrl": {
+                                          "__typename": "EphemeralUrl",
+                                          "expiresAt": "2037-01-01T01:00:00.000+01:00",
+                                          "url": "https://storage.googleapis.com/2cb158acbf985d6-avatar-developement/4fe6dfcd-47a7-49de-8281-edda4634ae4b"
+                                      },
+                                      "prefix": "Dr",
+                                      "firstName": "Véronique",
+                                      "lastName": "Cayol",
+                                      "title": "Gynécologue-obstétricien"
+                                  },
+                                  "typingAt": null,
+                                  "seenUntil": "2022-09-30T12:45:40.413+02:00"
+                              }
+                          ],
+                          "pictureUrl": null
+                      }
+                  ],
+                  "hasMore": true,
+                  "nextCursor": "50"
+              }
+          }
+      }
+- recorded: 2022-11-01T22:02:31.657Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      X-APOLLO-OPERATION-ID: d7c1fd6b9d9096d704d9a472e5e1f7da11f7fab9858aac64b11c8455686cacc9
+      X-APOLLO-OPERATION-NAME: CreateConversation
+    body: '{"operationName":"CreateConversation","variables":{},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!], $initialMessage: SendMessageInput) { createConversation(title: $title, providerIds: $providerIds, initialMessage: $initialMessage)
+      { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems: 1 } ) { data { __typename ...MessageFragment } } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider
+      { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment
+      on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } pictureUrl { __typename ...EphemeralUrlFragment } }  fragment PatientFragment on
+      Patient { id displayName isMe }  fragment SystemFragment on System { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload
+      { id url { __typename ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment on ImageMessageContent { imageFileUpload { __typename ...ImageFileUploadFragment } }  fragment VideoFileUploadFragment on VideoFileUpload
+      { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs width height }  fragment VideoMessageContentFragment on VideoMessageContent { videoFileUpload { __typename ...VideoFileUploadFragment } }  fragment DocumentFileUploadFragment
+      on DocumentFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType thumbnail { __typename ...ImageFileUploadFragment } }  fragment DocumentMessageContentFragment on DocumentMessageContent { title documentFileUpload { __typename ...DocumentFileUploadFragment
+      } }  fragment AudioFileUploadFragment on AudioFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs }  fragment AudioMessageContentFragment on AudioMessageContent { audioFileUpload { __typename ...AudioFileUploadFragment
+      } }  fragment LivekitRoomStatusFragment on LivekitRoomStatus { __typename ... on LivekitRoomOpenStatus { url token } ... on LivekitRoomClosedStatus { empty: _ } }  fragment LivekitRoomFragment on LivekitRoom { uuid status { __typename ...LivekitRoomStatusFragment
+      } }  fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent { livekitRoom { __typename ...LivekitRoomFragment } }  fragment MessageContentFragment on MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment
+      } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on VideoMessageContent { __typename ...VideoMessageContentFragment } ... on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ... on AudioMessageContent
+      { __typename ...AudioMessageContentFragment } ... on LivekitRoomMessageContent { __typename ...LivekitRoomMessageContentFragment } ... on DeletedMessageContent { empty: _ } }  fragment MessageSummaryFragment on Message { id author { __typename ... on Provider
+      { __typename ...ProviderFragment } ... on Patient { __typename ...PatientFragment } ... on System { __typename ...SystemFragment } ... on DeletedProvider { empty: _ } } messageContent: content { __typename ...MessageContentFragment } clientId conversation
+      { id } createdAt }  fragment MessageFragment on Message { __typename ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '730'
+      Content-Type: application/json; charset=UTF-8
+      Date: Tue, 01 Nov 2022 22:02:30 GMT
+      Server: ktor-server-core/1.6.2
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '398'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: 5bb5ef8b-6454-46ff-8434-0be32a939cf3
+      x-nabla-cloudregion: EU_WEST1
+    body: |-
+      {
+          "data": {
+              "createConversation": {
+                  "conversation": {
+                      "__typename": "Conversation",
+                      "id": "940f050a-2b30-4453-945e-cc0feabf55f4",
+                      "title": null,
+                      "subtitle": null,
+                      "createdAt": "2022-11-01T23:02:31.514+01:00",
+                      "updatedAt": "2022-11-01T23:02:31.514+01:00",
+                      "inboxPreviewTitle": "Ask us anything",
+                      "lastMessagePreview": null,
+                      "unreadMessageCount": 0,
+                      "providers": [
+                      ],
+                      "pictureUrl": null,
+                      "items": {
+                          "data": [
+                          ]
+                      }
+                  }
+              }
+          }
+      }
+- recorded: 2022-10-31T16:02:13.121Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/jwt/refresh
+    body: '{"refresh_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJwcm9kLXBhdGllbnQiLCJ0eXAiOiJSZWZyZXNoIiwiZXhwIjoxNjc1MDA2MTY1LCJzZXNzaW9uX3V1aWQiOiJjZjI1NzhjNi1mYWQ5LTQ1NjAtYTVjYy1jZmE2MmJiZGE5MjkiLCJvcmdhbml6YXRpb25TdHJpbmdJZCI6Im5hYmxhIn0.1TQSYQ3T2J-Sewbx8B2rhg8MTSDITV_L-RAWTd34lbE"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 31 Oct 2022 16:02:12 GMT
+      Server: ktor-server-core/1.6.2
+      Vary: Origin
+      X-Request-ID: 95157e28-6baa-47fb-be7c-8e77dd9ccaf1
+      transfer-encoding: chunked
+      x-nabla-cloudregion: EU_WEST1
+    body: |-
+      {
+          "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJwcm9kLXBhdGllbnQiLCJ0eXAiOiJCZWFyZXIiLCJleHAiOjE2NjcyMzI0MzMsInNlc3Npb25fdXVpZCI6ImNmMjU3OGM2LWZhZDktNDU2MC1hNWNjLWNmYTYyYmJkYTkyOSIsIm9yZ2FuaXphdGlvblN0cmluZ0lkIjoibmFibGEifQ.BmhfIRjxZe21gOrREeNScOJhettM78lyA9KkP4BE3d8",
+          "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNzVhODY2Yy04OWY0LTRkNzYtYjg1NS1iNTNlYjRkYzQ0NmUiLCJpc3MiOiJwcm9kLXBhdGllbnQiLCJ0eXAiOiJSZWZyZXNoIiwiZXhwIjoxNjc1MDA4MTMzLCJzZXNzaW9uX3V1aWQiOiJjZjI1NzhjNi1mYWQ5LTQ1NjAtYTVjYy1jZmE2MmJiZGE5MjkiLCJvcmdhbml6YXRpb25TdHJpbmdJZCI6Im5hYmxhIn0.sYMc9BdaRcX4oEIpKA6QEDyuimvlBBb5IxJf8JNuXyg"
+      }

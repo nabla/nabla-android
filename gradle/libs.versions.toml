@@ -66,6 +66,7 @@ apollo-testingSupport = { group = "com.apollographql.apollo3", name = "apollo-te
 
 coilCore = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coilVideo = { group = "io.coil-kt", name = "coil-video", version.ref = "coil" }
+coilSvg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 
 okreplay-okreplay = { group = "com.airbnb.okreplay", name = "okreplay", version.ref = "okreplay" }
 okreplay-junit = { group = "com.airbnb.okreplay", name = "junit", version.ref = "okreplay" }

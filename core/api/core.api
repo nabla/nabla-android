@@ -95,6 +95,7 @@ public final class com/nabla/sdk/core/data/apollo/CacheUpdateOperation$Write : c
 public final class com/nabla/sdk/core/data/apollo/CoreGqlMapper {
 	public fun <init> (Lcom/nabla/sdk/core/domain/boundary/Logger;)V
 	public final fun mapToEphemeralUrl (Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;)Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
+	public final fun mapToPatient (Lcom/nabla/sdk/graphql/fragment/PatientFragment;)Lcom/nabla/sdk/core/domain/entity/Patient;
 	public final fun mapToProvider (Lcom/nabla/sdk/graphql/fragment/ProviderFragment;)Lcom/nabla/sdk/core/domain/entity/Provider;
 	public final fun mapToVideoCallRoom (Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;
 	public final fun mapToVideoCallRoomStatus (Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;)Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus;
@@ -623,6 +624,34 @@ public final class com/nabla/sdk/core/domain/entity/PaginatedList$Companion {
 	public final fun empty ()Lcom/nabla/sdk/core/domain/entity/PaginatedList;
 }
 
+public abstract interface class com/nabla/sdk/core/domain/entity/Patient {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/Patient$Companion;
+}
+
+public final class com/nabla/sdk/core/domain/entity/Patient$Companion {
+}
+
+public final class com/nabla/sdk/core/domain/entity/Patient$Current : com/nabla/sdk/core/domain/entity/Patient {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/Patient$Current;
+}
+
+public final class com/nabla/sdk/core/domain/entity/Patient$Other : com/nabla/sdk/core/domain/entity/Patient {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/Patient$Other$Companion;
+	public fun <init> (Ljava/util/UUID;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/util/UUID;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/Patient$Other;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/Patient$Other;Ljava/util/UUID;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/Patient$Other;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplayName ()Ljava/lang/String;
+	public final fun getId ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/Patient$Other$Companion {
+}
+
 public final class com/nabla/sdk/core/domain/entity/Provider : com/nabla/sdk/core/domain/entity/MaybeProvider {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/Provider$Companion;
 	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
@@ -827,8 +856,7 @@ public final class com/nabla/sdk/core/ui/components/NablaAvatarView : androidx/c
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public final fun displayUnicolorPlaceholder ()V
 	public final fun loadAvatar (Lcom/nabla/sdk/core/domain/entity/Provider;)V
-	public final fun loadAvatar (Lcom/nabla/sdk/core/domain/entity/SystemUser;)V
-	public final fun loadAvatar--KNGqI8 (Ljava/lang/String;Ljava/lang/String;Ljava/util/UUID;)V
+	public final fun loadAvatar--KNGqI8 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V
 }
 
 public final class com/nabla/sdk/core/ui/helpers/ColorExtensionsKt {
@@ -1398,6 +1426,34 @@ public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_
 	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
 }
 
+public final class com/nabla/sdk/graphql/fragment/PatientFragment : com/apollographql/apollo3/api/Fragment$Data {
+	public fun <init> (Ljava/util/UUID;Ljava/lang/String;Z)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/util/UUID;Ljava/lang/String;Z)Lcom/nabla/sdk/graphql/fragment/PatientFragment;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/PatientFragment;Ljava/util/UUID;Ljava/lang/String;ZILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/PatientFragment;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDisplayName ()Ljava/lang/String;
+	public final fun getId ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public final fun isMe ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter {
+	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter;
+}
+
+public final class com/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter$PatientFragment : com/apollographql/apollo3/api/Adapter {
+	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter$PatientFragment;
+	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/PatientFragment;
+	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
+	public final fun getRESPONSE_NAMES ()Ljava/util/List;
+	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/PatientFragment;)V
+	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
+}
+
 public final class com/nabla/sdk/graphql/fragment/ProviderFragment : com/apollographql/apollo3/api/Fragment$Data {
 	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 	public final fun component1 ()Ljava/util/UUID;
@@ -1466,6 +1522,11 @@ public final class com/nabla/sdk/graphql/fragment/selections/LivekitRoomFragment
 
 public final class com/nabla/sdk/graphql/fragment/selections/LivekitRoomStatusFragmentSelections {
 	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/LivekitRoomStatusFragmentSelections;
+	public final fun get__root ()Ljava/util/List;
+}
+
+public final class com/nabla/sdk/graphql/fragment/selections/PatientFragmentSelections {
+	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/PatientFragmentSelections;
 	public final fun get__root ()Ljava/util/List;
 }
 
@@ -1615,6 +1676,15 @@ public final class com/nabla/sdk/graphql/type/OpaqueCursorPage {
 	public final fun getNumberOfItems ()Lcom/apollographql/apollo3/api/Optional;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/graphql/type/Patient {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/Patient$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/Patient$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
 }
 
 public final class com/nabla/sdk/graphql/type/Provider {

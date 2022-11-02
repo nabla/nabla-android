@@ -1,21 +1,20 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 
-public data class RepliedMessage(
+internal data class RepliedMessage(
     val id: MessageId,
     val content: Content,
-    val author: MessageAuthor,
+    val author: TimelineItem.Message.Author,
 ) {
-    public sealed interface Content {
-        public data class Text(val text: String) : Content
-        public data class Image(val uri: Uri) : Content
-        public data class Video(val uri: Uri) : Content
-        public data class Audio(val uri: Uri) : Content
-        public data class Document(val uri: Uri, val thumbnailUri: Uri?) : Content
-        public object Deleted : Content
-        public object LivekitRoom : Content
+    sealed interface Content {
+        data class Text(val text: String) : Content
+        data class Image(val uri: Uri) : Content
+        data class Video(val uri: Uri) : Content
+        data class Audio(val uri: Uri) : Content
+        data class Document(val uri: Uri, val thumbnailUri: Uri?) : Content
+        object Deleted : Content
+        object LivekitRoom : Content
     }
 }

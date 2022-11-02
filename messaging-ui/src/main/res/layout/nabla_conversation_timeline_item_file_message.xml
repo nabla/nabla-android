@@ -64,7 +64,6 @@
             android:layout_marginEnd="12dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/chatFileMessageIconImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/chatFileMessageIconImageView"

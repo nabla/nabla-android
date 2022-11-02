@@ -55,7 +55,7 @@ public class NablaClient private constructor(
     ) {
         runCatching {
             coreContainer.loginInteractor().login(userId.toId(), sessionTokenProvider)
-        }.mapFailureAsNablaException(coreContainer.exceptionMapper)
+        }.mapFailureAsNablaException(coreContainer.exceptionMapper).getOrThrow()
     }
 
     public companion object {

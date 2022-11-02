@@ -67,6 +67,7 @@ dependencies {
     implementation libs.apollo.cache.sqlite
     implementation libs.apollo.adapters
     implementation libs.coilCore
+    implementation libs.coilSvg
     implementation libs.androidx.core.ktx
     implementation libs.androidx.fragment.ktx
     implementation libs.google.material

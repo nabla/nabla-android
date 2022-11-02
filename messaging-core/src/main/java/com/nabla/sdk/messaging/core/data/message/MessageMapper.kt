@@ -28,7 +28,6 @@ internal class MessageMapper constructor(
     private val logger: Logger,
     private val gqlConversationContentDataSource: GqlConversationContentDataSource,
 ) {
-
     suspend fun messageInputToNewMessage(
         input: MessageInput,
         conversationId: ConversationId.Remote? = null,
@@ -37,7 +36,7 @@ internal class MessageMapper constructor(
         val baseMessage = BaseMessage(
             MessageId.Local(uuidGenerator.generate()),
             clock.now(),
-            MessageAuthor.Patient,
+            MessageAuthor.Patient.Current,
             SendStatus.Sending,
             replyTo = if (replyTo != null && conversationId != null) {
                 gqlConversationContentDataSource.findMessageInConversationCache(conversationId, replyTo).also { message ->

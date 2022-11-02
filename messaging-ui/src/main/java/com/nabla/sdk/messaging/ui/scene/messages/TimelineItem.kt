@@ -2,14 +2,14 @@ package com.nabla.sdk.messaging.ui.scene.messages
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.DeletedProvider
+import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
-import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import kotlinx.datetime.Instant
+import com.nabla.sdk.core.domain.entity.Provider as CoreProvider
 
 internal enum class MessageAction { Delete, Copy, Reply }
 
@@ -18,7 +18,7 @@ internal sealed interface TimelineItem {
 
     data class Message(
         val id: MessageId,
-        val author: MessageAuthor,
+        val author: Author,
         val showAuthorAvatar: Boolean,
         val showAuthorName: Boolean,
         val status: SendStatus,
@@ -28,6 +28,18 @@ internal sealed interface TimelineItem {
         val content: Content,
     ) : TimelineItem {
         override val listItemId = "message_${id.stableId}"
+
+        sealed interface Author {
+            object CurrentPatient : Author
+            data class Provider(val provider: CoreProvider) : Author
+
+            // might be another patient, a system message or an unknown type.
+            data class Other(
+                val uuid: Uuid?,
+                val displayName: String,
+                val avatar: EphemeralUrl?,
+            ) : Author
+        }
 
         sealed interface Content {
             val repliedMessage: RepliedMessage?
@@ -112,7 +124,7 @@ internal sealed interface TimelineItem {
     ) : TimelineItem
 
     data class ProviderTypingIndicator(
-        val provider: Provider,
+        val provider: CoreProvider,
         val showProviderName: Boolean,
     ) : TimelineItem {
         override val listItemId: String = "provider_typing_${provider.id}"
@@ -133,7 +145,7 @@ internal sealed interface TimelineItem {
             is ProviderJoinedConversation -> {
                 val id = when (content.maybeProvider) {
                     DeletedProvider -> "deleted_$date"
-                    is Provider -> "${content.maybeProvider.id}_$date"
+                    is CoreProvider -> "${content.maybeProvider.id}_$date"
                 }
                 "provider_joined_$id"
             }

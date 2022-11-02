@@ -13,15 +13,14 @@ import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
+import coil.decode.SvgDecoder
 import coil.dispose
 import coil.load
 import coil.size.Scale
-import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.R
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.databinding.NablaComponentAvatarViewBinding
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
@@ -87,15 +86,10 @@ public class NablaAvatarView : ConstraintLayout {
         loadAvatar(provider.avatar?.url, initials, provider.id)
     }
 
-    public fun loadAvatar(systemUser: SystemUser) {
-        val initials = systemUser.initials()
-        loadAvatar(systemUser.avatar?.url, initials, userId = null)
-    }
-
-    public fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, userId: Uuid?) {
+    public fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, randomBackgroundSeed: Any?) {
         val placeholderTextComputed = placeholderText ?: ""
-        val placeholderBackgroundColor = if (userId != null) {
-            val indexBackground = (userId.hashCode() % backgroundColors.size).absoluteValue
+        val placeholderBackgroundColor = if (randomBackgroundSeed != null) {
+            val indexBackground = (randomBackgroundSeed.hashCode() % backgroundColors.size).absoluteValue
             ColorIntWrapper(context.getColor(backgroundColors[indexBackground]))
         } else {
             ColorIntWrapper(defaultBackgroundColor)
@@ -110,6 +104,7 @@ public class NablaAvatarView : ConstraintLayout {
         hidePlaceholder()
         binding.componentAvatarImageView.load(avatarUrl.uri) {
             scale(Scale.FIT)
+            decoderFactory(SvgDecoder.Factory())
             listener(
                 onSuccess = { _, _ ->
                     hidePlaceholder()
@@ -142,7 +137,7 @@ public class NablaAvatarView : ConstraintLayout {
     }
 
     public fun displayUnicolorPlaceholder() {
-        loadAvatar(avatarUrl = null, placeholderText = null, userId = null)
+        loadAvatar(avatarUrl = null, placeholderText = null, randomBackgroundSeed = null)
     }
 
     @ColorRes

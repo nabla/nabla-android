@@ -11,12 +11,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - New Messaging UI feature: You can now scan (with the camera) and send multi-page documents in conversations.
+- Added support for group chats with multiple patients and providers.
 
 ### Fixed
 
 - Messaging: Fix error when deleting a message on a freshly created draft conversation (i.e. with Local id).
-- Fix a crash on Android 6 and 7 when taking a picture with the camera in messaging UI module.
+- Messaging UI: Fix video thumbnail not showing in replied-to quoted message.
+- Messaging UI: Fix file message title text appearance not fully applied from customization attribute.
+- Messaging UI: Fix provider deleted message placeholder wrongly wrapped in a card-like container.
 - Messaging UI: Fix conversation scroll state not restored after configuration change.
+- Fix a crash on Android 6 and 7 when taking a picture with the camera in messaging UI module.
+- Fix `NablaClient.authenticate` not re-throwing potential errors.
 
 ### Changed
 
@@ -25,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Messaging UI: Changed default spacing behavior for conversations-list recycler item decoration (`DefaultOffsetsItemDecoration`).
 - Messaging UI: Replaced customization attribute `nablaMessaging_conversationListHeaderColor` by `nablaMessaging_conversationListHeaderStyle` which defaults to `?toolbarSurfaceStyle`.
 - Messaging UI and Scheduling UI: minor theme styles and colors usage adjustments to fully support dark mode contracts. 
+- Messaging Core: breaking changes for the the structure of the sealed interface `MessageAuthor` and `Patient` entity to accommodate for current vs other patients. 
 
 ## [1.0-alpha17] - 2022-10-19
 

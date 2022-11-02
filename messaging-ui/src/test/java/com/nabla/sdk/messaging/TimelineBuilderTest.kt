@@ -178,7 +178,7 @@ class TimelineBuilderTest {
     @Test
     fun `Patient message has Delete, Copy and Reply actions`() {
         val outputMessage = TimelineBuilder().buildTimeline(
-            items = listOf(Message.Text.fake(author = MessageAuthor.Patient)),
+            items = listOf(Message.Text.fake(author = MessageAuthor.Patient.Current)),
             hasMore = false,
             providersInConversation = emptyList(),
         ).filterIsInstance<TimelineItem.Message>().first()

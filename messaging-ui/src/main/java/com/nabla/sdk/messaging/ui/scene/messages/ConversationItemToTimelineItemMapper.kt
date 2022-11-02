@@ -8,6 +8,7 @@ import com.nabla.sdk.messaging.core.domain.entity.ConversationActivityContent
 import com.nabla.sdk.messaging.core.domain.entity.Message
 import com.nabla.sdk.messaging.core.domain.entity.MessageAuthor
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
+import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem.Message.Author
 
 internal fun Message.toTimelineItem(
     showAuthorAvatar: Boolean,
@@ -18,17 +19,23 @@ internal fun Message.toTimelineItem(
     currentVideoCall: VideoCall?,
 ): TimelineItem {
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
-    val actions: Set<MessageAction> = when {
-        this is Message.Deleted -> emptySet()
-        author is MessageAuthor.Provider -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
-        author is MessageAuthor.System -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
-        author is MessageAuthor.Patient && sendStatus == SendStatus.Sent ->
-            setOfNotNull(copyActionOrNull, MessageAction.Delete, MessageAction.Reply)
-        else -> emptySet()
+    val actions: Set<MessageAction> = if (this is Message.Deleted) emptySet() else {
+        when (author) {
+            is MessageAuthor.Patient.Current -> {
+                if (sendStatus == SendStatus.Sent) {
+                    setOfNotNull(copyActionOrNull, MessageAction.Delete, MessageAction.Reply)
+                } else setOfNotNull(copyActionOrNull)
+            }
+            is MessageAuthor.Provider,
+            is MessageAuthor.System,
+            is MessageAuthor.Patient.Other,
+            is MessageAuthor.DeletedProvider,
+            is MessageAuthor.Unknown -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
+        }
     }
     return TimelineItem.Message(
         id = id,
-        author = author,
+        author = author.toTimelineMessageAuthor(),
         showAuthorAvatar = showAuthorAvatar,
         showAuthorName = showAuthorName,
         status = sendStatus,
@@ -40,6 +47,26 @@ internal fun Message.toTimelineItem(
             audioPlaybackProgressMap = audioPlaybackProgressMap,
             currentVideoCall = currentVideoCall,
         ),
+    )
+}
+
+private fun MessageAuthor.toTimelineMessageAuthor(): Author = when (this) {
+    is MessageAuthor.Provider -> Author.Provider(provider)
+    is MessageAuthor.Patient.Current -> Author.CurrentPatient
+    is MessageAuthor.Patient.Other -> Author.Other(
+        uuid = patient.id,
+        displayName = patient.displayName,
+        avatar = null,
+    )
+    is MessageAuthor.System -> Author.Other(
+        uuid = null,
+        displayName = system.name,
+        avatar = system.avatar,
+    )
+    is MessageAuthor.DeletedProvider, MessageAuthor.Unknown -> Author.Other(
+        uuid = null,
+        displayName = "",
+        avatar = null,
     )
 }
 
@@ -97,7 +124,7 @@ private fun Message.toRepliedMessage() = RepliedMessage(
         is Message.Text -> RepliedMessage.Content.Text(text)
         is Message.VideoCallRoom -> RepliedMessage.Content.LivekitRoom
     },
-    author = author,
+    author = author.toTimelineMessageAuthor(),
 )
 
 internal fun TimelineItem.Message.toRepliedMessage() = RepliedMessage(

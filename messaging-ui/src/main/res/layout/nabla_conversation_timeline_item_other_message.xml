@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipToPadding="false"
@@ -11,40 +10,41 @@
     >
 
     <TextView
-        android:id="@+id/chatSystemMessageAuthorTextView"
+        android:id="@+id/chatOtherMessageAuthorTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/nabla_conversation_message_author_unknown_title"
         android:textAppearance="?textAppearanceCaption"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/chatSystemMessageContentContainer"
+        app:layout_constraintStart_toStartOf="@+id/chatOtherMessageContentContainer"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <com.nabla.sdk.core.ui.components.NablaAvatarView
-        android:id="@+id/chatSystemMessageAvatarView"
+        android:id="@+id/chatOtherMessageAvatarView"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_gravity="center"
         android:layout_marginTop="3dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chatSystemMessageAuthorTextView"
-        tools:ignore="ContentDescription"
+        app:layout_constraintTop_toBottomOf="@+id/chatOtherMessageAuthorTextView"
         />
 
     <FrameLayout
-        android:id="@+id/chatSystemMessageContentContainer"
+        android:id="@+id/chatOtherMessageContentContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingBottom="1dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/chatSystemMessageAvatarView"
-        app:layout_constraintTop_toTopOf="@+id/chatSystemMessageAvatarView"
+        app:layout_constraintStart_toEndOf="@+id/chatOtherMessageAvatarView"
+        app:layout_constraintTop_toBottomOf="@id/chatOtherMessageAuthorTextView"
+        app:layout_goneMarginTop="0dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

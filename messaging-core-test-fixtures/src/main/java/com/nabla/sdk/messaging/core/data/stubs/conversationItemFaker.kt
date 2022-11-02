@@ -39,7 +39,7 @@ fun PaginatedList.Companion.fakeConversationsItems(
 fun Message.Text.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    author: MessageAuthor = MessageAuthor.Patient,
+    author: MessageAuthor = MessageAuthor.Patient.Current,
     status: SendStatus = SendStatus.Sent,
     text: String = randomText(),
     replyTo: Message? = null,
@@ -57,7 +57,7 @@ fun Message.Text.Companion.fake(
 fun Message.Media.Image.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    author: MessageAuthor = MessageAuthor.Patient,
+    author: MessageAuthor = MessageAuthor.Patient.Current,
     status: SendStatus = SendStatus.Sent,
     mediaSource: FileSource<FileLocal.Image, FileUpload.Image> = FileSource.Uploaded.fakeImage(),
 ) = Message.Media.Image(
@@ -74,7 +74,7 @@ fun Message.Media.Image.Companion.fake(
 fun Message.Media.Audio.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    author: MessageAuthor = MessageAuthor.Patient,
+    author: MessageAuthor = MessageAuthor.Patient.Current,
     status: SendStatus = SendStatus.Sent,
     mediaSource: FileSource<FileLocal.Audio, FileUpload.Audio> = FileSource.Uploaded.fakeAudio(),
 ) = Message.Media.Audio(
@@ -151,7 +151,7 @@ fun FileUpload.Audio.Companion.fake(
 fun Message.Media.Document.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sentAt: Instant = Clock.System.now().minus(20.minutes),
-    author: MessageAuthor = MessageAuthor.Patient,
+    author: MessageAuthor = MessageAuthor.Patient.Current,
     status: SendStatus = SendStatus.Sent,
     ephemeralUrl: EphemeralUrl = EphemeralUrl.fake(url = Uri("https://www.orimi.com/pdf-test.pdf")),
     mimeType: MimeType = MimeType.Application.Pdf,
@@ -212,6 +212,7 @@ fun Conversation.Companion.fake(
     lastMessagePreview = lastMessagePreview,
     patientUnreadMessageCount = patientUnreadMessageCount,
     providersInConversation = providersInConversation,
+    pictureUrl = null,
 )
 
 fun EphemeralUrl.Companion.fake(
