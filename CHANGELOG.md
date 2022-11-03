@@ -26,11 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Messaging UI: Changed the default value for `nablaMessaging_cancelVoiceMessageIcon` icon to a Material trash bin icon and fixed its ripple.
 - Messaging UI: Changed the default value of `nablaMessaging_conversationPreviewBackgroundDrawable` (background of a conversation item in the inbox) from a card to a transparent-with-ripple drawable.
 - Messaging UI: Changed default spacing behavior for conversations-list recycler item decoration (`DefaultOffsetsItemDecoration`).
 - Messaging UI: Replaced customization attribute `nablaMessaging_conversationListHeaderColor` by `nablaMessaging_conversationListHeaderStyle` which defaults to `?toolbarSurfaceStyle`.
-- Messaging UI and Scheduling UI: minor theme styles and colors usage adjustments to fully support dark mode contracts. 
+- Messaging UI: Replaced —default values for— icons with Material equivalents (mic, send, trash bin, camera, video...).
+- Messaging UI and Scheduling UI: minor theme styles and colors usage adjustments to fully support dark mode contracts.
 - Messaging Core: breaking changes for the the structure of the sealed interface `MessageAuthor` and `Patient` entity to accommodate for current vs other patients. 
 
 ## [1.0-alpha17] - 2022-10-19

@@ -9,9 +9,9 @@
         />
     <solid android:color="@color/nabla_on_surface_alpha_12" />
     <padding
-        android:bottom="14dp"
-        android:left="14dp"
-        android:right="14dp"
-        android:top="14dp"
+        android:bottom="10dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp"
         />
 </shape>

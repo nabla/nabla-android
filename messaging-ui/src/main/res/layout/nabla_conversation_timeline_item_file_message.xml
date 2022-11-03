@@ -43,8 +43,8 @@
 
         <ImageView
             android:id="@+id/chatFileMessageIconImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginStart="12dp"
             android:layout_marginVertical="12dp"
             android:contentDescription="@string/nabla_conversation_file_message_content_description"

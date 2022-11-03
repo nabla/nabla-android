@@ -22,6 +22,7 @@ internal class SwipeToReplyCallback(
     /*swipeDirections*/ DIRECTION_DISABLED
 ) {
     private val icon = ContextCompat.getDrawable(context, R.drawable.nabla_ic_reply)
+    private val iconSize = context.dpToPx(24)
     private val iconMargin = context.dpToPx(16)
     private var swipedViewHolder: RecyclerView.ViewHolder? = null
 
@@ -74,8 +75,8 @@ internal class SwipeToReplyCallback(
     private fun Canvas.drawIcon(animationProgress: Float, itemView: View) {
         val scaledMargin = MathUtils.lerp(0f, iconMargin.toFloat(), animationProgress).roundToInt().coerceIn(0, iconMargin)
         icon?.bounds?.apply {
-            val scaledHeight = (icon.intrinsicHeight * animationProgress).roundToInt()
-            val scaledWidth = (icon.intrinsicWidth * animationProgress).roundToInt()
+            val scaledHeight = (iconSize * animationProgress).roundToInt()
+            val scaledWidth = (iconSize * animationProgress).roundToInt()
 
             left = itemView.left + scaledMargin
             top = itemView.top + (itemView.height - scaledHeight) / 2
