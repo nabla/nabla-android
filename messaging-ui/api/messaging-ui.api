@@ -285,7 +285,6 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationTimel
 }
 
 public final class com/nabla/sdk/messaging/ui/databinding/NablaFragmentConversationBinding : androidx/viewbinding/ViewBinding {
-	public final field appbar Lcom/google/android/material/appbar/AppBarLayout;
 	public final field conversationAddMediaButton Landroid/widget/ImageView;
 	public final field conversationCancelRecordingButton Landroid/widget/ImageView;
 	public final field conversationComposerGroup Landroidx/constraintlayout/widget/Barrier;

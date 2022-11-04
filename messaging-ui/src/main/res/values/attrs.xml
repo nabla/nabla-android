@@ -47,7 +47,7 @@
     <attr name="nablaMessaging_mediaSourceDocumentScanIcon" format="reference"/>
 
     <attr name="nablaMessaging_conversationBackgroundColor" format="reference|color"/>
-    <attr name="nablaMessaging_conversationHeaderColor" format="reference|color"/>
+    <attr name="nablaMessaging_conversationHeaderStyle" format="reference|color"/>
 
     <attr name="nablaMessaging_conversationMediaPickerTextAppearance" format="reference|color"/>
     <attr name="nablaMessaging_conversationMediaPickerIconBackground" format="reference|color"/>

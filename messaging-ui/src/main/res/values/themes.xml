@@ -51,7 +51,7 @@
         <item name="nablaMessaging_mediaSourceDocumentIcon">@drawable/nabla_ic_pick_file</item>
         <item name="nablaMessaging_mediaSourceDocumentScanIcon">@drawable/nabla_ic_document_scan</item>
         <item name="nablaMessaging_conversationBackgroundColor">?android:colorBackground</item>
-        <item name="nablaMessaging_conversationHeaderColor">?colorSurface</item>
+        <item name="nablaMessaging_conversationHeaderStyle">?toolbarSurfaceStyle</item>
 
         <item name="nablaMessaging_conversationMediaPickerTextAppearance">?textAppearanceBodyLarge</item>
         <item name="nablaMessaging_conversationMediaPickerIconBackground">

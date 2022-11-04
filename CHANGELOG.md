@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## Changed
+
+- Dropped `nablaMessaging_conversationHeaderColor` in favor of the more generic `nablaMessaging_conversationHeaderStyle`.
+
 ## [1.0-alpha18] - 2022-11-03
 
 > ⚠️ You need to add `vectorDrawables.useSupportLibrary true` in your `build.gradle` file under `defaultConfig` for your app if you target API 23 or lower starting with this release.
