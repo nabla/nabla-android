@@ -140,6 +140,7 @@ type Conversation {
   createdAt: DateTime!
   updatedAt: DateTime!
   pictureUrl: EphemeralUrl
+  isLocked: Boolean!
 
   inboxPreviewTitle: String!
   lastMessagePreview: String
