@@ -21,6 +21,7 @@ type Query {
   appointmentCategories: AppointmentCategoriesOutput!
   appointmentCategory(id: UUID!): AppointmentCategoryOutput!
   provider(id: UUID!): ProviderOutput!
+  appointmentConfirmationConsents: AppointmentConfirmationConsentsOutput!
 }
 # ----------------------------------------------------------------------------------------------------------------------
 # Mutations.
@@ -542,4 +543,9 @@ type AvailabilitySlot {
   startAt: DateTime!
   endAt: DateTime!
   provider: Provider!
+}
+
+type AppointmentConfirmationConsentsOutput {
+  firstConsentHtml: String!
+  secondConsentHtml: String!
 }
