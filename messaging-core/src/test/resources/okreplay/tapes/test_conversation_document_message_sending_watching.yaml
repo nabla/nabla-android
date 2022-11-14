@@ -93,7 +93,7 @@ interactions:
 - recorded: 2022-08-11T09:52:21.939Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--3f3cdbb4-fbf3-4575-a047-6352ea2ed54a\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--3f3cdbb4-fbf3-4575-a047-6352ea2ed54a\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--3f3cdbb4-fbf3-4575-a047-6352ea2ed54a--\r\n"
   response:
@@ -200,7 +200,7 @@ interactions:
 - recorded: 2022-09-07T08:29:47.484Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: &id001 {}
     body: "--bd16f4bd-729c-4f0d-97af-f20bd678ecbf\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--bd16f4bd-729c-4f0d-97af-f20bd678ecbf\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--bd16f4bd-729c-4f0d-97af-f20bd678ecbf--\r\n"
@@ -353,7 +353,7 @@ interactions:
 - recorded: 2022-09-11T18:27:01.145Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--afdc6d6c-2faa-4bd0-8a00-bf0c52caa009\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--afdc6d6c-2faa-4bd0-8a00-bf0c52caa009\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--afdc6d6c-2faa-4bd0-8a00-bf0c52caa009--\r\n"
   response:
@@ -561,7 +561,7 @@ interactions:
 - recorded: 2022-10-31T15:30:30.495Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: &id002 {}
     body: "--fefc50ee-31cf-432c-81ec-a0ca63520b87\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--fefc50ee-31cf-432c-81ec-a0ca63520b87\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--fefc50ee-31cf-432c-81ec-a0ca63520b87--\r\n"
@@ -738,7 +738,7 @@ interactions:
 - recorded: 2022-10-31T15:57:34.075Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: *id001
     body: "--35ef2c98-cfe9-4c3c-b719-b0f972093aad\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--35ef2c98-cfe9-4c3c-b719-b0f972093aad\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--35ef2c98-cfe9-4c3c-b719-b0f972093aad--\r\n"
@@ -893,7 +893,7 @@ interactions:
 - recorded: 2022-10-31T16:00:15.480Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--d0d5b45f-1c19-41f3-b480-182d911d0ec5\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--d0d5b45f-1c19-41f3-b480-182d911d0ec5\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--d0d5b45f-1c19-41f3-b480-182d911d0ec5--\r\n"
   response:
@@ -1047,7 +1047,7 @@ interactions:
 - recorded: 2022-10-31T16:02:05.597Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: *id002
     body: "--c86b53ec-6769-4c12-b6d7-607d3c67961e\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--c86b53ec-6769-4c12-b6d7-607d3c67961e\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--c86b53ec-6769-4c12-b6d7-607d3c67961e--\r\n"
@@ -1202,7 +1202,7 @@ interactions:
 - recorded: 2022-10-31T16:02:15.827Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: *id001
     body: "--e8a33cfd-ed8d-4508-86c9-4fa893454b20\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--e8a33cfd-ed8d-4508-86c9-4fa893454b20\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--e8a33cfd-ed8d-4508-86c9-4fa893454b20--\r\n"
@@ -1357,7 +1357,7 @@ interactions:
 - recorded: 2022-11-01T22:02:34.717Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--a87e0083-0504-4bec-b222-7cc18abee56c\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--a87e0083-0504-4bec-b222-7cc18abee56c\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
       \ application/pdf\r\n\r\n\r\n--a87e0083-0504-4bec-b222-7cc18abee56c--\r\n"
   response:

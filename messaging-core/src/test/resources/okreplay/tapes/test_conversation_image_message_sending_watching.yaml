@@ -93,7 +93,7 @@ interactions:
 - recorded: 2022-08-11T09:52:20.470Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--6f8602de-c68a-4414-9279-0fd9cf29ba87\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--6f8602de-c68a-4414-9279-0fd9cf29ba87\r\nContent-Disposition: form-data; name=\"file\"; filename=\"06b91b08-a0d3-4f47-9e39-b6da8064e2d7\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--6f8602de-c68a-4414-9279-0fd9cf29ba87--\r\n"
   response:
@@ -200,7 +200,7 @@ interactions:
 - recorded: 2022-09-07T08:29:46.046Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--bab1dd34-5cee-46ab-b663-bcea545b5b27\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--bab1dd34-5cee-46ab-b663-bcea545b5b27\r\nContent-Disposition: form-data; name=\"file\"; filename=\"fbc45fb5-3394-4ee8-9f03-e2d23af62d59\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--bab1dd34-5cee-46ab-b663-bcea545b5b27--\r\n"
   response:
@@ -352,7 +352,7 @@ interactions:
 - recorded: 2022-09-11T18:26:59.647Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: &id001 {}
     body: "--c9c88976-7f2e-464c-9668-9b3eead372f6\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--c9c88976-7f2e-464c-9668-9b3eead372f6\r\nContent-Disposition: form-data; name=\"file\"; filename=\"a8d8e2a6-3bc8-4a0e-8da6-943b93c8cb95\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--c9c88976-7f2e-464c-9668-9b3eead372f6--\r\n"
@@ -561,7 +561,7 @@ interactions:
 - recorded: 2022-10-31T15:30:28.818Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--f1db0ee0-34e2-428b-8eb1-539a6eabd184\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--f1db0ee0-34e2-428b-8eb1-539a6eabd184\r\nContent-Disposition: form-data; name=\"file\"; filename=\"e29798b5-d015-4275-bbfd-a7c2582d392b\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--f1db0ee0-34e2-428b-8eb1-539a6eabd184--\r\n"
   response:
@@ -737,7 +737,7 @@ interactions:
 - recorded: 2022-10-31T15:57:32.408Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: *id001
     body: "--42db451e-5251-4600-9ac7-ef71395f9756\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--42db451e-5251-4600-9ac7-ef71395f9756\r\nContent-Disposition: form-data; name=\"file\"; filename=\"d7038a71-5b0b-45d7-943c-a774535d273b\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--42db451e-5251-4600-9ac7-ef71395f9756--\r\n"
@@ -892,7 +892,7 @@ interactions:
 - recorded: 2022-10-31T16:00:14.160Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: {}
     body: "--ecebf0a0-6e1b-419e-a98d-4d4a20dc3b3d\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--ecebf0a0-6e1b-419e-a98d-4d4a20dc3b3d\r\nContent-Disposition: form-data; name=\"file\"; filename=\"bf0b817e-ae6d-4fd1-a33d-bfbfb361ebb4\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--ecebf0a0-6e1b-419e-a98d-4d4a20dc3b3d--\r\n"
@@ -1047,7 +1047,7 @@ interactions:
 - recorded: 2022-10-31T16:02:04.491Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: {}
     body: "--c6aecdc3-f31a-4885-8bbf-b06bd258790c\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--c6aecdc3-f31a-4885-8bbf-b06bd258790c\r\nContent-Disposition: form-data; name=\"file\"; filename=\"52042be6-c474-49b5-9378-7aacf04b2985\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--c6aecdc3-f31a-4885-8bbf-b06bd258790c--\r\n"
@@ -1202,7 +1202,7 @@ interactions:
 - recorded: 2022-10-31T16:02:14.417Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     headers: *id001
     body: "--79431851-c09d-435f-a0e8-2ac93c206707\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--79431851-c09d-435f-a0e8-2ac93c206707\r\nContent-Disposition: form-data; name=\"file\"; filename=\"729c5093-1d07-4374-8d60-038a92664897\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--79431851-c09d-435f-a0e8-2ac93c206707--\r\n"
@@ -1357,7 +1357,7 @@ interactions:
 - recorded: 2022-11-01T22:02:32.846Z
   request:
     method: POST
-    uri: http://localhost:8080/v1/upload/patient
+    uri: http://localhost:8080/v1/patient/upload
     body: "--2c1f9f87-1883-4606-8144-eb1769b35e38\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--2c1f9f87-1883-4606-8144-eb1769b35e38\r\nContent-Disposition: form-data; name=\"file\"; filename=\"44e11783-6e26-4497-80e1-f7e5d7c83191\"\
       \r\nContent-Type: image/jpeg\r\n\r\n\r\n--2c1f9f87-1883-4606-8144-eb1769b35e38--\r\n"
   response:

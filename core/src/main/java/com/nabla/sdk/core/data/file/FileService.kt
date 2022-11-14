@@ -11,6 +11,6 @@ internal interface FileService {
     ): List<String>
 
     companion object {
-        const val UPLOAD_FILE_PATH = "v1/upload/patient"
+        const val UPLOAD_FILE_PATH = "v1/patient/upload"
     }
 }
