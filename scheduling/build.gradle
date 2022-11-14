@@ -21,13 +21,14 @@ dependencies {
     api project(':core')
     apolloMetadata(project(":core"))
     api libs.google.material
-    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.fragment
     implementation libs.kotlin.datetime
     implementation libs.apollo.runtime
     implementation libs.apollo.cache
     implementation libs.apollo.cache.sqlite
     implementation libs.apollo.adapters
     implementation libs.flexBoxLayout
+    implementation libs.androidx.core
 
     testImplementation project(':core-test-fixtures')
     testImplementation project(':tests-common')

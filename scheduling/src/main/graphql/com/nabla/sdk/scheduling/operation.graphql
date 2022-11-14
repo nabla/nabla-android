@@ -28,6 +28,13 @@ query AvailabilitySlots($categoryId: UUID!, $page: OpaqueCursorPage!) {
     }
 }
 
+query AppointmentConfirmationConsents {
+    appointmentConfirmationConsents {
+        firstConsentHtml
+        secondConsentHtml
+    }
+}
+
 mutation ScheduleAppointment(
     $categoryId: UUID!,
     $providerId: UUID!,

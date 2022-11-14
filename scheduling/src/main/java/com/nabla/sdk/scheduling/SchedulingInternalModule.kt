@@ -4,6 +4,7 @@ import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
@@ -20,6 +21,8 @@ internal interface SchedulingInternalModule : SchedulingModule {
 
     fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>
     fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>
+
+    suspend fun getAppointmentConfirmationContents(): Result<AppointmentConfirmationConsents>
 
     suspend fun scheduleAppointment(
         categoryId: CategoryId,

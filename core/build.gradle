@@ -68,8 +68,8 @@ dependencies {
     implementation libs.apollo.adapters
     implementation libs.coilCore
     implementation libs.coilSvg
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.core
+    implementation libs.androidx.fragment
     implementation libs.google.material
     implementation libs.kotlin.serialization.json
     implementation libs.kotlin.coroutines.core

@@ -80,6 +80,9 @@ subprojects { project ->
             jvmTarget = buildConfig.jvmTarget
             freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
             freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
+            // Some AndroidX lib start using kotlin interfaces with non abstract fun
+            // https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-default/
+            freeCompilerArgs += "-Xjvm-default=all"
             def projectsIgnoringStrictApi = ["ui-tests", "test-fixtures", "tests-common"]
             def projectIgnoresStrictApi = projectsIgnoringStrictApi.any { project.name.contains(it) }
             if (!task.name.contains("Test") && !projectIgnoresStrictApi) {

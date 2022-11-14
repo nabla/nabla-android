@@ -12,6 +12,7 @@ import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
@@ -63,6 +64,13 @@ internal class NablaSchedulingClientImpl(
             schedulingContainer.nablaExceptionMapper,
             schedulingContainer.sessionClient,
         )
+    }
+
+    override suspend fun getAppointmentConfirmationContents(): Result<AppointmentConfirmationConsents> {
+        return runCatchingCancellable {
+            schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            appointmentRepository.getAppointmentConfirmationContents()
+        }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
     override suspend fun scheduleAppointment(categoryId: CategoryId, providerId: UUID, slot: Instant): Result<Appointment> {

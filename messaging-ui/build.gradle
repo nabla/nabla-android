@@ -26,10 +26,10 @@ dependencies {
 
     implementation project(':doc-scanner')
     implementation libs.androidx.lifecycle.viewmodel
-    implementation libs.androidx.core.ktx
+    implementation libs.androidx.core
     implementation libs.coilCore
     implementation libs.coilVideo
-    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.fragment
     implementation libs.exoplayer
 
     testImplementation project(':core-test-fixtures')

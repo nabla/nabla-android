@@ -1,14 +1,21 @@
 package com.nabla.sdk.scheduling.scene
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
+import androidx.core.text.HtmlCompat
+import androidx.core.text.getSpans
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
@@ -20,6 +27,7 @@ import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
+import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
@@ -55,8 +63,6 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
         binding.nablaConfirmAppointmentButton.setOnClickListener { viewModel.onConfirmClicked() }
         binding.errorLayout.nablaErrorRetryButton.setOnClickListener { viewModel.onClickRetry() }
-        binding.nablaConfirmCheckbox1.setOnCheckedChangeListener { _, checked -> viewModel.onFirstConsentChecked(checked) }
-        binding.nablaConfirmCheckbox2.setOnCheckedChangeListener { _, checked -> viewModel.onSecondConsentChecked(checked) }
 
         viewLifecycleOwner.lifecycleScope.launchCollect(viewModel.stateFlow) { state ->
             binding.nablaConfirmLoadedGroup.isVisible = state is State.Loaded
@@ -70,6 +76,18 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                     binding.nablaConfirmAppointmentTitle.text = state.provider.fullNameWithPrefix(binding.context)
                     binding.nablaConfirmAppointmentSubtitle.setTextOrHide(state.provider.title)
                     binding.nablaConfirmAppointmentDatePill.text = state.slot.formatScheduledAt()
+
+                    binding.nablaConsentsContainer.removeAllViews()
+                    state.consents.htmlConsents.forEachIndexed { index, html ->
+                        val consentView = NablaSchedulingItemConsentBinding.inflate(layoutInflater, binding.nablaConsentsContainer, false)
+                        consentView.root.updateLayoutParams<MarginLayoutParams> {
+                            topMargin = view.context.dpToPx(8)
+                            marginEnd = view.context.dpToPx(16)
+                        }
+                        consentView.nablaConsentCheckbox.setOnCheckedChangeListener { _, checked -> viewModel.onConsentChecked(index, checked) }
+                        setHtml(consentView, html)
+                        binding.nablaConsentsContainer.addView(consentView.root)
+                    }
                 }
                 is State.Loading -> Unit /* no-op */
             }
@@ -86,6 +104,21 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                 Event.Finish -> {
                     hostActivity().finish()
                 }
+            }
+        }
+    }
+
+    private fun setHtml(itemConsentBinding: NablaSchedulingItemConsentBinding, html: String) {
+        val spanned = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        itemConsentBinding.nablaConsentText.text = spanned
+
+        // Makes hyperlinks clickable
+        itemConsentBinding.nablaConsentText.movementMethod = LinkMovementMethod.getInstance()
+
+        // Let text click toggle checkbox if no link
+        if (spanned.getSpans<ClickableSpan>().isEmpty()) {
+            itemConsentBinding.nablaConsentText.setOnClickListener {
+                itemConsentBinding.nablaConsentCheckbox.toggle()
             }
         }
     }

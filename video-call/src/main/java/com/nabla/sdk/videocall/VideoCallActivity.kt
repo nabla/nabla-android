@@ -178,7 +178,7 @@ public class VideoCallActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         if (lifecycle.currentState == Lifecycle.State.CREATED && !isInPictureInPictureMode) {
             // When user dismisses Picture-in-Picture mode, activity lifecycle is set to CREATED (onStop).
             viewModel.onPictureInPictureDismissed()

@@ -7,22 +7,19 @@ public final class com/nabla/sdk/messaging/core/BuildConfig {
 
 public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClient : com/nabla/sdk/core/domain/boundary/MessagingModule {
 	public abstract fun createConversation-BWLJW6A (Ljava/lang/String;Ljava/util/List;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun createConversation-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/List;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun createDraftConversation (Ljava/lang/String;Ljava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
+	public static synthetic fun createDraftConversation$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
 	public abstract fun deleteMessage-0E7RQCE (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
 	public abstract fun markConversationAsRead-gIAlu-s (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun retrySendingMessage-0E7RQCE (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun sendMessage-BWLJW6A (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun sendMessage-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun setTyping-0E7RQCE (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun watchConversation (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lkotlinx/coroutines/flow/Flow;
 	public abstract fun watchConversationItems (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lkotlinx/coroutines/flow/Flow;
 	public abstract fun watchConversations ()Lkotlinx/coroutines/flow/Flow;
-}
-
-public final class com/nabla/sdk/messaging/core/NablaMessagingClient$DefaultImpls {
-	public static synthetic fun createConversation-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/List;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static synthetic fun createDraftConversation$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
-	public static synthetic fun sendMessage-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingModule : com/nabla/sdk/core/domain/boundary/MessagingModule {
@@ -167,11 +164,7 @@ public abstract interface class com/nabla/sdk/messaging/core/domain/entity/Conve
 	public abstract fun getClientId ()Ljava/util/UUID;
 	public abstract fun getRemoteId ()Ljava/util/UUID;
 	public abstract fun getStableId ()Ljava/util/UUID;
-	public abstract fun requireRemote ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
-}
-
-public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$DefaultImpls {
-	public static fun requireRemote (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
+	public fun requireRemote ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Local : com/nabla/sdk/messaging/core/domain/entity/ConversationId {
@@ -186,7 +179,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Loc
 	public fun getRemoteId ()Ljava/util/UUID;
 	public fun getStableId ()Ljava/util/UUID;
 	public fun hashCode ()I
-	public fun requireRemote ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
 	public fun toString ()Ljava/lang/String;
 	public fun writeToParcel (Landroid/os/Parcel;I)V
 }
@@ -205,7 +197,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Rem
 	public fun getRemoteId ()Ljava/util/UUID;
 	public fun getStableId ()Ljava/util/UUID;
 	public fun hashCode ()I
-	public fun requireRemote ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
 	public fun toString ()Ljava/lang/String;
 	public fun writeToParcel (Landroid/os/Parcel;I)V
 }
@@ -532,11 +523,7 @@ public abstract interface class com/nabla/sdk/messaging/core/domain/entity/Messa
 	public abstract fun getClientId ()Ljava/util/UUID;
 	public abstract fun getRemoteId ()Ljava/util/UUID;
 	public abstract fun getStableId ()Ljava/util/UUID;
-	public abstract fun requireLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
-}
-
-public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$DefaultImpls {
-	public static fun requireLocal (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;)Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
+	public fun requireLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$Local : com/nabla/sdk/messaging/core/domain/entity/MessageId {
@@ -549,7 +536,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$Local : 
 	public fun getRemoteId ()Ljava/util/UUID;
 	public fun getStableId ()Ljava/util/UUID;
 	public fun hashCode ()I
-	public fun requireLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -564,7 +550,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$Remote :
 	public fun getRemoteId ()Ljava/util/UUID;
 	public fun getStableId ()Ljava/util/UUID;
 	public fun hashCode ()I
-	public fun requireLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
 	public fun toString ()Ljava/lang/String;
 }
 

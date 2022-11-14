@@ -40,9 +40,6 @@
     </plurals>
     <string name="nabla_scheduling_time_slot_pagination_error">Une erreur est survenue lors du chargement des disponibilités.</string>
 
-    <string name="nabla_scheduling_confirmation_consent_checkbox_first">Je consens à réaliser un appel vidéo.</string>
-    <string name="nabla_scheduling_confirmation_consent_checkbox_second">Je consens au traitement de mes données personnelles.</string>
-
     <string name="nabla_scheduling_date_pill_format_today">Rendez-vous prévu aujourd’hui à %1$s</string>
     <string name="nabla_scheduling_date_pill_format_future">Rendez-vous prévu le %1$s à %2$s</string>
     <string name="nabla_scheduling_time_format">HH\'h\'mm</string>

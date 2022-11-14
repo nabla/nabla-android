@@ -12,8 +12,10 @@ import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
+import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.schedulingInternalModule
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,8 +37,7 @@ internal class AppointmentConfirmationViewModel(
 ) : ViewModel() {
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
 
-    private var firstConsentGrantedFlow = MutableStateFlow(false)
-    private var secondConsentGrantedFlow = MutableStateFlow(false)
+    private val consentsGrantedFlow = MutableStateFlow(emptyList<Boolean>())
 
     private var isSubmittingFlow = MutableStateFlow(false)
 
@@ -44,8 +45,13 @@ internal class AppointmentConfirmationViewModel(
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
     val stateFlow: StateFlow<State> = flow {
-        val provider = nablaClient.coreContainer.providerRepository.getProvider(providerId)
-        emit(State.Loaded(provider, slot))
+        val asyncConsents = viewModelScope.async { nablaClient.schedulingInternalModule.getAppointmentConfirmationContents().getOrThrow() }
+        val provider = viewModelScope.async { nablaClient.coreContainer.providerRepository.getProvider(providerId) }
+        val consents = asyncConsents.await()
+        consentsGrantedFlow.value = List(consents.htmlConsents.size) {
+            false
+        }
+        emit(State.Loaded(provider.await(), slot, consents))
     }
         .combine(isSubmittingFlow) { state, isSubmitting ->
             if (isSubmitting) State.Loading else state
@@ -63,11 +69,10 @@ internal class AppointmentConfirmationViewModel(
         }.stateIn(viewModelScope, SharingStarted.Eagerly, State.Loading)
 
     val canSubmitFlow = combine(
-        firstConsentGrantedFlow,
-        secondConsentGrantedFlow,
+        consentsGrantedFlow,
         stateFlow,
-    ) { firstConsent, secondConsent, state ->
-        firstConsent && secondConsent && state is State.Loaded
+    ) { consents, state ->
+        consents.all { it } && state is State.Loaded
     }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
@@ -100,12 +105,10 @@ internal class AppointmentConfirmationViewModel(
         retryTriggerFlow.emitIn(viewModelScope, Unit)
     }
 
-    fun onFirstConsentChecked(checked: Boolean) {
-        firstConsentGrantedFlow.value = checked
-    }
-
-    fun onSecondConsentChecked(checked: Boolean) {
-        secondConsentGrantedFlow.value = checked
+    fun onConsentChecked(index: Int, checked: Boolean) {
+        consentsGrantedFlow.value = consentsGrantedFlow.value.toMutableList().apply {
+            this[index] = checked
+        }.toList()
     }
 
     sealed interface State {
@@ -114,6 +117,7 @@ internal class AppointmentConfirmationViewModel(
         data class Loaded(
             val provider: Provider,
             val slot: Instant,
+            val consents: AppointmentConfirmationConsents,
         ) : State
     }
 

@@ -3,9 +3,11 @@ package com.nabla.sdk.scheduling.data.apollo
 import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.graphql.AppointmentConfirmationConsentsQuery
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentCategoryFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AvailabilitySlotFragment
@@ -48,5 +50,17 @@ internal class GqlMapper(
             startAt = fragment.startAt,
             providerId = fragment.provider.id,
         )
+    }
+
+    fun mapToAppointmentConfirmationConsents(
+        gqlData: AppointmentConfirmationConsentsQuery.AppointmentConfirmationConsents
+    ): AppointmentConfirmationConsents {
+        val htmlConsents = mutableListOf<String>()
+        val checkAndAdd: (String) -> Unit = { htmlString ->
+            if (htmlString.isNotBlank()) htmlConsents.add(htmlString)
+        }
+        checkAndAdd(gqlData.firstConsentHtml)
+        checkAndAdd(gqlData.secondConsentHtml)
+        return AppointmentConfirmationConsents(htmlConsents)
     }
 }

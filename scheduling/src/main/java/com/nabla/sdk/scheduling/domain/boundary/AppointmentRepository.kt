@@ -3,6 +3,7 @@ package com.nabla.sdk.scheduling.domain.boundary
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
@@ -20,6 +21,8 @@ internal interface AppointmentRepository {
 
     fun watchAvailabilitySlots(categoryId: CategoryId): Flow<PaginatedList<AvailabilitySlot>>
     suspend fun loadMoreAvailabilitySlots(categoryId: CategoryId)
+
+    suspend fun getAppointmentConfirmationContents(): AppointmentConfirmationConsents
 
     suspend fun scheduleAppointment(
         categoryId: CategoryId,

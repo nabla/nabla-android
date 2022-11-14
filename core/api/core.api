@@ -193,11 +193,7 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/MessagingModu
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/MessagingModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
-	public abstract fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
-}
-
-public final class com/nabla/sdk/core/domain/boundary/MessagingModule$Factory$DefaultImpls {
-	public static fun type (Lcom/nabla/sdk/core/domain/boundary/MessagingModule$Factory;)Lcom/nabla/sdk/core/domain/entity/ModuleType;
+	public fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/Module {
@@ -217,22 +213,15 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingMod
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
-	public abstract fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
-}
-
-public final class com/nabla/sdk/core/domain/boundary/SchedulingModule$Factory$DefaultImpls {
-	public static fun type (Lcom/nabla/sdk/core/domain/boundary/SchedulingModule$Factory;)Lcom/nabla/sdk/core/domain/entity/ModuleType;
+	public fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SessionClient {
 	public abstract fun clearSession ()V
 	public abstract fun getFreshAccessToken (ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun getFreshAccessToken$default (Lcom/nabla/sdk/core/domain/boundary/SessionClient;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun initSession (Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
 	public abstract fun isSessionInitialized ()Z
-}
-
-public final class com/nabla/sdk/core/domain/boundary/SessionClient$DefaultImpls {
-	public static synthetic fun getFreshAccessToken$default (Lcom/nabla/sdk/core/domain/boundary/SessionClient;ZLkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenProvider {
@@ -264,11 +253,7 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModu
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
-	public abstract fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
-}
-
-public final class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory$DefaultImpls {
-	public static fun type (Lcom/nabla/sdk/core/domain/boundary/VideoCallModule$Factory;)Lcom/nabla/sdk/core/domain/entity/ModuleType;
+	public fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
 public final class com/nabla/sdk/core/domain/entity/Attachment {

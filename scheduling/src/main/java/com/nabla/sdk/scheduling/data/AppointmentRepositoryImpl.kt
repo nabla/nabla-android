@@ -7,6 +7,7 @@ import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.scheduling.domain.boundary.AppointmentRepository
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
@@ -19,6 +20,7 @@ internal class AppointmentRepositoryImpl(
     private val repoScope: CoroutineScope,
     private val gqlAppointmentDataSource: GqlAppointmentDataSource,
     private val gqlAppointmentCategoryDataSource: GqlAppointmentCategoryDataSource,
+    private val gqlAppointmentConfirmConsentsDataSource: GqlAppointmentConfirmConsentsDataSource,
 ) : AppointmentRepository {
 
     override fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment>> = gqlAppointmentDataSource.watchUpcomingAppointments()
@@ -45,6 +47,10 @@ internal class AppointmentRepositoryImpl(
             }
         }
         .await()
+
+    override suspend fun getAppointmentConfirmationContents(): AppointmentConfirmationConsents {
+        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents()
+    }
 
     override suspend fun scheduleAppointment(
         categoryId: CategoryId,

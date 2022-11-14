@@ -37,9 +37,6 @@
     </plurals>
     <string name="nabla_scheduling_time_slot_pagination_error">An error occurred while loading more availabilities.</string>
 
-    <string name="nabla_scheduling_confirmation_consent_checkbox_first">I consent to do a video consultation.</string>
-    <string name="nabla_scheduling_confirmation_consent_checkbox_second">I consent to the data processing policy.</string>
-
     <string name="nabla_scheduling_date_pill_format_today">Consultation planned today at %1$s</string>
     <string name="nabla_scheduling_date_pill_format_future">Consultation planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_time_format">hh:mm aa</string>

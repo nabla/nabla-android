@@ -14,17 +14,17 @@ import java.net.URI
 public class PickMediasFromLibraryActivityContract(private val context: Context) :
     ActivityResultContract<Array<MimeType>, MediaPickingResult<List<LocalMedia>>>() {
 
-    override fun createIntent(context: Context, mimeTypes: Array<MimeType>): Intent {
+    override fun createIntent(context: Context, input: Array<MimeType>): Intent {
         return Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            type = mimeTypes.joinToString("|") { it.stringRepresentation }
+            type = input.joinToString("|") { it.stringRepresentation }
             addCategory(Intent.CATEGORY_OPENABLE)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes.map { it.stringRepresentation }.toTypedArray())
+            putExtra(Intent.EXTRA_MIME_TYPES, input.map { it.stringRepresentation }.toTypedArray())
         }
     }
 
-    override fun parseResult(resultCode: Int, result: Intent?): MediaPickingResult<List<LocalMedia>> {
+    override fun parseResult(resultCode: Int, intent: Intent?): MediaPickingResult<List<LocalMedia>> {
         try {
             if (resultCode == Activity.RESULT_CANCELED) {
                 return MediaPickingResult.Cancelled()
@@ -34,11 +34,11 @@ public class PickMediasFromLibraryActivityContract(private val context: Context)
                 throw RuntimeException("Activity result: $resultCode")
             }
 
-            val singleMimeTypeOrNull = if (result?.clipData?.description?.mimeTypeCount == 1) {
-                result.clipData?.description?.getMimeType(0)
+            val singleMimeTypeOrNull = if (intent?.clipData?.description?.mimeTypeCount == 1) {
+                intent.clipData?.description?.getMimeType(0)
             } else null
 
-            result?.clipData?.let { clipData ->
+            intent?.clipData?.let { clipData ->
                 val urisWithMimeTypes = mutableListOf<Pair<Uri, String?>>()
                 for (i in 0 until clipData.itemCount) {
                     urisWithMimeTypes.add(clipData.getItemAt(i).uri to singleMimeTypeOrNull)
@@ -46,7 +46,7 @@ public class PickMediasFromLibraryActivityContract(private val context: Context)
                 return MediaPickingResult.Success(createMediasOrThrow(urisWithMimeTypes))
             }
 
-            result?.data?.let { uri ->
+            intent?.data?.let { uri ->
                 return MediaPickingResult.Success(createMediasOrThrow(listOf(Pair(uri, singleMimeTypeOrNull))))
             }
 

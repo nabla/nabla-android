@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Added support for custom consents in appointments.
+
 ## Changed
 
 - Dropped `nablaMessaging_conversationHeaderColor` in favor of the more generic `nablaMessaging_conversationHeaderStyle`.
+- `com.google.android.material:material` updated from 1.5.0 to 1.6.0
 
 ### Fixed
 

@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="RtlSymmetry"
-    >
+    tools:ignore="RtlSymmetry">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="?toolbarSurfaceStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?toolbarSurfaceStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
-        app:title="@string/nabla_scheduling_confirmation_title"
-        />
+        app:title="@string/nabla_scheduling_confirmation_title" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -26,65 +23,58 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        >
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="64dp"
-            >
+            android:paddingBottom="64dp">
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/nablaConfirmLoadedGroup"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:constraint_referenced_ids="nablaProviderInfo,nablaConfirmCheckbox1,nablaConfirmCheckbox2"
-                />
+                app:constraint_referenced_ids="nablaProviderInfo,nablaConsentsContainer" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/nablaProviderInfo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/nabla_scheduling_confirmation_background"
                 android:gravity="center"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.nabla.sdk.core.ui.components.NablaAvatarView
                     android:id="@+id/nablaConfirmAppointmentAvatar"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:layout_marginTop="20dp"
-                    />
+                    android:layout_marginTop="20dp" />
 
                 <TextView
                     android:id="@+id/nablaConfirmAppointmentTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="12dp"
                     android:gravity="center"
                     android:textAppearance="?textAppearanceTitleMedium"
-                    tools:text="Dr Véronique Cayol"
-                    />
+                    tools:text="Dr Véronique Cayol" />
 
                 <TextView
                     android:id="@+id/nablaConfirmAppointmentSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
                     app:layout_constrainedWidth="true"
-                    tools:text="Gynécologue"
-                    />
+                    tools:text="Gynécologue" />
 
                 <TextView
                     android:id="@+id/nablaConfirmAppointmentDatePill"
@@ -100,39 +90,19 @@
                     android:textColor="?colorPrimary"
                     app:drawableStartCompat="@drawable/nabla_ic_video_camera"
                     app:layout_constrainedWidth="true"
-                    tools:text="Consultation prévue le 01/07 à 16:00"
-                    />
+                    tools:text="Consultation prévue le 01/07 à 16:00" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/nablaConfirmCheckbox1"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/nablaConsentsContainer"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:layout_marginHorizontal="16dp"
-                android:paddingStart="10dp"
-                android:text="@string/nabla_scheduling_confirmation_consent_checkbox_first"
-                android:textAppearance="?textAppearanceBodyMedium"
-                android:textColor="?android:textColorPrimary"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nablaProviderInfo"
-                />
+                app:layout_constraintTop_toBottomOf="@id/nablaProviderInfo" />
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/nablaConfirmCheckbox2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:paddingStart="10dp"
-                android:text="@string/nabla_scheduling_confirmation_consent_checkbox_second"
-                android:textAppearance="?textAppearanceBodyMedium"
-                android:textColor="?android:textColorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nablaConfirmCheckbox1"
-                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
@@ -145,8 +115,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:layout_width="0dp"
@@ -156,16 +125,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone"
-        >
+        tools:visibility="gone">
 
         <include
             android:id="@+id/errorLayout"
+            layout="@layout/nabla_error_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            layout="@layout/nabla_error_layout"
-            android:gravity="center"
-            />
+            android:gravity="center" />
     </FrameLayout>
 
     <Button
@@ -177,7 +144,6 @@
         android:text="@string/nabla_scheduling_confirm_cta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

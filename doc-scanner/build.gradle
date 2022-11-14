@@ -24,8 +24,8 @@ dependencies {
     implementation libs.androidx.activity
     implementation libs.androidx.lifecycle.runtime
     implementation libs.androidx.lifecycle.viewmodel
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.core
+    implementation libs.androidx.fragment
     implementation libs.tensorflowMetadata
     implementation libs.coilCore
 }

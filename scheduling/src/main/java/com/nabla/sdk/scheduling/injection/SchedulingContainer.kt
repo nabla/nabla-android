@@ -3,6 +3,7 @@ package com.nabla.sdk.scheduling.injection
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.scheduling.data.AppointmentRepositoryImpl
 import com.nabla.sdk.scheduling.data.GqlAppointmentCategoryDataSource
+import com.nabla.sdk.scheduling.data.GqlAppointmentConfirmConsentsDataSource
 import com.nabla.sdk.scheduling.data.GqlAppointmentDataSource
 import com.nabla.sdk.scheduling.data.apollo.GqlMapper
 import kotlinx.coroutines.CoroutineScope
@@ -24,11 +25,16 @@ internal class SchedulingContainer(private val coreContainer: CoreContainer) {
         coreContainer.apolloClient,
         gqlMapper,
     )
+    private val gqlAppointmentConfirmConsentsDataSource = GqlAppointmentConfirmConsentsDataSource(
+        coreContainer.apolloClient,
+        gqlMapper
+    )
 
     val appointmentRepository = AppointmentRepositoryImpl(
         repoScope,
         gqlAppointmentDataSource,
         gqlAppointmentCategoryDataSource,
+        gqlAppointmentConfirmConsentsDataSource,
     )
     val nablaExceptionMapper = coreContainer.exceptionMapper
     val sessionClient = coreContainer.sessionClient
