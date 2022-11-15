@@ -48,6 +48,7 @@ public data class Conversation(
     val patientUnreadMessageCount: Int,
     val providersInConversation: List<ProviderInConversation>,
     val pictureUrl: EphemeralUrl?,
+    val isLocked: Boolean,
 ) {
     public companion object
 }

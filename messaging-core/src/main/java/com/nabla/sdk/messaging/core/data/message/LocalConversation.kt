@@ -25,6 +25,7 @@ internal data class LocalConversation(
             patientUnreadMessageCount = 0,
             providersInConversation = emptyList(),
             pictureUrl = null,
+            isLocked = false,
         )
     }
 

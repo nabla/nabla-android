@@ -203,6 +203,7 @@ fun Conversation.Companion.fake(
     lastMessagePreview: String = randomText(maxWords = 10),
     patientUnreadMessageCount: Int = 0,
     providersInConversation: List<ProviderInConversation> = listOf(ProviderInConversation.fake()),
+    isLocked: Boolean = false,
 ) = Conversation(
     id = id,
     lastModified = lastModified,
@@ -213,6 +214,7 @@ fun Conversation.Companion.fake(
     patientUnreadMessageCount = patientUnreadMessageCount,
     providersInConversation = providersInConversation,
     pictureUrl = null,
+    isLocked = isLocked,
 )
 
 fun EphemeralUrl.Companion.fake(

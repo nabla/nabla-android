@@ -26,14 +26,10 @@ public class ConversationActivity : AppCompatActivity() {
             val conversationId = (intent.getParcelableExtra<ConversationId>(CONVERSATION_ID_EXTRA))
                 ?: throwNablaInternalException("Failed to find/parse conversationId in ConversationActivity: ${intent.extras}")
 
-            val showComposer = intent.getBooleanExtra(SHOW_COMPOSER_EXTRA, true)
-
             supportFragmentManager.commit {
                 replace(
                     R.id.fragmentContainer,
-                    ConversationFragment.newInstance(conversationId, intent.requireSdkName()) {
-                        setShowComposer(showComposer)
-                    }
+                    ConversationFragment.newInstance(conversationId, intent.requireSdkName())
                 )
             }
         }
@@ -43,12 +39,10 @@ public class ConversationActivity : AppCompatActivity() {
         public fun newIntent(
             context: Context,
             conversationId: ConversationId,
-            showComposer: Boolean = true,
         ): Intent =
             Intent(context, ConversationActivity::class.java)
                 .apply {
                     putExtra(CONVERSATION_ID_EXTRA, conversationId)
-                    putExtra(SHOW_COMPOSER_EXTRA, showComposer)
                     setSdkName(NablaClient.DEFAULT_NAME)
                 }
 
@@ -56,16 +50,13 @@ public class ConversationActivity : AppCompatActivity() {
             context: Context,
             conversationId: ConversationId,
             sdkName: String,
-            showComposer: Boolean = true,
         ): Intent =
             Intent(context, ConversationActivity::class.java)
                 .apply {
                     putExtra(CONVERSATION_ID_EXTRA, conversationId)
-                    putExtra(SHOW_COMPOSER_EXTRA, showComposer)
                     setSdkName(sdkName)
                 }
 
         private const val CONVERSATION_ID_EXTRA = "conversationId"
-        private const val SHOW_COMPOSER_EXTRA = "showComposer"
     }
 }

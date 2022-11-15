@@ -52,6 +52,7 @@ internal class GqlMapper(
                 mapToProviderInConversation(it.providerInConversationFragment)
             },
             pictureUrl = fragment.pictureUrl?.ephemeralUrlFragment?.let(coreGqlMapper::mapToEphemeralUrl),
+            isLocked = fragment.isLocked,
         )
     }
 

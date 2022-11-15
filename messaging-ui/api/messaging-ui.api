@@ -383,10 +383,8 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivit
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion {
-	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Z)Landroid/content/Intent;
-	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Z)Landroid/content/Intent;
-	public static synthetic fun newIntent$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;ZILjava/lang/Object;)Landroid/content/Intent;
-	public static synthetic fun newIntent$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationActivity$Companion;Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;ZILjava/lang/Object;)Landroid/content/Intent;
+	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Landroid/content/Intent;
+	public final fun newIntent (Landroid/content/Context;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;)Landroid/content/Intent;
 }
 
 public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : androidx/fragment/app/Fragment {
@@ -404,7 +402,6 @@ public class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment : an
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Builder {
 	public final fun setFragment (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;)V
-	public final fun setShowComposer (Z)V
 }
 
 public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion {

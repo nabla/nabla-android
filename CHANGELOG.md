@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Dropped `nablaMessaging_conversationHeaderColor` in favor of the more generic `nablaMessaging_conversationHeaderStyle`.
 - `com.google.android.material:material` updated from 1.5.0 to 1.6.0
+- Removed the `showComposer` parameter from `ConversationFragment` & `ConversationActivity` and relies on `Conversation` `isLocked` property to hide the composer.  
+⚠️ If you were using the `showComposer` parameter, it is not available anymore and you should migrate to using lock conversation from the Console.
 
 ### Fixed
 

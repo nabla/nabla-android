@@ -764,7 +764,6 @@ public open class ConversationFragment : Fragment() {
     @Suppress("UNUSED")
     public class Builder internal constructor(private val conversationId: ConversationId) {
         private var customFragment: ConversationFragment? = null
-        private var showComposer = true
 
         /**
          * Call this to pass a custom child class of [ConversationFragment] you want to use
@@ -774,38 +773,24 @@ public open class ConversationFragment : Fragment() {
             customFragment = fragment
         }
 
-        /**
-         * Call this method if you want to hide the message composer for the patient. By doing so,
-         * they won't be able to send a message in the conversation. By default, the composer is shown.
-         */
-        public fun setShowComposer(showComposer: Boolean) {
-            this.showComposer = showComposer
-        }
-
         internal fun build(): ConversationFragment {
             return (customFragment ?: ConversationFragment()).apply {
-                arguments = newArgsBundle(conversationId, showComposer)
+                arguments = newArgsBundle(conversationId)
             }
         }
 
         internal companion object {
             private const val CONVERSATION_ID_ARG_KEY = "conversationId"
-            private const val SHOW_COMPOSER_ARG_KEY = "showComposer"
 
             private fun newArgsBundle(
                 conversationId: ConversationId,
-                showComposer: Boolean,
             ): Bundle = Bundle().apply {
                 putParcelable(CONVERSATION_ID_ARG_KEY, conversationId)
-                putBoolean(SHOW_COMPOSER_ARG_KEY, showComposer)
             }
 
             internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId {
                 return savedStateHandle.get(CONVERSATION_ID_ARG_KEY) ?: throw MissingConversationIdException
             }
-
-            internal fun showComposerFromSavedStateHandle(savedStateHandle: SavedStateHandle): Boolean =
-                savedStateHandle.get<Boolean>(SHOW_COMPOSER_ARG_KEY) ?: true
         }
     }
 

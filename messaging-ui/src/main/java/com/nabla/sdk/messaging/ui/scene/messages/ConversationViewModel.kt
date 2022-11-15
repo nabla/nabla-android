@@ -29,7 +29,6 @@ import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
-import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.showComposerFromSavedStateHandle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -92,11 +91,12 @@ internal class ConversationViewModel(
     private val currentlyRecordingVoiceMutableFlow = MutableStateFlow<OngoingVoiceRecording?>(null)
     val currentlyRecordingVoiceFlow: Flow<OngoingVoiceRecording?> = currentlyRecordingVoiceMutableFlow
 
+    private val showComposerFlow = MutableStateFlow(true)
+
     private var lastTypingEventSentAt: Instant = Instant.DISTANT_PAST
     private var isViewForeground = false
 
     private val conversationId: ConversationId = conversationIdFromSavedStateHandleOrThrow(savedStateHandle)
-    private val showComposer: Boolean = showComposerFromSavedStateHandle(savedStateHandle)
 
     init {
         stateFlow = makeStateFlow(
@@ -108,7 +108,7 @@ internal class ConversationViewModel(
         )
 
         editorStateFlow = combine(
-            flowOf(showComposer),
+            showComposerFlow,
             currentMessageStateFlow,
             mediasToSendMutableFlow,
             currentlyRecordingVoiceMutableFlow,
@@ -174,6 +174,7 @@ internal class ConversationViewModel(
 
     private fun Flow<Conversation>.handleConversationDataSideEffects() =
         onEach { conversation ->
+            showComposerFlow.value = !conversation.isLocked
             conversation.markConversationAsReadIfNeeded()
         }
 
