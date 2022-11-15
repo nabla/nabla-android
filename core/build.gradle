@@ -22,10 +22,8 @@ String getGitDescribe() {
 }
 
 String getSdkApiVersion() {
-    def jsonFile = file('versions.json')
-    def parsedJson = new groovy.json.JsonSlurper().parseText(jsonFile.text)
-
-    return parsedJson.code_version
+    def versionFile = file('version')
+    return versionFile.text.trim()
 }
 
 apollo {
