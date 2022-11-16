@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0-alpha19] - 2022-11-16
+
 ### Added
 
-- Added support for custom consents in appointments.
+- Support for dynamic consents in Scheduling module that you can customize from the console.
 
 ## Changed
 
