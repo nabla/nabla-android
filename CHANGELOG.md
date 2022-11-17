@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- Messaging UI: Add a new `setShowNavigation` method to `ConversationFragment`'s builder to hide the top navigation Toolbar in case you want to include the Fragment in your own navigation stack.
+
 ## [1.0-alpha19] - 2022-11-16
 
 ### Added

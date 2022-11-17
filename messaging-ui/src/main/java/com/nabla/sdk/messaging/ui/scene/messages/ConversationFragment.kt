@@ -199,6 +199,10 @@ public open class ConversationFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
+
+        viewLifeCycleScope.launchCollect(viewModel.showNavigationFlow) { showNavigation ->
+            binding.toolbar.isVisible = showNavigation
+        }
     }
 
     private fun setupPermissionsLaunchers() {
@@ -765,6 +769,8 @@ public open class ConversationFragment : Fragment() {
     public class Builder internal constructor(private val conversationId: ConversationId) {
         private var customFragment: ConversationFragment? = null
 
+        private var showNavigation = true
+
         /**
          * Call this to pass a custom child class of [ConversationFragment] you want to use
          * instead of the base one.
@@ -773,23 +779,39 @@ public open class ConversationFragment : Fragment() {
             customFragment = fragment
         }
 
+        /**
+         * Call this to display or hide the navigation bar (Toolbar) displayed at the top. Navigation is shown
+         * by default but if you want to embed that screen into your own navigation you can call this
+         * method to hide it.
+         */
+        public fun setShowNavigation(showNavigation: Boolean) {
+            this.showNavigation = showNavigation
+        }
+
         internal fun build(): ConversationFragment {
             return (customFragment ?: ConversationFragment()).apply {
-                arguments = newArgsBundle(conversationId)
+                arguments = newArgsBundle(conversationId, showNavigation)
             }
         }
 
         internal companion object {
+            private const val SHOW_NAVIGATION_ARG_KEY = "showNavigation"
             private const val CONVERSATION_ID_ARG_KEY = "conversationId"
 
             private fun newArgsBundle(
                 conversationId: ConversationId,
+                showNavigation: Boolean,
             ): Bundle = Bundle().apply {
                 putParcelable(CONVERSATION_ID_ARG_KEY, conversationId)
+                putBoolean(SHOW_NAVIGATION_ARG_KEY, showNavigation)
             }
 
             internal fun conversationIdFromSavedStateHandleOrThrow(savedStateHandle: SavedStateHandle): ConversationId {
                 return savedStateHandle.get(CONVERSATION_ID_ARG_KEY) ?: throw MissingConversationIdException
+            }
+
+            internal fun showNavigationFromSavedStateHandle(savedStateHandle: SavedStateHandle): Boolean {
+                return savedStateHandle.get(SHOW_NAVIGATION_ARG_KEY) ?: true
             }
         }
     }

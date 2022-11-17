@@ -29,6 +29,7 @@ import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.core.messagingClient
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.conversationIdFromSavedStateHandleOrThrow
+import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment.Builder.Companion.showNavigationFromSavedStateHandle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -91,6 +92,7 @@ internal class ConversationViewModel(
     private val currentlyRecordingVoiceMutableFlow = MutableStateFlow<OngoingVoiceRecording?>(null)
     val currentlyRecordingVoiceFlow: Flow<OngoingVoiceRecording?> = currentlyRecordingVoiceMutableFlow
 
+    val showNavigationFlow: Flow<Boolean> = flowOf(showNavigationFromSavedStateHandle(savedStateHandle))
     private val showComposerFlow = MutableStateFlow(true)
 
     private var lastTypingEventSentAt: Instant = Instant.DISTANT_PAST
