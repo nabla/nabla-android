@@ -96,7 +96,7 @@ internal class GqlConversationDataSource constructor(
     @OptIn(FlowPreview::class)
     fun watchConversations(): Flow<PaginatedList<Conversation>> {
         val dataFlow = apolloClient.query(conversationsQuery())
-            .fetchPolicy(FetchPolicy.CacheAndNetwork)
+            .fetchPolicy(FetchPolicy.NetworkFirst)
             .watch(fetchThrows = true)
             .map { response -> response.dataOrThrowOnError }
             .map { queryData ->
