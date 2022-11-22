@@ -218,6 +218,14 @@ public abstract class com/nabla/sdk/scheduling/scene/SchedulingBaseFragment : an
 	public final fun onGetLayoutInflater (Landroid/os/Bundle;)Landroid/view/LayoutInflater;
 }
 
+public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentType$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentType;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentType;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
 public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment : com/nabla/sdk/scheduling/scene/SchedulingBaseFragment {
 	public static final field Companion Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Companion;
 	public fun <init> ()V

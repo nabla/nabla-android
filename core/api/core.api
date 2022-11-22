@@ -844,6 +844,11 @@ public final class com/nabla/sdk/core/ui/components/NablaAvatarView : androidx/c
 	public final fun loadAvatar--KNGqI8 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V
 }
 
+public final class com/nabla/sdk/core/ui/helpers/BundleExtensionKt {
+	public static final fun getParcelableArrayListCompat (Landroid/os/Bundle;Ljava/lang/String;Ljava/lang/Class;)Ljava/util/ArrayList;
+	public static final fun getParcelableCompat (Landroid/os/Bundle;Ljava/lang/String;Ljava/lang/Class;)Landroid/os/Parcelable;
+}
+
 public final class com/nabla/sdk/core/ui/helpers/ColorExtensionsKt {
 	public static final fun setBackgroundColor (Landroid/view/View;Lcom/nabla/sdk/core/ui/helpers/ColorIntOrStateList;)V
 	public static final fun setTextColor (Landroid/widget/TextView;Lcom/nabla/sdk/core/ui/helpers/ColorIntOrStateList;)V
@@ -917,6 +922,12 @@ public final class com/nabla/sdk/core/ui/helpers/FlowCollectorExtensionKt {
 
 public final class com/nabla/sdk/core/ui/helpers/FragmentCoroutinesExtensionKt {
 	public static final fun getViewLifeCycleScope (Landroidx/fragment/app/Fragment;)Landroidx/lifecycle/LifecycleCoroutineScope;
+}
+
+public final class com/nabla/sdk/core/ui/helpers/IntentExtensionKt {
+	public static final fun getParcelableArrayListExtraCompat (Landroid/content/Intent;Ljava/lang/String;Ljava/lang/Class;)Ljava/util/ArrayList;
+	public static final fun getParcelableExtraCompat (Landroid/content/Intent;Ljava/lang/String;Ljava/lang/Class;)Landroid/os/Parcelable;
+	public static final fun getSerializableExtraCompat (Landroid/content/Intent;Ljava/lang/String;Ljava/lang/Class;)Ljava/io/Serializable;
 }
 
 public abstract interface class com/nabla/sdk/core/ui/helpers/LiveFlow {

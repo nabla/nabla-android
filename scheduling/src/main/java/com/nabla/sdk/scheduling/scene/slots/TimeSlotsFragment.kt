@@ -48,7 +48,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
         binding.nablaSlotsContinueButton.setOnClickListener { viewModel.onConfirmClicked() }
 
         binding.recyclerView.apply {

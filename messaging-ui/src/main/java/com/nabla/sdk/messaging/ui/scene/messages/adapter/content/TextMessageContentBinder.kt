@@ -44,7 +44,7 @@ internal class TextMessageContentBinder(
         with(binding.chatTextMessageTextView) {
             if (text.toString() == item.text) return
 
-            autoLinkMask = Linkify.ALL
+            autoLinkMask = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS
             text = item.text // give it text so it processes & adds url spans
             autoLinkMask = 0
 

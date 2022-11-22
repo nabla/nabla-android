@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
+import com.nabla.sdk.core.ui.helpers.getParcelableExtraCompat
 
 @NablaInternal
 public class DocScannerActivityContract :
@@ -26,7 +27,7 @@ public class DocScannerActivityContract :
                 throwNablaInternalException("Activity result: $resultCode")
             }
 
-            intent.getParcelableExtra<Uri>(DocumentScanActivity.EXTRA_RESULT_IMAGE_URI)
+            intent.getParcelableExtraCompat(DocumentScanActivity.EXTRA_RESULT_IMAGE_URI, Uri::class.java)
                 ?.let { Result.Document(it) }
                 ?: throwNablaInternalException("No parcelable extra in the intent with key ${DocumentScanActivity.EXTRA_RESULT_IMAGE_URI}")
         } catch (error: Exception) {

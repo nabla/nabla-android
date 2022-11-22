@@ -412,3 +412,11 @@ public final class com/nabla/sdk/messaging/ui/scene/messages/ConversationFragmen
 	public static synthetic fun newInstance$default (Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment$Companion;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/messaging/ui/scene/messages/ConversationFragment;
 }
 
+public final class com/nabla/sdk/messaging/ui/scene/messages/MediaSource$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/nabla/sdk/messaging/ui/scene/messages/MediaSource;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/nabla/sdk/messaging/ui/scene/messages/MediaSource;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+

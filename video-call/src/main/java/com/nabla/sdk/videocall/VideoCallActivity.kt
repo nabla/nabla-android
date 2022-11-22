@@ -13,7 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Rational
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
@@ -67,7 +69,7 @@ public class VideoCallActivity : AppCompatActivity() {
         )
         setContentView(binding.root)
 
-        binding.videoCallBackButton.setOnClickListener { onBackPressed() }
+        binding.videoCallBackButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         binding.fullScreenVideoRenderer.setOnClickListener { viewModel.onFullscreenClicked() }
         binding.videoCallControlMic.setOnClickListener { viewModel.onMicClicked() }
@@ -176,9 +178,23 @@ public class VideoCallActivity : AppCompatActivity() {
             binding.videoCallFloatingRendererContainer.isVisible = state is Both
             binding.fullScreenVideoRenderer.isVisible = state !is None
         }
+
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!PictureInPictureCompat.enterPictureInPictureMode(this@VideoCallActivity, ::getPictureInPictureParams)) {
+                        finish()
+                    }
+                }
+            }
+        )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+
         if (lifecycle.currentState == Lifecycle.State.CREATED && !isInPictureInPictureMode) {
             // When user dismisses Picture-in-Picture mode, activity lifecycle is set to CREATED (onStop).
             viewModel.onPictureInPictureDismissed()
@@ -263,12 +279,6 @@ public class VideoCallActivity : AppCompatActivity() {
 
     override fun onUserLeaveHint() {
         PictureInPictureCompat.enterPictureInPictureMode(this, ::getPictureInPictureParams)
-    }
-
-    override fun onBackPressed() {
-        if (!PictureInPictureCompat.enterPictureInPictureMode(this, ::getPictureInPictureParams)) {
-            super.onBackPressed()
-        }
     }
 
     override fun onDestroy() {

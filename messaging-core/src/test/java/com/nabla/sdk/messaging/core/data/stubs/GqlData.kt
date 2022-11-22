@@ -72,7 +72,7 @@ internal object GqlData {
     }
 
     object ConversationsEvents {
-        fun conversationUpdated(
+        fun conversationUpdatedForPatientUnreadMessageCount(
             conversationId: ConversationId,
             patientUnreadMessageCount: Int = 0,
         ) = ConversationsEventsSubscription.Data(CustomTestResolver()) {
@@ -81,6 +81,7 @@ internal object GqlData {
                     conversation = conversation {
                         id = conversationId.remoteId.toString()
                         unreadMessageCount = patientUnreadMessageCount
+                        providers = emptyList() // Empty providers list to avoid generating typing events
                     }
                 }
             }

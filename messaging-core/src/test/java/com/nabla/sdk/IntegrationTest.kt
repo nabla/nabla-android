@@ -557,23 +557,20 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
 
         conversationUpdatesFlow.test {
-            val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.patientUnreadMessageCount)
+            assertEquals(0, awaitItem().patientUnreadMessageCount)
 
             conversationsReplayEmitter.emit(
-                GqlData.ConversationsEvents.conversationUpdated(
+                GqlData.ConversationsEvents.conversationUpdatedForPatientUnreadMessageCount(
                     conversationId = createdConversation.id,
                     patientUnreadMessageCount = 1,
                 )
             )
 
-            val secondEmit = awaitItem()
-            assertEquals(1, secondEmit.patientUnreadMessageCount)
+            assertEquals(1, awaitItem().patientUnreadMessageCount)
 
             nablaMessagingClient.markConversationAsRead(createdConversation.id).getOrThrow()
 
-            val third = awaitItem()
-            assertEquals(0, third.patientUnreadMessageCount)
+            assertEquals(0, awaitItem().patientUnreadMessageCount)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -607,11 +604,11 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
 
         conversationUpdatesFlow.test {
-            val firstEmit = awaitItem()
-            assertEquals(0, firstEmit.providersInConversation.size)
+            assertEquals(0, awaitItem().providersInConversation.size)
 
             val providerId = uuid4()
             val providerInConversationId = uuid4()
+
             conversationsReplayEmitter.emit(
                 GqlData.ConversationsEvents.providerJoinsConversation(
                     conversationId = createdConversation.id,
@@ -621,8 +618,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 )
             )
 
-            val secondEmit = awaitItem()
-            assertFalse(secondEmit.providersInConversation.first().isTyping(clock))
+            assertFalse(awaitItem().providersInConversation.first().isTyping(clock))
 
             replayEventEmitter.emit(
                 GqlData.ConversationEvents.Typing.providerIsTyping(
@@ -632,8 +628,8 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 )
             )
 
-            val thirdEmit = awaitItem()
-            assertTrue(thirdEmit.providersInConversation.first().isTyping(clock))
+            assertTrue(awaitItem().providersInConversation.first().isTyping(clock))
+            awaitItem() // We emit twice as the delay when provider isn't typing anymore is executed instantaneously in tests
 
             replayEventEmitter.emit(
                 GqlData.ConversationEvents.Typing.providerIsTyping(
@@ -643,8 +639,8 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 )
             )
 
-            val fourthEmit = awaitItem()
-            assertFalse(fourthEmit.providersInConversation.first().isTyping(clock))
+            assertFalse(awaitItem().providersInConversation.first().isTyping(clock))
+            awaitItem() // We emit twice as the delay when provider isn't typing anymore is executed instantaneously in tests
 
             replayEventEmitter.emit(
                 GqlData.ConversationEvents.Typing.providerIsTyping(
@@ -654,8 +650,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 )
             )
 
-            val fifthEmit = awaitItem()
-            assertFalse(fifthEmit.providersInConversation.first().isTyping(clock))
+            assertFalse(awaitItem().providersInConversation.first().isTyping(clock))
 
             cancelAndIgnoreRemainingEvents()
         }

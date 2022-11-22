@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
+import com.nabla.sdk.core.ui.helpers.getParcelableExtraCompat
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -23,7 +24,7 @@ public class ConversationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
-            val conversationId = (intent.getParcelableExtra<ConversationId>(CONVERSATION_ID_EXTRA))
+            val conversationId = intent.getParcelableExtraCompat(CONVERSATION_ID_EXTRA, ConversationId::class.java)
                 ?: throwNablaInternalException("Failed to find/parse conversationId in ConversationActivity: ${intent.extras}")
 
             supportFragmentManager.commit {

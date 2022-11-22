@@ -185,6 +185,14 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Loc
 	public fun writeToParcel (Landroid/os/Parcel;I)V
 }
 
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Local$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
+}
+
 public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote : com/nabla/sdk/messaging/core/domain/entity/ConversationId {
 	public static final field CREATOR Landroid/os/Parcelable$Creator;
 	public fun <init> (Ljava/util/UUID;Ljava/util/UUID;)V
@@ -201,6 +209,14 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Rem
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote$Creator : android/os/Parcelable$Creator {
+	public fun <init> ()V
+	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
+	public synthetic fun createFromParcel (Landroid/os/Parcel;)Ljava/lang/Object;
+	public final fun newArray (I)[Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
+	public synthetic fun newArray (I)[Ljava/lang/Object;
 }
 
 public abstract interface class com/nabla/sdk/messaging/core/domain/entity/ConversationItem {

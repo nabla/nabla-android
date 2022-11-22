@@ -14,6 +14,7 @@ import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.getSerializableExtraCompat
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityFullScreenImageBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.createSharableJpegImage
@@ -27,7 +28,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
     private var binding: NablaActivityFullScreenImageBinding? = null
 
     private val imageUri by lazy {
-        (intent.extras?.get(IMAGE_URI_ARG) as? URI ?: throwNablaInternalException("missing image uri arg"))
+        (intent.getSerializableExtraCompat(IMAGE_URI_ARG, URI::class.java) ?: throwNablaInternalException("missing image uri arg"))
             .toAndroidUri()
             .sanitize()
     }

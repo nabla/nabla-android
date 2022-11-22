@@ -28,7 +28,7 @@ internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
 
         binding.recyclerView.apply {
             adapter = this@CategorySelectionFragment.adapter

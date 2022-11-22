@@ -12,6 +12,8 @@ import com.nabla.sdk.core.data.helper.toAndroidUri
 import com.nabla.sdk.core.data.helper.toKtUri
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.ui.helpers.getParcelableArrayListCompat
+import com.nabla.sdk.core.ui.helpers.getParcelableCompat
 import com.nabla.sdk.core.ui.helpers.sdkNameOrDefault
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.docscanner.core.models.NormalizedCorners
@@ -41,7 +43,7 @@ internal class DocumentEdgePickerFragment : DocumentScanBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = binding ?: return
-        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
         setupDocumentCropView(binding.documentCropView)
         binding.buttonCrop.setOnClickListener {
             setFragmentResult(
@@ -51,7 +53,7 @@ internal class DocumentEdgePickerFragment : DocumentScanBaseFragment() {
                     binding.documentCropView.normalizedCorners?.toNormalizedCorners(),
                 )
             )
-            hostActivity().onBackPressed()
+            hostActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -100,12 +102,12 @@ internal class DocumentEdgePickerFragment : DocumentScanBaseFragment() {
         }
 
         internal fun Bundle.normalizedCorners(): NormalizedCorners? {
-            val corners: Array<PointF>? = getParcelableArrayList<PointF>(NORMALIZED_CORNERS_KEY)?.toTypedArray()
+            val corners: Array<PointF>? = getParcelableArrayListCompat(NORMALIZED_CORNERS_KEY, PointF::class.java)?.toTypedArray()
             return corners?.toNormalizedCorners()
         }
 
         internal fun Bundle.getLocalImageUri(): Uri? {
-            return getParcelable<android.net.Uri>(LOCAL_IMAGE_KEY)?.toKtUri()
+            return getParcelableCompat(LOCAL_IMAGE_KEY, android.net.Uri::class.java)?.toKtUri()
         }
     }
 }

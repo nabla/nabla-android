@@ -20,7 +20,7 @@ class CustomTestResolver : DefaultTestResolver() {
         enumValues: List<String>,
         ctors: Array<out () -> Map<String, Any?>>?,
     ): T {
-        val customValue = when (compiledType.leafType().name) {
+        val customValue = when (compiledType.rawType().name) {
             UUID.type.name -> uuid4().toString()
             DateTime.type.name -> Clock.System.now().toString()
             else -> null

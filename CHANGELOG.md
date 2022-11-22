@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Messaging UI: Add a new `setShowNavigation` method to `ConversationFragment`'s builder to hide the top navigation Toolbar in case you want to include the Fragment in your own navigation stack.
 
+### Changed
+- The SDK targets API 33, meaning you should bump your `compileSdkVersion` to be 33 or higher (this doesn't impact your app's minimum Android supported version).
+- Android's map addresses detection and highlighting is now deprecated and its usage for text messages in Nabla Messaging UI has been removed.
+
 ## [1.0-alpha19] - 2022-11-16
 
 ### Added

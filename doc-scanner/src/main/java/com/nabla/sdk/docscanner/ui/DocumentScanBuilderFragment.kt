@@ -110,7 +110,7 @@ internal class DocumentScanBuilderFragment : DocumentScanBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
         setupRecyclerView()
         binding.buttonCrop.setOnClickListener {
             viewModel.onCropClicked()

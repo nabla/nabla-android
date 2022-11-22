@@ -60,7 +60,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
 
         dateFormatter = SimpleDateFormat(getString(R.string.nabla_scheduling_time_format), Locale.getDefault())
 
-        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
         binding.nablaConfirmAppointmentButton.setOnClickListener { viewModel.onConfirmClicked() }
         binding.errorLayout.nablaErrorRetryButton.setOnClickListener { viewModel.onClickRetry() }
 

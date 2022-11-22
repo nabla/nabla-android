@@ -18,13 +18,16 @@ internal fun <D> Flow<D>.notifyTypingUpdates(
 ): Flow<D> {
     return transformLatest { data ->
         emit(data)
-        providersSelector(data).mapNotNull { provider ->
-            provider.isInactiveAt()
-        }.minOrNull()?.let {
-            withContext(context) {
-                delay(it - clock.now())
+        providersSelector(data)
+            .mapNotNull { provider ->
+                provider.isInactiveAt()
             }
-            emit(data)
-        }
+            .minOrNull()
+            ?.let {
+                withContext(context) {
+                    delay(it - clock.now())
+                }
+                emit(data)
+            }
     }
 }

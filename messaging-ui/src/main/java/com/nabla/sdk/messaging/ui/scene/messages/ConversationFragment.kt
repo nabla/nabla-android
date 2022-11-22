@@ -123,7 +123,7 @@ public open class ConversationFragment : Fragment() {
     private var binding: NablaFragmentConversationBinding? = null
 
     private val conversationAdapter = ConversationAdapter(makeConversationAdapterCallbacks())
-    private val voiceMessagesCoordinator = createMediaPlayersCoordinator(C.CONTENT_TYPE_SPEECH, pauseOnPause = false)
+    private val voiceMessagesCoordinator = createMediaPlayersCoordinator(C.AUDIO_CONTENT_TYPE_SPEECH, pauseOnPause = false)
 
     /**
      * Callback for clicks on the header of a loaded conversation.
@@ -197,7 +197,7 @@ public open class ConversationFragment : Fragment() {
 
     private fun setupToolbarNav(binding: NablaFragmentConversationBinding) {
         binding.toolbar.setNavigationOnClickListener {
-            activity?.onBackPressed()
+            activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
         viewLifeCycleScope.launchCollect(viewModel.showNavigationFlow) { showNavigation ->

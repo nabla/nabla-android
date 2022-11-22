@@ -12,7 +12,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.audio.AudioAttributes
 
 // we want the fragment lifecycle here, view lifecycle is too short
-internal fun Fragment.createMediaPlayersCoordinator(contentType: Int = C.CONTENT_TYPE_MOVIE, pauseOnPause: Boolean = true): ExoPlayersCoordinator {
+internal fun Fragment.createMediaPlayersCoordinator(contentType: Int = C.AUDIO_CONTENT_TYPE_MOVIE, pauseOnPause: Boolean = true): ExoPlayersCoordinator {
     val coordinator = ExoPlayersCoordinator(contentType)
     lifecycle.addObserver(object : DefaultLifecycleObserver {
         override fun onDestroy(owner: LifecycleOwner) {
@@ -32,7 +32,7 @@ internal fun Fragment.createMediaPlayersCoordinator(contentType: Int = C.CONTENT
 /**
  * Helps maintain & coordinate a pool of video/audio players to never have more than one playing at a time.
  */
-internal class ExoPlayersCoordinator internal constructor(private val contentType: Int = C.CONTENT_TYPE_MOVIE) {
+internal class ExoPlayersCoordinator internal constructor(private val contentType: Int = C.AUDIO_CONTENT_TYPE_MOVIE) {
     private val exoPlayersPool = mutableMapOf<Uri, Player>()
 
     fun getAll(): Map<Uri, Player> = exoPlayersPool.toMap()

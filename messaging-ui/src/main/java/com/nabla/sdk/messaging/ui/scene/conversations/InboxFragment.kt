@@ -75,7 +75,7 @@ public open class InboxFragment : Fragment() {
             view.context.getThemeDrawable(android.R.attr.homeAsUpIndicator)
                 ?.let { binding.toolbar.setNavigationIcon(it) }
             binding.toolbar.setNavigationOnClickListener {
-                activity?.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
             }
         } else {
             binding.toolbar.navigationIcon = null

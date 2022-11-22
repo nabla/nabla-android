@@ -19,7 +19,6 @@ public final class com/nabla/sdk/videocall/NablaVideoCallModuleKt {
 
 public final class com/nabla/sdk/videocall/VideoCallActivity : androidx/appcompat/app/AppCompatActivity {
 	public fun <init> ()V
-	public fun onBackPressed ()V
 	public fun onPictureInPictureModeChanged (ZLandroid/content/res/Configuration;)V
 	public fun onPictureInPictureRequested ()Z
 }
