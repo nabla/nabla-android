@@ -70,6 +70,7 @@ private fun ConversationListView.bindViewModelState(
             loadingView.isVisible = state is State.Loading
             recyclerView.isVisible = state is State.Loaded
             errorView.root.isVisible = state is State.Error
+            emptyStateView.isVisible = state is State.Empty
 
             when (state) {
                 is State.Loaded -> {
@@ -82,6 +83,7 @@ private fun ConversationListView.bindViewModelState(
                 }
                 is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
                 is State.Loading -> Unit // no-op
+                is State.Empty -> Unit // no-op
             }
         }
     }

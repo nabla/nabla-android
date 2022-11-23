@@ -48,6 +48,7 @@ public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationItemL
 public final class com/nabla/sdk/messaging/ui/databinding/NablaConversationListViewBinding : androidx/viewbinding/ViewBinding {
 	public final field conversationsLoadingProgressBar Landroid/widget/ProgressBar;
 	public final field conversationsRecyclerView Landroidx/recyclerview/widget/RecyclerView;
+	public final field nablaConversationsEmptyState Landroidx/constraintlayout/widget/ConstraintLayout;
 	public final field nablaIncludedErrorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/messaging/ui/databinding/NablaConversationListViewBinding;
 	public fun getRoot ()Landroid/view/View;

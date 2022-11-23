@@ -70,6 +70,7 @@
 
     <string name="nabla_conversation_list_toolbar_title">Medical Chat</string>
     <string name="nabla_conversation_list_create_cta_text">Start a conversation</string>
+    <string name="nabla_conversation_list_empty_state_text">No conversations</string>
 
     <string name="nabla_conversation_video_consultation">Video consultation</string>
     <string name="nabla_conversation_video_consultation_icon_content_description">Video call icon</string>

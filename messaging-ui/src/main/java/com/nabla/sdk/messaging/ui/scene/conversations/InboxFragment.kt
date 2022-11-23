@@ -82,7 +82,7 @@ public open class InboxFragment : Fragment() {
         }
 
         viewLifeCycleScope.launchCollect(listViewModel.stateFlow) { state ->
-            binding.createConversationCta.isVisible = state is ConversationListViewModel.State.Loaded
+            binding.createConversationCta.isVisible = state is ConversationListViewModel.State.Loaded || state is ConversationListViewModel.State.Empty
         }
 
         viewLifecycleOwner.launchCollect(inboxViewModel.openConversationFlow) { conversationId ->

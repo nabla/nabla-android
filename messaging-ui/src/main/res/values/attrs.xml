@@ -11,6 +11,7 @@
 
     <attr name="nablaMessaging_conversationListBackgroundColor" format="reference|color" />
     <attr name="nablaMessaging_conversationListHeaderStyle" format="reference" />
+    <attr name="nablaMessaging_conversationListEmptyStateTextAppearance" format="reference" />
 
     <!-- Conversation messages -->
     <attr name="nablaMessaging_conversationHeaderTitleAppearance" format="reference" />

@@ -18,6 +18,8 @@ public class ConversationListView : FrameLayout {
         get() = binding.conversationsLoadingProgressBar
     internal val errorView: NablaErrorLayoutBinding
         get() = binding.nablaIncludedErrorLayout
+    internal val emptyStateView: View
+        get() = binding.nablaConversationsEmptyState
 
     public constructor(
         context: Context,

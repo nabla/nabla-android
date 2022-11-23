@@ -18,6 +18,7 @@
         <item name="nablaMessaging_conversationPreviewBackgroundElevation">1dp</item>
         <item name="nablaMessaging_conversationListBackgroundColor">?android:colorBackground</item>
         <item name="nablaMessaging_conversationListHeaderStyle">?toolbarSurfaceStyle</item>
+        <item name="nablaMessaging_conversationListEmptyStateTextAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationHeaderTitleAppearance">?textAppearanceTitleMedium</item>
         <item name="nablaMessaging_conversationHeaderSubtitleAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationDateSeparatorAppearance">?textAppearanceLabelMedium</item>

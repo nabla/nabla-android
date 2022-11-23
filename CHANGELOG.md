@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Messaging UI: Add a new `setShowNavigation` method to `ConversationFragment`'s builder to hide the top navigation Toolbar in case you want to include the Fragment in your own navigation stack.
+- Messaging UI: Add a new empty state when no conversations have been created yet for the patient. You can customize this text appearance using `nablaMessaging_conversationListEmptyStateTextAppearance`.
 
 ### Changed
 - The SDK targets API 33, meaning you should bump your `compileSdkVersion` to be 33 or higher (this doesn't impact your app's minimum Android supported version).

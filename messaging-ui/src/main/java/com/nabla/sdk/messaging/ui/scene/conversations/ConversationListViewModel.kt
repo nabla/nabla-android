@@ -35,9 +35,13 @@ public class ConversationListViewModel(
             .map { result ->
                 latestLoadMoreCallback = result.loadMore
 
-                State.Loaded(
-                    items = result.content.map { it.toUiModel() } + if (result.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
-                ).eraseType()
+                if (result.content.isEmpty()) {
+                    State.Empty
+                } else {
+                    State.Loaded(
+                        items = result.content.map { it.toUiModel() } + if (result.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
+                    )
+                }
             }
             .retryWhen { cause, _ ->
                 messagingClient.logger.warn(
@@ -81,11 +85,10 @@ public class ConversationListViewModel(
     internal sealed interface State {
         object Loading : State
         data class Error(val errorUiModel: ErrorUiModel) : State
+        object Empty : State
         data class Loaded(
             val items: List<ItemUiModel>,
         ) : State
-
-        fun eraseType() = this
     }
 
     private companion object {
