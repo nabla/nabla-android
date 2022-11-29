@@ -9,6 +9,7 @@ import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.ErrorReporter
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.ModuleType
+import com.nabla.sdk.core.domain.entity.StringId
 import com.nabla.sdk.core.graphql.RegisterOrUpdateDeviceMutation
 import com.nabla.sdk.core.graphql.type.DeviceInput
 import com.nabla.sdk.core.graphql.type.DeviceOs
@@ -29,7 +30,7 @@ internal class DeviceRepositoryImpl(
 ) : DeviceRepository {
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    override fun sendDeviceInfoAsync(activeModules: List<ModuleType>) {
+    override fun sendDeviceInfoAsync(activeModules: List<ModuleType>, userId: StringId) {
         coroutineScope.launch {
             logger.debug("Identifying current device", domain = LOG_DOMAIN)
             val device = deviceDataSource.getDevice()
@@ -50,7 +51,7 @@ internal class DeviceRepositoryImpl(
             )
 
             runCatchingCancellable {
-                val installId = installationDataSource.getInstallIdOrNull()
+                val installId = installationDataSource.getInstallIdOrNull(userId)
                 registerOrUpdateDeviceOp(installId, deviceInput)
             }
                 .fold(
@@ -67,7 +68,7 @@ internal class DeviceRepositoryImpl(
                 .onSuccess {
                     with(it.registerOrUpdateDevice) {
                         logger.debug("Device $deviceId registered/updated successfully", domain = LOG_DOMAIN)
-                        installationDataSource.storeInstallId(deviceId)
+                        installationDataSource.storeInstallId(deviceId, userId)
                         if (sentry != null) {
                             errorReporter.enable(dsn = sentry.dsn, env = sentry.env)
                         } else {

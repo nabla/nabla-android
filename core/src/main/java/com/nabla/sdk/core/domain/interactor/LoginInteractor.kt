@@ -27,6 +27,6 @@ internal class LoginInteractor(
         sessionClient.clearSession()
         sessionClient.initSession(sessionTokenProvider)
 
-        deviceRepository.sendDeviceInfoAsync(activeModules)
+        deviceRepository.sendDeviceInfoAsync(activeModules, patientId)
     }
 }

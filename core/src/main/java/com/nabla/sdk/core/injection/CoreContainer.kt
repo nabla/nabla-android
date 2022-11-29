@@ -82,8 +82,12 @@ public class CoreContainer internal constructor(
         override fun resolve(resId: Int): String = configuration.context.getString(resId)
     }
 
-    private val kvStorage = configuration.context.getSharedPreferences(
+    private val scopedKvStorage = configuration.context.getSharedPreferences(
         "nabla_kv_${name.hashCode()}.sp", Context.MODE_PRIVATE
+    )
+
+    private val dangerouslyUnscopedKvStorage = configuration.context.getSharedPreferences(
+        "nabla_kv_global.sp", Context.MODE_PRIVATE
     )
 
     public val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {
@@ -150,7 +154,7 @@ public class CoreContainer internal constructor(
     private val tokenRemoteDataSource by lazy { TokenRemoteDataSource(authService) }
 
     public val sessionClient: SessionClient by tokenRepositoryLazy
-    private val localPatientDataSource = LocalPatientDataSource(kvStorage)
+    private val localPatientDataSource = LocalPatientDataSource(scopedKvStorage)
 
     private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     public val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context, uuidGenerator)
@@ -166,7 +170,10 @@ public class CoreContainer internal constructor(
     )
 
     private val deviceDataSource = DeviceDataSource()
-    private val installationDataSource = InstallationDataSource(kvStorage)
+    private val installationDataSource = InstallationDataSource(
+        unscopedSharedPreferences = dangerouslyUnscopedKvStorage,
+        legacyScopedStorage = scopedKvStorage
+    )
     private val sdkApiVersionDataSource = SdkApiVersionDataSource()
     private val deviceRepository: DeviceRepository by lazy {
         DeviceRepositoryImpl(
