@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="NablaTest.ThemeOverlay.AvatarView.Squared" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="nablaAvatarViewStyle">@style/NablaTest.NablaOverlay.AvatarView.Squared</item>
+    </style>
+
+    <style name="NablaTest.NablaOverlay.AvatarView.Squared" parent="Nabla.Widget.AvatarView">
+        <item name="nabla_clipShape">none</item>
+    </style>
+
+    <style name="NablaTest.ThemeOverlay.AvatarView.RoundRect" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="nablaAvatarViewStyle">@style/NablaTest.NablaOverlay.AvatarView.RoundRect</item>
+    </style>
+
+    <style name="NablaTest.NablaOverlay.AvatarView.RoundRect" parent="Nabla.Widget.AvatarView">
+        <item name="nabla_clipShape">roundRect</item>
+    </style>
+</resources>

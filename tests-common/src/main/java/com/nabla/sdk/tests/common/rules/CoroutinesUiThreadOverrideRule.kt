@@ -10,7 +10,7 @@ import org.junit.runners.model.Statement
 
 class CoroutinesUiThreadOverrideRule(private val dispatcher: CoroutineDispatcher) : TestRule {
 
-    override fun apply(base: Statement, description: Description?): Statement = object : Statement() {
+    override fun apply(base: Statement, description: Description): Statement = object : Statement() {
         override fun evaluate() {
             Dispatchers.setMain(dispatcher)
 

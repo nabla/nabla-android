@@ -1,6 +1,7 @@
 plugins {
     id 'conventions.android-library'
     id 'com.apollographql.apollo3'
+    id 'dev.chrisbanes.paparazzi'
 }
 
 android {
