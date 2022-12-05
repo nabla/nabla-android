@@ -106,7 +106,7 @@ class DayNightPaparazziRule(
                 }
             },
             description,
-        )
+        ).evaluate()
     }
 
     data class ViewPreparationContext(
