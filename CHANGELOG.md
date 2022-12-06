@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - The SDK targets API 33, meaning you should bump your `compileSdkVersion` to be 33 or higher (this doesn't impact your app's minimum Android supported version).
 - Android's map addresses detection and highlighting is now deprecated and its usage for text messages in Nabla Messaging UI has been removed.
 
+### Fixed
+- Messaging UI: Fixed the play/pause button default color in dark mode for audio messages sent by a Provider.
+- Messaging UI: Fixed the appearance used for other's (System or other Patient) image messages.
+
 ## [1.0-alpha19] - 2022-11-16
 
 ### Added

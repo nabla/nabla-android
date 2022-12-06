@@ -841,6 +841,7 @@ public final class com/nabla/sdk/core/ui/components/NablaAvatarView : androidx/c
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public final fun displayUnicolorPlaceholder ()V
 	public final fun loadAvatar (Lcom/nabla/sdk/core/domain/entity/Provider;)V
+	public final fun loadAvatar (Lcom/nabla/sdk/core/domain/entity/Provider;Ljava/lang/Object;)V
 	public final fun loadAvatar--KNGqI8 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V
 }
 

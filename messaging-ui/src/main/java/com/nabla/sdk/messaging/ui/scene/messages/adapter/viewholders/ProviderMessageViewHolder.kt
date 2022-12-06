@@ -4,6 +4,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.benasher44.uuid.Uuid
@@ -33,6 +34,15 @@ internal sealed class ProviderMessageViewHolder<ContentType : TimelineItem.Messa
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
+    private var avatarRandomSeedOverridden = false
+    private var overriddenAvatarRandomSeed: Any? = null
+
+    @VisibleForTesting
+    fun overrideAvatarBackgroundRandomSeed(seed: Any?) {
+        avatarRandomSeedOverridden = true
+        overriddenAvatarRandomSeed = seed
+    }
+
     override fun bind(message: TimelineItem.Message, author: TimelineItem.Message.Author.Provider, content: ContentType) {
         super.bind(message, author, content)
 
@@ -45,7 +55,12 @@ internal sealed class ProviderMessageViewHolder<ContentType : TimelineItem.Messa
         }
 
         if (message.showAuthorAvatar) {
-            binding.chatProviderMessageAvatarView.loadAvatar(author.provider)
+            if (avatarRandomSeedOverridden) {
+                binding.chatProviderMessageAvatarView.loadAvatar(author.provider, overriddenAvatarRandomSeed)
+            } else {
+                binding.chatProviderMessageAvatarView.loadAvatar(author.provider)
+            }
+
             binding.chatProviderMessageAvatarViewContainer.setOnClickListener { author.provider.id.let(onProviderClicked) }
         }
     }

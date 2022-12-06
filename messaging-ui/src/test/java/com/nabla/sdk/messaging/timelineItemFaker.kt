@@ -8,20 +8,25 @@ import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.ui.scene.messages.PlaybackProgress
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 internal fun TimelineItem.Message.Companion.fake(
     id: MessageId = MessageId.Remote(uuid4(), uuid4()),
     sendStatus: SendStatus = SendStatus.Sent,
     showStatus: Boolean = false,
+    time: Instant = Clock.System.now(),
+    author: TimelineItem.Message.Author = TimelineItem.Message.Author.CurrentPatient,
+    showAuthorAvatar: Boolean = false,
+    showAuthorName: Boolean = false,
     content: TimelineItem.Message.Content
 ) = TimelineItem.Message(
     id = id,
-    author = TimelineItem.Message.Author.CurrentPatient,
-    showAuthorAvatar = false,
-    showAuthorName = false,
+    author = author,
+    showAuthorAvatar = showAuthorAvatar,
+    showAuthorName = showAuthorName,
     status = sendStatus,
     showStatus = showStatus,
-    time = Clock.System.now(),
+    time = time,
     actions = emptySet(),
     content = content,
 )

@@ -78,31 +78,38 @@ class DayNightPaparazziRule(
     )
 
     fun snapshotDayNightDefaultDevice(
+        offsetMillis: Long = 0L,
         action: (ViewPreparationContext) -> View,
     ) {
-        dayDefaultDevicePaparazzi.prepareAndSnapshot(action, "day")
-        nightDefaultDevicePaparazzi.prepareAndSnapshot(action, "night")
+        dayDefaultDevicePaparazzi.prepareAndSnapshot(action, "day", offsetMillis)
+        nightDefaultDevicePaparazzi.prepareAndSnapshot(action, "night", offsetMillis)
     }
 
     fun snapshotDayNightMultiDevices(
+        offsetMillis: Long = 0L,
         action: (ViewPreparationContext) -> View,
     ) {
-        daySmallDevicePaparazzi.prepareAndSnapshot(action, "small_day")
-        dayDefaultDevicePaparazzi.prepareAndSnapshot(action, "default_day")
-        dayLargeDevicePaparazzi.prepareAndSnapshot(action, "large_day")
-        nightSmallDevicePaparazzi.prepareAndSnapshot(action, "small_night")
-        nightDefaultDevicePaparazzi.prepareAndSnapshot(action, "default_night")
-        nightLargeDevicePaparazzi.prepareAndSnapshot(action, "large_night")
+        daySmallDevicePaparazzi.prepareAndSnapshot(action, "small_day", offsetMillis)
+        dayDefaultDevicePaparazzi.prepareAndSnapshot(action, "default_day", offsetMillis)
+        dayLargeDevicePaparazzi.prepareAndSnapshot(action, "large_day", offsetMillis)
+        nightSmallDevicePaparazzi.prepareAndSnapshot(action, "small_night", offsetMillis)
+        nightDefaultDevicePaparazzi.prepareAndSnapshot(action, "default_night", offsetMillis)
+        nightLargeDevicePaparazzi.prepareAndSnapshot(action, "large_night", offsetMillis)
     }
 
     private fun Paparazzi.prepareAndSnapshot(
         action: (ViewPreparationContext) -> View,
         name: String,
+        offsetMillis: Long = 0L,
     ) {
         apply(
             object : Statement() {
                 override fun evaluate() {
-                    snapshot(action(ViewPreparationContext(context, layoutInflater)), name)
+                    snapshot(
+                        view = action(ViewPreparationContext(context, layoutInflater)),
+                        name = name,
+                        offsetMillis = offsetMillis,
+                    )
                 }
             },
             description,

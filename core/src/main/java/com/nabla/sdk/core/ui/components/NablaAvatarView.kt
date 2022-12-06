@@ -10,6 +10,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.StyleRes
+import androidx.annotation.VisibleForTesting
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
@@ -82,8 +83,13 @@ public class NablaAvatarView : ConstraintLayout {
     }
 
     public fun loadAvatar(provider: Provider) {
+        loadAvatar(provider, randomBackgroundSeed = provider.id)
+    }
+
+    @VisibleForTesting
+    public fun loadAvatar(provider: Provider, randomBackgroundSeed: Any?) {
         val initials = provider.initials(context = context, singleLetter = useSingleLetterInPlaceHolder)
-        loadAvatar(provider.avatar?.url, initials, provider.id)
+        loadAvatar(provider.avatar?.url, initials, randomBackgroundSeed)
     }
 
     public fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, randomBackgroundSeed: Any?) {
