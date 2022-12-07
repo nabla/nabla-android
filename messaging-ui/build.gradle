@@ -32,6 +32,7 @@ dependencies {
     implementation libs.androidx.fragment
     implementation libs.exoplayer
 
+    testImplementation project(':core')
     testImplementation project(':core-test-fixtures')
     testImplementation project(':messaging-core-test-fixtures')
     testImplementation project(':tests-common')
