@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.Flow
 @NablaInternal
 public interface ConversationRepository {
     public suspend fun createConversation(
+        message: MessageInput?,
         title: String?,
         providerIds: List<Uuid>?,
-        initialMessage: MessageInput?,
     ): Conversation
     public fun createLocalConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local
     public fun watchConversation(conversationId: ConversationId): Flow<Conversation>

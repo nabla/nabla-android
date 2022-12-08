@@ -45,36 +45,37 @@ public interface NablaMessagingClient : MessagingModule {
     public fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>>
 
     /**
-     * Create a new conversation on behalf of the current user.
+     * Create a new conversation on behalf of the current user. This conversation will be created server-side
+     * and visible from the console right after calling this method.
      *
      * Reference the returned [Conversation.id] for further actions on that freshly created conversation: send message, mark as read, etc.
      *
+     * @param message - initial message to be sent to the conversation on behalf of the current user.
      * @param title optional - title for the conversation
      * @param providerIds optional - List of [com.nabla.sdk.core.domain.entity.Provider.id], providers that will
      *                    participate to the conversation.
      *                    Make sure the specified providers have enough rights to participate to a conversation.
      *                    See [Roles and Permissions](https://docs.nabla.com/docs/roles-and-permissions).
-     * @param initialMessage optional - initial message to be sent to the conversation.
      *
      * @return [Result] of the operation, eventual errors will be of type [NablaException].
      */
     @CheckResult
-    public suspend fun createConversation(
+    public suspend fun createConversationWithMessage(
+        message: MessageInput,
         title: String? = null,
         providerIds: List<Uuid>? = null,
-        initialMessage: MessageInput? = null,
     ): Result<Conversation>
 
     /**
-     * Create a new draft conversation on behalf of the current user. This conversation will not be
-     * created server-side nor visible from the console until a first message is sent in it.
+     * Start a new conversation. This conversation will not be created server-side nor visible
+     * from the console until a first message is sent in it by the Patient.
      *
-     * Check [createConversation] for more details.
+     * Check [createConversationWithMessage] for more details.
      *
-     * @return The id to use to reference the draft conversation in other endpoints, notably in [sendMessage].
+     * @return The id to use to reference the conversation in other endpoints, notably in [sendMessage].
      */
     @CheckResult
-    public fun createDraftConversation(
+    public fun startConversation(
         title: String? = null,
         providerIds: List<Uuid>? = null,
     ): ConversationId.Local

@@ -61,14 +61,14 @@ internal class NablaMessagingClientImpl internal constructor(
     }
 
     @CheckResult
-    override suspend fun createConversation(
+    override suspend fun createConversationWithMessage(
+        message: MessageInput,
         title: String?,
-        providerIds: List<Uuid>?,
-        initialMessage: MessageInput?
+        providerIds: List<Uuid>?
     ): Result<Conversation> {
         return runCatchingCancellable {
             messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
-            conversationRepository.createConversation(title, providerIds, initialMessage)
+            conversationRepository.createConversation(message, title, providerIds)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
             .mapFailure { error ->
                 if (error is ServerException) {
@@ -81,7 +81,7 @@ internal class NablaMessagingClientImpl internal constructor(
             }
     }
 
-    override fun createDraftConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
+    override fun startConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
         return conversationRepository.createLocalConversation(title, providerIds)
     }
 

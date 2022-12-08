@@ -35,13 +35,13 @@ internal class ConversationRepositoryImpl(
     }
 
     override suspend fun createConversation(
+        message: MessageInput?,
         title: String?,
         providerIds: List<Uuid>?,
-        initialMessage: MessageInput?,
     ): Conversation {
-        val message = initialMessage?.let { messageMapper.messageInputToNewMessage(it) }
-        val gqlMessageInput = message?.let {
-            messageMapper.messageToGqlSendMessageInput(message) {
+        val messageInput = message?.let { messageMapper.messageInputToNewMessage(it) }
+        val gqlMessageInput = messageInput?.let {
+            messageMapper.messageToGqlSendMessageInput(it) {
                 messageFileUploader.uploadFile(this)
             }
         }

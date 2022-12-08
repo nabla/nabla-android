@@ -36,9 +36,9 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
     val newlyCreatedConversationIds = mutableSetOf<Uuid>()
 
     override suspend fun createConversation(
+        message: MessageInput?,
         title: String?,
         providerIds: List<Uuid>?,
-        initialMessage: MessageInput?,
     ): Conversation {
         delayWithIdlingRes(idlingRes, 300.milliseconds)
 

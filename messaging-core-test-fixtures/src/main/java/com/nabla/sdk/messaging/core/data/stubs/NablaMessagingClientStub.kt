@@ -45,17 +45,17 @@ class NablaMessagingClientStub(
             }
     }
 
-    override suspend fun createConversation(
+    override suspend fun createConversationWithMessage(
+        message: MessageInput,
         title: String?,
         providerIds: List<Uuid>?,
-        initialMessage: MessageInput?,
     ): Result<Conversation> {
         return runCatchingCancellable {
-            conversationRepository.createConversation(title, providerIds, initialMessage)
+            conversationRepository.createConversation(message, title, providerIds)
         }
     }
 
-    override fun createDraftConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
+    override fun startConversation(title: String?, providerIds: List<Uuid>?): ConversationId.Local {
         return conversationRepository.createLocalConversation(title, providerIds)
     }
 

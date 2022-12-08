@@ -15,7 +15,7 @@ internal class InboxViewModel(
     internal val openConversationFlow: LiveFlow<ConversationId> = openConversationMutableFlow
 
     internal fun createConversation() {
-        val draftId = messagingClient.createDraftConversation()
-        openConversationMutableFlow.emitIn(viewModelScope, draftId)
+        val draftConversationId = messagingClient.startConversation()
+        openConversationMutableFlow.emitIn(viewModelScope, draftConversationId)
     }
 }

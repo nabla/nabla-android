@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- Messaging Core: Renamed `createDraftConversation` to `startConversation`. It keeps the behavior of creating the conversation lazily when the patient sends the first message.
+- Messaging Core: `createConversation` has been renamed `createConversationWithMessage` and now has a required `message` argument. It should be used to start a conversation on behalf of the patient with a first message from them.
+
+### Fixed
+- Messaging UI: Fixed the play/pause button default color in dark mode for audio messages sent by a Provider.
+- Messaging UI: Fixed the appearance used for other's (System or other Patient) image messages.
+
 ## [1.0-alpha20] - 2022-11-23
 
 ### Added
@@ -15,10 +23,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - The SDK targets API 33, meaning you should bump your `compileSdkVersion` to be 33 or higher (this doesn't impact your app's minimum Android supported version).
 - Android's map addresses detection and highlighting is now deprecated and its usage for text messages in Nabla Messaging UI has been removed.
-
-### Fixed
-- Messaging UI: Fixed the play/pause button default color in dark mode for audio messages sent by a Provider.
-- Messaging UI: Fixed the appearance used for other's (System or other Patient) image messages.
 
 ## [1.0-alpha19] - 2022-11-16
 
