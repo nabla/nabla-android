@@ -3,6 +3,7 @@ package com.nabla.sdk.scheduling.scene.appointments
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
@@ -57,8 +58,21 @@ internal class AppointmentViewHolder(
 
     private var timeUpdateJob: Job? = null
 
+    private var avatarRandomSeedOverridden = false
+    private var overriddenAvatarRandomSeed: Any? = null
+
+    @VisibleForTesting
+    fun overrideAvatarBackgroundRandomSeed(seed: Any?) {
+        avatarRandomSeedOverridden = true
+        overriddenAvatarRandomSeed = seed
+    }
+
     fun bind(uiModel: AppointmentUiModel) {
-        binding.appointmentAvatar.loadAvatar(uiModel.provider)
+        if (avatarRandomSeedOverridden) {
+            binding.appointmentAvatar.loadAvatar(uiModel.provider, overriddenAvatarRandomSeed)
+        } else {
+            binding.appointmentAvatar.loadAvatar(uiModel.provider)
+        }
         binding.appointmentTitle.text = uiModel.provider.fullNameWithPrefix(context)
         binding.appointmentSubtitle.text = uiModel.formatScheduledAt()
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import com.android.ide.common.rendering.api.SessionParams
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
@@ -21,7 +22,9 @@ import org.junit.Test
 
 internal class ConversationOtherTextCellTest : BaseCoroutineTest() {
     @get:Rule
-    val paparazzi = DayNightPaparazziRule()
+    val paparazzi = DayNightPaparazziRule(
+        renderingMode = SessionParams.RenderingMode.V_SCROLL,
+    )
 
     @Test
     fun `test other short text`() = paparazzi.snapshotDayNightDefaultDevice { (context, layoutInflater) ->

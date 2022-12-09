@@ -1,4 +1,4 @@
-package com.nabla.sdk.scheduling.ui
+package com.nabla.sdk.scheduling.ui.viewmodel
 
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4

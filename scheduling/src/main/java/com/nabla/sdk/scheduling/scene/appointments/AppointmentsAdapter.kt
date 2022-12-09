@@ -1,6 +1,7 @@
 package com.nabla.sdk.scheduling.scene.appointments
 
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -38,9 +39,24 @@ internal class AppointmentsAdapter(
         }
     }
 
+    private var avatarRandomSeedOverridden = false
+    private var overriddenAvatarRandomSeed: Any? = null
+
+    @VisibleForTesting
+    fun overrideAvatarBackgroundRandomSeed(seed: Any?) {
+        avatarRandomSeedOverridden = true
+        overriddenAvatarRandomSeed = seed
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is ItemUiModel.AppointmentUiModel -> (holder as AppointmentViewHolder).bind(item)
+            is ItemUiModel.AppointmentUiModel -> (holder as AppointmentViewHolder).apply {
+                if (avatarRandomSeedOverridden) {
+                    overrideAvatarBackgroundRandomSeed(overriddenAvatarRandomSeed)
+                }
+
+                bind(item)
+            }
             is ItemUiModel.Loading -> Unit /* no-op */
         }
     }

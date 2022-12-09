@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import com.android.ide.common.rendering.api.SessionParams
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
@@ -27,7 +28,9 @@ import java.time.temporal.ChronoUnit
 
 internal class ConversationPatientMediaCellTest : BaseCoroutineTest() {
     @get:Rule
-    val paparazzi = DayNightPaparazziRule()
+    val paparazzi = DayNightPaparazziRule(
+        renderingMode = SessionParams.RenderingMode.V_SCROLL,
+    )
 
     @Test
     fun `test patient image`() = paparazzi.snapshotDayNightDefaultDevice { (context, layoutInflater) ->

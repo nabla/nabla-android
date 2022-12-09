@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import com.android.ide.common.rendering.api.SessionParams
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.Provider
@@ -23,7 +24,9 @@ import org.junit.Test
 
 internal class ConversationProviderTextCellTest : BaseCoroutineTest() {
     @get:Rule
-    val paparazzi = DayNightPaparazziRule()
+    val paparazzi = DayNightPaparazziRule(
+        renderingMode = SessionParams.RenderingMode.V_SCROLL,
+    )
 
     @Test
     fun `test provider short text`() = paparazzi.snapshotDayNightDefaultDevice { (context, layoutInflater) ->

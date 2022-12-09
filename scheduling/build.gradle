@@ -2,6 +2,7 @@ plugins {
     id 'conventions.android-library'
     id 'com.apollographql.apollo3'
     id 'kotlin-parcelize'
+    id 'dev.chrisbanes.paparazzi'
 }
 
 android {
@@ -32,6 +33,7 @@ dependencies {
 
     testImplementation project(':core-test-fixtures')
     testImplementation project(':tests-common')
+    testImplementation libs.roboelectric
     testImplementation libs.turbine
     testImplementation libs.junit
     testImplementation libs.kotlin.test

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import com.android.ide.common.rendering.api.SessionParams
 import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
@@ -29,7 +30,9 @@ import java.time.temporal.ChronoUnit
 
 internal class ConversationProviderMediaCellTest : BaseCoroutineTest() {
     @get:Rule
-    val paparazzi = DayNightPaparazziRule()
+    val paparazzi = DayNightPaparazziRule(
+        renderingMode = SessionParams.RenderingMode.V_SCROLL,
+    )
 
     @Test
     fun `test provider image`() = paparazzi.snapshotDayNightDefaultDevice { (context, layoutInflater) ->

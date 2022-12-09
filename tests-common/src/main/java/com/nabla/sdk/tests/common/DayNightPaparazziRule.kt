@@ -28,6 +28,7 @@ class DayNightPaparazziRule(
             locale = "en",
             nightMode = NightMode.NOTNIGHT,
         ),
+        appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
     )
@@ -37,6 +38,7 @@ class DayNightPaparazziRule(
             locale = "en",
             nightMode = NightMode.NIGHT,
         ),
+        appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
     )
@@ -46,6 +48,7 @@ class DayNightPaparazziRule(
             locale = "en",
             nightMode = NightMode.NOTNIGHT,
         ),
+        appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
     )
@@ -55,6 +58,7 @@ class DayNightPaparazziRule(
             locale = "en",
             nightMode = NightMode.NIGHT,
         ),
+        appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
     )
@@ -64,6 +68,7 @@ class DayNightPaparazziRule(
             locale = "en",
             nightMode = NightMode.NOTNIGHT,
         ),
+        appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
     )
@@ -73,6 +78,7 @@ class DayNightPaparazziRule(
             locale = "en",
             nightMode = NightMode.NIGHT,
         ),
+        appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
     )

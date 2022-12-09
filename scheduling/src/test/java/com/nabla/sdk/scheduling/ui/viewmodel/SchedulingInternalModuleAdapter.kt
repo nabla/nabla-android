@@ -1,4 +1,4 @@
-package com.nabla.sdk.scheduling.ui
+package com.nabla.sdk.scheduling.ui.viewmodel
 
 import android.content.Context
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
