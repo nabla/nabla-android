@@ -6,6 +6,7 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.core.text.HtmlCompat
 import androidx.core.text.getSpans
 import androidx.core.view.isVisible
@@ -108,21 +109,6 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         }
     }
 
-    private fun setHtml(itemConsentBinding: NablaSchedulingItemConsentBinding, html: String) {
-        val spanned = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
-        itemConsentBinding.nablaConsentText.text = spanned
-
-        // Makes hyperlinks clickable
-        itemConsentBinding.nablaConsentText.movementMethod = LinkMovementMethod.getInstance()
-
-        // Let text click toggle checkbox if no link
-        if (spanned.getSpans<ClickableSpan>().isEmpty()) {
-            itemConsentBinding.nablaConsentText.setOnClickListener {
-                itemConsentBinding.nablaConsentCheckbox.toggle()
-            }
-        }
-    }
-
     private fun Instant.formatScheduledAt(): String {
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val isToday = today == toLocalDateTime(TimeZone.currentSystemDefault()).date
@@ -172,5 +158,21 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
             getLong(ARG_SLOT_INSTANT).also { if (it == 0L) throwNablaInternalException("Missing Slot Instant") }
 
         )
+
+        @VisibleForTesting
+        internal fun setHtml(itemConsentBinding: NablaSchedulingItemConsentBinding, html: String) {
+            val spanned = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
+            itemConsentBinding.nablaConsentText.text = spanned
+
+            // Makes hyperlinks clickable
+            itemConsentBinding.nablaConsentText.movementMethod = LinkMovementMethod.getInstance()
+
+            // Let text click toggle checkbox if no link
+            if (spanned.getSpans<ClickableSpan>().isEmpty()) {
+                itemConsentBinding.nablaConsentText.setOnClickListener {
+                    itemConsentBinding.nablaConsentCheckbox.toggle()
+                }
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemAppointmentCatego
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 
 internal class AppointmentCategoryAdapter(
-    val onClickAppointmentCategoryListener: (AppointmentCategory) -> Unit
+    private val onClickAppointmentCategoryListener: (AppointmentCategory) -> Unit
 ) : ListAdapter<AppointmentCategory, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
