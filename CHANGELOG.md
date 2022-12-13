@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0-alpha21] - 2022-12-13
+
 ### Changed
 - Messaging Core: Renamed `createDraftConversation` to `startConversation`. It keeps the behavior of creating the conversation lazily when the patient sends the first message.
 - Messaging Core: `createConversation` has been renamed `createConversationWithMessage` and now has a required `message` argument. It should be used to start a conversation on behalf of the patient with a first message from them.
