@@ -37,7 +37,7 @@ internal class VideoCallViewModel(
 ) : ViewModel() {
 
     private val mutableLocalVideoTrackFlow = MutableStateFlow<LocalVideoTrack?>(null)
-    private val mutableRemoteParticipantFlow = MutableStateFlow<VideoTrack?>(null)
+    private val mutableRemoteVideoTracksFlow = MutableStateFlow<List<VideoTrack>>(emptyList())
     private val mutableIsPictureInPictureFlow = MutableStateFlow(false)
 
     // this could have been avoided if tracks were observable, see https://github.com/livekit/client-sdk-android/issues/101
@@ -64,12 +64,11 @@ internal class VideoCallViewModel(
 
     internal val videoStateFlow = combine(
         mutableLocalVideoTrackFlow,
-        mutableRemoteParticipantFlow,
+        mutableRemoteVideoTracksFlow.map { it.lastOrNull() },
         mutableIsSelfMirrorFlow,
         mutableIsPictureInPictureFlow,
         mutableControlsFlow.map { it?.cameraEnabled ?: true },
     ) { localTrack, remoteTrack, isSelfMirror, pictureInPictureEnabled, cameraEnabled ->
-
         when (localTrack) {
             null -> when (remoteTrack) {
                 null -> VideoState.None
@@ -190,13 +189,13 @@ internal class VideoCallViewModel(
 
     private fun onTrackSubscribed(trackSubscribed: RoomEvent.TrackSubscribed) {
         (trackSubscribed.track as? VideoTrack)?.let { videoTrack ->
-            mutableRemoteParticipantFlow.value = videoTrack
+            mutableRemoteVideoTracksFlow.value = mutableRemoteVideoTracksFlow.value + videoTrack
         }
     }
 
     private fun onTrackUnsubscribed(trackUnsubscribed: RoomEvent.TrackUnsubscribed) {
-        (trackUnsubscribed.track as? VideoTrack)?.let {
-            mutableRemoteParticipantFlow.value = null
+        (trackUnsubscribed.track as? VideoTrack)?.let { videoTrack ->
+            mutableRemoteVideoTracksFlow.value = mutableRemoteVideoTracksFlow.value - videoTrack
         }
     }
 

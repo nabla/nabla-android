@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+- Video Call: Better support for screen sharing.
+
 ## [1.0-alpha21] - 2022-12-13
 
 ### Changed
