@@ -13,7 +13,6 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-enableFeaturePreview("VERSION_CATALOGS")
 rootProject.name = "nabla-sdk-android"
 include ':messaging-sample-app'
 include ':core'

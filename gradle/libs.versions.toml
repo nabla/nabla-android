@@ -9,9 +9,10 @@ ktlint = "0.45.1"
 espresso = "3.5.0"
 okreplay = "1.6.0"
 tensorflow = "0.4.3"
+androidGradlePlugin = "7.3.1"
 
 [libraries]
-android-pluginGradle = "com.android.tools.build:gradle:7.3.1"
+android-pluginGradle = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.15.0"
 
 # Put back normal paparazzi dependencies when https://github.com/cashapp/paparazzi/pull/605 has been merged
