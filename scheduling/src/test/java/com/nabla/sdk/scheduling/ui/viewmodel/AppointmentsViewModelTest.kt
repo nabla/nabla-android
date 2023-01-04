@@ -13,7 +13,6 @@ import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiMode
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus
 import com.nabla.sdk.scheduling.scene.appointments.SOON_CONVERSATION_THRESHOLD
 import com.nabla.sdk.tests.common.BaseCoroutineTest
-import com.nabla.sdk.tests.common.FakeStringResolver
 import com.nabla.sdk.tests.common.FakeVideoCallModule
 import com.nabla.sdk.tests.common.extensions.collectToFlow
 import io.mockk.mockk
@@ -50,7 +49,6 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
             videoCallModule = FakeVideoCallModule(),
             logger = StdLogger(),
             configuration = mockk(relaxed = true),
-            stringResolver = FakeStringResolver(),
             clock = TestClock(this),
             delayCoroutineContext = coroutineContext,
             appointmentType = AppointmentType.UPCOMING,
@@ -121,7 +119,6 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
             videoCallModule = FakeVideoCallModule(),
             logger = StdLogger(),
             configuration = mockk(relaxed = true),
-            stringResolver = FakeStringResolver(),
             clock = clock,
             delayCoroutineContext = coroutineContext,
             appointmentType = AppointmentType.UPCOMING,

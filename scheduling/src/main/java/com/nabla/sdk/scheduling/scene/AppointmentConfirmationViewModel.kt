@@ -6,6 +6,8 @@ import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.ServerException
+import com.nabla.sdk.core.domain.entity.StringOrRes
+import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
@@ -88,9 +90,9 @@ internal class AppointmentConfirmationViewModel(
                     eventsMutableFlow.emit(
                         Event.FailedSubmitting(
                             if (throwable is ServerException) {
-                                throwable.serverMessage
+                                throwable.serverMessage.asStringOrRes()
                             } else {
-                                nablaClient.coreContainer.stringResolver.resolve(throwable.asNetworkOrGeneric.titleRes)
+                                throwable.asNetworkOrGeneric.titleRes.asStringOrRes()
                             }
                         )
                     )
@@ -123,6 +125,6 @@ internal class AppointmentConfirmationViewModel(
 
     sealed interface Event {
         object Finish : Event
-        data class FailedSubmitting(val errorMessage: String) : Event
+        data class FailedSubmitting(val errorMessage: StringOrRes) : Event
     }
 }

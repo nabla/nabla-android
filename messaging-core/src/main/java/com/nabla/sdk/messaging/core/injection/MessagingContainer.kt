@@ -6,7 +6,6 @@ import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.SessionClient
-import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
@@ -35,7 +34,6 @@ internal class MessagingContainer(
     val sessionClient: SessionClient,
     clock: Clock,
     uuidGenerator: UuidGenerator,
-    stringResolver: StringResolver,
     maybeVideoCallModule: VideoCallModule?,
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -79,7 +77,6 @@ internal class MessagingContainer(
         gqlConversationContentDataSource = gqlConversationContentDataSource,
         messageMapper = messageMapper,
         messageFileUploader = messageFileUploader,
-        stringResolver = stringResolver,
     )
 
     private val conversationContentRepositoryImpl = ConversationContentRepositoryImpl(

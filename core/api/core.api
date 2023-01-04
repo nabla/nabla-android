@@ -233,10 +233,6 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenP
 	public abstract fun fetchNewSessionAuthTokens-f_-3YFY (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public abstract interface class com/nabla/sdk/core/domain/boundary/StringResolver {
-	public abstract fun resolve (I)Ljava/lang/String;
-}
-
 public abstract interface class com/nabla/sdk/core/domain/boundary/UuidGenerator {
 	public abstract fun generate ()Ljava/util/UUID;
 }
@@ -699,6 +695,38 @@ public final class com/nabla/sdk/core/domain/entity/StringId {
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
+public abstract interface class com/nabla/sdk/core/domain/entity/StringOrRes {
+}
+
+public final class com/nabla/sdk/core/domain/entity/StringOrRes$Res : com/nabla/sdk/core/domain/entity/StringOrRes {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lcom/nabla/sdk/core/domain/entity/StringOrRes$Res;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/StringOrRes$Res;IILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/StringOrRes$Res;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getResValue ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/StringOrRes$String : com/nabla/sdk/core/domain/entity/StringOrRes {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/StringOrRes$String;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/StringOrRes$String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/StringOrRes$String;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getStringValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/StringOrResKt {
+	public static final fun asStringOrRes (I)Lcom/nabla/sdk/core/domain/entity/StringOrRes;
+	public static final fun asStringOrRes (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/StringOrRes;
+	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroid/content/Context;)Ljava/lang/String;
+	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/fragment/app/Fragment;)Ljava/lang/String;
+}
+
 public final class com/nabla/sdk/core/domain/entity/SystemUser {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/SystemUser$Companion;
 	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;)V
@@ -807,7 +835,6 @@ public final class com/nabla/sdk/core/injection/CoreContainer {
 	public final fun getProviderRepository ()Lcom/nabla/sdk/core/domain/boundary/ProviderRepository;
 	public final fun getSchedulingModule ()Lcom/nabla/sdk/core/domain/boundary/SchedulingModule;
 	public final fun getSessionClient ()Lcom/nabla/sdk/core/domain/boundary/SessionClient;
-	public final fun getStringResolver ()Lcom/nabla/sdk/core/domain/boundary/StringResolver;
 	public final fun getUuidGenerator ()Lcom/nabla/sdk/core/domain/boundary/UuidGenerator;
 	public final fun getVideoCallModule ()Lcom/nabla/sdk/core/domain/boundary/VideoCallModule;
 }

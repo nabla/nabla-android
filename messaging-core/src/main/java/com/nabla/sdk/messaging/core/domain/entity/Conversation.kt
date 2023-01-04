@@ -5,6 +5,7 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
+import com.nabla.sdk.core.domain.entity.StringOrRes
 import kotlinx.datetime.Instant
 import kotlinx.parcelize.Parcelize
 
@@ -42,7 +43,7 @@ public data class Conversation(
     val id: ConversationId,
     val title: String?,
     val subtitle: String?,
-    val inboxPreviewTitle: String,
+    val inboxPreviewTitle: StringOrRes,
     val lastMessagePreview: String?,
     val lastModified: Instant,
     val patientUnreadMessageCount: Int,

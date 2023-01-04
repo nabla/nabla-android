@@ -1,8 +1,8 @@
 package com.nabla.sdk.messaging.core.data.message
 
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
+import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.messaging.core.R
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -14,12 +14,12 @@ internal data class LocalConversation(
     val title: String?,
     val providerIds: List<Uuid>?,
 ) {
-    fun asConversation(stringResolver: StringResolver): Conversation {
+    fun asConversation(): Conversation {
         return Conversation(
             id = localId,
             title = title,
             subtitle = null,
-            inboxPreviewTitle = stringResolver.resolve(R.string.nabla_draft_conversation_title_placeholder),
+            inboxPreviewTitle = R.string.nabla_draft_conversation_title_placeholder.asStringOrRes(),
             lastMessagePreview = null,
             lastModified = Clock.System.now(),
             patientUnreadMessageCount = 0,

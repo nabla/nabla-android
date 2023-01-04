@@ -38,7 +38,6 @@ internal class NablaMessagingClientImpl internal constructor(
         coreContainer.sessionClient,
         coreContainer.clock,
         coreContainer.uuidGenerator,
-        coreContainer.stringResolver,
         coreContainer.videoCallModule,
     )
 

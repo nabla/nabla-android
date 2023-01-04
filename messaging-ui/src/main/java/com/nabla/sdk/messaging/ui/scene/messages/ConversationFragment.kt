@@ -41,6 +41,7 @@ import com.nabla.sdk.core.data.helper.toJvmURI
 import com.nabla.sdk.core.data.helper.toKtUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.OpenPdfReaderResult
 import com.nabla.sdk.core.ui.helpers.PermissionRational
 import com.nabla.sdk.core.ui.helpers.PermissionRequestLauncher
@@ -579,7 +580,7 @@ public open class ConversationFragment : Fragment() {
 
     private fun updateLoadedDisplay(binding: NablaFragmentConversationBinding, state: ConversationViewModel.State.ConversationLoaded) {
         binding.updateToolbar(
-            title = state.conversation.title ?: state.conversation.inboxPreviewTitle,
+            title = state.conversation.title ?: state.conversation.inboxPreviewTitle.evaluate(this),
             subtitle = state.conversation.subtitle,
             providers = state.conversation.providersInConversation.map { it.provider },
             maybeConversationPicture = state.conversation.pictureUrl?.url,

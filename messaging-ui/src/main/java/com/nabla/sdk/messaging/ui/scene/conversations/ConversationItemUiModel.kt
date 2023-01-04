@@ -2,6 +2,7 @@ package com.nabla.sdk.messaging.ui.scene.conversations
 
 import android.content.Context
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.StringOrRes
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.helpers.isThisWeek
 import com.nabla.sdk.core.ui.helpers.isThisYear
@@ -21,7 +22,7 @@ internal sealed class ItemUiModel(val listId: String) {
 
     data class Conversation(
         val id: ConversationId,
-        val title: String,
+        val title: StringOrRes,
         val subtitle: String,
         val lastModified: Instant,
         val hasUnreadMessages: Boolean,

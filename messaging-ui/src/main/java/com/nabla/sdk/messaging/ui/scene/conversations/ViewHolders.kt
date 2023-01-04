@@ -6,6 +6,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -33,7 +34,7 @@ internal class ConversationViewHolder(
         val context = binding.context
 
         with(binding.conversationInboxTitle) {
-            text = uiModel.title
+            text = uiModel.title.evaluate(context)
             applyConversationListTitleStyle(this, uiModel.hasUnreadMessages)
         }
         with(binding.conversationInboxSubtitle) {

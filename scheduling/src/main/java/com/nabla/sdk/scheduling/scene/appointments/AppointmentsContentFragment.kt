@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.launchCollect
@@ -39,7 +40,6 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment() {
                 videoCallModule = nablaClient.coreContainer.videoCallModule,
                 logger = nablaClient.coreContainer.logger,
                 configuration = nablaClient.coreContainer.configuration,
-                stringResolver = nablaClient.coreContainer.stringResolver,
                 clock = Clock.System,
                 appointmentType = handle.get(APPOINTMENT_TYPE_ARG) ?: error("No appointment type specified"),
             )
@@ -91,7 +91,7 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment() {
         viewLifecycleOwner.launchCollect(viewModel.eventsFlow) { event ->
             when (event) {
                 is Event.FailedCancelling -> {
-                    Toast.makeText(context, event.errorMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.errorMessage.evaluate(this), Toast.LENGTH_LONG).show()
                 }
                 Event.FailedPagination -> {
                     Toast.makeText(context, R.string.nabla_scheduling_appointments_pagination_error, Toast.LENGTH_LONG).show()

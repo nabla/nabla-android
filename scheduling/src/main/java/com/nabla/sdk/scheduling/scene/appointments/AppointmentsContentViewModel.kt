@@ -5,12 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.ServerException
+import com.nabla.sdk.core.domain.entity.StringOrRes
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
@@ -41,7 +42,6 @@ internal class AppointmentsContentViewModel(
     private val videoCallModule: VideoCallModule?,
     private val logger: Logger,
     private val configuration: Configuration,
-    private val stringResolver: StringResolver,
     clock: Clock,
     delayCoroutineContext: CoroutineContext = EmptyCoroutineContext,
     private val appointmentType: AppointmentType,
@@ -92,9 +92,9 @@ internal class AppointmentsContentViewModel(
                     eventsMutableFlow.emit(
                         Event.FailedCancelling(
                             if (throwable is ServerException) {
-                                throwable.serverMessage
+                                throwable.serverMessage.asStringOrRes()
                             } else {
-                                stringResolver.resolve(throwable.asNetworkOrGeneric.titleRes)
+                                throwable.asNetworkOrGeneric.titleRes.asStringOrRes()
                             }
                         )
                     )
@@ -144,7 +144,7 @@ internal class AppointmentsContentViewModel(
     }
 
     sealed interface Event {
-        data class FailedCancelling(val errorMessage: String) : Event
+        data class FailedCancelling(val errorMessage: StringOrRes) : Event
         object FailedPagination : Event
     }
 

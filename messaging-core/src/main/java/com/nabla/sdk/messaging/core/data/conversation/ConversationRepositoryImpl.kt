@@ -1,7 +1,6 @@
 package com.nabla.sdk.messaging.core.data.conversation
 
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
@@ -27,7 +26,6 @@ internal class ConversationRepositoryImpl(
     private val gqlConversationContentDataSource: GqlConversationContentDataSource,
     private val messageMapper: MessageMapper,
     private val messageFileUploader: MessageFileUploader,
-    private val stringResolver: StringResolver,
 ) : ConversationRepository {
 
     private val loadMoreConversationSharedSingle = sharedSingleIn(repoScope) {
@@ -60,7 +58,7 @@ internal class ConversationRepositoryImpl(
                     is LocalConversation.CreationState.ErrorCreating,
                     LocalConversation.CreationState.ToBeCreated,
                     -> flowOf(
-                        localConversation.asConversation(stringResolver)
+                        localConversation.asConversation()
                     )
                     is LocalConversation.CreationState.Created -> {
                         watchRemoteConversationConversation(localConversation.creationState.remoteId)

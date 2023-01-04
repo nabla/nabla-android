@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
+import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.factoryFor
@@ -100,7 +101,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         viewLifecycleOwner.launchCollect(viewModel.eventsFlow) { event ->
             when (event) {
                 is Event.FailedSubmitting -> {
-                    Toast.makeText(context, event.errorMessage, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, event.errorMessage.evaluate(this), Toast.LENGTH_LONG).show()
                 }
                 Event.Finish -> {
                     hostActivity().finish()

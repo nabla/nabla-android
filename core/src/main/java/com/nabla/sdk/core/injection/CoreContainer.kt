@@ -49,7 +49,6 @@ import com.nabla.sdk.core.domain.boundary.ProviderRepository
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
-import com.nabla.sdk.core.domain.boundary.StringResolver
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.ModuleType
@@ -77,9 +76,6 @@ public class CoreContainer internal constructor(
     public val clock: Clock = overriddenClock ?: Clock.System
     public val uuidGenerator: UuidGenerator = overriddenUuidGenerator ?: object : UuidGenerator {
         override fun generate(): Uuid = Uuid.randomUUID()
-    }
-    public val stringResolver: StringResolver = object : StringResolver {
-        override fun resolve(resId: Int): String = configuration.context.getString(resId)
     }
 
     private val scopedKvStorage = configuration.context.getSharedPreferences(

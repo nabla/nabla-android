@@ -10,6 +10,7 @@ import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Patient
 import com.nabla.sdk.core.domain.entity.Size
 import com.nabla.sdk.core.domain.entity.SystemUser
+import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -44,7 +45,7 @@ internal class GqlMapper(
             id = localConversationDataSource.findLocalConversationId(fragment.id),
             title = fragment.title,
             subtitle = fragment.subtitle,
-            inboxPreviewTitle = fragment.inboxPreviewTitle,
+            inboxPreviewTitle = fragment.inboxPreviewTitle.asStringOrRes(),
             lastMessagePreview = fragment.lastMessagePreview,
             lastModified = fragment.updatedAt,
             patientUnreadMessageCount = fragment.unreadMessageCount,

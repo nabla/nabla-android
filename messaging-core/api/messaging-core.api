@@ -73,22 +73,22 @@ public final class com/nabla/sdk/messaging/core/domain/entity/BaseMessage {
 
 public final class com/nabla/sdk/messaging/core/domain/entity/Conversation {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Conversation$Companion;
-	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Z)V
+	public fun <init> (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/StringOrRes;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Z)V
 	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;
 	public final fun component10 ()Z
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
+	public final fun component4 ()Lcom/nabla/sdk/core/domain/entity/StringOrRes;
 	public final fun component5 ()Ljava/lang/String;
 	public final fun component6 ()Lkotlinx/datetime/Instant;
 	public final fun component7 ()I
 	public final fun component8 ()Ljava/util/List;
 	public final fun component9 ()Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;
-	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Z)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;ZILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
+	public final fun copy (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/StringOrRes;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;Z)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/StringOrRes;Ljava/lang/String;Lkotlinx/datetime/Instant;ILjava/util/List;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;ZILjava/lang/Object;)Lcom/nabla/sdk/messaging/core/domain/entity/Conversation;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;
-	public final fun getInboxPreviewTitle ()Ljava/lang/String;
+	public final fun getInboxPreviewTitle ()Lcom/nabla/sdk/core/domain/entity/StringOrRes;
 	public final fun getLastMessagePreview ()Ljava/lang/String;
 	public final fun getLastModified ()Lkotlinx/datetime/Instant;
 	public final fun getPatientUnreadMessageCount ()I

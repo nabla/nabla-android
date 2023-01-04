@@ -12,6 +12,7 @@ import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.SystemUser
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -208,7 +209,7 @@ fun Conversation.Companion.fake(
     id = id,
     lastModified = lastModified,
     title = title,
-    inboxPreviewTitle = inboxPreviewTitle,
+    inboxPreviewTitle = inboxPreviewTitle.asStringOrRes(),
     subtitle = subtitle,
     lastMessagePreview = lastMessagePreview,
     patientUnreadMessageCount = patientUnreadMessageCount,
