@@ -17,6 +17,7 @@ import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.getThemeDrawable
 import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.helpers.sdkNameOrDefault
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.messaging.core.NablaMessagingClient
@@ -54,7 +55,7 @@ public open class InboxFragment : Fragment() {
      * Override to define your own navigation. Default opens [ConversationActivity].
      */
     protected open fun openConversationScreen(conversationId: ConversationId) {
-        startActivity(ConversationActivity.newIntent(requireContext(), conversationId))
+        startActivity(ConversationActivity.newIntent(requireContext(), conversationId, sdkNameOrDefault()))
     }
 
     final override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater =

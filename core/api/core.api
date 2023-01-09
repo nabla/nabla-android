@@ -43,6 +43,7 @@ public final class com/nabla/sdk/core/NablaClient {
 	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun authenticate (Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
 	public final fun getCoreContainer ()Lcom/nabla/sdk/core/injection/CoreContainer;
+	public final fun getName ()Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/NablaClient$Companion {
@@ -840,10 +841,12 @@ public final class com/nabla/sdk/core/injection/CoreContainer {
 }
 
 public final class com/nabla/sdk/core/injection/CoreContainer$Companion {
+	public final fun getOverriddenApolloConfig ()Lkotlin/jvm/functions/Function1;
 	public final fun getOverriddenApolloWsConfig ()Lkotlin/jvm/functions/Function1;
 	public final fun getOverriddenClock ()Lkotlinx/datetime/Clock;
 	public final fun getOverriddenOkHttpClient ()Lkotlin/jvm/functions/Function1;
 	public final fun getOverriddenUuidGenerator ()Lcom/nabla/sdk/core/domain/boundary/UuidGenerator;
+	public final fun setOverriddenApolloConfig (Lkotlin/jvm/functions/Function1;)V
 	public final fun setOverriddenApolloWsConfig (Lkotlin/jvm/functions/Function1;)V
 	public final fun setOverriddenClock (Lkotlinx/datetime/Clock;)V
 	public final fun setOverriddenOkHttpClient (Lkotlin/jvm/functions/Function1;)V

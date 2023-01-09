@@ -67,6 +67,7 @@ apollo-cache = { group = "com.apollographql.apollo3", name = "apollo-normalized-
 apollo-cache-sqlite = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache-sqlite", version.ref = "apollo" }
 apollo-adapters = { group = "com.apollographql.apollo3", name = "apollo-adapters", version.ref = "apollo" }
 apollo-testingSupport = { group = "com.apollographql.apollo3", name = "apollo-testing-support", version.ref = "apollo" }
+apollo-idlingResource = { group = "com.apollographql.apollo3", name = "apollo-idling-resource", version.ref = "apollo" }
 
 coilCore = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coilVideo = { group = "io.coil-kt", name = "coil-video", version.ref = "coil" }

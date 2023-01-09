@@ -20,7 +20,7 @@ import com.nabla.sdk.core.injection.CoreContainer
  * check documentation of [initialize] and [getInstance].
  */
 public class NablaClient private constructor(
-    private val name: String,
+    public val name: String,
     private val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
     modulesFactory: List<Module.Factory<out Module>>,

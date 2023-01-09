@@ -132,6 +132,7 @@ public class CoreContainer internal constructor(
                     webSocketEngine(DefaultWebSocketEngine(okHttpClient))
                 }
             }
+            .apply { overriddenApolloConfig?.let { it(this) } }
             .build()
     }
 
@@ -213,6 +214,9 @@ public class CoreContainer internal constructor(
 
         @VisibleForTesting
         public var overriddenApolloWsConfig: ((ApolloClient.Builder) -> Unit)? = null
+
+        @VisibleForTesting
+        public var overriddenApolloConfig: ((ApolloClient.Builder) -> Unit)? = null
 
         @VisibleForTesting
         public var overriddenUuidGenerator: UuidGenerator? = null
