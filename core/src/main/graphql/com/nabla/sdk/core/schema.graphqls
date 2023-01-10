@@ -22,6 +22,7 @@ type Query {
   appointmentCategory(id: UUID!): AppointmentCategoryOutput!
   provider(id: UUID!): ProviderOutput!
   appointmentConfirmationConsents: AppointmentConfirmationConsentsOutput!
+  appointmentAvailableLocations: AppointmentAvailableLocationsOutput!
 }
 # ----------------------------------------------------------------------------------------------------------------------
 # Mutations.
@@ -49,6 +50,13 @@ type Mutation {
   scheduleAppointment(
     categoryId: UUID!
     providerId: UUID!
+    slot: DateTime!
+    timeZone: TimeZone!
+  ): ScheduleAppointmentOutput! #@deprecated(reason: "equivalent to scheduleAppointmentV2(isPhysical = false)")
+  scheduleAppointmentV2(
+    categoryId: UUID!
+    providerId: UUID!
+    isPhysical: Boolean!
     slot: DateTime!
     timeZone: TimeZone!
   ): ScheduleAppointmentOutput!
@@ -513,6 +521,27 @@ type Appointment {
   provider: Provider!
   scheduledAt: DateTime!
   state: AppointmentState!
+  location: AppointmentLocation!
+}
+
+union AppointmentLocation = PhysicalAppointmentLocation | RemoteAppointmentLocation
+
+type PhysicalAppointmentLocation {
+  address: Address!
+}
+
+type RemoteAppointmentLocation {
+  livekitRoom: LivekitRoom
+}
+
+type Address {
+  id: UUID!
+  address: String!
+  zipCode: String!
+  city: String!
+  state: String
+  country: String
+  extraDetails: String
 }
 
 union AppointmentState = UpcomingAppointment | FinalizedAppointment
@@ -530,6 +559,8 @@ type AppointmentCategory {
   name: String!
   callDurationMinutes: Int!
   availableSlots(page: OpaqueCursorPage!): AvailableSlotsPage!
+  #@deprecated(reason: "equivalent to availableSlotsV2(isPhysical = false)")
+  availableSlotsV2(isPhysical: Boolean!, page: OpaqueCursorPage!): AvailableSlotsPage!
 }
 
 type AvailableSlotsPage {
@@ -548,4 +579,9 @@ type AvailabilitySlot {
 type AppointmentConfirmationConsentsOutput {
   firstConsentHtml: String!
   secondConsentHtml: String!
+}
+
+type AppointmentAvailableLocationsOutput {
+  hasPhysicalAvailabilities: Boolean!
+  hasRemoteAvailabilities: Boolean!
 }
