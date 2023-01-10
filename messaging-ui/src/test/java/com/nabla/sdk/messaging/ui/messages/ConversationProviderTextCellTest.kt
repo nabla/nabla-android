@@ -254,8 +254,6 @@ internal class ConversationProviderTextCellTest : BaseCoroutineTest() {
             ),
         )
 
-        overrideAvatarBackgroundRandomSeed(null)
-
         bind(
             TimelineItem.Message.fake(
                 sendStatus = SendStatus.Sent,

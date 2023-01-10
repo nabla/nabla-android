@@ -4,7 +4,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.nabla.sdk.core.ui.helpers.context
@@ -31,15 +30,6 @@ internal sealed class OtherMessageViewHolder<ContentType : TimelineItem.Message.
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
 
-    private var avatarRandomSeedOverridden = false
-    private var overriddenAvatarRandomSeed: Any? = null
-
-    @VisibleForTesting
-    fun overrideAvatarBackgroundRandomSeed(seed: Any?) {
-        avatarRandomSeedOverridden = true
-        overriddenAvatarRandomSeed = seed
-    }
-
     override fun bind(message: TimelineItem.Message, author: TimelineItem.Message.Author.Other, content: ContentType) {
         super.bind(message, author, content)
 
@@ -51,8 +41,7 @@ internal sealed class OtherMessageViewHolder<ContentType : TimelineItem.Message.
         if (message.showAuthorAvatar) {
             binding.chatOtherMessageAvatarView.loadAvatar(
                 avatarUrl = author.avatar?.url,
-                placeholderText = author.displayName.firstOrNull()?.toString(),
-                randomBackgroundSeed = if (avatarRandomSeedOverridden) overriddenAvatarRandomSeed else author.uuid,
+                placeholderText = author.displayName.firstOrNull()?.toString()
             )
         } else binding.chatOtherMessageAvatarView.displayUnicolorPlaceholder()
     }

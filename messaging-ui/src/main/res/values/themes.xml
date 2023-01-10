@@ -32,9 +32,9 @@
         <item name="nablaMessaging_conversationMessageStatusAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationActivityAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_patientMessageBackgroundColor">?colorPrimaryDark</item>
-        <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurface</item>
-        <item name="nablaMessaging_otherMessageBackgroundColor">?colorSurface</item>
-        <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurface</item>
+        <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurfaceVariant</item>
+        <item name="nablaMessaging_otherMessageBackgroundColor">?colorSurfaceVariant</item>
+        <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurfaceVariant</item>
         <item name="nablaMessaging_sendMessageIconTint">@color/nabla_conversation_send_message_selector</item>
         <item name="nablaMessaging_conversationComposerEditTextStyle">
             @style/Nabla.Widget.Messaging.ComposerEditTextStyle
@@ -68,14 +68,14 @@
     </style>
 
     <style name="Nabla.TextAppearance.TextMessage.Provider" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textColor">?colorPrimaryDark</item>
-        <item name="android:textColorLink">?colorPrimaryDark</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColorLink">?android:textColorPrimary</item>
         <item name="fontFamily">?fontFamily</item>
     </style>
 
     <style name="Nabla.TextAppearance.TextMessage.Other" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textColor">?colorOnSurface</item>
-        <item name="android:textColorLink">?colorOnSurface</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColorLink">?android:textColorPrimary</item>
         <item name="fontFamily">?fontFamily</item>
     </style>
 </resources>

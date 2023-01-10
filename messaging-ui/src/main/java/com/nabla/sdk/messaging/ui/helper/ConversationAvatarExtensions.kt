@@ -11,7 +11,7 @@ internal fun NablaAvatarView.bindConversationAvatar(
     displayAvatar: Boolean,
 ) {
     when {
-        maybeConversationPictureUri != null -> loadAvatar(maybeConversationPictureUri, null, null)
+        maybeConversationPictureUri != null -> loadAvatar(maybeConversationPictureUri, null)
         firstProvider != null -> loadAvatar(firstProvider)
         else -> displayUnicolorPlaceholder()
     }

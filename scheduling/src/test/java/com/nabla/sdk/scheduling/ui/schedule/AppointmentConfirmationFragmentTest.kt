@@ -108,7 +108,7 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
     ) {
         nablaConfirmAppointmentButton.isEnabled = continueEnabled
 
-        nablaConfirmAppointmentAvatar.loadAvatar(provider, randomBackgroundSeed = null)
+        nablaConfirmAppointmentAvatar.loadAvatar(provider)
         nablaConfirmAppointmentTitle.text = provider.fullNameWithPrefix(context)
         nablaConfirmAppointmentSubtitle.setTextOrHide(provider.title)
         nablaConfirmAppointmentDatePill.text = "2028-01-01 at 8:20am"

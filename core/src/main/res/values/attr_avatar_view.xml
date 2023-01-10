@@ -9,11 +9,13 @@
         <attr name="nabla_clipShape" />
         <attr name="nabla_useSingleLetterInPlaceHolder" format="boolean" />
         <attr name="nabla_defaultBackgroundColor" format="reference|color" />
+        <attr name="nabla_defaultAvatarDrawable" format="reference" />
     </declare-styleable>
 
     <style name="Nabla.Widget.AvatarView" parent="">
         <item name="nabla_clipShape">oval</item>
         <item name="nabla_useSingleLetterInPlaceHolder">true</item>
-        <item name="nabla_defaultBackgroundColor">?attr/colorPrimary</item>
+        <item name="nabla_defaultBackgroundColor">?attr/colorSurfaceVariant</item>
+        <item name="nabla_defaultAvatarDrawable">@drawable/nabla_ic_outline_person</item>
     </style>
 </resources>

@@ -2,16 +2,16 @@ package com.nabla.sdk.core.ui.components
 
 import android.content.Context
 import android.graphics.Outline
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewOutlineProvider
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.StyleRes
-import androidx.annotation.VisibleForTesting
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 import androidx.core.view.ViewCompat
 import coil.decode.SvgDecoder
@@ -21,6 +21,7 @@ import coil.size.Scale
 import com.nabla.sdk.core.R
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.databinding.NablaComponentAvatarViewBinding
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.asNablaInternal
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
@@ -31,9 +32,8 @@ import com.nabla.sdk.core.ui.helpers.ColorIntWrapper
 import com.nabla.sdk.core.ui.helpers.getThemeColor
 import com.nabla.sdk.core.ui.helpers.initials
 import com.nabla.sdk.core.ui.helpers.setBackgroundColor
-import kotlin.math.absoluteValue
 import kotlin.math.min
-import com.nabla.sdk.core.R as coreR
+import com.google.android.material.R as MaterialR
 
 @NablaInternal
 public class NablaAvatarView : ConstraintLayout {
@@ -42,6 +42,7 @@ public class NablaAvatarView : ConstraintLayout {
     private var useSingleLetterInPlaceHolder: Boolean = false
     @ColorInt
     private var defaultBackgroundColor: Int = 0
+    private lateinit var defaultAvatarDrawable: Drawable
 
     public constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         init(context, attrs, defStyle)
@@ -78,31 +79,23 @@ public class NablaAvatarView : ConstraintLayout {
                 }
             }
             useSingleLetterInPlaceHolder = typedArray.getBoolean(R.styleable.NablaAvatarView_nabla_useSingleLetterInPlaceHolder, false)
-            defaultBackgroundColor = typedArray.getColor(R.styleable.NablaAvatarView_nabla_defaultBackgroundColor, context.getThemeColor(androidx.appcompat.R.attr.colorPrimary).asColorStateList(context).defaultColor)
+            defaultBackgroundColor = typedArray.getColor(R.styleable.NablaAvatarView_nabla_defaultBackgroundColor, context.getThemeColor(MaterialR.attr.colorSurfaceVariant).asColorStateList(context).defaultColor)
+            defaultAvatarDrawable = typedArray.getDrawable(R.styleable.NablaAvatarView_nabla_defaultAvatarDrawable)
+                ?: ContextCompat.getDrawable(context, R.drawable.nabla_ic_outline_person)
+                ?: throw IllegalStateException("Unable to find nabla_ic_outline_person drawable").asNablaInternal()
         }
     }
 
     public fun loadAvatar(provider: Provider) {
-        loadAvatar(provider, randomBackgroundSeed = provider.id)
-    }
-
-    @VisibleForTesting
-    public fun loadAvatar(provider: Provider, randomBackgroundSeed: Any?) {
         val initials = provider.initials(context = context, singleLetter = useSingleLetterInPlaceHolder)
-        loadAvatar(provider.avatar?.url, initials, randomBackgroundSeed)
+        loadAvatar(provider.avatar?.url, initials)
     }
 
-    public fun loadAvatar(avatarUrl: Uri?, placeholderText: String?, randomBackgroundSeed: Any?) {
-        val placeholderTextComputed = placeholderText ?: ""
-        val placeholderBackgroundColor = if (randomBackgroundSeed != null) {
-            val indexBackground = (randomBackgroundSeed.hashCode() % backgroundColors.size).absoluteValue
-            ColorIntWrapper(context.getColor(backgroundColors[indexBackground]))
-        } else {
-            ColorIntWrapper(defaultBackgroundColor)
-        }
+    public fun loadAvatar(avatarUrl: Uri?, placeholderText: String?) {
+        val placeholderBackgroundColor = ColorIntWrapper(defaultBackgroundColor)
 
         if (avatarUrl == null) {
-            showPlaceholder(placeholderTextComputed, placeholderBackgroundColor)
+            showPlaceholder(placeholderText, placeholderBackgroundColor)
             binding.componentAvatarImageView.dispose()
             return
         }
@@ -116,17 +109,25 @@ public class NablaAvatarView : ConstraintLayout {
                     hidePlaceholder()
                 },
                 onError = { _, _ ->
-                    showPlaceholder(placeholderTextComputed, placeholderBackgroundColor)
+                    showPlaceholder(placeholderText, placeholderBackgroundColor)
                 }
             )
         }
     }
 
-    private fun showPlaceholder(text: String, background: ColorIntOrStateList) {
+    private fun showPlaceholder(text: String?, background: ColorIntOrStateList) {
         binding.componentAvatarRoot.setBackgroundColor(background)
         binding.componentAvatarImageView.visibility = View.INVISIBLE
-        binding.componentAvatarPlaceholderTextView.text = text
-        binding.componentAvatarPlaceholderTextView.visibility = View.VISIBLE
+
+        if (text != null) {
+            binding.componentAvatarPlaceholderTextView.text = text
+            binding.componentAvatarPlaceholderTextView.visibility = View.VISIBLE
+            binding.componentDefaultAvatarImageView.visibility = View.INVISIBLE
+        } else {
+            binding.componentAvatarPlaceholderTextView.visibility = View.INVISIBLE
+            binding.componentDefaultAvatarImageView.visibility = View.VISIBLE
+            binding.componentDefaultAvatarImageView.setImageDrawable(defaultAvatarDrawable)
+        }
 
         val stateDescription = context.getString(R.string.nabla_avatar_state_description_placeholder)
         ViewCompat.setStateDescription(this, stateDescription)
@@ -143,16 +144,6 @@ public class NablaAvatarView : ConstraintLayout {
     }
 
     public fun displayUnicolorPlaceholder() {
-        loadAvatar(avatarUrl = null, placeholderText = null, randomBackgroundSeed = null)
+        loadAvatar(avatarUrl = null, placeholderText = null)
     }
-
-    @ColorRes
-    private val backgroundColors: List<Int> = listOf(
-        R.color.nabla_turquoise,
-        R.color.nabla_blue,
-        coreR.color.nabla_red,
-        R.color.nabla_orange,
-        R.color.nabla_indigo,
-        R.color.nabla_stone,
-    )
 }

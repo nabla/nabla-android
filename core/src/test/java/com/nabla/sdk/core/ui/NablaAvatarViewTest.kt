@@ -23,11 +23,11 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
     )
 
     @Test
-    fun `Avatar view just color`() {
+    fun `Default placeholder avatar`() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView()
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = null, randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = null)
 
             return@snapshotDayNightDefaultDevice container
         }
@@ -38,7 +38,7 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView()
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = "BL", randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = "BL")
 
             return@snapshotDayNightDefaultDevice container
         }
@@ -49,18 +49,18 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView()
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = "B", randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = "B")
 
             return@snapshotDayNightDefaultDevice container
         }
     }
 
     @Test
-    fun `Squared Avatar view just color`() {
+    fun `Squared Default placeholder avatar`() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView(R.style.NablaTest_ThemeOverlay_AvatarView_Squared)
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = null, randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = null)
 
             return@snapshotDayNightDefaultDevice container
         }
@@ -71,7 +71,7 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView(R.style.NablaTest_ThemeOverlay_AvatarView_Squared)
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = "BL", randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = "BL")
 
             return@snapshotDayNightDefaultDevice container
         }
@@ -82,18 +82,18 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView(R.style.NablaTest_ThemeOverlay_AvatarView_Squared)
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = "B", randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = "B")
 
             return@snapshotDayNightDefaultDevice container
         }
     }
 
     @Test
-    fun `Round Rect Avatar view just color`() {
+    fun `Round Rect Default placeholder avatar`() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView(R.style.NablaTest_ThemeOverlay_AvatarView_RoundRect)
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = null, randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = null)
 
             return@snapshotDayNightDefaultDevice container
         }
@@ -104,7 +104,7 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView(R.style.NablaTest_ThemeOverlay_AvatarView_RoundRect)
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = "BL", randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = "BL")
 
             return@snapshotDayNightDefaultDevice container
         }
@@ -115,7 +115,7 @@ internal class NablaAvatarViewTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, _) ->
             val (container, avatarView) = context.makeNablaAvatarView(R.style.NablaTest_ThemeOverlay_AvatarView_RoundRect)
 
-            avatarView.loadAvatar(avatarUrl = null, placeholderText = "B", randomBackgroundSeed = null)
+            avatarView.loadAvatar(avatarUrl = null, placeholderText = "B")
 
             return@snapshotDayNightDefaultDevice container
         }

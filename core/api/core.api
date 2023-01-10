@@ -161,12 +161,17 @@ public final class com/nabla/sdk/core/data/init/NablaCoreInitializer : androidx/
 
 public final class com/nabla/sdk/core/databinding/NablaComponentAvatarViewBinding : androidx/viewbinding/ViewBinding {
 	public final field componentAvatarImageView Landroid/widget/ImageView;
+	public final field componentAvatarImageViewAvatarBottomGuideline Landroidx/constraintlayout/widget/Guideline;
+	public final field componentAvatarImageViewAvatarEndGuideline Landroidx/constraintlayout/widget/Guideline;
+	public final field componentAvatarImageViewAvatarStartGuideline Landroidx/constraintlayout/widget/Guideline;
+	public final field componentAvatarImageViewAvatarTopGuideline Landroidx/constraintlayout/widget/Guideline;
 	public final field componentAvatarPlaceholderTextView Landroid/widget/TextView;
 	public final field componentAvatarPlaceholderTextViewBottomMargin Landroidx/constraintlayout/widget/Guideline;
 	public final field componentAvatarPlaceholderTextViewEndMargin Landroidx/constraintlayout/widget/Guideline;
 	public final field componentAvatarPlaceholderTextViewStartMargin Landroidx/constraintlayout/widget/Guideline;
 	public final field componentAvatarPlaceholderTextViewTopMargin Landroidx/constraintlayout/widget/Guideline;
 	public final field componentAvatarRoot Landroidx/constraintlayout/widget/ConstraintLayout;
+	public final field componentDefaultAvatarImageView Landroid/widget/ImageView;
 	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/core/databinding/NablaComponentAvatarViewBinding;
 	public synthetic fun getRoot ()Landroid/view/View;
 	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
@@ -876,8 +881,7 @@ public final class com/nabla/sdk/core/ui/components/NablaAvatarView : androidx/c
 	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
 	public final fun displayUnicolorPlaceholder ()V
 	public final fun loadAvatar (Lcom/nabla/sdk/core/domain/entity/Provider;)V
-	public final fun loadAvatar (Lcom/nabla/sdk/core/domain/entity/Provider;Ljava/lang/Object;)V
-	public final fun loadAvatar--KNGqI8 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object;)V
+	public final fun loadAvatar-w0RAjq4 (Ljava/lang/String;Ljava/lang/String;)V
 }
 
 public final class com/nabla/sdk/core/ui/helpers/BundleExtensionKt {

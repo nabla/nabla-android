@@ -22,6 +22,47 @@
         />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/componentAvatarImageViewAvatarStartGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/componentAvatarImageViewAvatarEndGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/componentAvatarImageViewAvatarTopGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/componentAvatarImageViewAvatarBottomGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <ImageView
+        android:id="@+id/componentDefaultAvatarImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/componentAvatarImageViewAvatarBottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/componentAvatarImageViewAvatarEndGuideline"
+        app:layout_constraintStart_toStartOf="@id/componentAvatarImageViewAvatarStartGuideline"
+        app:layout_constraintTop_toTopOf="@id/componentAvatarImageViewAvatarTopGuideline"
+        tools:ignore="ContentDescription"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/componentAvatarPlaceholderTextViewStartMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +103,7 @@
         android:maxLines="1"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textColor="@color/nabla_white"
+        android:textColor="?android:textColorSecondary"
         android:visibility="gone"
         app:autoSizeMaxTextSize="50dp"
         app:autoSizeMinTextSize="9dp"

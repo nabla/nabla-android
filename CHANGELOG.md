@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
 - Video Call: Better support for screen sharing.
+
+### Changed
+- Avatars are now using `colorSurfaceVariant` as default for background color. You can change that by customizing the `defaultBackgroundColor` of `Nabla.Widget.AvatarView`.
+- Avatars will now display a default icon when no picture or abbreviated name are available. You can change that drawable by customizing the `defaultAvatarDrawable` of `Nabla.Widget.AvatarView`.
+- Messaging UI: Messages from Providers and other users are now using `colorSurfaceVariant` as default background color. You can change that by customizing `nablaMessaging_providerMessageBackgroundColor`, `nablaMessaging_otherMessageBackgroundColor` and `nablaMessaging_deletedMessageBackgroundColor`
+- Messaging UI: Messages from Providers and other users are now using `textColorPrimary` as default text color. You can change that by customizing `nablaMessaging_conversationProviderMessageAppearance` and  `nablaMessaging_conversationOtherMessageAppearance`
+- Messaging UI: Removed the elevation for Providers and other users messages cell.
 
 ## [1.0-alpha21] - 2022-12-13
 

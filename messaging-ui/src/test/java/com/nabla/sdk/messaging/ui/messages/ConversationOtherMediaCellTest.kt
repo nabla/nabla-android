@@ -208,7 +208,6 @@ internal class ConversationOtherMediaCellTest : BaseCoroutineTest() {
     }
 
     private fun <C : TimelineItem.Message.Content, B : MessageContentBinder<C>> OtherMessageViewHolder<C, B>.bindContent(content: C) {
-        overrideAvatarBackgroundRandomSeed(null)
         bind(
             TimelineItem.Message.fake(
                 sendStatus = SendStatus.Sent,

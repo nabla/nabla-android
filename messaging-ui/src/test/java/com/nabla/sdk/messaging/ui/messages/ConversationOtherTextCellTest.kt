@@ -250,7 +250,6 @@ internal class ConversationOtherTextCellTest : BaseCoroutineTest() {
             avatar = null,
         )
 
-        overrideAvatarBackgroundRandomSeed(null)
         bind(
             TimelineItem.Message.fake(
                 sendStatus = SendStatus.Sent,
