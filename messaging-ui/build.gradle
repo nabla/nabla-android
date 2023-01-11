@@ -38,6 +38,6 @@ dependencies {
     testImplementation project(':tests-common')
     testImplementation libs.roboelectric
     testImplementation libs.junit
-    testImplementation libs.android.junit
+    testImplementation libs.androidx.test.junit
     testImplementation libs.kotlin.test
 }

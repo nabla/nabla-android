@@ -82,7 +82,8 @@ junit = "junit:junit:4.13.2"
 turbine = "app.cash.turbine:turbine:0.12.1"
 mockk = "io.mockk:mockk:1.13.2"
 roboelectric = "org.robolectric:robolectric:4.9"
-android-junit = "androidx.test.ext:junit-ktx:1.1.4"
+androidx-test-core = "androidx.test:core-ktx:1.5.0"
+androidx-test-junit = "androidx.test.ext:junit-ktx:1.1.4"
 hamcrest = 'org.hamcrest:hamcrest:2.2'
 
 # Downgraded from 1.1.4 because of https://github.com/livekit/client-sdk-android/issues/159

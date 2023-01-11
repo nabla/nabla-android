@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation libs.espressoIntents
     androidTestImplementation libs.testRules
     androidTestImplementation libs.hamcrest
-    androidTestImplementation libs.android.junit
+    androidTestImplementation libs.androidx.test.junit
     androidTestImplementation libs.kotlin.test
 
     coreLibraryDesugaring libs.desugaring
