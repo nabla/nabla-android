@@ -14,6 +14,14 @@ import io.sentry.protocol.Message
 internal class SentryErrorReporter(
     private val logger: Logger
 ) : ErrorReporter {
+    /**
+     * Map to save tags to reuse them if [hub] instance changes
+     */
+    private val tags = mutableMapOf<String, String>()
+    /**
+     * Map to save extras to reuse them if [hub] instance changes
+     */
+    private val extras = mutableMapOf<String, String>()
 
     private var hub: IHub = NoOpHub.getInstance()
 
@@ -26,6 +34,15 @@ internal class SentryErrorReporter(
             isAttachStacktrace = false
         }
         hub = Hub(options)
+
+        tags.forEach { (name, value) ->
+            hub.setTag(name, value)
+        }
+
+        extras.forEach { (name, value) ->
+            hub.setExtra(name, value)
+        }
+
         options.integrations.forEach { it.register(hub, options) }
         logger.debug("Reporter enabled for env $env", domain = Logger.ERROR_REPORTING_DOMAIN)
     }
@@ -35,9 +52,14 @@ internal class SentryErrorReporter(
         hub = NoOpHub.getInstance()
     }
 
-    override fun reportException(throwable: Throwable) {
-        logger.debug("Report throwable", domain = Logger.ERROR_REPORTING_DOMAIN)
-        hub.captureException(throwable)
+    override fun setTag(name: String, value: String) {
+        hub.setTag(name, value)
+        tags[name] = value
+    }
+
+    override fun setExtra(name: String, value: String) {
+        hub.setExtra(name, value)
+        extras[name] = value
     }
 
     override fun reportEvent(message: String) {
@@ -50,6 +72,34 @@ internal class SentryErrorReporter(
                 }
             },
         )
+    }
+
+    override fun reportWarning(message: String, throwable: Throwable?) {
+        logger.debug("Report warning $message", domain = Logger.ERROR_REPORTING_DOMAIN)
+        if (throwable != null) {
+            hub.addBreadcrumb(message, "Warning")
+            hub.captureEvent(
+                SentryEvent(throwable).apply {
+                    level = SentryLevel.WARNING
+                }
+            )
+        } else {
+            hub.captureMessage(message, SentryLevel.WARNING)
+        }
+    }
+
+    override fun reportError(message: String, throwable: Throwable?) {
+        logger.debug("Report error $message", domain = Logger.ERROR_REPORTING_DOMAIN)
+        if (throwable != null) {
+            hub.addBreadcrumb(message, "Error")
+            hub.captureEvent(
+                SentryEvent(throwable).apply {
+                    level = SentryLevel.ERROR
+                }
+            )
+        } else {
+            hub.captureMessage(message, SentryLevel.ERROR)
+        }
     }
 
     override fun log(message: String, metadata: Map<String, Any>?, domain: String?) {

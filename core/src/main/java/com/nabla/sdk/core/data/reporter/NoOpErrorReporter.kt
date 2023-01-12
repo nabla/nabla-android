@@ -13,11 +13,23 @@ internal class NoOpErrorReporter : ErrorReporter {
         /* no-op */
     }
 
-    override fun reportException(throwable: Throwable) {
+    override fun setTag(name: String, value: String) {
+        /* no-op */
+    }
+
+    override fun setExtra(name: String, value: String) {
         /* no-op */
     }
 
     override fun reportEvent(message: String) {
+        /* no-op */
+    }
+
+    override fun reportWarning(message: String, throwable: Throwable?) {
+        /* no-op */
+    }
+
+    override fun reportError(message: String, throwable: Throwable?) {
         /* no-op */
     }
 

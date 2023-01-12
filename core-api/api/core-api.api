@@ -14,8 +14,11 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/ErrorReporter
 	public abstract fun enable (Ljava/lang/String;Ljava/lang/String;)V
 	public abstract fun log (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;)V
 	public static synthetic fun log$default (Lcom/nabla/sdk/core/domain/boundary/ErrorReporter;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)V
+	public abstract fun reportError (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public abstract fun reportEvent (Ljava/lang/String;)V
-	public abstract fun reportException (Ljava/lang/Throwable;)V
+	public abstract fun reportWarning (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public abstract fun setExtra (Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun setTag (Ljava/lang/String;Ljava/lang/String;)V
 }
 
 public final class com/nabla/sdk/core/domain/boundary/ErrorReporter$Companion {

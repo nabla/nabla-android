@@ -1,6 +1,7 @@
 package com.nabla.sdk.core.injection
 
 import android.content.Context
+import android.os.Build
 import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
@@ -31,7 +32,9 @@ import com.nabla.sdk.core.data.exception.BaseExceptionMapper
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.file.FileService
 import com.nabla.sdk.core.data.file.FileUploadRepositoryImpl
+import com.nabla.sdk.core.data.logger.ErrorReporterLogger
 import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
+import com.nabla.sdk.core.data.logger.MutableCompositeLogger
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.ProviderRepositoryImpl
@@ -70,7 +73,13 @@ public class CoreContainer internal constructor(
     networkConfiguration: NetworkConfiguration,
     private val modulesFactory: List<Module.Factory<out Module>>,
 ) {
-    public val logger: Logger = configuration.logger
+    public val logger: Logger = MutableCompositeLogger(configuration.logger)
+    public val errorReporter: ErrorReporter = if (configuration.enableReporting) {
+        reporterFactory?.create(logger) ?: NoOpErrorReporter()
+    } else {
+        NoOpErrorReporter()
+    }
+
     public val coreGqlMapper: CoreGqlMapper = CoreGqlMapper(logger)
 
     public val clock: Clock = overriddenClock ?: Clock.System
@@ -183,6 +192,18 @@ public class CoreContainer internal constructor(
         )
     }
 
+    init {
+        (logger as? MutableCompositeLogger)?.addLogger(
+            ErrorReporterLogger(
+                errorReporter = errorReporter,
+                publicApiKey = configuration.publicApiKey,
+                sdkVersion = BuildConfig.VERSION_NAME,
+                phoneName = if (Build.MODEL.startsWith(Build.MANUFACTURER, ignoreCase = true)) { Build.MODEL } else { "${Build.MANUFACTURER} ${Build.MODEL}" },
+                androidApiLevel = Build.VERSION.SDK_INT,
+            )
+        )
+    }
+
     internal fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
     internal fun loginInteractor() = LoginInteractor(patientRepository, deviceRepository, sessionClient, logoutInteractor(), activeModules())
 
@@ -196,14 +217,6 @@ public class CoreContainer internal constructor(
 
     public val messagingModule: MessagingModule? by lazy {
         modulesFactory.filterIsInstance<MessagingModule.Factory>().firstOrNull()?.create(this)
-    }
-
-    public val errorReporter: ErrorReporter by lazy {
-        if (configuration.enableReporting) {
-            reporterFactory?.create(logger) ?: NoOpErrorReporter()
-        } else {
-            NoOpErrorReporter()
-        }
     }
 
     private fun activeModules(): List<ModuleType> = modulesFactory.map { it.type() }

@@ -12,10 +12,19 @@ public interface ErrorReporter {
     public fun disable()
 
     @NablaInternal
-    public fun reportException(throwable: Throwable)
+    public fun setTag(name: String, value: String)
+
+    @NablaInternal
+    public fun setExtra(name: String, value: String)
 
     @NablaInternal
     public fun reportEvent(message: String)
+
+    @NablaInternal
+    public fun reportWarning(message: String, throwable: Throwable?)
+
+    @NablaInternal
+    public fun reportError(message: String, throwable: Throwable?)
 
     @NablaInternal
     public fun log(message: String, metadata: Map<String, Any>? = null, domain: String? = null)
