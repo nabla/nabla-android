@@ -5,23 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.bind
-import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentCategoriesBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
-import com.nabla.sdk.scheduling.scene.AppointmentCategoryAdapter
+import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentLocationsBinding
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.scene.AppointmentLocationAdapter
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
 import com.nabla.sdk.scheduling.scene.withNablaSchedulingThemeOverlays
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import com.nabla.sdk.tests.common.DayNightPaparazziRule
 import org.junit.Rule
 import org.junit.Test
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
-class CategorySelectionFragmentTest : BaseCoroutineTest() {
+class LocationSelectionFragmentTest : BaseCoroutineTest() {
     @get:Rule
     val paparazzi = DayNightPaparazziRule()
 
@@ -32,35 +28,15 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
 
             binding.errorLayout.root.isVisible = false
             binding.progressBar.isVisible = false
-            binding.locationHint.isVisible = true
             binding.recyclerView.isVisible = true
-            binding.nablaNoCategoryText.isVisible = false
+            binding.nablaNoLocationText.isVisible = false
 
-            val adapter = AppointmentCategoryAdapter(
-                onClickAppointmentCategoryListener = {},
+            val adapter = AppointmentLocationAdapter(
+                onClickAppointmentLocationListener = {},
             )
 
             binding.recyclerView.adapter = adapter
-            binding.locationHint.text = "It is about in-person appointment."
-            adapter.submitList(
-                listOf(
-                    AppointmentCategory(
-                        id = CategoryId(Uuid.randomUUID()),
-                        name = "Category 1 with short name",
-                        callDuration = 15.minutes,
-                    ),
-                    AppointmentCategory(
-                        id = CategoryId(Uuid.randomUUID()),
-                        name = "Category 2 with longer name but not that long",
-                        callDuration = 30.minutes,
-                    ),
-                    AppointmentCategory(
-                        id = CategoryId(Uuid.randomUUID()),
-                        name = "Category 3 with a much longer name that takes way more than 1 line to be completely displayed even on a large screen !",
-                        callDuration = 1.hours,
-                    ),
-                )
-            )
+            adapter.submitList(AppointmentLocation.values().toList())
 
             return@snapshotDayNightDefaultDevice parent
         }
@@ -73,9 +49,8 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
 
             binding.errorLayout.root.isVisible = false
             binding.progressBar.isVisible = true
-            binding.locationHint.isVisible = false
             binding.recyclerView.isVisible = false
-            binding.nablaNoCategoryText.isVisible = false
+            binding.nablaNoLocationText.isVisible = false
 
             return@snapshotDayNightDefaultDevice parent
         }
@@ -88,9 +63,8 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
 
             binding.errorLayout.root.isVisible = false
             binding.progressBar.isVisible = false
-            binding.locationHint.isVisible = false
             binding.recyclerView.isVisible = false
-            binding.nablaNoCategoryText.isVisible = true
+            binding.nablaNoLocationText.isVisible = true
 
             return@snapshotDayNightDefaultDevice parent
         }
@@ -103,9 +77,8 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
 
             binding.errorLayout.root.isVisible = true
             binding.progressBar.isVisible = false
-            binding.locationHint.isVisible = false
             binding.recyclerView.isVisible = false
-            binding.nablaNoCategoryText.isVisible = false
+            binding.nablaNoLocationText.isVisible = false
 
             binding.errorLayout.bind(
                 error = ErrorUiModel.Generic,
@@ -116,9 +89,9 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
         }
     }
 
-    private fun createBinding(context: Context, layoutInflater: LayoutInflater): Pair<View, NablaSchedulingFragmentCategoriesBinding> {
+    private fun createBinding(context: Context, layoutInflater: LayoutInflater): Pair<View, NablaSchedulingFragmentLocationsBinding> {
         val parent = FrameLayout(context.withNablaSchedulingThemeOverlays())
-        val binding = NablaSchedulingFragmentCategoriesBinding.inflate(
+        val binding = NablaSchedulingFragmentLocationsBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
             false

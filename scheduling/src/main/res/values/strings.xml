@@ -9,10 +9,16 @@
     <string name="nabla_scheduling_confirm_cta">Confirm</string>
     <string name="nabla_scheduling_appointments_pagination_error">An error occurred while loading more appointments.</string>
 
+    <string name="nabla_scheduling_location_selection_title">Select the appointment mode</string>
+    <string name="nabla_scheduling_location_physical">In-person appointment</string>
+    <string name="nabla_scheduling_location_remote">Video call</string>
+    <string name="nabla_scheduling_time_slot_selection_no_location">No availabilities</string>
     <string name="nabla_scheduling_category_selection_title">Select a category</string>
+    <string name="nabla_scheduling_remote_location_hint">It is about video call teleconsultation.</string>
+    <string name="nabla_scheduling_physical_location_hint">It is about in-person appointment.</string>
     <string name="nabla_scheduling_time_slot_selection_title">Select a date</string>
     <string name="nabla_scheduling_confirmation_title">Confirm your appointment</string>
-    <string name="nabla_scheduling_time_slot_selection_no_category">No categories available</string>
+    <string name="nabla_scheduling_time_slot_selection_no_category">No category available</string>
     <string name="nabla_scheduling_time_slot_selection_no_availability">No availabilities</string>
 
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Cancel appointment</string>
@@ -37,8 +43,10 @@
     </plurals>
     <string name="nabla_scheduling_time_slot_pagination_error">An error occurred while loading more availabilities.</string>
 
-    <string name="nabla_scheduling_date_pill_format_today">Consultation planned today at %1$s</string>
-    <string name="nabla_scheduling_date_pill_format_future">Consultation planned on %1$s at %2$s</string>
+    <string name="nabla_scheduling_physical_date_format_today">In-person appointment planned today at %1$s</string>
+    <string name="nabla_scheduling_remote_date_format_today">Video call planned today at %1$s</string>
+    <string name="nabla_scheduling_physical_date_format_future">In-person appointment planned on %1$s at %2$s</string>
+    <string name="nabla_scheduling_remote_date_format_future">Video call planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_time_format">hh:mm aa</string>
     <string name="nabla_scheduling_date_pill_format_date">MMMM d, yyyy</string>
 </resources>

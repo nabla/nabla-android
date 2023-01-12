@@ -5,6 +5,7 @@ import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.graphql.AppointmentConfirmationConsentsQuery
@@ -53,14 +54,23 @@ internal class GqlMapper(
     }
 
     fun mapToAppointmentConfirmationConsents(
-        gqlData: AppointmentConfirmationConsentsQuery.AppointmentConfirmationConsents
+        gqlData: AppointmentConfirmationConsentsQuery.AppointmentConfirmationConsents,
+        location: AppointmentLocation
     ): AppointmentConfirmationConsents {
         val htmlConsents = mutableListOf<String>()
         val checkAndAdd: (String) -> Unit = { htmlString ->
             if (htmlString.isNotBlank()) htmlConsents.add(htmlString)
         }
-        checkAndAdd(gqlData.firstConsentHtml)
-        checkAndAdd(gqlData.secondConsentHtml)
+        when (location) {
+            AppointmentLocation.PHYSICAL -> {
+                checkAndAdd(gqlData.physicalFirstConsentHtml)
+                checkAndAdd(gqlData.physicalSecondConsentHtml)
+            }
+            AppointmentLocation.REMOTE -> {
+                checkAndAdd(gqlData.firstConsentHtml)
+                checkAndAdd(gqlData.secondConsentHtml)
+            }
+        }
         return AppointmentConfirmationConsents(htmlConsents)
     }
 }

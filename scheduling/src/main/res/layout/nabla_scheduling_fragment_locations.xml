@@ -17,19 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
-        app:title="@string/nabla_scheduling_category_selection_title"
-        />
-
-    <TextView
-        android:textAppearance="?textAppearanceBody1"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:id="@+id/locationHint"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:title="@string/nabla_scheduling_location_selection_title"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -42,9 +30,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationHint"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:itemCount="3"
-        tools:listitem="@layout/nabla_scheduling_item_appointment_category"
+        tools:listitem="@layout/nabla_scheduling_item_appointment_location"
         />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -59,10 +47,10 @@
         />
 
     <TextView
-        android:id="@+id/nablaNoCategoryText"
+        android:id="@+id/nablaNoLocationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nabla_scheduling_time_slot_selection_no_category"
+        android:text="@string/nabla_scheduling_time_slot_selection_no_location"
         android:textAppearance="?textAppearanceTitleMedium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

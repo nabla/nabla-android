@@ -14,6 +14,7 @@ import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.injection.SchedulingContainer
@@ -34,6 +35,13 @@ internal class NablaSchedulingClientImpl(
         return runCatchingCancellable {
             schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
             appointmentRepository.getCategories()
+        }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
+    }
+
+    override suspend fun getAppointmentLocations(): Result<Set<AppointmentLocation>> {
+        return runCatchingCancellable {
+            schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            appointmentRepository.getLocations()
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
@@ -66,16 +74,16 @@ internal class NablaSchedulingClientImpl(
         )
     }
 
-    override suspend fun getAppointmentConfirmationContents(): Result<AppointmentConfirmationConsents> {
+    override suspend fun getAppointmentConfirmationConsents(appointmentLocation: AppointmentLocation): Result<AppointmentConfirmationConsents> {
         return runCatchingCancellable {
             schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
-            appointmentRepository.getAppointmentConfirmationContents()
+            appointmentRepository.getAppointmentConfirmationConsents(appointmentLocation)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
-    override suspend fun scheduleAppointment(categoryId: CategoryId, providerId: UUID, slot: Instant): Result<Appointment> {
+    override suspend fun scheduleAppointment(location: AppointmentLocation, categoryId: CategoryId, providerId: UUID, slot: Instant): Result<Appointment> {
         return runCatchingCancellable {
-            appointmentRepository.scheduleAppointment(categoryId, providerId, slot)
+            appointmentRepository.scheduleAppointment(location, categoryId, providerId, slot)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 

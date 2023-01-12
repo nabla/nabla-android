@@ -9,6 +9,7 @@ import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +22,7 @@ internal class AppointmentRepositoryImpl(
     private val gqlAppointmentDataSource: GqlAppointmentDataSource,
     private val gqlAppointmentCategoryDataSource: GqlAppointmentCategoryDataSource,
     private val gqlAppointmentConfirmConsentsDataSource: GqlAppointmentConfirmConsentsDataSource,
+    private val gqlAppointmentLocationDataSource: GqlAppointmentLocationDataSource,
 ) : AppointmentRepository {
 
     override fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment>> = gqlAppointmentDataSource.watchUpcomingAppointments()
@@ -35,6 +37,9 @@ internal class AppointmentRepositoryImpl(
     override suspend fun loadMorePastAppointments() = loadMorePastAppointmentsSharedSingle.await()
 
     override suspend fun getCategories(): List<AppointmentCategory> = gqlAppointmentCategoryDataSource.getCategories()
+    override suspend fun getLocations(): Set<AppointmentLocation> {
+        return gqlAppointmentLocationDataSource.getAvailableLocations()
+    }
 
     override fun watchAvailabilitySlots(categoryId: CategoryId): Flow<PaginatedList<AvailabilitySlot>> =
         gqlAppointmentCategoryDataSource.watchAvailabilitySlots(categoryId)
@@ -48,17 +53,20 @@ internal class AppointmentRepositoryImpl(
         }
         .await()
 
-    override suspend fun getAppointmentConfirmationContents(): AppointmentConfirmationConsents {
-        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents()
+    override suspend fun getAppointmentConfirmationConsents(
+        appointmentLocation: AppointmentLocation
+    ): AppointmentConfirmationConsents {
+        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(appointmentLocation)
     }
 
     override suspend fun scheduleAppointment(
+        location: AppointmentLocation,
         categoryId: CategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
         return try {
-            gqlAppointmentDataSource.scheduleAppointment(categoryId, providerId, slot)
+            gqlAppointmentDataSource.scheduleAppointment(location, categoryId, providerId, slot)
         } catch (gqlException: GraphQLException) {
             try {
                 // very likely the input is not valid anymore (e.g. the selected slot is not available anymore)

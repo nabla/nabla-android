@@ -14,6 +14,7 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingInternalModule
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,6 +32,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 internal class TimeSlotsViewModel(
+    private val location: AppointmentLocation,
     private val categoryId: CategoryId,
     private val schedulingModule: SchedulingInternalModule,
     private val logger: Logger,
@@ -148,6 +150,7 @@ internal class TimeSlotsViewModel(
         eventsMutableFlow.emitIn(
             viewModelScope,
             Event.GoToConfirmation(
+                location,
                 categoryId,
                 providerId,
                 selectedSlot,
@@ -163,7 +166,13 @@ internal class TimeSlotsViewModel(
     }
 
     sealed interface Event {
-        data class GoToConfirmation(val categoryId: CategoryId, val providerId: Uuid, val slot: Instant) : Event
+        data class GoToConfirmation(
+            val location: AppointmentLocation,
+            val categoryId: CategoryId,
+            val providerId: Uuid,
+            val slot: Instant,
+        ) : Event
+
         sealed class ErrorAlert(@StringRes val errorMessageRes: Int) : Event {
             object Pagination : ErrorAlert(R.string.nabla_scheduling_time_slot_pagination_error)
         }

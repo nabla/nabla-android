@@ -8,7 +8,7 @@
     android:layout_margin="6dp"
     android:background="@drawable/nabla_time_slot_background"
     android:gravity="center"
-    android:paddingHorizontal="24dp"
+    android:paddingHorizontal="12dp"
     android:paddingVertical="6dp"
     android:textAppearance="?textAppearanceBodyLarge"
     android:textColor="@color/nabla_color_time_slot_on_container"

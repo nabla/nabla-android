@@ -32,16 +32,19 @@ query AppointmentConfirmationConsents {
     appointmentConfirmationConsents {
         firstConsentHtml
         secondConsentHtml
+        physicalFirstConsentHtml
+        physicalSecondConsentHtml
     }
 }
 
 mutation ScheduleAppointment(
     $categoryId: UUID!,
     $providerId: UUID!,
+    $isPhysical: Boolean!,
     $slot: DateTime!,
     $timezone: TimeZone!,
 ) {
-    scheduleAppointment(categoryId: $categoryId, providerId: $providerId, slot: $slot, timeZone: $timezone) {
+    scheduleAppointmentV2(categoryId: $categoryId, providerId: $providerId, isPhysical: $isPhysical, slot: $slot, timeZone: $timezone) {
         appointment {
             ...AppointmentFragment
         }
@@ -121,5 +124,12 @@ fragment AppointmentFragment on Appointment {
         ... on FinalizedAppointment {
             empty: _
         }
+    }
+}
+
+query AppointmentAvailableLocations {
+    appointmentAvailableLocations {
+        hasPhysicalAvailabilities
+        hasRemoteAvailabilities
     }
 }

@@ -14,6 +14,7 @@ import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
 import kotlinx.datetime.Instant
@@ -28,23 +29,52 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         if (savedInstanceState == null) {
-            pushFragment(CategorySelectionFragment.newInstance(intent.requireSdkName()), isFirstScreen = true)
+            pushFragment(LocationSelectionFragment.newInstance(intent.requireSdkName()), isFirstScreen = true)
         }
     }
 
-    internal fun goToTimeSlots(categoryId: CategoryId) {
-        pushFragment(TimeSlotsFragment.newInstance(categoryId, intent.requireSdkName()))
+    internal fun goToCategorySelection(appointmentLocation: AppointmentLocation, singleLocation: Boolean = false) {
+        pushFragment(
+            CategorySelectionFragment.newInstance(location = appointmentLocation, showLocationHint = singleLocation, intent.requireSdkName()),
+            popBackStack = singleLocation,
+            addToBackStack = !singleLocation
+        )
+    }
+
+    internal fun goToTimeSlots(location: AppointmentLocation, categoryId: CategoryId) {
+        pushFragment(
+            TimeSlotsFragment.newInstance(location, categoryId, intent.requireSdkName()),
+            addToBackStack = true
+        )
     }
 
     internal fun goToConfirmation(
+        location: AppointmentLocation,
         categoryId: CategoryId,
         providerId: Uuid,
         slot: Instant,
     ) {
-        pushFragment(AppointmentConfirmationFragment.newInstance(categoryId, providerId, slot, intent.requireSdkName()))
+        pushFragment(
+            AppointmentConfirmationFragment.newInstance(
+                location = location,
+                categoryId = categoryId,
+                providerId = providerId,
+                slot = slot,
+                sdkName = intent.requireSdkName()
+            ),
+            addToBackStack = true
+        )
     }
 
-    private fun pushFragment(fragment: Fragment, isFirstScreen: Boolean = false) {
+    private fun pushFragment(
+        fragment: Fragment,
+        isFirstScreen: Boolean = false,
+        addToBackStack: Boolean = false,
+        popBackStack: Boolean = false
+    ) {
+        if (popBackStack) {
+            supportFragmentManager.popBackStack()
+        }
         supportFragmentManager.commit {
             if (isFirstScreen) {
                 setTransition(TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN)
@@ -58,7 +88,7 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
                 )
             }
             replace(binding.fragmentContainer.id, fragment)
-            if (!isFirstScreen) addToBackStack(null)
+            if (addToBackStack) addToBackStack(null)
         }
     }
 

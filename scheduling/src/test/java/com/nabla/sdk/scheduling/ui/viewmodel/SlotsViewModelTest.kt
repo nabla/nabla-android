@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.stubs.StdLogger
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsUiItem
@@ -83,6 +84,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
 
         val slotsDataFlow = MutableSharedFlow<WatchPaginatedResponse<List<AvailabilitySlot>>>()
         val viewModel = TimeSlotsViewModel(
+            AppointmentLocation.REMOTE,
             CategoryId(uuid4()),
             object : SchedulingInternalModuleAdapter() {
                 override fun watchAvailabilitySlots(categoryId: CategoryId): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {

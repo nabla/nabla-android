@@ -19,6 +19,7 @@ import com.nabla.sdk.scheduling.data.apollo.GqlMapper
 import com.nabla.sdk.scheduling.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.graphql.AppointmentsEventsSubscription
 import com.nabla.sdk.scheduling.graphql.CancelAppointmentMutation
@@ -63,17 +64,22 @@ internal class GqlAppointmentDataSource(
     }
 
     suspend fun scheduleAppointment(
+        location: AppointmentLocation,
         categoryId: CategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
         return apolloClient.mutation(
             ScheduleAppointmentMutation(
-                categoryId.value, providerId, slot, TimeZone.currentSystemDefault()
+                categoryId = categoryId.value,
+                providerId = providerId,
+                isPhysical = location == AppointmentLocation.PHYSICAL,
+                slot = slot,
+                timezone = TimeZone.currentSystemDefault()
             )
         ).execute()
             .dataOrThrowOnError
-            .scheduleAppointment.appointment.appointmentFragment
+            .scheduleAppointmentV2.appointment.appointmentFragment
             .also { appointmentFragment ->
                 updateUpcomingAppointmentsCache(inserterOf(appointmentFragment))
             }

@@ -92,6 +92,7 @@ public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentA
 
 public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding : androidx/viewbinding/ViewBinding {
 	public final field errorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
+	public final field locationHint Landroid/widget/TextView;
 	public final field nablaNoCategoryText Landroid/widget/TextView;
 	public final field progressBar Lcom/google/android/material/progressindicator/CircularProgressIndicator;
 	public final field recyclerView Landroidx/recyclerview/widget/RecyclerView;
@@ -101,6 +102,19 @@ public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentC
 	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
 	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding;
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentCategoriesBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentLocationsBinding : androidx/viewbinding/ViewBinding {
+	public final field errorLayout Lcom/nabla/sdk/core/databinding/NablaErrorLayoutBinding;
+	public final field nablaNoLocationText Landroid/widget/TextView;
+	public final field progressBar Lcom/google/android/material/progressindicator/CircularProgressIndicator;
+	public final field recyclerView Landroidx/recyclerview/widget/RecyclerView;
+	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentLocationsBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentLocationsBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentLocationsBinding;
 }
 
 public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingFragmentTimeSlotsBinding : androidx/viewbinding/ViewBinding {
@@ -124,6 +138,15 @@ public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppoi
 	public fun getRoot ()Landroid/widget/TextView;
 	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentCategoryBinding;
 	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentCategoryBinding;
+}
+
+public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentLocationBinding : androidx/viewbinding/ViewBinding {
+	public final field name Landroid/widget/TextView;
+	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentLocationBinding;
+	public synthetic fun getRoot ()Landroid/view/View;
+	public fun getRoot ()Landroid/widget/TextView;
+	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentLocationBinding;
+	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/scheduling/databinding/NablaSchedulingItemAppointmentLocationBinding;
 }
 
 public final class com/nabla/sdk/scheduling/databinding/NablaSchedulingItemConsentBinding : androidx/viewbinding/ViewBinding {

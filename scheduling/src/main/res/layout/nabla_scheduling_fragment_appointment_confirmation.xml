@@ -84,7 +84,8 @@
                     android:gravity="center"
                     android:textAppearance="?textAppearanceLabelLarge"
                     android:textColor="?colorPrimary"
-                    app:drawableStartCompat="@drawable/nabla_ic_video_camera"
+                    app:drawableStartCompat="@drawable/nabla_ic_video_20"
+                    app:drawableTint="?colorPrimary"
                     app:layout_constrainedWidth="true"
                     tools:text="Consultation prévue le 01/07 à 16:00" />
 

@@ -7,9 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.NablaClient
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
@@ -19,9 +17,14 @@ import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentTimeSlotsBinding
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.BookAppointmentBaseFragment
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
+import com.nabla.sdk.scheduling.scene.requireCategoryId
+import com.nabla.sdk.scheduling.scene.requireLocation
+import com.nabla.sdk.scheduling.scene.setCategoryId
+import com.nabla.sdk.scheduling.scene.setLocation
 import com.nabla.sdk.scheduling.schedulingInternalModule
 
 internal class TimeSlotsFragment : BookAppointmentBaseFragment(
@@ -32,7 +35,8 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     private val viewModel: TimeSlotsViewModel by viewModels {
         factoryFor {
             TimeSlotsViewModel(
-                categoryId = getCategoryId(),
+                location = location,
+                categoryId = categoryId,
                 schedulingModule = nablaClient.schedulingInternalModule,
                 logger = nablaClient.coreContainer.logger,
             )
@@ -44,6 +48,14 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
             onSlotClicked = viewModel::onSlotClicked,
             onBindLoading = { viewModel.onListReachedBottom() }
         )
+    }
+
+    private val location: AppointmentLocation by lazy {
+        requireLocation()
+    }
+
+    private val categoryId: CategoryId by lazy {
+        requireCategoryId()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +79,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
         viewLifecycleOwner.launchCollect(viewModel.eventsFlow) { event ->
             when (event) {
                 is TimeSlotsViewModel.Event.GoToConfirmation -> hostActivity().goToConfirmation(
+                    event.location,
                     event.categoryId,
                     event.providerId,
                     event.slot,
@@ -96,26 +109,20 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
         }
     }
 
-    private fun getCategoryId(): CategoryId {
-        val stringId = requireArguments().getString(ARG_CATEGORY_ID) ?: throwNablaInternalException("Missing Category Id")
-        return CategoryId(Uuid.fromString(stringId))
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding.recyclerView.adapter = null
     }
 
     internal companion object {
-        private const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"
-
-        internal fun newInstance(categoryId: CategoryId, sdkName: String): TimeSlotsFragment {
-            val args = Bundle()
-            args.putString(ARG_CATEGORY_ID, categoryId.value.toString())
-            val fragment = TimeSlotsFragment()
-            fragment.arguments = args
-            fragment.setSdkName(sdkName)
-            return fragment
+        internal fun newInstance(
+            location: AppointmentLocation,
+            categoryId: CategoryId,
+            sdkName: String
+        ) = TimeSlotsFragment().apply {
+            setLocation(location)
+            setCategoryId(categoryId)
+            setSdkName(sdkName)
         }
     }
 }

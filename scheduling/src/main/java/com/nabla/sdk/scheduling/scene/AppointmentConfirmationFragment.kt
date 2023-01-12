@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.text.getSpans
 import androidx.core.view.isVisible
@@ -30,6 +31,7 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
@@ -47,7 +49,8 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     private val viewModel: AppointmentConfirmationViewModel by viewModels {
         factoryFor {
             AppointmentConfirmationViewModel(
-                requireArguments().getCategoryId(),
+                requireLocation(),
+                requireCategoryId(),
                 requireArguments().getProviderId(),
                 requireArguments().getSlot(),
                 getNablaInstanceByName(),
@@ -59,6 +62,18 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val locationIconRes = when (requireLocation()) {
+            AppointmentLocation.PHYSICAL -> R.drawable.nabla_ic_home_20
+            AppointmentLocation.REMOTE -> R.drawable.nabla_ic_video_20
+        }
+
+        binding.nablaConfirmAppointmentDatePill.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            locationIconRes,
+            0,
+            0,
+            0
+        )
 
         dateFormatter = SimpleDateFormat(getString(R.string.nabla_scheduling_time_format), Locale.getDefault())
 
@@ -117,38 +132,41 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         val formattedTime = dateFormatter.format(toJavaDate())
 
         return if (isToday) {
-            getString(R.string.nabla_scheduling_date_pill_format_today, formattedTime)
+            val stringRes = when (requireLocation()) {
+                AppointmentLocation.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_today
+                AppointmentLocation.REMOTE -> R.string.nabla_scheduling_remote_date_format_today
+            }
+            getString(stringRes, formattedTime)
         } else {
             val formattedDate = SimpleDateFormat(getString(R.string.nabla_scheduling_date_pill_format_date), Locale.getDefault())
                 .format(toJavaDate())
-            getString(R.string.nabla_scheduling_date_pill_format_future, formattedDate, formattedTime)
+            val stringRes = when (requireLocation()) {
+                AppointmentLocation.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_future
+                AppointmentLocation.REMOTE -> R.string.nabla_scheduling_remote_date_format_future
+            }
+            getString(stringRes, formattedDate, formattedTime)
         }
     }
 
     internal companion object {
-        private const val ARG_CATEGORY_ID = "ARG_CATEGORY_ID"
         private const val ARG_PROVIDER_ID = "ARG_PROVIDER_ID"
         private const val ARG_SLOT_INSTANT = "ARG_SLOT_INSTANT"
 
         internal fun newInstance(
+            location: AppointmentLocation,
             categoryId: CategoryId,
             providerId: Uuid,
             slot: Instant,
             sdkName: String,
         ) = AppointmentConfirmationFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_CATEGORY_ID, categoryId.value.toString())
-                putString(ARG_PROVIDER_ID, providerId.toString())
-                putLong(ARG_SLOT_INSTANT, slot.toEpochMilliseconds())
-            }
+            arguments = bundleOf(
+                ARG_PROVIDER_ID to providerId.toString(),
+                ARG_SLOT_INSTANT to slot.toEpochMilliseconds(),
+            )
+            setLocation(location)
+            setCategoryId(categoryId)
             setSdkName(sdkName)
         }
-
-        private fun Bundle.getCategoryId() = CategoryId(
-            Uuid.fromString(
-                getString(ARG_CATEGORY_ID) ?: throwNablaInternalException("Missing Category Id")
-            )
-        )
 
         private fun Bundle.getProviderId() =
             Uuid.fromString(
