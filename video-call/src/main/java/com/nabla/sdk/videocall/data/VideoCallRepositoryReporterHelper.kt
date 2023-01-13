@@ -33,7 +33,11 @@ internal class VideoCallRepositoryReporterHelper(private val errorReporter: Erro
                 )
                 when (event) {
                     is RoomEvent.Disconnected -> {
-                        errorReporter.reportError("Call ended", event.error)
+                        if (event.error == null) {
+                            errorReporter.reportEvent("Call ended without error")
+                        } else {
+                            errorReporter.reportError("Call ended with error", event.error)
+                        }
                     }
                     is RoomEvent.FailedToConnect -> {
                         errorReporter.reportError("Call failed to connect", event.error)
