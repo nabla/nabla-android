@@ -11,17 +11,17 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
-import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationFragment.Companion.setHtml
 import com.nabla.sdk.scheduling.scene.withNablaSchedulingThemeOverlays
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import com.nabla.sdk.tests.common.DayNightPaparazziRule
+import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
 
@@ -108,10 +108,12 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
     ) {
         nablaConfirmAppointmentButton.isEnabled = continueEnabled
 
-        nablaConfirmAppointmentAvatar.loadAvatar(provider)
-        nablaConfirmAppointmentTitle.text = provider.fullNameWithPrefix(context)
-        nablaConfirmAppointmentSubtitle.setTextOrHide(provider.title)
-        nablaConfirmAppointmentDatePill.text = "2028-01-01 at 8:20am"
+        nablaConfirmAppointmentSummary.bind(
+            locationType = AppointmentLocationType.REMOTE,
+            provider = provider,
+            slot = Instant.parse("2028-01-01T10:20:00Z"),
+            address = null
+        )
 
         consents.htmlConsents.forEachIndexed { _, html ->
             val consentView = NablaSchedulingItemConsentBinding.inflate(

@@ -24,7 +24,6 @@
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Annuler le rendez-vous ?</string>
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Confirmer l’annulation</string>
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Conserver le rendez-vous</string>
-    <string name="nabla_scheduling_appointment_item_options_content_description">Options</string>
     <string name="nabla_scheduling_appointment_item_join_cta">Rejoindre l’appel</string>
     <string name="nabla_scheduling_appointment_item_return_cta">Revenir à l’appel</string>
     <string name="nabla_scheduling_appointment_item_cancel_action">Annuler le rendez-vous</string>
@@ -52,4 +51,6 @@
     <string name="nabla_scheduling_remote_date_format_future">Téléconsultation prévue le %1$s à %2$s</string>
     <string name="nabla_scheduling_time_format">HH\'h\'mm</string>
     <string name="nabla_scheduling_date_pill_format_date">d MMM</string>
+
+    <string name="nabla_scheduling_appointment_details_title">Rendez-vous</string>
 </resources>

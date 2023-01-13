@@ -7,11 +7,11 @@ import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.scheduling.domain.boundary.AppointmentRepository
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
@@ -37,15 +37,16 @@ internal class AppointmentRepositoryImpl(
     override suspend fun loadMorePastAppointments() = loadMorePastAppointmentsSharedSingle.await()
 
     override suspend fun getCategories(): List<AppointmentCategory> = gqlAppointmentCategoryDataSource.getCategories()
-    override suspend fun getLocations(): Set<AppointmentLocation> {
-        return gqlAppointmentLocationDataSource.getAvailableLocations()
+
+    override suspend fun getLocationTypes(): Set<AppointmentLocationType> {
+        return gqlAppointmentLocationDataSource.getAvailableLocationTypes()
     }
 
-    override fun watchAvailabilitySlots(categoryId: CategoryId): Flow<PaginatedList<AvailabilitySlot>> =
+    override fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<PaginatedList<AvailabilitySlot>> =
         gqlAppointmentCategoryDataSource.watchAvailabilitySlots(categoryId)
 
-    private val loadMoreAvailabilitySlotsSharedSingleMap = mutableMapOf<CategoryId, SharedSingle<Unit, Result<Unit>>>()
-    override suspend fun loadMoreAvailabilitySlots(categoryId: CategoryId) = loadMoreAvailabilitySlotsSharedSingleMap
+    private val loadMoreAvailabilitySlotsSharedSingleMap = mutableMapOf<AppointmentCategoryId, SharedSingle<Unit, Result<Unit>>>()
+    override suspend fun loadMoreAvailabilitySlots(categoryId: AppointmentCategoryId) = loadMoreAvailabilitySlotsSharedSingleMap
         .getOrPut(categoryId) {
             sharedSingleIn(repoScope) {
                 gqlAppointmentCategoryDataSource.loadMoreAvailabilitySlots(categoryId)
@@ -54,14 +55,14 @@ internal class AppointmentRepositoryImpl(
         .await()
 
     override suspend fun getAppointmentConfirmationConsents(
-        appointmentLocation: AppointmentLocation
+        location: AppointmentLocationType
     ): AppointmentConfirmationConsents {
-        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(appointmentLocation)
+        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(location)
     }
 
     override suspend fun scheduleAppointment(
-        location: AppointmentLocation,
-        categoryId: CategoryId,
+        location: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
@@ -81,5 +82,9 @@ internal class AppointmentRepositoryImpl(
 
     override suspend fun cancelAppointment(id: AppointmentId) {
         return gqlAppointmentDataSource.cancelAppointment(id)
+    }
+
+    override suspend fun getAppointment(id: AppointmentId): Appointment {
+        return gqlAppointmentDataSource.getAppointment(id)
     }
 }

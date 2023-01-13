@@ -14,7 +14,7 @@ import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentLocationsBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.LocationSelectionViewModel.State
 
 internal class LocationSelectionFragment : BookAppointmentBaseFragment(R.layout.nabla_scheduling_fragment_locations) {
@@ -24,7 +24,7 @@ internal class LocationSelectionFragment : BookAppointmentBaseFragment(R.layout.
     private val viewModel: LocationSelectionViewModel by viewModels {
         factoryFor { LocationSelectionViewModel(nablaClient = nablaClient) }
     }
-    private val adapter = AppointmentLocationAdapter(::onClickLocation)
+    private val adapter = AppointmentLocationAdapter(::onClickLocationType)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,8 +62,8 @@ internal class LocationSelectionFragment : BookAppointmentBaseFragment(R.layout.
         binding.recyclerView.adapter = null
     }
 
-    private fun onClickLocation(appointmentLocation: AppointmentLocation) {
-        hostActivity().goToCategorySelection(appointmentLocation)
+    private fun onClickLocationType(locationType: AppointmentLocationType) {
+        hostActivity().goToCategorySelection(locationType)
     }
 
     internal companion object {

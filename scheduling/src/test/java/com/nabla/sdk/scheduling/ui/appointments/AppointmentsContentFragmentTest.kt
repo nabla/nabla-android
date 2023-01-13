@@ -33,8 +33,8 @@ class AppointmentsContentFragmentTest : BaseCoroutineTest() {
             val (parent, binding) = createBinding(context, layoutInflater)
 
             val adapter = AppointmentsAdapter(
-                onCancelClicked = {},
                 onJoinClicked = { _, _ -> },
+                onDetailsClicked = { },
             )
 
             adapter.overrideAvatarBackgroundRandomSeed(null)

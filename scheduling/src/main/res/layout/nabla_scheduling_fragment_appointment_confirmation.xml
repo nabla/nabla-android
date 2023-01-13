@@ -22,74 +22,28 @@
         android:id="@+id/nablaConfirmLoadedGroup"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="?colorSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="64dp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/nablaProviderInfo"
+            <com.nabla.sdk.scheduling.scene.AppointmentSummaryView
+                android:id="@+id/nablaConfirmAppointmentSummary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/nabla_scheduling_confirmation_background"
-                android:gravity="center"
-                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.nabla.sdk.core.ui.components.NablaAvatarView
-                    android:id="@+id/nablaConfirmAppointmentAvatar"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginTop="20dp" />
-
-                <TextView
-                    android:id="@+id/nablaConfirmAppointmentTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:textAppearance="?textAppearanceTitleMedium"
-                    tools:text="Dr Véronique Cayol" />
-
-                <TextView
-                    android:id="@+id/nablaConfirmAppointmentSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center"
-                    android:textAppearance="?textAppearanceBodyMedium"
-                    app:layout_constrainedWidth="true"
-                    tools:text="Gynécologue" />
-
-                <TextView
-                    android:id="@+id/nablaConfirmAppointmentDatePill"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/nabla_scheduling_date_pill_background"
-                    android:drawablePadding="4dp"
-                    android:gravity="center"
-                    android:textAppearance="?textAppearanceLabelLarge"
-                    android:textColor="?colorPrimary"
-                    app:drawableStartCompat="@drawable/nabla_ic_video_20"
-                    app:drawableTint="?colorPrimary"
-                    app:layout_constrainedWidth="true"
-                    tools:text="Consultation prévue le 01/07 à 16:00" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
             <LinearLayout
                 android:id="@+id/nablaConsentsContainer"
@@ -98,7 +52,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nablaProviderInfo" />
+                app:layout_constraintTop_toBottomOf="@id/nablaConfirmAppointmentSummary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

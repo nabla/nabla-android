@@ -6,11 +6,11 @@ import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import java.util.UUID
@@ -19,11 +19,11 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
     override suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>> =
         runCatchingCancellable { error("Not mocked") }
 
-    override suspend fun getAppointmentLocations(): Result<Set<AppointmentLocation>> {
+    override suspend fun getAppointmentLocationTypes(): Result<Set<AppointmentLocationType>> {
         error("Not mocked")
     }
 
-    override fun watchAvailabilitySlots(categoryId: CategoryId): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> =
+    override fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> =
         error("Not mocked")
 
     override fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =
@@ -32,13 +32,13 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
     override fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =
         error("Not mocked")
 
-    override suspend fun getAppointmentConfirmationConsents(appointmentLocation: AppointmentLocation): Result<AppointmentConfirmationConsents> {
+    override suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): Result<AppointmentConfirmationConsents> {
         error("Not mocked")
     }
 
     override suspend fun scheduleAppointment(
-        location: AppointmentLocation,
-        categoryId: CategoryId,
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant
     ): Result<Appointment> {
@@ -47,6 +47,10 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
 
     override suspend fun cancelAppointment(id: AppointmentId): Result<Unit> =
         runCatchingCancellable { error("Not mocked") }
+
+    override suspend fun getAppointment(id: AppointmentId): Result<Appointment> {
+        error("Not mocked")
+    }
 
     override fun openScheduleAppointmentActivity(context: Context) = error("Not mocked")
 }

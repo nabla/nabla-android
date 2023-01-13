@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
+import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 
 internal class AppointmentsAdapter(
-    private val onCancelClicked: (appointment: ItemUiModel.AppointmentUiModel.Upcoming) -> Unit,
     private val onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
+    private val onDetailsClicked: (appointmentId: AppointmentId) -> Unit,
 ) : ListAdapter<ItemUiModel, RecyclerView.ViewHolder>(
     object : DiffUtil.ItemCallback<ItemUiModel>() {
         override fun areItemsTheSame(
@@ -28,7 +29,7 @@ internal class AppointmentsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (ViewType.values()[viewType]) {
             ViewType.LOADING_MORE -> LoadingMoreViewHolder.create(parent)
-            ViewType.APPOINTMENT_ITEM -> AppointmentViewHolder.create(parent, onCancelClicked, onJoinClicked)
+            ViewType.APPOINTMENT_ITEM -> AppointmentViewHolder.create(parent, onJoinClicked, onDetailsClicked)
         }
     }
 

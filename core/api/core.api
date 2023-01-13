@@ -731,6 +731,7 @@ public final class com/nabla/sdk/core/domain/entity/StringOrResKt {
 	public static final fun asStringOrRes (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/StringOrRes;
 	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroid/content/Context;)Ljava/lang/String;
 	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/fragment/app/Fragment;)Ljava/lang/String;
+	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/viewbinding/ViewBinding;)Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/SystemUser {
@@ -1199,14 +1200,14 @@ public final class com/nabla/sdk/core/ui/helpers/mediapicker/PickMediasFromLibra
 
 public final class com/nabla/sdk/core/ui/model/ErrorUiModel {
 	public static final field Companion Lcom/nabla/sdk/core/ui/model/ErrorUiModel$Companion;
-	public fun <init> (II)V
-	public final fun component1 ()I
-	public final fun component2 ()I
-	public final fun copy (II)Lcom/nabla/sdk/core/ui/model/ErrorUiModel;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/model/ErrorUiModel;IIILjava/lang/Object;)Lcom/nabla/sdk/core/ui/model/ErrorUiModel;
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Lcom/nabla/sdk/core/domain/entity/StringOrRes;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/StringOrRes;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/StringOrRes;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Lcom/nabla/sdk/core/domain/entity/StringOrRes;)Lcom/nabla/sdk/core/ui/model/ErrorUiModel;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/model/ErrorUiModel;Lcom/nabla/sdk/core/domain/entity/StringOrRes;Lcom/nabla/sdk/core/domain/entity/StringOrRes;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/model/ErrorUiModel;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getBodyRes ()I
-	public final fun getTitleRes ()I
+	public final fun getBody ()Lcom/nabla/sdk/core/domain/entity/StringOrRes;
+	public final fun getTitle ()Lcom/nabla/sdk/core/domain/entity/StringOrRes;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

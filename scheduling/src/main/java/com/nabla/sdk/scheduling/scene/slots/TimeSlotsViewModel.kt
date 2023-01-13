@@ -14,9 +14,9 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingInternalModule
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -32,8 +32,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 internal class TimeSlotsViewModel(
-    private val location: AppointmentLocation,
-    private val categoryId: CategoryId,
+    private val locationType: AppointmentLocationType,
+    private val categoryId: AppointmentCategoryId,
     private val schedulingModule: SchedulingInternalModule,
     private val logger: Logger,
 ) : ViewModel() {
@@ -150,7 +150,7 @@ internal class TimeSlotsViewModel(
         eventsMutableFlow.emitIn(
             viewModelScope,
             Event.GoToConfirmation(
-                location,
+                locationType,
                 categoryId,
                 providerId,
                 selectedSlot,
@@ -167,8 +167,8 @@ internal class TimeSlotsViewModel(
 
     sealed interface Event {
         data class GoToConfirmation(
-            val location: AppointmentLocation,
-            val categoryId: CategoryId,
+            val locationType: AppointmentLocationType,
+            val categoryId: AppointmentCategoryId,
             val providerId: Uuid,
             val slot: Instant,
         ) : Event

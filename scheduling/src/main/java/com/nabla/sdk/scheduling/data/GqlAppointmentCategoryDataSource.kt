@@ -11,8 +11,8 @@ import com.nabla.sdk.core.data.apollo.updateCache
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.scheduling.data.apollo.GqlMapper
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.graphql.AppointmentCategoriesQuery
 import com.nabla.sdk.scheduling.graphql.AvailabilitySlotsQuery
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +31,7 @@ internal class GqlAppointmentCategoryDataSource(
         .categories
         .map { mapper.mapToAppointmentCategory(it.appointmentCategoryFragment) }
 
-    fun watchAvailabilitySlots(categoryId: CategoryId): Flow<PaginatedList<AvailabilitySlot>> {
+    fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<PaginatedList<AvailabilitySlot>> {
         return apolloClient.query(availabilitySlotsPageQuery(categoryId))
             .fetchPolicy(FetchPolicy.NetworkFirst)
             .watch(fetchThrows = true)
@@ -46,7 +46,7 @@ internal class GqlAppointmentCategoryDataSource(
             }
     }
 
-    suspend fun loadMoreAvailabilitySlots(categoryId: CategoryId) {
+    suspend fun loadMoreAvailabilitySlots(categoryId: AppointmentCategoryId) {
         apolloClient.updateCache(availabilitySlotsPageQuery(categoryId)) { cachedQueryData ->
             val cachedPages = cachedQueryData?.appointmentCategory?.category?.availableSlots?.availabilitySlotsPageFragment
             if (cachedPages == null || !cachedPages.hasMore) {
@@ -75,14 +75,14 @@ internal class GqlAppointmentCategoryDataSource(
         }
     }
 
-    suspend fun resetAvailabilitySlotsCache(categoryId: CategoryId) {
+    suspend fun resetAvailabilitySlotsCache(categoryId: AppointmentCategoryId) {
         apolloClient.query(availabilitySlotsPageQuery(categoryId))
             .fetchPolicy(FetchPolicy.NetworkOnly)
             .execute()
     }
 
     companion object {
-        private fun availabilitySlotsPageQuery(categoryId: CategoryId, cursorPage: String? = null) = AvailabilitySlotsQuery(
+        private fun availabilitySlotsPageQuery(categoryId: AppointmentCategoryId, cursorPage: String? = null) = AvailabilitySlotsQuery(
             categoryId.value,
             OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(100))
         )

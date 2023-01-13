@@ -20,6 +20,7 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.Appointment
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -94,7 +95,7 @@ internal class AppointmentsContentViewModel(
                             if (throwable is ServerException) {
                                 throwable.serverMessage.asStringOrRes()
                             } else {
-                                throwable.asNetworkOrGeneric.titleRes.asStringOrRes()
+                                throwable.asNetworkOrGeneric.title
                             }
                         )
                     )
@@ -162,7 +163,7 @@ private fun Flow<WatchPaginatedResponse<List<Appointment>>>.reTriggerWhenNextApp
 ) = transformLatest { appointments ->
     emit(appointments)
     val notSoonAppointments = appointments.content
-        .filterIsInstance<Appointment.Upcoming>()
+        .filter { it.state == AppointmentState.UPCOMING }
         .filter { !clock.isAppointmentSoon(it.scheduledAt) }
         .toMutableList()
 

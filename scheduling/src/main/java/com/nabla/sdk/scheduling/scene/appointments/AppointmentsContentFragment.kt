@@ -14,16 +14,19 @@ import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsContentBinding
+import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.Companion.APPOINTMENT_TYPE_ARG
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.Event
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.State
+import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsActivity
 import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.datetime.Clock
 
@@ -48,9 +51,13 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment() {
 
     private val appointmentsAdapter by lazy {
         AppointmentsAdapter(
-            onCancelClicked = viewModel::onCancelClicked,
             onJoinClicked = viewModel::onJoinClicked,
+            onDetailsClicked = ::openAppointmentDetailsScreen,
         )
+    }
+
+    private fun openAppointmentDetailsScreen(appointmentId: AppointmentId) {
+        startActivity(AppointmentDetailsActivity.newIntent(requireContext(), appointmentId, requireSdkName()))
     }
 
     override fun onCreateView(

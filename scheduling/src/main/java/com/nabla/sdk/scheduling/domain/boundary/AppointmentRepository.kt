@@ -3,11 +3,11 @@ package com.nabla.sdk.scheduling.domain.boundary
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import java.util.UUID
@@ -19,19 +19,21 @@ internal interface AppointmentRepository {
     suspend fun loadMoreUpcomingAppointments()
 
     suspend fun getCategories(): List<AppointmentCategory>
-    suspend fun getLocations(): Set<AppointmentLocation>
+    suspend fun getLocationTypes(): Set<AppointmentLocationType>
 
-    fun watchAvailabilitySlots(categoryId: CategoryId): Flow<PaginatedList<AvailabilitySlot>>
-    suspend fun loadMoreAvailabilitySlots(categoryId: CategoryId)
+    fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<PaginatedList<AvailabilitySlot>>
+    suspend fun loadMoreAvailabilitySlots(categoryId: AppointmentCategoryId)
 
-    suspend fun getAppointmentConfirmationConsents(appointmentLocation: AppointmentLocation): AppointmentConfirmationConsents
+    suspend fun getAppointmentConfirmationConsents(location: AppointmentLocationType): AppointmentConfirmationConsents
 
     suspend fun scheduleAppointment(
-        location: AppointmentLocation,
-        categoryId: CategoryId,
+        location: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment
 
     suspend fun cancelAppointment(id: AppointmentId)
+
+    suspend fun getAppointment(id: AppointmentId): Appointment
 }

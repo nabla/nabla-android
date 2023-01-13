@@ -24,7 +24,6 @@
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Cancel appointment</string>
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Confirm cancellation</string>
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Keep appointment</string>
-    <string name="nabla_scheduling_appointment_item_options_content_description">Options</string>
     <string name="nabla_scheduling_appointment_item_join_cta">Join the call</string>
     <string name="nabla_scheduling_appointment_item_return_cta">Return to the call</string>
     <string name="nabla_scheduling_appointment_item_cancel_action">Cancel appointment</string>
@@ -49,4 +48,6 @@
     <string name="nabla_scheduling_remote_date_format_future">Video call planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_time_format">hh:mm aa</string>
     <string name="nabla_scheduling_date_pill_format_date">MMMM d, yyyy</string>
+
+    <string name="nabla_scheduling_appointment_details_title">Appointment</string>
 </resources>

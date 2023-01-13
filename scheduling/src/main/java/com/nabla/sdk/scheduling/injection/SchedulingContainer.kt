@@ -15,6 +15,7 @@ internal class SchedulingContainer(private val coreContainer: CoreContainer) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val gqlMapper = GqlMapper(
         coreContainer.coreGqlMapper,
+        coreContainer.logger,
     )
     private val gqlAppointmentDataSource = GqlAppointmentDataSource(
         coreContainer.logger,
@@ -32,7 +33,6 @@ internal class SchedulingContainer(private val coreContainer: CoreContainer) {
     )
     private val gqlAppointmentLocationDataSource = GqlAppointmentLocationDataSource(
         coreContainer.apolloClient,
-        gqlMapper
     )
 
     val appointmentRepository = AppointmentRepositoryImpl(

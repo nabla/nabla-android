@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemAppointmentLocationBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 
 internal class AppointmentLocationAdapter(
-    private val onClickAppointmentLocationListener: (AppointmentLocation) -> Unit
-) : ListAdapter<AppointmentLocation, RecyclerView.ViewHolder>(diffCallback) {
+    private val onClickAppointmentLocationTypeListener: (AppointmentLocationType) -> Unit
+) : ListAdapter<AppointmentLocationType, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return AppointmentLocationViewHolder.create(parent, onClickAppointmentLocationListener)
+        return AppointmentLocationViewHolder.create(parent, onClickAppointmentLocationTypeListener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -25,30 +25,30 @@ internal class AppointmentLocationAdapter(
 
 private class AppointmentLocationViewHolder(
     val binding: NablaSchedulingItemAppointmentLocationBinding,
-    val onClickAppointmentLocationListener: (AppointmentLocation) -> Unit,
+    val onClickAppointmentLocationListener: (AppointmentLocationType) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(location: AppointmentLocation) {
+    fun bind(locationType: AppointmentLocationType) {
         binding.name.text = binding.context.getString(
-            when (location) {
-                AppointmentLocation.PHYSICAL -> R.string.nabla_scheduling_location_physical
-                AppointmentLocation.REMOTE -> R.string.nabla_scheduling_location_remote
+            when (locationType) {
+                AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_location_physical
+                AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_location_remote
             }
         )
-        val startIconRes = when (location) {
-            AppointmentLocation.PHYSICAL -> R.drawable.nabla_ic_home_24
-            AppointmentLocation.REMOTE -> R.drawable.nabla_ic_video_24
+        val startIconRes = when (locationType) {
+            AppointmentLocationType.PHYSICAL -> R.drawable.nabla_ic_home_24
+            AppointmentLocationType.REMOTE -> R.drawable.nabla_ic_video_24
         }
         val endIconRes = R.drawable.nabla_ic_chevron_24
         binding.name.setCompoundDrawablesRelativeWithIntrinsicBounds(startIconRes, 0, endIconRes, 0)
         binding.root.setOnClickListener {
-            onClickAppointmentLocationListener(location)
+            onClickAppointmentLocationListener(locationType)
         }
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
-            onClickAppointmentLocationListener: (AppointmentLocation) -> Unit,
+            onClickAppointmentLocationTypeListener: (AppointmentLocationType) -> Unit,
         ): AppointmentLocationViewHolder {
             return AppointmentLocationViewHolder(
                 NablaSchedulingItemAppointmentLocationBinding.inflate(
@@ -56,20 +56,20 @@ private class AppointmentLocationViewHolder(
                     parent,
                     false
                 ),
-                onClickAppointmentLocationListener
+                onClickAppointmentLocationTypeListener
             )
         }
     }
 }
 
-private val diffCallback = object : DiffUtil.ItemCallback<AppointmentLocation>() {
+private val diffCallback = object : DiffUtil.ItemCallback<AppointmentLocationType>() {
     override fun areItemsTheSame(
-        oldItem: AppointmentLocation,
-        newItem: AppointmentLocation
+        oldItem: AppointmentLocationType,
+        newItem: AppointmentLocationType
     ): Boolean = oldItem == newItem
 
     override fun areContentsTheSame(
-        oldItem: AppointmentLocation,
-        newItem: AppointmentLocation
+        oldItem: AppointmentLocationType,
+        newItem: AppointmentLocationType
     ): Boolean = oldItem == newItem
 }

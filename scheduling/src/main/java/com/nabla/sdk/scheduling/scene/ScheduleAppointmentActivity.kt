@@ -14,8 +14,8 @@ import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
 import kotlinx.datetime.Instant
 import com.nabla.sdk.core.R as CoreR
@@ -33,30 +33,30 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         }
     }
 
-    internal fun goToCategorySelection(appointmentLocation: AppointmentLocation, singleLocation: Boolean = false) {
+    internal fun goToCategorySelection(locationType: AppointmentLocationType, singleLocation: Boolean = false) {
         pushFragment(
-            CategorySelectionFragment.newInstance(location = appointmentLocation, showLocationHint = singleLocation, intent.requireSdkName()),
+            CategorySelectionFragment.newInstance(locationType = locationType, showLocationHint = singleLocation, intent.requireSdkName()),
             popBackStack = singleLocation,
             addToBackStack = !singleLocation
         )
     }
 
-    internal fun goToTimeSlots(location: AppointmentLocation, categoryId: CategoryId) {
+    internal fun goToTimeSlots(locationType: AppointmentLocationType, categoryId: AppointmentCategoryId) {
         pushFragment(
-            TimeSlotsFragment.newInstance(location, categoryId, intent.requireSdkName()),
+            TimeSlotsFragment.newInstance(locationType, categoryId, intent.requireSdkName()),
             addToBackStack = true
         )
     }
 
     internal fun goToConfirmation(
-        location: AppointmentLocation,
-        categoryId: CategoryId,
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
         providerId: Uuid,
         slot: Instant,
     ) {
         pushFragment(
             AppointmentConfirmationFragment.newInstance(
-                location = location,
+                locationType = locationType,
                 categoryId = categoryId,
                 providerId = providerId,
                 slot = slot,

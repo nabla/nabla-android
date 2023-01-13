@@ -18,9 +18,11 @@ import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.scheduling.data.apollo.GqlMapper
 import com.nabla.sdk.scheduling.data.apollo.GqlTypeHelper.modify
 import com.nabla.sdk.scheduling.domain.entity.Appointment
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
+import com.nabla.sdk.scheduling.graphql.AppointmentQuery
 import com.nabla.sdk.scheduling.graphql.AppointmentsEventsSubscription
 import com.nabla.sdk.scheduling.graphql.CancelAppointmentMutation
 import com.nabla.sdk.scheduling.graphql.PastAppointmentsQuery
@@ -63,9 +65,16 @@ internal class GqlAppointmentDataSource(
             }
     }
 
+    suspend fun getAppointment(appointmentId: AppointmentId): Appointment {
+        return apolloClient.query(AppointmentQuery(appointmentId = appointmentId.uuid))
+            .execute()
+            .dataOrThrowOnError
+            .let { mapper.mapToAppointment(it.appointment.appointment.appointmentFragment) }
+    }
+
     suspend fun scheduleAppointment(
-        location: AppointmentLocation,
-        categoryId: CategoryId,
+        location: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
@@ -73,7 +82,7 @@ internal class GqlAppointmentDataSource(
             ScheduleAppointmentMutation(
                 categoryId = categoryId.value,
                 providerId = providerId,
-                isPhysical = location == AppointmentLocation.PHYSICAL,
+                isPhysical = location == AppointmentLocationType.PHYSICAL,
                 slot = slot,
                 timezone = TimeZone.currentSystemDefault()
             )
@@ -95,7 +104,7 @@ internal class GqlAppointmentDataSource(
             }
     }
 
-    fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment.Upcoming>> {
+    fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment>> {
         val dataFlow = apolloClient.query(upcomingAppointmentsQuery())
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
@@ -104,7 +113,7 @@ internal class GqlAppointmentDataSource(
                 val items = queryData.upcomingAppointments.appointmentsPageFragment.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedBy { appointment -> appointment.scheduledAt }
-                    .filterIsInstance<Appointment.Upcoming>()
+                    .filter { it.state == AppointmentState.UPCOMING }
 
                 PaginatedList(items, queryData.upcomingAppointments.appointmentsPageFragment.hasMore)
             }
@@ -114,7 +123,7 @@ internal class GqlAppointmentDataSource(
             .filterIsInstance()
     }
 
-    fun watchPastAppointments(): Flow<PaginatedList<Appointment.Finalized>> {
+    fun watchPastAppointments(): Flow<PaginatedList<Appointment>> {
         val dataFlow = apolloClient.query(pastAppointmentsQuery())
             .fetchPolicy(FetchPolicy.CacheAndNetwork)
             .watch(fetchThrows = true)
@@ -124,7 +133,7 @@ internal class GqlAppointmentDataSource(
                 val items = page.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedByDescending { appointment -> appointment.scheduledAt }
-                    .filterIsInstance<Appointment.Finalized>()
+                    .filter { it.state == AppointmentState.FINALIZED }
 
                 PaginatedList(items, page.hasMore)
             }

@@ -23,6 +23,7 @@ type Query {
   provider(id: UUID!): ProviderOutput!
   appointmentConfirmationConsents: AppointmentConfirmationConsentsOutput!
   appointmentAvailableLocations: AppointmentAvailableLocationsOutput!
+  appointment(id: UUID!): AppointmentOutput!
 }
 # ----------------------------------------------------------------------------------------------------------------------
 # Mutations.
@@ -586,4 +587,8 @@ type AppointmentConfirmationConsentsOutput {
 type AppointmentAvailableLocationsOutput {
   hasPhysicalAvailabilities: Boolean!
   hasRemoteAvailabilities: Boolean!
+}
+
+type AppointmentOutput {
+  appointment: Appointment!
 }

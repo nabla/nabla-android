@@ -6,32 +6,50 @@ import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
+import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlin.random.Random
 
-internal fun Appointment.Upcoming.Companion.fake(
+internal fun Appointment.Companion.fake(
     id: AppointmentId = AppointmentId(uuid4()),
     provider: Provider = Provider.fake(),
     scheduledAt: Instant = Clock.System.now(),
-    videoCallRoom: VideoCallRoom? = VideoCallRoom.fake(),
-) = Appointment.Upcoming(
+    state: AppointmentState = AppointmentState.values().random(),
+    location: AppointmentLocation = AppointmentLocation.fake(videoCallRoomIsOpen = state == AppointmentState.UPCOMING),
+) = Appointment(
     id = id,
     provider = provider,
     scheduledAt = scheduledAt,
-    videoCallRoom = videoCallRoom,
+    state = state,
+    location = location,
 )
 
-internal fun Appointment.Finalized.Companion.fake(
-    id: AppointmentId = AppointmentId(uuid4()),
-    provider: Provider = Provider.fake(),
-    scheduledAt: Instant,
-) = Appointment.Finalized(
-    id = id,
-    provider = provider,
-    scheduledAt = scheduledAt,
-)
+internal fun AppointmentLocation.Companion.fake(
+    locationType: AppointmentLocationType = AppointmentLocationType.values().random(),
+    videoCallRoomIsOpen: Boolean = Random.nextBoolean(),
+): AppointmentLocation {
+    return when (locationType) {
+        AppointmentLocationType.REMOTE -> AppointmentLocation.Remote(VideoCallRoom.fake(status = VideoCallRoomStatus.fake(isOpen = videoCallRoomIsOpen)))
+        AppointmentLocationType.PHYSICAL -> AppointmentLocation.Physical(Address.fake())
+    }
+}
+
+internal fun Address.Companion.fake(): Address {
+    return Address(
+        address = "1234 Main St",
+        zipCode = "Fake Zip Code",
+        city = "Fake City",
+        state = "Fake State",
+        country = "Fake Country",
+        extraDetails = "Fake Extra Details",
+    )
+}
 
 internal fun VideoCallRoom.Companion.fake(
     id: Uuid = uuid4(),

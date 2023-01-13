@@ -10,7 +10,7 @@ import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentCategoriesBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.scene.AppointmentCategoryAdapter
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
 import com.nabla.sdk.scheduling.scene.withNablaSchedulingThemeOverlays
@@ -45,17 +45,17 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
             adapter.submitList(
                 listOf(
                     AppointmentCategory(
-                        id = CategoryId(Uuid.randomUUID()),
+                        id = AppointmentCategoryId(Uuid.randomUUID()),
                         name = "Category 1 with short name",
                         callDuration = 15.minutes,
                     ),
                     AppointmentCategory(
-                        id = CategoryId(Uuid.randomUUID()),
+                        id = AppointmentCategoryId(Uuid.randomUUID()),
                         name = "Category 2 with longer name but not that long",
                         callDuration = 30.minutes,
                     ),
                     AppointmentCategory(
-                        id = CategoryId(Uuid.randomUUID()),
+                        id = AppointmentCategoryId(Uuid.randomUUID()),
                         name = "Category 3 with a much longer name that takes way more than 1 line to be completely displayed even on a large screen !",
                         callDuration = 1.hours,
                     ),

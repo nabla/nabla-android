@@ -12,11 +12,11 @@ import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import com.nabla.sdk.scheduling.injection.SchedulingContainer
 import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import kotlinx.coroutines.flow.Flow
@@ -38,15 +38,15 @@ internal class NablaSchedulingClientImpl(
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
-    override suspend fun getAppointmentLocations(): Result<Set<AppointmentLocation>> {
+    override suspend fun getAppointmentLocationTypes(): Result<Set<AppointmentLocationType>> {
         return runCatchingCancellable {
             schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
-            appointmentRepository.getLocations()
+            appointmentRepository.getLocationTypes()
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
     override fun watchAvailabilitySlots(
-        categoryId: CategoryId,
+        categoryId: AppointmentCategoryId,
     ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {
         return makePaginatedFlow(
             appointmentRepository.watchAvailabilitySlots(categoryId),
@@ -74,22 +74,33 @@ internal class NablaSchedulingClientImpl(
         )
     }
 
-    override suspend fun getAppointmentConfirmationConsents(appointmentLocation: AppointmentLocation): Result<AppointmentConfirmationConsents> {
+    override suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): Result<AppointmentConfirmationConsents> {
         return runCatchingCancellable {
             schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
-            appointmentRepository.getAppointmentConfirmationConsents(appointmentLocation)
+            appointmentRepository.getAppointmentConfirmationConsents(locationType)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
-    override suspend fun scheduleAppointment(location: AppointmentLocation, categoryId: CategoryId, providerId: UUID, slot: Instant): Result<Appointment> {
+    override suspend fun scheduleAppointment(
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
+        providerId: UUID,
+        slot: Instant
+    ): Result<Appointment> {
         return runCatchingCancellable {
-            appointmentRepository.scheduleAppointment(location, categoryId, providerId, slot)
+            appointmentRepository.scheduleAppointment(locationType, categoryId, providerId, slot)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
     override suspend fun cancelAppointment(id: AppointmentId): Result<Unit> {
         return runCatchingCancellable {
             appointmentRepository.cancelAppointment(id)
+        }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
+    }
+
+    override suspend fun getAppointment(id: AppointmentId): Result<Appointment> {
+        return runCatchingCancellable {
+            appointmentRepository.getAppointment(id)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 

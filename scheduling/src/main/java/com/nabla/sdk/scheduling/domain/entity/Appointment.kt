@@ -8,25 +8,36 @@ import kotlinx.datetime.Instant
 @JvmInline
 public value class AppointmentId(public val uuid: Uuid)
 
-internal sealed interface Appointment {
-    val id: AppointmentId
-    val provider: Provider
-    val scheduledAt: Instant
+internal data class Appointment(
+    val id: AppointmentId,
+    val provider: Provider,
+    val scheduledAt: Instant,
+    val state: AppointmentState,
+    val location: AppointmentLocation,
+) {
+    companion object
+}
+internal enum class AppointmentState {
+    UPCOMING,
+    FINALIZED,
+}
 
-    data class Upcoming(
-        override val id: AppointmentId,
-        override val provider: Provider,
-        override val scheduledAt: Instant,
-        val videoCallRoom: VideoCallRoom?,
-    ) : Appointment {
-        companion object
+internal sealed interface AppointmentLocation {
+    val type: AppointmentLocationType
+    val address: Address?
+    data class Remote(val videoCallRoom: VideoCallRoom?) : AppointmentLocation {
+        override val type = AppointmentLocationType.REMOTE
+        override val address = null
     }
 
-    data class Finalized(
-        override val id: AppointmentId,
-        override val provider: Provider,
-        override val scheduledAt: Instant,
-    ) : Appointment {
-        companion object
+    data class Physical(override val address: Address) : AppointmentLocation {
+        override val type = AppointmentLocationType.PHYSICAL
     }
+
+    companion object
+}
+
+internal enum class AppointmentLocationType {
+    REMOTE,
+    PHYSICAL,
 }

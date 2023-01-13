@@ -6,10 +6,10 @@ import kotlin.time.Duration
 
 @NablaInternal
 public data class AppointmentCategory(
-    val id: CategoryId,
+    val id: AppointmentCategoryId,
     val name: String,
     val callDuration: Duration,
 )
 
 @JvmInline
-public value class CategoryId(public val value: Uuid)
+public value class AppointmentCategoryId(public val value: Uuid)

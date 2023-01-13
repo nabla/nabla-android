@@ -17,30 +17,21 @@ import androidx.lifecycle.lifecycleScope
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.domain.entity.evaluate
-import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.factoryFor
-import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.setSdkName
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
-import com.nabla.sdk.core.ui.helpers.toJavaDate
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     R.layout.nabla_scheduling_fragment_appointment_confirmation
@@ -49,8 +40,8 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     private val viewModel: AppointmentConfirmationViewModel by viewModels {
         factoryFor {
             AppointmentConfirmationViewModel(
-                requireLocation(),
-                requireCategoryId(),
+                requireAppointmentLocationType(),
+                requireAppointmentCategoryId(),
                 requireArguments().getProviderId(),
                 requireArguments().getSlot(),
                 getNablaInstanceByName(),
@@ -58,24 +49,8 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         }
     }
 
-    private lateinit var dateFormatter: SimpleDateFormat
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val locationIconRes = when (requireLocation()) {
-            AppointmentLocation.PHYSICAL -> R.drawable.nabla_ic_home_20
-            AppointmentLocation.REMOTE -> R.drawable.nabla_ic_video_20
-        }
-
-        binding.nablaConfirmAppointmentDatePill.setCompoundDrawablesRelativeWithIntrinsicBounds(
-            locationIconRes,
-            0,
-            0,
-            0
-        )
-
-        dateFormatter = SimpleDateFormat(getString(R.string.nabla_scheduling_time_format), Locale.getDefault())
 
         binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
         binding.nablaConfirmAppointmentButton.setOnClickListener { viewModel.onConfirmClicked() }
@@ -89,10 +64,12 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
             when (state) {
                 is State.Error -> binding.errorLayout.bind(state.errorUiModel, viewModel::onClickRetry)
                 is State.Loaded -> {
-                    binding.nablaConfirmAppointmentAvatar.loadAvatar(state.provider)
-                    binding.nablaConfirmAppointmentTitle.text = state.provider.fullNameWithPrefix(binding.context)
-                    binding.nablaConfirmAppointmentSubtitle.setTextOrHide(state.provider.title)
-                    binding.nablaConfirmAppointmentDatePill.text = state.slot.formatScheduledAt()
+                    binding.nablaConfirmAppointmentSummary.bind(
+                        requireAppointmentLocationType(),
+                        state.provider,
+                        state.slot,
+                        null
+                    )
 
                     binding.nablaConsentsContainer.removeAllViews()
                     state.consents.htmlConsents.forEachIndexed { index, html ->
@@ -125,36 +102,13 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         }
     }
 
-    private fun Instant.formatScheduledAt(): String {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val isToday = today == toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-        val formattedTime = dateFormatter.format(toJavaDate())
-
-        return if (isToday) {
-            val stringRes = when (requireLocation()) {
-                AppointmentLocation.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_today
-                AppointmentLocation.REMOTE -> R.string.nabla_scheduling_remote_date_format_today
-            }
-            getString(stringRes, formattedTime)
-        } else {
-            val formattedDate = SimpleDateFormat(getString(R.string.nabla_scheduling_date_pill_format_date), Locale.getDefault())
-                .format(toJavaDate())
-            val stringRes = when (requireLocation()) {
-                AppointmentLocation.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_future
-                AppointmentLocation.REMOTE -> R.string.nabla_scheduling_remote_date_format_future
-            }
-            getString(stringRes, formattedDate, formattedTime)
-        }
-    }
-
     internal companion object {
         private const val ARG_PROVIDER_ID = "ARG_PROVIDER_ID"
         private const val ARG_SLOT_INSTANT = "ARG_SLOT_INSTANT"
 
         internal fun newInstance(
-            location: AppointmentLocation,
-            categoryId: CategoryId,
+            locationType: AppointmentLocationType,
+            categoryId: AppointmentCategoryId,
             providerId: Uuid,
             slot: Instant,
             sdkName: String,
@@ -163,8 +117,8 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                 ARG_PROVIDER_ID to providerId.toString(),
                 ARG_SLOT_INSTANT to slot.toEpochMilliseconds(),
             )
-            setLocation(location)
-            setCategoryId(categoryId)
+            setAppointmentLocationType(locationType)
+            setAppointmentCategoryId(categoryId)
             setSdkName(sdkName)
         }
 

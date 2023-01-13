@@ -14,9 +14,9 @@ import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,8 +33,8 @@ import kotlinx.datetime.Instant
 import java.util.UUID
 
 internal class AppointmentConfirmationViewModel(
-    private val location: AppointmentLocation,
-    private val categoryId: CategoryId,
+    private val locationType: AppointmentLocationType,
+    private val categoryId: AppointmentCategoryId,
     private val providerId: UUID,
     private val slot: Instant,
     private val nablaClient: NablaClient,
@@ -49,8 +49,13 @@ internal class AppointmentConfirmationViewModel(
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
     val stateFlow: StateFlow<State> = flow {
-        val asyncConsents = viewModelScope.async { nablaClient.schedulingInternalModule.getAppointmentConfirmationConsents(location).getOrThrow() }
-        val provider = viewModelScope.async { nablaClient.coreContainer.providerRepository.getProvider(providerId) }
+        val asyncConsents = viewModelScope.async {
+            nablaClient.schedulingInternalModule.getAppointmentConfirmationConsents(locationType)
+                .getOrThrow()
+        }
+        val provider = viewModelScope.async {
+            nablaClient.coreContainer.providerRepository.getProvider(providerId)
+        }
         val consents = asyncConsents.await()
         consentsGrantedFlow.value = List(consents.htmlConsents.size) {
             false
@@ -85,7 +90,7 @@ internal class AppointmentConfirmationViewModel(
 
         viewModelScope.launch {
             isSubmittingFlow.value = true
-            nablaClient.schedulingInternalModule.scheduleAppointment(location, categoryId, providerId, slot)
+            nablaClient.schedulingInternalModule.scheduleAppointment(locationType, categoryId, providerId, slot)
                 .onFailure { throwable ->
                     nablaClient.coreContainer.logger.warn("failed scheduling appointment", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
 
@@ -94,7 +99,7 @@ internal class AppointmentConfirmationViewModel(
                             if (throwable is ServerException) {
                                 throwable.serverMessage.asStringOrRes()
                             } else {
-                                throwable.asNetworkOrGeneric.titleRes.asStringOrRes()
+                                throwable.asNetworkOrGeneric.title
                             }
                         )
                     )

@@ -6,6 +6,8 @@ import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -51,30 +53,37 @@ internal sealed class ItemUiModel(val listId: String) {
     object Loading : ItemUiModel(listId = "loading_more")
 }
 
-internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (this) {
-    is Appointment.Finalized -> ItemUiModel.AppointmentUiModel.Finalized(
+internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (this.state) {
+    AppointmentState.FINALIZED -> ItemUiModel.AppointmentUiModel.Finalized(
         id,
         provider,
         scheduledAt,
     )
-    is Appointment.Upcoming -> if (clock.isAppointmentSoon(scheduledAt)) {
+    AppointmentState.UPCOMING -> if (clock.isAppointmentSoon(scheduledAt)) {
         ItemUiModel.AppointmentUiModel.SoonOrOngoing(
             id,
             provider,
             scheduledAt,
-            callButtonStatus = when (videoCallRoom?.status) {
-                is VideoCallRoomStatus.Open -> {
-                    when (currentCallId) {
-                        null -> CallButtonStatus.Present.AsJoin(videoCallRoom)
-                        videoCallRoom.id -> CallButtonStatus.Present.AsGoBack(videoCallRoom)
-                        else -> {
-                            // there's a current call but it's not this one — don't show a join until the current call has ended.
+            callButtonStatus = when (location) {
+                is AppointmentLocation.Physical -> CallButtonStatus.Absent
+                is AppointmentLocation.Remote -> {
+                    when (location.videoCallRoom?.status) {
+                        is VideoCallRoomStatus.Open -> {
+                            when (currentCallId) {
+                                null -> CallButtonStatus.Present.AsJoin(location.videoCallRoom)
+                                location.videoCallRoom.id -> CallButtonStatus.Present.AsGoBack(
+                                    location.videoCallRoom
+                                )
+                                else -> {
+                                    // there's a current call but it's not this one — don't show a join until the current call has ended.
+                                    CallButtonStatus.Absent
+                                }
+                            }
+                        }
+                        is VideoCallRoomStatus.Closed, null -> {
                             CallButtonStatus.Absent
                         }
                     }
-                }
-                null, VideoCallRoomStatus.Closed -> {
-                    CallButtonStatus.Absent
                 }
             }
         )

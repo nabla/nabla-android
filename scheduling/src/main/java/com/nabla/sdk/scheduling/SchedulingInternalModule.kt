@@ -4,34 +4,38 @@ import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import java.util.UUID
 
 internal interface SchedulingInternalModule : SchedulingModule {
     suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>>
-    suspend fun getAppointmentLocations(): Result<Set<AppointmentLocation>>
+    suspend fun getAppointmentLocationTypes(): Result<Set<AppointmentLocationType>>
 
     fun watchAvailabilitySlots(
-        categoryId: CategoryId,
+        categoryId: AppointmentCategoryId,
     ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>>
 
     fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>
     fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>
 
-    suspend fun getAppointmentConfirmationConsents(appointmentLocation: AppointmentLocation): Result<AppointmentConfirmationConsents>
+    suspend fun getAppointmentConfirmationConsents(
+        locationType: AppointmentLocationType
+    ): Result<AppointmentConfirmationConsents>
 
     suspend fun scheduleAppointment(
-        location: AppointmentLocation,
-        categoryId: CategoryId,
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Result<Appointment>
 
     suspend fun cancelAppointment(id: AppointmentId): Result<Unit>
+
+    suspend fun getAppointment(id: AppointmentId): Result<Appointment>
 }

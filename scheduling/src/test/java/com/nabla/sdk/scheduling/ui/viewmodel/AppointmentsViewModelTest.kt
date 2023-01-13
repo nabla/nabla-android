@@ -7,6 +7,9 @@ import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.scheduling.core.data.stubs.fake
 import com.nabla.sdk.scheduling.domain.entity.Appointment
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentType
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel
@@ -32,11 +35,12 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
     fun `upcoming appointments change to SoonOrOngoing when imminent`() = runTest {
         // setup & test data
         val now = TestClock(this).now()
+        val locationFactory = { AppointmentLocation.fake(locationType = AppointmentLocationType.REMOTE, videoCallRoomIsOpen = true) }
         val appointmentsResponse = WatchPaginatedResponse(
-            content = listOf<Appointment>(
-                Appointment.Upcoming.fake(scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 2.minutes),
-                Appointment.Upcoming.fake(scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 3.minutes),
-                Appointment.Upcoming.fake(scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 30.minutes),
+            content = listOf(
+                Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 2.minutes),
+                Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 3.minutes),
+                Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 30.minutes),
             ),
             loadMore = null,
         )
@@ -108,7 +112,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
         val schedulingClient = object : SchedulingInternalModuleAdapter() {
             var firstCall = AtomicBoolean(true)
             override fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =
-                flowOf(WatchPaginatedResponse(listOf(Appointment.Upcoming.fake() as Appointment)) { Result.failure(Exception()) })
+                flowOf(WatchPaginatedResponse(listOf(Appointment.fake(state = AppointmentState.UPCOMING))) { Result.failure(Exception()) })
                     .onStart {
                         if (firstCall.compareAndSet(true, false)) error("simulated error")
                     }

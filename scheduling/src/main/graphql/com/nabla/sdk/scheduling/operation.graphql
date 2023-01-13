@@ -10,6 +10,14 @@ query UpcomingAppointments($page: OpaqueCursorPage!) {
     }
 }
 
+query Appointment($appointmentId: UUID!) {
+    appointment(id: $appointmentId) {
+        appointment {
+            ...AppointmentFragment
+        }
+    }
+}
+
 query AppointmentCategories {
     appointmentCategories {
         categories {
@@ -117,14 +125,34 @@ fragment AppointmentFragment on Appointment {
     scheduledAt
     state {
         ... on UpcomingAppointment {
-            livekitRoom {
-                ...LivekitRoomFragment
-            }
+            __typename
         }
         ... on FinalizedAppointment {
             empty: _
         }
     }
+    location {
+        ... on RemoteAppointmentLocation {
+            livekitRoom {
+                ...LivekitRoomFragment
+            }
+        }
+        ... on PhysicalAppointmentLocation {
+            address {
+                ...AddressFragment
+            }
+        }
+    }
+}
+
+fragment AddressFragment on Address {
+    id
+    address
+    zipCode
+    city
+    state
+    country
+    extraDetails
 }
 
 query AppointmentAvailableLocations {

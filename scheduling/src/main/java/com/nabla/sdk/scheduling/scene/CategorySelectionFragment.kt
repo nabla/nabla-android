@@ -16,7 +16,7 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentCategoriesBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.CategorySelectionViewModel.State
 
 internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.nabla_scheduling_fragment_categories) {
@@ -30,8 +30,8 @@ internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.
     private val showLocationHint: Boolean by lazy {
         requireArguments().getBoolean(ARG_SHOW_LOCATION_HINT)
     }
-    private val location: AppointmentLocation by lazy {
-        requireLocation()
+    private val locationType: AppointmentLocationType by lazy {
+        requireAppointmentLocationType()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,9 +60,9 @@ internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.
             }
         }
         binding.locationHint.text = getString(
-            when (location) {
-                AppointmentLocation.REMOTE -> R.string.nabla_scheduling_remote_location_hint
-                AppointmentLocation.PHYSICAL -> R.string.nabla_scheduling_physical_location_hint
+            when (locationType) {
+                AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_remote_location_hint
+                AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_physical_location_hint
             }
         )
     }
@@ -73,19 +73,19 @@ internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.
     }
 
     private fun onClickCategory(appointmentCategory: AppointmentCategory) {
-        hostActivity().goToTimeSlots(location, appointmentCategory.id)
+        hostActivity().goToTimeSlots(locationType, appointmentCategory.id)
     }
 
     internal companion object {
         private const val ARG_SHOW_LOCATION_HINT = "ARG_SHOW_LOCATION_HINT"
 
         fun newInstance(
-            location: AppointmentLocation,
+            locationType: AppointmentLocationType,
             showLocationHint: Boolean,
             sdkName: String
         ) = CategorySelectionFragment().apply {
             arguments = bundleOf(ARG_SHOW_LOCATION_HINT to showLocationHint)
-            setLocation(location)
+            setAppointmentLocationType(locationType)
             setSdkName(sdkName)
         }
     }

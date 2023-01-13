@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentLocationsBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.AppointmentLocationAdapter
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
 import com.nabla.sdk.scheduling.scene.withNablaSchedulingThemeOverlays
@@ -32,11 +32,11 @@ class LocationSelectionFragmentTest : BaseCoroutineTest() {
             binding.nablaNoLocationText.isVisible = false
 
             val adapter = AppointmentLocationAdapter(
-                onClickAppointmentLocationListener = {},
+                onClickAppointmentLocationTypeListener = {},
             )
 
             binding.recyclerView.adapter = adapter
-            adapter.submitList(AppointmentLocation.values().toList())
+            adapter.submitList(AppointmentLocationType.values().toList())
 
             return@snapshotDayNightDefaultDevice parent
         }

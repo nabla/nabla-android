@@ -17,14 +17,14 @@ import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentTimeSlotsBinding
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
-import com.nabla.sdk.scheduling.domain.entity.CategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.BookAppointmentBaseFragment
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
-import com.nabla.sdk.scheduling.scene.requireCategoryId
-import com.nabla.sdk.scheduling.scene.requireLocation
-import com.nabla.sdk.scheduling.scene.setCategoryId
-import com.nabla.sdk.scheduling.scene.setLocation
+import com.nabla.sdk.scheduling.scene.requireAppointmentCategoryId
+import com.nabla.sdk.scheduling.scene.requireAppointmentLocationType
+import com.nabla.sdk.scheduling.scene.setAppointmentCategoryId
+import com.nabla.sdk.scheduling.scene.setAppointmentLocationType
 import com.nabla.sdk.scheduling.schedulingInternalModule
 
 internal class TimeSlotsFragment : BookAppointmentBaseFragment(
@@ -35,7 +35,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     private val viewModel: TimeSlotsViewModel by viewModels {
         factoryFor {
             TimeSlotsViewModel(
-                location = location,
+                locationType = locationType,
                 categoryId = categoryId,
                 schedulingModule = nablaClient.schedulingInternalModule,
                 logger = nablaClient.coreContainer.logger,
@@ -50,12 +50,12 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
         )
     }
 
-    private val location: AppointmentLocation by lazy {
-        requireLocation()
+    private val locationType: AppointmentLocationType by lazy {
+        requireAppointmentLocationType()
     }
 
-    private val categoryId: CategoryId by lazy {
-        requireCategoryId()
+    private val categoryId: AppointmentCategoryId by lazy {
+        requireAppointmentCategoryId()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +79,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
         viewLifecycleOwner.launchCollect(viewModel.eventsFlow) { event ->
             when (event) {
                 is TimeSlotsViewModel.Event.GoToConfirmation -> hostActivity().goToConfirmation(
-                    event.location,
+                    event.locationType,
                     event.categoryId,
                     event.providerId,
                     event.slot,
@@ -116,12 +116,12 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
 
     internal companion object {
         internal fun newInstance(
-            location: AppointmentLocation,
-            categoryId: CategoryId,
+            locationType: AppointmentLocationType,
+            categoryId: AppointmentCategoryId,
             sdkName: String
         ) = TimeSlotsFragment().apply {
-            setLocation(location)
-            setCategoryId(categoryId)
+            setAppointmentLocationType(locationType)
+            setAppointmentCategoryId(categoryId)
             setSdkName(sdkName)
         }
     }

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nablaProviderInfo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nabla_scheduling_confirmation_background"
+    android:gravity="center"
+    android:paddingVertical="20dp"
+    android:orientation="vertical">
+
+    <com.nabla.sdk.core.ui.components.NablaAvatarView
+        android:id="@+id/nablaConfirmAppointmentAvatar"
+        android:layout_width="72dp"
+        android:layout_height="72dp" />
+
+    <TextView
+        android:id="@+id/nablaConfirmAppointmentTitle"
+        tools:text="Dr Véronique Cayol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:textAppearance="?textAppearanceTitleMedium" />
+
+    <TextView
+        android:id="@+id/nablaConfirmAppointmentSubtitle"
+        tools:text="Gynécologue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:textAppearance="?textAppearanceBodyMedium" />
+
+    <TextView
+        android:id="@+id/nablaConfirmAppointmentDate"
+        app:drawableStartCompat="@drawable/nabla_ic_video_20"
+        app:drawableTint="?colorPrimary"
+        tools:text="Consultation prévue le 01/07 à 16:00"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/nabla_scheduling_date_background"
+        android:drawablePadding="4dp"
+        android:textAppearance="?textAppearanceLabelLarge"
+        android:textColor="?colorPrimary" />
+
+    <TextView
+        android:id="@+id/nablaConfirmAppointmentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textAppearance="?textAppearanceLabelLarge"
+        android:textColor="?android:textColorSecondary"
+        tools:text="27 rue Molitor 75016 Paris" />
+
+    <TextView
+        android:id="@+id/nablaConfirmAppointmentLocationExtra"
+        tools:text="Au fond de la cour à droite Code B5678"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textAppearance="?textAppearanceLabelSmall" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

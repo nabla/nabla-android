@@ -1,15 +1,11 @@
 package com.nabla.sdk.scheduling.scene.appointments
 
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.doOnLayout
-import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.core.ui.helpers.capitalize
@@ -20,6 +16,7 @@ import com.nabla.sdk.core.ui.helpers.toJavaDate
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingAppointmentItemBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingAppointmentItemLoadingMoreBinding
+import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.Finalized
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing
@@ -49,8 +46,8 @@ internal class LoadingMoreViewHolder(val binding: NablaSchedulingAppointmentItem
 
 internal class AppointmentViewHolder(
     private val binding: NablaSchedulingAppointmentItemBinding,
-    private val onCancelClicked: (appointment: AppointmentUiModel.Upcoming) -> Unit,
     private val onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
+    private val onDetailsClicked: (appointmentId: AppointmentId) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val context
         get() = binding.context
@@ -64,7 +61,6 @@ internal class AppointmentViewHolder(
 
         scheduleTimeUpdates(uiModel)
 
-        binding.optionsButton.isVisible = uiModel is AppointmentUiModel.Upcoming
         binding.joinCallButton.setTextOrHide(
             if (uiModel is SoonOrOngoing && uiModel.callButtonStatus is Present) {
                 binding.context.getString(
@@ -91,8 +87,10 @@ internal class AppointmentViewHolder(
                     }
                 }
             }
-            is AppointmentUiModel.Upcoming -> setupOptionsMenu(uiModel)
+            is AppointmentUiModel.Upcoming -> Unit // no-op
         }
+
+        binding.root.setOnClickListener { onDetailsClicked(uiModel.id) }
     }
 
     private fun scheduleTimeUpdates(appointment: AppointmentUiModel) {
@@ -105,34 +103,6 @@ internal class AppointmentViewHolder(
                     binding.appointmentSubtitle.text = appointment.formatScheduledAt()
                     delay(remainingSecondsInCurrentMinute())
                 }
-            }
-        }
-    }
-
-    private fun setupOptionsMenu(upcomingAppointment: AppointmentUiModel.Upcoming) {
-        binding.optionsButton.setOnClickListener {
-            PopupMenu(context, binding.root, Gravity.END).apply {
-                menuInflater.inflate(R.menu.nabla_appointment_item_actions, menu)
-
-                setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.cancelAppointment -> {
-                            MaterialAlertDialogBuilder(context)
-                                .setTitle(context.getString(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_title))
-                                .setNegativeButton(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative) { _, _ -> /* no-op */ }
-                                .setPositiveButton(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive) { _, _ ->
-                                    onCancelClicked(upcomingAppointment)
-                                }
-                                .create()
-                                .show()
-
-                            true
-                        }
-                        else -> false
-                    }
-                }
-
-                show()
             }
         }
     }
@@ -172,11 +142,11 @@ internal class AppointmentViewHolder(
 
         fun create(
             parent: ViewGroup,
-            onCancelClicked: (appointment: AppointmentUiModel.Upcoming) -> Unit,
             onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
+            onDetailsClicked: (appointmentId: AppointmentId) -> Unit,
         ): AppointmentViewHolder {
             val binding = NablaSchedulingAppointmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return AppointmentViewHolder(binding, onCancelClicked, onJoinClicked)
+            return AppointmentViewHolder(binding, onJoinClicked, onDetailsClicked)
         }
     }
 }
