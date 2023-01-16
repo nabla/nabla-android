@@ -138,6 +138,7 @@ public class NablaAvatarView : ConstraintLayout {
         binding.componentAvatarImageView.visibility = View.VISIBLE
         binding.componentAvatarPlaceholderTextView.text = ""
         binding.componentAvatarPlaceholderTextView.visibility = View.INVISIBLE
+        binding.componentDefaultAvatarImageView.visibility = View.INVISIBLE
 
         val stateDescription = context.getString(R.string.nabla_avatar_state_description_no_placeholder)
         ViewCompat.setStateDescription(this, stateDescription)
