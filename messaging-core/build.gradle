@@ -12,9 +12,11 @@ android {
 }
 
 apollo {
-    packageName.set("com.nabla.sdk.messaging.graphql")
-    generateTestBuilders.set(true)
-    generateAsInternal.set(true)
+    service("service") {
+        packageName.set("com.nabla.sdk.messaging.graphql")
+        generateTestBuilders.set(true)
+        generateAsInternal.set(true)
+    }
 }
 
 dependencies {

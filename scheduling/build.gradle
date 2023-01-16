@@ -13,9 +13,11 @@ android {
 }
 
 apollo {
-    packageName.set("com.nabla.sdk.scheduling.graphql")
-    generateTestBuilders.set(true)
-    generateAsInternal.set(true)
+    service("service") {
+        packageName.set("com.nabla.sdk.scheduling.graphql")
+        generateTestBuilders.set(true)
+        generateAsInternal.set(true)
+    }
 }
 
 dependencies {

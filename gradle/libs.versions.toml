@@ -3,17 +3,17 @@ kotlin = "1.7.20"
 coroutines = "1.6.4"
 androidxlifecycle = "2.5.1"
 okhttp = "4.10.0"
-apollo = "3.7.1"
+apollo = "3.7.4"
 coil = "2.2.2"
 ktlint = "0.45.1"
-espresso = "3.5.0"
+espresso = "3.5.1"
 okreplay = "1.6.0"
 tensorflow = "0.4.3"
 androidGradlePlugin = "7.4.0"
 
 [libraries]
 android-pluginGradle = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
-gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.15.0"
+gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.18.0"
 
 # Put back normal paparazzi dependencies when https://github.com/cashapp/paparazzi/pull/605 has been merged
 paparazzi-pluginGradle = "dev.chrisbanes.paparazzi:paparazzi-gradle-plugin:1.1.0-sdk33-alpha02"
@@ -23,19 +23,19 @@ paparazzi = "dev.chrisbanes.paparazzi:paparazzi:1.1.0-sdk33-alpha02"
 
 androidx-core = "androidx.core:core-ktx:1.9.0"
 androidx-activity = "androidx.activity:activity-ktx:1.6.1"
-androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", version = "1.5.4" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", version = "1.5.5" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxlifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxlifecycle" }
 androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "androidxlifecycle" }
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-startup = "androidx.startup:startup-runtime:1.1.1"
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.5.1" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.0" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version = "1.5.0" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.2.1" }
 
 juniversalchardet = { group = "com.github.albfernandez", name = "juniversalchardet", version = "2.4.0" }
 touchImageView = { group = "com.github.MikeOrtiz", name = "TouchImageView", version = "3.2.1" }
-exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", version = "2.18.1" }
+exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", version = "2.18.2" }
 
 google-material = { group = "com.google.android.material", name = "material", version = "1.6.0" }
 flexBoxLayout = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
@@ -51,7 +51,7 @@ kotlin-serialization-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-seri
 kotlin-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
 kotlin-binaryCompatibilityValidator-pluginGradle = 'org.jetbrains.kotlinx:binary-compatibility-validator:0.12.1'
 
-ktlint-pluginGradle = "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
+ktlint-pluginGradle = "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
@@ -80,16 +80,16 @@ uuid = "com.benasher44:uuid:0.6.0"
 
 junit = "junit:junit:4.13.2"
 turbine = "app.cash.turbine:turbine:0.12.1"
-mockk = "io.mockk:mockk:1.13.2"
-roboelectric = "org.robolectric:robolectric:4.9"
+mockk = "io.mockk:mockk:1.13.3"
+roboelectric = "org.robolectric:robolectric:4.9.2"
 androidx-test-core = "androidx.test:core-ktx:1.5.0"
-androidx-test-junit = "androidx.test.ext:junit-ktx:1.1.4"
+androidx-test-junit = "androidx.test.ext:junit-ktx:1.1.5"
 hamcrest = 'org.hamcrest:hamcrest:2.2'
 
 # Downgraded from 1.1.4 because of https://github.com/livekit/client-sdk-android/issues/159
 liveKit = 'io.livekit:livekit-android:1.1.3'
 
-sentry-java = 'io.sentry:sentry:6.8.0'
+sentry-java = 'io.sentry:sentry:6.12.0'
 
 espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 espressoContrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
