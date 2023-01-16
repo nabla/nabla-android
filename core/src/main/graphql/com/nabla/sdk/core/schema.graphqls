@@ -575,6 +575,17 @@ type AvailabilitySlot {
   startAt: DateTime!
   endAt: DateTime!
   provider: Provider!
+  location: AvailabilitySlotLocation!
+}
+
+union AvailabilitySlotLocation = PhysicalAvailabilitySlotLocation | RemoteAvailabilitySlotLocation
+
+type PhysicalAvailabilitySlotLocation {
+  address: Address!
+}
+
+type RemoteAvailabilitySlotLocation {
+  _: EmptyObject!
 }
 
 type AppointmentConfirmationConsentsOutput {
