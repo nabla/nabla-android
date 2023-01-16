@@ -9,7 +9,7 @@ ktlint = "0.45.1"
 espresso = "3.5.0"
 okreplay = "1.6.0"
 tensorflow = "0.4.3"
-androidGradlePlugin = "7.3.1"
+androidGradlePlugin = "7.4.0"
 
 [libraries]
 android-pluginGradle = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
