@@ -14,6 +14,7 @@ import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
+import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
@@ -37,6 +38,7 @@ internal class AppointmentConfirmationViewModel(
     private val categoryId: AppointmentCategoryId,
     private val providerId: UUID,
     private val slot: Instant,
+    private val address: Address?,
     private val nablaClient: NablaClient,
 ) : ViewModel() {
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
@@ -60,7 +62,7 @@ internal class AppointmentConfirmationViewModel(
         consentsGrantedFlow.value = List(consents.htmlConsents.size) {
             false
         }
-        emit(State.Loaded(provider.await(), slot, consents))
+        emit(State.Loaded(provider.await(), slot, address, consents))
     }
         .combine(isSubmittingFlow) { state, isSubmitting ->
             if (isSubmitting) State.Loading else state
@@ -126,6 +128,7 @@ internal class AppointmentConfirmationViewModel(
         data class Loaded(
             val provider: Provider,
             val slot: Instant,
+            val address: Address?,
             val consents: AppointmentConfirmationConsents,
         ) : State
     }

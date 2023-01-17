@@ -21,13 +21,16 @@ internal interface AppointmentRepository {
     suspend fun getCategories(): List<AppointmentCategory>
     suspend fun getLocationTypes(): Set<AppointmentLocationType>
 
-    fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<PaginatedList<AvailabilitySlot>>
-    suspend fun loadMoreAvailabilitySlots(categoryId: AppointmentCategoryId)
+    fun watchAvailabilitySlots(
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId
+    ): Flow<PaginatedList<AvailabilitySlot>>
+    suspend fun loadMoreAvailabilitySlots(locationType: AppointmentLocationType, categoryId: AppointmentCategoryId)
 
-    suspend fun getAppointmentConfirmationConsents(location: AppointmentLocationType): AppointmentConfirmationConsents
+    suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): AppointmentConfirmationConsents
 
     suspend fun scheduleAppointment(
-        location: AppointmentLocationType,
+        locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,

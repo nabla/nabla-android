@@ -46,11 +46,12 @@ internal class NablaSchedulingClientImpl(
     }
 
     override fun watchAvailabilitySlots(
+        locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
     ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {
         return makePaginatedFlow(
-            appointmentRepository.watchAvailabilitySlots(categoryId),
-            { appointmentRepository.loadMoreAvailabilitySlots(categoryId) },
+            appointmentRepository.watchAvailabilitySlots(locationType, categoryId),
+            { appointmentRepository.loadMoreAvailabilitySlots(locationType, categoryId) },
             schedulingContainer.nablaExceptionMapper,
             schedulingContainer.sessionClient,
         )

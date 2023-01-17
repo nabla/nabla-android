@@ -14,6 +14,7 @@ import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
+import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
@@ -53,6 +54,7 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         categoryId: AppointmentCategoryId,
         providerId: Uuid,
         slot: Instant,
+        address: Address?,
     ) {
         pushFragment(
             AppointmentConfirmationFragment.newInstance(
@@ -60,6 +62,7 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
                 categoryId = categoryId,
                 providerId = providerId,
                 slot = slot,
+                address = address,
                 sdkName = intent.requireSdkName()
             ),
             addToBackStack = true

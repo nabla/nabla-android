@@ -20,6 +20,7 @@ import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.dpToPx
 import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
+import com.nabla.sdk.core.ui.helpers.getParcelableCompat
 import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
@@ -27,6 +28,7 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
+import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
@@ -44,6 +46,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                 requireAppointmentCategoryId(),
                 requireArguments().getProviderId(),
                 requireArguments().getSlot(),
+                requireArguments().getAddressOrNull(),
                 getNablaInstanceByName(),
             )
         }
@@ -68,7 +71,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                         requireAppointmentLocationType(),
                         state.provider,
                         state.slot,
-                        null
+                        state.address,
                     )
 
                     binding.nablaConsentsContainer.removeAllViews()
@@ -105,17 +108,20 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     internal companion object {
         private const val ARG_PROVIDER_ID = "ARG_PROVIDER_ID"
         private const val ARG_SLOT_INSTANT = "ARG_SLOT_INSTANT"
+        private const val ARG_ADDRESS = "ARG_ADDRESS"
 
         internal fun newInstance(
             locationType: AppointmentLocationType,
             categoryId: AppointmentCategoryId,
             providerId: Uuid,
             slot: Instant,
+            address: Address?,
             sdkName: String,
         ) = AppointmentConfirmationFragment().apply {
             arguments = bundleOf(
                 ARG_PROVIDER_ID to providerId.toString(),
                 ARG_SLOT_INSTANT to slot.toEpochMilliseconds(),
+                ARG_ADDRESS to address,
             )
             setAppointmentLocationType(locationType)
             setAppointmentCategoryId(categoryId)
@@ -129,8 +135,9 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
 
         private fun Bundle.getSlot() = Instant.fromEpochMilliseconds(
             getLong(ARG_SLOT_INSTANT).also { if (it == 0L) throwNablaInternalException("Missing Slot Instant") }
-
         )
+
+        private fun Bundle.getAddressOrNull() = getParcelableCompat(ARG_ADDRESS, Address::class.java)
 
         @VisibleForTesting
         internal fun setHtml(itemConsentBinding: NablaSchedulingItemConsentBinding, html: String) {

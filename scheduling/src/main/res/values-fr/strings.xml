@@ -45,8 +45,10 @@
     </plurals>
     <string name="nabla_scheduling_time_slot_pagination_error">Une erreur est survenue lors du chargement des disponibilités.</string>
 
+    <string name="nabla_scheduling_default_date_format_today">Consultation prévue aujourd’hui à %1$s</string>
     <string name="nabla_scheduling_physical_date_format_today">Consultation prévue aujourd’hui à %1$s</string>
     <string name="nabla_scheduling_remote_date_format_today">Téléconsultation prévue aujourd’hui à %1$s</string>
+    <string name="nabla_scheduling_default_date_format_future">Consultation prévue le %1$s à %2$s</string>
     <string name="nabla_scheduling_physical_date_format_future">Consultation prévue le %1$s à %2$s</string>
     <string name="nabla_scheduling_remote_date_format_future">Téléconsultation prévue le %1$s à %2$s</string>
     <string name="nabla_scheduling_time_format">HH\'h\'mm</string>

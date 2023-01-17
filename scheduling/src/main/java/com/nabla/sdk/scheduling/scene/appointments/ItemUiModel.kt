@@ -65,7 +65,7 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
             provider,
             scheduledAt,
             callButtonStatus = when (location) {
-                is AppointmentLocation.Physical -> CallButtonStatus.Absent
+                is AppointmentLocation.Physical, AppointmentLocation.Unknown -> CallButtonStatus.Absent
                 is AppointmentLocation.Remote -> {
                     when (location.videoCallRoom?.status) {
                         is VideoCallRoomStatus.Open -> {

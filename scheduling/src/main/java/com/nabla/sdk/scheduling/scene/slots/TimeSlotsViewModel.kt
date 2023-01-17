@@ -14,9 +14,11 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingInternalModule
+import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
+import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlotLocation
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,14 +44,14 @@ internal class TimeSlotsViewModel(
 
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
 
-    private val expandedDaysPositionsFlow = MutableStateFlow<Set<Int>>(setOf(0))
+    private val expandedDaysPositionsFlow = MutableStateFlow(setOf(0))
     private val selectedSlotFlow = MutableStateFlow<Instant?>(null)
 
     private val eventsMutableFlow = MutableLiveFlow<Event>()
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
     val stateFlow: StateFlow<State> = combine(
-        schedulingModule.watchAvailabilitySlots(categoryId).onEach { cacheLastResponse(it) },
+        schedulingModule.watchAvailabilitySlots(locationType, categoryId).onEach { cacheLastResponse(it) },
         expandedDaysPositionsFlow,
         selectedSlotFlow,
         ::mapToLoadedState,
@@ -144,8 +146,10 @@ internal class TimeSlotsViewModel(
     }
 
     fun onConfirmClicked() {
-        val selectedSlot = selectedSlotFlow.value ?: return
-        val providerId = lastReceivedSlots?.firstOrNull { it.startAt == selectedSlot }?.providerId ?: return
+        val selectedSlotAsInstant = selectedSlotFlow.value ?: return
+        val selectedSlot = lastReceivedSlots?.firstOrNull { it.startAt == selectedSlotAsInstant } ?: return
+        val providerId = selectedSlot.providerId
+        val address = (selectedSlot.location as? AvailabilitySlotLocation.Physical)?.address
 
         eventsMutableFlow.emitIn(
             viewModelScope,
@@ -153,7 +157,8 @@ internal class TimeSlotsViewModel(
                 locationType,
                 categoryId,
                 providerId,
-                selectedSlot,
+                selectedSlot.startAt,
+                address,
             )
         )
     }
@@ -171,6 +176,7 @@ internal class TimeSlotsViewModel(
             val categoryId: AppointmentCategoryId,
             val providerId: Uuid,
             val slot: Instant,
+            val address: Address?,
         ) : Event
 
         sealed class ErrorAlert(@StringRes val errorMessageRes: Int) : Event {

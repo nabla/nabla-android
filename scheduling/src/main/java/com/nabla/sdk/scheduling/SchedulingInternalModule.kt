@@ -18,7 +18,8 @@ internal interface SchedulingInternalModule : SchedulingModule {
     suspend fun getAppointmentLocationTypes(): Result<Set<AppointmentLocationType>>
 
     fun watchAvailabilitySlots(
-        categoryId: AppointmentCategoryId,
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId
     ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>>
 
     fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>

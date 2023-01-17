@@ -26,10 +26,10 @@ query AppointmentCategories {
     }
 }
 
-query AvailabilitySlots($categoryId: UUID!, $page: OpaqueCursorPage!) {
+query AvailabilitySlots($categoryId: UUID!, $isPhysical: Boolean!, $page: OpaqueCursorPage!) {
     appointmentCategory(id: $categoryId) {
         category {
-            availableSlots(page: $page) {
+            availableSlotsV2(isPhysical: $isPhysical, page: $page) {
                 ...AvailabilitySlotsPageFragment
             }
         }
@@ -79,6 +79,16 @@ fragment AvailabilitySlotFragment on AvailabilitySlot {
     endAt
     provider {
         id
+    }
+    location {
+        ... on PhysicalAvailabilitySlotLocation {
+            address {
+                ...AddressFragment
+            }
+        }
+        ... on RemoteAvailabilitySlotLocation {
+            empty: _
+        }
     }
 }
 

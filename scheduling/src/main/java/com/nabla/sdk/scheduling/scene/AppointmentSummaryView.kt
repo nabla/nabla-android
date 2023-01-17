@@ -31,7 +31,7 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
     }
 
     fun bind(
-        locationType: AppointmentLocationType,
+        locationType: AppointmentLocationType?,
         provider: Provider,
         slot: Instant,
         address: Address?,
@@ -42,10 +42,11 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
         setAddress(address)
     }
 
-    private fun setAppointmentLocation(locationType: AppointmentLocationType) {
+    private fun setAppointmentLocation(locationType: AppointmentLocationType?) {
         val locationIconRes = when (locationType) {
             AppointmentLocationType.PHYSICAL -> R.drawable.nabla_ic_home_20
             AppointmentLocationType.REMOTE -> R.drawable.nabla_ic_video_20
+            null -> 0
         }
 
         binding.nablaConfirmAppointmentDate.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -62,11 +63,11 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
         binding.nablaConfirmAppointmentSubtitle.setTextOrHide(provider.title)
     }
 
-    private fun setSlot(slot: Instant, locationType: AppointmentLocationType) {
+    private fun setSlot(slot: Instant, locationType: AppointmentLocationType?) {
         binding.nablaConfirmAppointmentDate.text = slot.formatScheduledAt(locationType)
     }
 
-    private fun Instant.formatScheduledAt(locationType: AppointmentLocationType): String {
+    private fun Instant.formatScheduledAt(locationType: AppointmentLocationType?): String {
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val isToday = today == toLocalDateTime(TimeZone.currentSystemDefault()).date
 
@@ -76,6 +77,7 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
             val stringRes = when (locationType) {
                 AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_today
                 AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_remote_date_format_today
+                null -> R.string.nabla_scheduling_default_date_format_today
             }
             context.getString(stringRes, formattedTime)
         } else {
@@ -84,6 +86,7 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
             val stringRes = when (locationType) {
                 AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_future
                 AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_remote_date_format_future
+                null -> R.string.nabla_scheduling_default_date_format_future
             }
             context.getString(stringRes, formattedDate, formattedTime)
         }

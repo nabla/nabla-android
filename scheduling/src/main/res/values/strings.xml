@@ -42,8 +42,10 @@
     </plurals>
     <string name="nabla_scheduling_time_slot_pagination_error">An error occurred while loading more availabilities.</string>
 
+    <string name="nabla_scheduling_default_date_format_today">Appointment planned today at %1$s</string>
     <string name="nabla_scheduling_physical_date_format_today">In-person appointment planned today at %1$s</string>
     <string name="nabla_scheduling_remote_date_format_today">Video call planned today at %1$s</string>
+    <string name="nabla_scheduling_default_date_format_future">Appointment planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_physical_date_format_future">In-person appointment planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_remote_date_format_future">Video call planned on %1$s at %2$s</string>
     <string name="nabla_scheduling_time_format">hh:mm aa</string>

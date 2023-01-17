@@ -23,7 +23,10 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
         error("Not mocked")
     }
 
-    override fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> =
+    override fun watchAvailabilitySlots(
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId
+    ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> =
         error("Not mocked")
 
     override fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =

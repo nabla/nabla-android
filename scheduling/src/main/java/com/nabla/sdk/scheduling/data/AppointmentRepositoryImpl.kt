@@ -42,36 +42,42 @@ internal class AppointmentRepositoryImpl(
         return gqlAppointmentLocationDataSource.getAvailableLocationTypes()
     }
 
-    override fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<PaginatedList<AvailabilitySlot>> =
-        gqlAppointmentCategoryDataSource.watchAvailabilitySlots(categoryId)
+    override fun watchAvailabilitySlots(
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId
+    ): Flow<PaginatedList<AvailabilitySlot>> {
+        return gqlAppointmentCategoryDataSource.watchAvailabilitySlots(locationType, categoryId)
+    }
 
-    private val loadMoreAvailabilitySlotsSharedSingleMap = mutableMapOf<AppointmentCategoryId, SharedSingle<Unit, Result<Unit>>>()
-    override suspend fun loadMoreAvailabilitySlots(categoryId: AppointmentCategoryId) = loadMoreAvailabilitySlotsSharedSingleMap
-        .getOrPut(categoryId) {
-            sharedSingleIn(repoScope) {
-                gqlAppointmentCategoryDataSource.loadMoreAvailabilitySlots(categoryId)
-            }
+    private val loadMoreAvailabilitySlotsSharedSingleMap = mutableMapOf<Pair<AppointmentLocationType, AppointmentCategoryId>, SharedSingle<Unit, Result<Unit>>>()
+    override suspend fun loadMoreAvailabilitySlots(
+        locationType: AppointmentLocationType,
+        categoryId: AppointmentCategoryId
+    ) = loadMoreAvailabilitySlotsSharedSingleMap.getOrPut(locationType to categoryId) {
+        sharedSingleIn(repoScope) {
+            gqlAppointmentCategoryDataSource.loadMoreAvailabilitySlots(locationType, categoryId)
         }
+    }
         .await()
 
     override suspend fun getAppointmentConfirmationConsents(
-        location: AppointmentLocationType
+        locationType: AppointmentLocationType
     ): AppointmentConfirmationConsents {
-        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(location)
+        return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(locationType)
     }
 
     override suspend fun scheduleAppointment(
-        location: AppointmentLocationType,
+        locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
         return try {
-            gqlAppointmentDataSource.scheduleAppointment(location, categoryId, providerId, slot)
+            gqlAppointmentDataSource.scheduleAppointment(locationType, categoryId, providerId, slot)
         } catch (gqlException: GraphQLException) {
             try {
                 // very likely the input is not valid anymore (e.g. the selected slot is not available anymore)
-                gqlAppointmentCategoryDataSource.resetAvailabilitySlotsCache(categoryId)
+                gqlAppointmentCategoryDataSource.resetAvailabilitySlotsCache(locationType, categoryId)
             } catch (e: Exception) {
                 throw e.initCause(gqlException)
             }

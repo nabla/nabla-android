@@ -83,6 +83,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
                     event.categoryId,
                     event.providerId,
                     event.slot,
+                    event.address,
                 )
                 is TimeSlotsViewModel.Event.ErrorAlert.Pagination -> {
                     Toast.makeText(requireContext(), event.errorMessageRes, Toast.LENGTH_SHORT).show()

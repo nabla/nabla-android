@@ -23,7 +23,7 @@ internal enum class AppointmentState {
 }
 
 internal sealed interface AppointmentLocation {
-    val type: AppointmentLocationType
+    val type: AppointmentLocationType?
     val address: Address?
     data class Remote(val videoCallRoom: VideoCallRoom?) : AppointmentLocation {
         override val type = AppointmentLocationType.REMOTE
@@ -32,6 +32,11 @@ internal sealed interface AppointmentLocation {
 
     data class Physical(override val address: Address) : AppointmentLocation {
         override val type = AppointmentLocationType.PHYSICAL
+    }
+
+    object Unknown : AppointmentLocation {
+        override val type = null
+        override val address = null
     }
 
     companion object

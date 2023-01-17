@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.stubs.StdLogger
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.scheduling.core.data.stubs.fake
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
@@ -33,16 +34,16 @@ class SlotsViewModelTest : BaseCoroutineTest() {
         // setup & test data
         val referenceInstant = Clock.System.now().toLocalDateTime(TimeZone.UTC).date.atTime(hour = 8, 0, 0, 0).toInstant(TimeZone.UTC)
         val firstPage = listOf(
-            AvailabilitySlot(referenceInstant, uuid4()),
-            AvailabilitySlot(referenceInstant + 15.minutes, uuid4()),
-            AvailabilitySlot(referenceInstant + 30.minutes, uuid4()),
-            AvailabilitySlot(referenceInstant + 1.days, uuid4()),
+            AvailabilitySlot.fake(startAt = referenceInstant),
+            AvailabilitySlot.fake(startAt = referenceInstant + 15.minutes),
+            AvailabilitySlot.fake(startAt = referenceInstant + 30.minutes),
+            AvailabilitySlot.fake(startAt = referenceInstant + 1.days),
         )
         val secondPage = listOf(
-            AvailabilitySlot(referenceInstant + 1.days + 15.minutes, uuid4()),
-            AvailabilitySlot(referenceInstant + 1.days + 30.minutes, uuid4()),
-            AvailabilitySlot(referenceInstant + 2.days, uuid4()),
-            AvailabilitySlot(referenceInstant + 2.days + 15.minutes, uuid4()),
+            AvailabilitySlot.fake(startAt = referenceInstant + 1.days + 15.minutes),
+            AvailabilitySlot.fake(startAt = referenceInstant + 1.days + 30.minutes),
+            AvailabilitySlot.fake(startAt = referenceInstant + 2.days),
+            AvailabilitySlot.fake(startAt = referenceInstant + 2.days + 15.minutes),
         )
         val firstExpectedUiModel = listOf(
             TimeSlotsUiItem.DaySlots(
@@ -87,7 +88,10 @@ class SlotsViewModelTest : BaseCoroutineTest() {
             AppointmentLocationType.REMOTE,
             AppointmentCategoryId(uuid4()),
             object : SchedulingInternalModuleAdapter() {
-                override fun watchAvailabilitySlots(categoryId: AppointmentCategoryId): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {
+                override fun watchAvailabilitySlots(
+                    locationType: AppointmentLocationType,
+                    categoryId: AppointmentCategoryId
+                ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {
                     return slotsDataFlow
                 }
             },
