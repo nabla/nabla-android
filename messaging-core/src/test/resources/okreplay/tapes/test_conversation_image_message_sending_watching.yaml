@@ -31,7 +31,7 @@ interactions:
               "registerOrUpdateDevice": {
                   "deviceId": "78f941a0-6905-43dd-b15f-a9ca17ab1399",
                   "sentry": {
-                      "dsn": "https://861687c1c61047f7b7efa5cfdb38be0b@sentry.nabla.com/10",
+                      "dsn": "https://d544635bca71460691802d7d8f1be4ee@sentry-relay.nabla.com/4504525106249728",
                       "env": "dev"
                   }
               }
