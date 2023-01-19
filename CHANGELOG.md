@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Video Call: Better support for screen sharing.
+- Added an extra step in the "schedule appointment" flow to choose between remote and physical appointments.
+- Added an appointment detail view accessible from the list of appointments. For physical appointments, this view displays the address of the appointment.
 
 ### Changed
 - Avatars are now using `colorSurfaceVariant` as default for background color. You can change that by customizing the `defaultBackgroundColor` of `Nabla.Widget.AvatarView`.
