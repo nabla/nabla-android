@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0.0-alpha22] - 2023-01-19
+
 ### Added
 - Video Call: Better support for screen sharing.
 - Added an extra step in the "schedule appointment" flow to choose between remote and physical appointments.
