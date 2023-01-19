@@ -76,6 +76,15 @@ type Subscription {
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
+# Directives.
+
+# See FieldCodegenDirectives class.
+directive @codegenAsAsyncFun on FIELD_DEFINITION
+
+# See EnumCodegenDirectives class.
+directive @backendEnumClass(noMapping: Boolean, dbName: String, qualifiedName: String) on ENUM
+
+# ----------------------------------------------------------------------------------------------------------------------
 # Other types.
 
 type Patient {
@@ -146,15 +155,15 @@ type Conversation {
 
   title: String
   description: String
-  subtitle: String
+  subtitle: String @codegenAsAsyncFun
   createdAt: DateTime!
-  updatedAt: DateTime!
+  updatedAt: DateTime! @codegenAsAsyncFun
   pictureUrl: EphemeralUrl
   isLocked: Boolean!
 
-  inboxPreviewTitle: String!
-  lastMessagePreview: String
-  unreadMessageCount: Int!
+  inboxPreviewTitle: String! @codegenAsAsyncFun
+  lastMessagePreview: String @codegenAsAsyncFun
+  unreadMessageCount: Int! @codegenAsAsyncFun
 
   providers: [ProviderInConversation!]!
   items(page: OpaqueCursorPage!): ConversationItemsPage!
@@ -187,7 +196,7 @@ union MessageContent =
   | LivekitRoomMessageContent
 
 type TextMessageContent {
-  text: String!
+  text: String! @codegenAsAsyncFun
 }
 
 interface IFileUpload {
@@ -252,14 +261,14 @@ type VideoMessageContent {
 type DocumentMessageContent {
   documentFileUpload: DocumentFileUpload!
 
-  title: String
+  title: String @codegenAsAsyncFun
 }
 
 type AudioMessageContent {
   audioFileUpload: AudioFileUpload!
 }
 
-enum EmptyObject {
+enum EmptyObject @backendEnumClass(noMapping: true) {
   EMPTY
 }
 
@@ -482,7 +491,7 @@ enum DeviceOs {
   IOS
 }
 
-enum SdkModule {
+enum SdkModule @backendEnumClass(dbName: "SdkModuleType") {
   MESSAGING
   VIDEO_CALL
   VIDEO_CALL_SCHEDULING
@@ -557,8 +566,8 @@ type FinalizedAppointment {
 
 type AppointmentCategory {
   id: UUID!
-  name: String!
-  callDurationMinutes: Int!
+  name: String! @codegenAsAsyncFun
+  callDurationMinutes: Int! @codegenAsAsyncFun
   availableSlots(page: OpaqueCursorPage!): AvailableSlotsPage!
   #@deprecated(reason: "equivalent to availableSlotsV2(isPhysical = false)")
   availableSlotsV2(isPhysical: Boolean!, page: OpaqueCursorPage!): AvailableSlotsPage!
