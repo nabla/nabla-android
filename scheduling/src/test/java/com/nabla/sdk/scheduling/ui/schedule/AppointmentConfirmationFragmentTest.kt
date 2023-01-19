@@ -155,7 +155,7 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
         )
         val consents = AppointmentConfirmationConsents(
             htmlConsents = listOf(
-                "<p>This is an html string with a <a href='https://www.google.com'>link</a> and some <b>bold</b>.</p>",
+                "<p>This is an html string with a <a href='https://www.google.com'>link</a>.</p>",
                 "<p>This is a consent that is normal, without any html, but just long enough to be more than 1 line long.</p>",
             )
         )

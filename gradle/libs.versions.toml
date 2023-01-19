@@ -15,11 +15,8 @@ androidGradlePlugin = "7.4.0"
 android-pluginGradle = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 gradle-dependencyAnalysis-pluginGradle = "com.autonomousapps:dependency-analysis-gradle-plugin:1.18.0"
 
-# Put back normal paparazzi dependencies when https://github.com/cashapp/paparazzi/pull/605 has been merged
-paparazzi-pluginGradle = "dev.chrisbanes.paparazzi:paparazzi-gradle-plugin:1.1.0-sdk33-alpha02"
-paparazzi = "dev.chrisbanes.paparazzi:paparazzi:1.1.0-sdk33-alpha02"
-#paparazzi-pluginGradle = "app.cash.paparazzi:paparazzi-gradle-plugin:1.1.0"
-#paparazzi = "app.cash.paparazzi:paparazzi:1.1.0"
+paparazzi-pluginGradle = "app.cash.paparazzi:paparazzi-gradle-plugin:1.2.0"
+paparazzi = "app.cash.paparazzi:paparazzi:1.2.0"
 
 androidx-core = "androidx.core:core-ktx:1.9.0"
 androidx-activity = "androidx.activity:activity-ktx:1.6.1"
@@ -37,7 +34,7 @@ juniversalchardet = { group = "com.github.albfernandez", name = "juniversalchard
 touchImageView = { group = "com.github.MikeOrtiz", name = "TouchImageView", version = "3.2.1" }
 exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", version = "2.18.2" }
 
-google-material = { group = "com.google.android.material", name = "material", version = "1.6.0" }
+google-material = { group = "com.google.android.material", name = "material", version = "1.7.0" }
 flexBoxLayout = { group = "com.google.android.flexbox", name = "flexbox", version = "3.0.0" }
 
 kotlin-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

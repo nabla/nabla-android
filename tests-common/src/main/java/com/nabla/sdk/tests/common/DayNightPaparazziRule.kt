@@ -22,6 +22,7 @@ class DayNightPaparazziRule(
     defaultDeviceConfig: DeviceConfig = defaultDefaultDeviceConfig,
     largerDeviceConfig: DeviceConfig = defaultLargeDeviceConfig,
     renderingMode: SessionParams.RenderingMode = SessionParams.RenderingMode.NORMAL,
+    showSystemUi: Boolean = true
 ) : TestRule {
     private val daySmallDevicePaparazzi = Paparazzi(
         deviceConfig = smallDeviceConfig.copy(
@@ -31,6 +32,7 @@ class DayNightPaparazziRule(
         appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
+        showSystemUi = showSystemUi,
     )
 
     private val nightSmallDevicePaparazzi = Paparazzi(
@@ -41,6 +43,7 @@ class DayNightPaparazziRule(
         appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
+        showSystemUi = showSystemUi,
     )
 
     private val dayDefaultDevicePaparazzi = Paparazzi(
@@ -51,6 +54,7 @@ class DayNightPaparazziRule(
         appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
+        showSystemUi = showSystemUi,
     )
 
     private val nightDefaultDevicePaparazzi = Paparazzi(
@@ -61,6 +65,7 @@ class DayNightPaparazziRule(
         appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
+        showSystemUi = showSystemUi,
     )
 
     private val dayLargeDevicePaparazzi = Paparazzi(
@@ -71,6 +76,7 @@ class DayNightPaparazziRule(
         appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
+        showSystemUi = showSystemUi,
     )
 
     private val nightLargeDevicePaparazzi = Paparazzi(
@@ -81,6 +87,7 @@ class DayNightPaparazziRule(
         appCompatEnabled = false,
         renderingMode = renderingMode,
         theme = theme,
+        showSystemUi = showSystemUi,
     )
 
     fun snapshotDayNightDefaultDevice(

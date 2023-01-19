@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.FrameLayout
-import app.cash.paparazzi.DeviceConfig
+import com.android.ide.common.rendering.api.SessionParams
 import com.nabla.sdk.core.R
 import com.nabla.sdk.core.ui.components.NablaAvatarView
 import com.nabla.sdk.tests.common.BaseCoroutineTest
@@ -15,11 +15,8 @@ import org.junit.Test
 internal class NablaAvatarViewTest : BaseCoroutineTest() {
     @get:Rule
     val paparazzi = DayNightPaparazziRule(
-        defaultDeviceConfig = DeviceConfig(
-            screenHeight = 250,
-            screenWidth = 200,
-            softButtons = false,
-        )
+        renderingMode = SessionParams.RenderingMode.SHRINK,
+        showSystemUi = false,
     )
 
     @Test
