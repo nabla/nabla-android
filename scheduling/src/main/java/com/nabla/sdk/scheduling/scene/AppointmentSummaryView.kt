@@ -1,6 +1,9 @@
 package com.nabla.sdk.scheduling.scene
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -18,8 +21,9 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 internal class AppointmentSummaryView(context: Context, attributes: AttributeSet) : FrameLayout(context, attributes) {
 
@@ -97,6 +101,19 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
         binding.nablaConfirmAppointmentLocationExtra.isVisible = address != null
         binding.nablaConfirmAppointmentLocation.text = address?.formatAddress()
         binding.nablaConfirmAppointmentLocationExtra.text = address?.extraDetails
+
+        if (address != null) {
+            binding.nablaConfirmAppointmentLocation.setOnClickListener {
+                try {
+                    val mapsIntentUri = Uri.parse("geo:0,0?q=${address.formatForMapsQuery()}")
+                    val mapIntent = Intent(Intent.ACTION_VIEW, mapsIntentUri)
+                    mapIntent.setPackage("com.google.android.apps.maps")
+                    binding.context.startActivity(mapIntent)
+                } catch (e: Exception) {
+                    // No-op as the app is probably just not installed on the device, so we silence that error
+                }
+            }
+        }
     }
 
     private fun Address.formatAddress(): String {
@@ -104,6 +121,20 @@ internal class AppointmentSummaryView(context: Context, attributes: AttributeSet
             append("$address, $city $zipCode")
             state?.let { append(", $it") }
             country?.let { append(", $it") }
+        }
+    }
+
+    private fun Address.formatForMapsQuery(): String {
+        val formatted = buildString {
+            append("$address, $city $zipCode")
+            state?.let { append(", $it") }
+            country?.let { append(", $it") }
+        }
+        return if (Build.VERSION.SDK_INT >= 33) {
+            URLEncoder.encode(formatted, Charsets.UTF_8)
+        } else {
+            @Suppress("DEPRECATION")
+            URLEncoder.encode(formatted)
         }
     }
 }
