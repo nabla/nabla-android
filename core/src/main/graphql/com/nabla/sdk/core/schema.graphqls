@@ -81,7 +81,7 @@ type Subscription {
 # See FieldCodegenDirectives class.
 directive @codegenAsAsyncFun on FIELD_DEFINITION
 
-# See EnumCodegenDirectives class.
+# See BackendEnumMapping class.
 directive @backendEnumClass(noMapping: Boolean, dbName: String, qualifiedName: String) on ENUM
 
 # ----------------------------------------------------------------------------------------------------------------------
