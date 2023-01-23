@@ -8,26 +8,7 @@ public final class com/nabla/sdk/core/api/BuildConfig {
 	public fun <init> ()V
 }
 
-public abstract interface class com/nabla/sdk/core/domain/boundary/ErrorReporter {
-	public static final field Companion Lcom/nabla/sdk/core/domain/boundary/ErrorReporter$Companion;
-	public abstract fun disable ()V
-	public abstract fun enable (Ljava/lang/String;Ljava/lang/String;)V
-	public abstract fun log (Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;)V
-	public static synthetic fun log$default (Lcom/nabla/sdk/core/domain/boundary/ErrorReporter;Ljava/lang/String;Ljava/util/Map;Ljava/lang/String;ILjava/lang/Object;)V
-	public abstract fun reportError (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public abstract fun reportEvent (Ljava/lang/String;)V
-	public abstract fun reportWarning (Ljava/lang/String;Ljava/lang/Throwable;)V
-	public abstract fun setExtra (Ljava/lang/String;Ljava/lang/String;)V
-	public abstract fun setTag (Ljava/lang/String;Ljava/lang/String;)V
-}
-
 public final class com/nabla/sdk/core/domain/boundary/ErrorReporter$Companion {
-	public final fun getReporterFactory ()Lcom/nabla/sdk/core/domain/boundary/ErrorReporter$Factory;
-	public final fun setReporterFactory (Lcom/nabla/sdk/core/domain/boundary/ErrorReporter$Factory;)V
-}
-
-public abstract interface class com/nabla/sdk/core/domain/boundary/ErrorReporter$Factory {
-	public abstract fun create (Lcom/nabla/sdk/core/domain/boundary/Logger;)Lcom/nabla/sdk/core/domain/boundary/ErrorReporter;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/Logger {

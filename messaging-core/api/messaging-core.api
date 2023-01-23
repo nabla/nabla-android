@@ -9,7 +9,6 @@ public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClien
 	public abstract fun createConversationWithMessage-BWLJW6A (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/lang/String;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun createConversationWithMessage-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/lang/String;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public abstract fun deleteMessage-0E7RQCE (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getLogger ()Lcom/nabla/sdk/core/domain/boundary/Logger;
 	public abstract fun markConversationAsRead-gIAlu-s (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun retrySendingMessage-0E7RQCE (Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun sendMessage-BWLJW6A (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -32,24 +31,6 @@ public final class com/nabla/sdk/messaging/core/NablaMessagingModule$Factory {
 
 public final class com/nabla/sdk/messaging/core/NablaMessagingModuleKt {
 	public static final fun getMessagingClient (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/messaging/core/NablaMessagingClient;
-}
-
-public abstract interface class com/nabla/sdk/messaging/core/domain/boundary/ConversationContentRepository {
-	public abstract fun deleteMessage (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun loadMoreMessages (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun retrySendingMessage (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun sendMessage (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Remote;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun setTyping (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun watchConversationItems (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lkotlinx/coroutines/flow/Flow;
-}
-
-public abstract interface class com/nabla/sdk/messaging/core/domain/boundary/ConversationRepository {
-	public abstract fun createConversation (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/lang/String;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun createLocalConversation (Ljava/lang/String;Ljava/util/List;)Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Local;
-	public abstract fun loadMoreConversations (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun markConversationAsRead (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun watchConversation (Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;)Lkotlinx/coroutines/flow/Flow;
-	public abstract fun watchConversations ()Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/BaseMessage {
@@ -166,7 +147,6 @@ public abstract interface class com/nabla/sdk/messaging/core/domain/entity/Conve
 	public abstract fun getClientId ()Ljava/util/UUID;
 	public abstract fun getRemoteId ()Ljava/util/UUID;
 	public abstract fun getStableId ()Ljava/util/UUID;
-	public fun requireRemote ()Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId$Remote;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/ConversationId$Local : com/nabla/sdk/messaging/core/domain/entity/ConversationId {
@@ -344,13 +324,11 @@ public final class com/nabla/sdk/messaging/core/domain/entity/InvalidMessageExce
 public abstract class com/nabla/sdk/messaging/core/domain/entity/Message : com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Companion;
 	public final fun getAuthor ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageAuthor;
-	public abstract fun getBaseMessage ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
 	public fun getCreatedAt ()Lkotlinx/datetime/Instant;
 	public final fun getId ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId;
 	public final fun getReplyTo ()Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public final fun getSendStatus ()Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;
 	public final fun getSentAt ()Lkotlinx/datetime/Instant;
-	public abstract fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Companion {
@@ -541,7 +519,6 @@ public abstract interface class com/nabla/sdk/messaging/core/domain/entity/Messa
 	public abstract fun getClientId ()Ljava/util/UUID;
 	public abstract fun getRemoteId ()Ljava/util/UUID;
 	public abstract fun getStableId ()Ljava/util/UUID;
-	public fun requireLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/MessageId$Local;
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/MessageId$Local : com/nabla/sdk/messaging/core/domain/entity/MessageId {

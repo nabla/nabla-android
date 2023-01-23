@@ -5,55 +5,6 @@ public final class com/nabla/sdk/docscanner/BuildConfig {
 	public fun <init> ()V
 }
 
-public final class com/nabla/sdk/docscanner/databinding/NablaDocumentScanActivityBinding : androidx/viewbinding/ViewBinding {
-	public final field fragmentContainer Landroidx/fragment/app/FragmentContainerView;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/docscanner/databinding/NablaDocumentScanActivityBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroidx/fragment/app/FragmentContainerView;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/docscanner/databinding/NablaDocumentScanActivityBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/docscanner/databinding/NablaDocumentScanActivityBinding;
-}
-
-public final class com/nabla/sdk/docscanner/databinding/NablaFragmentDocumentEdgePickerBinding : androidx/viewbinding/ViewBinding {
-	public final field appbar Lcom/google/android/material/appbar/AppBarLayout;
-	public final field buttonCrop Landroid/widget/Button;
-	public final field documentCropView Lcom/nabla/sdk/docscanner/ui/DocumentCropView;
-	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/docscanner/databinding/NablaFragmentDocumentEdgePickerBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/docscanner/databinding/NablaFragmentDocumentEdgePickerBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/docscanner/databinding/NablaFragmentDocumentEdgePickerBinding;
-}
-
-public final class com/nabla/sdk/docscanner/databinding/NablaFragmentDocumentScanBuilderBinding : androidx/viewbinding/ViewBinding {
-	public final field actionContainer Landroid/widget/LinearLayout;
-	public final field appbar Lcom/google/android/material/appbar/AppBarLayout;
-	public final field buttonAdd Landroid/widget/Button;
-	public final field buttonCrop Landroid/widget/Button;
-	public final field buttonDelete Landroid/widget/Button;
-	public final field buttonNext Landroid/widget/Button;
-	public final field counter Landroid/widget/TextView;
-	public final field progressBar Landroid/widget/ProgressBar;
-	public final field recyclerView Landroidx/recyclerview/widget/RecyclerView;
-	public final field title Landroid/widget/TextView;
-	public final field toolbar Lcom/google/android/material/appbar/MaterialToolbar;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/docscanner/databinding/NablaFragmentDocumentScanBuilderBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/docscanner/databinding/NablaFragmentDocumentScanBuilderBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/docscanner/databinding/NablaFragmentDocumentScanBuilderBinding;
-}
-
-public final class com/nabla/sdk/docscanner/databinding/NablaItemProcessedDocumentBinding : androidx/viewbinding/ViewBinding {
-	public final field image Landroid/widget/ImageView;
-	public static fun bind (Landroid/view/View;)Lcom/nabla/sdk/docscanner/databinding/NablaItemProcessedDocumentBinding;
-	public synthetic fun getRoot ()Landroid/view/View;
-	public fun getRoot ()Landroidx/constraintlayout/widget/ConstraintLayout;
-	public static fun inflate (Landroid/view/LayoutInflater;)Lcom/nabla/sdk/docscanner/databinding/NablaItemProcessedDocumentBinding;
-	public static fun inflate (Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Z)Lcom/nabla/sdk/docscanner/databinding/NablaItemProcessedDocumentBinding;
-}
-
 public final class com/nabla/sdk/docscanner/ml/Myrtle2 {
 	public fun close ()V
 	public static fun newInstance (Landroid/content/Context;)Lcom/nabla/sdk/docscanner/ml/Myrtle2;
@@ -64,14 +15,6 @@ public final class com/nabla/sdk/docscanner/ml/Myrtle2 {
 public class com/nabla/sdk/docscanner/ml/Myrtle2$Outputs {
 	public fun getOutputFeature0AsTensorBuffer ()Lorg/tensorflow/lite/support/tensorbuffer/TensorBuffer;
 	public fun getOutputFeature1AsTensorBuffer ()Lorg/tensorflow/lite/support/tensorbuffer/TensorBuffer;
-}
-
-public final class com/nabla/sdk/docscanner/ui/DocScannerActivityContract : androidx/activity/result/contract/ActivityResultContract {
-	public fun <init> ()V
-	public synthetic fun createIntent (Landroid/content/Context;Ljava/lang/Object;)Landroid/content/Intent;
-	public fun createIntent (Landroid/content/Context;Ljava/lang/String;)Landroid/content/Intent;
-	public fun parseResult (ILandroid/content/Intent;)Lcom/nabla/sdk/docscanner/ui/DocScannerActivityContract$Result;
-	public synthetic fun parseResult (ILandroid/content/Intent;)Ljava/lang/Object;
 }
 
 public abstract interface class com/nabla/sdk/docscanner/ui/DocScannerActivityContract$Result {
@@ -101,11 +44,6 @@ public final class com/nabla/sdk/docscanner/ui/DocScannerActivityContract$Result
 	public final fun getError ()Ljava/lang/Throwable;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/docscanner/ui/DocumentScanActivity : androidx/appcompat/app/AppCompatActivity {
-	public static final field Companion Lcom/nabla/sdk/docscanner/ui/DocumentScanActivity$Companion;
-	public fun <init> ()V
 }
 
 public final class com/nabla/sdk/docscanner/ui/DocumentScanActivity$Companion {

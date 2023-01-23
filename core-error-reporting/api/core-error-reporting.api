@@ -5,10 +5,3 @@ public final class com/nabla/sdk/core/reporting/BuildConfig {
 	public fun <init> ()V
 }
 
-public final class com/nabla/sdk/core/reporting/error/ErrorReportingInitializer : androidx/startup/Initializer {
-	public fun <init> ()V
-	public synthetic fun create (Landroid/content/Context;)Ljava/lang/Object;
-	public fun create (Landroid/content/Context;)V
-	public fun dependencies ()Ljava/util/List;
-}
-

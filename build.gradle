@@ -31,6 +31,14 @@ apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
 
 apiValidation {
     ignoredProjects += ["messaging-sample-app", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures", "tests-common"]
+    nonPublicMarkers += ["com.nabla.sdk.core.annotation.NablaInternal"]
+    ignoredPackages += [
+        "com.nabla.sdk.messaging.ui.databinding",
+        "com.nabla.sdk.scheduling.databinding",
+        "com.nabla.sdk.videocall.databinding",
+        "com.nabla.sdk.core.databinding",
+        "com.nabla.sdk.docscanner.databinding",
+    ]
 }
 
 // dependencies-analysis configuration
