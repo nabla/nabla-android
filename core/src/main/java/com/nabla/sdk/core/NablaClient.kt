@@ -7,9 +7,10 @@ import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.Module
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.ConfigurationException
-import com.nabla.sdk.core.domain.entity.NablaException
+import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Main entry-point to SDK-wide features.
@@ -58,6 +59,17 @@ public class NablaClient private constructor(
         }.mapFailureAsNablaException(coreContainer.exceptionMapper).getOrThrow()
     }
 
+    /**
+     * Watch the state of the events connection the SDK is using to receive live updates (new messages, new appointments etc...)
+     *
+     * You can use this to display a message to the user indicating they are offline is your use case
+     * is time sensitive and the risk of missing a message is important.
+     *
+     * Note that when the SDK is initialized, it starts with [EventsConnectionState.NotConnected].
+     * The state won't change until you start using the SDK by either displaying some UI or calling a watcher.
+     */
+    public fun watchEventsConnectionState(): Flow<EventsConnectionState> = coreContainer.eventsConnectionState
+
     public companion object {
         /**
          * The name of the default instance.
@@ -69,7 +81,7 @@ public class NablaClient private constructor(
         /**
          * Getter for the default instance created by [initialize].
          *
-         * @throws NablaException.Configuration.MissingInitialize If you didn't call [initialize] before.
+         * @throws ConfigurationException.MissingInitialize If you didn't call [initialize] before.
          *
          * @see initialize
          */
@@ -82,7 +94,7 @@ public class NablaClient private constructor(
          *
          * @param name name of the instance to get, as provided to [initialize].
          *
-         * @throws NablaException.Configuration.MissingInitialize If you didn't call [initialize] with the corresponding name before.
+         * @throws ConfigurationException.MissingInitialize If you didn't call [initialize] with the corresponding name before.
          *
          * @see initialize
          */

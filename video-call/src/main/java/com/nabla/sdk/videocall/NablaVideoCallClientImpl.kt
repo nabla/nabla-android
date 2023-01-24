@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.entity.VideoCall
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.videocall.domain.CameraService
 import com.nabla.sdk.videocall.injection.VideoCallContainer

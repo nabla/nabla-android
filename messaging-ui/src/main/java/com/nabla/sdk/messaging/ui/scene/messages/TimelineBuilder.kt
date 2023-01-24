@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
-import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.domain.entity.VideoCall
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
 import com.nabla.sdk.messaging.core.domain.entity.Message

@@ -2,8 +2,8 @@ package com.nabla.sdk.tests.common
 
 import android.content.Context
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.entity.VideoCall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

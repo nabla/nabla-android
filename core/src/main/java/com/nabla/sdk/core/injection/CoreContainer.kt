@@ -6,7 +6,6 @@ import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.cache.normalized.sql.SqlNormalizedCacheFactory
 import com.apollographql.apollo3.network.http.DefaultHttpEngine
-import com.apollographql.apollo3.network.ws.DefaultWebSocketEngine
 import com.benasher44.uuid.Uuid
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nabla.sdk.core.BuildConfig
@@ -14,6 +13,7 @@ import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.apollo.ApolloFactory
+import com.nabla.sdk.core.data.apollo.ConnectionStateAwareWebsocketEngine
 import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.core.data.auth.AcceptLanguageInterceptor
 import com.nabla.sdk.core.data.auth.AuthService
@@ -54,9 +54,11 @@ import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.core.domain.entity.ModuleType
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -123,6 +125,21 @@ public class CoreContainer internal constructor(
             .build()
     }
 
+    private val websocketEngine = ConnectionStateAwareWebsocketEngine(
+        webSocketFactory = okHttpClient,
+        clock = clock,
+    )
+
+    internal val eventsConnectionState = websocketEngine.connectionStateFlow
+        .map {
+            when (it) {
+                ConnectionStateAwareWebsocketEngine.WebSocketConnectionState.Connected -> EventsConnectionState.Connected
+                is ConnectionStateAwareWebsocketEngine.WebSocketConnectionState.Disconnected -> EventsConnectionState.Disconnected(since = it.since)
+                ConnectionStateAwareWebsocketEngine.WebSocketConnectionState.NotConnected -> EventsConnectionState.NotConnected
+                ConnectionStateAwareWebsocketEngine.WebSocketConnectionState.Connecting -> EventsConnectionState.Connecting
+            }
+        }
+
     public val apolloClient: ApolloClient by lazy {
         ApolloFactory
             .configureBuilder(
@@ -138,7 +155,7 @@ public class CoreContainer internal constructor(
                 if (overriddenApolloWsConfig != null) {
                     overriddenApolloWsConfig(this)
                 } else {
-                    webSocketEngine(DefaultWebSocketEngine(okHttpClient))
+                    webSocketEngine(websocketEngine)
                 }
             }
             .apply { overriddenApolloConfig?.let { it(this) } }

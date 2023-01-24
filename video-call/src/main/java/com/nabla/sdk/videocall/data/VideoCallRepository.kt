@@ -2,7 +2,7 @@ package com.nabla.sdk.videocall.data
 
 import android.content.Context
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.domain.boundary.VideoCall
+import com.nabla.sdk.core.domain.entity.VideoCall
 import com.twilio.audioswitch.AudioDevice
 import io.livekit.android.LiveKit
 import io.livekit.android.LiveKitOverrides

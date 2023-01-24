@@ -3,6 +3,7 @@ package com.nabla.sdk.core.domain.boundary
 import android.content.Context
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.ModuleType
+import com.nabla.sdk.core.domain.entity.VideoCall
 import kotlinx.coroutines.flow.Flow
 
 public interface VideoCallModule : Module {

@@ -1,4 +1,4 @@
-package com.nabla.sdk.core.domain.boundary
+package com.nabla.sdk.core.domain.entity
 
 import com.benasher44.uuid.Uuid
 

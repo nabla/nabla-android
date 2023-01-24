@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toJvmUri
-import com.nabla.sdk.core.domain.boundary.VideoCall
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.Uri
+import com.nabla.sdk.core.domain.entity.VideoCall
 import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.kotlin.combine
 import com.nabla.sdk.core.ui.helpers.LiveFlow

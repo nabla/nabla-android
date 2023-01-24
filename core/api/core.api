@@ -39,6 +39,7 @@ public final class com/nabla/sdk/core/NablaClient {
 	public synthetic fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/Configuration;Lcom/nabla/sdk/core/NetworkConfiguration;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun authenticate (Ljava/lang/String;Lcom/nabla/sdk/core/domain/boundary/SessionTokenProvider;)V
 	public final fun getName ()Ljava/lang/String;
+	public final fun watchEventsConnectionState ()Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class com/nabla/sdk/core/NablaClient$Companion {
@@ -135,17 +136,6 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingMod
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenProvider {
 	public abstract fun fetchNewSessionAuthTokens-f_-3YFY (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class com/nabla/sdk/core/domain/boundary/VideoCall {
-	public fun <init> (Ljava/util/UUID;)V
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun copy (Ljava/util/UUID;)Lcom/nabla/sdk/core/domain/boundary/VideoCall;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/boundary/VideoCall;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/boundary/VideoCall;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getId ()Ljava/util/UUID;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule : com/nabla/sdk/core/domain/boundary/Module {
@@ -262,6 +252,32 @@ public final class com/nabla/sdk/core/domain/entity/EphemeralUrl {
 }
 
 public final class com/nabla/sdk/core/domain/entity/EphemeralUrl$Companion {
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/EventsConnectionState {
+}
+
+public final class com/nabla/sdk/core/domain/entity/EventsConnectionState$Connected : com/nabla/sdk/core/domain/entity/EventsConnectionState {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/EventsConnectionState$Connected;
+}
+
+public final class com/nabla/sdk/core/domain/entity/EventsConnectionState$Connecting : com/nabla/sdk/core/domain/entity/EventsConnectionState {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/EventsConnectionState$Connecting;
+}
+
+public final class com/nabla/sdk/core/domain/entity/EventsConnectionState$Disconnected : com/nabla/sdk/core/domain/entity/EventsConnectionState {
+	public fun <init> (Lkotlinx/datetime/Instant;)V
+	public final fun component1 ()Lkotlinx/datetime/Instant;
+	public final fun copy (Lkotlinx/datetime/Instant;)Lcom/nabla/sdk/core/domain/entity/EventsConnectionState$Disconnected;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/EventsConnectionState$Disconnected;Lkotlinx/datetime/Instant;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/EventsConnectionState$Disconnected;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSince ()Lkotlinx/datetime/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/EventsConnectionState$NotConnected : com/nabla/sdk/core/domain/entity/EventsConnectionState {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/EventsConnectionState$NotConnected;
 }
 
 public abstract class com/nabla/sdk/core/domain/entity/FileUpload {
@@ -650,6 +666,17 @@ public final class com/nabla/sdk/core/domain/entity/Uri {
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/VideoCall {
+	public fun <init> (Ljava/util/UUID;)V
+	public final fun component1 ()Ljava/util/UUID;
+	public final fun copy (Ljava/util/UUID;)Lcom/nabla/sdk/core/domain/entity/VideoCall;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/VideoCall;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/VideoCall;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()Ljava/util/UUID;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/VideoCallRoom {
