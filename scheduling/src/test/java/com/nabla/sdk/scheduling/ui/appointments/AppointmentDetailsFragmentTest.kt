@@ -44,7 +44,18 @@ class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
         paparazzi.snapshotDayNightDefaultDevice { (context, layoutInflater) ->
             val (parent, binding) = createBinding(context, layoutInflater)
 
-            binding.bind(AppointmentDetailsViewModel.State.Loaded(appointment = appointment))
+            binding.bind(AppointmentDetailsViewModel.State.Loaded(appointment = appointment, cancelAvailable = true))
+
+            return@snapshotDayNightDefaultDevice parent
+        }
+    }
+
+    @Test
+    fun `Test loaded state without cancel button`() {
+        paparazzi.snapshotDayNightDefaultDevice { (context, layoutInflater) ->
+            val (parent, binding) = createBinding(context, layoutInflater)
+
+            binding.bind(AppointmentDetailsViewModel.State.Loaded(appointment = appointment, cancelAvailable = false))
 
             return@snapshotDayNightDefaultDevice parent
         }

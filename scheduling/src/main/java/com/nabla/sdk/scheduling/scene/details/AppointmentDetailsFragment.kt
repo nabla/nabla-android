@@ -77,7 +77,7 @@ internal class AppointmentDetailsFragment : SchedulingBaseFragment(
 
 internal fun NablaSchedulingFragmentAppointmentDetailsBinding.bind(state: State, onRetryListener: () -> Unit = {}) {
     nablaAppointmentSummary.isVisible = state.appointment != null
-    nablaCancelAppointmentButton.isVisible = state is State.Loaded
+    nablaCancelAppointmentButton.isVisible = state is State.Loaded && state.cancelAvailable
     progressBar.isVisible = state is State.Loading
     errorLayout.root.isVisible = state is State.Error
 

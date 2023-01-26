@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Core: Added a new `watchEventsConnectionState` method on `NablaClient` which allows you to monitor the current state of the network connection used to receive live events.
 
+### Fixed
+- Scheduling: Fix a bug where a user could try to cancel a past appointment.
+
 ## [1.0.0-alpha22] - 2023-01-19
 
 ### Added

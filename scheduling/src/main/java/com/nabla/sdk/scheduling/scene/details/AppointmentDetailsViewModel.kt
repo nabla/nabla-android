@@ -13,6 +13,8 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
+import com.nabla.sdk.scheduling.scene.appointments.SOON_CONVERSATION_THRESHOLD
 import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
 
 internal class AppointmentDetailsViewModel(
     private val appointmentId: AppointmentId,
@@ -38,7 +41,9 @@ internal class AppointmentDetailsViewModel(
     val stateFlow: StateFlow<State> = flow<State> {
         val appointment =
             nablaClient.schedulingInternalModule.getAppointment(appointmentId).getOrThrow()
-        emit(State.Loaded(appointment))
+        val cancelAvailable = appointment.state == AppointmentState.UPCOMING &&
+            appointment.scheduledAt - SOON_CONVERSATION_THRESHOLD - nablaClient.coreContainer.clock.now() > Duration.ZERO
+        emit(State.Loaded(appointment, cancelAvailable))
     }.combine(isCancellingFlow) { state, isCancelling ->
         if (isCancelling) State.Loading(state.appointment) else state
     }.retryWhen { cause, _ ->
@@ -90,6 +95,7 @@ internal class AppointmentDetailsViewModel(
 
         data class Loaded(
             override val appointment: Appointment,
+            val cancelAvailable: Boolean,
         ) : State
     }
 
