@@ -8,9 +8,10 @@ import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
 import com.nabla.sdk.core.domain.auth.throwOnStartIfNotAuthenticated
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
-import com.nabla.sdk.core.domain.helper.makePaginatedFlow
+import com.nabla.sdk.core.domain.helper.wrapAsResponsePaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
@@ -50,9 +51,8 @@ internal class NablaMessagingClientImpl internal constructor(
 
     override val logger: Logger = coreContainer.logger
 
-    override fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
-        return makePaginatedFlow(
-            conversationRepository.watchConversations(),
+    override fun watchConversations(): Flow<Response<PaginatedContent<List<Conversation>>>> {
+        return conversationRepository.watchConversations().wrapAsResponsePaginatedContent(
             conversationRepository::loadMoreConversations,
             messagingContainer.nablaExceptionMapper,
             messagingContainer.sessionClient
@@ -84,15 +84,14 @@ internal class NablaMessagingClientImpl internal constructor(
         return conversationRepository.createLocalConversation(title, providerIds)
     }
 
-    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+    override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
         return conversationRepository.watchConversation(conversationId)
             .throwOnStartIfNotAuthenticated(messagingContainer.sessionClient)
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
-    override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<List<ConversationItem>>> {
-        return makePaginatedFlow(
-            conversationContentRepository.watchConversationItems(conversationId),
+    override fun watchConversationItems(conversationId: ConversationId): Flow<Response<PaginatedContent<List<ConversationItem>>>> {
+        return conversationContentRepository.watchConversationItems(conversationId).wrapAsResponsePaginatedContent(
             { conversationContentRepository.loadMoreMessages(conversationId) },
             messagingContainer.nablaExceptionMapper,
             messagingContainer.sessionClient

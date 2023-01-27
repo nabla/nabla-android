@@ -3,8 +3,8 @@ package com.nabla.sdk.scheduling.ui.viewmodel
 import app.cash.turbine.test
 import com.nabla.sdk.core.data.stubs.StdLogger
 import com.nabla.sdk.core.data.stubs.TestClock
+import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.scheduling.core.data.stubs.fake
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
@@ -36,7 +36,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
         // setup & test data
         val now = TestClock(this).now()
         val locationFactory = { AppointmentLocation.fake(locationType = AppointmentLocationType.REMOTE, videoCallRoomIsOpen = true) }
-        val appointmentsResponse = WatchPaginatedResponse(
+        val appointmentsResponse = PaginatedContent(
             content = listOf(
                 Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 2.minutes),
                 Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 3.minutes),
@@ -44,9 +44,9 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
             ),
             loadMore = null,
         )
-        val appointmentDataFlow = MutableSharedFlow<WatchPaginatedResponse<List<Appointment>>>()
+        val appointmentDataFlow = MutableSharedFlow<PaginatedContent<List<Appointment>>>()
         val schedulingClient = object : SchedulingInternalModuleAdapter() {
-            override fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> = appointmentDataFlow
+            override fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>> = appointmentDataFlow
         }
         val viewModel = AppointmentsContentViewModel(
             schedulingClient,
@@ -111,8 +111,8 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
     fun `view model is catching errors from domain layer`() = runTest {
         val schedulingClient = object : SchedulingInternalModuleAdapter() {
             var firstCall = AtomicBoolean(true)
-            override fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =
-                flowOf(WatchPaginatedResponse(listOf(Appointment.fake(state = AppointmentState.UPCOMING))) { Result.failure(Exception()) })
+            override fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>> =
+                flowOf(PaginatedContent(listOf(Appointment.fake(state = AppointmentState.UPCOMING))) { Result.failure(Exception()) })
                     .onStart {
                         if (firstCall.compareAndSet(true, false)) error("simulated error")
                     }

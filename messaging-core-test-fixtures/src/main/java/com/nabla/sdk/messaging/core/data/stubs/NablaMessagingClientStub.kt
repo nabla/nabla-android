@@ -4,7 +4,8 @@ import androidx.test.espresso.idling.CountingIdlingResource
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.LogcatLogger
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -25,7 +26,7 @@ class NablaMessagingClientStub(
 
     override val logger: Logger = LogcatLogger(logLevel = LogcatLogger.LogLevel.DEBUG)
 
-    override fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>> {
+    override fun watchConversations(): Flow<Response<PaginatedContent<List<Conversation>>>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 conversationRepository.loadMoreConversations()
@@ -33,14 +34,18 @@ class NablaMessagingClientStub(
         }
 
         return conversationRepository.watchConversations()
-            .map { paginatedConversations ->
-                WatchPaginatedResponse(
-                    content = paginatedConversations.items,
-                    loadMore = if (paginatedConversations.hasMore) {
-                        loadMoreCallback
-                    } else {
-                        null
-                    },
+            .map { paginatedConversationsResponse ->
+                Response(
+                    isDataFresh = paginatedConversationsResponse.isDataFresh,
+                    refreshingState = paginatedConversationsResponse.refreshingState,
+                    data = PaginatedContent(
+                        content = paginatedConversationsResponse.data.items,
+                        loadMore = if (paginatedConversationsResponse.data.hasMore) {
+                            loadMoreCallback
+                        } else {
+                            null
+                        },
+                    ),
                 )
             }
     }
@@ -59,11 +64,11 @@ class NablaMessagingClientStub(
         return conversationRepository.createLocalConversation(title, providerIds)
     }
 
-    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+    override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
         return conversationRepository.watchConversation(conversationId)
     }
 
-    override fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<List<ConversationItem>>> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<Response<PaginatedContent<List<ConversationItem>>>> {
         val loadMoreCallback = suspend {
             runCatchingCancellable {
                 messageRepository.loadMoreMessages(conversationId)
@@ -71,12 +76,16 @@ class NablaMessagingClientStub(
         }
 
         return messageRepository.watchConversationItems(conversationId)
-            .map { paginatedConversationItems ->
-                WatchPaginatedResponse(
-                    content = paginatedConversationItems.items,
-                    loadMore = if (paginatedConversationItems.hasMore) {
-                        loadMoreCallback
-                    } else null
+            .map { paginatedConversationItemsResponse ->
+                Response(
+                    isDataFresh = paginatedConversationItemsResponse.isDataFresh,
+                    refreshingState = paginatedConversationItemsResponse.refreshingState,
+                    data = PaginatedContent(
+                        content = paginatedConversationItemsResponse.data.items,
+                        loadMore = if (paginatedConversationItemsResponse.data.hasMore) {
+                            loadMoreCallback
+                        } else null
+                    )
                 )
             }
     }

@@ -6,8 +6,8 @@ import android.content.Intent
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
-import com.nabla.sdk.core.domain.helper.makePaginatedFlow
+import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.helper.wrapAsPaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.domain.entity.Appointment
@@ -48,27 +48,24 @@ internal class NablaSchedulingClientImpl(
     override fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
-    ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {
-        return makePaginatedFlow(
-            appointmentRepository.watchAvailabilitySlots(locationType, categoryId),
+    ): Flow<PaginatedContent<List<AvailabilitySlot>>> {
+        return appointmentRepository.watchAvailabilitySlots(locationType, categoryId).wrapAsPaginatedContent(
             { appointmentRepository.loadMoreAvailabilitySlots(locationType, categoryId) },
             schedulingContainer.nablaExceptionMapper,
             schedulingContainer.sessionClient,
         )
     }
 
-    override fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> {
-        return makePaginatedFlow(
-            appointmentRepository.watchPastAppointments(),
+    override fun watchPastAppointments(): Flow<PaginatedContent<List<Appointment>>> {
+        return appointmentRepository.watchPastAppointments().wrapAsPaginatedContent(
             appointmentRepository::loadMorePastAppointments,
             schedulingContainer.nablaExceptionMapper,
             schedulingContainer.sessionClient,
         )
     }
 
-    override fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> {
-        return makePaginatedFlow(
-            appointmentRepository.watchUpcomingAppointments(),
+    override fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>> {
+        return appointmentRepository.watchUpcomingAppointments().wrapAsPaginatedContent(
             appointmentRepository::loadMoreUpcomingAppointments,
             schedulingContainer.nablaExceptionMapper,
             schedulingContainer.sessionClient,

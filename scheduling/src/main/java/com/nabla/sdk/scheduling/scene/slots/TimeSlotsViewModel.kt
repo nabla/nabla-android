@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
@@ -67,13 +67,13 @@ internal class TimeSlotsViewModel(
         true
     }.stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = State.Loading)
 
-    private fun cacheLastResponse(response: WatchPaginatedResponse<List<AvailabilitySlot>>) {
+    private fun cacheLastResponse(response: PaginatedContent<List<AvailabilitySlot>>) {
         latestLoadMoreCallback = response.loadMore
         lastReceivedSlots = response.content
     }
 
     private fun mapToLoadedState(
-        availabilitySlots: WatchPaginatedResponse<List<AvailabilitySlot>>,
+        availabilitySlots: PaginatedContent<List<AvailabilitySlot>>,
         expandedDaysPositions: Set<Int>,
         selectedSlot: Instant?,
     ): State {

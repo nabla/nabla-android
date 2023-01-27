@@ -33,13 +33,13 @@ public class ConversationListViewModel(
     internal val stateFlow: StateFlow<State> =
         messagingClient.watchConversations()
             .map { result ->
-                latestLoadMoreCallback = result.loadMore
+                latestLoadMoreCallback = result.data.loadMore
 
-                if (result.content.isEmpty()) {
+                if (result.data.content.isEmpty()) {
                     State.Empty
                 } else {
                     State.Loaded(
-                        items = result.content.map { it.toUiModel() } + if (result.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
+                        items = result.data.content.map { it.toUiModel() } + if (result.data.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
                     )
                 }
             }

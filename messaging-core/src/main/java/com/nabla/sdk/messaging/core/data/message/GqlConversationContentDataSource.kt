@@ -7,16 +7,18 @@ import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.optimisticUpdates
-import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
 import com.nabla.sdk.core.data.apollo.readFromCache
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.domain.helper.watchAsCachedResponse
 import com.nabla.sdk.graphql.type.Conversation
 import com.nabla.sdk.graphql.type.ConversationActivity
 import com.nabla.sdk.graphql.type.DeletedMessageContent
@@ -59,6 +61,7 @@ internal class GqlConversationContentDataSource(
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
+    private val exceptionMapper: NablaExceptionMapper,
     private val localConversationDataSource: LocalConversationDataSource,
 ) {
 
@@ -183,13 +186,11 @@ internal class GqlConversationContentDataSource(
     }
 
     @OptIn(FlowPreview::class)
-    fun watchConversationItems(conversationId: ConversationId.Remote): Flow<PaginatedList<ConversationItem>> {
+    fun watchConversationItems(conversationId: ConversationId.Remote): Flow<Response<PaginatedList<ConversationItem>>> {
         val dataFlow = apolloClient.query(conversationItemsQuery(conversationId))
-            .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .watch(fetchThrows = true)
-            .map { response -> requireNotNull(response.data) }
-            .map { queryData ->
-                val page = queryData.conversation.conversation.conversationItemsPageFragment.items
+            .watchAsCachedResponse(exceptionMapper)
+            .map { response ->
+                val page = response.data.conversation.conversation.conversationItemsPageFragment.items
                 val items = page.data.mapNotNull { pageData ->
                     pageData?.messageFragment?.let {
                         return@mapNotNull mapper.mapToMessage(
@@ -202,9 +203,14 @@ internal class GqlConversationContentDataSource(
                         return@mapNotNull mapper.mapToConversationActivity(it)
                     }
                 }
-                PaginatedList(
-                    items = items,
-                    hasMore = page.hasMore,
+
+                return@map Response(
+                    isDataFresh = response.isDataFresh,
+                    refreshingState = response.refreshingState,
+                    data = PaginatedList(
+                        items = items,
+                        hasMore = page.hasMore,
+                    ),
                 )
             }
         return flowOf(

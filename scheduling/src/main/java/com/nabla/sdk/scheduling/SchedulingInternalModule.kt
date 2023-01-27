@@ -1,7 +1,7 @@
 package com.nabla.sdk.scheduling
 
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
@@ -20,10 +20,10 @@ internal interface SchedulingInternalModule : SchedulingModule {
     fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId
-    ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>>
+    ): Flow<PaginatedContent<List<AvailabilitySlot>>>
 
-    fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>
-    fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>>
+    fun watchPastAppointments(): Flow<PaginatedContent<List<Appointment>>>
+    fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>>
 
     suspend fun getAppointmentConfirmationConsents(
         locationType: AppointmentLocationType

@@ -7,6 +7,8 @@ import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
@@ -47,15 +49,19 @@ internal class ConversationContentRepositoryStub(
     private val flowMutex = Mutex()
     private val messagesFlowPerConversation = mutableMapOf<Uuid, MutableStateFlow<List<Message>>>()
 
-    override fun watchConversationItems(conversationId: ConversationId): Flow<PaginatedList<ConversationItem>> {
+    override fun watchConversationItems(conversationId: ConversationId): Flow<Response<PaginatedList<ConversationItem>>> {
         val isNewlyCreated = conversationId.stableId in conversationRepositoryStub.newlyCreatedConversationIds
         return messagesFlowPerConversation.getOrPut(conversationId.stableId) {
             conversationItemsStateFlow(prepopulate = !isNewlyCreated)
         }
             .map { messages ->
-                PaginatedList.fakeConversationsItems(
-                    messages = messages.sortedByDescending { it.baseMessage.createdAt },
-                    hasMore = !isNewlyCreated
+                Response(
+                    isDataFresh = true,
+                    refreshingState = RefreshingState.Refreshed,
+                    data = PaginatedList.fakeConversationsItems(
+                        messages = messages.sortedByDescending { it.baseMessage.createdAt },
+                        hasMore = !isNewlyCreated
+                    )
                 )
             }
             .onStart {

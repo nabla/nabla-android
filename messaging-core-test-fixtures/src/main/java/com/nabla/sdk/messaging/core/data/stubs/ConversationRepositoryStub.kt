@@ -7,6 +7,8 @@ import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
@@ -66,15 +68,28 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
         return ConversationId.Local(newConversation.id.clientId!!)
     }
 
-    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
-        return conversationsFlow.map { it.items.first { it.id.stableId == conversationId.stableId } }
+    override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
+        return conversationsFlow.map {
+            Response(
+                isDataFresh = true,
+                refreshingState = RefreshingState.Refreshed,
+                data = it.items.first { it.id.stableId == conversationId.stableId },
+            )
+        }
     }
 
-    override fun watchConversations(): Flow<PaginatedList<Conversation>> {
+    override fun watchConversations(): Flow<Response<PaginatedList<Conversation>>> {
         return conversationsFlow
             .onStart {
                 delayWithIdlingRes(idlingRes, 100.milliseconds)
                 if (MOCK_ERRORS) if (Random.nextBoolean()) throw ApolloNetworkException()
+            }
+            .map {
+                Response(
+                    isDataFresh = true,
+                    refreshingState = RefreshingState.Refreshed,
+                    data = it,
+                )
             }
     }
 

@@ -500,6 +500,18 @@ public class com/nabla/sdk/core/domain/entity/NablaException : java/lang/Excepti
 public final class com/nabla/sdk/core/domain/entity/NetworkException : com/nabla/sdk/core/domain/entity/NablaException {
 }
 
+public final class com/nabla/sdk/core/domain/entity/PaginatedContent {
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun component2 ()Lkotlin/jvm/functions/Function1;
+	public final fun copy (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/domain/entity/PaginatedContent;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/PaginatedContent;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/PaginatedContent;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContent ()Ljava/lang/Object;
+	public final fun getLoadMore ()Lkotlin/jvm/functions/Function1;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/nabla/sdk/core/domain/entity/PaginatedList {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/PaginatedList$Companion;
 	public fun <init> (Ljava/util/List;Z)V
@@ -569,6 +581,43 @@ public final class com/nabla/sdk/core/domain/entity/Provider : com/nabla/sdk/cor
 }
 
 public final class com/nabla/sdk/core/domain/entity/Provider$Companion {
+}
+
+public abstract class com/nabla/sdk/core/domain/entity/RefreshingState {
+}
+
+public final class com/nabla/sdk/core/domain/entity/RefreshingState$ErrorWhileRefreshing : com/nabla/sdk/core/domain/entity/RefreshingState {
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/NablaException;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/NablaException;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/NablaException;)Lcom/nabla/sdk/core/domain/entity/RefreshingState$ErrorWhileRefreshing;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/RefreshingState$ErrorWhileRefreshing;Lcom/nabla/sdk/core/domain/entity/NablaException;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/RefreshingState$ErrorWhileRefreshing;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lcom/nabla/sdk/core/domain/entity/NablaException;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/RefreshingState$Refreshed : com/nabla/sdk/core/domain/entity/RefreshingState {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/RefreshingState$Refreshed;
+}
+
+public final class com/nabla/sdk/core/domain/entity/RefreshingState$Refreshing : com/nabla/sdk/core/domain/entity/RefreshingState {
+	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/RefreshingState$Refreshing;
+}
+
+public final class com/nabla/sdk/core/domain/entity/Response {
+	public fun <init> (ZLcom/nabla/sdk/core/domain/entity/RefreshingState;Ljava/lang/Object;)V
+	public final fun component1 ()Z
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/RefreshingState;
+	public final fun component3 ()Ljava/lang/Object;
+	public final fun copy (ZLcom/nabla/sdk/core/domain/entity/RefreshingState;Ljava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/Response;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/Response;ZLcom/nabla/sdk/core/domain/entity/RefreshingState;Ljava/lang/Object;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/Response;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/lang/Object;
+	public final fun getRefreshingState ()Lcom/nabla/sdk/core/domain/entity/RefreshingState;
+	public fun hashCode ()I
+	public final fun isDataFresh ()Z
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/ServerException : com/nabla/sdk/core/domain/entity/NablaException {
@@ -720,16 +769,7 @@ public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open : c
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/WatchPaginatedResponse {
-	public final fun component1 ()Ljava/lang/Object;
-	public final fun component2 ()Lkotlin/jvm/functions/Function1;
-	public final fun copy (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/core/domain/entity/WatchPaginatedResponse;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/WatchPaginatedResponse;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/WatchPaginatedResponse;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getContent ()Ljava/lang/Object;
-	public final fun getLoadMore ()Lkotlin/jvm/functions/Function1;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public final class com/nabla/sdk/core/domain/helper/ApolloResponseHelperKt {
 }
 
 public final class com/nabla/sdk/core/domain/helper/PaginationHelperKt {

@@ -7,7 +7,8 @@ import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.NablaException
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.core.domain.entity.ConversationItem
@@ -38,11 +39,12 @@ public interface NablaMessagingClient : MessagingModule {
     /**
      * Watch the list of conversations the current user is involved in.
      *
-     * @see WatchPaginatedResponse for pagination mechanism.
+     * @see PaginatedContent for pagination mechanism.
+     * @see Response for cache and offline data management.
      *
      * Returned flow might throw any of [NablaException] children.
      */
-    public fun watchConversations(): Flow<WatchPaginatedResponse<List<Conversation>>>
+    public fun watchConversations(): Flow<Response<PaginatedContent<List<Conversation>>>>
 
     /**
      * Create a new conversation on behalf of the current user. This conversation will be created server-side
@@ -91,21 +93,24 @@ public interface NablaMessagingClient : MessagingModule {
      *
      * Returned flow might throw any of [NablaException] children.
      *
+     * @see Response for cache and offline data management.
+     *
      * @param conversationId the id of the conversation you want to watch update for.
      */
-    public fun watchConversation(conversationId: ConversationId): Flow<Conversation>
+    public fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>>
 
     /**
      * Watch the list of [ConversationItem] in a conversation.
      * The current user should be involved in that conversation or a security error will be raised.
      *
-     * @see WatchPaginatedResponse for pagination mechanism.
+     * @see PaginatedContent for pagination mechanism.
+     * @see Response for cache and offline data management.
      *
      * Returned flow might throw any of [NablaException] children.
      *
      * @param conversationId the id from [Conversation.id].
      */
-    public fun watchConversationItems(conversationId: ConversationId): Flow<WatchPaginatedResponse<List<ConversationItem>>>
+    public fun watchConversationItems(conversationId: ConversationId): Flow<Response<PaginatedContent<List<ConversationItem>>>>
 
     /**
      * Send a new message in the conversation.

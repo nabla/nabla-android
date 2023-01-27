@@ -5,15 +5,17 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
-import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.domain.helper.watchAsCachedResponse
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.graphql.type.SendMessageInput
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
@@ -42,6 +44,7 @@ internal class GqlConversationDataSource constructor(
     coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
+    private val exceptionMapper: NablaExceptionMapper,
     private val clock: Clock,
 ) {
     private val conversationsEventsFlow by lazy {
@@ -49,8 +52,8 @@ internal class GqlConversationDataSource constructor(
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach {
                 logger.debug(domain = GQL_DOMAIN, message = "Event $it")
-                it.dataOrThrowOnError.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let {
-                    insertConversationToConversationsListCache(it)
+                it.dataOrThrowOnError.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let { conversationFragment ->
+                    insertConversationToConversationsListCache(conversationFragment)
                 }
             }
     }
@@ -94,17 +97,19 @@ internal class GqlConversationDataSource constructor(
     }
 
     @OptIn(FlowPreview::class)
-    fun watchConversations(): Flow<PaginatedList<Conversation>> {
+    fun watchConversations(): Flow<Response<PaginatedList<Conversation>>> {
         val dataFlow = apolloClient.query(conversationsQuery())
-            .fetchPolicy(FetchPolicy.NetworkFirst)
-            .watch(fetchThrows = true)
-            .map { response -> response.dataOrThrowOnError }
-            .map { queryData ->
-                val items = queryData.conversations.conversations.map {
+            .watchAsCachedResponse(exceptionMapper)
+            .map { response ->
+                val items = response.data.conversations.conversations.map {
                     mapper.mapToConversation(it.conversationFragment)
                 }.sortedByDescending { conversation -> conversation.lastModified }
 
-                return@map PaginatedList(items, queryData.conversations.hasMore)
+                return@map Response(
+                    isDataFresh = response.isDataFresh,
+                    refreshingState = response.refreshingState,
+                    data = PaginatedList(items, response.data.conversations.hasMore)
+                )
             }
         return flowOf(conversationsEventsFlow, dataFlow)
             .flattenMerge()
@@ -137,17 +142,21 @@ internal class GqlConversationDataSource constructor(
     }
 
     @OptIn(FlowPreview::class)
-    fun watchConversation(conversationId: ConversationId.Remote): Flow<Conversation> {
+    fun watchConversation(conversationId: ConversationId.Remote): Flow<Response<Conversation>> {
         val watcher = apolloClient.query(ConversationQuery(conversationId.remoteId))
-            .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .watch(fetchThrows = true)
-            .map { response -> response.dataOrThrowOnError }
-            .notifyTypingUpdates(clock = clock) { data ->
-                data.conversation.conversation.conversationFragment.providers
+            .watchAsCachedResponse(exceptionMapper)
+            .notifyTypingUpdates(clock = clock) { response ->
+                response.data.conversation.conversation.conversationFragment.providers
                     .map { it.providerInConversationFragment }
                     .map { mapper.mapToProviderInConversation(it) }
             }
-            .map { queryData -> mapper.mapToConversation(queryData.conversation.conversation.conversationFragment) }
+            .map { response ->
+                Response(
+                    isDataFresh = response.isDataFresh,
+                    refreshingState = response.refreshingState,
+                    data = mapper.mapToConversation(response.data.conversation.conversation.conversationFragment)
+                )
+            }
 
         return flowOf(conversationsEventsFlow, watcher)
             .flattenMerge()

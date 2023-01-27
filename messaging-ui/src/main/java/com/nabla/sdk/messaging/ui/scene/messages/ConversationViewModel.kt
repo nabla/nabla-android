@@ -9,9 +9,10 @@ import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.toJvmUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
+import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCall
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.kotlin.combine
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -139,8 +140,8 @@ internal class ConversationViewModel(
     }
 
     private fun makeStateFlow(
-        conversationDataFlow: Flow<Conversation>,
-        conversationItemsFlow: Flow<WatchPaginatedResponse<List<ConversationItem>>>,
+        conversationDataFlow: Flow<Response<Conversation>>,
+        conversationItemsFlow: Flow<Response<PaginatedContent<List<ConversationItem>>>>,
     ): StateFlow<State> {
 
         val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
@@ -174,15 +175,15 @@ internal class ConversationViewModel(
             .stateIn(viewModelScope + Dispatchers.Default, SharingStarted.Eagerly, initialValue = State.Loading)
     }
 
-    private fun Flow<Conversation>.handleConversationDataSideEffects() =
-        onEach { conversation ->
-            showComposerFlow.value = !conversation.isLocked
-            conversation.markConversationAsReadIfNeeded()
+    private fun Flow<Response<Conversation>>.handleConversationDataSideEffects() =
+        onEach { response ->
+            showComposerFlow.value = !response.data.isLocked
+            response.data.markConversationAsReadIfNeeded()
         }
 
-    private fun Flow<WatchPaginatedResponse<List<ConversationItem>>>.handleConversationMessagesSideEffects() =
+    private fun Flow<Response<PaginatedContent<List<ConversationItem>>>>.handleConversationMessagesSideEffects() =
         onEach { response ->
-            latestLoadMoreCallback = response.loadMore
+            latestLoadMoreCallback = response.data.loadMore
         }
 
     fun onViewStart() {
@@ -689,19 +690,19 @@ internal class ConversationViewModel(
         private val timelineBuilder = TimelineBuilder()
 
         fun mapToState(
-            conversation: Conversation,
-            conversationItemsResponse: WatchPaginatedResponse<List<ConversationItem>>,
+            conversationResponse: Response<Conversation>,
+            conversationItemsResponse: Response<PaginatedContent<List<ConversationItem>>>,
             selectedMessageId: MessageId?,
             audioPlaybackProgressMap: Map<Uri, PlaybackProgress>,
             nowPlayingAudio: Uri?,
             currentVideoCall: VideoCall?,
         ): State {
             return State.ConversationLoaded(
-                conversation = conversation,
+                conversation = conversationResponse.data,
                 items = timelineBuilder.buildTimeline(
-                    items = conversationItemsResponse.content,
-                    hasMore = conversationItemsResponse.loadMore != null,
-                    providersInConversation = conversation.providersInConversation,
+                    items = conversationItemsResponse.data.content,
+                    hasMore = conversationItemsResponse.data.loadMore != null,
+                    providersInConversation = conversationResponse.data.providersInConversation,
                     selectedMessageId = selectedMessageId,
                     audioPlaybackProgressMap = audioPlaybackProgressMap,
                     nowPlayingAudioUri = nowPlayingAudio,

@@ -3,6 +3,8 @@ package com.nabla.sdk.messaging.core.data.message
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.data.stubs.fakeImage
 import com.nabla.sdk.messaging.core.data.stubs.fakeProviderJoined
@@ -82,8 +84,15 @@ class ConversationContentRepositoryImplTest : BaseCoroutineTest() {
             every { watchLocalMessages(conversationId) } returns flowOf(localMessages)
         }
         val gqlConversationContentDataSource = mockk<GqlConversationContentDataSource> {
-            every { watchConversationItems(conversationId) } returns flowOf(paginatedConversationItems)
+            every { watchConversationItems(conversationId) } returns flowOf(
+                Response(
+                    isDataFresh = true,
+                    refreshingState = RefreshingState.Refreshed,
+                    data = paginatedConversationItems,
+                )
+            )
         }
+
         val mergedMessage = gqlMessageToMerge.modify(
             mediaSource = FileSource.Uploaded(
                 fileLocal = localMessageToMergeMediaSource.fileLocal,
@@ -100,8 +109,8 @@ class ConversationContentRepositoryImplTest : BaseCoroutineTest() {
             isVideoCallModuleActive = false,
         )
         repo.watchConversationItems(conversationId).test {
-            val item = awaitItem()
-            item.items.apply {
+            val itemResponse = awaitItem()
+            itemResponse.data.items.apply {
                 assertTrue(contains(localMessageToKeep))
                 assertFalse(contains(localMessageToReplace))
                 assertFalse(contains(localMessageToMerge))

@@ -1,7 +1,7 @@
 package com.nabla.sdk.scheduling.ui.viewmodel
 
 import android.content.Context
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.Appointment
@@ -26,13 +26,13 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
     override fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId
-    ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> =
+    ): Flow<PaginatedContent<List<AvailabilitySlot>>> =
         error("Not mocked")
 
-    override fun watchPastAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =
+    override fun watchPastAppointments(): Flow<PaginatedContent<List<Appointment>>> =
         error("Not mocked")
 
-    override fun watchUpcomingAppointments(): Flow<WatchPaginatedResponse<List<Appointment>>> =
+    override fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>> =
         error("Not mocked")
 
     override suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): Result<AppointmentConfirmationConsents> {

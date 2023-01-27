@@ -45,6 +45,7 @@ internal class MessagingContainer(
         logger = logger,
         apolloClient = apolloClient,
         mapper = gqlMapper,
+        exceptionMapper = nablaExceptionMapper,
         coroutineScope = repoScope,
         localConversationDataSource = localConversationDataSource,
     )
@@ -53,6 +54,7 @@ internal class MessagingContainer(
         coroutineScope = repoScope,
         apolloClient = apolloClient,
         mapper = gqlMapper,
+        exceptionMapper = nablaExceptionMapper,
         clock = clock,
     )
     private val messageMapper = MessageMapper(

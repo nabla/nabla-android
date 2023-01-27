@@ -3,7 +3,7 @@ package com.nabla.sdk.scheduling.ui.viewmodel
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.stubs.StdLogger
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
+import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.scheduling.core.data.stubs.fake
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
@@ -83,7 +83,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
             ),
         )
 
-        val slotsDataFlow = MutableSharedFlow<WatchPaginatedResponse<List<AvailabilitySlot>>>()
+        val slotsDataFlow = MutableSharedFlow<PaginatedContent<List<AvailabilitySlot>>>()
         val viewModel = TimeSlotsViewModel(
             AppointmentLocationType.REMOTE,
             AppointmentCategoryId(uuid4()),
@@ -91,16 +91,16 @@ class SlotsViewModelTest : BaseCoroutineTest() {
                 override fun watchAvailabilitySlots(
                     locationType: AppointmentLocationType,
                     categoryId: AppointmentCategoryId
-                ): Flow<WatchPaginatedResponse<List<AvailabilitySlot>>> {
+                ): Flow<PaginatedContent<List<AvailabilitySlot>>> {
                     return slotsDataFlow
                 }
             },
             StdLogger(),
         )
-        val firstPageResponse = WatchPaginatedResponse(
+        val firstPageResponse = PaginatedContent(
             firstPage,
             loadMore = {
-                slotsDataFlow.emit(WatchPaginatedResponse(firstPage + secondPage, loadMore = null))
+                slotsDataFlow.emit(PaginatedContent(firstPage + secondPage, loadMore = null))
                 Result.success(Unit)
             }
         )

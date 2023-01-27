@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 - Core: Added a new `watchEventsConnectionState` method on `NablaClient` which allows you to monitor the current state of the network connection used to receive live events.
+- Messaging Core: Added a new `Response` object returned by watchers. It contains metadata about the freshness of the data returned, allowing the caller to know if the data comes from cache or is fresh and if a background refresh is in progress.
+
+### Changed
+- Messaging Core: `WatchPaginatedResponse` as been renamed `PaginatedContent`.
+- Messaging Core: `watchConversation` now returns a `Flow<Response<Conversation>>`.
+- Messaging Core: `watchConversationItems` now returns a `Flow<Response<WatchPaginatedResponse<List<ConversationItem>>>>`.
+- Messaging Core: `watchConversations` now returns a `Flow<Response<WatchPaginatedResponse<List<Conversation>>>>`.
+
+### Fixed
+- Messaging UI: The `ConversationListView` will now correctly display the error state when it cannot fetch the data. It was showing a blank screen before.
 
 ### Fixed
 - Scheduling: Fix a bug where a user could try to cancel a past appointment.

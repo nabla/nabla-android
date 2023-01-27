@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.domain.entity.StringOrRes
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
-import com.nabla.sdk.core.domain.entity.WatchPaginatedResponse
 import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
@@ -157,7 +157,7 @@ internal class AppointmentsContentViewModel(
 /**
  * Emits immediately then re-emits each time an upcoming (but not soon) appointment becomes soon.
  */
-private fun Flow<WatchPaginatedResponse<List<Appointment>>>.reTriggerWhenNextAppointmentIsSoon(
+private fun Flow<PaginatedContent<List<Appointment>>>.reTriggerWhenNextAppointmentIsSoon(
     clock: Clock,
     delayCoroutineContext: CoroutineContext,
 ) = transformLatest { appointments ->

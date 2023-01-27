@@ -7,6 +7,7 @@ import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.apollo.CoreGqlMapper
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
@@ -52,12 +53,12 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             gqlEventEmitter.filterNotNull()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
-            var paginatedConversations = awaitItem()
-            assertTrue(paginatedConversations.items.isEmpty())
+            var paginatedConversationsResponse = awaitItem()
+            assertTrue(paginatedConversationsResponse.data.items.isEmpty())
             gqlEventEmitter.value =
                 GqlData.ConversationEvents.MessageCreated.patientTextMessage(conversationId)
-            paginatedConversations = awaitItem()
-            assertTrue(paginatedConversations.items.size == 1)
+            paginatedConversationsResponse = awaitItem()
+            assertTrue(paginatedConversationsResponse.data.items.size == 1)
         }
         job.cancel()
     }
@@ -90,15 +91,15 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             emptyFlow()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
-            var paginatedItems = awaitItem()
-            assertTrue(paginatedItems.items.size == 1)
+            var paginatedItemsResponse = awaitItem()
+            assertTrue(paginatedItemsResponse.data.items.size == 1)
             launch {
                 gqlConversationContentDataSource.loadMoreConversationItemsInCache(
                     conversationId
                 )
             }
-            paginatedItems = awaitItem()
-            assertTrue(paginatedItems.items.size == 2)
+            paginatedItemsResponse = awaitItem()
+            assertTrue(paginatedItemsResponse.data.items.size == 2)
         }
         job.cancel()
     }
@@ -121,14 +122,14 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             gqlEventEmitter.filterNotNull()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
-            var paginatedConversationItems = awaitItem()
-            var message = paginatedConversationItems.items.first()
+            var paginatedConversationItemsResponse = awaitItem()
+            var message = paginatedConversationItemsResponse.data.items.first()
             assertIs<Message.Text>(message)
 
             gqlEventEmitter.value = GqlData.ConversationEvents.MessageDeleted.deletedPatientMessage(conversationId, message.id)
 
-            paginatedConversationItems = awaitItem()
-            message = paginatedConversationItems.items.first()
+            paginatedConversationItemsResponse = awaitItem()
+            message = paginatedConversationItemsResponse.data.items.first()
 
             assertIs<Message.Deleted>(message)
         }
@@ -167,8 +168,8 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             gqlEventEmitter.filterNotNull()
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
-            var paginatedConversationItems = awaitItem()
-            var (firstMessage, secondMessage) = paginatedConversationItems.items
+            var paginatedConversationItemsResponse = awaitItem()
+            var (firstMessage, secondMessage) = paginatedConversationItemsResponse.data.items
             assertIs<Message.Text>(firstMessage)
             assertIs<Message.Text>(secondMessage)
             assertEquals(firstMessage.id.remoteId, replyToMessageId)
@@ -176,9 +177,9 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
 
             gqlEventEmitter.value = GqlData.ConversationEvents.MessageDeleted.deletedPatientMessage(conversationId, firstMessage.id)
 
-            paginatedConversationItems = awaitItem()
-            firstMessage = paginatedConversationItems.items[0]
-            secondMessage = paginatedConversationItems.items[1]
+            paginatedConversationItemsResponse = awaitItem()
+            firstMessage = paginatedConversationItemsResponse.data.items[0]
+            secondMessage = paginatedConversationItemsResponse.data.items[1]
 
             assertIs<Message.Deleted>(firstMessage)
             assertIs<Message.Text>(secondMessage)
@@ -207,21 +208,21 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             gqlEventEmitter,
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
-            var items = awaitItem().items
+            var items = awaitItem().data.items
             assertEquals(0, items.size)
 
             val event = GqlData.ConversationEvents.Activity.existingProviderJoinedActivity(conversationId)
 
             gqlEventEmitter.emit(event)
 
-            items = awaitItem().items
+            items = awaitItem().data.items
             assertEquals(1, items.size)
 
             gqlEventEmitter.emit(event) // should be ignored by idempotency
 
             gqlEventEmitter.emit(GqlData.ConversationEvents.MessageCreated.patientTextMessage(conversationId))
 
-            items = awaitItem().items
+            items = awaitItem().data.items
 
             assertEquals(2, items.size)
             assertIs<Message.Text>(items[0])
@@ -254,6 +255,7 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             coroutineScope = scope,
             apolloClient = apolloClient,
             mapper = GqlMapper(logger, localConversationDataSource, coreGqlMapper),
+            exceptionMapper = NablaExceptionMapper(),
             localConversationDataSource = localConversationDataSource,
         )
     }

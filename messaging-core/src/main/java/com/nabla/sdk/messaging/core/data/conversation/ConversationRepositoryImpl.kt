@@ -2,6 +2,8 @@ package com.nabla.sdk.messaging.core.data.conversation
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
 import com.nabla.sdk.messaging.core.data.message.LocalConversation
@@ -50,7 +52,7 @@ internal class ConversationRepositoryImpl(
         return localConversationDataSource.create(title, providerIds)
     }
 
-    override fun watchConversation(conversationId: ConversationId): Flow<Conversation> {
+    override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
         return when (conversationId) {
             is ConversationId.Local -> localConversationDataSource.watch(conversationId).flatMapLatest { localConversation ->
                 when (localConversation.creationState) {
@@ -58,21 +60,25 @@ internal class ConversationRepositoryImpl(
                     is LocalConversation.CreationState.ErrorCreating,
                     LocalConversation.CreationState.ToBeCreated,
                     -> flowOf(
-                        localConversation.asConversation()
+                        Response(
+                            isDataFresh = true,
+                            refreshingState = RefreshingState.Refreshed,
+                            data = localConversation.asConversation(),
+                        )
                     )
                     is LocalConversation.CreationState.Created -> {
-                        watchRemoteConversationConversation(localConversation.creationState.remoteId)
+                        watchRemoteConversation(localConversation.creationState.remoteId)
                     }
                 }
             }
-            is ConversationId.Remote -> watchRemoteConversationConversation(conversationId)
+            is ConversationId.Remote -> watchRemoteConversation(conversationId)
         }
     }
 
     @OptIn(FlowPreview::class)
-    private fun watchRemoteConversationConversation(
+    private fun watchRemoteConversation(
         conversationId: ConversationId.Remote
-    ): Flow<Conversation> {
+    ): Flow<Response<Conversation>> {
         return flowOf(
             gqlConversationContentDataSource.conversationEventsFlow(conversationId),
             gqlConversationDataSource.watchConversation(conversationId)
@@ -81,7 +87,7 @@ internal class ConversationRepositoryImpl(
             .filterIsInstance()
     }
 
-    override fun watchConversations(): Flow<PaginatedList<Conversation>> {
+    override fun watchConversations(): Flow<Response<PaginatedList<Conversation>>> {
         return gqlConversationDataSource.watchConversations()
     }
 

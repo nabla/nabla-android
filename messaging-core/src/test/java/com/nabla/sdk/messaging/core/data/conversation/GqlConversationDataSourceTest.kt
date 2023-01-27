@@ -7,6 +7,7 @@ import com.apollographql.apollo3.network.NetworkTransport
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.apollo.ApolloFactory
 import com.nabla.sdk.core.data.apollo.CoreGqlMapper
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.stubs.TestClock
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
@@ -47,12 +48,12 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
         )
 
         gqlConversationDataSource.watchConversations().test {
-            var paginatedConversations = awaitItem()
-            assertTrue(paginatedConversations.items.isEmpty())
+            var paginatedConversationsResponse = awaitItem()
+            assertTrue(paginatedConversationsResponse.data.items.isEmpty())
             conversationsEventsSubscriptionResponseFlow.value =
                 GqlData.ConversationsEvents.conversationCreated()
-            paginatedConversations = awaitItem()
-            assertTrue(paginatedConversations.items.size == 1)
+            paginatedConversationsResponse = awaitItem()
+            assertTrue(paginatedConversationsResponse.data.items.size == 1)
         }
         job.cancel()
     }
@@ -82,11 +83,11 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
             emptyFlow()
         )
         gqlConversationDataSource.watchConversations().test {
-            var paginatedConversations = awaitItem()
-            assertTrue(paginatedConversations.items.size == 1)
+            var paginatedConversationsResponse = awaitItem()
+            assertTrue(paginatedConversationsResponse.data.items.size == 1)
             launch { gqlConversationDataSource.loadMoreConversationsInCache() }
-            paginatedConversations = awaitItem()
-            assertTrue(paginatedConversations.items.size == 2)
+            paginatedConversationsResponse = awaitItem()
+            assertTrue(paginatedConversationsResponse.data.items.size == 2)
         }
         job.cancel()
     }
@@ -114,6 +115,7 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
             coroutineScope = scope,
             apolloClient = apolloClient,
             mapper = GqlMapper(logger, LocalConversationDataSource(), CoreGqlMapper(logger)),
+            exceptionMapper = NablaExceptionMapper(),
             clock = TestClock(testScope),
         )
     }
