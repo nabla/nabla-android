@@ -29,6 +29,7 @@ import com.nabla.sdk.core.ui.helpers.launchCollect
 import com.nabla.sdk.core.ui.helpers.registerForPermissionsResult
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
+import com.nabla.sdk.core.ui.helpers.setTextOrHide
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.Both
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.None
 import com.nabla.sdk.videocall.VideoCallViewModel.VideoState.RemoteOnly
@@ -123,6 +124,10 @@ public class VideoCallActivity : AppCompatActivity() {
                 room.initVideoRenderer(binding.floatingVideoRenderer)
                 room.initVideoRenderer(binding.fullScreenVideoRenderer)
             }
+        }
+
+        lifecycleScope.launchCollect(viewModel.participantsCountFlow) { count ->
+            binding.participantsCountBanner.setTextOrHide(count.takeIf { it > 1 }?.toString())
         }
 
         lifecycleScope.launchCollect(viewModel.connectionInfoFlow) { connectionInfo ->

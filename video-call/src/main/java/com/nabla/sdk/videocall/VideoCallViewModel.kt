@@ -12,6 +12,8 @@ import io.livekit.android.events.RoomEvent
 import io.livekit.android.events.collect
 import io.livekit.android.room.Room
 import io.livekit.android.room.participant.LocalParticipant
+import io.livekit.android.room.participant.Participant
+import io.livekit.android.room.participant.RemoteParticipant
 import io.livekit.android.room.track.CameraPosition
 import io.livekit.android.room.track.LocalVideoTrack
 import io.livekit.android.room.track.LocalVideoTrackOptions
@@ -22,8 +24,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -38,6 +44,8 @@ internal class VideoCallViewModel(
 
     private val mutableLocalVideoTrackFlow = MutableStateFlow<LocalVideoTrack?>(null)
     private val mutableRemoteVideoTracksFlow = MutableStateFlow<List<VideoTrack>>(emptyList())
+    private val mutableActiveSpeakersFlow = MutableStateFlow<List<Participant>>(emptyList())
+    private val mutableRemoteParticipantsFlow = MutableStateFlow<Map<String, RemoteParticipant>>(emptyMap())
     private val mutableIsPictureInPictureFlow = MutableStateFlow(false)
 
     // this could have been avoided if tracks were observable, see https://github.com/livekit/client-sdk-android/issues/101
@@ -53,6 +61,10 @@ internal class VideoCallViewModel(
     private val mutableConnectionInfoFlow = MutableStateFlow<ConnectionInfoState?>(null)
     internal val connectionInfoFlow: StateFlow<ConnectionInfoState?> = mutableConnectionInfoFlow
 
+    internal val participantsCountFlow: StateFlow<Int> = mutableRemoteParticipantsFlow
+        .map { participants -> participants.size + 1 }
+        .stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = 0)
+
     private val mutableControlsFlow = MutableStateFlow<ControlsState?>(null)
     internal val controlsFlow: Flow<ControlsState?> = mutableControlsFlow
         .combine(mutableIsPictureInPictureFlow) { controls, isPip ->
@@ -62,25 +74,42 @@ internal class VideoCallViewModel(
     private var flipJob: Job? = null
     private var toggleCameraJob: Job? = null
 
+    private val mutableRemoteActiveSpeakerVideoTrackFlow = mutableRemoteVideoTracksFlow
+        .combine(
+            mutableActiveSpeakersFlow
+                // We don't want empty lists (except at the very beginning) as we want to keep the last active speaker.
+                .filter { it.isNotEmpty() }.onStart { emit(emptyList()) }
+        ) { tracks, speakers ->
+            tracks.lastOrNull { track ->
+                // take last (in order of subscription) track belonging to any of the current speakers
+                speakers.any { speaker -> speaker.videoTracks.any { (_, videoTrack) -> videoTrack != null && videoTrack.sid == track.sid } }
+            }
+                // we either:
+                // 1. are at the very beginning with empty speakers list,
+                // 2. we have some active speakers but they don't have video tracks anymore,
+                // Then take the last subscribed track.
+                ?: tracks.lastOrNull()
+        }.distinctUntilChangedBy { it?.sid }
+
     internal val videoStateFlow = combine(
         mutableLocalVideoTrackFlow,
-        mutableRemoteVideoTracksFlow.map { it.lastOrNull() },
+        mutableRemoteActiveSpeakerVideoTrackFlow,
         mutableIsSelfMirrorFlow,
         mutableIsPictureInPictureFlow,
         mutableControlsFlow.map { it?.cameraEnabled ?: true },
-    ) { localTrack, remoteTrack, isSelfMirror, pictureInPictureEnabled, cameraEnabled ->
+    ) { localTrack, activeRemoteTrack, isSelfMirror, pictureInPictureEnabled, cameraEnabled ->
         when (localTrack) {
-            null -> when (remoteTrack) {
+            null -> when (activeRemoteTrack) {
                 null -> VideoState.None
-                else -> VideoState.RemoteOnly(remoteTrack)
+                else -> VideoState.RemoteOnly(activeRemoteTrack)
             }
-            else -> when (remoteTrack) {
+            else -> when (activeRemoteTrack) {
                 null -> if (cameraEnabled) {
                     VideoState.SelfOnly(localTrack, isSelfMirror)
                 } else VideoState.None
                 else -> if (cameraEnabled && !pictureInPictureEnabled) {
-                    VideoState.Both(localTrack, remoteTrack, isSelfMirror)
-                } else VideoState.RemoteOnly(remoteTrack)
+                    VideoState.Both(localTrack, activeRemoteTrack, isSelfMirror)
+                } else VideoState.RemoteOnly(activeRemoteTrack)
             }
         }.also { videoCallClient.logger.debug("new video state: $it", domain = VIDEO_CALL_DOMAIN) }
     }
@@ -162,6 +191,13 @@ internal class VideoCallViewModel(
                 micEnabled = localParticipant.isMicrophoneEnabled(),
                 cameraEnabled = localParticipant.isCameraEnabled(),
             )
+
+            viewModelScope.launch {
+                room::remoteParticipants.flow.collect(mutableRemoteParticipantsFlow)
+            }
+            viewModelScope.launch {
+                room::activeSpeakers.flow.collect(mutableActiveSpeakersFlow)
+            }
 
             viewModelScope.launch {
                 localParticipant::videoTracks.flow

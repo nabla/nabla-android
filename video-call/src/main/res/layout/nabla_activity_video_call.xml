@@ -32,7 +32,6 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-
     <TextView
         android:id="@+id/connectionInfoBanner"
         android:layout_width="wrap_content"
@@ -47,6 +46,24 @@
         android:textColor="@color/nabla_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/participantsCountBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/nabla_video_call_text_banner_background"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
+        tools:text="3"
+        android:textAppearance="?textAppearanceTitleSmall"
+        android:textColor="@color/nabla_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:drawableStartCompat="@drawable/nabla_ic_user"
+        app:drawableTint="@color/nabla_white"
         app:layout_constraintTop_toTopOf="parent"
         />
 
