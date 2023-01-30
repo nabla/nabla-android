@@ -22,7 +22,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:title="@string/nabla_conversation_list_toolbar_title"
-        />
+        >
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/toolbarProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="16dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorSize="20dp"
+            app:trackThickness="2dp"
+            />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <com.nabla.sdk.messaging.ui.scene.conversations.ConversationListView
         android:id="@+id/conversationListView"

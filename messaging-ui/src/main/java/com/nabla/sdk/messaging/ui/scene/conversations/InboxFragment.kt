@@ -86,6 +86,10 @@ public open class InboxFragment : Fragment() {
             binding.createConversationCta.isVisible = state is ConversationListViewModel.State.Loaded || state is ConversationListViewModel.State.Empty
         }
 
+        viewLifeCycleScope.launchCollect(listViewModel.isRefreshingFlow) { isRefreshing ->
+            binding.toolbarProgressBar.isVisible = isRefreshing
+        }
+
         viewLifecycleOwner.launchCollect(inboxViewModel.openConversationFlow) { conversationId ->
             openConversationScreen(conversationId)
         }

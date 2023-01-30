@@ -26,55 +26,75 @@
         app:navigationIcon="?attr/homeAsUpIndicator"
         >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/conversationToolbarContentContainer"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:paddingEnd="16dp"
-            tools:ignore="RtlSymmetry"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             >
 
-            <com.nabla.sdk.core.ui.components.NablaAvatarView
-                android:id="@+id/conversationToolbarAvatarView"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-            <TextView
-                android:id="@+id/conversationToolbarTitle"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/conversationToolbarContentContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAppearance="?nablaMessaging_conversationHeaderTitleAppearance"
-                app:layout_constraintBottom_toTopOf="@id/conversationToolbarSubtitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/conversationToolbarAvatarView"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Here is a title"
-                />
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:paddingEnd="16dp"
+                tools:ignore="RtlSymmetry"
+                >
 
-            <TextView
-                android:id="@+id/conversationToolbarSubtitle"
-                android:layout_width="0dp"
+                <com.nabla.sdk.core.ui.components.NablaAvatarView
+                    android:id="@+id/conversationToolbarAvatarView"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/conversationToolbarTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="?nablaMessaging_conversationHeaderTitleAppearance"
+                    app:layout_constraintBottom_toTopOf="@id/conversationToolbarSubtitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/conversationToolbarAvatarView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Here is a title"
+                    />
+
+                <TextView
+                    android:id="@+id/conversationToolbarSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="?nablaMessaging_conversationHeaderSubtitleAppearance"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/conversationToolbarTitle"
+                    app:layout_constraintTop_toBottomOf="@id/conversationToolbarTitle"
+                    tools:text="And a subtitle right here"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/toolbarProgressBar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textAppearance="?nablaMessaging_conversationHeaderSubtitleAppearance"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/conversationToolbarTitle"
-                app:layout_constraintTop_toBottomOf="@id/conversationToolbarTitle"
-                tools:text="And a subtitle right here"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:indicatorSize="20dp"
+                app:trackThickness="2dp"
                 />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </LinearLayout>
 
     </com.google.android.material.appbar.MaterialToolbar>
 

@@ -4,6 +4,7 @@ import androidx.annotation.CheckResult
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
@@ -12,6 +13,7 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.ui.R
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -30,16 +32,20 @@ public class ConversationListViewModel(
     private val errorAlertMutableFlow = MutableLiveFlow<ErrorAlert>()
     internal val errorAlertEventFlow: LiveFlow<ErrorAlert> = errorAlertMutableFlow
 
+    private val isRefreshingMutableFlow = MutableStateFlow(false)
+    internal val isRefreshingFlow: StateFlow<Boolean> = isRefreshingMutableFlow
+
     internal val stateFlow: StateFlow<State> =
         messagingClient.watchConversations()
-            .map { result ->
-                latestLoadMoreCallback = result.data.loadMore
+            .map { response ->
+                latestLoadMoreCallback = response.data.loadMore
+                isRefreshingMutableFlow.value = response.refreshingState == RefreshingState.Refreshing
 
-                if (result.data.content.isEmpty()) {
+                if (response.data.content.isEmpty()) {
                     State.Empty
                 } else {
                     State.Loaded(
-                        items = result.data.content.map { it.toUiModel() } + if (result.data.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
+                        items = response.data.content.map { it.toUiModel() } + if (response.data.loadMore != null) listOf(ItemUiModel.Loading) else emptyList(),
                     )
                 }
             }

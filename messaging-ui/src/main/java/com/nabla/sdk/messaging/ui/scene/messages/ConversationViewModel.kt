@@ -10,6 +10,7 @@ import com.nabla.sdk.core.data.helper.toJvmUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCall
@@ -95,6 +96,9 @@ internal class ConversationViewModel(
 
     val showNavigationFlow: Flow<Boolean> = flowOf(showNavigationFromSavedStateHandle(savedStateHandle))
     private val showComposerFlow = MutableStateFlow(true)
+
+    private val isRefreshingMutableFlow = MutableStateFlow(false)
+    val isRefreshingFlow: StateFlow<Boolean> = isRefreshingMutableFlow
 
     private var lastTypingEventSentAt: Instant = Instant.DISTANT_PAST
     private var isViewForeground = false
@@ -184,6 +188,7 @@ internal class ConversationViewModel(
     private fun Flow<Response<PaginatedContent<List<ConversationItem>>>>.handleConversationMessagesSideEffects() =
         onEach { response ->
             latestLoadMoreCallback = response.data.loadMore
+            isRefreshingMutableFlow.value = response.refreshingState is RefreshingState.Refreshing
         }
 
     fun onViewStart() {

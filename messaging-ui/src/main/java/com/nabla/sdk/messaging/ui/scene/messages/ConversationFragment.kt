@@ -174,6 +174,7 @@ public open class ConversationFragment : Fragment() {
         collectNavigationEvents()
         collectState(binding)
         collectEditorState(binding)
+        collectRefreshingState(binding)
     }
 
     @CallSuper
@@ -425,6 +426,12 @@ public open class ConversationFragment : Fragment() {
                     binding.conversationEditText.requestFocus()
                 }
             }
+        }
+    }
+
+    private fun collectRefreshingState(binding: NablaFragmentConversationBinding) {
+        viewLifeCycleScope.launchCollect(viewModel.isRefreshingFlow) { isRefreshing ->
+            binding.toolbarProgressBar.isVisible = isRefreshing
         }
     }
 
