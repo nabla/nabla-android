@@ -21,17 +21,18 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retryWhen
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @NablaInternal
 public fun <T : Query.Data> ApolloCall<T>.watchAsCachedResponse(
     exceptionMapper: NablaExceptionMapper,
 ): Flow<Response<T>> {
     return makeCachedResponseWatcher(exceptionMapper) { fetchPolicy ->
-        flow { emit(copy().fetchPolicy(fetchPolicy)) }
-            .flatMapLatest { it.watch(fetchThrows = true) }
+        copy()
+            .fetchPolicy(fetchPolicy)
+            .watch(fetchThrows = true)
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun <T : Query.Data> makeCachedResponseWatcher(
     exceptionMapper: NablaExceptionMapper,
@@ -41,7 +42,8 @@ internal fun <T : Query.Data> makeCachedResponseWatcher(
     var lastError: NablaException? = null
     var fetchPolicy: FetchPolicy = FetchPolicy.CacheAndNetwork
 
-    return watcherCreator(fetchPolicy)
+    return flow { emit(fetchPolicy) }
+        .flatMapLatest { watcherCreator(it) }
         .map { apolloResponse ->
             val error = lastError
             val response = Response(
