@@ -8,6 +8,7 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.messaging.core.data.apollo.GqlMapper
 import com.nabla.sdk.messaging.core.data.conversation.ConversationRepositoryImpl
 import com.nabla.sdk.messaging.core.data.conversation.GqlConversationDataSource
@@ -23,6 +24,7 @@ import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
 
 internal class MessagingContainer(
@@ -35,6 +37,7 @@ internal class MessagingContainer(
     clock: Clock,
     uuidGenerator: UuidGenerator,
     maybeVideoCallModule: VideoCallModule?,
+    val eventsConnectionStateFlow: Flow<EventsConnectionState>,
 ) {
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val localConversationDataSource = LocalConversationDataSource()

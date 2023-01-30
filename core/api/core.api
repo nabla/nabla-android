@@ -772,6 +772,9 @@ public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open : c
 public final class com/nabla/sdk/core/domain/helper/ApolloResponseHelperKt {
 }
 
+public final class com/nabla/sdk/core/domain/helper/FlowConnectionStateAwareHelperKt {
+}
+
 public final class com/nabla/sdk/core/domain/helper/PaginationHelperKt {
 }
 

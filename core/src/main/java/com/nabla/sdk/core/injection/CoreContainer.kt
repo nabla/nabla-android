@@ -58,6 +58,7 @@ import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.core.domain.entity.ModuleType
 import com.nabla.sdk.core.domain.interactor.LoginInteractor
 import com.nabla.sdk.core.domain.interactor.LogoutInteractor
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -130,7 +131,7 @@ public class CoreContainer internal constructor(
         clock = clock,
     )
 
-    internal val eventsConnectionState = websocketEngine.connectionStateFlow
+    public val eventsConnectionState: Flow<EventsConnectionState> = websocketEngine.connectionStateFlow
         .map {
             when (it) {
                 ConnectionStateAwareWebsocketEngine.WebSocketConnectionState.Connected -> EventsConnectionState.Connected

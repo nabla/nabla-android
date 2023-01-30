@@ -11,6 +11,7 @@ import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
+import com.nabla.sdk.core.domain.helper.restartWhenConnectionReconnects
 import com.nabla.sdk.core.domain.helper.wrapAsResponsePaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -40,6 +41,7 @@ internal class NablaMessagingClientImpl internal constructor(
         coreContainer.clock,
         coreContainer.uuidGenerator,
         coreContainer.videoCallModule,
+        coreContainer.eventsConnectionState,
     )
 
     private val conversationRepository: ConversationRepository by lazy {
@@ -55,7 +57,7 @@ internal class NablaMessagingClientImpl internal constructor(
         return conversationRepository.watchConversations().wrapAsResponsePaginatedContent(
             conversationRepository::loadMoreConversations,
             messagingContainer.nablaExceptionMapper,
-            messagingContainer.sessionClient
+            messagingContainer.sessionClient,
         )
     }
 
@@ -86,6 +88,7 @@ internal class NablaMessagingClientImpl internal constructor(
 
     override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
         return conversationRepository.watchConversation(conversationId)
+            .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
             .throwOnStartIfNotAuthenticated(messagingContainer.sessionClient)
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
@@ -94,7 +97,7 @@ internal class NablaMessagingClientImpl internal constructor(
         return conversationContentRepository.watchConversationItems(conversationId).wrapAsResponsePaginatedContent(
             { conversationContentRepository.loadMoreMessages(conversationId) },
             messagingContainer.nablaExceptionMapper,
-            messagingContainer.sessionClient
+            messagingContainer.sessionClient,
         )
     }
 
