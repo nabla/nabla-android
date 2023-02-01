@@ -41,6 +41,18 @@ internal class AuthorizationInterceptor(
                 chain.request()
             }
         }
-        return chain.proceed(updatedRequest)
+
+        val response = chain.proceed(updatedRequest)
+
+        if (response.code == 401) {
+            logger.warn(
+                domain = AUTH_DOMAIN,
+                message = "Current user received a 401 Unauthorized response from the server, invalidating tokens.",
+            )
+
+            sessionClient.value.markTokensAsInvalid()
+        }
+
+        return response
     }
 }

@@ -38,6 +38,10 @@ internal class SessionClientImpl(
         }
     }
 
+    override fun markTokensAsInvalid() {
+        tokenLocalDataSource.clear()
+    }
+
     private suspend fun getFreshAccessTokenUnsafe(
         forceRefreshAccessToken: Boolean
     ): String {

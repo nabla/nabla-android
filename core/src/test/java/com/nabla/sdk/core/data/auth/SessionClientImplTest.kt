@@ -17,6 +17,7 @@ import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -28,6 +29,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -163,6 +165,33 @@ class SessionClientImplTest : BaseCoroutineTest() {
                 sessionTokenProvider wasNot Called
             }
         }
+
+    @Test
+    fun `marking tokens as expired invalidates local token and is recoverable`() = runTest {
+        val accessToken = JwtFaker.expiredIn2050
+        val refreshToken = JwtFaker.expiredIn2050_2
+        val newSessionTokens = AuthTokens(
+            refreshToken = JwtFaker.expiredIn2050,
+            accessToken = JwtFaker.expiredIn2050_3
+        )
+        every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = refreshToken, accessToken = accessToken)
+        every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
+        every { tokenLocalDataSource.clear() } just Runs
+        every { patientRepository.getPatientId() } returns StringId("id")
+        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(any()) } returns Result.success(newSessionTokens)
+        coEvery { tokenRemoteDataSource.refresh(refreshToken) } returns newSessionTokens
+        sessionClient.initSession(sessionTokenProvider)
+
+        assertEquals(accessToken, sessionClient.getFreshAccessToken())
+
+        sessionClient.markTokensAsInvalid()
+        every { tokenLocalDataSource.getAuthTokens() } returns null
+
+        assertEquals(newSessionTokens.accessToken, sessionClient.getFreshAccessToken())
+        coVerify {
+            sessionTokenProvider.fetchNewSessionAuthTokens(any())
+        }
+    }
 
     @Test
     fun `expired access token from session provider should be refreshed`() = runTest {
