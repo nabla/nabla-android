@@ -71,10 +71,8 @@ internal class GqlMapper(
         conversationActivityFragment: ConversationActivityFragment,
     ): ConversationActivity? {
         val content = mapToConversationActivityContent(conversationActivityFragment.conversationActivityContent.conversationActivityContentFragment)
-        if (content == null) {
-            logger.error("Unknown conversation activity content mapping for $conversationActivityFragment")
-            return null
-        }
+            ?: return null
+
         return ConversationActivity(
             id = conversationActivityFragment.id.toConversationActivityId(),
             conversationId = localConversationDataSource.findLocalConversationId(conversationActivityFragment.conversation.id),
@@ -88,9 +86,22 @@ internal class GqlMapper(
         conversationActivityContentFragment: ConversationActivityContentFragment,
     ): ConversationActivityContent? {
         conversationActivityContentFragment.onProviderJoinedConversation?.let {
-            val maybeProvider = mapToMaybeProvider(it.provider.maybeProviderFragment) ?: return null
+            val maybeProvider = mapToMaybeProvider(it.provider.maybeProviderFragment) ?: kotlin.run {
+                logger.error("No provider for activity content $conversationActivityContentFragment")
+                return null
+            }
             return ConversationActivityContent.ProviderJoinedConversation(maybeProvider)
         }
+        conversationActivityContentFragment.onConversationClosed?.let {
+            // No-op as we don't display them in the timeline
+            return null
+        }
+        conversationActivityContentFragment.onConversationReopened?.let {
+            // No-op as we don't display them in the timeline
+            return null
+        }
+
+        logger.error("Unknown conversation activity content mapping for $conversationActivityContentFragment")
         return null
     }
 

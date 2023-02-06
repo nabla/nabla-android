@@ -1,7 +1,7 @@
 !tape
 name: test conversation document message sending watching
 interactions:
-- recorded: 2022-12-08T11:52:44.504Z
+- recorded: 2023-02-06T16:39:31.222Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -15,21 +15,21 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '287'
+      Content-Length: '307'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:44 GMT
+      Date: Mon, 06 Feb 2023 16:39:30 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: a3853dcf-2afb-446a-a603-b16e534c77b4
+      X-Request-ID: 3541a9a0-7e64-4e77-a1cd-d6289743c9fd
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
           "data": {
               "registerOrUpdateDevice": {
-                  "deviceId": "286d0c11-2dd1-42e9-b026-15a70b4bebdb",
+                  "deviceId": "1c78682a-e86e-4272-b4f8-ba6b7122a318",
                   "sentry": {
                       "dsn": "https://d544635bca71460691802d7d8f1be4ee@sentry-relay.nabla.com/4504525106249728",
                       "env": "dev"
@@ -37,7 +37,7 @@ interactions:
               }
           }
       }
-- recorded: 2022-12-08T11:52:44.555Z
+- recorded: 2023-02-06T16:39:31.299Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -45,7 +45,7 @@ interactions:
       Accept: multipart/mixed; deferSpec=20220824, application/json
       X-APOLLO-OPERATION-ID: 84cf450e318b172dc9b32645523b2b60ccc02a9c289e82d15597ad219ef9c094
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"a3effd7e-6111-4349-844e-3e5570b62a58"}},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!], $initialMessage:
+    body: '{"operationName":"CreateConversation","variables":{"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"8cb36d53-710b-4296-bce1-3928deb53d6c"}},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!], $initialMessage:
       SendMessageInput) { createConversation(title: $title, providerIds: $providerIds, initialMessage: $initialMessage) { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems: 1 } ) { data { __typename ...MessageFragment
       } } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment ProviderInConversationFragment on ProviderInConversation
       { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
@@ -64,15 +64,15 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '1813'
+      Content-Length: '1812'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:44 GMT
+      Date: Mon, 06 Feb 2023 16:39:30 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 9d216399-5625-4159-ac6f-341d8b29c33e
+      X-Request-ID: e9eb152e-3e89-4195-b93c-12b843cc2ce8
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
@@ -80,11 +80,11 @@ interactions:
               "createConversation": {
                   "conversation": {
                       "__typename": "Conversation",
-                      "id": "43a339f6-14a7-47a5-9fb8-e4138f9bfd9a",
+                      "id": "fcd03fe4-96ee-4731-8281-5d73e739efa4",
                       "title": null,
                       "subtitle": null,
-                      "createdAt": "2022-12-08T12:52:44.495+01:00",
-                      "updatedAt": "2022-12-08T12:52:44.506+01:00",
+                      "createdAt": "2023-02-06T17:39:31.191+01:00",
+                      "updatedAt": "2023-02-06T17:39:31.228+01:00",
                       "inboxPreviewTitle": "Ask us anything",
                       "lastMessagePreview": "You: Hello",
                       "unreadMessageCount": 0,
@@ -96,22 +96,22 @@ interactions:
                           "data": [
                               {
                                   "__typename": "Message",
-                                  "id": "07331e61-1e62-40fe-8053-96eef7c04677",
+                                  "id": "ba0ab8e4-f49c-414b-a1ce-5fbfae514764",
                                   "author": {
                                       "__typename": "Patient",
-                                      "id": "dda75c23-1e29-46e8-ab86-f13d8dc4c376",
-                                      "displayName": "Test Patient",
+                                      "id": "2eb690fe-ad65-439f-ab78-db332e767f59",
+                                      "displayName": "Benoit Test",
                                       "isMe": true
                                   },
                                   "messageContent": {
                                       "__typename": "TextMessageContent",
                                       "text": "Hello"
                                   },
-                                  "clientId": "a3effd7e-6111-4349-844e-3e5570b62a58",
+                                  "clientId": "8cb36d53-710b-4296-bce1-3928deb53d6c",
                                   "conversation": {
-                                      "id": "43a339f6-14a7-47a5-9fb8-e4138f9bfd9a"
+                                      "id": "fcd03fe4-96ee-4731-8281-5d73e739efa4"
                                   },
-                                  "createdAt": "2022-12-08T12:52:44.506+01:00",
+                                  "createdAt": "2023-02-06T17:39:31.228+01:00",
                                   "replyTo": null
                               }
                           ]
@@ -120,43 +120,43 @@ interactions:
               }
           }
       }
-- recorded: 2022-12-08T11:52:44.578Z
+- recorded: 2023-02-06T16:39:31.371Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
     headers:
       Accept: multipart/mixed; deferSpec=20220824, application/json
-      X-APOLLO-OPERATION-ID: f39e938ab9d04abab95f131663e6dc707df6942e27d0f70edf16d4b8ec5bdcda
+      X-APOLLO-OPERATION-ID: 04ef2173f93fbbf18386dff2cce18f1d8aab280e6b92103b6df1bf8c63c745f4
       X-APOLLO-OPERATION-NAME: ConversationItems
-    body: '{"operationName":"ConversationItems","variables":{"id":"43a339f6-14a7-47a5-9fb8-e4138f9bfd9a","pageInfo":{"numberOfItems":50}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename
+    body: '{"operationName":"ConversationItems","variables":{"id":"fcd03fe4-96ee-4731-8281-5d73e739efa4","pageInfo":{"numberOfItems":50}},"query":"query ConversationItems($id: UUID!, $pageInfo: OpaqueCursorPage!) { conversation(id: $id) { conversation { __typename
       id ...ConversationItemsPageFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment MaybeProviderFragment
       on MaybeProvider { __typename ... on Provider { __typename ...ProviderFragment } ... on DeletedProvider { empty: _ } }  fragment ConversationActivityContentFragment on ConversationActivityContent { __typename ... on ProviderJoinedConversation { provider
-      { __typename ...MaybeProviderFragment } } }  fragment ConversationActivityFragment on ConversationActivity { id conversation { id } createdAt activityTime conversationActivityContent: content { __typename ...ConversationActivityContentFragment } }  fragment
-      PatientFragment on Patient { id displayName isMe }  fragment SystemFragment on System { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment
-      on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment on ImageMessageContent { imageFileUpload { __typename ...ImageFileUploadFragment } }  fragment VideoFileUploadFragment
-      on VideoFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs width height }  fragment VideoMessageContentFragment on VideoMessageContent { videoFileUpload { __typename ...VideoFileUploadFragment } }  fragment DocumentFileUploadFragment
-      on DocumentFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType thumbnail { __typename ...ImageFileUploadFragment } }  fragment DocumentMessageContentFragment on DocumentMessageContent { title documentFileUpload { __typename ...DocumentFileUploadFragment
-      } }  fragment AudioFileUploadFragment on AudioFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs }  fragment AudioMessageContentFragment on AudioMessageContent { audioFileUpload { __typename ...AudioFileUploadFragment
-      } }  fragment LivekitRoomStatusFragment on LivekitRoomStatus { __typename ... on LivekitRoomOpenStatus { url token } ... on LivekitRoomClosedStatus { empty: _ } }  fragment LivekitRoomFragment on LivekitRoom { uuid status { __typename ...LivekitRoomStatusFragment
-      } }  fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent { livekitRoom { __typename ...LivekitRoomFragment } }  fragment MessageContentFragment on MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment
-      } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on VideoMessageContent { __typename ...VideoMessageContentFragment } ... on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ... on AudioMessageContent
-      { __typename ...AudioMessageContentFragment } ... on LivekitRoomMessageContent { __typename ...LivekitRoomMessageContentFragment } ... on DeletedMessageContent { empty: _ } }  fragment MessageSummaryFragment on Message { id author { __typename ... on Provider
-      { __typename ...ProviderFragment } ... on Patient { __typename ...PatientFragment } ... on System { __typename ...SystemFragment } ... on DeletedProvider { empty: _ } } messageContent: content { __typename ...MessageContentFragment } clientId conversation
-      { id } createdAt }  fragment MessageFragment on Message { __typename ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }  fragment ConversationItemsPageFragment on Conversation { items(page: $pageInfo) { data { __typename ...ConversationActivityFragment
-      ...MessageFragment } hasMore nextCursor } }"}'
+      { __typename ...MaybeProviderFragment } } ... on ConversationClosed { __typename } ... on ConversationReopened { __typename } }  fragment ConversationActivityFragment on ConversationActivity { id conversation { id } createdAt activityTime conversationActivityContent:
+      content { __typename ...ConversationActivityContentFragment } }  fragment PatientFragment on Patient { id displayName isMe }  fragment SystemFragment on System { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment
+      on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment on ImageMessageContent { imageFileUpload { __typename
+      ...ImageFileUploadFragment } }  fragment VideoFileUploadFragment on VideoFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs width height }  fragment VideoMessageContentFragment on VideoMessageContent { videoFileUpload
+      { __typename ...VideoFileUploadFragment } }  fragment DocumentFileUploadFragment on DocumentFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType thumbnail { __typename ...ImageFileUploadFragment } }  fragment DocumentMessageContentFragment
+      on DocumentMessageContent { title documentFileUpload { __typename ...DocumentFileUploadFragment } }  fragment AudioFileUploadFragment on AudioFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs }  fragment AudioMessageContentFragment
+      on AudioMessageContent { audioFileUpload { __typename ...AudioFileUploadFragment } }  fragment LivekitRoomStatusFragment on LivekitRoomStatus { __typename ... on LivekitRoomOpenStatus { url token } ... on LivekitRoomClosedStatus { empty: _ } }  fragment
+      LivekitRoomFragment on LivekitRoom { uuid status { __typename ...LivekitRoomStatusFragment } }  fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent { livekitRoom { __typename ...LivekitRoomFragment } }  fragment MessageContentFragment
+      on MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on VideoMessageContent { __typename ...VideoMessageContentFragment } ...
+      on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ... on AudioMessageContent { __typename ...AudioMessageContentFragment } ... on LivekitRoomMessageContent { __typename ...LivekitRoomMessageContentFragment } ... on DeletedMessageContent
+      { empty: _ } }  fragment MessageSummaryFragment on Message { id author { __typename ... on Provider { __typename ...ProviderFragment } ... on Patient { __typename ...PatientFragment } ... on System { __typename ...SystemFragment } ... on DeletedProvider
+      { empty: _ } } messageContent: content { __typename ...MessageContentFragment } clientId conversation { id } createdAt }  fragment MessageFragment on Message { __typename ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }  fragment
+      ConversationItemsPageFragment on Conversation { items(page: $pageInfo) { data { __typename ...ConversationActivityFragment ...MessageFragment } hasMore nextCursor } }"}'
   response:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '1453'
+      Content-Length: '1452'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:44 GMT
+      Date: Mon, 06 Feb 2023 16:39:30 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 1185beba-3a15-4924-b38f-559d3002b3ea
+      X-Request-ID: 0a5e8ff7-18b4-43a4-9d82-776f8ae4d9d7
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
@@ -164,59 +164,59 @@ interactions:
               "conversation": {
                   "conversation": {
                       "__typename": "Conversation",
-                      "id": "43a339f6-14a7-47a5-9fb8-e4138f9bfd9a",
+                      "id": "fcd03fe4-96ee-4731-8281-5d73e739efa4",
                       "items": {
                           "data": [
                               {
                                   "__typename": "Message",
-                                  "id": "07331e61-1e62-40fe-8053-96eef7c04677",
+                                  "id": "ba0ab8e4-f49c-414b-a1ce-5fbfae514764",
                                   "author": {
                                       "__typename": "Patient",
-                                      "id": "dda75c23-1e29-46e8-ab86-f13d8dc4c376",
-                                      "displayName": "Test Patient",
+                                      "id": "2eb690fe-ad65-439f-ab78-db332e767f59",
+                                      "displayName": "Benoit Test",
                                       "isMe": true
                                   },
                                   "messageContent": {
                                       "__typename": "TextMessageContent",
                                       "text": "Hello"
                                   },
-                                  "clientId": "a3effd7e-6111-4349-844e-3e5570b62a58",
+                                  "clientId": "8cb36d53-710b-4296-bce1-3928deb53d6c",
                                   "conversation": {
-                                      "id": "43a339f6-14a7-47a5-9fb8-e4138f9bfd9a"
+                                      "id": "fcd03fe4-96ee-4731-8281-5d73e739efa4"
                                   },
-                                  "createdAt": "2022-12-08T12:52:44.506+01:00",
+                                  "createdAt": "2023-02-06T17:39:31.228+01:00",
                                   "replyTo": null
                               }
                           ],
                           "hasMore": false,
-                          "nextCursor": "2022-12-08T12:52:44.495+01:00"
+                          "nextCursor": "2023-02-06T17:39:31.183+01:00"
                       }
                   }
               }
           }
       }
-- recorded: 2022-12-08T11:52:45.010Z
+- recorded: 2023-02-06T16:39:31.994Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/upload
-    body: "--3158a613-7da3-4778-b732-ba2c466d5549\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--3158a613-7da3-4778-b732-ba2c466d5549\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
-      \ application/pdf\r\n\r\n\r\n--3158a613-7da3-4778-b732-ba2c466d5549--\r\n"
+    body: "--7e141661-c8e5-4f88-8b21-806d8b727e9b\r\nContent-Disposition: form-data; name=\"purpose\"\r\nContent-Length: 7\r\n\r\nMESSAGE\r\n--7e141661-c8e5-4f88-8b21-806d8b727e9b\r\nContent-Disposition: form-data; name=\"file\"; filename=\"test.pdf\"\r\nContent-Type:\
+      \ application/pdf\r\n\r\n\r\n--7e141661-c8e5-4f88-8b21-806d8b727e9b--\r\n"
   response:
     status: 200
     headers:
       Connection: keep-alive
       Content-Length: '46'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:44 GMT
+      Date: Mon, 06 Feb 2023 16:39:30 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
-      X-Request-ID: 759809ae-81b6-4d45-b0c6-09be702b7560
+      X-Request-ID: 0f87d509-2432-4850-ac7f-0c11c1efef1d
       x-nabla-cloudregion: EU_WEST1
     body: |-
       [
-          "4978a6aa-b25b-4e4d-b69b-77135a824f0b"
+          "bb817de3-c3ed-44b1-bedc-298b0b81f6b2"
       ]
-- recorded: 2022-12-08T11:52:45.112Z
+- recorded: 2023-02-06T16:39:32.140Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -224,7 +224,7 @@ interactions:
       Accept: multipart/mixed; deferSpec=20220824, application/json
       X-APOLLO-OPERATION-ID: ac4065fd2d0b0f0207947f65680966873c0eba3d273062053166293af08d7902
       X-APOLLO-OPERATION-NAME: SendMessage
-    body: '{"operationName":"SendMessage","variables":{"conversationId":"43a339f6-14a7-47a5-9fb8-e4138f9bfd9a","input":{"content":{"documentInput":{"upload":{"uuid":"4978a6aa-b25b-4e4d-b69b-77135a824f0b"}}},"clientId":"7cbed178-aa63-4d43-a409-10ad8f69e0d6"}},"query":"mutation
+    body: '{"operationName":"SendMessage","variables":{"conversationId":"fcd03fe4-96ee-4731-8281-5d73e739efa4","input":{"content":{"documentInput":{"upload":{"uuid":"bb817de3-c3ed-44b1-bedc-298b0b81f6b2"}}},"clientId":"632f97b7-25a0-44ef-8b06-185c232aabd6"}},"query":"mutation
       SendMessage($conversationId: UUID!, $input: SendMessageInput!) { sendMessageV2(conversationId: $conversationId, input: $input) { message { __typename ...MessageFragment conversation { __typename ...ConversationPreviewFragment } } } }  fragment EphemeralUrlFragment
       on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment PatientFragment on Patient { id displayName isMe }  fragment SystemFragment on System
       { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType
@@ -242,15 +242,15 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '2607'
+      Content-Length: '2606'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:44 GMT
+      Date: Mon, 06 Feb 2023 16:39:32 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 35fc0137-8fb4-421c-9d9a-ace91988deca
+      X-Request-ID: 7d39dd21-0f13-4e00-850c-0d06b98ea91d
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
@@ -258,11 +258,11 @@ interactions:
               "sendMessageV2": {
                   "message": {
                       "__typename": "Message",
-                      "id": "9ccfef47-991e-4c27-b30b-945e3698fbc7",
+                      "id": "987cce73-18f8-4433-9100-d90a1a40b938",
                       "author": {
                           "__typename": "Patient",
-                          "id": "dda75c23-1e29-46e8-ab86-f13d8dc4c376",
-                          "displayName": "Test Patient",
+                          "id": "2eb690fe-ad65-439f-ab78-db332e767f59",
+                          "displayName": "Benoit Test",
                           "isMe": true
                       },
                       "messageContent": {
@@ -270,27 +270,27 @@ interactions:
                           "title": "test.pdf",
                           "documentFileUpload": {
                               "__typename": "DocumentFileUpload",
-                              "id": "4978a6aa-b25b-4e4d-b69b-77135a824f0b",
+                              "id": "bb817de3-c3ed-44b1-bedc-298b0b81f6b2",
                               "url": {
                                   "__typename": "EphemeralUrl",
-                                  "expiresAt": "2022-12-08T14:52:45.111+01:00",
-                                  "url": "https://storage.googleapis.com/2cb158acbf985d6-attachment-development/93cdc557-a38d-4a0d-bd7f-905c868e5f34?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=dev-impersonate%40nabla-staging-317712.iam.gserviceaccount.com%2F20221208%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20221208T115245Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=8006038f56ccd9b13247e8467baa79fd174f07720da00255e8d8ae61f7ecd06d67e6d4d664811fa811a269e274b4e94fff7852523df4be3c290294133f77300d962954ec03996958a268dbd90540ffd26a4d7b313d9f9d2e4835dc4b54386711634af626f0ff50d39e2274b3076201a578bd27a3158134e1b1af1904908bd0e696deca6e3606ac2e5134d4d399b90019fe9d6ce77bc2a8a2184932ddc3dcd4622357d5668b013d27adb2a1c508480a21ddf1d5092129ebf450ec22e854640563364a3a92a36a448b0ee81b24901b0d459d55e35b68a54bb72c630e088d9fbff605a42b13557c9dec2af156295adda71d2e60b4706e8a94e99d31875791012b00"
+                                  "expiresAt": "2023-02-06T19:39:32.138+01:00",
+                                  "url": "https://storage.googleapis.com/2cb158acbf985d6-attachment-development/fc573d9a-d505-4623-af27-d69c6711c264?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=dev-impersonate%40nabla-staging-317712.iam.gserviceaccount.com%2F20230206%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230206T163932Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=a9162bf3fe849a6ff1b5490b76e459b81e76acaea79514a51840b22df173c78dcf1c96e88fa0f5d4f2aff3cbfecdcb64f5332618556c0a19d5bb0a83c86326df3d9fda04ea897504bd357de6e3e6834ea5b3cda828e5917d46d29dc7a2c8c9fc4b3d9503e55323dacea6c142d0e25e260537c291d70145e296f04b8bac3e0cbf2170a6764a5d1c536a4642d2995208c9a57114b7f656c35f89f8b34dd33078dcdcce474597d342c0d6b01609b1a9b953471a9dcad1c9a9e391ae8c894a9e10105412357d309414b1567b7573a63f165b6bd53c10b0a375e552ea2f5004ab283ad9119d0463aea6d211695f4b92a729c802e0307e556144a85edc332b290a11b8"
                               },
                               "fileName": "test.pdf",
                               "mimeType": "application/pdf",
                               "thumbnail": null
                           }
                       },
-                      "clientId": "7cbed178-aa63-4d43-a409-10ad8f69e0d6",
+                      "clientId": "632f97b7-25a0-44ef-8b06-185c232aabd6",
                       "conversation": {
-                          "id": "43a339f6-14a7-47a5-9fb8-e4138f9bfd9a",
+                          "id": "fcd03fe4-96ee-4731-8281-5d73e739efa4",
                           "__typename": "Conversation",
-                          "updatedAt": "2022-12-08T12:52:45.034+01:00",
+                          "updatedAt": "2023-02-06T17:39:32.026+01:00",
                           "inboxPreviewTitle": "Ask us anything",
                           "lastMessagePreview": "You sent a document",
                           "unreadMessageCount": 0
                       },
-                      "createdAt": "2022-12-08T12:52:45.034+01:00",
+                      "createdAt": "2023-02-06T17:39:32.026+01:00",
                       "replyTo": null
                   }
               }

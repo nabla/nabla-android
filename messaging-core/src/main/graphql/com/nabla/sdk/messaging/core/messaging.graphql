@@ -194,6 +194,12 @@ fragment ConversationActivityContentFragment on ConversationActivityContent {
             ...MaybeProviderFragment
         }
     }
+    ... on ConversationClosed {
+        __typename
+    }
+    ... on ConversationReopened {
+        __typename
+    }
 }
 
 fragment MaybeProviderFragment on MaybeProvider {

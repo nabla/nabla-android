@@ -1,7 +1,7 @@
 !tape
 name: test watch conversation is called when the providers are updated
 interactions:
-- recorded: 2022-12-08T11:52:42.798Z
+- recorded: 2023-02-06T16:39:25.813Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -15,21 +15,21 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '287'
+      Content-Length: '307'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:42 GMT
+      Date: Mon, 06 Feb 2023 16:39:24 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 98a50219-f489-40a4-ac9e-5ac87c4a4d10
+      X-Request-ID: 2b9c4c7a-a270-45af-b644-abdf28b7379f
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
           "data": {
               "registerOrUpdateDevice": {
-                  "deviceId": "ebc5a171-82f3-4506-a544-aa7cc5a682f8",
+                  "deviceId": "5d20e140-17ac-4f7a-bdf3-3e3a59f3fad0",
                   "sentry": {
                       "dsn": "https://d544635bca71460691802d7d8f1be4ee@sentry-relay.nabla.com/4504525106249728",
                       "env": "dev"
@@ -37,7 +37,7 @@ interactions:
               }
           }
       }
-- recorded: 2022-12-08T11:52:42.844Z
+- recorded: 2023-02-06T16:39:26.039Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -45,7 +45,7 @@ interactions:
       Accept: multipart/mixed; deferSpec=20220824, application/json
       X-APOLLO-OPERATION-ID: 84cf450e318b172dc9b32645523b2b60ccc02a9c289e82d15597ad219ef9c094
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"5fe4de11-55e7-4bb5-b279-7df9ab481eac"}},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!], $initialMessage:
+    body: '{"operationName":"CreateConversation","variables":{"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"d26de6e1-8eec-4d87-86d4-735e15f43d00"}},"query":"mutation CreateConversation($title: String, $providerIds: [UUID!], $initialMessage:
       SendMessageInput) { createConversation(title: $title, providerIds: $providerIds, initialMessage: $initialMessage) { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems: 1 } ) { data { __typename ...MessageFragment
       } } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment ProviderInConversationFragment on ProviderInConversation
       { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment
@@ -64,15 +64,15 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '1813'
+      Content-Length: '1812'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:42 GMT
+      Date: Mon, 06 Feb 2023 16:39:24 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 81c93986-0421-40d6-91af-67410202d7a5
+      X-Request-ID: 1294ddce-cebc-49cb-b68b-a92b1e4765c3
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
@@ -80,11 +80,11 @@ interactions:
               "createConversation": {
                   "conversation": {
                       "__typename": "Conversation",
-                      "id": "e500da75-f338-423c-90b1-feaf10fd5baa",
+                      "id": "b4f3c642-3a7b-4505-b4c8-7748ba095632",
                       "title": null,
                       "subtitle": null,
-                      "createdAt": "2022-12-08T12:52:42.762+01:00",
-                      "updatedAt": "2022-12-08T12:52:42.810+01:00",
+                      "createdAt": "2023-02-06T17:39:25.741+01:00",
+                      "updatedAt": "2023-02-06T17:39:25.839+01:00",
                       "inboxPreviewTitle": "Ask us anything",
                       "lastMessagePreview": "You: Hello",
                       "unreadMessageCount": 0,
@@ -96,22 +96,22 @@ interactions:
                           "data": [
                               {
                                   "__typename": "Message",
-                                  "id": "24254ccd-2506-4c31-84c2-270670a1aeb8",
+                                  "id": "b80f42f1-475e-499b-be72-3ef1de83085d",
                                   "author": {
                                       "__typename": "Patient",
-                                      "id": "dda75c23-1e29-46e8-ab86-f13d8dc4c376",
-                                      "displayName": "Test Patient",
+                                      "id": "2eb690fe-ad65-439f-ab78-db332e767f59",
+                                      "displayName": "Benoit Test",
                                       "isMe": true
                                   },
                                   "messageContent": {
                                       "__typename": "TextMessageContent",
                                       "text": "Hello"
                                   },
-                                  "clientId": "5fe4de11-55e7-4bb5-b279-7df9ab481eac",
+                                  "clientId": "d26de6e1-8eec-4d87-86d4-735e15f43d00",
                                   "conversation": {
-                                      "id": "e500da75-f338-423c-90b1-feaf10fd5baa"
+                                      "id": "b4f3c642-3a7b-4505-b4c8-7748ba095632"
                                   },
-                                  "createdAt": "2022-12-08T12:52:42.810+01:00",
+                                  "createdAt": "2023-02-06T17:39:25.839+01:00",
                                   "replyTo": null
                               }
                           ]
@@ -120,7 +120,7 @@ interactions:
               }
           }
       }
-- recorded: 2022-12-08T11:52:42.891Z
+- recorded: 2023-02-06T16:39:26.168Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -128,7 +128,7 @@ interactions:
       Accept: multipart/mixed; deferSpec=20220824, application/json
       X-APOLLO-OPERATION-ID: 83bd22c2328d3985e3530070ca8573dc0cd2fee857b6633fa0174d1492410ec7
       X-APOLLO-OPERATION-NAME: Conversation
-    body: '{"operationName":"Conversation","variables":{"id":"e500da75-f338-423c-90b1-feaf10fd5baa"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
+    body: '{"operationName":"Conversation","variables":{"id":"b4f3c642-3a7b-4505-b4c8-7748ba095632"},"query":"query Conversation($id: UUID!) { conversation(id: $id) { conversation { __typename ...ConversationFragment } } }  fragment EphemeralUrlFragment on EphemeralUrl
       { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
       } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename ...ProviderInConversationFragment } pictureUrl { __typename ...EphemeralUrlFragment
       } isLocked }"}'
@@ -138,13 +138,13 @@ interactions:
       Connection: keep-alive
       Content-Length: '669'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:42 GMT
+      Date: Mon, 06 Feb 2023 16:39:26 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 7ebba368-d712-4b41-b671-1739298ac585
+      X-Request-ID: 6856709e-e342-4d35-b3f8-70c9843c9234
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
@@ -152,11 +152,11 @@ interactions:
               "conversation": {
                   "conversation": {
                       "__typename": "Conversation",
-                      "id": "e500da75-f338-423c-90b1-feaf10fd5baa",
+                      "id": "b4f3c642-3a7b-4505-b4c8-7748ba095632",
                       "title": null,
                       "subtitle": null,
-                      "createdAt": "2022-12-08T12:52:42.762+01:00",
-                      "updatedAt": "2022-12-08T12:52:42.810+01:00",
+                      "createdAt": "2023-02-06T17:39:25.741+01:00",
+                      "updatedAt": "2023-02-06T17:39:25.839+01:00",
                       "inboxPreviewTitle": "Ask us anything",
                       "lastMessagePreview": "You: Hello",
                       "unreadMessageCount": 0,

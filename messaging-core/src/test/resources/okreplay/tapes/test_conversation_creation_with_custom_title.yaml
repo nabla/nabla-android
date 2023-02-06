@@ -1,7 +1,7 @@
 !tape
 name: test conversation creation with custom title
 interactions:
-- recorded: 2022-12-08T11:52:42.147Z
+- recorded: 2023-02-06T16:39:23.857Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -15,21 +15,21 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '287'
+      Content-Length: '307'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:42 GMT
+      Date: Mon, 06 Feb 2023 16:39:23 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 72cfd65c-fb6a-4b2e-9985-9ab8ea561002
+      X-Request-ID: 0ca00f0c-a355-47e4-95d5-bdf987b9ca96
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
           "data": {
               "registerOrUpdateDevice": {
-                  "deviceId": "fbe51a4b-41d1-467a-ae85-1469e46d4f78",
+                  "deviceId": "529fb475-00b9-4109-9529-2ab4593c25e9",
                   "sentry": {
                       "dsn": "https://d544635bca71460691802d7d8f1be4ee@sentry-relay.nabla.com/4504525106249728",
                       "env": "dev"
@@ -37,7 +37,7 @@ interactions:
               }
           }
       }
-- recorded: 2022-12-08T11:52:42.215Z
+- recorded: 2023-02-06T16:39:24.301Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -45,7 +45,7 @@ interactions:
       Accept: multipart/mixed; deferSpec=20220824, application/json
       X-APOLLO-OPERATION-ID: 84cf450e318b172dc9b32645523b2b60ccc02a9c289e82d15597ad219ef9c094
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"title":"Test custom title","initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"563fa518-fec0-45d9-8e54-bf089ce3bbbd"}},"query":"mutation CreateConversation($title: String, $providerIds:
+    body: '{"operationName":"CreateConversation","variables":{"title":"Test custom title","initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"35750c88-91a9-460e-abc1-3a8c9f1eac29"}},"query":"mutation CreateConversation($title: String, $providerIds:
       [UUID!], $initialMessage: SendMessageInput) { createConversation(title: $title, providerIds: $providerIds, initialMessage: $initialMessage) { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems: 1 } ) { data { __typename
       ...MessageFragment } } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment ProviderInConversationFragment
       on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount providers { __typename
@@ -64,15 +64,15 @@ interactions:
     status: 200
     headers:
       Connection: keep-alive
-      Content-Length: '1830'
+      Content-Length: '1829'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:42 GMT
+      Date: Mon, 06 Feb 2023 16:39:23 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: fb8e93e1-6ed0-484c-b42c-f8f7b2d716c0
+      X-Request-ID: 48d9e13f-93e9-4f97-a918-e9a9afeaadf2
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
@@ -80,11 +80,11 @@ interactions:
               "createConversation": {
                   "conversation": {
                       "__typename": "Conversation",
-                      "id": "5418c18e-c7d8-4e4a-9838-ab69a455c10d",
+                      "id": "7cd8c9bf-9fc1-40ca-bf11-c791f282c95e",
                       "title": "Test custom title",
                       "subtitle": null,
-                      "createdAt": "2022-12-08T12:52:42.103+01:00",
-                      "updatedAt": "2022-12-08T12:52:42.155+01:00",
+                      "createdAt": "2023-02-06T17:39:24.023+01:00",
+                      "updatedAt": "2023-02-06T17:39:24.093+01:00",
                       "inboxPreviewTitle": "Test custom title",
                       "lastMessagePreview": "You: Hello",
                       "unreadMessageCount": 0,
@@ -96,22 +96,22 @@ interactions:
                           "data": [
                               {
                                   "__typename": "Message",
-                                  "id": "b0e1fcc4-149c-46a1-b861-ba49c198a107",
+                                  "id": "20bd3f95-3056-4222-96a9-575a2fab07c9",
                                   "author": {
                                       "__typename": "Patient",
-                                      "id": "dda75c23-1e29-46e8-ab86-f13d8dc4c376",
-                                      "displayName": "Test Patient",
+                                      "id": "2eb690fe-ad65-439f-ab78-db332e767f59",
+                                      "displayName": "Benoit Test",
                                       "isMe": true
                                   },
                                   "messageContent": {
                                       "__typename": "TextMessageContent",
                                       "text": "Hello"
                                   },
-                                  "clientId": "563fa518-fec0-45d9-8e54-bf089ce3bbbd",
+                                  "clientId": "35750c88-91a9-460e-abc1-3a8c9f1eac29",
                                   "conversation": {
-                                      "id": "5418c18e-c7d8-4e4a-9838-ab69a455c10d"
+                                      "id": "7cd8c9bf-9fc1-40ca-bf11-c791f282c95e"
                                   },
-                                  "createdAt": "2022-12-08T12:52:42.155+01:00",
+                                  "createdAt": "2023-02-06T17:39:24.093+01:00",
                                   "replyTo": null
                               }
                           ]

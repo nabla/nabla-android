@@ -1,7 +1,7 @@
 !tape
 name: test conversation creation with unknown provider
 interactions:
-- recorded: 2022-12-08T11:52:45.688Z
+- recorded: 2023-02-06T16:39:33.215Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
@@ -9,7 +9,7 @@ interactions:
       Accept: multipart/mixed; deferSpec=20220824, application/json
       X-APOLLO-OPERATION-ID: 84cf450e318b172dc9b32645523b2b60ccc02a9c289e82d15597ad219ef9c094
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"],"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"0719d79e-a085-42ce-a9f4-430090700ec9"}},"query":"mutation CreateConversation($title:
+    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"],"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"d68d11db-3cdb-4caf-b6c7-708d8b1eee1c"}},"query":"mutation CreateConversation($title:
       String, $providerIds: [UUID!], $initialMessage: SendMessageInput) { createConversation(title: $title, providerIds: $providerIds, initialMessage: $initialMessage) { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems:
       1 } ) { data { __typename ...MessageFragment } } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment
       ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount
@@ -31,13 +31,13 @@ interactions:
       Connection: keep-alive
       Content-Length: '429'
       Content-Type: application/json; charset=UTF-8
-      Date: Thu, 08 Dec 2022 11:52:45 GMT
+      Date: Mon, 06 Feb 2023 16:39:33 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: 225f2c29-c9f6-4137-bd91-d13ba0f8ea22
+      X-Request-ID: dd75b171-4556-492b-8311-1dffeab8bb95
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {
