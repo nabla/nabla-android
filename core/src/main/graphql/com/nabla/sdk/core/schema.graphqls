@@ -7,6 +7,7 @@ schema {
 scalar DateTime
 scalar UUID
 scalar TimeZone
+scalar BigDecimal
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Queries.
@@ -60,8 +61,15 @@ type Mutation {
     isPhysical: Boolean!
     slot: DateTime!
     timeZone: TimeZone!
-  ): ScheduleAppointmentOutput!
+  ): ScheduleAppointmentOutput! #@deprecated(reason: "only possible if appointment does not require payment.")
   cancelAppointment(id: UUID!): CancelAppointmentOutput!
+  createPendingAppointment(
+    categoryId: UUID!
+    providerId: UUID!
+    isPhysical: Boolean!
+    startAt: DateTime!
+  ): ScheduleAppointmentOutput!
+  schedulePendingAppointment(appointmentId: UUID!): ScheduleAppointmentOutput!
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -554,7 +562,7 @@ type Address {
   extraDetails: String
 }
 
-union AppointmentState = UpcomingAppointment | FinalizedAppointment
+union AppointmentState = PendingAppointment | UpcomingAppointment | FinalizedAppointment
 
 type UpcomingAppointment {
   livekitRoom: LivekitRoom
@@ -562,6 +570,14 @@ type UpcomingAppointment {
 
 type FinalizedAppointment {
   _: EmptyObject!
+}
+
+type PendingAppointment {
+  schedulingRequiresPayment: AppointmentSchedulingRequiresPayment
+}
+
+type AppointmentSchedulingRequiresPayment {
+  price: Price!
 }
 
 type AppointmentCategory {
@@ -611,4 +627,9 @@ type AppointmentAvailableLocationsOutput {
 
 type AppointmentOutput {
   appointment: Appointment!
+}
+
+type Price {
+  amount: BigDecimal!
+  currencyCode: String!
 }
