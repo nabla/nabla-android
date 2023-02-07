@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="nabla_scheduling_appointments_toolbar_title">Appointments</string>
     <string name="nabla_scheduling_upcoming_appointments">Scheduled</string>
     <string name="nabla_scheduling_past_appointments">Past</string>
     <string name="nabla_scheduling_no_upcoming_appointments">No appointments scheduled</string>

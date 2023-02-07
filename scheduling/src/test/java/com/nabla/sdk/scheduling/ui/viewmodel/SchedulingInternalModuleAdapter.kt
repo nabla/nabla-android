@@ -2,6 +2,7 @@ package com.nabla.sdk.scheduling.ui.viewmodel
 
 import android.content.Context
 import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.Appointment
@@ -12,6 +13,7 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Instant
 import java.util.UUID
 
@@ -29,10 +31,12 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
     ): Flow<PaginatedContent<List<AvailabilitySlot>>> =
         error("Not mocked")
 
-    override fun watchPastAppointments(): Flow<PaginatedContent<List<Appointment>>> =
+    override fun isRefreshingAppointments(): Flow<Boolean> = flowOf(false)
+
+    override fun watchPastAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>> =
         error("Not mocked")
 
-    override fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>> =
+    override fun watchUpcomingAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>> =
         error("Not mocked")
 
     override suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): Result<AppointmentConfirmationConsents> {

@@ -1,6 +1,7 @@
 package com.nabla.sdk.scheduling.domain.boundary
 
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
@@ -13,8 +14,8 @@ import kotlinx.datetime.Instant
 import java.util.UUID
 
 internal interface AppointmentRepository {
-    fun watchPastAppointments(): Flow<PaginatedList<Appointment>>
-    fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment>>
+    fun watchPastAppointments(): Flow<Response<PaginatedList<Appointment>>>
+    fun watchUpcomingAppointments(): Flow<Response<PaginatedList<Appointment>>>
     suspend fun loadMorePastAppointments()
     suspend fun loadMoreUpcomingAppointments()
 

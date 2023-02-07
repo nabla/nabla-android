@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- Scheduling: Added a new `nablaScheduling_appointmentListHeaderStyle` for the `AppointmentsFragment` toolbar's style.
+
+### Changed
+- Scheduling: The `AppointmentsFragment` now comes with a `Toolbar` by default, you can choose to hide it by calling `setShowNavigation(false)` on the Fragment's builder.
+
 ## [1.0.0-alpha23] - 2023-02-03
 
 ### Added

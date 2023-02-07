@@ -5,6 +5,8 @@
     <attr name="nablaSchedulingThemeOverlay" format="reference" />
     <style name="Nabla.ThemeOverlay.Scheduling" parent="Nabla.ThemeOverlay.Base">
         <item name="nablaHasValidSchedulingOverlays">true</item>
+
+        <item name="nablaScheduling_appointmentListHeaderStyle">?toolbarSurfaceStyle</item>
     </style>
 
 </resources>

@@ -4,36 +4,64 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.SavedStateHandle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
+import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.sdkNameOrDefault
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
+import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsBinding
 import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
+import com.nabla.sdk.scheduling.schedulingInternalModule
+import kotlinx.coroutines.launch
 
 public class AppointmentsFragment : SchedulingBaseFragment() {
+    private val nablaClient: NablaClient = getNablaInstanceByName()
 
     private val binding by viewBinding(NablaSchedulingFragmentAppointmentsBinding::bind)
+    private val viewModel: AppointmentsViewModel by viewModels {
+        savedStateFactoryFor { handle ->
+            AppointmentsViewModel(
+                schedulingClient = nablaClient.schedulingInternalModule,
+                savedStateHandle = handle,
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return NablaSchedulingFragmentAppointmentsBinding.inflate(inflater, container, false).root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToolbar()
         setupViewPager()
 
         binding.nablaBookAppointmentButton.setOnClickListener {
             startActivity(ScheduleAppointmentActivity.newIntent(requireContext(), sdkNameOrDefault()))
+        }
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.isVisible = viewModel.showNavigation
+
+        viewLifeCycleScope.launch {
+            viewModel.isRefreshingFlow.collect { isRefreshing ->
+                binding.toolbarProgressBar.isVisible = isRefreshing
+            }
         }
     }
 
@@ -53,11 +81,54 @@ public class AppointmentsFragment : SchedulingBaseFragment() {
         }
     }
 
-    public companion object {
-        public fun newInstance(): AppointmentsFragment = newInstance(NablaClient.DEFAULT_NAME)
+    @Suppress("UNUSED")
+    public class Builder internal constructor() {
+        private var showNavigation = true
 
-        public fun newInstance(sdkName: String): AppointmentsFragment {
-            return AppointmentsFragment().apply { setSdkName(sdkName) }
+        /**
+         * Call this to display or hide the navigation bar (Toolbar) displayed at the top. Navigation is shown
+         * by default but if you want to embed that screen into your own navigation you can call this
+         * method to hide it.
+         */
+        public fun setShowNavigation(showNavigation: Boolean) {
+            this.showNavigation = showNavigation
+        }
+
+        internal fun build(): AppointmentsFragment {
+            return AppointmentsFragment().apply {
+                arguments = newArgsBundle(showNavigation)
+            }
+        }
+
+        internal companion object {
+            private const val SHOW_NAVIGATION_ARG_KEY = "showNavigation"
+
+            private fun newArgsBundle(
+                showNavigation: Boolean,
+            ): Bundle = Bundle().apply {
+                putBoolean(SHOW_NAVIGATION_ARG_KEY, showNavigation)
+            }
+
+            internal fun showNavigationFromSavedStateHandle(savedStateHandle: SavedStateHandle): Boolean {
+                return savedStateHandle.get(SHOW_NAVIGATION_ARG_KEY) ?: true
+            }
+        }
+    }
+
+    public companion object {
+        public fun newInstance(
+            init: (Builder.() -> Unit)? = null,
+        ): AppointmentsFragment = newInstance(NablaClient.DEFAULT_NAME, init)
+
+        public fun newInstance(
+            sdkName: String,
+            init: (Builder.() -> Unit)? = null,
+        ): AppointmentsFragment {
+            val builder = Builder()
+            init?.invoke(builder)
+            return builder.build().also {
+                it.setSdkName(sdkName)
+            }
         }
     }
 }

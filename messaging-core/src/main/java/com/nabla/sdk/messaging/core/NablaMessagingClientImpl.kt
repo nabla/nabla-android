@@ -54,11 +54,13 @@ internal class NablaMessagingClientImpl internal constructor(
     override val logger: Logger = coreContainer.logger
 
     override fun watchConversations(): Flow<Response<PaginatedContent<List<Conversation>>>> {
-        return conversationRepository.watchConversations().wrapAsResponsePaginatedContent(
-            conversationRepository::loadMoreConversations,
-            messagingContainer.nablaExceptionMapper,
-            messagingContainer.sessionClient,
-        )
+        return conversationRepository.watchConversations()
+            .wrapAsResponsePaginatedContent(
+                conversationRepository::loadMoreConversations,
+                messagingContainer.nablaExceptionMapper,
+                messagingContainer.sessionClient,
+            )
+            .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
     }
 
     @CheckResult
@@ -94,11 +96,13 @@ internal class NablaMessagingClientImpl internal constructor(
     }
 
     override fun watchConversationItems(conversationId: ConversationId): Flow<Response<PaginatedContent<List<ConversationItem>>>> {
-        return conversationContentRepository.watchConversationItems(conversationId).wrapAsResponsePaginatedContent(
-            { conversationContentRepository.loadMoreMessages(conversationId) },
-            messagingContainer.nablaExceptionMapper,
-            messagingContainer.sessionClient,
-        )
+        return conversationContentRepository.watchConversationItems(conversationId)
+            .wrapAsResponsePaginatedContent(
+                { conversationContentRepository.loadMoreMessages(conversationId) },
+                messagingContainer.nablaExceptionMapper,
+                messagingContainer.sessionClient,
+            )
+            .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
     }
 
     override suspend fun sendMessage(

@@ -68,9 +68,15 @@ public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentsFragm
 	public fun onViewCreated (Landroid/view/View;Landroid/os/Bundle;)V
 }
 
+public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Builder {
+	public final fun setShowNavigation (Z)V
+}
+
 public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Companion {
-	public final fun newInstance ()Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
-	public final fun newInstance (Ljava/lang/String;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
+	public final fun newInstance (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
+	public final fun newInstance (Lkotlin/jvm/functions/Function1;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
+	public static synthetic fun newInstance$default (Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Companion;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
+	public static synthetic fun newInstance$default (Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment$Companion;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/scene/appointments/AppointmentsFragment;
 }
 
 public final class com/nabla/sdk/scheduling/scene/details/AppointmentDetailsActivity : androidx/appcompat/app/AppCompatActivity {

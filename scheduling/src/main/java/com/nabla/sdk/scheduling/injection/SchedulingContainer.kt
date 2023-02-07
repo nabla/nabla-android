@@ -11,7 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
-internal class SchedulingContainer(private val coreContainer: CoreContainer) {
+internal class SchedulingContainer(coreContainer: CoreContainer) {
+    val nablaExceptionMapper = coreContainer.exceptionMapper
+    val sessionClient = coreContainer.sessionClient
+    val eventsConnectionStateFlow = coreContainer.eventsConnectionState
+
     private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val gqlMapper = GqlMapper(
         coreContainer.coreGqlMapper,
@@ -22,6 +26,7 @@ internal class SchedulingContainer(private val coreContainer: CoreContainer) {
         repoScope,
         coreContainer.apolloClient,
         gqlMapper,
+        nablaExceptionMapper,
     )
     private val gqlAppointmentCategoryDataSource = GqlAppointmentCategoryDataSource(
         coreContainer.apolloClient,
@@ -42,6 +47,4 @@ internal class SchedulingContainer(private val coreContainer: CoreContainer) {
         gqlAppointmentConfirmConsentsDataSource,
         gqlAppointmentLocationDataSource,
     )
-    val nablaExceptionMapper = coreContainer.exceptionMapper
-    val sessionClient = coreContainer.sessionClient
 }

@@ -2,6 +2,7 @@ package com.nabla.sdk.scheduling.data
 
 import com.nabla.sdk.core.data.exception.GraphQLException
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.kotlin.SharedSingle
 import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.scheduling.domain.boundary.AppointmentRepository
@@ -25,8 +26,8 @@ internal class AppointmentRepositoryImpl(
     private val gqlAppointmentLocationDataSource: GqlAppointmentLocationDataSource,
 ) : AppointmentRepository {
 
-    override fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment>> = gqlAppointmentDataSource.watchUpcomingAppointments()
-    override fun watchPastAppointments(): Flow<PaginatedList<Appointment>> = gqlAppointmentDataSource.watchPastAppointments()
+    override fun watchUpcomingAppointments(): Flow<Response<PaginatedList<Appointment>>> = gqlAppointmentDataSource.watchUpcomingAppointments()
+    override fun watchPastAppointments(): Flow<Response<PaginatedList<Appointment>>> = gqlAppointmentDataSource.watchPastAppointments()
 
     private val loadMoreUpcomingAppointmentsSharedSingle: SharedSingle<Unit, Result<Unit>> =
         sharedSingleIn(repoScope) { gqlAppointmentDataSource.loadMoreUpcomingAppointments() }

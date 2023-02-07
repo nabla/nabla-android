@@ -7,6 +7,7 @@ import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.domain.entity.StringOrRes
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
@@ -61,9 +62,9 @@ internal class AppointmentsContentViewModel(
         AppointmentType.UPCOMING -> schedulingClient.watchUpcomingAppointments()
     }
         .reTriggerWhenNextAppointmentIsSoon(clock, delayCoroutineContext)
-        .combine(currentCallFlow) { appointments, currentCall ->
-            loadMoreCallback = appointments.loadMore
-            val items = appointments.content.map { it.toUiModel(clock, currentCall?.id) }
+        .combine(currentCallFlow) { response, currentCall ->
+            loadMoreCallback = response.data.loadMore
+            val items = response.data.content.map { it.toUiModel(clock, currentCall?.id) }
 
             if (items.isEmpty()) {
                 State.Empty(appointmentType.emptyStateRes)
@@ -157,12 +158,12 @@ internal class AppointmentsContentViewModel(
 /**
  * Emits immediately then re-emits each time an upcoming (but not soon) appointment becomes soon.
  */
-private fun Flow<PaginatedContent<List<Appointment>>>.reTriggerWhenNextAppointmentIsSoon(
+private fun Flow<Response<PaginatedContent<List<Appointment>>>>.reTriggerWhenNextAppointmentIsSoon(
     clock: Clock,
     delayCoroutineContext: CoroutineContext,
-) = transformLatest { appointments ->
-    emit(appointments)
-    val notSoonAppointments = appointments.content
+) = transformLatest { response ->
+    emit(response)
+    val notSoonAppointments = response.data.content
         .filter { it.state == AppointmentState.UPCOMING }
         .filter { !clock.isAppointmentSoon(it.scheduledAt) }
         .toMutableList()
@@ -175,6 +176,6 @@ private fun Flow<PaginatedContent<List<Appointment>>>.reTriggerWhenNextAppointme
         withContext(delayCoroutineContext) {
             delay(nextNotSoonAppointment.scheduledAt - SOON_CONVERSATION_THRESHOLD - clock.now())
         }
-        emit(appointments)
+        emit(response)
     }
 }

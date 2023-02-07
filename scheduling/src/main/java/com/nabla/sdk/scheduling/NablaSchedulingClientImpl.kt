@@ -7,8 +7,13 @@ import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.domain.helper.restartWhenConnectionReconnects
 import com.nabla.sdk.core.domain.helper.wrapAsPaginatedContent
+import com.nabla.sdk.core.domain.helper.wrapAsResponsePaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
+import com.nabla.sdk.core.kotlin.combine
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
@@ -20,6 +25,9 @@ import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.injection.SchedulingContainer
 import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
 import java.util.UUID
 
@@ -30,6 +38,9 @@ internal class NablaSchedulingClientImpl(
     private val schedulingContainer = SchedulingContainer(coreContainer)
     private val appointmentRepository = schedulingContainer.appointmentRepository
     private val name = coreContainer.name
+
+    private val areUpcomingAppointmentsRefreshingMutableFlow = MutableStateFlow(false)
+    private val arePastAppointmentsRefreshingMutableFlow = MutableStateFlow(false)
 
     override suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>> {
         return runCatchingCancellable {
@@ -56,20 +67,35 @@ internal class NablaSchedulingClientImpl(
         )
     }
 
-    override fun watchPastAppointments(): Flow<PaginatedContent<List<Appointment>>> {
-        return appointmentRepository.watchPastAppointments().wrapAsPaginatedContent(
-            appointmentRepository::loadMorePastAppointments,
-            schedulingContainer.nablaExceptionMapper,
-            schedulingContainer.sessionClient,
-        )
+    override fun isRefreshingAppointments(): Flow<Boolean> = arePastAppointmentsRefreshingMutableFlow
+        .combine(areUpcomingAppointmentsRefreshingMutableFlow) { pastRefreshing, upcomingRefreshing ->
+            pastRefreshing || upcomingRefreshing
+        }
+
+    override fun watchPastAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>> {
+        return appointmentRepository.watchPastAppointments()
+            .wrapAsResponsePaginatedContent(
+                appointmentRepository::loadMorePastAppointments,
+                schedulingContainer.nablaExceptionMapper,
+                schedulingContainer.sessionClient,
+            )
+            .restartWhenConnectionReconnects(schedulingContainer.eventsConnectionStateFlow)
+            .onEach { response ->
+                arePastAppointmentsRefreshingMutableFlow.value = response.refreshingState is RefreshingState.Refreshing
+            }
     }
 
-    override fun watchUpcomingAppointments(): Flow<PaginatedContent<List<Appointment>>> {
-        return appointmentRepository.watchUpcomingAppointments().wrapAsPaginatedContent(
-            appointmentRepository::loadMoreUpcomingAppointments,
-            schedulingContainer.nablaExceptionMapper,
-            schedulingContainer.sessionClient,
-        )
+    override fun watchUpcomingAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>> {
+        return appointmentRepository.watchUpcomingAppointments()
+            .wrapAsResponsePaginatedContent(
+                appointmentRepository::loadMoreUpcomingAppointments,
+                schedulingContainer.nablaExceptionMapper,
+                schedulingContainer.sessionClient,
+            )
+            .restartWhenConnectionReconnects(schedulingContainer.eventsConnectionStateFlow)
+            .onEach { response ->
+                areUpcomingAppointmentsRefreshingMutableFlow.value = response.refreshingState is RefreshingState.Refreshing
+            }
     }
 
     override suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): Result<AppointmentConfirmationConsents> {

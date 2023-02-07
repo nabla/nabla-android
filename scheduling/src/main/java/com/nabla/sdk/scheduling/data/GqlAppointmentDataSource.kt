@@ -4,15 +4,17 @@ import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
-import com.apollographql.apollo3.cache.normalized.watch
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
 import com.nabla.sdk.core.data.apollo.retryOnNetworkErrorAndShareIn
 import com.nabla.sdk.core.data.apollo.updateCache
+import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
 import com.nabla.sdk.core.domain.entity.PaginatedList
+import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.domain.helper.watchAsCachedResponse
 import com.nabla.sdk.graphql.type.AppointmentsPage
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.scheduling.data.apollo.GqlMapper
@@ -46,6 +48,7 @@ internal class GqlAppointmentDataSource(
     private val coroutineScope: CoroutineScope,
     private val apolloClient: ApolloClient,
     private val mapper: GqlMapper,
+    private val exceptionMapper: NablaExceptionMapper,
 ) {
     private val appointmentsEventsFlow by lazy {
         apolloClient.subscription(AppointmentsEventsSubscription())
@@ -104,18 +107,20 @@ internal class GqlAppointmentDataSource(
             }
     }
 
-    fun watchUpcomingAppointments(): Flow<PaginatedList<Appointment>> {
+    fun watchUpcomingAppointments(): Flow<Response<PaginatedList<Appointment>>> {
         val dataFlow = apolloClient.query(upcomingAppointmentsQuery())
-            .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .watch(fetchThrows = true)
-            .map { response -> response.dataOrThrowOnError }
-            .map { queryData ->
-                val items = queryData.upcomingAppointments.appointmentsPageFragment.data.map {
+            .watchAsCachedResponse(exceptionMapper)
+            .map { response ->
+                val items = response.data.upcomingAppointments.appointmentsPageFragment.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedBy { appointment -> appointment.scheduledAt }
                     .filter { it.state == AppointmentState.UPCOMING }
 
-                PaginatedList(items, queryData.upcomingAppointments.appointmentsPageFragment.hasMore)
+                Response(
+                    isDataFresh = response.isDataFresh,
+                    refreshingState = response.refreshingState,
+                    data = PaginatedList(items, response.data.upcomingAppointments.appointmentsPageFragment.hasMore)
+                )
             }
 
         return flowOf(appointmentsEventsFlow, dataFlow)
@@ -123,19 +128,21 @@ internal class GqlAppointmentDataSource(
             .filterIsInstance()
     }
 
-    fun watchPastAppointments(): Flow<PaginatedList<Appointment>> {
+    fun watchPastAppointments(): Flow<Response<PaginatedList<Appointment>>> {
         val dataFlow = apolloClient.query(pastAppointmentsQuery())
-            .fetchPolicy(FetchPolicy.CacheAndNetwork)
-            .watch(fetchThrows = true)
-            .map { response -> response.dataOrThrowOnError }
-            .map { queryData ->
-                val page = queryData.pastAppointments.appointmentsPageFragment
+            .watchAsCachedResponse(exceptionMapper)
+            .map { response ->
+                val page = response.data.pastAppointments.appointmentsPageFragment
                 val items = page.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedByDescending { appointment -> appointment.scheduledAt }
                     .filter { it.state == AppointmentState.FINALIZED }
 
-                PaginatedList(items, page.hasMore)
+                Response(
+                    isDataFresh = response.isDataFresh,
+                    refreshingState = response.refreshingState,
+                    data = PaginatedList(items, page.hasMore)
+                )
             }
 
         return flowOf(appointmentsEventsFlow, dataFlow)
