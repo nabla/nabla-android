@@ -62,7 +62,7 @@ public class NablaClient private constructor(
     /**
      * Watch the state of the events connection the SDK is using to receive live updates (new messages, new appointments etc...)
      *
-     * You can use this to display a message to the user indicating they are offline is your use case
+     * You can use this to display a message to the user indicating they are offline if your use case
      * is time sensitive and the risk of missing a message is important.
      *
      * Note that when the SDK is initialized, it starts with [EventsConnectionState.NotConnected].
