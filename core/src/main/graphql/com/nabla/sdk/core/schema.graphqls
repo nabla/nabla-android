@@ -550,6 +550,7 @@ type PhysicalAppointmentLocation {
 
 type RemoteAppointmentLocation {
   livekitRoom: LivekitRoom
+  externalCallUrl: String
 }
 
 type Address {
