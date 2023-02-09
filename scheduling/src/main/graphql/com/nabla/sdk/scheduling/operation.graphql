@@ -146,6 +146,7 @@ fragment AppointmentFragment on Appointment {
             livekitRoom {
                 ...LivekitRoomFragment
             }
+            externalCallUrl
         }
         ... on PhysicalAppointmentLocation {
             address {

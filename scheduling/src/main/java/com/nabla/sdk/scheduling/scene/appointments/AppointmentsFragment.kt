@@ -1,9 +1,7 @@
 package com.nabla.sdk.scheduling.scene.appointments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,13 +15,16 @@ import com.nabla.sdk.core.ui.helpers.sdkNameOrDefault
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
+import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsBinding
 import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.coroutines.launch
 
-public class AppointmentsFragment : SchedulingBaseFragment() {
+public class AppointmentsFragment : SchedulingBaseFragment(
+    R.layout.nabla_scheduling_fragment_appointments
+) {
     private val nablaClient: NablaClient = getNablaInstanceByName()
 
     private val binding by viewBinding(NablaSchedulingFragmentAppointmentsBinding::bind)
@@ -34,14 +35,6 @@ public class AppointmentsFragment : SchedulingBaseFragment() {
                 savedStateHandle = handle,
             )
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

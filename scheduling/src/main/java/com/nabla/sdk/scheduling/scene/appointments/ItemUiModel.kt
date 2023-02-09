@@ -2,6 +2,7 @@ package com.nabla.sdk.scheduling.scene.appointments
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
 import com.nabla.sdk.scheduling.domain.entity.Appointment
@@ -34,11 +35,15 @@ internal sealed class ItemUiModel(val listId: String) {
         ) : AppointmentUiModel(id.toString()) {
             sealed interface CallButtonStatus {
                 object Absent : CallButtonStatus
-                sealed interface Present : CallButtonStatus {
+                sealed interface Present : CallButtonStatus
+
+                data class ForExternalUrl(val url: Uri) : CallButtonStatus, Present
+
+                sealed interface ForVideoCall : CallButtonStatus, Present {
                     val videoCallRoom: VideoCallRoom
 
-                    data class AsJoin(override val videoCallRoom: VideoCallRoom) : Present
-                    data class AsGoBack(override val videoCallRoom: VideoCallRoom) : Present
+                    data class AsJoin(override val videoCallRoom: VideoCallRoom) : ForVideoCall
+                    data class AsGoBack(override val videoCallRoom: VideoCallRoom) : ForVideoCall
                 }
             }
         }
@@ -66,12 +71,12 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
             scheduledAt,
             callButtonStatus = when (location) {
                 is AppointmentLocation.Physical, AppointmentLocation.Unknown -> CallButtonStatus.Absent
-                is AppointmentLocation.Remote -> {
+                is AppointmentLocation.Remote.Nabla -> {
                     when (location.videoCallRoom?.status) {
                         is VideoCallRoomStatus.Open -> {
                             when (currentCallId) {
-                                null -> CallButtonStatus.Present.AsJoin(location.videoCallRoom)
-                                location.videoCallRoom.id -> CallButtonStatus.Present.AsGoBack(
+                                null -> CallButtonStatus.ForVideoCall.AsJoin(location.videoCallRoom)
+                                location.videoCallRoom.id -> CallButtonStatus.ForVideoCall.AsGoBack(
                                     location.videoCallRoom
                                 )
                                 else -> {
@@ -85,6 +90,7 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
                         }
                     }
                 }
+                is AppointmentLocation.Remote.External -> CallButtonStatus.ForExternalUrl(location.url)
             }
         )
     } else {

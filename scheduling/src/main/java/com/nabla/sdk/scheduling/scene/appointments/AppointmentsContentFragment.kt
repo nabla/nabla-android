@@ -1,15 +1,15 @@
 package com.nabla.sdk.scheduling.scene.appointments
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.canScrollDown
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
@@ -30,7 +30,9 @@ import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsActivity
 import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.datetime.Clock
 
-internal class AppointmentsContentFragment : SchedulingBaseFragment() {
+internal class AppointmentsContentFragment : SchedulingBaseFragment(
+    R.layout.nabla_scheduling_fragment_appointments_content
+) {
 
     private val nablaClient: NablaClient = getNablaInstanceByName()
 
@@ -53,6 +55,7 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment() {
         AppointmentsAdapter(
             onJoinClicked = viewModel::onJoinClicked,
             onDetailsClicked = ::openAppointmentDetailsScreen,
+            onJoinExternalClicked = ::openExternalLink,
         )
     }
 
@@ -60,12 +63,12 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment() {
         startActivity(AppointmentDetailsActivity.newIntent(requireContext(), appointmentId, requireSdkName()))
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return binding.root
+    private fun openExternalLink(url: Uri) {
+        try {
+            context?.startActivity(Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url.uri)))
+        } catch (e: Exception) {
+            viewModel.onFailedToOpenExternalLink(e)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -35,7 +35,7 @@ internal fun AppointmentLocation.Companion.fake(
     videoCallRoomIsOpen: Boolean = Random.nextBoolean(),
 ): AppointmentLocation {
     return when (locationType) {
-        AppointmentLocationType.REMOTE -> AppointmentLocation.Remote(VideoCallRoom.fake(status = VideoCallRoomStatus.fake(isOpen = videoCallRoomIsOpen)))
+        AppointmentLocationType.REMOTE -> AppointmentLocation.Remote.Nabla(VideoCallRoom.fake(status = VideoCallRoomStatus.fake(isOpen = videoCallRoomIsOpen)))
         AppointmentLocationType.PHYSICAL -> AppointmentLocation.Physical(Address.fake())
     }
 }

@@ -85,7 +85,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
                 assertIs<AppointmentUiModel.SoonOrOngoing>(nextAppointment)
                 assertIs<AppointmentUiModel.Upcoming>(secondAppointment)
                 assertIs<AppointmentUiModel.Upcoming>(farAppointment)
-                assertIs<CallButtonStatus.Present.AsJoin>(nextAppointment.callButtonStatus)
+                assertIs<CallButtonStatus.ForVideoCall.AsJoin>(nextAppointment.callButtonStatus)
             }
 
             // one minutes later the second appointment is now SoonOrOngoing too
@@ -95,8 +95,8 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
                 assertIs<AppointmentUiModel.SoonOrOngoing>(nextAppointment)
                 assertIs<AppointmentUiModel.SoonOrOngoing>(secondAppointment)
                 assertIs<AppointmentUiModel.Upcoming>(farAppointment)
-                assertIs<CallButtonStatus.Present.AsJoin>(nextAppointment.callButtonStatus)
-                assertIs<CallButtonStatus.Present.AsJoin>(secondAppointment.callButtonStatus)
+                assertIs<CallButtonStatus.ForVideoCall.AsJoin>(nextAppointment.callButtonStatus)
+                assertIs<CallButtonStatus.ForVideoCall.AsJoin>(secondAppointment.callButtonStatus)
 
                 viewModel.onJoinClicked(
                     nextAppointment.callButtonStatus.videoCallRoom,
@@ -110,7 +110,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
                 val (nextAppointment, secondAppointment, _) = state.items
                 assertIs<AppointmentUiModel.SoonOrOngoing>(nextAppointment)
                 assertIs<AppointmentUiModel.SoonOrOngoing>(secondAppointment)
-                assertIs<CallButtonStatus.Present.AsGoBack>(nextAppointment.callButtonStatus)
+                assertIs<CallButtonStatus.ForVideoCall.AsGoBack>(nextAppointment.callButtonStatus)
                 assertIs<CallButtonStatus.Absent>(secondAppointment.callButtonStatus)
             }
         }

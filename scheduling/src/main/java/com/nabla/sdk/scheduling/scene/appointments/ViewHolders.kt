@@ -20,7 +20,9 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.Finalized
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing
-import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.Present
+import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus
+import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.ForExternalUrl
+import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.ForVideoCall
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -32,6 +34,7 @@ import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.ceil
 import kotlin.time.Duration.Companion.seconds
+import com.nabla.sdk.core.domain.entity.Uri as URI
 
 internal class LoadingMoreViewHolder(val binding: NablaSchedulingAppointmentItemLoadingMoreBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {
@@ -47,6 +50,7 @@ internal class LoadingMoreViewHolder(val binding: NablaSchedulingAppointmentItem
 internal class AppointmentViewHolder(
     private val binding: NablaSchedulingAppointmentItemBinding,
     private val onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
+    private val onJoinExternalClicked: (url: URI) -> Unit,
     private val onDetailsClicked: (appointmentId: AppointmentId) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     private val context
@@ -62,11 +66,12 @@ internal class AppointmentViewHolder(
         scheduleTimeUpdates(uiModel)
 
         binding.joinCallButton.setTextOrHide(
-            if (uiModel is SoonOrOngoing && uiModel.callButtonStatus is Present) {
+            if (uiModel is SoonOrOngoing && uiModel.callButtonStatus is CallButtonStatus.Present) {
                 binding.context.getString(
                     when (uiModel.callButtonStatus) {
-                        is Present.AsJoin -> R.string.nabla_scheduling_appointment_item_join_cta
-                        is Present.AsGoBack -> R.string.nabla_scheduling_appointment_item_return_cta
+                        is ForExternalUrl,
+                        is ForVideoCall.AsJoin -> R.string.nabla_scheduling_appointment_item_join_cta
+                        is ForVideoCall.AsGoBack -> R.string.nabla_scheduling_appointment_item_return_cta
                     }
                 )
             } else null
@@ -78,13 +83,21 @@ internal class AppointmentViewHolder(
         when (uiModel) {
             is Finalized -> Unit /* no-op */
             is SoonOrOngoing -> {
-                if (uiModel.callButtonStatus is Present) {
-                    val status = uiModel.callButtonStatus.videoCallRoom.status
-                    if (status is VideoCallRoomStatus.Open) {
-                        binding.joinCallButton.setOnClickListener {
-                            onJoinClicked(uiModel.callButtonStatus.videoCallRoom, status)
+                when (uiModel.callButtonStatus) {
+                    is ForVideoCall -> {
+                        val status = uiModel.callButtonStatus.videoCallRoom.status
+                        if (status is VideoCallRoomStatus.Open) {
+                            binding.joinCallButton.setOnClickListener {
+                                onJoinClicked(uiModel.callButtonStatus.videoCallRoom, status)
+                            }
                         }
                     }
+                    is ForExternalUrl -> {
+                        binding.joinCallButton.setOnClickListener {
+                            onJoinExternalClicked(uiModel.callButtonStatus.url)
+                        }
+                    }
+                    CallButtonStatus.Absent -> Unit /* no-op */
                 }
             }
             is AppointmentUiModel.Upcoming -> Unit // no-op
@@ -143,10 +156,16 @@ internal class AppointmentViewHolder(
         fun create(
             parent: ViewGroup,
             onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
+            onJoinExternalClicked: (uri: com.nabla.sdk.core.domain.entity.Uri) -> Unit,
             onDetailsClicked: (appointmentId: AppointmentId) -> Unit,
         ): AppointmentViewHolder {
             val binding = NablaSchedulingAppointmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return AppointmentViewHolder(binding, onJoinClicked, onDetailsClicked)
+            return AppointmentViewHolder(
+                binding,
+                onJoinClicked,
+                onJoinExternalClicked,
+                onDetailsClicked
+            )
         }
     }
 }

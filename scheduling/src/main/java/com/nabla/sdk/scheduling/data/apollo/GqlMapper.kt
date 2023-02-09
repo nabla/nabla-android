@@ -2,6 +2,7 @@ package com.nabla.sdk.scheduling.data.apollo
 
 import com.nabla.sdk.core.data.apollo.CoreGqlMapper
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
@@ -41,9 +42,11 @@ internal class GqlMapper(
             val addressFragment = it.address.addressFragment
             return AppointmentLocation.Physical(mapAddress(addressFragment))
         }
-        location.onRemoteAppointmentLocation?.let {
-            return AppointmentLocation.Remote(
-                it.livekitRoom?.livekitRoomFragment?.let { coreGqlMapper.mapToVideoCallRoom(it) }
+        location.onRemoteAppointmentLocation?.let { remote ->
+            return remote.externalCallUrl?.let { stringUrl ->
+                AppointmentLocation.Remote.External(Uri(stringUrl))
+            } ?: AppointmentLocation.Remote.Nabla(
+                remote.livekitRoom?.livekitRoomFragment?.let { coreGqlMapper.mapToVideoCallRoom(it) }
             )
         }
         logger.error("Unknown appointment location mapping for $location")

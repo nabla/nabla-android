@@ -11,6 +11,7 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 
 internal class AppointmentsAdapter(
     private val onJoinClicked: (room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) -> Unit,
+    private val onJoinExternalClicked: (uri: com.nabla.sdk.core.domain.entity.Uri) -> Unit,
     private val onDetailsClicked: (appointmentId: AppointmentId) -> Unit,
 ) : ListAdapter<ItemUiModel, RecyclerView.ViewHolder>(
     object : DiffUtil.ItemCallback<ItemUiModel>() {
@@ -29,7 +30,9 @@ internal class AppointmentsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (ViewType.values()[viewType]) {
             ViewType.LOADING_MORE -> LoadingMoreViewHolder.create(parent)
-            ViewType.APPOINTMENT_ITEM -> AppointmentViewHolder.create(parent, onJoinClicked, onDetailsClicked)
+            ViewType.APPOINTMENT_ITEM ->
+                AppointmentViewHolder
+                    .create(parent, onJoinClicked, onJoinExternalClicked, onDetailsClicked)
         }
     }
 

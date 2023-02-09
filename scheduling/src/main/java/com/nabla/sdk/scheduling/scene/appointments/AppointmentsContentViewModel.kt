@@ -122,6 +122,10 @@ internal class AppointmentsContentViewModel(
         retryTriggerFlow.emitIn(viewModelScope, Unit)
     }
 
+    fun onFailedToOpenExternalLink(throwable: Throwable) {
+        logger.error("Failed to open external video call link", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
+    }
+
     fun onListReachedBottom() {
         viewModelScope.launch {
             loadMoreCallback?.invoke()?.onFailure { throwable ->

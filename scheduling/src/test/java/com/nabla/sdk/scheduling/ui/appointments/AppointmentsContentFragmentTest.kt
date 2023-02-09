@@ -34,6 +34,7 @@ class AppointmentsContentFragmentTest : BaseCoroutineTest() {
 
             val adapter = AppointmentsAdapter(
                 onJoinClicked = { _, _ -> },
+                onJoinExternalClicked = { },
                 onDetailsClicked = { },
             )
 
@@ -75,13 +76,13 @@ class AppointmentsContentFragmentTest : BaseCoroutineTest() {
                         id = AppointmentId(Uuid.randomUUID()),
                         provider = provider,
                         scheduledAt = Clock.System.now().plus(5.minutes),
-                        callButtonStatus = ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.Present.AsJoin(videoCallRoom),
+                        callButtonStatus = ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.ForVideoCall.AsJoin(videoCallRoom),
                     ),
                     ItemUiModel.AppointmentUiModel.SoonOrOngoing(
                         id = AppointmentId(Uuid.randomUUID()),
                         provider = provider,
                         scheduledAt = Clock.System.now().plus(5.minutes),
-                        callButtonStatus = ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.Present.AsGoBack(videoCallRoom),
+                        callButtonStatus = ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus.ForVideoCall.AsGoBack(videoCallRoom),
                     ),
                     ItemUiModel.AppointmentUiModel.Finalized(
                         id = AppointmentId(Uuid.randomUUID()),
