@@ -50,9 +50,12 @@ internal class GqlConversationDataSource constructor(
     private val conversationsEventsFlow by lazy {
         apolloClient.subscription(ConversationsEventsSubscription())
             .toFlow()
-            .retryOnNetworkErrorAndShareIn(coroutineScope).onEach {
-                logger.debug(domain = GQL_DOMAIN, message = "Event $it")
-                it.dataOrThrowOnError.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let { conversationFragment ->
+            .retryOnNetworkErrorAndShareIn(coroutineScope).onEach { response ->
+                logger.debug(domain = GQL_DOMAIN, message = "Event $response")
+                response.errors?.forEach {
+                    logger.error(domain = GQL_DOMAIN, message = "error received in ConversationsEventsSubscription: ${it.message}")
+                }
+                response.data?.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let { conversationFragment ->
                     insertConversationToConversationsListCache(conversationFragment)
                 }
             }

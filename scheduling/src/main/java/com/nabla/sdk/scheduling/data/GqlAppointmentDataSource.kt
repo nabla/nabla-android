@@ -54,7 +54,10 @@ internal class GqlAppointmentDataSource(
         apolloClient.subscription(AppointmentsEventsSubscription())
             .toFlow()
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach { response ->
-                val event = response.dataOrThrowOnError.appointments?.event
+                response.errors?.forEach {
+                    logger.error(domain = GQL_DOMAIN, message = "error received in AppointmentsEventsSubscription: ${it.message}")
+                }
+                val event = response.data?.appointments?.event
                 logger.debug(domain = GQL_DOMAIN, message = "Event $event")
                 event?.onAppointmentCreatedEvent?.appointment?.appointmentFragment?.let {
                     handleNewAppointment(it)

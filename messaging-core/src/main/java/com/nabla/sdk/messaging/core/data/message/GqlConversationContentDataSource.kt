@@ -2,7 +2,6 @@ package com.nabla.sdk.messaging.core.data.message
 
 import androidx.annotation.VisibleForTesting
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
@@ -76,24 +75,30 @@ internal class GqlConversationContentDataSource(
     }
 
     private fun createConversationEventsFlow(conversationId: ConversationId.Remote): Flow<Unit> {
-        return apolloClient.subscription(ConversationEventsSubscription(conversationId.remoteId))
+        val subscription = ConversationEventsSubscription(conversationId.remoteId)
+        return apolloClient.subscription(subscription)
             .toFlow()
-            .onEach { putInsertEventToCache(it) }
+            .onEach { response ->
+                response.errors?.forEach {
+                    logger.error(domain = GQL_DOMAIN, message = "error received in $subscription: ${it.message}")
+                }
+                response.data?.conversation?.event?.let { putInsertEventToCache(it) }
+            }
             .retryOnNetworkErrorAndShareIn(coroutineScope)
             .filterIsInstance()
     }
 
     private suspend fun putInsertEventToCache(
-        it: ApolloResponse<ConversationEventsSubscription.Data>,
+        event: ConversationEventsSubscription.Event,
     ) {
         logger.debug(
             domain = GQL_DOMAIN,
-            message = "Event ${it.dataOrThrowOnError.conversation?.event?.__typename}"
+            message = "Event ${event.__typename}"
         )
-        it.dataOrThrowOnError.conversation?.event?.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
+        event.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
             insertMessageToConversationCache(messageFragment)
         }
-        it.dataOrThrowOnError.conversation?.event?.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
+        event.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
             insertConversationActivityToConversationCache(conversationActivityFragment)
         }
     }
