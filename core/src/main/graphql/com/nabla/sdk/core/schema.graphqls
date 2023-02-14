@@ -574,7 +574,7 @@ type FinalizedAppointment {
 }
 
 type PendingAppointment {
-  schedulingRequiresPayment: AppointmentSchedulingRequiresPayment
+  schedulingPaymentRequirement: AppointmentSchedulingRequiresPayment
 }
 
 type AppointmentSchedulingRequiresPayment {
