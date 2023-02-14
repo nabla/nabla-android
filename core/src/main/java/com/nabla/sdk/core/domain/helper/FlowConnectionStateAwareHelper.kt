@@ -6,6 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onStart
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @NablaInternal
@@ -16,6 +17,9 @@ public fun <T> Flow<T>.restartWhenConnectionReconnects(
     var firstEmit = true
 
     return eventsConnectionStateFlow
+        .onStart {
+            firstEmit = true
+        }
         .filter {
             // Always emit the first value to start the wrapped flow
             if (firstEmit) {
