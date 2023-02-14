@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0.0-alpha24] - 2023-02-14
+
 ### Added
 - Scheduling: Added a new `nablaScheduling_appointmentListHeaderStyle` for the `AppointmentsFragment` toolbar's style.
 
