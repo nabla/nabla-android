@@ -1,11 +1,16 @@
 package com.nabla.sdk.scheduling.scene.slots
 
-import androidx.annotation.StringRes
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.PaginatedContent
+import com.nabla.sdk.core.domain.entity.ServerException
+import com.nabla.sdk.core.domain.entity.StringOrRes
+import com.nabla.sdk.core.domain.entity.StringOrRes.Res
+import com.nabla.sdk.core.domain.entity.asStringOrRes
+import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
 import com.nabla.sdk.core.ui.helpers.emitIn
@@ -16,6 +21,7 @@ import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingInternalModule
 import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlotLocation
@@ -38,14 +44,24 @@ internal class TimeSlotsViewModel(
     private val categoryId: AppointmentCategoryId,
     private val schedulingModule: SchedulingInternalModule,
     private val logger: Logger,
+    private val handle: SavedStateHandle,
 ) : ViewModel() {
     private var latestLoadMoreCallback: (suspend () -> Result<Unit>)? = null
     private var lastReceivedSlots: List<AvailabilitySlot>? = null
+
+    private var pendingAppointmentId: AppointmentId?
+        get() = handle.get<String>(PENDING_APPOINTMENT_UUID)?.let { AppointmentId(Uuid.fromString(it)) }
+        set(value) = handle.set(PENDING_APPOINTMENT_UUID, value?.uuid?.toString())
+
+    private var pendingAppointmentStartAt: Instant?
+        get() = handle.get<Long>(PENDING_APPOINTMENT_INSTANT)?.let { Instant.fromEpochMilliseconds(it) }
+        set(value) = handle.set(PENDING_APPOINTMENT_INSTANT, value?.toEpochMilliseconds())
 
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
 
     private val expandedDaysPositionsFlow = MutableStateFlow(setOf(0))
     private val selectedSlotFlow = MutableStateFlow<Instant?>(null)
+    private val isSubmittingFlow = MutableStateFlow(false)
 
     private val eventsMutableFlow = MutableLiveFlow<Event>()
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
@@ -54,6 +70,7 @@ internal class TimeSlotsViewModel(
         schedulingModule.watchAvailabilitySlots(locationType, categoryId).onEach { cacheLastResponse(it) },
         expandedDaysPositionsFlow,
         selectedSlotFlow,
+        isSubmittingFlow,
         ::mapToLoadedState,
     ).retryWhen { cause, _ ->
         logger.warn(
@@ -76,7 +93,10 @@ internal class TimeSlotsViewModel(
         availabilitySlots: PaginatedContent<List<AvailabilitySlot>>,
         expandedDaysPositions: Set<Int>,
         selectedSlot: Instant?,
+        isSubmitting: Boolean,
     ): State {
+        if (isSubmitting) return State.Loading
+
         val uiItems = mutableListOf<TimeSlotsUiItem>()
 
         uiItems.addAll(
@@ -140,7 +160,7 @@ internal class TimeSlotsViewModel(
                         message = "Error while loading more availability slots",
                         error = error,
                     )
-                    eventsMutableFlow.emit(Event.ErrorAlert.Pagination)
+                    eventsMutableFlow.emit(Event.ShowMessage(Res(R.string.nabla_scheduling_time_slot_pagination_error)))
                 }
         }
     }
@@ -150,17 +170,53 @@ internal class TimeSlotsViewModel(
         val selectedSlot = lastReceivedSlots?.firstOrNull { it.startAt == selectedSlotAsInstant } ?: return
         val providerId = selectedSlot.providerId
         val address = (selectedSlot.location as? AvailabilitySlotLocation.Physical)?.address
+        logDebug("confirm clicked with slot: $selectedSlotAsInstant")
 
+        viewModelScope.launch {
+            isSubmittingFlow.value = true
+            runCatchingCancellable {
+                val appointmentId = pendingAppointmentId
+                    ?.also { logDebug("not null pendingAppointmentId") }
+                    ?.takeIf { (pendingAppointmentStartAt == selectedSlotAsInstant) }
+                    ?.also { logDebug("re-using the pendingAppointmentId because same slot") }
+                    ?: schedulingModule.createPendingAppointment(locationType, categoryId, providerId, selectedSlot.startAt)
+                        .onSuccess {
+                            logDebug("created new pending appointment")
+                            pendingAppointmentId = it.id
+                            pendingAppointmentStartAt = it.scheduledAt
+                        }
+                        .getOrThrow().id
+
+                logDebug("opening confirmation screen for pending appointment $pendingAppointmentId")
+                eventsMutableFlow.emitIn(
+                    viewModelScope,
+                    Event.GoToConfirmation(
+                        locationType = locationType,
+                        providerId = providerId,
+                        slot = selectedSlot.startAt,
+                        address = address,
+                        pendingAppointmentId = appointmentId,
+                    )
+                )
+            }.onFailure { logAndShowErrorMessage(it, "failed creating/reusing pending appointment to open confirmation") }
+            isSubmittingFlow.value = false
+        }
+    }
+
+    private fun logAndShowErrorMessage(throwable: Throwable, logMessage: String) {
+        logger.warn(logMessage, throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
         eventsMutableFlow.emitIn(
             viewModelScope,
-            Event.GoToConfirmation(
-                locationType,
-                categoryId,
-                providerId,
-                selectedSlot.startAt,
-                address,
+            Event.ShowMessage(
+                if (throwable is ServerException) {
+                    throwable.serverMessage.asStringOrRes()
+                } else throwable.asNetworkOrGeneric.title
             )
         )
+    }
+
+    private fun logDebug(message: String) {
+        logger.debug("TimeSlotsViewModel $message", domain = Logger.SCHEDULING_DOMAIN.UI)
     }
 
     sealed interface State {
@@ -173,14 +229,17 @@ internal class TimeSlotsViewModel(
     sealed interface Event {
         data class GoToConfirmation(
             val locationType: AppointmentLocationType,
-            val categoryId: AppointmentCategoryId,
             val providerId: Uuid,
             val slot: Instant,
             val address: Address?,
+            val pendingAppointmentId: AppointmentId,
         ) : Event
 
-        sealed class ErrorAlert(@StringRes val errorMessageRes: Int) : Event {
-            object Pagination : ErrorAlert(R.string.nabla_scheduling_time_slot_pagination_error)
-        }
+        data class ShowMessage(val message: StringOrRes) : Event
+    }
+
+    companion object {
+        private const val PENDING_APPOINTMENT_UUID = "PENDING_APPOINTMENT_UUID"
+        private const val PENDING_APPOINTMENT_INSTANT = "PENDING_APPOINTMENT_INSTANT"
     }
 }

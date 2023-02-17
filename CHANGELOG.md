@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- Scheduling: Replace your current usage of `nablaClient.schedulingModule` to `nablaClient.schedulingClient`.
+
+### Added
+- Scheduling: support for registering a payment step. See doc for details/instructions.
+
 ## [1.0.0-alpha24] - 2023-02-14
 
 ### Added

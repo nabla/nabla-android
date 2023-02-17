@@ -13,7 +13,6 @@ import com.nabla.sdk.core.domain.helper.restartWhenConnectionReconnects
 import com.nabla.sdk.core.domain.helper.wrapAsPaginatedContent
 import com.nabla.sdk.core.domain.helper.wrapAsResponsePaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
-import com.nabla.sdk.core.kotlin.combine
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
@@ -34,6 +33,9 @@ import java.util.UUID
 internal class NablaSchedulingClientImpl(
     coreContainer: CoreContainer,
 ) : NablaSchedulingClient, SchedulingModule, SchedulingInternalModule {
+
+    override var paymentActivityContract: PaymentActivityContract? = null
+        private set
 
     private val schedulingContainer = SchedulingContainer(coreContainer)
     private val appointmentRepository = schedulingContainer.appointmentRepository
@@ -105,14 +107,22 @@ internal class NablaSchedulingClientImpl(
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
-    override suspend fun scheduleAppointment(
+    override suspend fun createPendingAppointment(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
-        slot: Instant
+        slot: Instant,
     ): Result<Appointment> {
         return runCatchingCancellable {
-            appointmentRepository.scheduleAppointment(locationType, categoryId, providerId, slot)
+            appointmentRepository.createPendingAppointment(locationType, categoryId, providerId, slot)
+        }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
+    }
+
+    override suspend fun schedulePendingAppointment(
+        appointmentId: AppointmentId,
+    ): Result<Appointment> {
+        return runCatchingCancellable {
+            appointmentRepository.schedulePendingAppointment(appointmentId)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
@@ -139,5 +149,9 @@ internal class NablaSchedulingClientImpl(
                 }
             }
         )
+    }
+
+    override fun registerPaymentActivityContract(contract: PaymentActivityContract) {
+        paymentActivityContract = contract
     }
 }

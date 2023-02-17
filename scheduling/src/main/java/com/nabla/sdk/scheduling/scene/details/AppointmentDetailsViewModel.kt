@@ -41,7 +41,7 @@ internal class AppointmentDetailsViewModel(
     val stateFlow: StateFlow<State> = flow<State> {
         val appointment =
             nablaClient.schedulingInternalModule.getAppointment(appointmentId).getOrThrow()
-        val cancelAvailable = appointment.state == AppointmentState.UPCOMING &&
+        val cancelAvailable = appointment.state == AppointmentState.Upcoming &&
             appointment.scheduledAt - SOON_CONVERSATION_THRESHOLD - nablaClient.coreContainer.clock.now() > Duration.ZERO
         emit(State.Loaded(appointment, cancelAvailable))
     }.combine(isCancellingFlow) { state, isCancelling ->

@@ -104,7 +104,7 @@ class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
                 title = "Dr",
             ),
             scheduledAt = Instant.parse("2021-06-01T10:00:00Z"),
-            state = AppointmentState.UPCOMING,
+            state = AppointmentState.Upcoming,
             location = AppointmentLocation.Physical(
                 address = Address(
                     city = "New York",

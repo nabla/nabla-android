@@ -1,3 +1,8 @@
 package com.nabla.sdk.scheduling
 
-internal interface NablaSchedulingClient
+import android.content.Context
+
+public interface NablaSchedulingClient {
+    public fun openScheduleAppointmentActivity(context: Context)
+    public fun registerPaymentActivityContract(contract: PaymentActivityContract)
+}

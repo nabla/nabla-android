@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-internal data class Address(
+public data class Address(
     val address: String,
     val zipCode: String,
     val city: String,
@@ -12,5 +12,5 @@ internal data class Address(
     val country: String?,
     val extraDetails: String?
 ) : Parcelable {
-    companion object
+    public companion object
 }

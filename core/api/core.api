@@ -127,7 +127,6 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/Module$Factor
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingModule : com/nabla/sdk/core/domain/boundary/Module {
-	public abstract fun openScheduleAppointmentActivity (Landroid/content/Context;)V
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
@@ -1294,6 +1293,15 @@ public final class com/nabla/sdk/graphql/fragment/selections/ProviderFragmentSel
 public final class com/nabla/sdk/graphql/selections/ProviderQuerySelections {
 	public static final field INSTANCE Lcom/nabla/sdk/graphql/selections/ProviderQuerySelections;
 	public final fun get__root ()Ljava/util/List;
+}
+
+public final class com/nabla/sdk/graphql/type/BigDecimal {
+	public static final field Companion Lcom/nabla/sdk/graphql/type/BigDecimal$Companion;
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/graphql/type/BigDecimal$Companion {
+	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
 }
 
 public final class com/nabla/sdk/graphql/type/DateTime {

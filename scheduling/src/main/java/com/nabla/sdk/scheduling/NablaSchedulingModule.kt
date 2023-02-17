@@ -13,14 +13,11 @@ public interface NablaSchedulingModule : SchedulingModule {
     }
 }
 
-public val NablaClient.schedulingModule: SchedulingModule
-    get() = coreContainer.schedulingModule ?: throw moduleNotInitialized
-
 internal val NablaClient.schedulingInternalModule: SchedulingInternalModule
     get() = coreContainer.schedulingModule as? SchedulingInternalModule
         ?: throw moduleNotInitialized
 
-internal val NablaClient.schedulingClient: NablaSchedulingClient
+public val NablaClient.schedulingClient: NablaSchedulingClient
     get() = coreContainer.schedulingModule as? NablaSchedulingClient
         ?: throw moduleNotInitialized
 

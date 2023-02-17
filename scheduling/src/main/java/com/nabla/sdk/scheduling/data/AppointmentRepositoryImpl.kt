@@ -67,14 +67,14 @@ internal class AppointmentRepositoryImpl(
         return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(locationType)
     }
 
-    override suspend fun scheduleAppointment(
+    override suspend fun createPendingAppointment(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
         return try {
-            gqlAppointmentDataSource.scheduleAppointment(locationType, categoryId, providerId, slot)
+            gqlAppointmentDataSource.createPendingAppointment(locationType, categoryId, providerId, slot)
         } catch (gqlException: GraphQLException) {
             try {
                 // very likely the input is not valid anymore (e.g. the selected slot is not available anymore)
@@ -85,6 +85,12 @@ internal class AppointmentRepositoryImpl(
 
             throw gqlException
         }
+    }
+
+    override suspend fun schedulePendingAppointment(
+        appointmentId: AppointmentId,
+    ): Appointment {
+        return gqlAppointmentDataSource.schedulePendingAppointment(appointmentId)
     }
 
     override suspend fun cancelAppointment(id: AppointmentId) {

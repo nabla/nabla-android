@@ -8,14 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.commit
-import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.ui.helpers.requireSdkName
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
-import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
 import kotlinx.datetime.Instant
@@ -51,18 +50,14 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
 
     internal fun goToConfirmation(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId,
-        providerId: Uuid,
         slot: Instant,
-        address: Address?,
+        pendingAppointmentId: AppointmentId,
     ) {
         pushFragment(
             AppointmentConfirmationFragment.newInstance(
                 locationType = locationType,
-                categoryId = categoryId,
-                providerId = providerId,
                 slot = slot,
-                address = address,
+                pendingAppointmentId = pendingAppointmentId,
                 sdkName = intent.requireSdkName()
             ),
             addToBackStack = true

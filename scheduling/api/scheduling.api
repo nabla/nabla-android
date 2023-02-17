@@ -5,6 +5,11 @@ public final class com/nabla/sdk/scheduling/BuildConfig {
 	public fun <init> ()V
 }
 
+public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingClient {
+	public abstract fun openScheduleAppointmentActivity (Landroid/content/Context;)V
+	public abstract fun registerPaymentActivityContract (Lcom/nabla/sdk/scheduling/PaymentActivityContract;)V
+}
+
 public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingModule : com/nabla/sdk/core/domain/boundary/SchedulingModule {
 	public static final field Factory Lcom/nabla/sdk/scheduling/NablaSchedulingModule$Factory;
 }
@@ -14,7 +19,50 @@ public final class com/nabla/sdk/scheduling/NablaSchedulingModule$Factory {
 }
 
 public final class com/nabla/sdk/scheduling/NablaSchedulingModuleKt {
-	public static final fun getSchedulingModule (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/core/domain/boundary/SchedulingModule;
+	public static final fun getSchedulingClient (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/scheduling/NablaSchedulingClient;
+}
+
+public abstract class com/nabla/sdk/scheduling/PaymentActivityContract : androidx/activity/result/contract/ActivityResultContract {
+	public fun <init> ()V
+}
+
+public abstract interface class com/nabla/sdk/scheduling/PaymentActivityContract$Result {
+}
+
+public final class com/nabla/sdk/scheduling/PaymentActivityContract$Result$ShouldRetry : com/nabla/sdk/scheduling/PaymentActivityContract$Result {
+	public static final field INSTANCE Lcom/nabla/sdk/scheduling/PaymentActivityContract$Result$ShouldRetry;
+}
+
+public final class com/nabla/sdk/scheduling/PaymentActivityContract$Result$Succeeded : com/nabla/sdk/scheduling/PaymentActivityContract$Result {
+	public static final field INSTANCE Lcom/nabla/sdk/scheduling/PaymentActivityContract$Result$Succeeded;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/Address : android/os/Parcelable {
+	public static final field CREATOR Landroid/os/Parcelable$Creator;
+	public static final field Companion Lcom/nabla/sdk/scheduling/domain/entity/Address$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/scheduling/domain/entity/Address;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/scheduling/domain/entity/Address;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/Address;
+	public fun describeContents ()I
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddress ()Ljava/lang/String;
+	public final fun getCity ()Ljava/lang/String;
+	public final fun getCountry ()Ljava/lang/String;
+	public final fun getExtraDetails ()Ljava/lang/String;
+	public final fun getState ()Ljava/lang/String;
+	public final fun getZipCode ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public fun writeToParcel (Landroid/os/Parcel;I)V
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/Address$Companion {
 }
 
 public final class com/nabla/sdk/scheduling/domain/entity/Address$Creator : android/os/Parcelable$Creator {
@@ -51,6 +99,108 @@ public final class com/nabla/sdk/scheduling/domain/entity/AppointmentId {
 	public fun toString ()Ljava/lang/String;
 	public static fun toString-impl (Ljava/util/UUID;)Ljava/lang/String;
 	public final synthetic fun unbox-impl ()Ljava/util/UUID;
+}
+
+public abstract interface class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation {
+	public static final field Companion Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Companion;
+	public abstract fun getType ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Companion {
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Physical : com/nabla/sdk/scheduling/domain/entity/AppointmentLocation {
+	public fun <init> (Lcom/nabla/sdk/scheduling/domain/entity/Address;)V
+	public final fun component1 ()Lcom/nabla/sdk/scheduling/domain/entity/Address;
+	public final fun copy (Lcom/nabla/sdk/scheduling/domain/entity/Address;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Physical;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Physical;Lcom/nabla/sdk/scheduling/domain/entity/Address;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Physical;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddress ()Lcom/nabla/sdk/scheduling/domain/entity/Address;
+	public fun getType ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote : com/nabla/sdk/scheduling/domain/entity/AppointmentLocation {
+	public fun getType ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$External : com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-9Mbh8_A ()Ljava/lang/String;
+	public final fun copy-tuorwt8 (Ljava/lang/String;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$External;
+	public static synthetic fun copy-tuorwt8$default (Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$External;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$External;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getUrl-9Mbh8_A ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$Nabla : com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote {
+	public fun <init> (Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;)V
+	public final fun component1 ()Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;
+	public final fun copy (Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$Nabla;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$Nabla;Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Remote$Nabla;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getVideoCallRoom ()Lcom/nabla/sdk/core/domain/entity/VideoCallRoom;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Unknown : com/nabla/sdk/scheduling/domain/entity/AppointmentLocation {
+	public static final field INSTANCE Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Unknown;
+	public fun getType ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocationType : java/lang/Enum {
+	public static final field PHYSICAL Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+	public static final field REMOTE Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+	public static fun values ()[Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/MissingPaymentStep : com/nabla/sdk/core/domain/entity/NablaException {
+	public fun <init> ()V
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/PendingAppointment {
+	public static final field Companion Lcom/nabla/sdk/scheduling/domain/entity/PendingAppointment$Companion;
+	public synthetic fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/Provider;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation;Lcom/nabla/sdk/scheduling/domain/entity/Price;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-vB6q8xI ()Ljava/util/UUID;
+	public final fun component2 ()Lcom/nabla/sdk/core/domain/entity/Provider;
+	public final fun component3 ()Lkotlinx/datetime/Instant;
+	public final fun component4 ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation;
+	public final fun component5 ()Lcom/nabla/sdk/scheduling/domain/entity/Price;
+	public final fun copy-xjQqaEc (Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/Provider;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation;Lcom/nabla/sdk/scheduling/domain/entity/Price;)Lcom/nabla/sdk/scheduling/domain/entity/PendingAppointment;
+	public static synthetic fun copy-xjQqaEc$default (Lcom/nabla/sdk/scheduling/domain/entity/PendingAppointment;Ljava/util/UUID;Lcom/nabla/sdk/core/domain/entity/Provider;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation;Lcom/nabla/sdk/scheduling/domain/entity/Price;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/PendingAppointment;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId-vB6q8xI ()Ljava/util/UUID;
+	public final fun getLocation ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation;
+	public final fun getPrice ()Lcom/nabla/sdk/scheduling/domain/entity/Price;
+	public final fun getProvider ()Lcom/nabla/sdk/core/domain/entity/Provider;
+	public final fun getScheduledAt ()Lkotlinx/datetime/Instant;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/PendingAppointment$Companion {
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/Price {
+	public static final field Companion Lcom/nabla/sdk/scheduling/domain/entity/Price$Companion;
+	public fun <init> (Ljava/math/BigDecimal;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/math/BigDecimal;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/math/BigDecimal;Ljava/lang/String;)Lcom/nabla/sdk/scheduling/domain/entity/Price;
+	public static synthetic fun copy$default (Lcom/nabla/sdk/scheduling/domain/entity/Price;Ljava/math/BigDecimal;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/scheduling/domain/entity/Price;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAmount ()Ljava/math/BigDecimal;
+	public final fun getCurrencyCode ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/scheduling/domain/entity/Price$Companion {
 }
 
 public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentType$Creator : android/os/Parcelable$Creator {

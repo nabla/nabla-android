@@ -1,5 +1,6 @@
 package com.nabla.sdk.scheduling.ui.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.stubs.StdLogger
@@ -96,6 +97,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
                 }
             },
             StdLogger(),
+            SavedStateHandle(),
         )
         val firstPageResponse = PaginatedContent(
             firstPage,

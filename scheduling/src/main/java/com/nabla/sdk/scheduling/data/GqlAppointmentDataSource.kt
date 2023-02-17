@@ -27,8 +27,9 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.graphql.AppointmentQuery
 import com.nabla.sdk.scheduling.graphql.AppointmentsEventsSubscription
 import com.nabla.sdk.scheduling.graphql.CancelAppointmentMutation
+import com.nabla.sdk.scheduling.graphql.CreatePendingAppointmentMutation
 import com.nabla.sdk.scheduling.graphql.PastAppointmentsQuery
-import com.nabla.sdk.scheduling.graphql.ScheduleAppointmentMutation
+import com.nabla.sdk.scheduling.graphql.SchedulePendingAppointmentMutation
 import com.nabla.sdk.scheduling.graphql.UpcomingAppointmentsQuery
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentsPageFragment
@@ -40,7 +41,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
 import java.util.UUID
 
 internal class GqlAppointmentDataSource(
@@ -78,23 +78,35 @@ internal class GqlAppointmentDataSource(
             .let { mapper.mapToAppointment(it.appointment.appointment.appointmentFragment) }
     }
 
-    suspend fun scheduleAppointment(
+    suspend fun createPendingAppointment(
         location: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
     ): Appointment {
         return apolloClient.mutation(
-            ScheduleAppointmentMutation(
+            CreatePendingAppointmentMutation(
                 categoryId = categoryId.value,
                 providerId = providerId,
                 isPhysical = location == AppointmentLocationType.PHYSICAL,
-                slot = slot,
-                timezone = TimeZone.currentSystemDefault()
+                startAt = slot,
             )
         ).execute()
             .dataOrThrowOnError
-            .scheduleAppointmentV2.appointment.appointmentFragment
+            .createPendingAppointment.appointment.appointmentFragment
+            .let(mapper::mapToAppointment)
+    }
+
+    suspend fun schedulePendingAppointment(
+        appointmentId: AppointmentId,
+    ): Appointment {
+        return apolloClient.mutation(
+            SchedulePendingAppointmentMutation(
+                appointmentId = appointmentId.uuid,
+            )
+        ).execute()
+            .dataOrThrowOnError
+            .schedulePendingAppointment.appointment.appointmentFragment
             .also { appointmentFragment ->
                 updateUpcomingAppointmentsCache(inserterOf(appointmentFragment))
             }
@@ -117,7 +129,7 @@ internal class GqlAppointmentDataSource(
                 val items = response.data.upcomingAppointments.appointmentsPageFragment.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedBy { appointment -> appointment.scheduledAt }
-                    .filter { it.state == AppointmentState.UPCOMING }
+                    .filter { it.state == AppointmentState.Upcoming }
 
                 Response(
                     isDataFresh = response.isDataFresh,
@@ -139,7 +151,7 @@ internal class GqlAppointmentDataSource(
                 val items = page.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedByDescending { appointment -> appointment.scheduledAt }
-                    .filter { it.state == AppointmentState.FINALIZED }
+                    .filter { it.state == AppointmentState.Finalized }
 
                 Response(
                     isDataFresh = response.isDataFresh,

@@ -1,6 +1,5 @@
 package com.nabla.sdk.scheduling.ui.viewmodel
 
-import android.content.Context
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -43,7 +42,7 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
         error("Not mocked")
     }
 
-    override suspend fun scheduleAppointment(
+    override suspend fun createPendingAppointment(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
@@ -59,5 +58,8 @@ internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
         error("Not mocked")
     }
 
-    override fun openScheduleAppointmentActivity(context: Context) = error("Not mocked")
+    override val paymentActivityContract = null
+    override suspend fun schedulePendingAppointment(appointmentId: AppointmentId): Result<Appointment> {
+        error("Not mocked")
+    }
 }

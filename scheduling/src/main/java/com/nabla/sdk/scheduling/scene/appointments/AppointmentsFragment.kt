@@ -17,8 +17,8 @@ import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.helpers.viewLifeCycleScope
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsBinding
-import com.nabla.sdk.scheduling.scene.ScheduleAppointmentActivity
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
+import com.nabla.sdk.scheduling.schedulingClient
 import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.coroutines.launch
 
@@ -44,7 +44,7 @@ public class AppointmentsFragment : SchedulingBaseFragment(
         setupViewPager()
 
         binding.nablaBookAppointmentButton.setOnClickListener {
-            startActivity(ScheduleAppointmentActivity.newIntent(requireContext(), sdkNameOrDefault()))
+            nablaClient.schedulingClient.openScheduleAppointmentActivity(requireContext())
         }
     }
 

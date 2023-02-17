@@ -56,4 +56,6 @@
     <string name="nabla_scheduling_date_pill_format_date">d MMM</string>
 
     <string name="nabla_scheduling_appointment_details_title">Rendez-vous</string>
+
+    <string name="nabla_scheduling_payment_error">La confirmation n’a pas abouti, veuillez réessayer.</string>
 </resources>

@@ -45,14 +45,23 @@ query AppointmentConfirmationConsents {
     }
 }
 
-mutation ScheduleAppointment(
+mutation CreatePendingAppointment(
     $categoryId: UUID!,
     $providerId: UUID!,
     $isPhysical: Boolean!,
-    $slot: DateTime!,
-    $timezone: TimeZone!,
+    $startAt: DateTime!,
 ) {
-    scheduleAppointmentV2(categoryId: $categoryId, providerId: $providerId, isPhysical: $isPhysical, slot: $slot, timeZone: $timezone) {
+    createPendingAppointment(categoryId: $categoryId, providerId: $providerId, isPhysical: $isPhysical, startAt: $startAt) {
+        appointment {
+            ...AppointmentFragment
+        }
+    }
+}
+
+mutation schedulePendingAppointment(
+    $appointmentId: UUID!,
+) {
+    schedulePendingAppointment(appointmentId: $appointmentId) {
         appointment {
             ...AppointmentFragment
         }
@@ -139,6 +148,14 @@ fragment AppointmentFragment on Appointment {
         }
         ... on FinalizedAppointment {
             empty: _
+        }
+        ... on PendingAppointment {
+            schedulingPaymentRequirement {
+                price {
+                    amount
+                    currencyCode
+                }
+            }
         }
     }
     location {

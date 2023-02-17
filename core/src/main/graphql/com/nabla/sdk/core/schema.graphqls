@@ -54,7 +54,7 @@ type Mutation {
     providerId: UUID!
     slot: DateTime!
     timeZone: TimeZone!
-  ): ScheduleAppointmentOutput! #@deprecated(reason: "equivalent to scheduleAppointmentV2(isPhysical = false)")
+  ): ScheduleAppointmentOutput! @deprecated(reason: "equivalent to scheduleAppointmentV2(isPhysical = false)")
   scheduleAppointmentV2(
     categoryId: UUID!
     providerId: UUID!
@@ -586,7 +586,7 @@ type AppointmentCategory {
   name: String! @codegenAsAsyncFun
   callDurationMinutes: Int! @codegenAsAsyncFun
   availableSlots(page: OpaqueCursorPage!): AvailableSlotsPage!
-  #@deprecated(reason: "equivalent to availableSlotsV2(isPhysical = false)")
+    @deprecated(reason: "equivalent to availableSlotsV2(isPhysical = false)")
   availableSlotsV2(isPhysical: Boolean!, page: OpaqueCursorPage!): AvailableSlotsPage!
 }
 

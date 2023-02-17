@@ -18,36 +18,38 @@ internal data class Appointment(
 ) {
     companion object
 }
-internal enum class AppointmentState {
-    UPCOMING,
-    FINALIZED,
+internal sealed interface AppointmentState {
+    object Upcoming : AppointmentState
+    object Finalized : AppointmentState
+
+    data class Pending(val requiredPrice: Price?) : AppointmentState
 }
 
-internal sealed interface AppointmentLocation {
-    val type: AppointmentLocationType?
-    val address: Address?
+public sealed interface AppointmentLocation {
+    public val type: AppointmentLocationType?
 
-    sealed class Remote : AppointmentLocation {
-        override val address = null
-        override val type = AppointmentLocationType.REMOTE
+    public sealed class Remote : AppointmentLocation {
+        override val type: AppointmentLocationType = AppointmentLocationType.REMOTE
 
-        data class External(val url: Uri) : Remote()
-        data class Nabla(val videoCallRoom: VideoCallRoom?) : Remote()
+        public data class External(val url: Uri) : Remote()
+        public data class Nabla(val videoCallRoom: VideoCallRoom?) : Remote()
     }
 
-    data class Physical(override val address: Address) : AppointmentLocation {
-        override val type = AppointmentLocationType.PHYSICAL
+    public data class Physical(val address: Address) : AppointmentLocation {
+        override val type: AppointmentLocationType = AppointmentLocationType.PHYSICAL
     }
 
-    object Unknown : AppointmentLocation {
-        override val type = null
-        override val address = null
+    public object Unknown : AppointmentLocation {
+        override val type: AppointmentLocationType? = null
     }
 
-    companion object
+    public companion object
 }
 
-internal enum class AppointmentLocationType {
+public enum class AppointmentLocationType {
     REMOTE,
     PHYSICAL,
 }
+
+internal val AppointmentLocation.address: Address?
+    get() = (this as? AppointmentLocation.Physical)?.address

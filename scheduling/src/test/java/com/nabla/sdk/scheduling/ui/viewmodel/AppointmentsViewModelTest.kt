@@ -41,9 +41,9 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
         val locationFactory = { AppointmentLocation.fake(locationType = AppointmentLocationType.REMOTE, videoCallRoomIsOpen = true) }
         val appointmentsResponse = PaginatedContent(
             content = listOf(
-                Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 2.minutes),
-                Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 3.minutes),
-                Appointment.fake(state = AppointmentState.UPCOMING, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 30.minutes),
+                Appointment.fake(state = AppointmentState.Upcoming, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 2.minutes),
+                Appointment.fake(state = AppointmentState.Upcoming, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 3.minutes),
+                Appointment.fake(state = AppointmentState.Upcoming, location = locationFactory(), scheduledAt = now + SOON_CONVERSATION_THRESHOLD + 30.minutes),
             ),
             loadMore = null,
         )
@@ -123,7 +123,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
             val response = Response(
                 isDataFresh = true,
                 refreshingState = RefreshingState.Refreshed,
-                data = PaginatedContent(listOf(Appointment.fake(state = AppointmentState.UPCOMING)), loadMore = { Result.failure(Exception()) }),
+                data = PaginatedContent(listOf(Appointment.fake(state = AppointmentState.Upcoming)), loadMore = { Result.failure(Exception()) }),
             )
 
             override fun watchUpcomingAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>> =

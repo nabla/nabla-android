@@ -53,4 +53,6 @@
     <string name="nabla_scheduling_date_pill_format_date">MMMM d, yyyy</string>
 
     <string name="nabla_scheduling_appointment_details_title">Appointment</string>
+
+    <string name="nabla_scheduling_payment_error">Confirmation did not complete, please try again.</string>
 </resources>

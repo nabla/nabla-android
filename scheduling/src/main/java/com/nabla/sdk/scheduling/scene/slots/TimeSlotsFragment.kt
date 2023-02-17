@@ -8,10 +8,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.NablaClient
+import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.canScrollDown
-import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
 import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
@@ -25,6 +26,7 @@ import com.nabla.sdk.scheduling.scene.requireAppointmentCategoryId
 import com.nabla.sdk.scheduling.scene.requireAppointmentLocationType
 import com.nabla.sdk.scheduling.scene.setAppointmentCategoryId
 import com.nabla.sdk.scheduling.scene.setAppointmentLocationType
+import com.nabla.sdk.scheduling.scene.slots.TimeSlotsViewModel.State
 import com.nabla.sdk.scheduling.schedulingInternalModule
 
 internal class TimeSlotsFragment : BookAppointmentBaseFragment(
@@ -33,12 +35,13 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     private val nablaClient: NablaClient = getNablaInstanceByName()
     private val binding by viewBinding(NablaSchedulingFragmentTimeSlotsBinding::bind)
     private val viewModel: TimeSlotsViewModel by viewModels {
-        factoryFor {
+        savedStateFactoryFor {
             TimeSlotsViewModel(
                 locationType = locationType,
                 categoryId = categoryId,
                 schedulingModule = nablaClient.schedulingInternalModule,
                 logger = nablaClient.coreContainer.logger,
+                handle = it,
             )
         }
     }
@@ -80,32 +83,31 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
             when (event) {
                 is TimeSlotsViewModel.Event.GoToConfirmation -> hostActivity().goToConfirmation(
                     event.locationType,
-                    event.categoryId,
-                    event.providerId,
                     event.slot,
-                    event.address,
+                    event.pendingAppointmentId,
                 )
-                is TimeSlotsViewModel.Event.ErrorAlert.Pagination -> {
-                    Toast.makeText(requireContext(), event.errorMessageRes, Toast.LENGTH_SHORT).show()
+                is TimeSlotsViewModel.Event.ShowMessage -> {
+                    Toast.makeText(requireContext(), event.message.evaluate(this), Toast.LENGTH_SHORT).show()
                 }
             }
         }
         viewLifecycleOwner.lifecycleScope.launchCollect(viewModel.stateFlow) { state ->
-            binding.progressBar.isVisible = state is TimeSlotsViewModel.State.Loading
-            binding.errorLayout.root.isVisible = state is TimeSlotsViewModel.State.Error
-            binding.nablaSlotsContinueButton.isEnabled = state is TimeSlotsViewModel.State.Loaded && state.canSubmit
-            binding.nablaNoAvailabilityText.isVisible = state is TimeSlotsViewModel.State.Empty
+            binding.progressBar.isVisible = state is State.Loading
+            binding.errorLayout.root.isVisible = state is State.Error
+            binding.nablaSlotsContinueButton.isEnabled = state is State.Loaded && state.canSubmit
+            binding.nablaNoAvailabilityText.isVisible = state is State.Empty
+            binding.recyclerView.isVisible = state is State.Loaded
 
             when (state) {
-                is TimeSlotsViewModel.State.Error -> {
+                is State.Error -> {
                     binding.errorLayout.bind(state.errorUiModel) {
                         viewModel.onClickRetry()
                     }
                 }
-                is TimeSlotsViewModel.State.Loaded -> {
+                is State.Loaded -> {
                     adapter.submitList(state.items)
                 }
-                TimeSlotsViewModel.State.Empty, TimeSlotsViewModel.State.Loading -> Unit /* no-op */
+                State.Empty, State.Loading -> Unit /* no-op */
             }
         }
     }

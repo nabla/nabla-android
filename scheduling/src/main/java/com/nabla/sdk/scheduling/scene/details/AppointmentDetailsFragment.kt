@@ -18,6 +18,7 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentDetailsBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
+import com.nabla.sdk.scheduling.domain.entity.address
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsViewModel.Event
 import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsViewModel.State

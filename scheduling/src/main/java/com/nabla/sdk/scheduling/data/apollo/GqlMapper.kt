@@ -14,6 +14,7 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlotLocation
+import com.nabla.sdk.scheduling.domain.entity.Price
 import com.nabla.sdk.scheduling.graphql.AppointmentConfirmationConsentsQuery
 import com.nabla.sdk.scheduling.graphql.fragment.AddressFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentCategoryFragment
@@ -26,16 +27,30 @@ internal class GqlMapper(
     private val logger: Logger,
 ) {
     fun mapToAppointment(fragment: AppointmentFragment): Appointment {
-        val state = if (fragment.state.onUpcomingAppointment != null) AppointmentState.UPCOMING else AppointmentState.FINALIZED
         val location = mapLocation(fragment.location)
         return Appointment(
-            AppointmentId(fragment.id),
-            coreGqlMapper.mapToProvider(fragment.provider.providerFragment),
-            fragment.scheduledAt,
-            state,
-            location
+            id = AppointmentId(fragment.id),
+            provider = coreGqlMapper.mapToProvider(fragment.provider.providerFragment),
+            scheduledAt = fragment.scheduledAt,
+            state = mapAppointmentState(fragment.state),
+            location = location,
         )
     }
+
+    private fun mapAppointmentState(state: AppointmentFragment.State) =
+        when {
+            state.onUpcomingAppointment != null -> AppointmentState.Upcoming
+            state.onFinalizedAppointment != null -> AppointmentState.Finalized
+            state.onPendingAppointment != null -> AppointmentState.Pending(
+                requiredPrice = state.onPendingAppointment.schedulingPaymentRequirement?.price?.let(::mapPrice)
+            )
+            else -> {
+                logger.error("Unknown appointment state $state — considering it as Upcoming")
+                AppointmentState.Upcoming
+            }
+        }
+
+    private fun mapPrice(price: AppointmentFragment.Price) = Price(price.amount, price.currencyCode)
 
     private fun mapLocation(location: AppointmentFragment.Location): AppointmentLocation {
         location.onPhysicalAppointmentLocation?.let {
@@ -94,7 +109,7 @@ internal class GqlMapper(
 
     fun mapToAppointmentConfirmationConsents(
         gqlData: AppointmentConfirmationConsentsQuery.AppointmentConfirmationConsents,
-        locationType: AppointmentLocationType
+        locationType: AppointmentLocationType,
     ): AppointmentConfirmationConsents {
         val htmlConsents = mutableListOf<String>()
         val checkAndAdd: (String) -> Unit = { htmlString ->

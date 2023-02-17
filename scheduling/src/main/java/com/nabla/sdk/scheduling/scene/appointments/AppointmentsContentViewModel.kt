@@ -168,7 +168,7 @@ private fun Flow<Response<PaginatedContent<List<Appointment>>>>.reTriggerWhenNex
 ) = transformLatest { response ->
     emit(response)
     val notSoonAppointments = response.data.content
-        .filter { it.state == AppointmentState.UPCOMING }
+        .filter { it.state == AppointmentState.Upcoming }
         .filter { !clock.isAppointmentSoon(it.scheduledAt) }
         .toMutableList()
 

@@ -1,6 +1,7 @@
 package com.nabla.sdk.scheduling.scene.appointments
 
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
@@ -59,12 +60,12 @@ internal sealed class ItemUiModel(val listId: String) {
 }
 
 internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (this.state) {
-    AppointmentState.FINALIZED -> ItemUiModel.AppointmentUiModel.Finalized(
+    AppointmentState.Finalized -> ItemUiModel.AppointmentUiModel.Finalized(
         id,
         provider,
         scheduledAt,
     )
-    AppointmentState.UPCOMING -> if (clock.isAppointmentSoon(scheduledAt)) {
+    AppointmentState.Upcoming -> if (clock.isAppointmentSoon(scheduledAt)) {
         ItemUiModel.AppointmentUiModel.SoonOrOngoing(
             id,
             provider,
@@ -100,6 +101,7 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
             scheduledAt,
         )
     }
+    is AppointmentState.Pending -> throwNablaInternalException("Received a pending appointment in the list of upcoming/past appointments")
 }
 
 internal fun Clock.isAppointmentSoon(scheduledAt: Instant) = now() >= scheduledAt.minus(SOON_CONVERSATION_THRESHOLD)

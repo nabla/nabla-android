@@ -35,6 +35,7 @@ apollo {
         mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
         mapScalar("TimeZone", "kotlinx.datetime.TimeZone", "com.nabla.sdk.core.data.apollo.adapter.timeZoneAdapter")
         mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
+        mapScalar("BigDecimal", "com.apollographql.apollo3.adapter.BigDecimal", "com.apollographql.apollo3.adapter.BigDecimalAdapter")
         generateApolloMetadata.set(true)
         alwaysGenerateTypesMatching.set(["OpaqueCursorPage", "Query", "Subscription", "Mutation", "SubscriptionReadinessEvent"])
     }

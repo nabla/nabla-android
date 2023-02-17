@@ -18,37 +18,43 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.domain.entity.evaluate
 import com.nabla.sdk.core.ui.helpers.dpToPx
-import com.nabla.sdk.core.ui.helpers.factoryFor
 import com.nabla.sdk.core.ui.helpers.getNablaInstanceByName
-import com.nabla.sdk.core.ui.helpers.getParcelableCompat
 import com.nabla.sdk.core.ui.helpers.launchCollect
+import com.nabla.sdk.core.ui.helpers.savedStateFactoryFor
 import com.nabla.sdk.core.ui.helpers.setSdkName
 import com.nabla.sdk.core.ui.helpers.viewBinding
 import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
-import com.nabla.sdk.scheduling.domain.entity.Address
-import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
+import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
+import com.nabla.sdk.scheduling.schedulingInternalModule
 import kotlinx.datetime.Instant
 
 internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     R.layout.nabla_scheduling_fragment_appointment_confirmation
 ) {
+    private val nablaClient = getNablaInstanceByName()
+    private val paymentActivityContract = nablaClient.schedulingInternalModule.paymentActivityContract
     private val binding by viewBinding(NablaSchedulingFragmentAppointmentConfirmationBinding::bind)
     private val viewModel: AppointmentConfirmationViewModel by viewModels {
-        factoryFor {
+        savedStateFactoryFor { handle ->
             AppointmentConfirmationViewModel(
-                requireAppointmentLocationType(),
-                requireAppointmentCategoryId(),
-                requireArguments().getProviderId(),
-                requireArguments().getSlot(),
-                requireArguments().getAddressOrNull(),
-                getNablaInstanceByName(),
+                locationType = requireAppointmentLocationType(),
+                slot = requireArguments().getSlot(),
+                pendingAppointmentId = requireArguments().getPendingAppointmentIdOrNull(),
+                paymentStepRegistered = paymentActivityContract != null,
+                nablaClient = nablaClient,
+                handle = handle,
             )
+        }
+    }
+    private val paymentLauncher = paymentActivityContract?.let { contract ->
+        registerForActivityResult(contract) { succeeded ->
+            viewModel.onPaymentFinished(succeeded)
         }
     }
 
@@ -56,7 +62,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener { hostActivity().onBackPressedDispatcher.onBackPressed() }
-        binding.nablaConfirmAppointmentButton.setOnClickListener { viewModel.onConfirmClicked() }
+        binding.nablaConfirmAppointmentButton.setOnClickListener { viewModel.onCtaClicked() }
         binding.errorLayout.nablaErrorRetryButton.setOnClickListener { viewModel.onClickRetry() }
 
         viewLifecycleOwner.lifecycleScope.launchCollect(viewModel.stateFlow) { state ->
@@ -75,12 +81,15 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                     )
 
                     binding.nablaConsentsContainer.removeAllViews()
-                    state.consents.htmlConsents.forEachIndexed { index, html ->
+                    state.htmlConsents.forEachIndexed { index, consent ->
+                        val (html, isChecked) = consent
                         val consentView = NablaSchedulingItemConsentBinding.inflate(layoutInflater, binding.nablaConsentsContainer, false)
                         consentView.root.updateLayoutParams<MarginLayoutParams> {
                             topMargin = view.context.dpToPx(8)
                             marginEnd = view.context.dpToPx(16)
                         }
+                        consentView.nablaConsentCheckbox.isChecked = isChecked
+                        viewModel.onConsentChecked(index, consentView.nablaConsentCheckbox.isChecked)
                         consentView.nablaConsentCheckbox.setOnCheckedChangeListener { _, checked -> viewModel.onConsentChecked(index, checked) }
                         setHtml(consentView, html)
                         binding.nablaConsentsContainer.addView(consentView.root)
@@ -95,49 +104,45 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
 
         viewLifecycleOwner.launchCollect(viewModel.eventsFlow) { event ->
             when (event) {
-                is Event.FailedSubmitting -> {
-                    Toast.makeText(context, event.errorMessage.evaluate(this), Toast.LENGTH_LONG).show()
+                is Event.ShowMessage -> {
+                    Toast.makeText(context, event.message.evaluate(this), Toast.LENGTH_LONG).show()
                 }
                 Event.Finish -> {
                     hostActivity().finish()
+                }
+                is Event.StartPayment -> {
+                    paymentLauncher?.launch(event.pendingAppointment)
+                        ?: throwNablaInternalException("ViewModel said to StartPayment but no launcher registered")
                 }
             }
         }
     }
 
     internal companion object {
-        private const val ARG_PROVIDER_ID = "ARG_PROVIDER_ID"
         private const val ARG_SLOT_INSTANT = "ARG_SLOT_INSTANT"
-        private const val ARG_ADDRESS = "ARG_ADDRESS"
+        private const val ARG_PENDING_APPOINTMENT_UUID = "ARG_PENDING_APPOINTMENT_UUID"
 
         internal fun newInstance(
             locationType: AppointmentLocationType,
-            categoryId: AppointmentCategoryId,
-            providerId: Uuid,
             slot: Instant,
-            address: Address?,
+            pendingAppointmentId: AppointmentId,
             sdkName: String,
         ) = AppointmentConfirmationFragment().apply {
             arguments = bundleOf(
-                ARG_PROVIDER_ID to providerId.toString(),
                 ARG_SLOT_INSTANT to slot.toEpochMilliseconds(),
-                ARG_ADDRESS to address,
+                ARG_PENDING_APPOINTMENT_UUID to pendingAppointmentId.uuid.toString(),
             )
             setAppointmentLocationType(locationType)
-            setAppointmentCategoryId(categoryId)
             setSdkName(sdkName)
         }
-
-        private fun Bundle.getProviderId() =
-            Uuid.fromString(
-                getString(ARG_PROVIDER_ID) ?: throwNablaInternalException("Missing Provider Id")
-            )
 
         private fun Bundle.getSlot() = Instant.fromEpochMilliseconds(
             getLong(ARG_SLOT_INSTANT).also { if (it == 0L) throwNablaInternalException("Missing Slot Instant") }
         )
 
-        private fun Bundle.getAddressOrNull() = getParcelableCompat(ARG_ADDRESS, Address::class.java)
+        private fun Bundle.getPendingAppointmentIdOrNull() = AppointmentId(
+            Uuid.fromString(getString(ARG_PENDING_APPOINTMENT_UUID) ?: throwNablaInternalException("Missing pending appointment id"))
+        )
 
         @VisibleForTesting
         internal fun setHtml(itemConsentBinding: NablaSchedulingItemConsentBinding, html: String) {

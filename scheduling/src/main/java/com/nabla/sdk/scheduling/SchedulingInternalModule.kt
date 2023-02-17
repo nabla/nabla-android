@@ -15,6 +15,8 @@ import kotlinx.datetime.Instant
 import java.util.UUID
 
 internal interface SchedulingInternalModule : SchedulingModule {
+    val paymentActivityContract: PaymentActivityContract?
+
     suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>>
     suspend fun getAppointmentLocationTypes(): Result<Set<AppointmentLocationType>>
 
@@ -32,11 +34,15 @@ internal interface SchedulingInternalModule : SchedulingModule {
         locationType: AppointmentLocationType
     ): Result<AppointmentConfirmationConsents>
 
-    suspend fun scheduleAppointment(
+    suspend fun createPendingAppointment(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
+    ): Result<Appointment>
+
+    suspend fun schedulePendingAppointment(
+        appointmentId: AppointmentId,
     ): Result<Appointment>
 
     suspend fun cancelAppointment(id: AppointmentId): Result<Unit>

@@ -30,11 +30,15 @@ internal interface AppointmentRepository {
 
     suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): AppointmentConfirmationConsents
 
-    suspend fun scheduleAppointment(
+    suspend fun createPendingAppointment(
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
         slot: Instant,
+    ): Appointment
+
+    suspend fun schedulePendingAppointment(
+        appointmentId: AppointmentId,
     ): Appointment
 
     suspend fun cancelAppointment(id: AppointmentId)
