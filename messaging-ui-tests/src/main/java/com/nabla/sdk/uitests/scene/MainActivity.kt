@@ -18,7 +18,8 @@ class MainActivity : AppCompatActivity() {
             modules = listOf(
                 MessagingModule.Factory { nablaMessagingModuleStub },
             ),
-            Configuration(this, publicApiKey = "dummy")
+            Configuration(this, publicApiKey = "dummy"),
+            sessionTokenProvider = { _ -> throw NotImplementedError("Should not be call during test") },
         )
 
         binding = ActivityMainBinding.inflate(layoutInflater)

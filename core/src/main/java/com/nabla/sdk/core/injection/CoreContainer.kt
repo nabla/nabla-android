@@ -52,12 +52,13 @@ import com.nabla.sdk.core.domain.boundary.ProviderRepository
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
+import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.core.domain.entity.ModuleType
-import com.nabla.sdk.core.domain.interactor.LoginInteractor
-import com.nabla.sdk.core.domain.interactor.LogoutInteractor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
@@ -75,6 +76,7 @@ public class CoreContainer internal constructor(
     public val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
     private val modulesFactory: List<Module.Factory<out Module<*>>>,
+    private val sessionTokenProvider: SessionTokenProvider,
 ) {
     public val logger: Logger = MutableCompositeLogger(configuration.logger)
     public val errorReporter: ErrorReporter = if (configuration.enableReporting) {
@@ -89,6 +91,8 @@ public class CoreContainer internal constructor(
     public val uuidGenerator: UuidGenerator = overriddenUuidGenerator ?: object : UuidGenerator {
         override fun generate(): Uuid = Uuid.randomUUID()
     }
+
+    public val backgroundScope: CoroutineScope = CoroutineScope(SupervisorJob())
 
     private val scopedKvStorage = configuration.context.getSharedPreferences(
         "nabla_kv_${name.hashCode()}.sp", Context.MODE_PRIVATE
@@ -109,6 +113,7 @@ public class CoreContainer internal constructor(
             patientRepository,
             logger,
             exceptionMapper,
+            sessionTokenProvider,
         )
     }
 
@@ -180,14 +185,14 @@ public class CoreContainer internal constructor(
     public val sessionClient: SessionClient by tokenRepositoryLazy
     private val localPatientDataSource = LocalPatientDataSource(scopedKvStorage)
 
-    private val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
+    internal val patientRepository: PatientRepository = PatientRepositoryImpl(localPatientDataSource)
     public val fileUploadRepository: FileUploadRepository = FileUploadRepositoryImpl(fileService, configuration.context, uuidGenerator)
 
     public val providerRepository: ProviderRepository by lazy {
         ProviderRepositoryImpl(apolloClient, coreGqlMapper)
     }
 
-    private val sessionLocalDataCleaner: SessionLocalDataCleaner = SessionLocalDataCleanerImpl(
+    internal val sessionLocalDataCleaner: SessionLocalDataCleaner = SessionLocalDataCleanerImpl(
         apolloClient,
         localPatientDataSource,
         tokenLocalDataSource,
@@ -199,14 +204,15 @@ public class CoreContainer internal constructor(
         legacyScopedStorage = scopedKvStorage
     )
     private val sdkApiVersionDataSource = SdkApiVersionDataSource()
-    private val deviceRepository: DeviceRepository by lazy {
+    internal val deviceRepository: DeviceRepository by lazy {
         DeviceRepositoryImpl(
             deviceDataSource,
             installationDataSource,
             sdkApiVersionDataSource,
             apolloClient,
             logger,
-            errorReporter
+            errorReporter,
+            backgroundScope
         )
     }
 
@@ -222,9 +228,6 @@ public class CoreContainer internal constructor(
         )
     }
 
-    internal fun logoutInteractor() = LogoutInteractor(sessionLocalDataCleaner)
-    internal fun loginInteractor() = LoginInteractor(patientRepository, deviceRepository, sessionClient, logoutInteractor(), activeModules())
-
     public val videoCallModule: VideoCallModule? by lazy {
         modulesFactory.filterIsInstance<VideoCallModule.Factory>().firstOrNull()?.create(this)
     }
@@ -237,7 +240,7 @@ public class CoreContainer internal constructor(
         modulesFactory.filterIsInstance<MessagingModule.Factory>().firstOrNull()?.create(this)
     }
 
-    private fun activeModules(): List<ModuleType> = modulesFactory.map { it.type() }
+    internal fun activeModules(): List<ModuleType> = modulesFactory.map { it.type() }
 
     public companion object {
         @VisibleForTesting

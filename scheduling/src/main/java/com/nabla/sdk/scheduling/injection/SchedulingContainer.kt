@@ -7,23 +7,19 @@ import com.nabla.sdk.scheduling.data.GqlAppointmentConfirmConsentsDataSource
 import com.nabla.sdk.scheduling.data.GqlAppointmentDataSource
 import com.nabla.sdk.scheduling.data.GqlAppointmentLocationDataSource
 import com.nabla.sdk.scheduling.data.apollo.GqlMapper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 internal class SchedulingContainer(coreContainer: CoreContainer) {
     val nablaExceptionMapper = coreContainer.exceptionMapper
     val sessionClient = coreContainer.sessionClient
     val eventsConnectionStateFlow = coreContainer.eventsConnectionState
 
-    private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val gqlMapper = GqlMapper(
         coreContainer.coreGqlMapper,
         coreContainer.logger,
     )
     private val gqlAppointmentDataSource = GqlAppointmentDataSource(
         coreContainer.logger,
-        repoScope,
+        coreContainer.backgroundScope,
         coreContainer.apolloClient,
         gqlMapper,
         nablaExceptionMapper,
@@ -41,7 +37,7 @@ internal class SchedulingContainer(coreContainer: CoreContainer) {
     )
 
     val appointmentRepository = AppointmentRepositoryImpl(
-        repoScope,
+        coreContainer.backgroundScope,
         gqlAppointmentDataSource,
         gqlAppointmentCategoryDataSource,
         gqlAppointmentConfirmConsentsDataSource,

@@ -9,7 +9,6 @@ import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
-import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -20,17 +19,14 @@ internal class SessionClientImpl(
     private val patientRepository: PatientRepository,
     private val logger: Logger,
     private val exceptionMapper: NablaExceptionMapper,
+    private val sessionTokenProvider: SessionTokenProvider,
 ) : SessionClient {
 
     private val refreshLock = Mutex()
 
-    private var sessionTokenProvider: SessionTokenProvider? = null
-
-    override fun initSession(sessionTokenProvider: SessionTokenProvider) {
-        this.sessionTokenProvider = sessionTokenProvider
+    override fun authenticatableOrThrow() {
+        patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet
     }
-
-    override fun isSessionInitialized(): Boolean = sessionTokenProvider != null
 
     override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): String {
         return refreshLock.withLock {
@@ -82,16 +78,8 @@ internal class SessionClientImpl(
         }.accessToken
     }
 
-    override fun clearSession() {
-        sessionTokenProvider = null
-        tokenLocalDataSource.clear()
-    }
-
     private suspend fun renewSessionAuthTokens(): AuthTokens {
-        val sessionTokenProvider =
-            sessionTokenProvider ?: throw AuthenticationException.NotAuthenticated
-        val patientId = patientRepository.getPatientId()
-            ?: throwNablaInternalException("Session token provider available without patientId")
+        val patientId = patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet
 
         return sessionTokenProvider.fetchNewSessionAuthTokens(patientId)
             .getOrElse { exception ->

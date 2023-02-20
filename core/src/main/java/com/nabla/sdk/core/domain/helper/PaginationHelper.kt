@@ -4,7 +4,6 @@ import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
-import com.nabla.sdk.core.domain.auth.throwOnStartIfNotAuthenticated
 import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.PaginatedList
@@ -25,7 +24,7 @@ public fun <T> Flow<PaginatedList<T>>.wrapAsPaginatedContent(
         }.mapFailureAsNablaException(nablaExceptionMapper)
     }
     return this
-        .throwOnStartIfNotAuthenticated(sessionClient)
+        .throwOnStartIfNotAuthenticatable(sessionClient)
         .map { paginatedList ->
             PaginatedContent(
                 content = paginatedList.items,
@@ -48,7 +47,7 @@ public fun <T> Flow<Response<PaginatedList<T>>>.wrapAsResponsePaginatedContent(
         }.mapFailureAsNablaException(nablaExceptionMapper)
     }
     return this
-        .throwOnStartIfNotAuthenticated(sessionClient)
+        .throwOnStartIfNotAuthenticatable(sessionClient)
         .map { response ->
             Response(
                 isDataFresh = response.isDataFresh,

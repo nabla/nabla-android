@@ -18,14 +18,22 @@ public sealed class ConfigurationException(message: String) : NablaException(mes
 }
 
 public sealed class AuthenticationException constructor(cause: Throwable?, message: String) : NablaException(cause = cause, message = message) {
-    public object NotAuthenticated :
-        AuthenticationException(cause = null, message = "You must call NablaClient.authenticate before using any authenticated API")
+    public object UserIdNotSet :
+        AuthenticationException(cause = null, message = "You must call NablaClient.setCurrentUserOrThrow before using any authenticated API")
 
     public class UnableToGetFreshSessionToken(cause: Throwable) :
         AuthenticationException(cause = cause, message = "Unable to get session token from the SessionTokenProvider")
 
     public class AuthorizationDenied(cause: Throwable) :
         AuthenticationException(cause = cause, message = "Authorization denied")
+
+    public class CurrentUserAlreadySet(currentUserId: String, newUserId: String) :
+        AuthenticationException(
+            cause = null,
+            message = "You can't set a new current user when one is already set. " +
+                "Current user id: $currentUserId, new user id: $newUserId. " +
+                "You should call clearCurrentUser before calling setCurrentUserOrThrow again with another id."
+        )
 }
 
 public class InvalidAppThemeException(message: String) :

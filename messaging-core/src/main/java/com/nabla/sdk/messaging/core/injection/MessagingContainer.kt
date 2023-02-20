@@ -22,8 +22,6 @@ import com.nabla.sdk.messaging.core.data.message.SendMessageOrchestrator
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
 
@@ -38,8 +36,8 @@ internal class MessagingContainer(
     uuidGenerator: UuidGenerator,
     maybeVideoCallModule: VideoCallModule?,
     val eventsConnectionStateFlow: Flow<EventsConnectionState>,
+    backgroundScope: CoroutineScope,
 ) {
-    private val repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val localConversationDataSource = LocalConversationDataSource()
     private val gqlMapper = GqlMapper(logger, localConversationDataSource, coreGqlMapper)
     private val localMessageDataSource = LocalMessageDataSource()
@@ -49,12 +47,12 @@ internal class MessagingContainer(
         apolloClient = apolloClient,
         mapper = gqlMapper,
         exceptionMapper = nablaExceptionMapper,
-        coroutineScope = repoScope,
+        coroutineScope = backgroundScope,
         localConversationDataSource = localConversationDataSource,
     )
     private val gqlConversationDataSource = GqlConversationDataSource(
         logger = logger,
-        coroutineScope = repoScope,
+        coroutineScope = backgroundScope,
         apolloClient = apolloClient,
         mapper = gqlMapper,
         exceptionMapper = nablaExceptionMapper,
@@ -76,7 +74,7 @@ internal class MessagingContainer(
     )
 
     private val conversationRepositoryImpl = ConversationRepositoryImpl(
-        repoScope = repoScope,
+        repoScope = backgroundScope,
         localConversationDataSource = localConversationDataSource,
         gqlConversationDataSource = gqlConversationDataSource,
         gqlConversationContentDataSource = gqlConversationContentDataSource,
@@ -85,7 +83,7 @@ internal class MessagingContainer(
     )
 
     private val conversationContentRepositoryImpl = ConversationContentRepositoryImpl(
-        repoScope = repoScope,
+        repoScope = backgroundScope,
         localMessageDataSource = localMessageDataSource,
         localConversationDataSource = localConversationDataSource,
         gqlConversationContentDataSource = gqlConversationContentDataSource,

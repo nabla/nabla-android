@@ -16,8 +16,6 @@ import com.nabla.sdk.core.graphql.type.DeviceOs
 import com.nabla.sdk.core.graphql.type.SdkModule
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 internal class DeviceRepositoryImpl(
@@ -27,11 +25,10 @@ internal class DeviceRepositoryImpl(
     private val apolloClient: ApolloClient,
     private val logger: Logger,
     private val errorReporter: ErrorReporter,
+    private val backgroundScope: CoroutineScope,
 ) : DeviceRepository {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
     override fun sendDeviceInfoAsync(activeModules: List<ModuleType>, userId: StringId) {
-        coroutineScope.launch {
+        backgroundScope.launch {
             logger.debug("Identifying current device", domain = LOG_DOMAIN)
             val device = deviceDataSource.getDevice()
             val gqlActiveModules = activeModules.map {

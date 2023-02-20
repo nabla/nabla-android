@@ -10,7 +10,6 @@ import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
-import com.nabla.sdk.core.domain.entity.InternalException
 import com.nabla.sdk.core.domain.entity.StringId
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import io.mockk.Called
@@ -44,22 +43,14 @@ class SessionClientImplTest : BaseCoroutineTest() {
         tokenRemoteDataSource = tokenRemoteDataSource,
         patientRepository = patientRepository,
         logger = StdLogger(),
-        exceptionMapper = NablaExceptionMapper()
+        exceptionMapper = NablaExceptionMapper(),
+        sessionTokenProvider = sessionTokenProvider,
     )
 
-    @Test(expected = AuthenticationException.NotAuthenticated::class)
-    fun `get fresh access token while unauthenticated should throw`() = runTest {
-        every { tokenLocalDataSource.getAuthTokens() } returns null
-        sessionClient.getFreshAccessToken(false)
-    }
-
-    @Test(expected = InternalException::class)
-    fun `get fresh access token authenticated but without patient should throw`() = runTest {
+    @Test(expected = AuthenticationException.UserIdNotSet::class)
+    fun `get fresh access token without patient should throw`() = runTest {
         every { tokenLocalDataSource.getAuthTokens() } returns null
         every { patientRepository.getPatientId() } returns null
-        sessionClient.initSession {
-            Result.success(AuthTokens.fake())
-        }
         sessionClient.getFreshAccessToken(false)
     }
 
@@ -75,7 +66,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
             authTokens
         )
 
-        sessionClient.initSession(sessionTokenProvider)
         assertTrue {
             sessionClient.getFreshAccessToken(false) == authTokens.accessToken
         }
@@ -86,7 +76,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
     fun `get fresh access token with valid access token should return it`() = runTest {
         val accessToken = JwtFaker.expiredIn2050
         every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = JwtFaker.expiredIn2050_2, accessToken = accessToken)
-        sessionClient.initSession(sessionTokenProvider)
         assertTrue {
             sessionClient.getFreshAccessToken(false) == accessToken
         }
@@ -109,7 +98,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
                 refreshToken = refreshToken,
                 accessToken = refreshedAccessToken
             )
-            sessionClient.initSession(sessionTokenProvider)
             assertTrue {
                 sessionClient.getFreshAccessToken(false) == refreshedAccessToken
             }
@@ -135,7 +123,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
             coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
                 newSessionTokens
             )
-            sessionClient.initSession(sessionTokenProvider)
             assertTrue {
                 sessionClient.getFreshAccessToken(false) == newSessionTokens.accessToken
             }
@@ -156,7 +143,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
             every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = refreshToken, accessToken = accessToken)
             every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
             coEvery { tokenRemoteDataSource.refresh(refreshToken) } returns newSessionTokens
-            sessionClient.initSession(sessionTokenProvider)
             assertTrue {
                 sessionClient.getFreshAccessToken(true) == newSessionTokens.accessToken
             }
@@ -180,7 +166,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
         every { patientRepository.getPatientId() } returns StringId("id")
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(any()) } returns Result.success(newSessionTokens)
         coEvery { tokenRemoteDataSource.refresh(refreshToken) } returns newSessionTokens
-        sessionClient.initSession(sessionTokenProvider)
 
         assertEquals(accessToken, sessionClient.getFreshAccessToken())
 
@@ -211,7 +196,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
             authTokens_1
         ) andThen Result.success(authTokens_2)
-        sessionClient.initSession(sessionTokenProvider)
         every { tokenLocalDataSource.getAuthTokens() } returns null
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
 
@@ -233,7 +217,6 @@ class SessionClientImplTest : BaseCoroutineTest() {
         )
         every { tokenLocalDataSource.getAuthTokens() } returns null
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
-        sessionClient.initSession(sessionTokenProvider)
 
         sessionClient.getFreshAccessToken()
     }

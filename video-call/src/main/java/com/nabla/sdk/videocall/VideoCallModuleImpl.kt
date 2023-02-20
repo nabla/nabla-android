@@ -25,6 +25,7 @@ internal class VideoCallModuleImpl internal constructor(
         logger = coreContainer.logger,
         context = coreContainer.configuration.context,
         errorReporter = coreContainer.errorReporter,
+        backgroundScope = coreContainer.backgroundScope,
     )
 
     override val logger: Logger = videoCallContainer.logger

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
-import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
 import com.nabla.sdk.core.domain.boundary.SchedulingInternalClient
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
@@ -48,14 +47,14 @@ internal class SchedulingModuleImpl(
 
     override suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>> {
         return runCatchingCancellable {
-            schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            schedulingContainer.sessionClient.authenticatableOrThrow()
             appointmentRepository.getCategories()
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
 
     override suspend fun getAppointmentLocationTypes(): Result<Set<AppointmentLocationType>> {
         return runCatchingCancellable {
-            schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            schedulingContainer.sessionClient.authenticatableOrThrow()
             appointmentRepository.getLocationTypes()
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }
@@ -104,7 +103,7 @@ internal class SchedulingModuleImpl(
 
     override suspend fun getAppointmentConfirmationConsents(locationType: AppointmentLocationType): Result<AppointmentConfirmationConsents> {
         return runCatchingCancellable {
-            schedulingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            schedulingContainer.sessionClient.authenticatableOrThrow()
             appointmentRepository.getAppointmentConfirmationConsents(locationType)
         }.mapFailureAsNablaException(schedulingContainer.nablaExceptionMapper)
     }

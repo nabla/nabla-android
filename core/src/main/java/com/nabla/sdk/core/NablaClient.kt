@@ -3,14 +3,18 @@ package com.nabla.sdk.core
 import com.nabla.sdk.core.NablaClient.Companion.getInstance
 import com.nabla.sdk.core.NablaClient.Companion.initialize
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.boundary.Module
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
+import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.ConfigurationException
 import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 /**
  * Main entry-point to SDK-wide features.
@@ -25,6 +29,7 @@ public class NablaClient private constructor(
     private val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
     modulesFactory: List<Module.Factory<out Module<*>>>,
+    sessionTokenProvider: SessionTokenProvider,
 ) {
 
     private val coreContainerDelegate = lazy {
@@ -33,31 +38,52 @@ public class NablaClient private constructor(
             configuration,
             networkConfiguration,
             modulesFactory,
+            sessionTokenProvider,
         )
     }
 
     @NablaInternal
     public val coreContainer: CoreContainer by coreContainerDelegate
 
-    /**
-     * Authenticate the current user with the given [userId].
-     *
-     * Note that this method isn't suspending as it doesn't directly call the [sessionTokenProvider]
-     * but rather stores it to use it later if needed for an authenticated call.
-     *
-     * @param userId user identifier, typically created on Nabla server and communicated to your own server.
-     * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
-     *
-     * @see com.nabla.sdk.core.domain.boundary.SessionTokenProvider
-     */
-    public fun authenticate(
-        userId: String,
-        sessionTokenProvider: SessionTokenProvider,
-    ) {
-        runCatching {
-            coreContainer.loginInteractor().login(userId.toId(), sessionTokenProvider)
-        }.mapFailureAsNablaException(coreContainer.exceptionMapper).getOrThrow()
+    init {
+        coreContainer.backgroundScope.launch {
+            coreContainer.patientRepository.getPatientIdFlow().filterNotNull().collectLatest { patientId ->
+                coreContainer.deviceRepository.sendDeviceInfoAsync(coreContainer.activeModules(), patientId)
+            }
+        }
     }
+
+    /**
+     * Set the user to be used by this SDK instance.
+     *
+     * @param userId user identifier, an arbitrary string that must be unique to this user.
+     * Calling this method again with another userId is considered as authenticating a new user
+     * by the SDK, so it should be preceded by a call to [clearCurrentUser].
+     *
+     * @throws AuthenticationException.CurrentUserAlreadySet if a user is already set and is different from the one provided.
+     * You should call [clearCurrentUser] before calling this method again with another user id.
+     */
+    public fun setCurrentUserOrThrow(userId: String) {
+        val patientId = userId.toId()
+        val existingPatientId = coreContainer.patientRepository.getPatientId()
+        if (existingPatientId != null && existingPatientId != patientId) {
+            throw AuthenticationException.CurrentUserAlreadySet(existingPatientId.value, patientId.value)
+        }
+        coreContainer.patientRepository.setPatientId(patientId)
+    }
+
+    /**
+     * Clear the user currently used by this SDK instance alongside all its data.
+     */
+    public suspend fun clearCurrentUser() {
+        coreContainer.sessionLocalDataCleaner.cleanLocalSessionData()
+        coreContainer.backgroundScope.coroutineContext.cancelChildren()
+    }
+
+    /**
+     * Get the user currently used by this SDK instance.
+     */
+    public val currentUserId: String? = coreContainer.patientRepository.getPatientId()?.value
 
     /**
      * Watch the state of the events connection the SDK is using to receive live updates (new messages, new appointments etc...)
@@ -109,13 +135,17 @@ public class NablaClient private constructor(
          * @param modules list of modules to be used by the SDK.
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
          * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
+         * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
+         *
+         * @see com.nabla.sdk.core.domain.boundary.SessionTokenProvider
          */
         public fun initialize(
             modules: List<Module.Factory<out Module<*>>>,
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
+            sessionTokenProvider: SessionTokenProvider,
         ): NablaClient {
-            return initialize(modules, configuration, networkConfiguration, DEFAULT_NAME)
+            return initialize(modules, configuration, networkConfiguration, DEFAULT_NAME, sessionTokenProvider)
         }
 
         /**
@@ -125,18 +155,22 @@ public class NablaClient private constructor(
          * @param modules list of modules to be used by the SDK.
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
          * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
+         * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
          * @param name name to create your own instance, if not specified a default name is used.
+         *
+         * @see com.nabla.sdk.core.domain.boundary.SessionTokenProvider
          */
         public fun initialize(
             modules: List<Module.Factory<out Module<*>>>,
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
             name: String,
+            sessionTokenProvider: SessionTokenProvider,
         ): NablaClient {
             synchronized(this) {
                 val alreadyInitializedInstance = INSTANCES[name]
                 return if (alreadyInitializedInstance == null) {
-                    NablaClient(name, configuration, networkConfiguration, modules)
+                    NablaClient(name, configuration, networkConfiguration, modules, sessionTokenProvider)
                         .also { INSTANCES[name] = it }
                 } else {
                     alreadyInitializedInstance

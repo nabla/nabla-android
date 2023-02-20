@@ -6,14 +6,13 @@ import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
 import com.nabla.sdk.core.data.exception.mapFailure
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
-import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
-import com.nabla.sdk.core.domain.auth.throwOnStartIfNotAuthenticated
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.domain.helper.restartWhenConnectionReconnects
+import com.nabla.sdk.core.domain.helper.throwOnStartIfNotAuthenticatable
 import com.nabla.sdk.core.domain.helper.wrapAsResponsePaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -44,6 +43,7 @@ internal class MessagingModuleImpl internal constructor(
         coreContainer.uuidGenerator,
         coreContainer.videoCallModule,
         coreContainer.eventsConnectionState,
+        coreContainer.backgroundScope,
     )
 
     private val conversationRepository: ConversationRepository by lazy {
@@ -72,7 +72,7 @@ internal class MessagingModuleImpl internal constructor(
         providerIds: List<Uuid>?
     ): Result<Conversation> {
         return runCatchingCancellable {
-            messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            messagingContainer.sessionClient.authenticatableOrThrow()
             conversationRepository.createConversation(message, title, providerIds)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
             .mapFailure { error ->
@@ -93,7 +93,7 @@ internal class MessagingModuleImpl internal constructor(
     override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
         return conversationRepository.watchConversation(conversationId)
             .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
-            .throwOnStartIfNotAuthenticated(messagingContainer.sessionClient)
+            .throwOnStartIfNotAuthenticatable(messagingContainer.sessionClient)
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
@@ -113,7 +113,7 @@ internal class MessagingModuleImpl internal constructor(
         replyTo: MessageId.Remote?,
     ): Result<MessageId.Local> {
         return runCatchingCancellable {
-            messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            messagingContainer.sessionClient.authenticatableOrThrow()
             conversationContentRepository.sendMessage(input, conversationId, replyTo)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
@@ -121,7 +121,7 @@ internal class MessagingModuleImpl internal constructor(
     @CheckResult
     override suspend fun retrySendingMessage(localMessageId: MessageId.Local, conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
-            messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            messagingContainer.sessionClient.authenticatableOrThrow()
             conversationContentRepository.retrySendingMessage(conversationId, localMessageId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
@@ -129,7 +129,7 @@ internal class MessagingModuleImpl internal constructor(
     @CheckResult
     override suspend fun setTyping(conversationId: ConversationId, isTyping: Boolean): Result<Unit> {
         return runCatchingCancellable {
-            messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            messagingContainer.sessionClient.authenticatableOrThrow()
             conversationContentRepository.setTyping(conversationId, isTyping)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
@@ -137,7 +137,7 @@ internal class MessagingModuleImpl internal constructor(
     @CheckResult
     override suspend fun markConversationAsRead(conversationId: ConversationId): Result<Unit> {
         return runCatchingCancellable {
-            messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            messagingContainer.sessionClient.authenticatableOrThrow()
             conversationRepository.markConversationAsRead(conversationId)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
@@ -145,7 +145,7 @@ internal class MessagingModuleImpl internal constructor(
     @CheckResult
     override suspend fun deleteMessage(conversationId: ConversationId, id: MessageId): Result<Unit> {
         return runCatchingCancellable {
-            messagingContainer.sessionClient.ensureAuthenticatedOrThrow()
+            messagingContainer.sessionClient.authenticatableOrThrow()
             conversationContentRepository.deleteMessage(conversationId, id)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }

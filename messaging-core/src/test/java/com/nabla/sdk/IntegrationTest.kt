@@ -724,55 +724,55 @@ internal class IntegrationTest : BaseCoroutineTest() {
     @Test
     fun `test calling public methods without auth throws`() = runTest {
         val (nablaMessagingClient) = setupClient(
-            authenticate = false,
+            setCurrentUser = false,
         )
 
         nablaMessagingClient.watchConversations().test {
-            assertEquals(AuthenticationException.NotAuthenticated, awaitError())
+            assertEquals(AuthenticationException.UserIdNotSet, awaitError())
         }
 
         nablaMessagingClient.watchConversation(ConversationId.Remote(remoteId = uuid4())).test {
-            assertEquals(AuthenticationException.NotAuthenticated, awaitError())
+            assertEquals(AuthenticationException.UserIdNotSet, awaitError())
         }
 
         nablaMessagingClient.watchConversationItems(ConversationId.Remote(remoteId = uuid4())).test {
-            assertEquals(AuthenticationException.NotAuthenticated, awaitError())
+            assertEquals(AuthenticationException.UserIdNotSet, awaitError())
         }
 
         assertEquals(
-            AuthenticationException.NotAuthenticated,
+            AuthenticationException.UserIdNotSet,
             nablaMessagingClient.createConversationWithMessage(message = MessageInput.Text("Hello"))
                 .exceptionOrNull()
         )
         assertEquals(
-            AuthenticationException.NotAuthenticated,
+            AuthenticationException.UserIdNotSet,
             nablaMessagingClient.deleteMessage(
                 ConversationId.Remote(remoteId = uuid4()),
                 MessageId.Local(uuid4()),
             ).exceptionOrNull()
         )
         assertEquals(
-            AuthenticationException.NotAuthenticated,
+            AuthenticationException.UserIdNotSet,
             nablaMessagingClient.markConversationAsRead(
                 ConversationId.Remote(remoteId = uuid4())
             ).exceptionOrNull()
         )
         assertEquals(
-            AuthenticationException.NotAuthenticated,
+            AuthenticationException.UserIdNotSet,
             nablaMessagingClient.retrySendingMessage(
                 MessageId.Local(uuid4()),
                 ConversationId.Remote(remoteId = uuid4()),
             ).exceptionOrNull()
         )
         assertEquals(
-            AuthenticationException.NotAuthenticated,
+            AuthenticationException.UserIdNotSet,
             nablaMessagingClient.setTyping(
                 ConversationId.Remote(remoteId = uuid4()),
                 isTyping = true,
             ).exceptionOrNull()
         )
         assertEquals(
-            AuthenticationException.NotAuthenticated,
+            AuthenticationException.UserIdNotSet,
             nablaMessagingClient.sendMessage(
                 MessageInput.Text(""),
                 ConversationId.Remote(remoteId = uuid4()),
@@ -790,7 +790,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
     private fun setupClient(
         clock: Clock? = null,
         uuidGenerator: UuidGenerator? = null,
-        authenticate: Boolean = true,
+        setCurrentUser: Boolean = true,
     ): ComponentUnderTest {
         CoreContainer.overriddenUuidGenerator = uuidGenerator
         CoreContainer.overriddenClock = clock
@@ -810,11 +810,8 @@ internal class IntegrationTest : BaseCoroutineTest() {
             networkConfiguration = NetworkConfiguration(
                 baseUrl = baseUrl,
             ),
-            modules = listOf(NablaMessagingModule())
-        )
-
-        if (authenticate) {
-            nablaClient.authenticate("dummy-user") {
+            modules = listOf(NablaMessagingModule()),
+            sessionTokenProvider = {
                 Result.success(
                     AuthTokens(
                         refreshToken = refreshToken,
@@ -822,6 +819,10 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     )
                 )
             }
+        )
+
+        if (setCurrentUser) {
+            nablaClient.setCurrentUserOrThrow("dummy-user")
         }
 
         return ComponentUnderTest(nablaClient.messagingClient, mockSubscriptionNetworkTransport)

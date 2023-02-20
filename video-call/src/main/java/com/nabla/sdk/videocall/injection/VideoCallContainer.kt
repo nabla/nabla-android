@@ -8,8 +8,6 @@ import com.nabla.sdk.videocall.data.VideoCallRepository
 import com.nabla.sdk.videocall.data.VideoCallRepositoryReporterHelper
 import com.nabla.sdk.videocall.domain.CameraService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 
 internal class VideoCallContainer(
@@ -17,6 +15,7 @@ internal class VideoCallContainer(
     val logger: Logger,
     val context: Context,
     val errorReporter: ErrorReporter,
+    backgroundScope: CoroutineScope,
 ) {
 
     private val okHttpClient = baseOkHttpClient.newBuilder()
@@ -25,7 +24,7 @@ internal class VideoCallContainer(
     val videoCallRepository = VideoCallRepository(
         applicationContext = context,
         okHttpClient = okHttpClient,
-        repoScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+        repoScope = backgroundScope,
         videoCallRepositoryReporterHelper = VideoCallRepositoryReporterHelper(errorReporter)
     )
 
