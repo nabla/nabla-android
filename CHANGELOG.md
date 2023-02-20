@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 - Scheduling: support for registering a payment step. See doc for details/instructions.
 
+### Fixed
+- Fix appointments list not updated in real-time for some edge-case status changes.
+
 ## [1.0.0-alpha24] - 2023-02-14
 
 ### Added

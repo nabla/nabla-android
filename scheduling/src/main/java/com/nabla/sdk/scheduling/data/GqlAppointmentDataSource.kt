@@ -60,13 +60,13 @@ internal class GqlAppointmentDataSource(
                 val event = response.data?.appointments?.event
                 logger.debug(domain = GQL_DOMAIN, message = "Event $event")
                 event?.onAppointmentCreatedEvent?.appointment?.appointmentFragment?.let {
-                    handleNewAppointment(it)
+                    handleCreatedOrUpdatedAppointment(it)
                 }
                 event?.onAppointmentCancelledEvent?.appointmentId?.let {
                     handleCancelledAppointment(it)
                 }
                 event?.onAppointmentUpdatedEvent?.appointment?.appointmentFragment?.let {
-                    handleUpdatedAppointment(it)
+                    handleCreatedOrUpdatedAppointment(it)
                 }
             }
     }
@@ -201,16 +201,6 @@ internal class GqlAppointmentDataSource(
         }
     }
 
-    private suspend fun handleNewAppointment(appointment: AppointmentFragment) {
-        val inserter = inserterOf(appointment)
-
-        if (appointment.state.onFinalizedAppointment != null) {
-            updatePastAppointmentsCache(inserter)
-        } else {
-            updateUpcomingAppointmentsCache(inserter)
-        }
-    }
-
     private suspend fun handleCancelledAppointment(appointmentId: Uuid) {
         val deleter = deleterOf(appointmentId)
 
@@ -218,14 +208,23 @@ internal class GqlAppointmentDataSource(
         updatePastAppointmentsCache(deleter)
     }
 
-    private suspend fun handleUpdatedAppointment(appointment: AppointmentFragment) {
+    private suspend fun handleCreatedOrUpdatedAppointment(appointment: AppointmentFragment) {
         val deleter = deleterOf(appointment.id)
         val inserter = inserterOf(appointment)
 
-        // we only have to handle this event by hand if it's a "upcoming to finalized" state change, e.g. moving it from one list to the other
-        if (appointment.state.onFinalizedAppointment != null) {
-            updateUpcomingAppointmentsCache(deleter)
-            updatePastAppointmentsCache(inserter)
+        when {
+            appointment.state.onUpcomingAppointment != null -> {
+                updateUpcomingAppointmentsCache(inserter)
+                updatePastAppointmentsCache(deleter)
+            }
+            appointment.state.onFinalizedAppointment != null -> {
+                updateUpcomingAppointmentsCache(deleter)
+                updatePastAppointmentsCache(inserter)
+            }
+            appointment.state.onPendingAppointment != null -> {
+                updateUpcomingAppointmentsCache(deleter)
+                updatePastAppointmentsCache(deleter)
+            }
         }
     }
 
