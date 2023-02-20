@@ -19,7 +19,7 @@ import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsBinding
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 import com.nabla.sdk.scheduling.schedulingClient
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.coroutines.launch
 
 public class AppointmentsFragment : SchedulingBaseFragment(
@@ -31,7 +31,7 @@ public class AppointmentsFragment : SchedulingBaseFragment(
     private val viewModel: AppointmentsViewModel by viewModels {
         savedStateFactoryFor { handle ->
             AppointmentsViewModel(
-                schedulingClient = nablaClient.schedulingInternalModule,
+                schedulingPrivateClient = nablaClient.schedulingPrivateClient,
                 savedStateHandle = handle,
             )
         }

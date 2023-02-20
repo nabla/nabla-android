@@ -27,7 +27,7 @@ import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.Event
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsContentViewModel.State
 import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsActivity
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.datetime.Clock
 
 internal class AppointmentsContentFragment : SchedulingBaseFragment(
@@ -41,8 +41,8 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment(
     private val viewModel: AppointmentsContentViewModel by viewModels {
         savedStateFactoryFor { handle ->
             AppointmentsContentViewModel(
-                schedulingClient = nablaClient.schedulingInternalModule,
-                videoCallModule = nablaClient.coreContainer.videoCallModule,
+                schedulingPrivateClient = nablaClient.schedulingPrivateClient,
+                videoCallInternalClient = nablaClient.coreContainer.videoCallModule?.internalClient,
                 logger = nablaClient.coreContainer.logger,
                 configuration = nablaClient.coreContainer.configuration,
                 clock = Clock.System,

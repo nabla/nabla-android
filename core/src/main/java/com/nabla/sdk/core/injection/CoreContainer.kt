@@ -74,7 +74,7 @@ public class CoreContainer internal constructor(
     public val name: String,
     public val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
-    private val modulesFactory: List<Module.Factory<out Module>>,
+    private val modulesFactory: List<Module.Factory<out Module<*>>>,
 ) {
     public val logger: Logger = MutableCompositeLogger(configuration.logger)
     public val errorReporter: ErrorReporter = if (configuration.enableReporting) {

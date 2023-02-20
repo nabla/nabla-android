@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         // inject stub feature modules
         NablaClient.initialize(
             modules = listOf(
-                MessagingModule.Factory { nablaMessagingClientStub },
+                MessagingModule.Factory { nablaMessagingModuleStub },
             ),
             Configuration(this, publicApiKey = "dummy")
         )

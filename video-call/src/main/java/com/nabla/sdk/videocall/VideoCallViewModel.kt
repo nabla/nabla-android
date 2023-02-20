@@ -1,6 +1,5 @@
 package com.nabla.sdk.videocall
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
@@ -24,7 +23,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
@@ -36,7 +34,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 internal class VideoCallViewModel(
-    private val videoCallClient: NablaVideoCallClient,
+    private val videoCallPrivateClient: VideoCallPrivateClient,
     private val url: String,
     private val token: String,
     private val cameraService: CameraService,
@@ -111,7 +109,7 @@ internal class VideoCallViewModel(
                     VideoState.Both(localTrack, activeRemoteTrack, isSelfMirror)
                 } else VideoState.RemoteOnly(activeRemoteTrack)
             }
-        }.also { videoCallClient.logger.debug("new video state: $it", domain = VIDEO_CALL_DOMAIN) }
+        }.also { videoCallPrivateClient.logger.debug("new video state: $it", domain = VIDEO_CALL_DOMAIN) }
     }
         .stateIn(viewModelScope, started = SharingStarted.Eagerly, initialValue = VideoState.None)
 
@@ -130,11 +128,11 @@ internal class VideoCallViewModel(
 
     private suspend fun connectRoom() {
         runCatchingCancellable {
-            val room = videoCallClient.createCurrentRoom()
+            val room = videoCallPrivateClient.createCurrentRoom()
 
             viewModelScope.launch {
                 room::state.flow.collect { roomState ->
-                    videoCallClient.logger.debug(
+                    videoCallPrivateClient.logger.debug(
                         "new state for room ${room.name}: $roomState",
                         domain = VIDEO_CALL_DOMAIN
                     )
@@ -157,7 +155,7 @@ internal class VideoCallViewModel(
 
             viewModelScope.launch {
                 room.events.collect { event ->
-                    videoCallClient.logger.debug(
+                    videoCallPrivateClient.logger.debug(
                         "new event in room ${room.name}: ${event.javaClass.simpleName}",
                         domain = VIDEO_CALL_DOMAIN
                     )
@@ -207,7 +205,7 @@ internal class VideoCallViewModel(
                     .collect(mutableLocalVideoTrackFlow)
             }
         }.onFailure {
-            videoCallClient.logger.warn("Failed to join room", domain = VIDEO_CALL_DOMAIN)
+            videoCallPrivateClient.logger.warn("Failed to join room", domain = VIDEO_CALL_DOMAIN)
             mutableFinishFlow.emit(FinishReason.UnableToConnect)
         }
     }
@@ -333,10 +331,6 @@ internal class VideoCallViewModel(
         val cameraEnabled: Boolean,
         val controlsVisible: Boolean = true,
     )
-
-    sealed class ErrorAlert(@StringRes val errorMessageRes: Int) {
-        object FailedToJoin : ErrorAlert(R.string.nabla_video_call_error_failed_to_join)
-    }
 
     enum class ConnectionInfoState {
         Connecting,

@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - Scheduling: Replace your current usage of `nablaClient.schedulingModule` to `nablaClient.schedulingClient`.
+- VideoCall: `openVideoCall` is now private and should not be used anymore.
 
 ### Added
 - Scheduling: support for registering a payment step. See doc for details/instructions.

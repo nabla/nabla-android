@@ -4,21 +4,21 @@ import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.ConfigurationException
 
-public interface NablaSchedulingModule : SchedulingModule {
+public interface NablaSchedulingModule {
     public companion object Factory {
         public operator fun invoke(): SchedulingModule.Factory =
             SchedulingModule.Factory { coreContainer ->
-                NablaSchedulingClientImpl(coreContainer)
+                SchedulingModuleImpl(coreContainer)
             }
     }
 }
 
-internal val NablaClient.schedulingInternalModule: SchedulingInternalModule
-    get() = coreContainer.schedulingModule as? SchedulingInternalModule
-        ?: throw moduleNotInitialized
+private val NablaClient.schedulingModuleImpl: SchedulingModuleImpl
+    get() = coreContainer.schedulingModule as? SchedulingModuleImpl
+        ?: throw ConfigurationException.ModuleNotInitialized("NablaSchedulingModule")
+
+internal val NablaClient.schedulingPrivateClient: SchedulingPrivateClient
+    get() = schedulingModuleImpl
 
 public val NablaClient.schedulingClient: NablaSchedulingClient
-    get() = coreContainer.schedulingModule as? NablaSchedulingClient
-        ?: throw moduleNotInitialized
-
-private val moduleNotInitialized = ConfigurationException.ModuleNotInitialized("NablaSchedulingModule")
+    get() = schedulingModuleImpl

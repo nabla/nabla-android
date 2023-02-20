@@ -3,8 +3,10 @@ package com.nabla.sdk.scheduling
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
+import com.nabla.sdk.core.domain.boundary.SchedulingInternalClient
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.RefreshingState
@@ -30,9 +32,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
 import java.util.UUID
 
-internal class NablaSchedulingClientImpl(
+internal class SchedulingModuleImpl(
     coreContainer: CoreContainer,
-) : NablaSchedulingClient, SchedulingModule, SchedulingInternalModule {
+) : SchedulingModule, NablaSchedulingClient, SchedulingPrivateClient, SchedulingInternalClient {
 
     override var paymentActivityContract: PaymentActivityContract? = null
         private set
@@ -154,4 +156,7 @@ internal class NablaSchedulingClientImpl(
     override fun registerPaymentActivityContract(contract: PaymentActivityContract) {
         paymentActivityContract = contract
     }
+
+    @NablaInternal
+    override val internalClient: SchedulingInternalClient = this
 }

@@ -148,7 +148,7 @@ internal class ConversationViewModel(
         conversationItemsFlow: Flow<Response<PaginatedContent<List<ConversationItem>>>>,
     ): StateFlow<State> {
 
-        val currentCallFlow = nablaClient.coreContainer.videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
+        val currentCallFlow = nablaClient.coreContainer.videoCallModule?.internalClient?.watchCurrentVideoCall() ?: flowOf(null)
 
         return combine(
             conversationDataFlow,

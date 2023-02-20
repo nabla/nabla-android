@@ -4,24 +4,13 @@ import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.ConfigurationException
 
-public interface NablaVideoCallModule : VideoCallModule {
+public interface NablaVideoCallModule {
     public companion object Factory {
         public operator fun invoke(): VideoCallModule.Factory =
-            VideoCallModule.Factory { NablaVideoCallClientImpl(coreContainer = it) }
+            VideoCallModule.Factory { VideoCallModuleImpl(coreContainer = it) }
     }
 }
 
-public val NablaClient.videoCallModule: VideoCallModule
-    get() = coreContainer.videoCallModule
-        ?: throw moduleNotInitialized()
-
-internal val NablaClient.videoCallInternalModule: VideoCallInternalModule
-    get() = coreContainer.videoCallModule as? VideoCallInternalModule
-        ?: throw moduleNotInitialized()
-
-internal val NablaClient.videoCallClient: NablaVideoCallClient
-    get() = videoCallModule as? NablaVideoCallClient
-        ?: throw moduleNotInitialized()
-
-private fun moduleNotInitialized() =
-    ConfigurationException.ModuleNotInitialized("NablaVideoCallModule")
+internal val NablaClient.videoCallPrivateClient: VideoCallPrivateClient
+    get() = coreContainer.videoCallModule as? VideoCallModuleImpl
+        ?: throw ConfigurationException.ModuleNotInitialized("NablaVideoCallModule")

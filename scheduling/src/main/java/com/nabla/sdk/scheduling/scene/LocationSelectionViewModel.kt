@@ -9,7 +9,7 @@ import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ internal class LocationSelectionViewModel(private val nablaClient: NablaClient) 
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
 
     internal val stateFlow: StateFlow<State> = flow {
-        val locations = nablaClient.schedulingInternalModule.getAppointmentLocationTypes().getOrThrow()
+        val locations = nablaClient.schedulingPrivateClient.getAppointmentLocationTypes().getOrThrow()
 
         emit(if (locations.isEmpty()) State.Empty else State.Loaded(locations.toList()))
     }.retryWhen { cause, _ ->

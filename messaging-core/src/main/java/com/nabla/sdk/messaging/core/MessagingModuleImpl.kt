@@ -2,12 +2,14 @@ package com.nabla.sdk.messaging.core
 
 import androidx.annotation.CheckResult
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.catchAndRethrowAsNablaException
 import com.nabla.sdk.core.data.exception.mapFailure
 import com.nabla.sdk.core.data.exception.mapFailureAsNablaException
 import com.nabla.sdk.core.domain.auth.ensureAuthenticatedOrThrow
 import com.nabla.sdk.core.domain.auth.throwOnStartIfNotAuthenticated
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
@@ -27,9 +29,9 @@ import com.nabla.sdk.messaging.core.domain.entity.ProviderNotFoundException
 import com.nabla.sdk.messaging.core.injection.MessagingContainer
 import kotlinx.coroutines.flow.Flow
 
-internal class NablaMessagingClientImpl internal constructor(
+internal class MessagingModuleImpl internal constructor(
     coreContainer: CoreContainer,
-) : NablaMessagingClient {
+) : MessagingModule, NablaMessagingClient {
 
     private val messagingContainer = MessagingContainer(
         coreContainer.logger,
@@ -147,4 +149,8 @@ internal class NablaMessagingClientImpl internal constructor(
             conversationContentRepository.deleteMessage(conversationId, id)
         }.mapFailureAsNablaException(messagingContainer.nablaExceptionMapper)
     }
+
+    @NablaInternal
+    override val internalClient: Unit
+        get() = Unit
 }

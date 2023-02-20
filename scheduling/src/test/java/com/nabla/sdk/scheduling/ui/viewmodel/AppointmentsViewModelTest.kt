@@ -18,7 +18,7 @@ import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiMode
 import com.nabla.sdk.scheduling.scene.appointments.ItemUiModel.AppointmentUiModel.SoonOrOngoing.CallButtonStatus
 import com.nabla.sdk.scheduling.scene.appointments.SOON_CONVERSATION_THRESHOLD
 import com.nabla.sdk.tests.common.BaseCoroutineTest
-import com.nabla.sdk.tests.common.FakeVideoCallModule
+import com.nabla.sdk.tests.common.FakeVideoCallInternalClient
 import com.nabla.sdk.tests.common.extensions.collectToFlow
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +48,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
             loadMore = null,
         )
         val appointmentDataFlow = MutableSharedFlow<PaginatedContent<List<Appointment>>>()
-        val schedulingClient = object : SchedulingInternalModuleAdapter() {
+        val schedulingPrivateClient = object : SchedulingPrivateClientAdapter() {
             override fun watchUpcomingAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>> = appointmentDataFlow.map {
                 Response(
                     isDataFresh = true,
@@ -58,8 +58,8 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
             }
         }
         val viewModel = AppointmentsContentViewModel(
-            schedulingClient,
-            videoCallModule = FakeVideoCallModule(),
+            schedulingPrivateClient,
+            videoCallInternalClient = FakeVideoCallInternalClient(),
             logger = StdLogger(),
             configuration = mockk(relaxed = true),
             clock = TestClock(this),
@@ -118,7 +118,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
 
     @Test
     fun `view model is catching errors from domain layer`() = runTest {
-        val schedulingClient = object : SchedulingInternalModuleAdapter() {
+        val schedulingPrivateClient = object : SchedulingPrivateClientAdapter() {
             var firstCall = AtomicBoolean(true)
             val response = Response(
                 isDataFresh = true,
@@ -134,8 +134,8 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
         }
         val clock = TestClock(this)
         val viewModel = AppointmentsContentViewModel(
-            schedulingClient = schedulingClient,
-            videoCallModule = FakeVideoCallModule(),
+            schedulingPrivateClient = schedulingPrivateClient,
+            videoCallInternalClient = FakeVideoCallInternalClient(),
             logger = StdLogger(),
             configuration = mockk(relaxed = true),
             clock = clock,

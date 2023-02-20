@@ -3,7 +3,9 @@ package com.nabla.sdk.videocall
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.VideoCallInternalClient
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
 import com.nabla.sdk.core.domain.entity.VideoCall
 import com.nabla.sdk.core.injection.CoreContainer
@@ -12,9 +14,9 @@ import com.nabla.sdk.videocall.injection.VideoCallContainer
 import io.livekit.android.room.Room
 import kotlinx.coroutines.flow.Flow
 
-internal class NablaVideoCallClientImpl internal constructor(
+internal class VideoCallModuleImpl internal constructor(
     coreContainer: CoreContainer,
-) : NablaVideoCallClient, VideoCallModule, VideoCallInternalModule {
+) : VideoCallModule, VideoCallInternalClient, VideoCallPrivateClient {
 
     private val name = coreContainer.name
 
@@ -53,4 +55,7 @@ internal class NablaVideoCallClientImpl internal constructor(
 
     override val cameraService: CameraService
         get() = videoCallContainer.cameraService
+
+    @NablaInternal
+    override val internalClient: VideoCallInternalClient = this
 }

@@ -47,12 +47,12 @@ public class VideoCallActivity : AppCompatActivity() {
 
     private val viewModel: VideoCallViewModel by viewModels {
         factoryFor {
-            val client = NablaClient.getInstance(intent.requireSdkName())
+            val nablaClient = NablaClient.getInstance(intent.requireSdkName())
             VideoCallViewModel(
-                videoCallClient = client.videoCallClient,
+                videoCallPrivateClient = nablaClient.videoCallPrivateClient,
                 url = intent.getUrl(),
                 token = intent.getToken(),
-                cameraService = client.videoCallInternalModule.cameraService,
+                cameraService = nablaClient.videoCallPrivateClient.cameraService,
             )
         }
     }

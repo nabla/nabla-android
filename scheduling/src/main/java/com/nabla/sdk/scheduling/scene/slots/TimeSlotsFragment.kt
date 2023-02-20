@@ -27,7 +27,7 @@ import com.nabla.sdk.scheduling.scene.requireAppointmentLocationType
 import com.nabla.sdk.scheduling.scene.setAppointmentCategoryId
 import com.nabla.sdk.scheduling.scene.setAppointmentLocationType
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsViewModel.State
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 
 internal class TimeSlotsFragment : BookAppointmentBaseFragment(
     R.layout.nabla_scheduling_fragment_time_slots
@@ -39,7 +39,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
             TimeSlotsViewModel(
                 locationType = locationType,
                 categoryId = categoryId,
-                schedulingModule = nablaClient.schedulingInternalModule,
+                schedulingPrivateClient = nablaClient.schedulingPrivateClient,
                 logger = nablaClient.coreContainer.logger,
                 handle = it,
             )

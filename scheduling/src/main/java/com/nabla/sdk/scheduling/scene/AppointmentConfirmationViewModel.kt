@@ -27,7 +27,7 @@ import com.nabla.sdk.scheduling.domain.entity.MissingPaymentStep
 import com.nabla.sdk.scheduling.domain.entity.PendingAppointment
 import com.nabla.sdk.scheduling.domain.entity.Price
 import com.nabla.sdk.scheduling.domain.entity.address
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -50,7 +50,7 @@ internal class AppointmentConfirmationViewModel(
 ) : ViewModel() {
     private val retryTriggerFlow = MutableSharedFlow<Unit>()
 
-    private val schedulingClient get() = nablaClient.schedulingInternalModule
+    private val schedulingPrivateClient get() = nablaClient.schedulingPrivateClient
 
     private val consentsGrantedFlow = handle.getStateFlow<Array<Boolean>>(CONSENTS_CHECKED_ARRAY_KEY, emptyArray())
 
@@ -71,8 +71,8 @@ internal class AppointmentConfirmationViewModel(
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
     val stateFlow: StateFlow<State> = combine(
-        flow { emit(nablaClient.schedulingInternalModule.getAppointmentConfirmationConsents(locationType).getOrThrow()) },
-        flow { emit(nablaClient.schedulingInternalModule.getAppointment(pendingAppointmentId).getOrThrow()) },
+        flow { emit(schedulingPrivateClient.getAppointmentConfirmationConsents(locationType).getOrThrow()) },
+        flow { emit(schedulingPrivateClient.getAppointment(pendingAppointmentId).getOrThrow()) },
         consentsGrantedFlow,
         isLoadingFlow,
     ) { consents, appointment, grants, isLoading ->
@@ -113,7 +113,7 @@ internal class AppointmentConfirmationViewModel(
 
         viewModelScope.launch {
             isLoadingFlow.value = true
-            schedulingClient.getAppointment(pendingAppointmentId)
+            schedulingPrivateClient.getAppointment(pendingAppointmentId)
                 .onFailure { throwable ->
                     logAndShowErrorMessage(throwable, "failed fetching pending appointment")
                     isLoadingFlow.value = false
@@ -158,7 +158,7 @@ internal class AppointmentConfirmationViewModel(
         logDebug("confirming the pending appointment.")
         viewModelScope.launch {
             isLoadingFlow.value = true
-            schedulingClient.schedulePendingAppointment(pendingAppointmentId)
+            schedulingPrivateClient.schedulePendingAppointment(pendingAppointmentId)
                 .onFailure { throwable ->
                     logAndShowErrorMessage(throwable, "failed scheduling appointment")
                     isLoadingFlow.value = false

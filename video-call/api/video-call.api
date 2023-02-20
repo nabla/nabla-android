@@ -5,15 +5,11 @@ public final class com/nabla/sdk/videocall/BuildConfig {
 	public fun <init> ()V
 }
 
-public abstract interface class com/nabla/sdk/videocall/NablaVideoCallModule : com/nabla/sdk/core/domain/boundary/VideoCallModule {
+public abstract interface class com/nabla/sdk/videocall/NablaVideoCallModule {
 	public static final field Factory Lcom/nabla/sdk/videocall/NablaVideoCallModule$Factory;
 }
 
 public final class com/nabla/sdk/videocall/NablaVideoCallModule$Factory {
 	public final fun invoke ()Lcom/nabla/sdk/core/domain/boundary/VideoCallModule$Factory;
-}
-
-public final class com/nabla/sdk/videocall/NablaVideoCallModuleKt {
-	public static final fun getVideoCallModule (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/core/domain/boundary/VideoCallModule;
 }
 

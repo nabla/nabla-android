@@ -10,7 +10,7 @@ public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingClient {
 	public abstract fun registerPaymentActivityContract (Lcom/nabla/sdk/scheduling/PaymentActivityContract;)V
 }
 
-public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingModule : com/nabla/sdk/core/domain/boundary/SchedulingModule {
+public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingModule {
 	public static final field Factory Lcom/nabla/sdk/scheduling/NablaSchedulingModule$Factory;
 }
 

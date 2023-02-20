@@ -15,7 +15,7 @@ import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.scene.appointments.SOON_CONVERSATION_THRESHOLD
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,8 +39,7 @@ internal class AppointmentDetailsViewModel(
 
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
     val stateFlow: StateFlow<State> = flow<State> {
-        val appointment =
-            nablaClient.schedulingInternalModule.getAppointment(appointmentId).getOrThrow()
+        val appointment = nablaClient.schedulingPrivateClient.getAppointment(appointmentId).getOrThrow()
         val cancelAvailable = appointment.state == AppointmentState.Upcoming &&
             appointment.scheduledAt - SOON_CONVERSATION_THRESHOLD - nablaClient.coreContainer.clock.now() > Duration.ZERO
         emit(State.Loaded(appointment, cancelAvailable))
@@ -65,7 +64,7 @@ internal class AppointmentDetailsViewModel(
     fun onCancelClicked() {
         viewModelScope.launch {
             isCancellingFlow.value = true
-            nablaClient.schedulingInternalModule.cancelAppointment(appointmentId)
+            nablaClient.schedulingPrivateClient.cancelAppointment(appointmentId)
                 .onFailure { throwable ->
                     nablaClient.coreContainer.logger.warn(
                         "failed cancelling appointment",

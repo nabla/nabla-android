@@ -31,14 +31,14 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
-import com.nabla.sdk.scheduling.schedulingInternalModule
+import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.datetime.Instant
 
 internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     R.layout.nabla_scheduling_fragment_appointment_confirmation
 ) {
     private val nablaClient = getNablaInstanceByName()
-    private val paymentActivityContract = nablaClient.schedulingInternalModule.paymentActivityContract
+    private val paymentActivityContract = nablaClient.schedulingPrivateClient.paymentActivityContract
     private val binding by viewBinding(NablaSchedulingFragmentAppointmentConfirmationBinding::bind)
     private val viewModel: AppointmentConfirmationViewModel by viewModels {
         savedStateFactoryFor { handle ->

@@ -88,7 +88,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
         val viewModel = TimeSlotsViewModel(
             AppointmentLocationType.REMOTE,
             AppointmentCategoryId(uuid4()),
-            object : SchedulingInternalModuleAdapter() {
+            object : SchedulingPrivateClientAdapter() {
                 override fun watchAvailabilitySlots(
                     locationType: AppointmentLocationType,
                     categoryId: AppointmentCategoryId

@@ -5,7 +5,6 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
@@ -27,7 +26,7 @@ import kotlinx.coroutines.flow.Flow
  * We recommend you reuse the same instance for all interactions,
  * check documentation of [initialize] and [getInstance].
  */
-public interface NablaMessagingClient : MessagingModule {
+public interface NablaMessagingClient {
 
     /**
      * Exposed for internal usage by Nabla Messaging UI.

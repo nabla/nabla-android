@@ -2,7 +2,9 @@ package com.nabla.sdk.messaging.core.data.stubs
 
 import androidx.test.espresso.idling.CountingIdlingResource
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.LogcatLogger
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
@@ -16,9 +18,9 @@ import com.nabla.sdk.messaging.core.domain.entity.MessageInput
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class NablaMessagingClientStub(
+class NablaMessagingModuleStub(
     val idlingRes: CountingIdlingResource = CountingIdlingResource("Stubs Idling Res", true),
-) : NablaMessagingClient {
+) : MessagingModule, NablaMessagingClient {
     var isTyping = false
 
     private val conversationRepository = ConversationRepositoryStub(idlingRes)
@@ -120,4 +122,8 @@ class NablaMessagingClientStub(
             messageRepository.deleteMessage(conversationId, id)
         }
     }
+
+    @NablaInternal
+    override val internalClient: Unit
+        get() = Unit
 }

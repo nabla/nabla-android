@@ -576,7 +576,7 @@ public open class ConversationFragment : Fragment() {
         }
 
         override fun onJoinLivekitRoomClicked(url: String, roomId: String, accessToken: String) {
-            nablaClient.coreContainer.videoCallModule?.openVideoCall(
+            nablaClient.coreContainer.videoCallModule?.internalClient?.openVideoCall(
                 requireActivity(),
                 url,
                 roomId,

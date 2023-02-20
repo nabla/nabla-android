@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.Configuration
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.boundary.VideoCallModule
+import com.nabla.sdk.core.domain.boundary.VideoCallInternalClient
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
@@ -19,7 +19,7 @@ import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
-import com.nabla.sdk.scheduling.SchedulingInternalModule
+import com.nabla.sdk.scheduling.SchedulingPrivateClient
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import kotlinx.coroutines.delay
@@ -40,8 +40,8 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 internal class AppointmentsContentViewModel(
-    private val schedulingClient: SchedulingInternalModule,
-    private val videoCallModule: VideoCallModule?,
+    private val schedulingPrivateClient: SchedulingPrivateClient,
+    private val videoCallInternalClient: VideoCallInternalClient?,
     private val logger: Logger,
     private val configuration: Configuration,
     clock: Clock,
@@ -55,11 +55,11 @@ internal class AppointmentsContentViewModel(
     private val eventsMutableFlow = MutableLiveFlow<Event>()
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
-    private val currentCallFlow = videoCallModule?.watchCurrentVideoCall() ?: flowOf(null)
+    private val currentCallFlow = videoCallInternalClient?.watchCurrentVideoCall() ?: flowOf(null)
 
     internal val stateFlow: StateFlow<State> = when (appointmentType) {
-        AppointmentType.PAST -> schedulingClient.watchPastAppointments()
-        AppointmentType.UPCOMING -> schedulingClient.watchUpcomingAppointments()
+        AppointmentType.PAST -> schedulingPrivateClient.watchPastAppointments()
+        AppointmentType.UPCOMING -> schedulingPrivateClient.watchUpcomingAppointments()
     }
         .reTriggerWhenNextAppointmentIsSoon(clock, delayCoroutineContext)
         .combine(currentCallFlow) { response, currentCall ->
@@ -87,7 +87,7 @@ internal class AppointmentsContentViewModel(
 
     fun onCancelClicked(upcoming: ItemUiModel.AppointmentUiModel.Upcoming) {
         viewModelScope.launch {
-            schedulingClient.cancelAppointment(upcoming.id)
+            schedulingPrivateClient.cancelAppointment(upcoming.id)
                 .onFailure { throwable ->
                     logger.warn("failed cancelling appointment", throwable, domain = Logger.SCHEDULING_DOMAIN.UI)
 
@@ -105,12 +105,11 @@ internal class AppointmentsContentViewModel(
     }
 
     fun onJoinClicked(room: VideoCallRoom, roomStatus: VideoCallRoomStatus.Open) {
-        val videoCallModule = videoCallModule ?: run {
+        if (videoCallInternalClient == null) {
             logger.error("You need to add the video-call module to be able to join a call.", domain = Logger.SCHEDULING_DOMAIN.UI)
             return
         }
-
-        videoCallModule.openVideoCall(
+        videoCallInternalClient.openVideoCall(
             configuration.context,
             roomStatus.url,
             room.id.toString(),

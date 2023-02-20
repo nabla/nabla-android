@@ -3,7 +3,7 @@ package com.nabla.sdk.scheduling.ui.viewmodel
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.kotlin.runCatchingCancellable
-import com.nabla.sdk.scheduling.SchedulingInternalModule
+import com.nabla.sdk.scheduling.SchedulingPrivateClient
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Instant
 import java.util.UUID
 
-internal open class SchedulingInternalModuleAdapter : SchedulingInternalModule {
+internal open class SchedulingPrivateClientAdapter : SchedulingPrivateClient {
     override suspend fun getAppointmentCategories(): Result<List<AppointmentCategory>> =
         runCatchingCancellable { error("Not mocked") }
 

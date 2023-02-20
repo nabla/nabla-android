@@ -24,7 +24,7 @@ public class NablaClient private constructor(
     public val name: String,
     private val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
-    modulesFactory: List<Module.Factory<out Module>>,
+    modulesFactory: List<Module.Factory<out Module<*>>>,
 ) {
 
     private val coreContainerDelegate = lazy {
@@ -111,7 +111,7 @@ public class NablaClient private constructor(
          * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
          */
         public fun initialize(
-            modules: List<Module.Factory<out Module>>,
+            modules: List<Module.Factory<out Module<*>>>,
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
         ): NablaClient {
@@ -128,7 +128,7 @@ public class NablaClient private constructor(
          * @param name name to create your own instance, if not specified a default name is used.
          */
         public fun initialize(
-            modules: List<Module.Factory<out Module>>,
+            modules: List<Module.Factory<out Module<*>>>,
             configuration: Configuration = Configuration(),
             networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
             name: String,

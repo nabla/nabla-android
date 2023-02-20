@@ -18,7 +18,7 @@ import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
-import com.nabla.sdk.scheduling.SchedulingInternalModule
+import com.nabla.sdk.scheduling.SchedulingPrivateClient
 import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
@@ -42,7 +42,7 @@ import kotlinx.datetime.toLocalDateTime
 internal class TimeSlotsViewModel(
     private val locationType: AppointmentLocationType,
     private val categoryId: AppointmentCategoryId,
-    private val schedulingModule: SchedulingInternalModule,
+    private val schedulingPrivateClient: SchedulingPrivateClient,
     private val logger: Logger,
     private val handle: SavedStateHandle,
 ) : ViewModel() {
@@ -67,7 +67,7 @@ internal class TimeSlotsViewModel(
     val eventsFlow: LiveFlow<Event> = eventsMutableFlow
 
     val stateFlow: StateFlow<State> = combine(
-        schedulingModule.watchAvailabilitySlots(locationType, categoryId).onEach { cacheLastResponse(it) },
+        schedulingPrivateClient.watchAvailabilitySlots(locationType, categoryId).onEach { cacheLastResponse(it) },
         expandedDaysPositionsFlow,
         selectedSlotFlow,
         isSubmittingFlow,
@@ -179,7 +179,7 @@ internal class TimeSlotsViewModel(
                     ?.also { logDebug("not null pendingAppointmentId") }
                     ?.takeIf { (pendingAppointmentStartAt == selectedSlotAsInstant) }
                     ?.also { logDebug("re-using the pendingAppointmentId because same slot") }
-                    ?: schedulingModule.createPendingAppointment(locationType, categoryId, providerId, selectedSlot.startAt)
+                    ?: schedulingPrivateClient.createPendingAppointment(locationType, categoryId, providerId, selectedSlot.startAt)
                         .onSuccess {
                             logDebug("created new pending appointment")
                             pendingAppointmentId = it.id

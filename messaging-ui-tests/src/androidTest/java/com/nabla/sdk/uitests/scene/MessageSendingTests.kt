@@ -73,7 +73,7 @@ class MessageSendingTests {
         // write some text
         onView(withId(SdkR.id.conversationEditText)).perform(typeText("Hello!"))
         onView(withId(SdkR.id.conversationSendButton)).check(matches(isEnabled()))
-        assert(nablaMessagingClientStub.isTyping) { "started typing on conversation composer but patient was not marked as typing" }
+        assert(nablaMessagingModuleStub.isTyping) { "started typing on conversation composer but patient was not marked as typing" }
 
         // send it
         onView(withId(SdkR.id.conversationSendButton)).perform(click())

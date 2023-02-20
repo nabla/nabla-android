@@ -87,7 +87,11 @@ subprojects { project ->
             allWarningsAsErrors = true
             jvmTarget = buildConfig.jvmTarget
             freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-            freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
+            def projectsRespectingNablaInternal = ["messaging-sample-app"]
+            def projectRespectsNablaInternal = projectsRespectingNablaInternal.any { project.name.contains(it) }
+            if (!projectRespectsNablaInternal) {
+                freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"
+            }
             // Some AndroidX lib start using kotlin interfaces with non abstract fun
             // https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-default/
             freeCompilerArgs += "-Xjvm-default=all"

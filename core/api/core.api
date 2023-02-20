@@ -138,7 +138,6 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenP
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule : com/nabla/sdk/core/domain/boundary/Module {
-	public abstract fun openVideoCall (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
