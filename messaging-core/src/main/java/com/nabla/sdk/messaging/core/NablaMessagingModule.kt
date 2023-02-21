@@ -12,5 +12,5 @@ public interface NablaMessagingModule {
 }
 
 public val NablaClient.messagingClient: NablaMessagingClient
-    get() = coreContainer.messagingModule as? MessagingModuleImpl
+    get() = coreContainer.messagingModule as? NablaMessagingClient
         ?: throw ConfigurationException.ModuleNotInitialized("NablaMessagingModule")
