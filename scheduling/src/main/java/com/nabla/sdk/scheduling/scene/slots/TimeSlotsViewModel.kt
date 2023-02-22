@@ -19,12 +19,10 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingPrivateClient
-import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlotLocation
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -169,7 +167,6 @@ internal class TimeSlotsViewModel(
         val selectedSlotAsInstant = selectedSlotFlow.value ?: return
         val selectedSlot = lastReceivedSlots?.firstOrNull { it.startAt == selectedSlotAsInstant } ?: return
         val providerId = selectedSlot.providerId
-        val address = (selectedSlot.location as? AvailabilitySlotLocation.Physical)?.address
         logDebug("confirm clicked with slot: $selectedSlotAsInstant")
 
         viewModelScope.launch {
@@ -192,9 +189,6 @@ internal class TimeSlotsViewModel(
                     viewModelScope,
                     Event.GoToConfirmation(
                         locationType = locationType,
-                        providerId = providerId,
-                        slot = selectedSlot.startAt,
-                        address = address,
                         pendingAppointmentId = appointmentId,
                     )
                 )
@@ -229,9 +223,6 @@ internal class TimeSlotsViewModel(
     sealed interface Event {
         data class GoToConfirmation(
             val locationType: AppointmentLocationType,
-            val providerId: Uuid,
-            val slot: Instant,
-            val address: Address?,
             val pendingAppointmentId: AppointmentId,
         ) : Event
 

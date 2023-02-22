@@ -7,7 +7,6 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.core.view.isVisible
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
@@ -16,94 +15,95 @@ import com.nabla.sdk.core.ui.helpers.toJavaDate
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingAppointmentSummaryViewBinding
 import com.nabla.sdk.scheduling.domain.entity.Address
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
+import com.nabla.sdk.scheduling.domain.entity.Price
+import com.nabla.sdk.scheduling.domain.entity.address
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.net.URLEncoder
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Currency
+import java.util.Locale
 
 internal class AppointmentSummaryView(context: Context, attributes: AttributeSet) : FrameLayout(context, attributes) {
 
     private val binding: NablaSchedulingAppointmentSummaryViewBinding
     private val dateFormatter = SimpleDateFormat(context.getString(R.string.nabla_scheduling_time_format), Locale.getDefault())
+    private val currencyFormatter = NumberFormat.getCurrencyInstance()
 
     init {
         binding = NablaSchedulingAppointmentSummaryViewBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
     fun bind(
-        locationType: AppointmentLocationType?,
+        location: AppointmentLocation,
         provider: Provider,
         slot: Instant,
-        address: Address?,
+        price: Price?,
     ) {
-        setAppointmentLocation(locationType)
+        setLocation(location)
         setProvider(provider)
-        setSlot(slot, locationType)
-        setAddress(address)
+        setSlot(slot)
+        setPrice(price)
     }
 
-    private fun setAppointmentLocation(locationType: AppointmentLocationType?) {
-        val locationIconRes = when (locationType) {
-            AppointmentLocationType.PHYSICAL -> R.drawable.nabla_ic_home_20
-            AppointmentLocationType.REMOTE -> R.drawable.nabla_ic_video_20
-            null -> 0
+    private fun setLocation(location: AppointmentLocation) {
+        val (locationIconRes, stringRes) = when (location.type) {
+            AppointmentLocationType.PHYSICAL -> R.drawable.nabla_ic_home_20 to R.string.nabla_scheduling_location_physical
+            AppointmentLocationType.REMOTE -> R.drawable.nabla_ic_video_20 to R.string.nabla_scheduling_location_remote
+            null -> 0 to 0
         }
 
-        binding.nablaConfirmAppointmentDate.setCompoundDrawablesRelativeWithIntrinsicBounds(
-            locationIconRes,
-            0,
-            0,
-            0
-        )
+        binding.nablaAppointmentLocationType.setCompoundDrawablesRelativeWithIntrinsicBounds(locationIconRes, 0, 0, 0)
+        binding.nablaAppointmentLocationType.setText(stringRes)
+
+        setAddress(location.address)
     }
 
     private fun setProvider(provider: Provider) {
-        binding.nablaConfirmAppointmentAvatar.loadAvatar(provider)
-        binding.nablaConfirmAppointmentTitle.text = provider.fullNameWithPrefix(binding.context)
-        binding.nablaConfirmAppointmentSubtitle.setTextOrHide(provider.title)
+        binding.nablaAppointmentAvatar.loadAvatar(provider)
+        binding.nablaAppointmentTitle.text = provider.fullNameWithPrefix(binding.context)
+        binding.nablaAppointmentSubtitle.setTextOrHide(provider.title)
     }
 
-    private fun setSlot(slot: Instant, locationType: AppointmentLocationType?) {
-        binding.nablaConfirmAppointmentDate.text = slot.formatScheduledAt(locationType)
+    private fun setSlot(slot: Instant) {
+        binding.nablaAppointmentDate.text = slot.formatScheduledAt()
     }
 
-    private fun Instant.formatScheduledAt(locationType: AppointmentLocationType?): String {
+    private fun setPrice(price: Price?) {
+        binding.nablaAppointmentPrice.setTextOrHide(price?.formatPrice())
+    }
+
+    private fun Instant.formatScheduledAt(): String {
         val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val isToday = today == toLocalDateTime(TimeZone.currentSystemDefault()).date
 
         val formattedTime = dateFormatter.format(toJavaDate())
 
         return if (isToday) {
-            val stringRes = when (locationType) {
-                AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_today
-                AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_remote_date_format_today
-                null -> R.string.nabla_scheduling_default_date_format_today
-            }
-            context.getString(stringRes, formattedTime)
+            context.getString(R.string.nabla_scheduling_default_date_format_today, formattedTime)
         } else {
             val formattedDate = SimpleDateFormat(context.getString(R.string.nabla_scheduling_date_pill_format_date), Locale.getDefault())
                 .format(toJavaDate())
-            val stringRes = when (locationType) {
-                AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_physical_date_format_future
-                AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_remote_date_format_future
-                null -> R.string.nabla_scheduling_default_date_format_future
-            }
-            context.getString(stringRes, formattedDate, formattedTime)
+            context.getString(R.string.nabla_scheduling_default_date_format_future, formattedDate, formattedTime)
         }
     }
 
+    private fun Price.formatPrice(): String {
+        currencyFormatter.currency = Currency.getInstance(currencyCode)
+        return currencyFormatter.format(amount)
+    }
+
     private fun setAddress(address: Address?) {
-        binding.nablaConfirmAppointmentLocation.isVisible = address != null
-        binding.nablaConfirmAppointmentLocationExtra.isVisible = address != null
-        binding.nablaConfirmAppointmentLocation.text = address?.formatAddress()
-        binding.nablaConfirmAppointmentLocationExtra.text = address?.extraDetails
+        binding.nablaAppointmentAddress.setTextOrHide(address?.formatAddress())
+        binding.nablaAppointmentAddressExtra.setTextOrHide(address?.extraDetails)
 
         if (address != null) {
-            binding.nablaConfirmAppointmentLocation.setOnClickListener {
+            binding.nablaAppointmentAddress.setOnClickListener {
                 try {
                     val mapsIntentUri = Uri.parse("geo:0,0?q=${address.formatForMapsQuery()}")
                     val mapIntent = Intent(Intent.ACTION_VIEW, mapsIntentUri)

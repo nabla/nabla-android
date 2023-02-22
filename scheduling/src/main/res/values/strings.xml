@@ -8,6 +8,7 @@
     <string name="nabla_scheduling_book_appointment">Schedule an appointment</string>
     <string name="nabla_scheduling_continue_cta">Continue</string>
     <string name="nabla_scheduling_confirm_cta">Confirm</string>
+    <string name="nabla_scheduling_go_payment_cta">Go to payment</string>
     <string name="nabla_scheduling_appointments_pagination_error">An error occurred while loading more appointments.</string>
 
     <string name="nabla_scheduling_location_selection_title">Select the appointment mode</string>
@@ -43,16 +44,13 @@
     </plurals>
     <string name="nabla_scheduling_time_slot_pagination_error">An error occurred while loading more availabilities.</string>
 
-    <string name="nabla_scheduling_default_date_format_today">Appointment planned today at %1$s</string>
-    <string name="nabla_scheduling_physical_date_format_today">In-person appointment planned today at %1$s</string>
-    <string name="nabla_scheduling_remote_date_format_today">Video call planned today at %1$s</string>
-    <string name="nabla_scheduling_default_date_format_future">Appointment planned on %1$s at %2$s</string>
-    <string name="nabla_scheduling_physical_date_format_future">In-person appointment planned on %1$s at %2$s</string>
-    <string name="nabla_scheduling_remote_date_format_future">Video call planned on %1$s at %2$s</string>
+    <string name="nabla_scheduling_default_date_format_today">Today at %1$s</string>
+    <string name="nabla_scheduling_default_date_format_future">%1$s at %2$s</string>
     <string name="nabla_scheduling_time_format">hh:mm aa</string>
     <string name="nabla_scheduling_date_pill_format_date">MMMM d, yyyy</string>
 
     <string name="nabla_scheduling_appointment_details_title">Appointment</string>
 
-    <string name="nabla_scheduling_payment_error">Confirmation did not complete, please try again.</string>
+    <string name="nabla_scheduling_payment_error">Payment did not complete, please try again.</string>
+    <string name="nabla_scheduling_confirm_success">Appointment created successfully.</string>
 </resources>

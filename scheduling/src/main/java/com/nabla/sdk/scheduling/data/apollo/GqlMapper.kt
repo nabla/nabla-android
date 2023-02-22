@@ -13,7 +13,6 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlot
-import com.nabla.sdk.scheduling.domain.entity.AvailabilitySlotLocation
 import com.nabla.sdk.scheduling.domain.entity.Price
 import com.nabla.sdk.scheduling.graphql.AppointmentConfirmationConsentsQuery
 import com.nabla.sdk.scheduling.graphql.fragment.AddressFragment
@@ -68,18 +67,6 @@ internal class GqlMapper(
         return AppointmentLocation.Unknown
     }
 
-    private fun mapSlotLocation(location: AvailabilitySlotFragment.Location): AvailabilitySlotLocation {
-        location.onPhysicalAvailabilitySlotLocation?.let {
-            val addressFragment = it.address.addressFragment
-            return AvailabilitySlotLocation.Physical(mapAddress(addressFragment))
-        }
-        location.onRemoteAvailabilitySlotLocation?.let {
-            return AvailabilitySlotLocation.Remote
-        }
-        logger.error("Unknown slot location mapping for $location")
-        return AvailabilitySlotLocation.Unknown
-    }
-
     private fun mapAddress(addressFragment: AddressFragment): Address {
         return Address(
             address = addressFragment.address,
@@ -103,7 +90,6 @@ internal class GqlMapper(
         return AvailabilitySlot(
             startAt = fragment.startAt,
             providerId = fragment.provider.id,
-            location = mapSlotLocation(fragment.location)
         )
     }
 

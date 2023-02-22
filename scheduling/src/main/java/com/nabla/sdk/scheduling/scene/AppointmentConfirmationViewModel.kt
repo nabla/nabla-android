@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.boundary.Logger
-import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.domain.entity.StringOrRes
 import com.nabla.sdk.core.domain.entity.StringOrRes.Res
@@ -18,7 +17,6 @@ import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.PaymentActivityContract
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
-import com.nabla.sdk.scheduling.domain.entity.Address
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
@@ -26,7 +24,6 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.domain.entity.MissingPaymentStep
 import com.nabla.sdk.scheduling.domain.entity.PendingAppointment
 import com.nabla.sdk.scheduling.domain.entity.Price
-import com.nabla.sdk.scheduling.domain.entity.address
 import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,11 +35,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 
 internal class AppointmentConfirmationViewModel(
     private val locationType: AppointmentLocationType,
-    private val slot: Instant,
     private val pendingAppointmentId: AppointmentId,
     private val paymentStepRegistered: Boolean,
     private val nablaClient: NablaClient,
@@ -78,9 +73,8 @@ internal class AppointmentConfirmationViewModel(
     ) { consents, appointment, grants, isLoading ->
         if (isLoading) State.Loading else {
             State.Loaded(
-                appointment.provider,
-                slot,
-                appointment.location.address,
+                appointment,
+                requiresPayment = (appointment.state as? AppointmentState.Pending)?.requiredPrice != null,
                 consents.htmlConsents.mapIndexed { index, consent ->
                     consent to grants.getOrElse(index) { false }
                 },
@@ -163,8 +157,9 @@ internal class AppointmentConfirmationViewModel(
                     logAndShowErrorMessage(throwable, "failed scheduling appointment")
                     isLoadingFlow.value = false
                 }.onSuccess {
-                    eventsMutableFlow.emit(Event.Finish)
                     logDebug("pending appointment confirmed by Nabla's backend, finishing.")
+                    eventsMutableFlow.emit(Event.ShowMessage(Res(R.string.nabla_scheduling_confirm_success)))
+                    eventsMutableFlow.emit(Event.Finish)
                 }
         }
     }
@@ -206,9 +201,8 @@ internal class AppointmentConfirmationViewModel(
         object Loading : State
         data class Error(val errorUiModel: ErrorUiModel) : State
         data class Loaded(
-            val provider: Provider,
-            val slot: Instant,
-            val address: Address?,
+            val appointment: Appointment,
+            val requiresPayment: Boolean,
             val htmlConsents: List<Pair<String, Boolean>>,
         ) : State
     }

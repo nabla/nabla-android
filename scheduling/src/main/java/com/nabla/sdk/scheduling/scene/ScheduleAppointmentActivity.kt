@@ -17,7 +17,6 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsFragment
-import kotlinx.datetime.Instant
 import com.nabla.sdk.core.R as CoreR
 
 @NablaInternal
@@ -50,13 +49,11 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
 
     internal fun goToConfirmation(
         locationType: AppointmentLocationType,
-        slot: Instant,
         pendingAppointmentId: AppointmentId,
     ) {
         pushFragment(
             AppointmentConfirmationFragment.newInstance(
                 locationType = locationType,
-                slot = slot,
                 pendingAppointmentId = pendingAppointmentId,
                 sdkName = intent.requireSdkName()
             ),

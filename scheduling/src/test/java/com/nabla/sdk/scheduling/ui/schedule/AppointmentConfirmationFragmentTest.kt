@@ -16,7 +16,8 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents
-import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
+import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
+import com.nabla.sdk.scheduling.domain.entity.Price
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationFragment.Companion.setHtml
 import com.nabla.sdk.scheduling.scene.withNablaSchedulingThemeOverlays
 import com.nabla.sdk.tests.common.BaseCoroutineTest
@@ -24,6 +25,7 @@ import com.nabla.sdk.tests.common.DayNightPaparazziRule
 import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
+import java.math.BigDecimal
 
 class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
     @get:Rule
@@ -109,10 +111,10 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
         nablaConfirmAppointmentButton.isEnabled = continueEnabled
 
         nablaConfirmAppointmentSummary.bind(
-            locationType = AppointmentLocationType.REMOTE,
             provider = provider,
             slot = Instant.parse("2028-01-01T10:20:00Z"),
-            address = null
+            location = AppointmentLocation.Remote.Nabla(null),
+            price = Price(BigDecimal(60.5), "USD")
         )
 
         consents.htmlConsents.forEachIndexed { _, html ->

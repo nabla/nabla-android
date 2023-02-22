@@ -18,7 +18,7 @@ import com.nabla.sdk.core.ui.model.bind
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentDetailsBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
-import com.nabla.sdk.scheduling.domain.entity.address
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.scene.SchedulingBaseFragment
 import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsViewModel.Event
 import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsViewModel.State
@@ -84,10 +84,10 @@ internal fun NablaSchedulingFragmentAppointmentDetailsBinding.bind(state: State,
 
     state.appointment?.let {
         nablaAppointmentSummary.bind(
-            it.location.type,
+            it.location,
             it.provider,
             it.scheduledAt,
-            it.location.address,
+            (it.state as? AppointmentState.Pending)?.requiredPrice,
         )
     }
     if (state is State.Error) {

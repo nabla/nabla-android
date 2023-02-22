@@ -29,10 +29,10 @@ import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentCo
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
+import com.nabla.sdk.scheduling.domain.entity.AppointmentState
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.Event
 import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
 import com.nabla.sdk.scheduling.schedulingPrivateClient
-import kotlinx.datetime.Instant
 
 internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     R.layout.nabla_scheduling_fragment_appointment_confirmation
@@ -44,7 +44,6 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         savedStateFactoryFor { handle ->
             AppointmentConfirmationViewModel(
                 locationType = requireAppointmentLocationType(),
-                slot = requireArguments().getSlot(),
                 pendingAppointmentId = requireArguments().getPendingAppointmentIdOrNull(),
                 paymentStepRegistered = paymentActivityContract != null,
                 nablaClient = nablaClient,
@@ -74,10 +73,14 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                 is State.Error -> binding.errorLayout.bind(state.errorUiModel, viewModel::onClickRetry)
                 is State.Loaded -> {
                     binding.nablaConfirmAppointmentSummary.bind(
-                        requireAppointmentLocationType(),
-                        state.provider,
-                        state.slot,
-                        state.address,
+                        state.appointment.location,
+                        state.appointment.provider,
+                        state.appointment.scheduledAt,
+                        (state.appointment.state as? AppointmentState.Pending)?.requiredPrice,
+                    )
+
+                    binding.nablaConfirmAppointmentButton.setText(
+                        if (state.requiresPayment) R.string.nabla_scheduling_go_payment_cta else R.string.nabla_scheduling_confirm_cta
                     )
 
                     binding.nablaConsentsContainer.removeAllViews()
@@ -85,7 +88,6 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                         val (html, isChecked) = consent
                         val consentView = NablaSchedulingItemConsentBinding.inflate(layoutInflater, binding.nablaConsentsContainer, false)
                         consentView.root.updateLayoutParams<MarginLayoutParams> {
-                            topMargin = view.context.dpToPx(8)
                             marginEnd = view.context.dpToPx(16)
                         }
                         consentView.nablaConsentCheckbox.isChecked = isChecked
@@ -124,21 +126,15 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
 
         internal fun newInstance(
             locationType: AppointmentLocationType,
-            slot: Instant,
             pendingAppointmentId: AppointmentId,
             sdkName: String,
         ) = AppointmentConfirmationFragment().apply {
             arguments = bundleOf(
-                ARG_SLOT_INSTANT to slot.toEpochMilliseconds(),
                 ARG_PENDING_APPOINTMENT_UUID to pendingAppointmentId.uuid.toString(),
             )
             setAppointmentLocationType(locationType)
             setSdkName(sdkName)
         }
-
-        private fun Bundle.getSlot() = Instant.fromEpochMilliseconds(
-            getLong(ARG_SLOT_INSTANT).also { if (it == 0L) throwNablaInternalException("Missing Slot Instant") }
-        )
 
         private fun Bundle.getPendingAppointmentIdOrNull() = AppointmentId(
             Uuid.fromString(getString(ARG_PENDING_APPOINTMENT_UUID) ?: throwNablaInternalException("Missing pending appointment id"))
@@ -147,7 +143,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         @VisibleForTesting
         internal fun setHtml(itemConsentBinding: NablaSchedulingItemConsentBinding, html: String) {
             val spanned = HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
-            itemConsentBinding.nablaConsentText.text = spanned
+            itemConsentBinding.nablaConsentText.text = spanned.trim()
 
             // Makes hyperlinks clickable
             itemConsentBinding.nablaConsentText.movementMethod = LinkMovementMethod.getInstance()

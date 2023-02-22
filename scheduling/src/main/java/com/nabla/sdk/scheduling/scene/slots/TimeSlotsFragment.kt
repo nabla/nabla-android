@@ -83,7 +83,6 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
             when (event) {
                 is TimeSlotsViewModel.Event.GoToConfirmation -> hostActivity().goToConfirmation(
                     event.locationType,
-                    event.slot,
                     event.pendingAppointmentId,
                 )
                 is TimeSlotsViewModel.Event.ShowMessage -> {
