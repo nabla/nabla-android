@@ -10,14 +10,14 @@ import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
 import com.nabla.sdk.core.domain.entity.StringOrRes
+import com.nabla.sdk.core.domain.entity.StringOrRes.Companion.asStringOrRes
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
-import com.nabla.sdk.core.domain.entity.asStringOrRes
+import com.nabla.sdk.core.ui.helpers.FlowCollectorExtension.emitIn
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
-import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
+import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.asNetworkOrGeneric
 import com.nabla.sdk.scheduling.SCHEDULING_DOMAIN
 import com.nabla.sdk.scheduling.SchedulingPrivateClient
 import com.nabla.sdk.scheduling.domain.entity.Appointment

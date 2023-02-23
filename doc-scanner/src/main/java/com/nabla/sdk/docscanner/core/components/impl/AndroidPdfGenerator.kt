@@ -3,10 +3,10 @@ package com.nabla.sdk.docscanner.core.components.impl
 import android.content.Context
 import android.graphics.Matrix
 import android.graphics.pdf.PdfDocument
-import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.core.data.helper.toKtUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toKtUri
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.ui.helpers.toJavaDate
+import com.nabla.sdk.core.ui.helpers.DateParsingExtension.toJavaDate
 import com.nabla.sdk.docscanner.R
 import com.nabla.sdk.docscanner.core.components.PdfGenerator
 import com.nabla.sdk.docscanner.core.helpers.getWarpMatrix

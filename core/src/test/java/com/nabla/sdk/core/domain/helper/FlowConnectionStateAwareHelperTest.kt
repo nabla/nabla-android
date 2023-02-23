@@ -2,6 +2,7 @@ package com.nabla.sdk.core.domain.helper
 
 import app.cash.turbine.test
 import com.nabla.sdk.core.domain.entity.EventsConnectionState
+import com.nabla.sdk.core.domain.helper.FlowConnectionStateAwareHelper.restartWhenConnectionReconnects
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -11,7 +12,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class FlowConnectionStateAwareHelper : BaseCoroutineTest() {
+class FlowConnectionStateAwareHelperTest : BaseCoroutineTest() {
 
     @Test
     fun `test we are always emitting the first value`() = runTest {

@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentCategoriesBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId

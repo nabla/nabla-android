@@ -9,8 +9,8 @@ import com.nabla.sdk.core.domain.entity.MaybeProvider
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Patient
 import com.nabla.sdk.core.domain.entity.Size
+import com.nabla.sdk.core.domain.entity.StringOrRes.Companion.asStringOrRes
 import com.nabla.sdk.core.domain.entity.SystemUser
-import com.nabla.sdk.core.domain.entity.asStringOrRes
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.entity.BaseMessage
 import com.nabla.sdk.messaging.core.domain.entity.Conversation

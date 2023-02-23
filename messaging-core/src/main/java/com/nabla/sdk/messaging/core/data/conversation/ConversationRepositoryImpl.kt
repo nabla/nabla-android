@@ -4,7 +4,7 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.domain.entity.Response
-import com.nabla.sdk.core.kotlin.sharedSingleIn
+import com.nabla.sdk.core.kotlin.KotlinExt.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.message.GqlConversationContentDataSource
 import com.nabla.sdk.messaging.core.data.message.LocalConversation
 import com.nabla.sdk.messaging.core.data.message.MessageFileUploader

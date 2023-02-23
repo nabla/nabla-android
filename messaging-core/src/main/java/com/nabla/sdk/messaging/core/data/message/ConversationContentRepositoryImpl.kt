@@ -3,8 +3,8 @@ package com.nabla.sdk.messaging.core.data.message
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.kotlin.KotlinExt.sharedSingleIn
 import com.nabla.sdk.core.kotlin.SharedSingle
-import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.messaging.core.data.conversation.LocalConversationDataSource
 import com.nabla.sdk.messaging.core.domain.boundary.ConversationContentRepository
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId

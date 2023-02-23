@@ -1,5 +1,6 @@
 package com.nabla.sdk.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 
 /**
@@ -12,6 +13,7 @@ public sealed class FileUpload {
         val size: Size?,
         override val fileUpload: BaseFileUpload,
     ) : FileUpload() {
+        @VisibleForTesting
         public companion object
     }
 
@@ -20,6 +22,7 @@ public sealed class FileUpload {
         val durationMs: Long?,
         override val fileUpload: BaseFileUpload,
     ) : FileUpload() {
+        @VisibleForTesting
         public companion object
     }
 
@@ -27,6 +30,7 @@ public sealed class FileUpload {
         val thumbnail: Image?,
         override val fileUpload: BaseFileUpload,
     ) : FileUpload() {
+        @VisibleForTesting
         public companion object
     }
 
@@ -34,6 +38,7 @@ public sealed class FileUpload {
         val durationMs: Long?,
         override val fileUpload: BaseFileUpload,
     ) : FileUpload() {
+        @VisibleForTesting
         public companion object
     }
 }

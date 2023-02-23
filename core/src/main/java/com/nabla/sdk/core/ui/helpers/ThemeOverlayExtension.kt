@@ -10,65 +10,68 @@ import androidx.appcompat.view.ContextThemeWrapper
 import com.nabla.sdk.core.R
 import com.nabla.sdk.core.annotation.NablaInternal
 
-/**
- * Applies Nabla specific theme Overlay customization to [this] if not already the case.
- *
- * @param hasValidOverlaysAttr attr to check if the theme has already been customized with the overlay.
- * @param themeOverlayAttr attr to get the overlay as a theme attribute.
- * @param styleOverlay to check for theme overlay in custom view style.
- * @param defaultThemeOverlay attr to get the default overlay.
- */
 @NablaInternal
-public fun Context.withNablaThemeOverlay(
-    @AttrRes hasValidOverlaysAttr: Int,
-    @AttrRes themeOverlayAttr: Int,
-    styleOverlay: StyleOverlay? = null,
-    @StyleRes defaultThemeOverlay: Int,
-): Context = withNablaThemeContextWrapper(hasValidOverlaysAttr, themeOverlayAttr, styleOverlay, defaultThemeOverlay).apply {
-    // Apply default values for Nabla_ThemeOverlay_Base without overriding anything defined in the theme
-    theme.applyStyle(R.style.Nabla_ThemeOverlay_Base_Default, false)
-}
-
-private fun Context.withNablaThemeContextWrapper(
-    @AttrRes hasValidOverlaysAttr: Int,
-    @AttrRes themeOverlayAttr: Int,
-    styleOverlay: StyleOverlay?,
-    @StyleRes defaultThemeOverlay: Int,
-): Context {
-    val outValue = TypedValue()
-
-    // Check if theme itself implements the wanted overlay
-    val hasValidOverlays = theme.resolveAttribute(hasValidOverlaysAttr, outValue, true)
-    if (hasValidOverlays) {
-        return this
+public object ThemeOverlayExtension {
+    /**
+     * Applies Nabla specific theme Overlay customization to [this] if not already the case.
+     *
+     * @param hasValidOverlaysAttr attr to check if the theme has already been customized with the overlay.
+     * @param themeOverlayAttr attr to get the overlay as a theme attribute.
+     * @param styleOverlay to check for theme overlay in custom view style.
+     * @param defaultThemeOverlay attr to get the default overlay.
+     */
+    @NablaInternal
+    public fun Context.withNablaThemeOverlay(
+        @AttrRes hasValidOverlaysAttr: Int,
+        @AttrRes themeOverlayAttr: Int,
+        styleOverlay: StyleOverlay? = null,
+        @StyleRes defaultThemeOverlay: Int,
+    ): Context = withNablaThemeContextWrapper(hasValidOverlaysAttr, themeOverlayAttr, styleOverlay, defaultThemeOverlay).apply {
+        // Apply default values for Nabla_ThemeOverlay_Base without overriding anything defined in the theme
+        theme.applyStyle(R.style.Nabla_ThemeOverlay_Base_Default, false)
     }
 
-    // Check if theme contains overlay as theme attr
-    val hasOverlayAsThemeAttr = theme.resolveAttribute(themeOverlayAttr, outValue, true)
-    if (hasOverlayAsThemeAttr) {
-        return ContextThemeWrapper(this, outValue.resourceId)
-    }
+    private fun Context.withNablaThemeContextWrapper(
+        @AttrRes hasValidOverlaysAttr: Int,
+        @AttrRes themeOverlayAttr: Int,
+        styleOverlay: StyleOverlay?,
+        @StyleRes defaultThemeOverlay: Int,
+    ): Context {
+        val outValue = TypedValue()
 
-    // Check if attrs contains overlay
-    if (styleOverlay != null) {
-        val themeOverlayApplierInAttrs = obtainStyledAttributes(
-            styleOverlay.attrs,
-            styleOverlay.themeOverlayStyle
-        )
-        val nablaOverlayInAttrs = themeOverlayApplierInAttrs.getResourceId(0, -1)
-
-        themeOverlayApplierInAttrs.recycle()
-
-        if (nablaOverlayInAttrs != -1) {
-            return ContextThemeWrapper(this, nablaOverlayInAttrs)
+        // Check if theme itself implements the wanted overlay
+        val hasValidOverlays = theme.resolveAttribute(hasValidOverlaysAttr, outValue, true)
+        if (hasValidOverlays) {
+            return this
         }
-    }
 
-    // Neither theme nor attrs do specify Nabla overlays. Fallback to defaults.
-    return ContextThemeWrapper(
-        this,
-        defaultThemeOverlay
-    )
+        // Check if theme contains overlay as theme attr
+        val hasOverlayAsThemeAttr = theme.resolveAttribute(themeOverlayAttr, outValue, true)
+        if (hasOverlayAsThemeAttr) {
+            return ContextThemeWrapper(this, outValue.resourceId)
+        }
+
+        // Check if attrs contains overlay
+        if (styleOverlay != null) {
+            val themeOverlayApplierInAttrs = obtainStyledAttributes(
+                styleOverlay.attrs,
+                styleOverlay.themeOverlayStyle
+            )
+            val nablaOverlayInAttrs = themeOverlayApplierInAttrs.getResourceId(0, -1)
+
+            themeOverlayApplierInAttrs.recycle()
+
+            if (nablaOverlayInAttrs != -1) {
+                return ContextThemeWrapper(this, nablaOverlayInAttrs)
+            }
+        }
+
+        // Neither theme nor attrs do specify Nabla overlays. Fallback to defaults.
+        return ContextThemeWrapper(
+            this,
+            defaultThemeOverlay
+        )
+    }
 }
 
 @NablaInternal

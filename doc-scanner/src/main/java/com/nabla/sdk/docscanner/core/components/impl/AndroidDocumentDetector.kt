@@ -2,7 +2,7 @@ package com.nabla.sdk.docscanner.core.components.impl
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.docscanner.core.components.DocumentDetector
 import com.nabla.sdk.docscanner.core.models.NormalizedCorners

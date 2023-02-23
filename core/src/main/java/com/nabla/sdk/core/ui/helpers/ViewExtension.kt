@@ -7,32 +7,35 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.nabla.sdk.core.annotation.NablaInternal
 
-/**
- * Remove the callback to be invoked when this view is clicked. If this view is
- * clickable, it becomes not clickable.
- *
- * @see View.setOnClickListener
- */
 @NablaInternal
-public fun View.removeOnClickListener() {
-    setOnClickListener(null)
-    isClickable = false
-}
+public object ViewExtension {
+    /**
+     * Remove the callback to be invoked when this view is clicked. If this view is
+     * clickable, it becomes not clickable.
+     *
+     * @see View.setOnClickListener
+     */
+    @NablaInternal
+    public fun View.removeOnClickListener() {
+        setOnClickListener(null)
+        isClickable = false
+    }
 
-@NablaInternal
-public fun View.setOnClickLabel(@StringRes stringRes: Int, vararg args: Any) {
-    ViewCompat.setAccessibilityDelegate(
-        this,
-        object : AccessibilityDelegateCompat() {
-            override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
-                super.onInitializeAccessibilityNodeInfo(host, info)
-                info.addAction(
-                    AccessibilityNodeInfoCompat.AccessibilityActionCompat(
-                        AccessibilityNodeInfoCompat.ACTION_CLICK,
-                        host.context.getString(stringRes, *args)
+    @NablaInternal
+    public fun View.setOnClickLabel(@StringRes stringRes: Int, vararg args: Any) {
+        ViewCompat.setAccessibilityDelegate(
+            this,
+            object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(host: View, info: AccessibilityNodeInfoCompat) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    info.addAction(
+                        AccessibilityNodeInfoCompat.AccessibilityActionCompat(
+                            AccessibilityNodeInfoCompat.ACTION_CLICK,
+                            host.context.getString(stringRes, *args)
+                        )
                     )
-                )
+                }
             }
-        }
-    )
+        )
+    }
 }

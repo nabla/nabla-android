@@ -6,7 +6,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
-import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemOtherMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem

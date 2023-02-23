@@ -3,7 +3,7 @@ package com.nabla.sdk.messaging.ui.fullscreenmedia.helper
 import android.content.Context
 import android.util.AttributeSet
 import com.nabla.sdk.core.ui.helpers.StyleOverlay
-import com.nabla.sdk.core.ui.helpers.withNablaThemeOverlay
+import com.nabla.sdk.core.ui.helpers.ThemeOverlayExtension.withNablaThemeOverlay
 import com.nabla.sdk.messaging.ui.R
 
 internal fun Context.withNablaMessagingThemeOverlays(attrs: AttributeSet? = null): Context {

@@ -9,10 +9,10 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.DensityExtensions.dpToPx
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentConfirmationBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemConsentBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentConfirmationConsents

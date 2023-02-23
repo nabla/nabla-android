@@ -9,9 +9,9 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.commit
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.ui.helpers.requireSdkName
-import com.nabla.sdk.core.ui.helpers.setSdkName
-import com.nabla.sdk.core.ui.helpers.viewBinding
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.requireSdkName
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.setSdkName
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.viewBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityScheduleAppointmentHostBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId

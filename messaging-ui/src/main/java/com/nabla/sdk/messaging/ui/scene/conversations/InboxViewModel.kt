@@ -2,9 +2,9 @@ package com.nabla.sdk.messaging.ui.scene.conversations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nabla.sdk.core.ui.helpers.FlowCollectorExtension.emitIn
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
-import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 

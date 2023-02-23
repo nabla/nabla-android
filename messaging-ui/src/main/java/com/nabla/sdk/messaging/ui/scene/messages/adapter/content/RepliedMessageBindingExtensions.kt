@@ -6,8 +6,8 @@ import androidx.core.view.isVisible
 import coil.decode.VideoFrameDecoder
 import coil.dispose
 import coil.load
-import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.core.ui.helpers.abbreviatedNameWithPrefix
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.abbreviatedNameWithPrefix
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.scene.messages.RepliedMessage
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem

@@ -2,14 +2,14 @@ package com.nabla.sdk.docscanner.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nabla.sdk.core.data.helper.toJvmUri
-import com.nabla.sdk.core.data.helper.toKtUri
+import com.nabla.sdk.core.data.helper.UrlExt.toJvmUri
+import com.nabla.sdk.core.data.helper.UrlExt.toKtUri
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
+import com.nabla.sdk.core.ui.helpers.FlowCollectorExtension.emitIn
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
-import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.docscanner.core.DocumentScanClient
 import com.nabla.sdk.docscanner.core.models.NormalizedCorners

@@ -14,9 +14,9 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.nabla.sdk.core.ui.helpers.capitalize
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.toJavaDate
+import com.nabla.sdk.core.ui.helpers.DateParsingExtension.toJavaDate
+import com.nabla.sdk.core.ui.helpers.StringExtension.capitalize
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemDaySlotsBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemLoadingBinding

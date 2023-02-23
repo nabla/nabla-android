@@ -5,9 +5,9 @@ import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.cache.normalized.FetchPolicy
 import com.apollographql.apollo3.cache.normalized.fetchPolicy
 import com.apollographql.apollo3.cache.normalized.watch
-import com.nabla.sdk.core.data.apollo.CacheUpdateOperation
-import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
-import com.nabla.sdk.core.data.apollo.updateCache
+import com.nabla.sdk.core.data.apollo.ApolloExt.CacheUpdateOperation
+import com.nabla.sdk.core.data.apollo.ApolloExt.updateCache
+import com.nabla.sdk.core.data.apollo.ApolloResponseExt.dataOrThrowOnError
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.graphql.type.OpaqueCursorPage
 import com.nabla.sdk.scheduling.data.apollo.GqlMapper

@@ -1,7 +1,7 @@
 package com.nabla.sdk.videocall
 
 import android.content.Context
-import com.nabla.sdk.core.ui.helpers.withNablaThemeOverlay
+import com.nabla.sdk.core.ui.helpers.ThemeOverlayExtension.withNablaThemeOverlay
 
 internal fun Context.withNablaVideoCallThemeOverlays(): Context {
     return this.withNablaThemeOverlay(

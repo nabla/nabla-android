@@ -8,7 +8,7 @@ import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.LogcatLogger
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId

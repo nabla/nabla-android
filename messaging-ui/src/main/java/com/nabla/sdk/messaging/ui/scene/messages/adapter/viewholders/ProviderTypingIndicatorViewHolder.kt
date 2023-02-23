@@ -4,8 +4,8 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.fullNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderMessageBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderMessageContentBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderTypingIndicatorBinding

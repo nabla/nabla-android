@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
-import com.nabla.sdk.core.ui.helpers.getParcelableExtraCompat
-import com.nabla.sdk.core.ui.helpers.requireSdkName
-import com.nabla.sdk.core.ui.helpers.setSdkName
+import com.nabla.sdk.core.ui.helpers.IntentExtension.getParcelableExtraCompat
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.requireSdkName
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.setSdkName
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaActivityConversationBinding

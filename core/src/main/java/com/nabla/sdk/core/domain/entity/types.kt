@@ -1,6 +1,7 @@
 package com.nabla.sdk.core.domain.entity
 
 import com.benasher44.uuid.Uuid
+import com.nabla.sdk.core.annotation.NablaInternal
 
 /*
  Abstract platform-agnostic types that can be mapped from and into each platform types (e.g. jvm or android's URI, Date, UUID, etc.)
@@ -12,6 +13,7 @@ public value class Uri(public val uri: String) {
 }
 
 @JvmInline
+@NablaInternal
 public value class StringId(public val value: String) {
     override fun toString(): String = value
 }

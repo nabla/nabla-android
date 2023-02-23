@@ -8,7 +8,7 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
 
 @NablaInternal
-public val uuidAdapter: Adapter<Uuid> = object : Adapter<Uuid> {
+public object UuidAdapter : Adapter<Uuid> {
     override fun fromJson(reader: JsonReader, customScalarAdapters: CustomScalarAdapters): Uuid {
         return Uuid.fromString(reader.nextString())
     }

@@ -11,7 +11,7 @@ import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.ui.R

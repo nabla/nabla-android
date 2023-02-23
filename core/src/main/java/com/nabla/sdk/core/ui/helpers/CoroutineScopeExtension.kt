@@ -14,26 +14,29 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @NablaInternal
-public fun <T> CoroutineScope.launchCollect(
-    flowToCollect: Flow<T>,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    collector: FlowCollector<T>,
-): Job {
-    return this.launch(context, start) {
-        flowToCollect.collect(collector)
+public object CoroutineScopeExtension {
+    @NablaInternal
+    public fun <T> CoroutineScope.launchCollect(
+        flowToCollect: Flow<T>,
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        collector: FlowCollector<T>,
+    ): Job {
+        return this.launch(context, start) {
+            flowToCollect.collect(collector)
+        }
     }
-}
 
-@NablaInternal
-public fun <T> LifecycleOwner.launchCollect(
-    liveFlowToCollect: LiveFlow<T>,
-    context: CoroutineContext = EmptyCoroutineContext,
-    start: CoroutineStart = CoroutineStart.DEFAULT,
-    minState: Lifecycle.State = Lifecycle.State.STARTED,
-    collector: suspend (T) -> Unit,
-): Job {
-    return this.lifecycleScope.launch(context, start) {
-        liveFlowToCollect.collect(LiveFlow.LiveFlowCollector(lifecycle, minState, collector))
+    @NablaInternal
+    public fun <T> LifecycleOwner.launchCollect(
+        liveFlowToCollect: LiveFlow<T>,
+        context: CoroutineContext = EmptyCoroutineContext,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        minState: Lifecycle.State = Lifecycle.State.STARTED,
+        collector: suspend (T) -> Unit,
+    ): Job {
+        return this.lifecycleScope.launch(context, start) {
+            liveFlowToCollect.collect(LiveFlow.LiveFlowCollector(lifecycle, minState, collector))
+        }
     }
 }

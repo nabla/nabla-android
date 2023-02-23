@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.decode.VideoFrameDecoder
 import coil.load
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.domain.entity.MimeType
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.core.ui.helpers.coil.LocalPdfPreviewFetcher
-import com.nabla.sdk.core.ui.helpers.context
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemMediaToSendBinding

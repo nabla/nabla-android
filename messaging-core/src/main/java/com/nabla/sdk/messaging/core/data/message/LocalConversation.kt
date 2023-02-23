@@ -2,7 +2,7 @@ package com.nabla.sdk.messaging.core.data.message
 
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
-import com.nabla.sdk.core.domain.entity.asStringOrRes
+import com.nabla.sdk.core.domain.entity.StringOrRes.Companion.asStringOrRes
 import com.nabla.sdk.messaging.core.R
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId

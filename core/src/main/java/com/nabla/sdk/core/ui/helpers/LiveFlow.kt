@@ -37,8 +37,10 @@ import kotlinx.coroutines.flow.receiveAsFlow
 public interface LiveFlow<T> {
     public suspend fun collect(liveCollector: BaseLiveFlowCollector<T>)
 
+    @NablaInternal
     public abstract class BaseLiveFlowCollector<T> : FlowCollector<T>
 
+    @NablaInternal
     public class LiveFlowCollector<T>(
         private val lifecycle: Lifecycle,
         private val minState: Lifecycle.State = Lifecycle.State.STARTED,

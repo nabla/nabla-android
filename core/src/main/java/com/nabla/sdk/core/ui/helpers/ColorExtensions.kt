@@ -24,17 +24,20 @@ public data class ColorStateListWrapper(@ColorRes val res: Int) : ColorIntOrStat
 }
 
 @NablaInternal
-public fun TextView.setTextColor(color: ColorIntOrStateList) {
-    when (color) {
-        is ColorIntWrapper -> setTextColor(color.value)
-        is ColorStateListWrapper -> setTextColor(color.asColorStateList(context))
+public object ColorExtensions {
+    @NablaInternal
+    public fun TextView.setTextColor(color: ColorIntOrStateList) {
+        when (color) {
+            is ColorIntWrapper -> setTextColor(color.value)
+            is ColorStateListWrapper -> setTextColor(color.asColorStateList(context))
+        }
     }
-}
 
-@NablaInternal
-public fun View.setBackgroundColor(color: ColorIntOrStateList) {
-    when (color) {
-        is ColorIntWrapper -> setBackgroundColor(color.value)
-        is ColorStateListWrapper -> setBackgroundResource(color.res)
+    @NablaInternal
+    public fun View.setBackgroundColor(color: ColorIntOrStateList) {
+        when (color) {
+            is ColorIntWrapper -> setBackgroundColor(color.value)
+            is ColorStateListWrapper -> setBackgroundResource(color.res)
+        }
     }
 }

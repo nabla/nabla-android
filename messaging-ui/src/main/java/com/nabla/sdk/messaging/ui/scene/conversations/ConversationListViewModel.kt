@@ -5,11 +5,11 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.ui.helpers.FlowCollectorExtension.emitIn
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
-import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.core.ui.model.asNetworkOrGeneric
+import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.asNetworkOrGeneric
 import com.nabla.sdk.messaging.core.NablaMessagingClient
 import com.nabla.sdk.messaging.ui.R
 import kotlinx.coroutines.flow.MutableSharedFlow

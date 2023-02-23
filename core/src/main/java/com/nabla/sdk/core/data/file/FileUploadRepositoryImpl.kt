@@ -2,7 +2,7 @@ package com.nabla.sdk.core.data.file
 
 import android.content.Context
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.entity.MimeType

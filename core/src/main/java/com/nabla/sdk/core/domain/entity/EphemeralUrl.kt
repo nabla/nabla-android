@@ -1,5 +1,6 @@
 package com.nabla.sdk.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import kotlinx.datetime.Instant
 
 /**
@@ -10,5 +11,6 @@ public data class EphemeralUrl(
     val expiresAt: Instant,
     val url: Uri,
 ) {
+    @VisibleForTesting
     public companion object
 }

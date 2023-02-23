@@ -1,6 +1,6 @@
 package com.nabla.sdk.core.data.stubs
 
-import com.nabla.sdk.core.ui.helpers.capitalize
+import com.nabla.sdk.core.ui.helpers.StringExtension.capitalize
 import kotlin.math.absoluteValue
 import kotlin.random.Random
 

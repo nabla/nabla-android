@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
-import com.nabla.sdk.core.ui.helpers.getParcelableCompat
+import com.nabla.sdk.core.ui.helpers.BundleExtension.getParcelableCompat
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationMediaSourcePickerBinding
 import com.nabla.sdk.messaging.ui.fullscreenmedia.helper.withNablaMessagingThemeOverlays

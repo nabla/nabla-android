@@ -16,7 +16,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatImageView
 import com.google.android.material.R
 import com.google.android.material.color.MaterialColors
-import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.DensityExtensions.dpToPx
 import java.lang.Float.min
 import kotlin.math.max
 import kotlin.math.sqrt

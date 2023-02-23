@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.fullNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemTextConversationActivityBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem

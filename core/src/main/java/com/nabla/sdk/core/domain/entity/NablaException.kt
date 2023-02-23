@@ -45,6 +45,8 @@ public class ServerException internal constructor(cause: Throwable, public val c
 
 @NablaInternal
 public class InternalException private constructor(cause: Throwable) : NablaException(cause = cause, message = cause.message) {
+
+    @NablaInternal
     public companion object {
         @NablaInternal
         public fun Throwable.asNablaInternal(): InternalException = InternalException(this)

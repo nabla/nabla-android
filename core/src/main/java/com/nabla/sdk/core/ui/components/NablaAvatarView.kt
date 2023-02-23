@@ -27,11 +27,11 @@ import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_NONE
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_OVAL
 import com.nabla.sdk.core.ui.components.AvatarClipShape.CLIP_SHAPE_ROUND_RECT
+import com.nabla.sdk.core.ui.helpers.ColorExtensions.setBackgroundColor
 import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
 import com.nabla.sdk.core.ui.helpers.ColorIntWrapper
-import com.nabla.sdk.core.ui.helpers.getThemeColor
-import com.nabla.sdk.core.ui.helpers.initials
-import com.nabla.sdk.core.ui.helpers.setBackgroundColor
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.initials
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeColor
 import kotlin.math.min
 import com.google.android.material.R as MaterialR
 

@@ -242,6 +242,7 @@ public class CoreContainer internal constructor(
 
     internal fun activeModules(): List<ModuleType> = modulesFactory.map { it.type() }
 
+    @VisibleForTesting
     public companion object {
         @VisibleForTesting
         public var overriddenOkHttpClient: ((OkHttpClient.Builder) -> Unit)? = null

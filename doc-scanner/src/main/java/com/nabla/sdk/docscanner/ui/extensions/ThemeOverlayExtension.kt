@@ -1,7 +1,7 @@
 package com.nabla.sdk.docscanner.ui.extensions
 
 import android.content.Context
-import com.nabla.sdk.core.ui.helpers.withNablaThemeOverlay
+import com.nabla.sdk.core.ui.helpers.ThemeOverlayExtension.withNablaThemeOverlay
 import com.nabla.sdk.docscanner.R
 
 internal fun Context.withNablaDocScannerThemeOverlays(): Context {

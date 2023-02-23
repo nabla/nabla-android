@@ -8,12 +8,15 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 @NablaInternal
-public fun <T> FlowCollector<T>.emitIn(
-    scope: CoroutineScope,
-    value: T,
-    context: CoroutineContext = EmptyCoroutineContext,
-) {
-    scope.launch(context) {
-        this@emitIn.emit(value)
+public object FlowCollectorExtension {
+    @NablaInternal
+    public fun <T> FlowCollector<T>.emitIn(
+        scope: CoroutineScope,
+        value: T,
+        context: CoroutineContext = EmptyCoroutineContext,
+    ) {
+        scope.launch(context) {
+            this@emitIn.emit(value)
+        }
     }
 }

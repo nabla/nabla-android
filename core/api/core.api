@@ -1,12 +1,3 @@
-public final class com/nabla/sdk/core/BuildConfig {
-	public static final field API_VERSION I
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public static final field VERSION_NAME Ljava/lang/String;
-	public fun <init> ()V
-}
-
 public final class com/nabla/sdk/core/Configuration {
 	public static final field Companion Lcom/nabla/sdk/core/Configuration$Companion;
 	public fun <init> ()V
@@ -64,47 +55,6 @@ public final class com/nabla/sdk/core/NetworkConfiguration {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/data/apollo/ApolloExtKt {
-}
-
-public final class com/nabla/sdk/core/data/apollo/ApolloFactory {
-	public static final field INSTANCE Lcom/nabla/sdk/core/data/apollo/ApolloFactory;
-	public final fun configureBuilder (Lcom/apollographql/apollo3/cache/normalized/api/NormalizedCacheFactory;)Lcom/apollographql/apollo3/ApolloClient$Builder;
-}
-
-public final class com/nabla/sdk/core/data/apollo/ApolloResponseExtKt {
-}
-
-public final class com/nabla/sdk/core/data/apollo/CacheUpdateOperation$Ignore : com/nabla/sdk/core/data/apollo/CacheUpdateOperation {
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/core/data/apollo/CacheUpdateOperation$Write : com/nabla/sdk/core/data/apollo/CacheUpdateOperation {
-	public fun <init> (Ljava/lang/Object;)V
-	public final fun component1 ()Ljava/lang/Object;
-	public final fun copy (Ljava/lang/Object;)Lcom/nabla/sdk/core/data/apollo/CacheUpdateOperation$Write;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/data/apollo/CacheUpdateOperation$Write;Ljava/lang/Object;ILjava/lang/Object;)Lcom/nabla/sdk/core/data/apollo/CacheUpdateOperation$Write;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getData ()Ljava/lang/Object;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/data/apollo/SubscriptionExtKt {
-}
-
-public final class com/nabla/sdk/core/data/apollo/adapter/TimeZoneAdapterKt {
-}
-
-public final class com/nabla/sdk/core/data/apollo/adapter/UuidAdapterKt {
-}
-
-public final class com/nabla/sdk/core/data/exception/CoroutineHelpersKt {
-}
-
-public final class com/nabla/sdk/core/data/helper/UrlExtKt {
-}
-
 public final class com/nabla/sdk/core/data/init/NablaCoreInitializer : androidx/startup/Initializer {
 	public fun <init> ()V
 	public synthetic fun create (Landroid/content/Context;)Ljava/lang/Object;
@@ -133,7 +83,7 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/SchedulingMod
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/SessionTokenProvider {
-	public abstract fun fetchNewSessionAuthTokens-f_-3YFY (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun fetchNewSessionAuthTokens-gIAlu-s (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule : com/nabla/sdk/core/domain/boundary/Module {
@@ -141,23 +91,6 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModu
 
 public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModule$Factory : com/nabla/sdk/core/domain/boundary/Module$Factory {
 	public fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
-}
-
-public final class com/nabla/sdk/core/domain/entity/Attachment {
-	public synthetic fun <init> (Ljava/util/UUID;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun component2-9Mbh8_A ()Ljava/lang/String;
-	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType;
-	public final fun component4-9Mbh8_A ()Ljava/lang/String;
-	public final fun copy-b8VQ8CI (Ljava/util/UUID;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/Attachment;
-	public static synthetic fun copy-b8VQ8CI$default (Lcom/nabla/sdk/core/domain/entity/Attachment;Ljava/util/UUID;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/Attachment;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getId ()Ljava/util/UUID;
-	public final fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
-	public final fun getThumbnailUrl-9Mbh8_A ()Ljava/lang/String;
-	public final fun getUrl-9Mbh8_A ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/AuthTokens {
@@ -172,9 +105,6 @@ public final class com/nabla/sdk/core/domain/entity/AuthTokens {
 	public final fun getRefreshToken ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/domain/entity/AuthTokens$Companion {
 }
 
 public abstract class com/nabla/sdk/core/domain/entity/AuthenticationException : com/nabla/sdk/core/domain/entity/NablaException {
@@ -252,9 +182,6 @@ public final class com/nabla/sdk/core/domain/entity/EphemeralUrl {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/EphemeralUrl$Companion {
-}
-
 public abstract class com/nabla/sdk/core/domain/entity/EventsConnectionState {
 }
 
@@ -299,9 +226,6 @@ public final class com/nabla/sdk/core/domain/entity/FileUpload$Audio : com/nabla
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/FileUpload$Audio$Companion {
-}
-
 public final class com/nabla/sdk/core/domain/entity/FileUpload$Document : com/nabla/sdk/core/domain/entity/FileUpload {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/FileUpload$Document$Companion;
 	public fun <init> (Lcom/nabla/sdk/core/domain/entity/FileUpload$Image;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;)V
@@ -316,9 +240,6 @@ public final class com/nabla/sdk/core/domain/entity/FileUpload$Document : com/na
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/FileUpload$Document$Companion {
-}
-
 public final class com/nabla/sdk/core/domain/entity/FileUpload$Image : com/nabla/sdk/core/domain/entity/FileUpload {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/FileUpload$Image$Companion;
 	public fun <init> (Lcom/nabla/sdk/core/domain/entity/Size;Lcom/nabla/sdk/core/domain/entity/BaseFileUpload;)V
@@ -331,9 +252,6 @@ public final class com/nabla/sdk/core/domain/entity/FileUpload$Image : com/nabla
 	public final fun getSize ()Lcom/nabla/sdk/core/domain/entity/Size;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/domain/entity/FileUpload$Image$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/FileUpload$Video : com/nabla/sdk/core/domain/entity/FileUpload {
@@ -352,18 +270,11 @@ public final class com/nabla/sdk/core/domain/entity/FileUpload$Video : com/nabla
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/FileUpload$Video$Companion {
-}
-
-public final class com/nabla/sdk/core/domain/entity/InternalException$Companion {
-}
-
 public final class com/nabla/sdk/core/domain/entity/InvalidAppThemeException : com/nabla/sdk/core/domain/entity/NablaException {
 	public fun <init> (Ljava/lang/String;)V
 }
 
 public final class com/nabla/sdk/core/domain/entity/LogcatLogger : com/nabla/sdk/core/domain/boundary/Logger {
-	public static final field Companion Lcom/nabla/sdk/core/domain/entity/LogcatLogger$Companion;
 	public fun <init> ()V
 	public fun <init> (Lcom/nabla/sdk/core/domain/entity/LogcatLogger$LogLevel;)V
 	public synthetic fun <init> (Lcom/nabla/sdk/core/domain/entity/LogcatLogger$LogLevel;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -371,9 +282,6 @@ public final class com/nabla/sdk/core/domain/entity/LogcatLogger : com/nabla/sdk
 	public fun error (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
 	public fun info (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
 	public fun warn (Ljava/lang/String;Ljava/lang/Throwable;Ljava/lang/String;)V
-}
-
-public final class com/nabla/sdk/core/domain/entity/LogcatLogger$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/LogcatLogger$LogLevel : java/lang/Enum {
@@ -527,15 +435,8 @@ public final class com/nabla/sdk/core/domain/entity/PaginatedList {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/PaginatedList$Companion {
-	public final fun empty ()Lcom/nabla/sdk/core/domain/entity/PaginatedList;
-}
-
 public abstract interface class com/nabla/sdk/core/domain/entity/Patient {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/Patient$Companion;
-}
-
-public final class com/nabla/sdk/core/domain/entity/Patient$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/Patient$Current : com/nabla/sdk/core/domain/entity/Patient {
@@ -554,9 +455,6 @@ public final class com/nabla/sdk/core/domain/entity/Patient$Other : com/nabla/sd
 	public final fun getId ()Ljava/util/UUID;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/domain/entity/Patient$Other$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/Provider : com/nabla/sdk/core/domain/entity/MaybeProvider {
@@ -579,9 +477,6 @@ public final class com/nabla/sdk/core/domain/entity/Provider : com/nabla/sdk/cor
 	public final fun getTitle ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/domain/entity/Provider$Companion {
 }
 
 public abstract class com/nabla/sdk/core/domain/entity/RefreshingState {
@@ -639,21 +534,14 @@ public final class com/nabla/sdk/core/domain/entity/Size {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/StringId {
-	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/StringId;
-	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
-	public fun equals (Ljava/lang/Object;)Z
-	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
-	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
-	public final fun getValue ()Ljava/lang/String;
-	public fun hashCode ()I
-	public static fun hashCode-impl (Ljava/lang/String;)I
-	public fun toString ()Ljava/lang/String;
-	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
-	public final synthetic fun unbox-impl ()Ljava/lang/String;
+public abstract interface class com/nabla/sdk/core/domain/entity/StringOrRes {
+	public static final field Companion Lcom/nabla/sdk/core/domain/entity/StringOrRes$Companion;
 }
 
-public abstract interface class com/nabla/sdk/core/domain/entity/StringOrRes {
+public final class com/nabla/sdk/core/domain/entity/StringOrRes$Companion {
+	public final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroid/content/Context;)Ljava/lang/String;
+	public final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/fragment/app/Fragment;)Ljava/lang/String;
+	public final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/viewbinding/ViewBinding;)Ljava/lang/String;
 }
 
 public final class com/nabla/sdk/core/domain/entity/StringOrRes$Res : com/nabla/sdk/core/domain/entity/StringOrRes {
@@ -678,12 +566,6 @@ public final class com/nabla/sdk/core/domain/entity/StringOrRes$String : com/nab
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/StringOrResKt {
-	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroid/content/Context;)Ljava/lang/String;
-	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/fragment/app/Fragment;)Ljava/lang/String;
-	public static final fun evaluate (Lcom/nabla/sdk/core/domain/entity/StringOrRes;Landroidx/viewbinding/ViewBinding;)Ljava/lang/String;
-}
-
 public final class com/nabla/sdk/core/domain/entity/SystemUser {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/SystemUser$Companion;
 	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/EphemeralUrl;)V
@@ -696,9 +578,6 @@ public final class com/nabla/sdk/core/domain/entity/SystemUser {
 	public final fun getName ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/domain/entity/SystemUser$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/UnknownException : com/nabla/sdk/core/domain/entity/NablaException {
@@ -743,18 +622,12 @@ public final class com/nabla/sdk/core/domain/entity/VideoCallRoom {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/core/domain/entity/VideoCallRoom$Companion {
-}
-
 public abstract class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Companion;
 }
 
 public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Closed : com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
 	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Closed;
-}
-
-public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Companion {
 }
 
 public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open : com/nabla/sdk/core/domain/entity/VideoCallRoomStatus {
@@ -768,770 +641,5 @@ public final class com/nabla/sdk/core/domain/entity/VideoCallRoomStatus$Open : c
 	public final fun getUrl ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/domain/helper/ApolloResponseHelperKt {
-}
-
-public final class com/nabla/sdk/core/domain/helper/AuthHelperKt {
-}
-
-public final class com/nabla/sdk/core/domain/helper/FlowConnectionStateAwareHelperKt {
-}
-
-public final class com/nabla/sdk/core/domain/helper/PaginationHelperKt {
-}
-
-public final class com/nabla/sdk/core/injection/CoreContainer$Companion {
-	public final fun getOverriddenApolloConfig ()Lkotlin/jvm/functions/Function1;
-	public final fun getOverriddenApolloWsConfig ()Lkotlin/jvm/functions/Function1;
-	public final fun getOverriddenClock ()Lkotlinx/datetime/Clock;
-	public final fun getOverriddenOkHttpClient ()Lkotlin/jvm/functions/Function1;
-	public final fun getOverriddenUuidGenerator ()Lcom/nabla/sdk/core/domain/boundary/UuidGenerator;
-	public final fun setOverriddenApolloConfig (Lkotlin/jvm/functions/Function1;)V
-	public final fun setOverriddenApolloWsConfig (Lkotlin/jvm/functions/Function1;)V
-	public final fun setOverriddenClock (Lkotlinx/datetime/Clock;)V
-	public final fun setOverriddenOkHttpClient (Lkotlin/jvm/functions/Function1;)V
-	public final fun setOverriddenUuidGenerator (Lcom/nabla/sdk/core/domain/boundary/UuidGenerator;)V
-}
-
-public final class com/nabla/sdk/core/kotlin/KotlinExtKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/BundleExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/ColorExtensionsKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/CoroutineScopeExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/DateFormattingExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/DateParsingExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/DensityExtensionsKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/FlowCollectorExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/FragmentCoroutinesExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/IntentExtensionKt {
-}
-
-public abstract class com/nabla/sdk/core/ui/helpers/LiveFlow$BaseLiveFlowCollector : kotlinx/coroutines/flow/FlowCollector {
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/core/ui/helpers/LiveFlow$LiveFlowCollector : com/nabla/sdk/core/ui/helpers/LiveFlow$BaseLiveFlowCollector {
-	public fun <init> (Landroidx/lifecycle/Lifecycle;Landroidx/lifecycle/Lifecycle$State;Lkotlin/jvm/functions/Function2;)V
-	public synthetic fun <init> (Landroidx/lifecycle/Lifecycle;Landroidx/lifecycle/Lifecycle$State;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun emit (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class com/nabla/sdk/core/ui/helpers/MessageAuthorExtensionsKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/PermissionExtensionKt {
-}
-
-public abstract interface class com/nabla/sdk/core/ui/helpers/PermissionRequestLauncher {
-	public abstract fun launch ()V
-}
-
-public final class com/nabla/sdk/core/ui/helpers/RecyclerViewExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/SceneHelpersKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/StringExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/TextViewExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/ThemeExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/ThemeOverlayExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/ViewBindingExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/ViewExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/ViewModelExtensionKt {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Companion {
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document : com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
-	public fun <init> (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)V
-	public final fun component1 ()Ljava/net/URI;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType;
-	public final fun copy (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document;Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Document;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
-	public fun getName ()Ljava/lang/String;
-	public fun getUri ()Ljava/net/URI;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image : com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
-	public fun <init> (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;)V
-	public final fun component1 ()Ljava/net/URI;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
-	public final fun copy (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image;Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Image;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Image;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType$Image;
-	public synthetic fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
-	public fun getName ()Ljava/lang/String;
-	public fun getUri ()Ljava/net/URI;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video : com/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia {
-	public fun <init> (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;)V
-	public final fun component1 ()Ljava/net/URI;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Lcom/nabla/sdk/core/domain/entity/MimeType$Video;
-	public final fun copy (Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video;Ljava/net/URI;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;ILjava/lang/Object;)Lcom/nabla/sdk/core/ui/helpers/mediapicker/LocalMedia$Video;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType$Video;
-	public synthetic fun getMimeType ()Lcom/nabla/sdk/core/domain/entity/MimeType;
-	public fun getName ()Ljava/lang/String;
-	public fun getUri ()Ljava/net/URI;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult$Cancelled : com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult$Failure : com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
-	public fun <init> (Ljava/lang/Exception;)V
-	public final fun getException ()Ljava/lang/Exception;
-}
-
-public final class com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult$Success : com/nabla/sdk/core/ui/helpers/mediapicker/MediaPickingResult {
-	public fun <init> (Ljava/lang/Object;)V
-	public final fun getData ()Ljava/lang/Object;
-}
-
-public final class com/nabla/sdk/core/ui/model/ErrorUiModel$Companion {
-	public final fun getGeneric ()Lcom/nabla/sdk/core/ui/model/ErrorUiModel;
-	public final fun getNetwork ()Lcom/nabla/sdk/core/ui/model/ErrorUiModel;
-}
-
-public final class com/nabla/sdk/core/ui/model/ErrorUiModelKt {
-}
-
-public final class com/nabla/sdk/graphql/ProviderQuery : com/apollographql/apollo3/api/Query {
-	public static final field Companion Lcom/nabla/sdk/graphql/ProviderQuery$Companion;
-	public static final field OPERATION_ID Ljava/lang/String;
-	public static final field OPERATION_NAME Ljava/lang/String;
-	public fun <init> (Ljava/util/UUID;)V
-	public fun adapter ()Lcom/apollographql/apollo3/api/Adapter;
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun copy (Ljava/util/UUID;)Lcom/nabla/sdk/graphql/ProviderQuery;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/ProviderQuery;Ljava/util/UUID;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/ProviderQuery;
-	public fun document ()Ljava/lang/String;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getId ()Ljava/util/UUID;
-	public fun hashCode ()I
-	public fun id ()Ljava/lang/String;
-	public fun name ()Ljava/lang/String;
-	public fun rootField ()Lcom/apollographql/apollo3/api/CompiledField;
-	public fun serializeVariables (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)V
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/ProviderQuery$Companion {
-	public final fun getOPERATION_DOCUMENT ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/ProviderQuery$Data : com/apollographql/apollo3/api/Query$Data {
-	public fun <init> (Lcom/nabla/sdk/graphql/ProviderQuery$Provider;)V
-	public final fun component1 ()Lcom/nabla/sdk/graphql/ProviderQuery$Provider;
-	public final fun copy (Lcom/nabla/sdk/graphql/ProviderQuery$Provider;)Lcom/nabla/sdk/graphql/ProviderQuery$Data;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/ProviderQuery$Data;Lcom/nabla/sdk/graphql/ProviderQuery$Provider;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/ProviderQuery$Data;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getProvider ()Lcom/nabla/sdk/graphql/ProviderQuery$Provider;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/ProviderQuery$Provider {
-	public fun <init> (Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;)V
-	public final fun component1 ()Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;
-	public final fun copy (Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;)Lcom/nabla/sdk/graphql/ProviderQuery$Provider;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/ProviderQuery$Provider;Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/ProviderQuery$Provider;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getProvider ()Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/ProviderQuery$Provider1 {
-	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/ProviderFragment;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lcom/nabla/sdk/graphql/fragment/ProviderFragment;
-	public final fun copy (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/ProviderFragment;)Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/ProviderFragment;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getProviderFragment ()Lcom/nabla/sdk/graphql/fragment/ProviderFragment;
-	public final fun get__typename ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter;
-}
-
-public final class com/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter$Data : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter$Data;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/ProviderQuery$Data;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/ProviderQuery$Data;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter$Provider : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter$Provider;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/ProviderQuery$Provider;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/ProviderQuery$Provider;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter$Provider1 : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/adapter/ProviderQuery_ResponseAdapter$Provider1;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/ProviderQuery$Provider1;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/adapter/ProviderQuery_VariablesAdapter : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/adapter/ProviderQuery_VariablesAdapter;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/ProviderQuery;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/ProviderQuery;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/EphemeralUrlFragment : com/apollographql/apollo3/api/Fragment$Data {
-	public fun <init> (Lkotlinx/datetime/Instant;Ljava/lang/String;)V
-	public final fun component1 ()Lkotlinx/datetime/Instant;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Lkotlinx/datetime/Instant;Ljava/lang/String;)Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;Lkotlinx/datetime/Instant;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getExpiresAt ()Lkotlinx/datetime/Instant;
-	public final fun getUrl ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/EphemeralUrlFragmentImpl_ResponseAdapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragmentImpl_ResponseAdapter;
-}
-
-public final class com/nabla/sdk/graphql/fragment/EphemeralUrlFragmentImpl_ResponseAdapter$EphemeralUrlFragment : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragmentImpl_ResponseAdapter$EphemeralUrlFragment;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomFragment : com/apollographql/apollo3/api/Fragment$Data {
-	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;)V
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun component2 ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;
-	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getStatus ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;
-	public final fun getUuid ()Ljava/util/UUID;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status {
-	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;
-	public final fun copy (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getLivekitRoomStatusFragment ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;
-	public final fun get__typename ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomFragmentImpl_ResponseAdapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragmentImpl_ResponseAdapter;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomFragmentImpl_ResponseAdapter$LivekitRoomFragment : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragmentImpl_ResponseAdapter$LivekitRoomFragment;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomFragmentImpl_ResponseAdapter$Status : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragmentImpl_ResponseAdapter$Status;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/LivekitRoomFragment$Status;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment : com/apollographql/apollo3/api/Fragment$Data {
-	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;
-	public final fun component3 ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;
-	public final fun copy (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getOnLivekitRoomClosedStatus ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;
-	public final fun getOnLivekitRoomOpenStatus ()Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;
-	public final fun get__typename ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus {
-	public fun <init> (Lcom/nabla/sdk/graphql/type/EmptyObject;)V
-	public final fun component1 ()Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public final fun copy (Lcom/nabla/sdk/graphql/type/EmptyObject;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;Lcom/nabla/sdk/graphql/type/EmptyObject;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEmpty ()Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getToken ()Ljava/lang/String;
-	public final fun getUrl ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter;
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter$LivekitRoomStatusFragment : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter$LivekitRoomStatusFragment;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter$OnLivekitRoomClosedStatus : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter$OnLivekitRoomClosedStatus;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomClosedStatus;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter$OnLivekitRoomOpenStatus : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragmentImpl_ResponseAdapter$OnLivekitRoomOpenStatus;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/LivekitRoomStatusFragment$OnLivekitRoomOpenStatus;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/PatientFragment : com/apollographql/apollo3/api/Fragment$Data {
-	public fun <init> (Ljava/util/UUID;Ljava/lang/String;Z)V
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Z
-	public final fun copy (Ljava/util/UUID;Ljava/lang/String;Z)Lcom/nabla/sdk/graphql/fragment/PatientFragment;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/PatientFragment;Ljava/util/UUID;Ljava/lang/String;ZILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/PatientFragment;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDisplayName ()Ljava/lang/String;
-	public final fun getId ()Ljava/util/UUID;
-	public fun hashCode ()I
-	public final fun isMe ()Z
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter;
-}
-
-public final class com/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter$PatientFragment : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/PatientFragmentImpl_ResponseAdapter$PatientFragment;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/PatientFragment;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/PatientFragment;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/ProviderFragment : com/apollographql/apollo3/api/Fragment$Data {
-	public fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/util/UUID;
-	public final fun component2 ()Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/graphql/fragment/ProviderFragment;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/ProviderFragment;Ljava/util/UUID;Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/ProviderFragment;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAvatarUrl ()Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;
-	public final fun getFirstName ()Ljava/lang/String;
-	public final fun getId ()Ljava/util/UUID;
-	public final fun getLastName ()Ljava/lang/String;
-	public final fun getPrefix ()Ljava/lang/String;
-	public final fun getTitle ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl {
-	public fun <init> (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;
-	public final fun copy (Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;)Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;Ljava/lang/String;Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEphemeralUrlFragment ()Lcom/nabla/sdk/graphql/fragment/EphemeralUrlFragment;
-	public final fun get__typename ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/fragment/ProviderFragmentImpl_ResponseAdapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/ProviderFragmentImpl_ResponseAdapter;
-}
-
-public final class com/nabla/sdk/graphql/fragment/ProviderFragmentImpl_ResponseAdapter$AvatarUrl : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/ProviderFragmentImpl_ResponseAdapter$AvatarUrl;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/ProviderFragment$AvatarUrl;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/ProviderFragmentImpl_ResponseAdapter$ProviderFragment : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/ProviderFragmentImpl_ResponseAdapter$ProviderFragment;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/fragment/ProviderFragment;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public final fun getRESPONSE_NAMES ()Ljava/util/List;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/fragment/ProviderFragment;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/fragment/selections/EphemeralUrlFragmentSelections {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/EphemeralUrlFragmentSelections;
-	public final fun get__root ()Ljava/util/List;
-}
-
-public final class com/nabla/sdk/graphql/fragment/selections/LivekitRoomFragmentSelections {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/LivekitRoomFragmentSelections;
-	public final fun get__root ()Ljava/util/List;
-}
-
-public final class com/nabla/sdk/graphql/fragment/selections/LivekitRoomStatusFragmentSelections {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/LivekitRoomStatusFragmentSelections;
-	public final fun get__root ()Ljava/util/List;
-}
-
-public final class com/nabla/sdk/graphql/fragment/selections/PatientFragmentSelections {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/PatientFragmentSelections;
-	public final fun get__root ()Ljava/util/List;
-}
-
-public final class com/nabla/sdk/graphql/fragment/selections/ProviderFragmentSelections {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/fragment/selections/ProviderFragmentSelections;
-	public final fun get__root ()Ljava/util/List;
-}
-
-public final class com/nabla/sdk/graphql/selections/ProviderQuerySelections {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/selections/ProviderQuerySelections;
-	public final fun get__root ()Ljava/util/List;
-}
-
-public final class com/nabla/sdk/graphql/type/BigDecimal {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/BigDecimal$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/BigDecimal$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/DateTime {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/DateTime$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/DateTime$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/EmptyObject : java/lang/Enum {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/EmptyObject$Companion;
-	public static final field EMPTY Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public static final field UNKNOWN__ Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public final fun getRawValue ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public static fun values ()[Lcom/nabla/sdk/graphql/type/EmptyObject;
-}
-
-public final class com/nabla/sdk/graphql/type/EmptyObject$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/EnumType;
-	public final fun knownValues ()[Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public final fun safeValueOf (Ljava/lang/String;)Lcom/nabla/sdk/graphql/type/EmptyObject;
-}
-
-public final class com/nabla/sdk/graphql/type/EphemeralUrl {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/EphemeralUrl$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/EphemeralUrl$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLBoolean {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLBoolean$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLBoolean$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLFloat {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLFloat$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLFloat$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLID {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLID$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLID$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLInt {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLInt$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLInt$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLString {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/GraphQLString$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/GraphQLString$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoom {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/LivekitRoom$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoom$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoomClosedStatus {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/LivekitRoomClosedStatus$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoomClosedStatus$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoomOpenStatus {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/LivekitRoomOpenStatus$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoomOpenStatus$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoomStatus {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/LivekitRoomStatus$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/LivekitRoomStatus$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/UnionType;
-}
-
-public final class com/nabla/sdk/graphql/type/Mutation {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/Mutation$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/Mutation$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/OpaqueCursorPage {
-	public fun <init> ()V
-	public fun <init> (Lcom/apollographql/apollo3/api/Optional;Lcom/apollographql/apollo3/api/Optional;)V
-	public synthetic fun <init> (Lcom/apollographql/apollo3/api/Optional;Lcom/apollographql/apollo3/api/Optional;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Lcom/apollographql/apollo3/api/Optional;
-	public final fun component2 ()Lcom/apollographql/apollo3/api/Optional;
-	public final fun copy (Lcom/apollographql/apollo3/api/Optional;Lcom/apollographql/apollo3/api/Optional;)Lcom/nabla/sdk/graphql/type/OpaqueCursorPage;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/graphql/type/OpaqueCursorPage;Lcom/apollographql/apollo3/api/Optional;Lcom/apollographql/apollo3/api/Optional;ILjava/lang/Object;)Lcom/nabla/sdk/graphql/type/OpaqueCursorPage;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCursor ()Lcom/apollographql/apollo3/api/Optional;
-	public final fun getNumberOfItems ()Lcom/apollographql/apollo3/api/Optional;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/graphql/type/Patient {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/Patient$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/Patient$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/Provider {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/Provider$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/Provider$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/ProviderOutput {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/ProviderOutput$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/ProviderOutput$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/Query {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/Query$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/Query$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/Subscription {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/Subscription$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/Subscription$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/SubscriptionReadinessEvent {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/SubscriptionReadinessEvent$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/SubscriptionReadinessEvent$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/ObjectType;
-}
-
-public final class com/nabla/sdk/graphql/type/TimeZone {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/TimeZone$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/TimeZone$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/UUID {
-	public static final field Companion Lcom/nabla/sdk/graphql/type/UUID$Companion;
-	public fun <init> ()V
-}
-
-public final class com/nabla/sdk/graphql/type/UUID$Companion {
-	public final fun getType ()Lcom/apollographql/apollo3/api/CustomScalarType;
-}
-
-public final class com/nabla/sdk/graphql/type/adapter/EmptyObject_ResponseAdapter : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/type/adapter/EmptyObject_ResponseAdapter;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/type/EmptyObject;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/type/EmptyObject;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
-}
-
-public final class com/nabla/sdk/graphql/type/adapter/OpaqueCursorPage_InputAdapter : com/apollographql/apollo3/api/Adapter {
-	public static final field INSTANCE Lcom/nabla/sdk/graphql/type/adapter/OpaqueCursorPage_InputAdapter;
-	public fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Lcom/nabla/sdk/graphql/type/OpaqueCursorPage;
-	public synthetic fun fromJson (Lcom/apollographql/apollo3/api/json/JsonReader;Lcom/apollographql/apollo3/api/CustomScalarAdapters;)Ljava/lang/Object;
-	public fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Lcom/nabla/sdk/graphql/type/OpaqueCursorPage;)V
-	public synthetic fun toJson (Lcom/apollographql/apollo3/api/json/JsonWriter;Lcom/apollographql/apollo3/api/CustomScalarAdapters;Ljava/lang/Object;)V
 }
 

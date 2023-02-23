@@ -7,8 +7,8 @@ import android.view.View.VISIBLE
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.ui.helpers.abbreviatedNameWithPrefix
-import com.nabla.sdk.core.ui.helpers.context
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.abbreviatedNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemProviderMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem

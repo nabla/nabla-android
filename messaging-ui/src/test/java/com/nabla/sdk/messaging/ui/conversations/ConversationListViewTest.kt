@@ -4,7 +4,7 @@ import androidx.core.view.isVisible
 import com.android.ide.common.rendering.api.SessionParams
 import com.nabla.sdk.core.data.stubs.fake
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.DensityExtensions.dpToPx
 import com.nabla.sdk.messaging.core.data.stubs.fake
 import com.nabla.sdk.messaging.core.domain.entity.Conversation
 import com.nabla.sdk.messaging.core.domain.entity.ProviderInConversation

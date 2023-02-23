@@ -3,7 +3,7 @@ package com.nabla.sdk.core.data.device
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.benasher44.uuid.Uuid
-import com.nabla.sdk.core.data.apollo.dataOrThrowOnError
+import com.nabla.sdk.core.data.apollo.ApolloResponseExt.dataOrThrowOnError
 import com.nabla.sdk.core.data.exception.GraphQLException
 import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.ErrorReporter
@@ -14,7 +14,7 @@ import com.nabla.sdk.core.graphql.RegisterOrUpdateDeviceMutation
 import com.nabla.sdk.core.graphql.type.DeviceInput
 import com.nabla.sdk.core.graphql.type.DeviceOs
 import com.nabla.sdk.core.graphql.type.SdkModule
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

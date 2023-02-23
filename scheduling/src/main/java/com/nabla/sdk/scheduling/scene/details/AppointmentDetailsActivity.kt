@@ -6,8 +6,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.nabla.sdk.core.NablaClient
-import com.nabla.sdk.core.ui.helpers.requireSdkName
-import com.nabla.sdk.core.ui.helpers.setSdkName
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.requireSdkName
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.setSdkName
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingActivityAppointmentDetailsHostBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId

@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 
 internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>() {

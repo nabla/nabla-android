@@ -1,5 +1,6 @@
 package com.nabla.sdk.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 
 /**
@@ -14,5 +15,6 @@ public data class Provider(
     val prefix: String?,
     val title: String?,
 ) : MaybeProvider {
+    @VisibleForTesting
     public companion object
 }

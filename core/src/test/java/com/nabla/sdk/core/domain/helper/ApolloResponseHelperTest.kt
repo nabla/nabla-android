@@ -8,6 +8,7 @@ import com.apollographql.apollo3.cache.normalized.CacheInfo
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.entity.RefreshingState
+import com.nabla.sdk.core.domain.helper.ApolloResponseHelper.makeCachedResponseWatcher
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

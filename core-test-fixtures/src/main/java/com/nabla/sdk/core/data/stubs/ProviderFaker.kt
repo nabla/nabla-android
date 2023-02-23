@@ -5,7 +5,7 @@ import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.ui.helpers.capitalize
+import com.nabla.sdk.core.ui.helpers.StringExtension.capitalize
 import kotlinx.datetime.Instant
 
 fun Provider.Companion.fake(

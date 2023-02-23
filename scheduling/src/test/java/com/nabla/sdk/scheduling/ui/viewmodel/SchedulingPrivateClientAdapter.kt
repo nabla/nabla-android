@@ -2,7 +2,7 @@ package com.nabla.sdk.scheduling.ui.viewmodel
 
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
 import com.nabla.sdk.scheduling.SchedulingPrivateClient
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory

@@ -7,11 +7,11 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.core.ui.helpers.canScrollDown
-import com.nabla.sdk.core.ui.helpers.dpToPx
-import com.nabla.sdk.core.ui.helpers.launchCollect
-import com.nabla.sdk.core.ui.helpers.scrollToTop
-import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.core.ui.helpers.CoroutineScopeExtension.launchCollect
+import com.nabla.sdk.core.ui.helpers.DensityExtensions.dpToPx
+import com.nabla.sdk.core.ui.helpers.RecyclerViewExtension.canScrollDown
+import com.nabla.sdk.core.ui.helpers.RecyclerViewExtension.scrollToTop
+import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.bind
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
 import kotlinx.coroutines.launch

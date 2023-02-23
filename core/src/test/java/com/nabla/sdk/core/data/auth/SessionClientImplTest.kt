@@ -62,7 +62,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
         every { tokenLocalDataSource.getAuthTokens() } returns null
         every { patientRepository.getPatientId() } returns patientId
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
-        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
+        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
             authTokens
         )
 
@@ -120,7 +120,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
             every { patientRepository.getPatientId() } returns patientId
             every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(refreshToken = refreshToken, accessToken = accessToken)
             every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
-            coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
+            coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
                 newSessionTokens
             )
             assertTrue {
@@ -193,7 +193,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
             accessToken = JwtFaker.expiredIn2050_3
         )
         every { patientRepository.getPatientId() } returns patientId
-        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
+        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
             authTokens_1
         ) andThen Result.success(authTokens_2)
         every { tokenLocalDataSource.getAuthTokens() } returns null
@@ -212,7 +212,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
             accessToken = JwtFaker.expiredIn2020_2
         )
         every { patientRepository.getPatientId() } returns patientId
-        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId) } returns Result.success(
+        coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
             expiredAuthTokens
         )
         every { tokenLocalDataSource.getAuthTokens() } returns null

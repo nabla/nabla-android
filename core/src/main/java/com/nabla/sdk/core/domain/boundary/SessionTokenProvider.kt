@@ -1,7 +1,6 @@
 package com.nabla.sdk.core.domain.boundary
 
 import com.nabla.sdk.core.domain.entity.AuthTokens
-import com.nabla.sdk.core.domain.entity.StringId
 
 /**
  * Callback from Nabla SDK to request new server-made access and refresh tokens.
@@ -10,5 +9,5 @@ import com.nabla.sdk.core.domain.entity.StringId
  * the SDK is only interested in fresh versions each time it calls back.
  */
 public fun interface SessionTokenProvider {
-    public suspend fun fetchNewSessionAuthTokens(userId: StringId): Result<AuthTokens>
+    public suspend fun fetchNewSessionAuthTokens(userId: String): Result<AuthTokens>
 }

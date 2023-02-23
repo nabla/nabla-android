@@ -3,10 +3,13 @@ package com.nabla.sdk.core.data.apollo
 import app.cash.turbine.test
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.nabla.sdk.core.data.apollo.ApolloResponseExt.dataOrThrowOnError
+import com.nabla.sdk.core.data.apollo.SubscriptionExt.retryOnNetworkErrorAndShareIn
+import com.nabla.sdk.core.data.apollo.SubscriptionExt.retryOnNetworkErrorWithExponentialBackoff
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +61,7 @@ internal class SubscriptionExtKtTest : BaseCoroutineTest() {
                 throw networkError
             } else {
                 val response = mockk<ApolloResponse<Operation.Data>> {
-                    mockkStatic("com.nabla.sdk.core.data.apollo.ApolloResponseExtKt")
+                    mockkObject(ApolloResponseExt)
                     every { dataOrThrowOnError } returns mockk()
                 }
                 emit(response)

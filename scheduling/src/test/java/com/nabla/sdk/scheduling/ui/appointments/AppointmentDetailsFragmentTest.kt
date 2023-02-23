@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.FrameLayout
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.core.domain.entity.asStringOrRes
+import com.nabla.sdk.core.domain.entity.StringOrRes.Companion.asStringOrRes
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentDetailsBinding
 import com.nabla.sdk.scheduling.domain.entity.Address

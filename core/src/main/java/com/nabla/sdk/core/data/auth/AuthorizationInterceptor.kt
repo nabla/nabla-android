@@ -4,7 +4,7 @@ import com.nabla.sdk.core.data.exception.WrappedOkhttpInterceptorException
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.AUTH_DOMAIN
 import com.nabla.sdk.core.domain.boundary.SessionClient
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request

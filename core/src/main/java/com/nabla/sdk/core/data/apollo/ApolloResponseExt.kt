@@ -9,13 +9,16 @@ import com.nabla.sdk.core.data.exception.GraphQLException
 internal const val REQUEST_ID_HEADER_NAME = "x-request-id"
 
 @NablaInternal
-public val <D : Operation.Data> ApolloResponse<D>.dataOrThrowOnError: D
-    get(): D {
-        val requestId = (executionContext as? HttpInfo)?.headers?.firstOrNull { it.name == REQUEST_ID_HEADER_NAME }?.value
-        val error = errors?.firstOrNull()
-        if (error != null) {
-            throw GraphQLException(error, requestId)
-        }
+public object ApolloResponseExt {
+    @NablaInternal
+    public val <D : Operation.Data> ApolloResponse<D>.dataOrThrowOnError: D
+        get(): D {
+            val requestId = (executionContext as? HttpInfo)?.headers?.firstOrNull { it.name == REQUEST_ID_HEADER_NAME }?.value
+            val error = errors?.firstOrNull()
+            if (error != null) {
+                throw GraphQLException(error, requestId)
+            }
 
-        return data ?: throw ApolloNoDataException(requestId)
-    }
+            return data ?: throw ApolloNoDataException(requestId)
+        }
+}

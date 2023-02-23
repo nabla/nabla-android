@@ -6,9 +6,9 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.nabla.sdk.core.domain.entity.evaluate
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
+import com.nabla.sdk.core.domain.entity.StringOrRes.Companion.evaluate
+import com.nabla.sdk.core.ui.helpers.TextViewExtension.setTextOrHide
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationItemLoadingMoreBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationListViewItemBinding

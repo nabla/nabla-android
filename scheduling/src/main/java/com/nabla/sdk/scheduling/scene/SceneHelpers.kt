@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
-import com.nabla.sdk.core.ui.helpers.getSerializableCompat
+import com.nabla.sdk.core.ui.helpers.BundleExtension.getSerializableCompat
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategoryId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType

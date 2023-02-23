@@ -12,7 +12,7 @@ import coil.fetch.Fetcher
 import coil.request.Options
 import coil.size.Dimension
 import com.nabla.sdk.core.R
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.domain.entity.InternalException
 import java.net.URI
 import kotlin.math.max

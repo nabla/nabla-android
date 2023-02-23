@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.NablaClient
-import com.nabla.sdk.core.data.helper.toJvmUri
+import com.nabla.sdk.core.data.helper.UrlExt.toJvmUri
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedContent
@@ -14,10 +14,10 @@ import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCall
-import com.nabla.sdk.core.kotlin.combine
+import com.nabla.sdk.core.kotlin.KotlinExt.combine
+import com.nabla.sdk.core.ui.helpers.FlowCollectorExtension.emitIn
 import com.nabla.sdk.core.ui.helpers.LiveFlow
 import com.nabla.sdk.core.ui.helpers.MutableLiveFlow
-import com.nabla.sdk.core.ui.helpers.emitIn
 import com.nabla.sdk.core.ui.helpers.mediapicker.LocalMedia
 import com.nabla.sdk.core.ui.model.ErrorUiModel
 import com.nabla.sdk.messaging.core.domain.entity.Conversation

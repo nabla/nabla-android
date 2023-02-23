@@ -9,9 +9,9 @@ import androidx.annotation.AttrRes
 import coil.decode.VideoFrameDecoder
 import coil.load
 import com.google.android.material.resources.TextAppearance
-import com.nabla.sdk.core.data.helper.toAndroidUri
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeStyle
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemVideoMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 

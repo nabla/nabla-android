@@ -11,9 +11,9 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.resources.TextAppearance
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.ui.helpers.ColorIntOrStateList
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeColor
-import com.nabla.sdk.core.ui.helpers.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeColor
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemAudioMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.ConversationFragment

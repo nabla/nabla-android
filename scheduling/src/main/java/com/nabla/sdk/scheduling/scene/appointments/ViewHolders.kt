@@ -8,11 +8,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
-import com.nabla.sdk.core.ui.helpers.capitalize
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
-import com.nabla.sdk.core.ui.helpers.toJavaDate
+import com.nabla.sdk.core.ui.helpers.DateParsingExtension.toJavaDate
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.fullNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.StringExtension.capitalize
+import com.nabla.sdk.core.ui.helpers.TextViewExtension.setTextOrHide
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingAppointmentItemBinding
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingAppointmentItemLoadingMoreBinding

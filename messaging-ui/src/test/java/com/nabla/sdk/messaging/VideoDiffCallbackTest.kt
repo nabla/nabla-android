@@ -1,7 +1,7 @@
 package com.nabla.sdk.messaging
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 import com.nabla.sdk.messaging.ui.scene.messages.adapter.BindingPayload

@@ -13,9 +13,9 @@ import androidx.core.text.getSpans
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.resources.TextAppearance
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeStyle
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
+import com.nabla.sdk.core.ui.helpers.TextViewExtension.setTextOrHide
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.core.domain.entity.MessageId
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemRepliedMessageViewBinding
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemTextMessageBinding

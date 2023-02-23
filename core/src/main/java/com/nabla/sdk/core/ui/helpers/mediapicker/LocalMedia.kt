@@ -14,15 +14,20 @@ public sealed class LocalMedia {
     abstract override fun equals(other: Any?): Boolean
     abstract override fun hashCode(): Int
 
+    @NablaInternal
     public data class Image(override val uri: URI, override val name: String?, override val mimeType: MimeType.Image) : LocalMedia()
+
+    @NablaInternal
     public data class Video(
         override val uri: URI,
         override val name: String?,
         override val mimeType: MimeType.Video,
     ) : LocalMedia()
 
+    @NablaInternal
     public data class Document(override val uri: URI, override val name: String?, override val mimeType: MimeType) : LocalMedia()
 
+    @NablaInternal
     public companion object {
         @Throws(IllegalArgumentException::class)
         internal fun create(uri: URI, mimeTypeRepresentation: String, name: String?): LocalMedia {

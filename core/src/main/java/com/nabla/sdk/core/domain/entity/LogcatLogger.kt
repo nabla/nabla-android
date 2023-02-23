@@ -63,7 +63,7 @@ public class LogcatLogger(
         ERROR(3)
     }
 
-    public companion object {
+    private companion object {
         private const val DEFAULT_TAG = "Nabla-SDK"
 
         private fun asSdkTag(domain: String?): String {

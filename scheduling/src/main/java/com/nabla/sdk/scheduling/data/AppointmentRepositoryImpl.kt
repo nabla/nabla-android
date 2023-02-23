@@ -3,8 +3,8 @@ package com.nabla.sdk.scheduling.data
 import com.nabla.sdk.core.data.exception.GraphQLException
 import com.nabla.sdk.core.domain.entity.PaginatedList
 import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.kotlin.KotlinExt.sharedSingleIn
 import com.nabla.sdk.core.kotlin.SharedSingle
-import com.nabla.sdk.core.kotlin.sharedSingleIn
 import com.nabla.sdk.scheduling.domain.boundary.AppointmentRepository
 import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory

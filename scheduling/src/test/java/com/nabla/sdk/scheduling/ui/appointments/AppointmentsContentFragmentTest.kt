@@ -9,7 +9,7 @@ import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.VideoCallRoom
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
-import com.nabla.sdk.core.ui.helpers.dpToPx
+import com.nabla.sdk.core.ui.helpers.DensityExtensions.dpToPx
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentsContentBinding
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.scene.appointments.AppointmentsAdapter

@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.annotation.AttrRes
 import androidx.core.view.isVisible
 import com.google.android.material.resources.TextAppearance
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeStyle
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemLivekitRoomMessageBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem

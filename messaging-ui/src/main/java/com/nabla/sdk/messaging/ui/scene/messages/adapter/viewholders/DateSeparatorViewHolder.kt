@@ -2,9 +2,9 @@ package com.nabla.sdk.messaging.ui.scene.messages.adapter.viewholders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.toFormattedRelativeWeekDayAndShortTimeString
-import com.nabla.sdk.core.ui.helpers.toJavaDate
+import com.nabla.sdk.core.ui.helpers.DateFormattingExtension.toFormattedRelativeWeekDayAndShortTimeString
+import com.nabla.sdk.core.ui.helpers.DateParsingExtension.toJavaDate
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemDateBinding
 import com.nabla.sdk.messaging.ui.scene.messages.TimelineItem
 

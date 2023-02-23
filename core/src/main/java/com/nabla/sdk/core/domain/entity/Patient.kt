@@ -1,5 +1,6 @@
 package com.nabla.sdk.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 
 public sealed interface Patient {
@@ -15,8 +16,10 @@ public sealed interface Patient {
         val id: Uuid,
         val displayName: String,
     ) : Patient {
+        @VisibleForTesting
         public companion object
     }
 
+    @VisibleForTesting
     public companion object
 }

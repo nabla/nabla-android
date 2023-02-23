@@ -9,7 +9,7 @@ import com.nabla.sdk.core.domain.boundary.SessionClient
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
-import com.nabla.sdk.core.kotlin.runCatchingCancellable
+import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -81,7 +81,7 @@ internal class SessionClientImpl(
     private suspend fun renewSessionAuthTokens(): AuthTokens {
         val patientId = patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet
 
-        return sessionTokenProvider.fetchNewSessionAuthTokens(patientId)
+        return sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value)
             .getOrElse { exception ->
                 throw AuthenticationException.UnableToGetFreshSessionToken(
                     exceptionMapper.map(exception)

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.size.Size
 import coil.transform.Transformation
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.docscanner.R
 import com.nabla.sdk.docscanner.core.helpers.getWarpedBitmap
 import com.nabla.sdk.docscanner.core.models.NormalizedCorners

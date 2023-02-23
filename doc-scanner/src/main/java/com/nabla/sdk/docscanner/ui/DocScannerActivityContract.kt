@@ -7,7 +7,7 @@ import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
-import com.nabla.sdk.core.ui.helpers.getParcelableExtraCompat
+import com.nabla.sdk.core.ui.helpers.IntentExtension.getParcelableExtraCompat
 
 @NablaInternal
 public class DocScannerActivityContract :

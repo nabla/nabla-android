@@ -10,11 +10,11 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.commit
 import com.nabla.sdk.core.annotation.NablaInternal
-import com.nabla.sdk.core.data.helper.toAndroidUri
+import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.domain.entity.Uri
-import com.nabla.sdk.core.ui.helpers.requireSdkName
-import com.nabla.sdk.core.ui.helpers.setSdkName
-import com.nabla.sdk.core.ui.helpers.viewBinding
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.requireSdkName
+import com.nabla.sdk.core.ui.helpers.SceneHelpers.setSdkName
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.viewBinding
 import com.nabla.sdk.docscanner.core.models.NormalizedCorners
 import com.nabla.sdk.docscanner.databinding.NablaDocumentScanActivityBinding
 import com.nabla.sdk.core.R as CoreR

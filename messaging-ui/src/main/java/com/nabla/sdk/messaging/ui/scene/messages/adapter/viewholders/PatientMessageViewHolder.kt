@@ -4,9 +4,9 @@ import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.getThemeColor
-import com.nabla.sdk.core.ui.helpers.setTextColor
+import com.nabla.sdk.core.ui.helpers.ColorExtensions.setTextColor
+import com.nabla.sdk.core.ui.helpers.ThemeExtension.getThemeColor
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.messaging.core.domain.entity.SendStatus
 import com.nabla.sdk.messaging.ui.R
 import com.nabla.sdk.messaging.ui.databinding.NablaConversationTimelineItemPatientMessageBinding

@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import com.nabla.sdk.core.ui.model.ErrorUiModel
-import com.nabla.sdk.core.ui.model.bind
+import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.bind
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentTimeSlotsBinding
 import com.nabla.sdk.scheduling.scene.VerticalOffsetsItemDecoration
 import com.nabla.sdk.scheduling.scene.slots.TimeSlotsAdapter

@@ -8,7 +8,7 @@ import com.nabla.sdk.core.annotation.NablaInternal
 import kotlinx.datetime.TimeZone
 
 @NablaInternal
-public val timeZoneAdapter: Adapter<TimeZone> = object : Adapter<TimeZone> {
+public object TimeZoneAdapter : Adapter<TimeZone> {
     override fun fromJson(reader: JsonReader, customScalarAdapters: CustomScalarAdapters): TimeZone {
         return TimeZone.of(reader.nextString()!!)
     }

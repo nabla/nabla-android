@@ -32,8 +32,8 @@ apollo {
     // See https://github.com/apollographql/apollo-kotlin/issues/4334
     service("service") {
         packageName.set("com.nabla.sdk.graphql")
-        mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
-        mapScalar("TimeZone", "kotlinx.datetime.TimeZone", "com.nabla.sdk.core.data.apollo.adapter.timeZoneAdapter")
+        mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.UuidAdapter")
+        mapScalar("TimeZone", "kotlinx.datetime.TimeZone", "com.nabla.sdk.core.data.apollo.adapter.TimeZoneAdapter")
         mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
         mapScalar("BigDecimal", "com.apollographql.apollo3.adapter.BigDecimal", "com.apollographql.apollo3.adapter.BigDecimalAdapter")
         generateApolloMetadata.set(true)
@@ -43,7 +43,7 @@ apollo {
     service("internal") {
         srcDir("src/main/graphqlinternal")
         schemaFile.set(file("src/main/graphql/com/nabla/sdk/core/schema.graphqls"))
-        mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.uuidAdapter")
+        mapScalar("UUID", "com.benasher44.uuid.Uuid", "com.nabla.sdk.core.data.apollo.adapter.UuidAdapter")
         mapScalar("DateTime", "kotlinx.datetime.Instant", "com.apollographql.apollo3.adapter.KotlinxInstantAdapter")
         packageName.set("com.nabla.sdk.core.graphql")
         generateAsInternal.set(true)

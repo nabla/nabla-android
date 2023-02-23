@@ -8,10 +8,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.nabla.sdk.core.domain.entity.Provider
-import com.nabla.sdk.core.ui.helpers.context
-import com.nabla.sdk.core.ui.helpers.fullNameWithPrefix
-import com.nabla.sdk.core.ui.helpers.setTextOrHide
-import com.nabla.sdk.core.ui.helpers.toJavaDate
+import com.nabla.sdk.core.ui.helpers.DateParsingExtension.toJavaDate
+import com.nabla.sdk.core.ui.helpers.MessageAuthorExtensions.fullNameWithPrefix
+import com.nabla.sdk.core.ui.helpers.TextViewExtension.setTextOrHide
+import com.nabla.sdk.core.ui.helpers.ViewBindingExtension.context
 import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingAppointmentSummaryViewBinding
 import com.nabla.sdk.scheduling.domain.entity.Address
