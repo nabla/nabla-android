@@ -19,6 +19,7 @@ public data class ProviderInConversation(
         return Companion.isInactiveAt(typingAt)
     }
 
+    @VisibleForTesting
     public companion object {
         @VisibleForTesting public val TYPING_TIME_WINDOW: Duration = 20.seconds
 

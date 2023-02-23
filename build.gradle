@@ -50,6 +50,8 @@ apiValidation {
         "com.nabla.sdk.docscanner.BuildConfig",
         "com.nabla.sdk.scheduling.BuildConfig",
         "com.nabla.sdk.videocall.BuildConfig",
+        "com.nabla.sdk.messaging.ui.BuildConfig",
+        "com.nabla.sdk.messaging.core.BuildConfig",
     ]
 }
 

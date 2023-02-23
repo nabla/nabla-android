@@ -1,10 +1,3 @@
-public final class com/nabla/sdk/messaging/core/BuildConfig {
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public fun <init> ()V
-}
-
 public abstract interface class com/nabla/sdk/messaging/core/NablaMessagingClient {
 	public abstract fun createConversationWithMessage-BWLJW6A (Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/lang/String;Ljava/util/List;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun createConversationWithMessage-BWLJW6A$default (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;Lcom/nabla/sdk/messaging/core/domain/entity/MessageInput;Ljava/lang/String;Ljava/util/List;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
@@ -63,9 +56,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Conversation {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/Conversation$Companion {
-}
-
 public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivity : com/nabla/sdk/messaging/core/domain/entity/ConversationItem {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivity$Companion;
 	public synthetic fun <init> (Ljava/util/UUID;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationId;Lkotlinx/datetime/Instant;Lkotlinx/datetime/Instant;Lcom/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -86,9 +76,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivi
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivity$Companion {
-}
-
 public abstract class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent {
 }
 
@@ -102,9 +89,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivi
 	public final fun getMaybeProvider ()Lcom/nabla/sdk/core/domain/entity/MaybeProvider;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityContent$ProviderJoinedConversation$Companion {
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/ConversationActivityId {
@@ -240,9 +224,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Image : 
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Image$Companion {
-}
-
 public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Video : com/nabla/sdk/messaging/core/domain/entity/FileLocal {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal$Video$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/nabla/sdk/core/domain/entity/MimeType$Video;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -260,9 +241,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Video : 
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/FileLocal$Video$Companion {
-}
-
 public abstract class com/nabla/sdk/messaging/core/domain/entity/FileSource {
 }
 
@@ -276,9 +254,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Local :
 	public final fun getFileLocal ()Lcom/nabla/sdk/messaging/core/domain/entity/FileLocal;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Local$Companion {
 }
 
 public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded : com/nabla/sdk/messaging/core/domain/entity/FileSource {
@@ -295,9 +270,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Uploade
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/FileSource$Uploaded$Companion {
-}
-
 public final class com/nabla/sdk/messaging/core/domain/entity/InvalidMessageException : com/nabla/sdk/core/domain/entity/NablaException {
 	public fun <init> (Ljava/lang/String;)V
 }
@@ -312,9 +284,6 @@ public abstract class com/nabla/sdk/messaging/core/domain/entity/Message : com/n
 	public final fun getSentAt ()Lkotlinx/datetime/Instant;
 }
 
-public final class com/nabla/sdk/messaging/core/domain/entity/Message$Companion {
-}
-
 public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted : com/nabla/sdk/messaging/core/domain/entity/Message {
 	public static final field Companion Lcom/nabla/sdk/messaging/core/domain/entity/Message$Deleted$Companion;
 	public final fun component1 ()Lcom/nabla/sdk/messaging/core/domain/entity/BaseMessage;
@@ -325,9 +294,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted : 
 	public fun hashCode ()I
 	public fun modify (Lcom/nabla/sdk/messaging/core/domain/entity/SendStatus;)Lcom/nabla/sdk/messaging/core/domain/entity/Message;
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/messaging/core/domain/entity/Message$Deleted$Companion {
 }
 
 public abstract class com/nabla/sdk/messaging/core/domain/entity/Message$Media : com/nabla/sdk/messaging/core/domain/entity/Message {
@@ -591,9 +557,6 @@ public final class com/nabla/sdk/messaging/core/domain/entity/ProviderInConversa
 	public final fun isTyping (Lkotlinx/datetime/Clock;)Z
 	public static synthetic fun isTyping$default (Lcom/nabla/sdk/messaging/core/domain/entity/ProviderInConversation;Lkotlinx/datetime/Clock;ILjava/lang/Object;)Z
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/messaging/core/domain/entity/ProviderInConversation$Companion {
 }
 
 public class com/nabla/sdk/messaging/core/domain/entity/ProviderMissingPermissionException : com/nabla/sdk/core/domain/entity/NablaException {

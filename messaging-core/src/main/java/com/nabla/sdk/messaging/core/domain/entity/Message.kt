@@ -36,6 +36,7 @@ public sealed interface FileLocal {
         override val fileName: String?,
         override val mimeType: MimeType.Image,
     ) : FileLocal {
+        @VisibleForTesting
         public companion object
     }
 
@@ -44,6 +45,7 @@ public sealed interface FileLocal {
         override val fileName: String?,
         override val mimeType: MimeType.Video,
     ) : FileLocal {
+        @VisibleForTesting
         public companion object
     }
 
@@ -68,6 +70,7 @@ public sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileU
     public data class Local<FileLocalType : FileLocal, FileUploadType : FileUpload>(
         val fileLocal: FileLocalType,
     ) : FileSource<FileLocalType, FileUploadType>() {
+        @VisibleForTesting
         public companion object
     }
 
@@ -75,6 +78,7 @@ public sealed class FileSource<FileLocalType : FileLocal, FileUploadType : FileU
         val fileLocal: FileLocalType?,
         val fileUpload: FileUploadType,
     ) : FileSource<FileLocalType, FileUploadType>() {
+        @VisibleForTesting
         public companion object
     }
 }
@@ -246,8 +250,10 @@ public sealed class Message : ConversationItem {
             return copy(baseMessage = baseMessage.copy(sendStatus = status))
         }
 
+        @VisibleForTesting
         public companion object
     }
 
+    @VisibleForTesting
     public companion object
 }

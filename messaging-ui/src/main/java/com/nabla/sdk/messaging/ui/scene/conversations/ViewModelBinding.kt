@@ -89,7 +89,7 @@ private fun ConversationListView.bindViewModelState(
     }
 }
 
-public class DefaultOffsetsItemDecoration(
+internal class DefaultOffsetsItemDecoration(
     private val spacingBetweenItemsPx: Int = 0,
     private val firstItemTopPaddingPx: Int = spacingBetweenItemsPx,
     private val lastItemBottomPaddingPx: Int = 0,

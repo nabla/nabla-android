@@ -1,6 +1,7 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.EphemeralUrl
@@ -51,5 +52,6 @@ public data class Conversation(
     val pictureUrl: EphemeralUrl?,
     val isLocked: Boolean,
 ) {
+    @VisibleForTesting
     public companion object
 }

@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.core.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.MaybeProvider
 import kotlinx.datetime.Instant
@@ -16,6 +17,7 @@ public data class ConversationActivity(
     val activityTime: Instant,
     val content: ConversationActivityContent
 ) : ConversationItem {
+    @VisibleForTesting
     public companion object
 }
 
@@ -23,6 +25,7 @@ public sealed class ConversationActivityContent {
     public data class ProviderJoinedConversation(
         val maybeProvider: MaybeProvider
     ) : ConversationActivityContent() {
+        @VisibleForTesting
         public companion object
     }
 }

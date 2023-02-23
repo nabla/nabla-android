@@ -1,10 +1,3 @@
-public final class com/nabla/sdk/messaging/ui/BuildConfig {
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public fun <init> ()V
-}
-
 public final class com/nabla/sdk/messaging/ui/helper/ConversationListViewModelFactory : androidx/lifecycle/AbstractSavedStateViewModelFactory {
 	public fun <init> (Landroidx/savedstate/SavedStateRegistryOwner;Lcom/nabla/sdk/messaging/core/NablaMessagingClient;)V
 	public synthetic fun <init> (Landroidx/savedstate/SavedStateRegistryOwner;Lcom/nabla/sdk/messaging/core/NablaMessagingClient;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -18,13 +11,6 @@ public final class com/nabla/sdk/messaging/ui/scene/conversations/ConversationLi
 
 public final class com/nabla/sdk/messaging/ui/scene/conversations/ConversationListViewModel : androidx/lifecycle/ViewModel {
 	public fun <init> (Lcom/nabla/sdk/messaging/core/NablaMessagingClient;)V
-}
-
-public final class com/nabla/sdk/messaging/ui/scene/conversations/DefaultOffsetsItemDecoration : androidx/recyclerview/widget/RecyclerView$ItemDecoration {
-	public fun <init> ()V
-	public fun <init> (III)V
-	public synthetic fun <init> (IIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getItemOffsets (Landroid/graphics/Rect;Landroid/view/View;Landroidx/recyclerview/widget/RecyclerView;Landroidx/recyclerview/widget/RecyclerView$State;)V
 }
 
 public class com/nabla/sdk/messaging/ui/scene/conversations/InboxFragment : androidx/fragment/app/Fragment {
