@@ -1,5 +1,6 @@
 package com.nabla.sdk.core
 
+import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaInternalException
 
 /**
@@ -9,6 +10,7 @@ import com.nabla.sdk.core.domain.entity.InternalException.Companion.throwNablaIn
  * @param baseUrl Optional — base url for Nabla API server.
  * @param additionalHeadersProvider Optional — useful to append additional query headers to http calls.
  */
+@NablaInternal
 public data class NetworkConfiguration(
     internal val baseUrl: String = "https://api.nabla.com/",
     internal val additionalHeadersProvider: HeaderProvider? = null,
@@ -18,4 +20,12 @@ public data class NetworkConfiguration(
             throwNablaInternalException("baseUrl($baseUrl) must end with a /")
         }
     }
+}
+
+@NablaInternal
+public data class Header(val name: String, val value: String)
+
+@NablaInternal
+public interface HeaderProvider {
+    public fun headers(): List<Header>
 }

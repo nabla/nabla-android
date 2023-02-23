@@ -24,14 +24,11 @@ public class Configuration(
     public val context: Context = context.applicationContext
 
     @NablaInternal
+    public var networkConfiguration: NetworkConfiguration = NetworkConfiguration()
+
+    @NablaInternal
     public companion object {
         internal var defaultAppContext: Context? = null
         internal var defaultPublicApiKey: String? = null
     }
-}
-
-public data class Header(val name: String, val value: String)
-
-public interface HeaderProvider {
-    public fun headers(): List<Header>
 }

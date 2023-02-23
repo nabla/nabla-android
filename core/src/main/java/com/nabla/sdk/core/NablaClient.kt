@@ -25,19 +25,18 @@ import kotlinx.coroutines.launch
  * check documentation of [initialize] and [getInstance].
  */
 public class NablaClient private constructor(
-    public val name: String,
-    private val configuration: Configuration,
-    networkConfiguration: NetworkConfiguration,
     modulesFactory: List<Module.Factory<out Module<*>>>,
+    private val configuration: Configuration,
+    public val name: String,
     sessionTokenProvider: SessionTokenProvider,
 ) {
 
     private val coreContainerDelegate = lazy {
         CoreContainer(
-            name,
-            configuration,
-            networkConfiguration,
             modulesFactory,
+            configuration,
+            configuration.networkConfiguration,
+            name,
             sessionTokenProvider,
         )
     }
@@ -134,7 +133,6 @@ public class NablaClient private constructor(
          *
          * @param modules list of modules to be used by the SDK.
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
-         * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
          * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
          *
          * @see com.nabla.sdk.core.domain.boundary.SessionTokenProvider
@@ -142,10 +140,9 @@ public class NablaClient private constructor(
         public fun initialize(
             modules: List<Module.Factory<out Module<*>>>,
             configuration: Configuration = Configuration(),
-            networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
             sessionTokenProvider: SessionTokenProvider,
         ): NablaClient {
-            return initialize(modules, configuration, networkConfiguration, DEFAULT_NAME, sessionTokenProvider)
+            return initialize(modules, configuration, DEFAULT_NAME, sessionTokenProvider)
         }
 
         /**
@@ -154,7 +151,6 @@ public class NablaClient private constructor(
          *
          * @param modules list of modules to be used by the SDK.
          * @param configuration optional configuration if you're not using the manifest for the API key or you want to override some defaults.
-         * @param networkConfiguration optional network configuration, exposed for internal tests purposes and should not be used in your app.
          * @param sessionTokenProvider Callback to get server-made authentication tokens, see [SessionTokenProvider].
          * @param name name to create your own instance, if not specified a default name is used.
          *
@@ -163,14 +159,13 @@ public class NablaClient private constructor(
         public fun initialize(
             modules: List<Module.Factory<out Module<*>>>,
             configuration: Configuration = Configuration(),
-            networkConfiguration: NetworkConfiguration = NetworkConfiguration(),
             name: String,
             sessionTokenProvider: SessionTokenProvider,
         ): NablaClient {
             synchronized(this) {
                 val alreadyInitializedInstance = INSTANCES[name]
                 return if (alreadyInitializedInstance == null) {
-                    NablaClient(name, configuration, networkConfiguration, modules, sessionTokenProvider)
+                    NablaClient(modules, configuration, name, sessionTokenProvider)
                         .also { INSTANCES[name] = it }
                 } else {
                     alreadyInitializedInstance

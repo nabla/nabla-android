@@ -806,20 +806,20 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 context = RuntimeEnvironment.getApplication(),
                 publicApiKey = "dummy-api-key",
                 logger = StdLogger(),
-            ),
-            networkConfiguration = NetworkConfiguration(
-                baseUrl = baseUrl,
-            ),
-            modules = listOf(NablaMessagingModule()),
-            sessionTokenProvider = {
-                Result.success(
-                    AuthTokens(
-                        refreshToken = refreshToken,
-                        accessToken = accessToken
-                    )
+            ).apply {
+                networkConfiguration = NetworkConfiguration(
+                    baseUrl = baseUrl,
                 )
-            }
-        )
+            },
+            modules = listOf(NablaMessagingModule()),
+        ) {
+            Result.success(
+                AuthTokens(
+                    refreshToken = refreshToken,
+                    accessToken = accessToken
+                )
+            )
+        }
 
         if (setCurrentUser) {
             nablaClient.setCurrentUserOrThrow("dummy-user")

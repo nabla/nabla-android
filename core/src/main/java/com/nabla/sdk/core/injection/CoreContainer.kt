@@ -72,10 +72,10 @@ import kotlin.time.toJavaDuration
 
 @NablaInternal
 public class CoreContainer internal constructor(
-    public val name: String,
+    private val modulesFactory: List<Module.Factory<out Module<*>>>,
     public val configuration: Configuration,
     networkConfiguration: NetworkConfiguration,
-    private val modulesFactory: List<Module.Factory<out Module<*>>>,
+    public val name: String,
     private val sessionTokenProvider: SessionTokenProvider,
 ) {
     public val logger: Logger = MutableCompositeLogger(configuration.logger)
