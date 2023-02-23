@@ -1,5 +1,6 @@
 package com.nabla.sdk.scheduling.domain.entity
 
+import androidx.annotation.VisibleForTesting
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.domain.entity.Provider
 import com.nabla.sdk.core.domain.entity.Uri
@@ -43,6 +44,7 @@ public sealed interface AppointmentLocation {
         override val type: AppointmentLocationType? = null
     }
 
+    @VisibleForTesting
     public companion object
 }
 

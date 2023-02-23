@@ -68,6 +68,7 @@ public class DocumentScanActivity : AppCompatActivity() {
         }
     }
 
+    @NablaInternal
     public companion object {
         internal const val EXTRA_RESULT_IMAGE_URI = "result_image_uri"
         public fun newIntent(context: Context, name: String): Intent =

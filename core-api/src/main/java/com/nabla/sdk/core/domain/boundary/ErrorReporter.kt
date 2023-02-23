@@ -36,6 +36,7 @@ public interface ErrorReporter {
         public fun create(logger: Logger): ErrorReporter
     }
 
+    @NablaInternal
     public companion object {
         @NablaInternal
         public var reporterFactory: Factory? = null

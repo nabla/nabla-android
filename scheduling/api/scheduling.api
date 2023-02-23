@@ -1,10 +1,3 @@
-public final class com/nabla/sdk/scheduling/BuildConfig {
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public fun <init> ()V
-}
-
 public abstract interface class com/nabla/sdk/scheduling/NablaSchedulingClient {
 	public abstract fun openScheduleAppointmentActivity (Landroid/content/Context;)V
 	public abstract fun registerPaymentActivityContract (Lcom/nabla/sdk/scheduling/PaymentActivityContract;)V
@@ -62,9 +55,6 @@ public final class com/nabla/sdk/scheduling/domain/entity/Address : android/os/P
 	public fun writeToParcel (Landroid/os/Parcel;I)V
 }
 
-public final class com/nabla/sdk/scheduling/domain/entity/Address$Companion {
-}
-
 public final class com/nabla/sdk/scheduling/domain/entity/Address$Creator : android/os/Parcelable$Creator {
 	public fun <init> ()V
 	public final fun createFromParcel (Landroid/os/Parcel;)Lcom/nabla/sdk/scheduling/domain/entity/Address;
@@ -104,9 +94,6 @@ public final class com/nabla/sdk/scheduling/domain/entity/AppointmentId {
 public abstract interface class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation {
 	public static final field Companion Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Companion;
 	public abstract fun getType ()Lcom/nabla/sdk/scheduling/domain/entity/AppointmentLocationType;
-}
-
-public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Companion {
 }
 
 public final class com/nabla/sdk/scheduling/domain/entity/AppointmentLocation$Physical : com/nabla/sdk/scheduling/domain/entity/AppointmentLocation {
@@ -183,9 +170,6 @@ public final class com/nabla/sdk/scheduling/domain/entity/PendingAppointment {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/nabla/sdk/scheduling/domain/entity/PendingAppointment$Companion {
-}
-
 public final class com/nabla/sdk/scheduling/domain/entity/Price {
 	public static final field Companion Lcom/nabla/sdk/scheduling/domain/entity/Price$Companion;
 	public fun <init> (Ljava/math/BigDecimal;Ljava/lang/String;)V
@@ -198,9 +182,6 @@ public final class com/nabla/sdk/scheduling/domain/entity/Price {
 	public final fun getCurrencyCode ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
-}
-
-public final class com/nabla/sdk/scheduling/domain/entity/Price$Companion {
 }
 
 public final class com/nabla/sdk/scheduling/scene/appointments/AppointmentType$Creator : android/os/Parcelable$Creator {
@@ -236,9 +217,5 @@ public final class com/nabla/sdk/scheduling/scene/details/AppointmentDetailsActi
 public final class com/nabla/sdk/scheduling/scene/details/AppointmentDetailsActivity$Companion {
 	public final fun newIntent-rYdnBjw (Landroid/content/Context;Ljava/util/UUID;Ljava/lang/String;)Landroid/content/Intent;
 	public static synthetic fun newIntent-rYdnBjw$default (Lcom/nabla/sdk/scheduling/scene/details/AppointmentDetailsActivity$Companion;Landroid/content/Context;Ljava/util/UUID;Ljava/lang/String;ILjava/lang/Object;)Landroid/content/Intent;
-}
-
-public final class com/nabla/sdk/scheduling/scene/slots/ViewHoldersKt {
-	public static final fun formatDate (Lkotlinx/datetime/LocalDate;Landroid/content/Context;)Ljava/lang/String;
 }
 

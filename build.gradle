@@ -40,9 +40,16 @@ apiValidation {
         "com.nabla.sdk.docscanner.databinding",
         "com.nabla.sdk.graphql",
         "com.nabla.sdk.core.graphql",
+        "com.nabla.sdk.docscanner.ml",
     ]
     ignoredClasses += [
         "com.nabla.sdk.core.BuildConfig",
+        "com.nabla.sdk.core.api.BuildConfig",
+        "com.nabla.sdk.core.annotation.NablaInternal",
+        "com.nabla.sdk.core.reporting.BuildConfig",
+        "com.nabla.sdk.docscanner.BuildConfig",
+        "com.nabla.sdk.scheduling.BuildConfig",
+        "com.nabla.sdk.videocall.BuildConfig",
     ]
 }
 

@@ -161,7 +161,7 @@ internal class LoadingViewHolder(
     }
 }
 
-public fun formatDate(localDate: LocalDate, context: Context): String {
+internal fun formatDate(localDate: LocalDate, context: Context): String {
     val relativeDay = DateUtils.getRelativeTimeSpanString(
         localDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds(),
         Clock.System.now().toEpochMilliseconds(),
