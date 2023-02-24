@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.nabla.sdk.core.ui.helpers.CoroutineScopeExtension.launchCollect
 import com.nabla.sdk.core.ui.helpers.DensityExtensions.dpToPx
@@ -14,7 +14,6 @@ import com.nabla.sdk.core.ui.helpers.RecyclerViewExtension.scrollToTop
 import com.nabla.sdk.core.ui.model.ErrorUiModel.Companion.bind
 import com.nabla.sdk.messaging.core.domain.entity.ConversationId
 import com.nabla.sdk.messaging.ui.scene.conversations.ConversationListViewModel.State
-import kotlinx.coroutines.launch
 
 public fun ConversationListView.bindViewModel(
     viewModel: ConversationListViewModel,
@@ -65,26 +64,24 @@ private fun ConversationListView.bindViewModelState(
     viewModel: ConversationListViewModel,
     conversationAdapter: ConversationListAdapter,
 ) {
-    viewModel.viewModelScope.launch {
-        viewModel.stateFlow.collect { state ->
-            loadingView.isVisible = state is State.Loading
-            recyclerView.isVisible = state is State.Loaded
-            errorViewContainer.isVisible = state is State.Error
-            emptyStateView.isVisible = state is State.Empty
+    findViewTreeLifecycleOwner()?.lifecycleScope?.launchCollect(viewModel.stateFlow) { state ->
+        loadingView.isVisible = state is State.Loading
+        recyclerView.isVisible = state is State.Loaded
+        errorViewContainer.isVisible = state is State.Error
+        emptyStateView.isVisible = state is State.Empty
 
-            when (state) {
-                is State.Loaded -> {
-                    // Only scroll down automatically if we're at the bottom of the chat && there are new items
-                    val shouldScrollToBottomAfterSubmit = recyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size
+        when (state) {
+            is State.Loaded -> {
+                // Only scroll down automatically if we're at the bottom of the chat && there are new items
+                val shouldScrollToBottomAfterSubmit = recyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size
 
-                    conversationAdapter.submitList(state.items) {
-                        if (shouldScrollToBottomAfterSubmit) recyclerView.scrollToTop()
-                    }
+                conversationAdapter.submitList(state.items) {
+                    if (shouldScrollToBottomAfterSubmit) recyclerView.scrollToTop()
                 }
-                is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
-                is State.Loading -> Unit // no-op
-                is State.Empty -> Unit // no-op
             }
+            is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
+            is State.Loading -> Unit // no-op
+            is State.Empty -> Unit // no-op
         }
     }
 }
