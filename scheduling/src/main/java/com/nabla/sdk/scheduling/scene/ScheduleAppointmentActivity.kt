@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_OPEN
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.fragment.app.commit
@@ -61,6 +62,13 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         )
     }
 
+    internal fun goToSuccess() {
+        pushFragment(
+            AppointmentCreatedSuccessFragment(),
+            popBackStack = true,
+        )
+    }
+
     private fun pushFragment(
         fragment: Fragment,
         isFirstScreen: Boolean = false,
@@ -68,7 +76,7 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         popBackStack: Boolean = false
     ) {
         if (popBackStack) {
-            supportFragmentManager.popBackStack()
+            supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)
         }
         supportFragmentManager.commit {
             if (isFirstScreen) {

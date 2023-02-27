@@ -132,6 +132,9 @@ fragment AppointmentFragment on Appointment {
         ...ProviderFragment
     }
     scheduledAt
+    price {
+        ...PriceFragment
+    }
     state {
         ... on UpcomingAppointment {
             __typename
@@ -142,8 +145,7 @@ fragment AppointmentFragment on Appointment {
         ... on PendingAppointment {
             schedulingPaymentRequirement {
                 price {
-                    amount
-                    currencyCode
+                    ...PriceFragment
                 }
             }
         }
@@ -161,6 +163,11 @@ fragment AppointmentFragment on Appointment {
             }
         }
     }
+}
+
+fragment PriceFragment on Price {
+    amount
+    currencyCode
 }
 
 fragment AddressFragment on Address {

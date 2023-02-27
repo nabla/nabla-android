@@ -109,8 +109,8 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                 is Event.ShowMessage -> {
                     Toast.makeText(context, event.message.evaluate(this), Toast.LENGTH_LONG).show()
                 }
-                Event.Finish -> {
-                    hostActivity().finish()
+                Event.ShowConfirmation -> {
+                    hostActivity().goToSuccess()
                 }
                 is Event.StartPayment -> {
                     paymentLauncher?.launch(event.pendingAppointment)
@@ -121,7 +121,6 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
     }
 
     internal companion object {
-        private const val ARG_SLOT_INSTANT = "ARG_SLOT_INSTANT"
         private const val ARG_PENDING_APPOINTMENT_UUID = "ARG_PENDING_APPOINTMENT_UUID"
 
         internal fun newInstance(

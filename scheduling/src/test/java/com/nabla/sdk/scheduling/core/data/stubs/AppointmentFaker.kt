@@ -12,6 +12,7 @@ import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 import com.nabla.sdk.scheduling.domain.entity.AppointmentState
+import com.nabla.sdk.scheduling.domain.entity.Price
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.random.Random
@@ -22,12 +23,14 @@ internal fun Appointment.Companion.fake(
     scheduledAt: Instant = Clock.System.now(),
     state: AppointmentState = AppointmentState.Upcoming,
     location: AppointmentLocation = AppointmentLocation.fake(videoCallRoomIsOpen = state == AppointmentState.Upcoming),
+    price: Price? = null,
 ) = Appointment(
     id = id,
     provider = provider,
     scheduledAt = scheduledAt,
     state = state,
     location = location,
+    price = price,
 )
 
 internal fun AppointmentLocation.Companion.fake(

@@ -16,6 +16,7 @@ internal data class Appointment(
     val scheduledAt: Instant,
     val state: AppointmentState,
     val location: AppointmentLocation,
+    val price: Price?,
 ) {
     companion object
 }

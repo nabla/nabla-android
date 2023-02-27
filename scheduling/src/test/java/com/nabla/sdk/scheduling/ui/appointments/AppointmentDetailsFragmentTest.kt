@@ -14,6 +14,7 @@ import com.nabla.sdk.scheduling.domain.entity.Appointment
 import com.nabla.sdk.scheduling.domain.entity.AppointmentId
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocation
 import com.nabla.sdk.scheduling.domain.entity.AppointmentState
+import com.nabla.sdk.scheduling.domain.entity.Price
 import com.nabla.sdk.scheduling.scene.details.AppointmentDetailsViewModel
 import com.nabla.sdk.scheduling.scene.details.bind
 import com.nabla.sdk.scheduling.scene.withNablaSchedulingThemeOverlays
@@ -22,6 +23,7 @@ import com.nabla.sdk.tests.common.DayNightPaparazziRule
 import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
+import java.math.BigDecimal
 import java.util.UUID
 
 class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
@@ -114,7 +116,8 @@ class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
                     extraDetails = "Apt 1",
                     zipCode = "12345",
                 )
-            )
+            ),
+            price = Price(BigDecimal(50), "USD"),
         )
     }
 }

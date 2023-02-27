@@ -87,7 +87,7 @@ internal fun NablaSchedulingFragmentAppointmentDetailsBinding.bind(state: State,
             it.location,
             it.provider,
             it.scheduledAt,
-            (it.state as? AppointmentState.Pending)?.requiredPrice,
+            (it.state as? AppointmentState.Pending)?.requiredPrice ?: it.price,
         )
     }
     if (state is State.Error) {

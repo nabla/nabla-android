@@ -158,8 +158,7 @@ internal class AppointmentConfirmationViewModel(
                     isLoadingFlow.value = false
                 }.onSuccess {
                     logDebug("pending appointment confirmed by Nabla's backend, finishing.")
-                    eventsMutableFlow.emit(Event.ShowMessage(Res(R.string.nabla_scheduling_confirm_success)))
-                    eventsMutableFlow.emit(Event.Finish)
+                    eventsMutableFlow.emit(Event.ShowConfirmation)
                 }
         }
     }
@@ -208,7 +207,7 @@ internal class AppointmentConfirmationViewModel(
     }
 
     sealed interface Event {
-        object Finish : Event
+        object ShowConfirmation : Event
         data class ShowMessage(val message: StringOrRes) : Event
         data class StartPayment(val pendingAppointment: PendingAppointment) : Event
     }

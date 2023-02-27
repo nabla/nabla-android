@@ -8,8 +8,10 @@
     <string name="nabla_scheduling_book_appointment">Prendre rendez-vous</string>
     <string name="nabla_scheduling_continue_cta">Continuer</string>
     <string name="nabla_scheduling_confirm_cta">Confirmer</string>
+    <string name="nabla_scheduling_success_cta">OK</string>
     <string name="nabla_scheduling_go_payment_cta">Aller au paiement</string>
     <string name="nabla_scheduling_appointments_pagination_error">Une erreur est survenue lors du chargement des réservations.</string>
+    <string name="nabla_scheduling_success_body">Votre rendez-vous a été programmé.</string>
 
     <string name="nabla_scheduling_location_selection_title">Choisissez le mode de rendez-vous</string>
     <string name="nabla_scheduling_location_physical">Rendez-vous physique</string>
@@ -55,5 +57,4 @@
     <string name="nabla_scheduling_appointment_details_title">Rendez-vous</string>
 
     <string name="nabla_scheduling_payment_error">Le paiement n’a pas abouti, veuillez réessayer.</string>
-    <string name="nabla_scheduling_confirm_success">Rendez-vous créé avec succès.</string>
 </resources>

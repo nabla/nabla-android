@@ -19,6 +19,7 @@ import com.nabla.sdk.scheduling.graphql.fragment.AddressFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentCategoryFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AppointmentFragment
 import com.nabla.sdk.scheduling.graphql.fragment.AvailabilitySlotFragment
+import com.nabla.sdk.scheduling.graphql.fragment.PriceFragment
 import kotlin.time.Duration.Companion.minutes
 
 internal class GqlMapper(
@@ -33,6 +34,7 @@ internal class GqlMapper(
             scheduledAt = fragment.scheduledAt,
             state = mapAppointmentState(fragment.state),
             location = location,
+            price = fragment.price?.priceFragment?.let { mapPrice(it) },
         )
     }
 
@@ -41,7 +43,7 @@ internal class GqlMapper(
             state.onUpcomingAppointment != null -> AppointmentState.Upcoming
             state.onFinalizedAppointment != null -> AppointmentState.Finalized
             state.onPendingAppointment != null -> AppointmentState.Pending(
-                requiredPrice = state.onPendingAppointment.schedulingPaymentRequirement?.price?.let(::mapPrice)
+                requiredPrice = state.onPendingAppointment.schedulingPaymentRequirement?.price?.priceFragment?.let(::mapPrice)
             )
             else -> {
                 logger.error("Unknown appointment state $state — considering it as Upcoming")
@@ -49,7 +51,7 @@ internal class GqlMapper(
             }
         }
 
-    private fun mapPrice(price: AppointmentFragment.Price) = Price(price.amount, price.currencyCode)
+    private fun mapPrice(price: PriceFragment) = Price(price.amount, price.currencyCode)
 
     private fun mapLocation(location: AppointmentFragment.Location): AppointmentLocation {
         location.onPhysicalAppointmentLocation?.let {
