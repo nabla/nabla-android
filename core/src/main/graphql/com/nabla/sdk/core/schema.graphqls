@@ -540,6 +540,7 @@ type Appointment {
   scheduledAt: DateTime!
   state: AppointmentState!
   location: AppointmentLocation!
+  price: Price
 }
 
 union AppointmentLocation = PhysicalAppointmentLocation | RemoteAppointmentLocation
