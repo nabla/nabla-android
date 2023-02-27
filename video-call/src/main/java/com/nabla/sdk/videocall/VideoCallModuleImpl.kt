@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 
 internal class VideoCallModuleImpl internal constructor(
     coreContainer: CoreContainer,
-) : VideoCallModule, VideoCallInternalClient, VideoCallPrivateClient {
+) : VideoCallModule, VideoCallInternalClient, VideoCallPrivateClient, NablaVideoCallClient {
 
     private val name = coreContainer.name
 

@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - Scheduling: Replace your current usage of `nablaClient.schedulingModule` to `nablaClient.schedulingClient`.
-- VideoCall: `openVideoCall` is now private and should not be used anymore.
+- VideoCall: Replace your current usage of `nablaClient.videoCallModule` to `nablaClient.videoCallClient`.
 - Core: `NablaClient.authenticate` is replaced by `NablaClient.setCurrentUserOrThrow` and `NablaClient.clearCurrentUser`. `SessionTokenProvider` is set during `NablaClient.initialize`.
 
 ### Added

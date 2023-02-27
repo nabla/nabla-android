@@ -1,8 +1,16 @@
+public abstract interface class com/nabla/sdk/videocall/NablaVideoCallClient {
+	public abstract fun openVideoCall (Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+}
+
 public abstract interface class com/nabla/sdk/videocall/NablaVideoCallModule {
 	public static final field Factory Lcom/nabla/sdk/videocall/NablaVideoCallModule$Factory;
 }
 
 public final class com/nabla/sdk/videocall/NablaVideoCallModule$Factory {
 	public final fun invoke ()Lcom/nabla/sdk/core/domain/boundary/VideoCallModule$Factory;
+}
+
+public final class com/nabla/sdk/videocall/NablaVideoCallModuleKt {
+	public static final fun getVideoCallClient (Lcom/nabla/sdk/core/NablaClient;)Lcom/nabla/sdk/videocall/NablaVideoCallClient;
 }
 
