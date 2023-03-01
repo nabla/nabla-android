@@ -1,5 +1,7 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.entity.LogcatLogger
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCall
 import com.nabla.sdk.messaging.core.domain.entity.ConversationActivity
@@ -20,13 +22,14 @@ internal class TimelineBuilder {
         audioPlaybackProgressMap: Map<Uri, PlaybackProgress> = emptyMap(),
         nowPlayingAudioUri: Uri? = null,
         currentVideoCall: VideoCall? = null,
+        logger: Logger = LogcatLogger(),
     ): List<TimelineItem> {
 
         // First generates items containing messages, conversation activity and action request.
         // In this first pass, we don't show the status and the author (will do in a second pass)
-        val allMessageItems = items.map { item ->
+        val allMessageItems = items.mapNotNull { item ->
             when (item) {
-                is ConversationActivity -> item.toTimelineItem()
+                is ConversationActivity -> item.toTimelineItem(logger)
                 is Message -> {
                     item.toTimelineItem(
                         showAuthorAvatar = false,

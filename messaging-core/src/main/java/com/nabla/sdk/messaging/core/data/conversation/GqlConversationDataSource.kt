@@ -57,7 +57,13 @@ internal class GqlConversationDataSource constructor(
                 }
                 response.data?.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let { conversationFragment ->
                     insertConversationToConversationsListCache(conversationFragment)
+                    return@onEach
                 }
+                response.data?.conversations?.event?.onConversationUpdatedEvent?.conversation?.conversationFragment?.let {
+                    /* no-op — Handled by Apollo's Normalized Cache */
+                    return@onEach
+                }
+                logger.warn("Unknown ConversationsEventsSubscription event not handled: ${response.data?.conversations?.event?.__typename}")
             }
     }
 

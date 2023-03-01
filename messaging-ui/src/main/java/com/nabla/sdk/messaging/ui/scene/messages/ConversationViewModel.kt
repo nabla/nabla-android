@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nabla.sdk.core.NablaClient
 import com.nabla.sdk.core.data.helper.UrlExt.toJvmUri
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.NetworkException
 import com.nabla.sdk.core.domain.entity.PaginatedContent
@@ -157,7 +158,7 @@ internal class ConversationViewModel(
             voiceMessagesProgressMutableFlow,
             nowPlayingVoiceMessageMutableFlow,
             currentCallFlow,
-            StateMapper()::mapToState,
+            StateMapper(messagingClient.logger)::mapToState,
         )
             .retryWhen { throwable, _ ->
                 messagingClient.logger.warn(
@@ -691,7 +692,7 @@ internal class ConversationViewModel(
         object DocumentScanFailed : ErrorAlert(R.string.nabla_conversation_document_scan_failure)
     }
 
-    private class StateMapper {
+    private class StateMapper(private val logger: Logger) {
         private val timelineBuilder = TimelineBuilder()
 
         fun mapToState(
@@ -712,6 +713,7 @@ internal class ConversationViewModel(
                     audioPlaybackProgressMap = audioPlaybackProgressMap,
                     nowPlayingAudioUri = nowPlayingAudio,
                     currentVideoCall = currentVideoCall,
+                    logger = logger,
                 ),
             )
         }

@@ -61,13 +61,17 @@ internal class GqlAppointmentDataSource(
                 logger.debug(domain = GQL_DOMAIN, message = "Event $event")
                 event?.onAppointmentCreatedEvent?.appointment?.appointmentFragment?.let {
                     handleCreatedOrUpdatedAppointment(it)
+                    return@onEach
                 }
                 event?.onAppointmentCancelledEvent?.appointmentId?.let {
                     handleCancelledAppointment(it)
+                    return@onEach
                 }
                 event?.onAppointmentUpdatedEvent?.appointment?.appointmentFragment?.let {
                     handleCreatedOrUpdatedAppointment(it)
+                    return@onEach
                 }
+                logger.warn("Unknown AppointmentsEventsSubscription event not handled: ${event?.__typename}")
             }
     }
 

@@ -209,6 +209,7 @@ internal class GqlMapper(
         author.onProvider?.providerFragment?.let { return MessageAuthor.Provider(coreGqlMapper.mapToProvider(it)) }
         author.onSystem?.let { return MessageAuthor.System(mapToSystem(it.systemFragment)) }
         author.onDeletedProvider?.let { return MessageAuthor.DeletedProvider }
+        logger.error("Unknown message author ${author.__typename}")
         return MessageAuthor.Unknown
     }
 

@@ -15,15 +15,15 @@ public data class ConversationActivity(
     val conversationId: ConversationId,
     override val createdAt: Instant,
     val activityTime: Instant,
-    val content: ConversationActivityContent
+    val content: ConversationActivityContent,
 ) : ConversationItem {
     @VisibleForTesting
     public companion object
 }
 
-public sealed class ConversationActivityContent {
+public abstract class ConversationActivityContent private constructor() {
     public data class ProviderJoinedConversation(
-        val maybeProvider: MaybeProvider
+        val maybeProvider: MaybeProvider,
     ) : ConversationActivityContent() {
         @VisibleForTesting
         public companion object

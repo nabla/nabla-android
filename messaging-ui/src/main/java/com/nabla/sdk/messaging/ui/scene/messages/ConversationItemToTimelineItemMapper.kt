@@ -1,5 +1,6 @@
 package com.nabla.sdk.messaging.ui.scene.messages
 
+import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.domain.entity.VideoCall
 import com.nabla.sdk.core.domain.entity.VideoCallRoomStatus
@@ -141,13 +142,17 @@ internal fun TimelineItem.Message.toRepliedMessage() = RepliedMessage(
     author = author,
 )
 
-internal fun ConversationActivity.toTimelineItem(): TimelineItem.ConversationActivity {
+internal fun ConversationActivity.toTimelineItem(logger: Logger): TimelineItem.ConversationActivity? {
     return when (val content = content) {
         is ConversationActivityContent.ProviderJoinedConversation -> {
             TimelineItem.ConversationActivity(
                 createdAt,
                 TimelineItem.ConversationActivity.ProviderJoinedConversation(content.maybeProvider)
             )
+        }
+        else -> {
+            logger.warn("Unknown Activity content item: ${content.javaClass.name}")
+            null
         }
     }
 }

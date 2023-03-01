@@ -7,7 +7,7 @@ public open class NablaException(
     cause: Throwable? = null,
 ) : Exception(message, cause)
 
-public sealed class ConfigurationException(message: String) : NablaException(message = message) {
+public abstract class ConfigurationException private constructor(message: String) : NablaException(message = message) {
     public object MissingInitialize : ConfigurationException("Missing SDK initialize. Make sure you call \"NablaClient.initialize\".")
     public object MissingApiKey :
         ConfigurationException("Missing API key. Make sure to add \"com.nabla.sdk.PUBLIC_API_KEY\" in your manifest or pass a Context to \"NablaClient.initialize\" in the \"Configuration\" argument.")
@@ -17,7 +17,7 @@ public sealed class ConfigurationException(message: String) : NablaException(mes
     public class ModuleNotInitialized(moduleName: String) : ConfigurationException("The $moduleName module is not initialized properly. Please make sure you call \"NablaClient.initialize\" with it included as a module.")
 }
 
-public sealed class AuthenticationException constructor(cause: Throwable?, message: String) : NablaException(cause = cause, message = message) {
+public abstract class AuthenticationException private constructor(cause: Throwable?, message: String) : NablaException(cause = cause, message = message) {
     public object UserIdNotSet :
         AuthenticationException(cause = null, message = "You must call NablaClient.setCurrentUserOrThrow before using any authenticated API")
 

@@ -97,10 +97,13 @@ internal class GqlConversationContentDataSource(
         )
         event.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
             insertMessageToConversationCache(messageFragment)
+            return
         }
         event.onConversationActivityCreated?.activity?.conversationActivityFragment?.let { conversationActivityFragment ->
             insertConversationActivityToConversationCache(conversationActivityFragment)
+            return
         }
+        logger.warn("Unknown ConversationEventsSubscription event not handled: ${event.__typename}")
     }
 
     private suspend fun insertMessageToConversationCache(
@@ -207,6 +210,9 @@ internal class GqlConversationContentDataSource(
                     pageData?.conversationActivityFragment?.let {
                         return@mapNotNull mapper.mapToConversationActivity(it)
                     }
+
+                    logger.error("Unknown conversation item ${pageData?.__typename}")
+                    return@mapNotNull null
                 }
 
                 return@map Response(
