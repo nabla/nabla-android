@@ -15,8 +15,8 @@ import com.nabla.sdk.core.domain.entity.LogcatLogger
  * different [LogcatLogger.LogLevel]. Default is [LogcatLogger.LogLevel.WARN].
  */
 public class Configuration(
-    context: Context = defaultAppContext ?: throw ConfigurationException.MissingContext,
-    internal val publicApiKey: String = defaultPublicApiKey ?: throw ConfigurationException.MissingApiKey,
+    context: Context = defaultAppContext ?: throw ConfigurationException.MissingContext(),
+    internal val publicApiKey: String = defaultPublicApiKey ?: throw ConfigurationException.MissingApiKey(),
     public val logger: Logger = LogcatLogger(),
     public val enableReporting: Boolean = true,
 ) {

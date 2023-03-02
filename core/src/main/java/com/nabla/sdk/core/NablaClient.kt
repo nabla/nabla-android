@@ -124,7 +124,7 @@ public class NablaClient private constructor(
          * @see initialize
          */
         public fun getInstance(name: String): NablaClient {
-            return INSTANCES[name] ?: throw ConfigurationException.MissingInitialize
+            return INSTANCES[name] ?: throw ConfigurationException.MissingInitialize()
         }
 
         /**

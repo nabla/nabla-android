@@ -96,7 +96,7 @@ public final class com/nabla/sdk/core/domain/entity/AuthenticationException$Unab
 }
 
 public final class com/nabla/sdk/core/domain/entity/AuthenticationException$UserIdNotSet : com/nabla/sdk/core/domain/entity/AuthenticationException {
-	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/AuthenticationException$UserIdNotSet;
+	public fun <init> ()V
 }
 
 public final class com/nabla/sdk/core/domain/entity/BaseFileUpload {
@@ -121,15 +121,15 @@ public abstract class com/nabla/sdk/core/domain/entity/ConfigurationException : 
 }
 
 public final class com/nabla/sdk/core/domain/entity/ConfigurationException$MissingApiKey : com/nabla/sdk/core/domain/entity/ConfigurationException {
-	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/ConfigurationException$MissingApiKey;
+	public fun <init> ()V
 }
 
 public final class com/nabla/sdk/core/domain/entity/ConfigurationException$MissingContext : com/nabla/sdk/core/domain/entity/ConfigurationException {
-	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/ConfigurationException$MissingContext;
+	public fun <init> ()V
 }
 
 public final class com/nabla/sdk/core/domain/entity/ConfigurationException$MissingInitialize : com/nabla/sdk/core/domain/entity/ConfigurationException {
-	public static final field INSTANCE Lcom/nabla/sdk/core/domain/entity/ConfigurationException$MissingInitialize;
+	public fun <init> ()V
 }
 
 public final class com/nabla/sdk/core/domain/entity/ConfigurationException$ModuleNotInitialized : com/nabla/sdk/core/domain/entity/ConfigurationException {

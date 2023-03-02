@@ -728,51 +728,46 @@ internal class IntegrationTest : BaseCoroutineTest() {
         )
 
         nablaMessagingClient.watchConversations().test {
-            assertEquals(AuthenticationException.UserIdNotSet, awaitError())
+            assertIs<AuthenticationException.UserIdNotSet>(awaitError())
+            assertIs<AuthenticationException.UserIdNotSet>(awaitError())
         }
 
         nablaMessagingClient.watchConversation(ConversationId.Remote(remoteId = uuid4())).test {
-            assertEquals(AuthenticationException.UserIdNotSet, awaitError())
+            assertIs<AuthenticationException.UserIdNotSet>(awaitError())
         }
 
         nablaMessagingClient.watchConversationItems(ConversationId.Remote(remoteId = uuid4())).test {
-            assertEquals(AuthenticationException.UserIdNotSet, awaitError())
+            assertIs<AuthenticationException.UserIdNotSet>(awaitError())
         }
 
-        assertEquals(
-            AuthenticationException.UserIdNotSet,
+        assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.createConversationWithMessage(message = MessageInput.Text("Hello"))
                 .exceptionOrNull()
         )
-        assertEquals(
-            AuthenticationException.UserIdNotSet,
+        assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.deleteMessage(
                 ConversationId.Remote(remoteId = uuid4()),
                 MessageId.Local(uuid4()),
             ).exceptionOrNull()
         )
-        assertEquals(
-            AuthenticationException.UserIdNotSet,
+        assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.markConversationAsRead(
                 ConversationId.Remote(remoteId = uuid4())
             ).exceptionOrNull()
         )
-        assertEquals(
-            AuthenticationException.UserIdNotSet,
+        assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.retrySendingMessage(
                 MessageId.Local(uuid4()),
                 ConversationId.Remote(remoteId = uuid4()),
             ).exceptionOrNull()
         )
-        assertEquals(
-            AuthenticationException.UserIdNotSet,
+        assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.setTyping(
                 ConversationId.Remote(remoteId = uuid4()),
                 isTyping = true,
             ).exceptionOrNull()
         )
-        assertEquals(
-            AuthenticationException.UserIdNotSet,
+        assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.sendMessage(
                 MessageInput.Text(""),
                 ConversationId.Remote(remoteId = uuid4()),

@@ -25,7 +25,7 @@ internal class SessionClientImpl(
     private val refreshLock = Mutex()
 
     override fun authenticatableOrThrow() {
-        patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet
+        patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet()
     }
 
     override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): String {
@@ -79,7 +79,7 @@ internal class SessionClientImpl(
     }
 
     private suspend fun renewSessionAuthTokens(): AuthTokens {
-        val patientId = patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet
+        val patientId = patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet()
 
         return sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value)
             .getOrElse { exception ->
