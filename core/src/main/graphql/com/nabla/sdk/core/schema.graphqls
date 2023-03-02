@@ -602,7 +602,7 @@ type AvailabilitySlot {
   startAt: DateTime!
   endAt: DateTime!
   provider: Provider!
-  location: AvailabilitySlotLocation!
+  location: AvailabilitySlotLocation! @deprecated(reason: "No longer used by SDKs.")
 }
 
 union AvailabilitySlotLocation = PhysicalAvailabilitySlotLocation | RemoteAvailabilitySlotLocation
