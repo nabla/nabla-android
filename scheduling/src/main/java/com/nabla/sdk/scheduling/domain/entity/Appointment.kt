@@ -27,20 +27,42 @@ internal sealed interface AppointmentState {
     data class Pending(val requiredPrice: Price?) : AppointmentState
 }
 
+/**
+ * Where an appointment is expected to happen.
+ */
 public sealed interface AppointmentLocation {
     public val type: AppointmentLocationType?
 
+    /**
+     * The appointment will be conducted remotely, e.g. video-call teleconsultation.
+     */
     public sealed class Remote : AppointmentLocation {
         override val type: AppointmentLocationType = AppointmentLocationType.REMOTE
 
+        /**
+         * The video-call is expected to happen on an external video-consultation provider.
+         *
+         * @param url the link to join the call.
+         */
         public data class External(val url: Uri) : Remote()
+
+        /**
+         * The video-call will be happen on Nabla's Servers using Nabla's Console or SDKs.
+         */
         public data class Nabla(val videoCallRoom: VideoCallRoom?) : Remote()
     }
 
+    /**
+     * The appointment will be conducted in-person at the specified [address].
+     */
     public data class Physical(val address: Address) : AppointmentLocation {
         override val type: AppointmentLocationType = AppointmentLocationType.PHYSICAL
     }
 
+    /**
+     * Server specified a location type not handled by the current SDK version.
+     * If you get this then you probably need to upgrade the SDK version you're using.
+     */
     public object Unknown : AppointmentLocation {
         override val type: AppointmentLocationType? = null
     }
