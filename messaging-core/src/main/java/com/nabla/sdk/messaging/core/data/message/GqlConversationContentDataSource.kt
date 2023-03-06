@@ -95,6 +95,10 @@ internal class GqlConversationContentDataSource(
             domain = GQL_DOMAIN,
             message = "Event ${event.__typename}"
         )
+        event.onSubscriptionReadinessEvent?.let {
+            /* no-op */
+            return
+        }
         event.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
             insertMessageToConversationCache(messageFragment)
             return

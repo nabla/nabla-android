@@ -59,6 +59,10 @@ internal class GqlAppointmentDataSource(
                 }
                 val event = response.data?.appointments?.event
                 logger.debug(domain = GQL_DOMAIN, message = "Event $event")
+                event?.onSubscriptionReadinessEvent?.let {
+                    /* no-op */
+                    return@onEach
+                }
                 event?.onAppointmentCreatedEvent?.appointment?.appointmentFragment?.let {
                     handleCreatedOrUpdatedAppointment(it)
                     return@onEach

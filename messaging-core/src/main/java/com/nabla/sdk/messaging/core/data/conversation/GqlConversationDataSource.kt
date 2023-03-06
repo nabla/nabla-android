@@ -55,6 +55,10 @@ internal class GqlConversationDataSource constructor(
                 response.errors?.forEach {
                     logger.error(domain = GQL_DOMAIN, message = "error received in ConversationsEventsSubscription: ${it.message}")
                 }
+                response.data?.conversations?.event?.onSubscriptionReadinessEvent?.let {
+                    /* no-op */
+                    return@onEach
+                }
                 response.data?.conversations?.event?.onConversationCreatedEvent?.conversation?.conversationFragment?.let { conversationFragment ->
                     insertConversationToConversationsListCache(conversationFragment)
                     return@onEach

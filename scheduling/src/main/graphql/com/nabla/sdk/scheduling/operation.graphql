@@ -94,6 +94,9 @@ fragment AvailabilitySlotFragment on AvailabilitySlot {
 subscription AppointmentsEvents {
     appointments {
         event {
+            ... on SubscriptionReadinessEvent {
+                __typename
+            }
             ... on AppointmentCreatedEvent {
                 appointment {
                     ...AppointmentFragment

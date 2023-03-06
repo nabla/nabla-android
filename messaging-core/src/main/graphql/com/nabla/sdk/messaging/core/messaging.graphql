@@ -95,6 +95,9 @@ query Conversations($pageInfo: OpaqueCursorPage!) {
 subscription ConversationsEvents {
     conversations {
         event {
+            ... on SubscriptionReadinessEvent {
+                __typename
+            }
             ... on ConversationCreatedEvent {
                 conversation {
                     ...ConversationFragment
@@ -115,6 +118,9 @@ subscription ConversationsEvents {
 subscription ConversationEvents($conversationId: UUID!) {
     conversation(id: $conversationId) {
         event {
+            ... on SubscriptionReadinessEvent {
+                __typename
+            }
             ... on MessageCreatedEvent {
                 message {
                     ...MessageFragment
