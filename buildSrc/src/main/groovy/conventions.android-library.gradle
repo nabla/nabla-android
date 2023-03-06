@@ -41,7 +41,7 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         warningsAsErrors true
         abortOnError true
         disable 'RtlEnabled','VisibleForTests'
@@ -65,6 +65,10 @@ afterEvaluate {
             }
         }
     }
+}
+
+dependencies {
+    lintChecks(project(":linter-rules"))
 }
 
 publishing.publications.all {

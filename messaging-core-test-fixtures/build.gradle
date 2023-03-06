@@ -13,7 +13,7 @@ android {
         targetSdk buildConfig.targetSdk
     }
 
-    lintOptions {
+    lint {
         warningsAsErrors true
         abortOnError true
         disable 'VisibleForTests'

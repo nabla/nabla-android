@@ -1,11 +1,9 @@
 <resources>
     <style name="Theme.Nabla.Sdk.MessagingSample" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#FF018786</item>
-        <item name="colorPrimaryDark">#025353</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <item name="colorSecondary">@color/turbo</item>
-        <item name="colorSecondaryVariant">@color/pale_blue_green</item>
         <item name="colorOnSecondary">@color/white</item>
 
         <item name="colorSurface">@color/pale_blue_green</item>
@@ -14,11 +12,9 @@
         <item name="android:colorBackground">@color/silver</item>
         <item name="colorOnBackground">@color/stone</item>
 
-        <item name="android:textColorPrimary">?colorPrimaryDark</item>
+        <item name="android:textColorPrimary">?colorPrimary</item>
         <item name="android:textColorSecondary">?colorOnSurface</item>
 
-        <item name="colorAccent">?colorSecondary</item>
-        <item name="colorPrimaryVariant">?attr/colorPrimaryDark</item>
         <item name="android:windowBackground">?android:attr/colorBackground</item>
 
         <!-- ripple & scroll edges -->

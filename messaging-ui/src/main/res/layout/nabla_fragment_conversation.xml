@@ -210,7 +210,7 @@
                 app:layout_constraintEnd_toStartOf="@id/currentlyReplyingToCancel"
                 app:layout_constraintTop_toTopOf="@id/currentlyReplyingToTitle"
                 app:roundPercent="0.5"
-                tools:background="?colorAccent"
+                tools:background="?colorSecondary"
                 />
 
             <ImageView

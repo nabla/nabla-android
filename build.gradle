@@ -30,7 +30,7 @@ buildscript {
 apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
 
 apiValidation {
-    ignoredProjects += ["messaging-sample-app", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures", "tests-common"]
+    ignoredProjects += ["messaging-sample-app", "messaging-ui-tests", "messaging-core-test-fixtures", "core-test-fixtures", "tests-common", "linter-rules"]
     nonPublicMarkers += ["com.nabla.sdk.core.annotation.NablaInternal", "androidx.annotation.VisibleForTesting"]
     ignoredPackages += [
         "com.nabla.sdk.messaging.ui.databinding",
@@ -101,7 +101,7 @@ subprojects { project ->
             allWarningsAsErrors = true
             jvmTarget = buildConfig.jvmTarget
             freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-            def projectsRespectingNablaInternal = ["messaging-sample-app"]
+            def projectsRespectingNablaInternal = ["messaging-sample-app", "linter-rules"]
             def projectRespectsNablaInternal = projectsRespectingNablaInternal.any { project.name.contains(it) }
             if (!projectRespectsNablaInternal) {
                 freeCompilerArgs += "-opt-in=com.nabla.sdk.core.annotation.NablaInternal"

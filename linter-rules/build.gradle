@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+group "com.nabla.sdk"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    def lintVersion = "30.4.2"
+    compileOnly "com.android.tools.lint:lint-api:$lintVersion"
+    compileOnly "com.android.tools.lint:lint-checks:$lintVersion"
+    compileOnly "com.android.tools.lint:lint:$lintVersion"
+}
+
+jar {
+    manifest {
+        attributes("Lint-Registry-v2": "com.nabla.sdk.linter.rules.Registry")
+    }
+}

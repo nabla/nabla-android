@@ -31,7 +31,7 @@
         <item name="nablaMessaging_conversationMessageAuthorAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationMessageStatusAppearance">?textAppearanceBodyMedium</item>
         <item name="nablaMessaging_conversationActivityAppearance">?textAppearanceBodyMedium</item>
-        <item name="nablaMessaging_patientMessageBackgroundColor">?colorPrimaryDark</item>
+        <item name="nablaMessaging_patientMessageBackgroundColor">?colorPrimary</item>
         <item name="nablaMessaging_providerMessageBackgroundColor">?colorSurfaceVariant</item>
         <item name="nablaMessaging_otherMessageBackgroundColor">?colorSurfaceVariant</item>
         <item name="nablaMessaging_deletedMessageBackgroundColor">?colorSurfaceVariant</item>

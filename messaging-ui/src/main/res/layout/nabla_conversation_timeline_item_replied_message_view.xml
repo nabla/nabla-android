@@ -18,8 +18,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/repliedToTextContainer"
         app:layout_goneMarginTop="6dp"
-        android:background="?colorPrimaryDark"
-        tools:background="?colorPrimaryDark"
+        android:background="?colorPrimary"
+        tools:background="?colorPrimary"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,6 +93,6 @@
         app:layout_constraintStart_toEndOf="@id/repliedToTextContainer"
         app:layout_constraintTop_toTopOf="@id/repliedToIndentView"
         tools:ignore="ContentDescription"
-        tools:background="?colorAccent"
+        tools:background="?colorSecondary"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

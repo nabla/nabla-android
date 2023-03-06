@@ -6,7 +6,7 @@
     android:layout_width="64dp"
     android:layout_height="64dp"
     android:layout_marginEnd="8dp"
-    app:cardBackgroundColor="?colorPrimaryDark"
+    app:cardBackgroundColor="?colorPrimary"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
     >
