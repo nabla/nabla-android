@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0.0-alpha25] - 2023-03-06
+
 ### Changed
 - Scheduling: Replace your current usage of `nablaClient.schedulingModule` to `nablaClient.schedulingClient`.
 - VideoCall: Replace your current usage of `nablaClient.videoCallModule` to `nablaClient.videoCallClient`.
