@@ -25,9 +25,10 @@
     <string name="nabla_scheduling_time_slot_selection_no_category">No category available</string>
     <string name="nabla_scheduling_time_slot_selection_no_availability">No availabilities</string>
 
-    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Cancel appointment</string>
-    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Confirm cancellation</string>
-    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Keep appointment</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Cancel appointment?</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_message">Do you want to cancel this appointment? It cannot be undone.</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Yes, cancel it</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">No, keep it</string>
     <string name="nabla_scheduling_appointment_item_join_cta">Join the call</string>
     <string name="nabla_scheduling_appointment_item_return_cta">Return to the call</string>
     <string name="nabla_scheduling_appointment_item_cancel_action">Cancel appointment</string>

@@ -26,8 +26,9 @@
     <string name="nabla_scheduling_time_slot_selection_no_availability">Pas de créneau disponible</string>
 
     <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Annuler le rendez-vous ?</string>
-    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Confirmer l’annulation</string>
-    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Conserver le rendez-vous</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_message">Voulez-vous annuler ce rendez-vous ? Cette action est définitive.</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Oui, annuler le rendez-vous</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Non, maintenir le rendez-vous</string>
     <string name="nabla_scheduling_appointment_item_join_cta">Rejoindre l’appel</string>
     <string name="nabla_scheduling_appointment_item_return_cta">Revenir à l’appel</string>
     <string name="nabla_scheduling_appointment_item_cancel_action">Annuler le rendez-vous</string>

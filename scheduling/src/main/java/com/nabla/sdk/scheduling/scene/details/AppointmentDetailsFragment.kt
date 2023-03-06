@@ -45,6 +45,7 @@ internal class AppointmentDetailsFragment : SchedulingBaseFragment(
         binding.nablaCancelAppointmentButton.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_title))
+                .setMessage(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_message)
                 .setNegativeButton(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative) { _, _ -> /* no-op */ }
                 .setPositiveButton(R.string.nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive) { _, _ ->
                     viewModel.onCancelClicked()
