@@ -46,8 +46,8 @@ internal class SessionClientImpl(
             message = "get fresh access token with forceRefreshAccessToken=$forceRefreshAccessToken...",
         )
         val authTokens = tokenLocalDataSource.getAuthTokens() ?: renewSessionAuthTokens()
-        val accessToken = JWT(authTokens.accessToken)
-        val refreshToken = JWT(authTokens.refreshToken)
+        val accessToken = JWT(authTokens.accessToken.token)
+        val refreshToken = JWT(authTokens.refreshToken.token)
 
         if (!accessToken.isExpired() && !forceRefreshAccessToken) {
             logger.debug(
@@ -70,12 +70,12 @@ internal class SessionClientImpl(
             )
             refreshSessionAuthTokens(refreshToken.toString())
         }.also { freshTokens ->
-            if (JWT(freshTokens.accessToken).isExpired()) {
+            if (JWT(freshTokens.accessToken.token).isExpired()) {
                 throw AuthenticationException.UnableToGetFreshSessionToken(
                     IllegalStateException("access token is expired")
                 )
             }
-        }.accessToken
+        }.accessToken.token
     }
 
     private suspend fun renewSessionAuthTokens(): AuthTokens {

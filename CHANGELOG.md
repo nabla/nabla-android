@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+- `AuthTokens` now takes `AccessToken` and `RefreshToken` as parameters to avoid any confusion. The order has been changed too, so you should now call `val authTokens = AuthTokens(AccessToken("your access token"), RefreshToken("your refreshToken"))`
+
 ## [1.0.0-alpha25] - 2023-03-06
 
 ### Changed

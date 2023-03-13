@@ -65,16 +65,30 @@ public abstract interface class com/nabla/sdk/core/domain/boundary/VideoCallModu
 	public fun type ()Lcom/nabla/sdk/core/domain/entity/ModuleType;
 }
 
+public final class com/nabla/sdk/core/domain/entity/AccessToken {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/AccessToken;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
 public final class com/nabla/sdk/core/domain/entity/AuthTokens {
 	public static final field Companion Lcom/nabla/sdk/core/domain/entity/AuthTokens$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/AuthTokens;
-	public static synthetic fun copy$default (Lcom/nabla/sdk/core/domain/entity/AuthTokens;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/AuthTokens;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-F0RcfOE ()Ljava/lang/String;
+	public final fun component2-nUPRItQ ()Ljava/lang/String;
+	public final fun copy-pB64AWU (Ljava/lang/String;Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/AuthTokens;
+	public static synthetic fun copy-pB64AWU$default (Lcom/nabla/sdk/core/domain/entity/AuthTokens;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/nabla/sdk/core/domain/entity/AuthTokens;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAccessToken ()Ljava/lang/String;
-	public final fun getRefreshToken ()Ljava/lang/String;
+	public final fun getAccessToken-F0RcfOE ()Ljava/lang/String;
+	public final fun getRefreshToken-nUPRItQ ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -449,6 +463,20 @@ public final class com/nabla/sdk/core/domain/entity/Provider : com/nabla/sdk/cor
 	public final fun getTitle ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/nabla/sdk/core/domain/entity/RefreshToken {
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/nabla/sdk/core/domain/entity/RefreshToken;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getToken ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
 public abstract class com/nabla/sdk/core/domain/entity/RefreshingState {

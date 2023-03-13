@@ -10,12 +10,14 @@ import com.nabla.sdk.core.NetworkConfiguration
 import com.nabla.sdk.core.data.helper.UrlExt.toAndroidUri
 import com.nabla.sdk.core.data.stubs.StdLogger
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
+import com.nabla.sdk.core.domain.entity.AccessToken
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.DeletedProvider
 import com.nabla.sdk.core.domain.entity.FileUpload
 import com.nabla.sdk.core.domain.entity.MimeType
 import com.nabla.sdk.core.domain.entity.Provider
+import com.nabla.sdk.core.domain.entity.RefreshToken
 import com.nabla.sdk.core.domain.entity.Uri
 import com.nabla.sdk.core.injection.CoreContainer
 import com.nabla.sdk.messaging.core.NablaMessagingClient
@@ -810,8 +812,8 @@ internal class IntegrationTest : BaseCoroutineTest() {
         ) {
             Result.success(
                 AuthTokens(
-                    refreshToken = refreshToken,
-                    accessToken = accessToken
+                    AccessToken(accessToken),
+                    RefreshToken(refreshToken),
                 )
             )
         }

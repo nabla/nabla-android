@@ -1,6 +1,8 @@
 package com.nabla.sdk.core.data.stubs
 
+import com.nabla.sdk.core.domain.entity.AccessToken
 import com.nabla.sdk.core.domain.entity.AuthTokens
+import com.nabla.sdk.core.domain.entity.RefreshToken
 
 object JwtFaker {
     // Use https://www.javainuse.com/jwtgenerator to easily generate mocked tokens
@@ -13,6 +15,6 @@ object JwtFaker {
 }
 
 fun AuthTokens.Companion.fake() = AuthTokens(
-    refreshToken = JwtFaker.expiredIn2050,
-    accessToken = JwtFaker.expiredIn2050_2,
+    AccessToken(JwtFaker.expiredIn2050_2),
+    RefreshToken(JwtFaker.expiredIn2050),
 )
