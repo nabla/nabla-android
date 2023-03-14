@@ -3,7 +3,9 @@ package com.nabla.sdk.messaging.ui.scene.conversations
 import android.graphics.Rect
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -53,9 +55,11 @@ private fun ConversationListView.setupRecyclerAdapter(
 }
 
 private fun ConversationListView.bindViewModelAlerts(viewModel: ConversationListViewModel) {
-    findViewTreeLifecycleOwner()?.launchCollect(viewModel.errorAlertEventFlow) { errorAlert ->
-        context?.let { context ->
-            Toast.makeText(context, errorAlert.errorMessageRes, Toast.LENGTH_SHORT).show()
+    doWithViewTreeLifecycleOwner {
+        it.launchCollect(viewModel.errorAlertEventFlow) { errorAlert ->
+            context?.let { context ->
+                Toast.makeText(context, errorAlert.errorMessageRes, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
@@ -64,25 +68,34 @@ private fun ConversationListView.bindViewModelState(
     viewModel: ConversationListViewModel,
     conversationAdapter: ConversationListAdapter,
 ) {
-    findViewTreeLifecycleOwner()?.lifecycleScope?.launchCollect(viewModel.stateFlow) { state ->
-        loadingView.isVisible = state is State.Loading
-        recyclerView.isVisible = state is State.Loaded
-        errorViewContainer.isVisible = state is State.Error
-        emptyStateView.isVisible = state is State.Empty
+    doWithViewTreeLifecycleOwner {
+        it.lifecycleScope.launchCollect(viewModel.stateFlow) { state ->
+            loadingView.isVisible = state is State.Loading
+            recyclerView.isVisible = state is State.Loaded
+            errorViewContainer.isVisible = state is State.Error
+            emptyStateView.isVisible = state is State.Empty
 
-        when (state) {
-            is State.Loaded -> {
-                // Only scroll down automatically if we're at the bottom of the chat && there are new items
-                val shouldScrollToBottomAfterSubmit = recyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size
+            when (state) {
+                is State.Loaded -> {
+                    // Only scroll down automatically if we're at the bottom of the chat && there are new items
+                    val shouldScrollToBottomAfterSubmit = recyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size
 
-                conversationAdapter.submitList(state.items) {
-                    if (shouldScrollToBottomAfterSubmit) recyclerView.scrollToTop()
+                    conversationAdapter.submitList(state.items) {
+                        if (shouldScrollToBottomAfterSubmit) recyclerView.scrollToTop()
+                    }
                 }
+                is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
+                is State.Loading -> Unit // no-op
+                is State.Empty -> Unit // no-op
             }
-            is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
-            is State.Loading -> Unit // no-op
-            is State.Empty -> Unit // no-op
         }
+    }
+}
+
+private inline fun View.doWithViewTreeLifecycleOwner(crossinline action: (lifecycleOwner: LifecycleOwner) -> Unit) {
+    // We wait for the view to be attached so that viewTreeLifecycleOwner is defined
+    doOnAttach {
+        findViewTreeLifecycleOwner()?.let { action(it) }
     }
 }
 
