@@ -11,7 +11,7 @@ import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.Response
 import com.nabla.sdk.core.domain.entity.ServerException
-import com.nabla.sdk.core.domain.helper.AuthHelper.throwOnStartIfNotAuthenticatable
+import com.nabla.sdk.core.domain.helper.AuthHelper.authenticatable
 import com.nabla.sdk.core.domain.helper.FlowConnectionStateAwareHelper.restartWhenConnectionReconnects
 import com.nabla.sdk.core.domain.helper.PaginationHelper.wrapAsResponsePaginatedContent
 import com.nabla.sdk.core.injection.CoreContainer
@@ -60,8 +60,7 @@ internal class MessagingModuleImpl internal constructor(
             .wrapAsResponsePaginatedContent(
                 conversationRepository::loadMoreConversations,
                 messagingContainer.nablaExceptionMapper,
-                messagingContainer.sessionClient,
-            )
+            ).authenticatable(messagingContainer.sessionClient)
             .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
     }
 
@@ -93,7 +92,7 @@ internal class MessagingModuleImpl internal constructor(
     override fun watchConversation(conversationId: ConversationId): Flow<Response<Conversation>> {
         return conversationRepository.watchConversation(conversationId)
             .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
-            .throwOnStartIfNotAuthenticatable(messagingContainer.sessionClient)
+            .authenticatable(messagingContainer.sessionClient)
             .catchAndRethrowAsNablaException(messagingContainer.nablaExceptionMapper)
     }
 
@@ -102,8 +101,8 @@ internal class MessagingModuleImpl internal constructor(
             .wrapAsResponsePaginatedContent(
                 { conversationContentRepository.loadMoreMessages(conversationId) },
                 messagingContainer.nablaExceptionMapper,
-                messagingContainer.sessionClient,
             )
+            .authenticatable(messagingContainer.sessionClient)
             .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
     }
 

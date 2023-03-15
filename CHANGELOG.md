@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - `AuthTokens` now takes `AccessToken` and `RefreshToken` as parameters to avoid any confusion. The order has been changed too, so you should now call `val authTokens = AuthTokens(AccessToken("your access token"), RefreshToken("your refreshToken"))`
+- Messaging and Scheduling: Messaging core: Watchers will now correctly emit a UserIdNotSet exception if you call clearCurrentUser while still watching them.
 
 ### Fixed
 - Fix a runtime issue with `ConversationListView` not binding properly to its view model if you called `bindViewModel` before attaching the view.

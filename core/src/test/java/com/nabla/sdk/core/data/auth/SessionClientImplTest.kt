@@ -1,6 +1,7 @@
 package com.nabla.sdk.core.data.auth
 
 import android.util.Base64
+import app.cash.turbine.test
 import com.benasher44.uuid.uuid4
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.data.stubs.JwtFaker
@@ -13,6 +14,7 @@ import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.RefreshToken
 import com.nabla.sdk.core.domain.entity.StringId
+import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.tests.common.BaseCoroutineTest
 import io.mockk.Called
 import io.mockk.Runs
@@ -26,6 +28,8 @@ import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.After
 import org.junit.Before
 import org.junit.BeforeClass
@@ -221,6 +225,46 @@ class SessionClientImplTest : BaseCoroutineTest() {
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
 
         sessionClient.getFreshAccessToken()
+    }
+
+    @Test
+    fun `authenticatable flow emits error when starting with no user id set`() = runTest {
+        val patientIdFlow = flowOf(null)
+        every { patientRepository.getPatientIdFlow() } returns patientIdFlow
+
+        val authenticatableFlow = sessionClient.authenticatableFlow(flowOf("Data from authenticated source"))
+
+        authenticatableFlow.test {
+            assertTrue { awaitError() is AuthenticationException.UserIdNotSet }
+        }
+    }
+
+    @Test
+    fun `authenticatable flow emits item when user id is set`() = runTest {
+        val patientIdFlow = flowOf("patient-id".toId())
+        every { patientRepository.getPatientIdFlow() } returns patientIdFlow
+
+        val authenticatableFlow = sessionClient.authenticatableFlow(flowOf("1", "2"))
+
+        authenticatableFlow.test {
+            assertEquals("1", awaitItem())
+            assertEquals("2", awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `authenticatable flow emits error when user id is nullified`() = runTest {
+        val patientIdFlow = MutableStateFlow<StringId?>(StringId("patient-id"))
+        every { patientRepository.getPatientIdFlow() } returns patientIdFlow
+
+        val authenticatableFlow = sessionClient.authenticatableFlow(flowOf("1"))
+
+        authenticatableFlow.test {
+            assertEquals("1", awaitItem())
+            patientIdFlow.value = null
+            assertTrue { awaitError() is AuthenticationException.UserIdNotSet }
+        }
     }
 
     @Before

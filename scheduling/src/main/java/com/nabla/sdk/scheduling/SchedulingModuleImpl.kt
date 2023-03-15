@@ -10,6 +10,7 @@ import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.entity.PaginatedContent
 import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.domain.entity.Response
+import com.nabla.sdk.core.domain.helper.AuthHelper.authenticatable
 import com.nabla.sdk.core.domain.helper.FlowConnectionStateAwareHelper.restartWhenConnectionReconnects
 import com.nabla.sdk.core.domain.helper.PaginationHelper.wrapAsPaginatedContent
 import com.nabla.sdk.core.domain.helper.PaginationHelper.wrapAsResponsePaginatedContent
@@ -66,8 +67,8 @@ internal class SchedulingModuleImpl(
         return appointmentRepository.watchAvailabilitySlots(locationType, categoryId).wrapAsPaginatedContent(
             { appointmentRepository.loadMoreAvailabilitySlots(locationType, categoryId) },
             schedulingContainer.nablaExceptionMapper,
-            schedulingContainer.sessionClient,
-        )
+        ).authenticatable(schedulingContainer.sessionClient)
+            .restartWhenConnectionReconnects(schedulingContainer.eventsConnectionStateFlow)
     }
 
     override fun isRefreshingAppointments(): Flow<Boolean> = arePastAppointmentsRefreshingMutableFlow
@@ -80,8 +81,8 @@ internal class SchedulingModuleImpl(
             .wrapAsResponsePaginatedContent(
                 appointmentRepository::loadMorePastAppointments,
                 schedulingContainer.nablaExceptionMapper,
-                schedulingContainer.sessionClient,
             )
+            .authenticatable(schedulingContainer.sessionClient)
             .restartWhenConnectionReconnects(schedulingContainer.eventsConnectionStateFlow)
             .onEach { response ->
                 arePastAppointmentsRefreshingMutableFlow.value = response.refreshingState is RefreshingState.Refreshing
@@ -93,8 +94,7 @@ internal class SchedulingModuleImpl(
             .wrapAsResponsePaginatedContent(
                 appointmentRepository::loadMoreUpcomingAppointments,
                 schedulingContainer.nablaExceptionMapper,
-                schedulingContainer.sessionClient,
-            )
+            ).authenticatable(schedulingContainer.sessionClient)
             .restartWhenConnectionReconnects(schedulingContainer.eventsConnectionStateFlow)
             .onEach { response ->
                 areUpcomingAppointmentsRefreshingMutableFlow.value = response.refreshingState is RefreshingState.Refreshing

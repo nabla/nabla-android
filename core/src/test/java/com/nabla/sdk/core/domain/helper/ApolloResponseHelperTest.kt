@@ -5,8 +5,10 @@ import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Query
 import com.apollographql.apollo3.cache.normalized.CacheInfo
+import com.apollographql.apollo3.exception.ApolloNetworkException
 import com.benasher44.uuid.Uuid
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
+import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.domain.entity.RefreshingState
 import com.nabla.sdk.core.domain.helper.ApolloResponseHelper.makeCachedResponseWatcher
 import com.nabla.sdk.tests.common.BaseCoroutineTest
@@ -39,8 +41,8 @@ class ApolloResponseHelperTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun `test watcher throwing with a previous cached response sends the error as response`() = runTest {
-        val exception = Exception("Test")
+    fun `test watcher throwing network exception with a cached data sends the corresponding error + cached data as response`() = runTest {
+        val exception = ApolloNetworkException("Network exception")
 
         makeCachedResponseWatcher(
             exceptionMapper = NablaExceptionMapper(),
@@ -57,7 +59,10 @@ class ApolloResponseHelperTest : BaseCoroutineTest() {
 
             val secondResponse = awaitItem()
             assertEquals(false, secondResponse.isDataFresh)
-            assertTrue(secondResponse.refreshingState is RefreshingState.ErrorWhileRefreshing)
+            secondResponse.refreshingState.let {
+                assertTrue(it is RefreshingState.ErrorWhileRefreshing)
+                assertEquals(exception.message, it.error.message)
+            }
             assertNotNull(secondResponse.data)
 
             cancelAndIgnoreRemainingEvents()
@@ -65,7 +70,31 @@ class ApolloResponseHelperTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun `test watcher with cache data and succcesful network refresh`() = runTest {
+    fun `test watcher throwing no user exception with cached data sends the error as response`() = runTest {
+        val exception = AuthenticationException.UserIdNotSet()
+
+        makeCachedResponseWatcher(
+            exceptionMapper = NablaExceptionMapper(),
+        ) {
+            flow {
+                emit(generateResponse(isLast = false, isFromCache = true))
+                throw exception
+            }
+        }.test {
+            val firstResponse = awaitItem()
+            assertEquals(false, firstResponse.isDataFresh)
+            assertEquals(RefreshingState.Refreshing, firstResponse.refreshingState)
+            assertNotNull(firstResponse.data)
+
+            val error = awaitError()
+            assertTrue(error is AuthenticationException.UserIdNotSet)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `test watcher with cache data and successful network refresh`() = runTest {
         makeCachedResponseWatcher(
             exceptionMapper = NablaExceptionMapper(),
         ) {

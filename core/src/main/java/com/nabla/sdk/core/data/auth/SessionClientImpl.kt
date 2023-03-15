@@ -10,6 +10,10 @@ import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.entity.AuthTokens
 import com.nabla.sdk.core.domain.entity.AuthenticationException
 import com.nabla.sdk.core.kotlin.KotlinExt.runCatchingCancellable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -26,6 +30,17 @@ internal class SessionClientImpl(
 
     override fun authenticatableOrThrow() {
         patientRepository.getPatientId() ?: throw AuthenticationException.UserIdNotSet()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun <T> authenticatableFlow(flow: Flow<T>): Flow<T> {
+        return patientRepository.getPatientIdFlow().distinctUntilChanged()
+            .flatMapLatest { patientId ->
+                if (patientId == null) {
+                    throw AuthenticationException.UserIdNotSet()
+                }
+                flow
+            }
     }
 
     override suspend fun getFreshAccessToken(forceRefreshAccessToken: Boolean): String {
