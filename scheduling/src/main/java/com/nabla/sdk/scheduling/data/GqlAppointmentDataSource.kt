@@ -9,6 +9,7 @@ import com.nabla.sdk.core.data.apollo.ApolloExt.CacheUpdateOperation
 import com.nabla.sdk.core.data.apollo.ApolloExt.updateCache
 import com.nabla.sdk.core.data.apollo.ApolloResponseExt.dataOrThrowOnError
 import com.nabla.sdk.core.data.apollo.SubscriptionExt.retryOnNetworkErrorAndShareIn
+import com.nabla.sdk.core.data.apollo.SubscriptionExt.toFlowAsRetryable
 import com.nabla.sdk.core.data.exception.NablaExceptionMapper
 import com.nabla.sdk.core.domain.boundary.Logger
 import com.nabla.sdk.core.domain.boundary.Logger.Companion.GQL_DOMAIN
@@ -52,7 +53,7 @@ internal class GqlAppointmentDataSource(
 ) {
     private val appointmentsEventsFlow by lazy {
         apolloClient.subscription(AppointmentsEventsSubscription())
-            .toFlow()
+            .toFlowAsRetryable()
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach { response ->
                 response.errors?.forEach {
                     logger.error(domain = GQL_DOMAIN, message = "error received in AppointmentsEventsSubscription: ${it.message}")

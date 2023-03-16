@@ -1,14 +1,19 @@
 package com.nabla.sdk.core.data.apollo
 
+import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Operation
+import com.apollographql.apollo3.api.Subscription
 import com.nabla.sdk.core.annotation.NablaInternal
 import com.nabla.sdk.core.data.exception.isNetworkError
 import com.nabla.sdk.core.kotlin.KotlinExt.shareInWithMaterializedErrors
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.retryWhen
 import kotlin.math.min
 
@@ -35,6 +40,12 @@ public object SubscriptionExt {
             replay = 0,
             started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
         )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @NablaInternal
+    public fun <D : Subscription.Data> ApolloCall<D>.toFlowAsRetryable(): Flow<ApolloResponse<D>> =
+        flowOf(this)
+            .flatMapLatest { it.toFlow() }
 }
 
 private const val DELAY_UNIT = 5000L
