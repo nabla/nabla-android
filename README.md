@@ -15,11 +15,12 @@ The Nabla Messaging UI SDK is compatible with Android 6 (API Level 23) and highe
 
 First add Jitpack repository to your build file if it's not already there:
 ```
-allprojects {
+dependencyResolutionManagement {
+    ...
     repositories {
         ...
         maven { url 'https://jitpack.io' }
-   }
+    }
 }
 ```
 Then add Nabla's dependency in your app's build.gradle. You can choose between:
