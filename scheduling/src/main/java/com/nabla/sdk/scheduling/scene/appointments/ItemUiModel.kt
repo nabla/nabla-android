@@ -65,7 +65,7 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
         provider,
         scheduledAt,
     )
-    AppointmentState.Upcoming -> if (clock.isAppointmentSoon(scheduledAt)) {
+    AppointmentState.Scheduled -> if (clock.isAppointmentSoon(scheduledAt)) {
         ItemUiModel.AppointmentUiModel.SoonOrOngoing(
             id,
             provider,

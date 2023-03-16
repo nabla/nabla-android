@@ -40,14 +40,14 @@ internal class GqlMapper(
 
     private fun mapAppointmentState(state: AppointmentFragment.State) =
         when {
-            state.onUpcomingAppointment != null -> AppointmentState.Upcoming
+            state.onUpcomingAppointment != null -> AppointmentState.Scheduled
             state.onFinalizedAppointment != null -> AppointmentState.Finalized
             state.onPendingAppointment != null -> AppointmentState.Pending(
                 requiredPrice = state.onPendingAppointment.schedulingPaymentRequirement?.price?.priceFragment?.let(::mapPrice)
             )
             else -> {
-                logger.error("Unknown appointment state $state — considering it as Upcoming")
-                AppointmentState.Upcoming
+                logger.error("Unknown appointment state $state — considering it as Scheduled")
+                AppointmentState.Scheduled
             }
         }
 

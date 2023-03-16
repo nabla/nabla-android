@@ -137,7 +137,7 @@ internal class GqlAppointmentDataSource(
                 val items = response.data.upcomingAppointments.appointmentsPageFragment.data.map {
                     mapper.mapToAppointment(it.appointmentFragment)
                 }.sortedBy { appointment -> appointment.scheduledAt }
-                    .filter { it.state == AppointmentState.Upcoming }
+                    .filter { it.state == AppointmentState.Scheduled }
 
                 Response(
                     isDataFresh = response.isDataFresh,

@@ -21,7 +21,7 @@ internal data class Appointment(
     companion object
 }
 internal sealed interface AppointmentState {
-    object Upcoming : AppointmentState
+    object Scheduled : AppointmentState
     object Finalized : AppointmentState
 
     data class Pending(val requiredPrice: Price?) : AppointmentState

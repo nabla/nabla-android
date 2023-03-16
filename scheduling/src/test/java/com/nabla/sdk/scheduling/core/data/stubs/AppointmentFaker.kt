@@ -21,8 +21,8 @@ internal fun Appointment.Companion.fake(
     id: AppointmentId = AppointmentId(uuid4()),
     provider: Provider = Provider.fake(),
     scheduledAt: Instant = Clock.System.now(),
-    state: AppointmentState = AppointmentState.Upcoming,
-    location: AppointmentLocation = AppointmentLocation.fake(videoCallRoomIsOpen = state == AppointmentState.Upcoming),
+    state: AppointmentState = AppointmentState.Scheduled,
+    location: AppointmentLocation = AppointmentLocation.fake(videoCallRoomIsOpen = state == AppointmentState.Scheduled),
     price: Price? = null,
 ) = Appointment(
     id = id,
