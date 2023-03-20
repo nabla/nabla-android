@@ -52,7 +52,7 @@ internal class GqlConversationDataSource constructor(
         apolloClient.subscription(ConversationsEventsSubscription())
             .toFlowAsRetryable()
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach { response ->
-                logger.debug(domain = GQL_DOMAIN, message = "Event $response")
+                logger.debug(domain = GQL_DOMAIN, message = "Event ${response.data?.conversations?.event?.__typename}")
                 response.errors?.forEach {
                     logger.error(domain = GQL_DOMAIN, message = "error received in ConversationsEventsSubscription: ${it.message}")
                 }
@@ -66,6 +66,10 @@ internal class GqlConversationDataSource constructor(
                 }
                 response.data?.conversations?.event?.onConversationUpdatedEvent?.conversation?.conversationFragment?.let {
                     /* no-op — Handled by Apollo's Normalized Cache */
+                    return@onEach
+                }
+                response.data?.conversations?.event?.onConversationDeletedEvent?.conversationId?.let { id ->
+                    deleteFromConversationsCache(id)
                     return@onEach
                 }
                 logger.warn("Unknown ConversationsEventsSubscription event not handled: ${response.data?.conversations?.event?.__typename}")
@@ -88,6 +92,17 @@ internal class GqlConversationDataSource constructor(
             val mergedConversations = listOf(newItem) + cachedQueryData.conversations.conversations
             val mergedQueryData = cachedQueryData.modify(mergedConversations)
             CacheUpdateOperation.Write(mergedQueryData)
+        }
+    }
+
+    private suspend fun deleteFromConversationsCache(conversationId: Uuid) {
+        apolloClient.updateCache(conversationsQuery()) { cachedQueryData ->
+            if (cachedQueryData == null) return@updateCache CacheUpdateOperation.Ignore()
+            val isNotInCache = cachedQueryData.conversations.conversations.none { it.conversationFragment.id == conversationId }
+            if (isNotInCache) return@updateCache CacheUpdateOperation.Ignore()
+
+            val filteredConversations = cachedQueryData.conversations.conversations.filter { it.conversationFragment.id != conversationId }
+            CacheUpdateOperation.Write(cachedQueryData.modify(filteredConversations))
         }
     }
 

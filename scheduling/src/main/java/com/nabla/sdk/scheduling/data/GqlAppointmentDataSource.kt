@@ -59,7 +59,7 @@ internal class GqlAppointmentDataSource(
                     logger.error(domain = GQL_DOMAIN, message = "error received in AppointmentsEventsSubscription: ${it.message}")
                 }
                 val event = response.data?.appointments?.event
-                logger.debug(domain = GQL_DOMAIN, message = "Event $event")
+                logger.debug(domain = GQL_DOMAIN, message = "Event ${event?.__typename}")
                 event?.onSubscriptionReadinessEvent?.let {
                     /* no-op */
                     return@onEach
