@@ -28,6 +28,7 @@ import kotlinx.coroutines.plus
 import kotlinx.coroutines.test.TestScope
 import org.junit.Test
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
@@ -47,13 +48,14 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
             conversationsEventsSubscriptionResponseFlow.filterNotNull()
         )
 
-        gqlConversationDataSource.watchConversations().test {
+        // It was flacky on CI so the timeout is a little bigger than default here (1s by default)
+        gqlConversationDataSource.watchConversations().test(timeout = 5.seconds) {
             var paginatedConversationsResponse = awaitItem()
-            assertTrue(paginatedConversationsResponse.data.items.isEmpty())
+            assertTrue(paginatedConversationsResponse.data.items.isEmpty(), "item size should be 0")
             conversationsEventsSubscriptionResponseFlow.value =
                 GqlData.ConversationsEvents.conversationCreated()
             paginatedConversationsResponse = awaitItem()
-            assertTrue(paginatedConversationsResponse.data.items.size == 1)
+            assertTrue(paginatedConversationsResponse.data.items.size == 1, "item size should be one")
         }
         job.cancel()
     }

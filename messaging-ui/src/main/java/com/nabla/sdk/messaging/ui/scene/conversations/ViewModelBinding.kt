@@ -79,9 +79,12 @@ private fun ConversationListView.bindViewModelState(
                 is State.Loaded -> {
                     // Only scroll down automatically if we're at the bottom of the chat && there are new items
                     val shouldScrollToBottomAfterSubmit = recyclerView.canScrollDown() && conversationAdapter.itemCount < state.items.size
+                    // If the item count changes, we need to make sure we apply the right decoration to the first & last element
+                    val shouldRecomputeItemDecoration = conversationAdapter.itemCount != state.items.size
 
                     conversationAdapter.submitList(state.items) {
                         if (shouldScrollToBottomAfterSubmit) recyclerView.scrollToTop()
+                        if (shouldRecomputeItemDecoration) recyclerView.invalidateItemDecorations()
                     }
                 }
                 is State.Error -> errorView.bind(state.errorUiModel, viewModel::onRetryClicked)
