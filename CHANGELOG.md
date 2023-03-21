@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2023-03-21
+
 ### Fixed
-- Fix joining/leaving multi-patients conversations not shown in real-time (but only on refresh).
+- Messaging: Fix joining/leaving multi-patients conversations not shown in real-time (but only on refresh).
+- Messaging: Fix a rare UI glitch where the spacing between conversations on the `ConversationListView` would be too high.
 
 ## [1.0.0] - 2023-03-16
 
