@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Fixed
+- Messaging: Make the button and the icon in video consultation item respect the container/content color pair.
+
 ## [1.0.1] - 2023-03-21
 
 ### Fixed

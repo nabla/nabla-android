@@ -32,7 +32,8 @@ internal class ProviderLivekitRoomMessageViewHolder(
                 onProviderClicked,
                 inflateProviderMessageContentCard(inflater, binding.chatProviderMessageContentContainer) { contentParent ->
                     LivekitRoomMessageContentBinder.create(
-                        R.attr.nablaMessaging_conversationProviderMessageAppearance,
+                        contentTextAppearanceAttr = R.attr.nablaMessaging_conversationProviderMessageAppearance,
+                        surfaceColorAttr = R.attr.nablaMessaging_providerMessageBackgroundColor,
                         inflater,
                         contentParent,
                         onJoinLivekitRoomClicked
