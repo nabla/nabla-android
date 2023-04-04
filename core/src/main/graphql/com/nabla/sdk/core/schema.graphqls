@@ -479,7 +479,7 @@ type LivekitRoomClosedStatus {
 input DeviceInput {
   deviceModel: String!
   os: DeviceOs!
-  osVersion: String!
+  osVersion: String
   codeVersion: Int!
   sdkModules: [SdkModule!]!
 }
@@ -497,6 +497,7 @@ type Sentry {
 enum DeviceOs {
   ANDROID
   IOS
+  WEB
 }
 
 enum SdkModule @backendEnumClass(dbName: "SdkModuleType") {

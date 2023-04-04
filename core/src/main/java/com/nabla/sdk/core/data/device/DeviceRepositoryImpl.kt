@@ -42,7 +42,7 @@ internal class DeviceRepositoryImpl(
             val deviceInput = DeviceInput(
                 deviceModel = device.deviceModel,
                 os = DeviceOs.ANDROID,
-                osVersion = device.osVersion,
+                osVersion = Optional.present(device.osVersion),
                 codeVersion = sdkApiVersionDataSource.getSdkApiVersion(),
                 sdkModules = gqlActiveModules,
             )
