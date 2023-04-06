@@ -1,43 +1,81 @@
 !tape
 name: test conversation creation with unknown provider
 interactions:
-- recorded: 2023-02-06T16:39:33.215Z
+- recorded: 2023-04-05T17:33:52.609Z
   request:
     method: POST
     uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
     headers:
       Accept: multipart/mixed; deferSpec=20220824, application/json
-      X-APOLLO-OPERATION-ID: 84cf450e318b172dc9b32645523b2b60ccc02a9c289e82d15597ad219ef9c094
+      X-APOLLO-OPERATION-ID: 49e8f2a08ad3c6fafd2d228daf84bdab54db0fec21439d1c7174ef1b075feb0c
+      X-APOLLO-OPERATION-NAME: RegisterOrUpdateDevice
+    body: '{"operationName":"RegisterOrUpdateDevice","variables":{"device":{"deviceModel":"unknown - robolectric (robolectric)","os":"ANDROID","osVersion":"4.1.2 (16)","codeVersion":478,"sdkModules":["MESSAGING"]}},"query":"mutation RegisterOrUpdateDevice($deviceId:
+      UUID, $device: DeviceInput!) { registerOrUpdateDevice(deviceId: $deviceId, device: $device) { deviceId sentry { dsn env } } }"}'
+  response:
+    status: 200
+    headers:
+      Connection: keep-alive
+      Content-Length: '307'
+      Content-Type: application/json; charset=UTF-8
+      Date: Wed, 05 Apr 2023 17:33:52 GMT
+      Server: ktor-server-core/1.6.2
+      Vary: Origin
+      X-Nabla-Minimum-Android-Code-Version: '0'
+      X-Nabla-Minimum-Code-Version: '398'
+      X-Nabla-Minimum-iOS-Code-Version: '0'
+      X-Request-ID: f7956170-7baa-4503-b6aa-881980022e48
+      X-Trace-ID: f7956170-7baa-4503-b6aa-881980022e48
+      x-nabla-cloudregion: EU_WEST1
+    body: |-
+      {
+          "data": {
+              "registerOrUpdateDevice": {
+                  "deviceId": "a60ea8dc-9c6d-4d4f-b5dc-cf5ad38757f3",
+                  "sentry": {
+                      "dsn": "https://d544635bca71460691802d7d8f1be4ee@sentry-relay.nabla.com/4504525106249728",
+                      "env": "dev"
+                  }
+              }
+          }
+      }
+- recorded: 2023-04-05T17:33:52.609Z
+  request:
+    method: POST
+    uri: http://localhost:8080/v1/patient/graphql/sdk/authenticated
+    headers:
+      Accept: multipart/mixed; deferSpec=20220824, application/json
+      X-APOLLO-OPERATION-ID: 12ac1be280edad898cdcf1d270b594e9c98afcb0dace53d7608a76074bd87fa2
       X-APOLLO-OPERATION-NAME: CreateConversation
-    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"],"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"d68d11db-3cdb-4caf-b6c7-708d8b1eee1c"}},"query":"mutation CreateConversation($title:
+    body: '{"operationName":"CreateConversation","variables":{"providerIds":["01234567-0000-0000-0000-000000000000"],"initialMessage":{"content":{"textInput":{"text":"Hello"}},"clientId":"fe187063-f4dc-4949-8190-1e86aa6ed483"}},"query":"mutation CreateConversation($title:
       String, $providerIds: [UUID!], $initialMessage: SendMessageInput) { createConversation(title: $title, providerIds: $providerIds, initialMessage: $initialMessage) { conversation { __typename ...ConversationFragment items(page: { cursor: null numberOfItems:
       1 } ) { data { __typename ...MessageFragment } } } } }  fragment EphemeralUrlFragment on EphemeralUrl { expiresAt url }  fragment ProviderFragment on Provider { id avatarUrl { __typename ...EphemeralUrlFragment } prefix firstName lastName title }  fragment
-      ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview unreadMessageCount
-      providers { __typename ...ProviderInConversationFragment } pictureUrl { __typename ...EphemeralUrlFragment } isLocked }  fragment PatientFragment on Patient { id displayName isMe }  fragment SystemFragment on System { name avatar { id url { __typename
-      ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment
-      on ImageMessageContent { imageFileUpload { __typename ...ImageFileUploadFragment } }  fragment VideoFileUploadFragment on VideoFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs width height }  fragment VideoMessageContentFragment
-      on VideoMessageContent { videoFileUpload { __typename ...VideoFileUploadFragment } }  fragment DocumentFileUploadFragment on DocumentFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType thumbnail { __typename ...ImageFileUploadFragment
-      } }  fragment DocumentMessageContentFragment on DocumentMessageContent { title documentFileUpload { __typename ...DocumentFileUploadFragment } }  fragment AudioFileUploadFragment on AudioFileUpload { id url { __typename ...EphemeralUrlFragment } fileName
-      mimeType durationMs }  fragment AudioMessageContentFragment on AudioMessageContent { audioFileUpload { __typename ...AudioFileUploadFragment } }  fragment LivekitRoomStatusFragment on LivekitRoomStatus { __typename ... on LivekitRoomOpenStatus { url token
-      } ... on LivekitRoomClosedStatus { empty: _ } }  fragment LivekitRoomFragment on LivekitRoom { uuid status { __typename ...LivekitRoomStatusFragment } }  fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent { livekitRoom { __typename
-      ...LivekitRoomFragment } }  fragment MessageContentFragment on MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on VideoMessageContent
-      { __typename ...VideoMessageContentFragment } ... on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ... on AudioMessageContent { __typename ...AudioMessageContentFragment } ... on LivekitRoomMessageContent { __typename ...LivekitRoomMessageContentFragment
-      } ... on DeletedMessageContent { empty: _ } }  fragment MessageSummaryFragment on Message { id author { __typename ... on Provider { __typename ...ProviderFragment } ... on Patient { __typename ...PatientFragment } ... on System { __typename ...SystemFragment
-      } ... on DeletedProvider { empty: _ } } messageContent: content { __typename ...MessageContentFragment } clientId conversation { id } createdAt }  fragment MessageFragment on Message { __typename ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment
-      } }"}'
+      PatientFragment on Patient { id displayName isMe }  fragment SystemFragment on System { name avatar { id url { __typename ...EphemeralUrlFragment } } }  fragment TextMessageContentFragment on TextMessageContent { text }  fragment ImageFileUploadFragment
+      on ImageFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType width height }  fragment ImageMessageContentFragment on ImageMessageContent { imageFileUpload { __typename ...ImageFileUploadFragment } }  fragment VideoFileUploadFragment
+      on VideoFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs width height }  fragment VideoMessageContentFragment on VideoMessageContent { videoFileUpload { __typename ...VideoFileUploadFragment } }  fragment DocumentFileUploadFragment
+      on DocumentFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType thumbnail { __typename ...ImageFileUploadFragment } }  fragment DocumentMessageContentFragment on DocumentMessageContent { title documentFileUpload { __typename ...DocumentFileUploadFragment
+      } }  fragment AudioFileUploadFragment on AudioFileUpload { id url { __typename ...EphemeralUrlFragment } fileName mimeType durationMs }  fragment AudioMessageContentFragment on AudioMessageContent { audioFileUpload { __typename ...AudioFileUploadFragment
+      } }  fragment LivekitRoomStatusFragment on LivekitRoomStatus { __typename ... on LivekitRoomOpenStatus { url token } ... on LivekitRoomClosedStatus { empty: _ } }  fragment LivekitRoomFragment on LivekitRoom { uuid status { __typename ...LivekitRoomStatusFragment
+      } }  fragment LivekitRoomMessageContentFragment on LivekitRoomMessageContent { livekitRoom { __typename ...LivekitRoomFragment } }  fragment MessageContentFragment on MessageContent { __typename ... on TextMessageContent { __typename ...TextMessageContentFragment
+      } ... on ImageMessageContent { __typename ...ImageMessageContentFragment } ... on VideoMessageContent { __typename ...VideoMessageContentFragment } ... on DocumentMessageContent { __typename ...DocumentMessageContentFragment } ... on AudioMessageContent
+      { __typename ...AudioMessageContentFragment } ... on LivekitRoomMessageContent { __typename ...LivekitRoomMessageContentFragment } ... on DeletedMessageContent { empty: _ } }  fragment MessageSummaryFragment on Message { id author { __typename ... on Provider
+      { __typename ...ProviderFragment } ... on Patient { __typename ...PatientFragment } ... on System { __typename ...SystemFragment } ... on DeletedProvider { empty: _ } } messageContent: content { __typename ...MessageContentFragment } clientId conversation
+      { id } createdAt }  fragment MessageFragment on Message { __typename ...MessageSummaryFragment replyTo { __typename ...MessageSummaryFragment } }  fragment ProviderInConversationFragment on ProviderInConversation { id provider { __typename ...ProviderFragment
+      } typingAt seenUntil }  fragment ConversationFragment on Conversation { id title subtitle createdAt updatedAt inboxPreviewTitle lastMessagePreview lastMessage { __typename ...MessageFragment } unreadMessageCount providers { __typename ...ProviderInConversationFragment
+      } pictureUrl { __typename ...EphemeralUrlFragment } isLocked }"}'
   response:
     status: 200
     headers:
       Connection: keep-alive
       Content-Length: '429'
       Content-Type: application/json; charset=UTF-8
-      Date: Mon, 06 Feb 2023 16:39:33 GMT
+      Date: Wed, 05 Apr 2023 17:33:52 GMT
       Server: ktor-server-core/1.6.2
       Vary: Origin
       X-Nabla-Minimum-Android-Code-Version: '0'
       X-Nabla-Minimum-Code-Version: '398'
       X-Nabla-Minimum-iOS-Code-Version: '0'
-      X-Request-ID: dd75b171-4556-492b-8311-1dffeab8bb95
+      X-Request-ID: bf7c399d-07cd-4300-810b-22e4c131aa47
+      X-Trace-ID: bf7c399d-07cd-4300-810b-22e4c131aa47
       x-nabla-cloudregion: EU_WEST1
     body: |-
       {

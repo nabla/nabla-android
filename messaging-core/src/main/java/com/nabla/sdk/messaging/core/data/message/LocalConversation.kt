@@ -21,6 +21,7 @@ internal data class LocalConversation(
             subtitle = null,
             inboxPreviewTitle = R.string.nabla_draft_conversation_title_placeholder.asStringOrRes(),
             lastMessagePreview = null,
+            lastMessage = null,
             lastModified = Clock.System.now(),
             patientUnreadMessageCount = 0,
             providersInConversation = emptyList(),

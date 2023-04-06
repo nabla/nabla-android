@@ -47,6 +47,13 @@ internal class GqlMapper(
             subtitle = fragment.subtitle,
             inboxPreviewTitle = fragment.inboxPreviewTitle.asStringOrRes(),
             lastMessagePreview = fragment.lastMessagePreview,
+            lastMessage = fragment.lastMessage?.messageFragment?.let { messageFragment ->
+                mapToMessage(
+                    messageFragment.messageSummaryFragment,
+                    sendStatus = SendStatus.Sent,
+                    replyTo = messageFragment.replyTo?.messageSummaryFragment,
+                )
+            },
             lastModified = fragment.updatedAt,
             patientUnreadMessageCount = fragment.unreadMessageCount,
             providersInConversation = fragment.providers.map {

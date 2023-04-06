@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+- Messaging core: Added new `lastMessage` property on `Conversation` that gives access to the whole message and not just its preview.
+
 ### Fixed
 - Messaging: Make the button and the icon in video consultation item respect the container/content color pair.
 

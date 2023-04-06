@@ -51,6 +51,7 @@ public data class Conversation(
     val providersInConversation: List<ProviderInConversation>,
     val pictureUrl: EphemeralUrl?,
     val isLocked: Boolean,
+    val lastMessage: Message?,
 ) {
     @VisibleForTesting
     public companion object

@@ -31,7 +31,11 @@ internal object GqlData {
         fun single(block: ConversationsQuery_TestBuilder.ConversationsBuilder.() -> Unit = {}) =
             ConversationsQuery.Data(CustomTestResolver()) {
                 conversations = conversations {
-                    conversations = listOf(conversation { })
+                    conversations = listOf(
+                        conversation {
+                            lastMessage = null
+                        }
+                    )
                     block()
                 }
             }
@@ -81,6 +85,7 @@ internal object GqlData {
                     conversation = conversation {
                         id = conversationId.remoteId.toString()
                         unreadMessageCount = patientUnreadMessageCount
+                        lastMessage = null
                         providers = emptyList() // Empty providers list to avoid generating typing events
                     }
                 }
@@ -94,6 +99,7 @@ internal object GqlData {
                 event = conversationCreatedEventEvent {
                     conversation = conversation {
                         conversationId?.let { id = conversationId.remoteId.toString() }
+                        lastMessage = null
                     }
                 }
             }
@@ -109,6 +115,7 @@ internal object GqlData {
                 event = conversationUpdatedEventEvent {
                     conversation = conversation {
                         id = conversationId.remoteId.toString()
+                        lastMessage = null
                         providers = listOf(
                             provider {
                                 id = providerInConversationId.toString()
@@ -130,6 +137,7 @@ internal object GqlData {
                 event = conversationUpdatedEventEvent {
                     conversation = conversation {
                         id = conversationId.remoteId.toString()
+                        lastMessage = null
                         providers = listOf()
                     }
                 }

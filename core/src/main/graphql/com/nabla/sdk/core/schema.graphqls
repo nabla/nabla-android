@@ -171,6 +171,7 @@ type Conversation {
 
   inboxPreviewTitle: String! @codegenAsAsyncFun
   lastMessagePreview: String @codegenAsAsyncFun
+  lastMessage: Message
   unreadMessageCount: Int! @codegenAsAsyncFun
 
   providers: [ProviderInConversation!]!
