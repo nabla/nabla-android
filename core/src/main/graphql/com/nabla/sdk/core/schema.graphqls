@@ -203,6 +203,7 @@ union MessageContent =
   | DeletedMessageContent
   | AudioMessageContent
   | LivekitRoomMessageContent
+  | QuestionsSetFormMessageContent
 
 type TextMessageContent {
   text: String! @codegenAsAsyncFun
@@ -287,6 +288,21 @@ type DeletedMessageContent {
 
 type LivekitRoomMessageContent {
   livekitRoom: LivekitRoom!
+}
+
+type QuestionsSetFormMessageContent {
+  form: QuestionsSetForm!
+}
+
+enum QuestionsSetFormState @backendEnumClass(noMapping: true) {
+  NOT_STARTED
+  IN_PROGRESS
+  ANSWERED
+}
+
+type QuestionsSetForm {
+  answerFormUrl: String! @codegenAsAsyncFun
+  state: QuestionsSetFormState! @codegenAsAsyncFun
 }
 
 input OpaqueCursorPage {
