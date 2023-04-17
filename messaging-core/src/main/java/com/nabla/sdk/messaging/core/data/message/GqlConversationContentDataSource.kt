@@ -100,6 +100,14 @@ internal class GqlConversationContentDataSource(
             /* no-op */
             return
         }
+        event.onTypingEvent?.let {
+            /* no-op */
+            return
+        }
+        event.onMessageUpdatedEvent?.let {
+            /* no-op */
+            return
+        }
         event.onMessageCreatedEvent?.message?.messageFragment?.let { messageFragment ->
             insertMessageToConversationCache(messageFragment)
             return
