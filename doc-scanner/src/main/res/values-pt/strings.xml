@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_document_scan_edge_picker_title">Cortar documento</string>
+    <string name="nabla_document_scan_edge_picker_crop_cta">Cortar</string>
+    <string name="nabla_document_scan_builder_title">Editar documento</string>
+    <string name="nabla_document_scan_builder_continue_cta">Validar</string>
+    <string name="nabla_document_scan_builder_add_cta">Adicionar</string>
+    <string name="nabla_document_scan_builder_crop_cta">Cortar</string>
+    <string name="nabla_document_scan_builder_delete_cta">Excluir</string>
+    <string name="nabla_document_scan_builder_confirm_delete_info">Deseja excluir essa página?</string>
+    <string name="nabla_document_scan_builder_confirm_delete_yes_cta">Sim</string>
+    <string name="nabla_document_scan_builder_confirm_delete_no_cta">Não</string>
+    <string name="nabla_document_scan_new_document_name">Digitalização de %s</string>
+    <string name="nabla_document_scan_new_document_name_date_format">dd\'-\'MM\'-\'yyyy</string>
+    <string name="nabla_document_scan_processed_document_content_description">documento</string>
+    <string name="nabla_document_scan_camera_picture_permission_rational_title">Permissão para usar a câmera</string>
+    <string name="nabla_document_scan_camera_picture_permission_rational_description">Para digitalizar um documento, precisamos da sua permissão para usar a câmera.</string>
+</resources>

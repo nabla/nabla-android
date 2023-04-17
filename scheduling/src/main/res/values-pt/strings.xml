@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_scheduling_appointments_toolbar_title">Consultas</string>
+    <string name="nabla_scheduling_upcoming_appointments">Agendadas</string>
+    <string name="nabla_scheduling_past_appointments">Passadas</string>
+    <string name="nabla_scheduling_no_upcoming_appointments">Nenhuma consulta agendada</string>
+    <string name="nabla_scheduling_no_past_appointments">Nenhuma consulta anterior</string>
+    <string name="nabla_scheduling_book_appointment">Marcar uma consulta</string>
+    <string name="nabla_scheduling_continue_cta">Continuar</string>
+    <string name="nabla_scheduling_confirm_cta">Confirmar</string>
+    <string name="nabla_scheduling_success_cta">OK</string>
+    <string name="nabla_scheduling_go_payment_cta">Ir para o pagamento</string>
+    <string name="nabla_scheduling_appointments_pagination_error">Ocorreu um erro durante o carregamento das reservas.</string>
+    <string name="nabla_scheduling_success_body">Sua consulta foi agendada.</string>
+
+    <string name="nabla_scheduling_location_selection_title">Escolha o modo de consulta</string>
+    <string name="nabla_scheduling_location_physical">Consulta presencial</string>
+    <string name="nabla_scheduling_location_remote">Teleconsulta</string>
+    <string name="nabla_scheduling_time_slot_selection_no_location">Nenhum horário disponível</string>
+    <string name="nabla_scheduling_category_selection_title">Escolha uma categoria</string>
+    <string name="nabla_scheduling_remote_location_hint">São teleconsultas por videochamada.</string>
+    <string name="nabla_scheduling_physical_location_hint">São consultas físicas.</string>
+    <string name="nabla_scheduling_time_slot_selection_title">Escolha uma data</string>
+    <string name="nabla_scheduling_confirmation_title">Confirme seu agendamento</string>
+    <string name="nabla_scheduling_time_slot_selection_no_category">Nenhuma categoria disponível</string>
+    <string name="nabla_scheduling_time_slot_selection_no_availability">Nenhuma vaga disponível</string>
+
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_title">Cancelar consulta?</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_message">Deseja cancelar esta consulta? Esta ação é final.</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_positive">Sim, cancele a consulta</string>
+    <string name="nabla_scheduling_appointment_item_cancel_confirmation_dialog_negative">Não, mantenha a consulta</string>
+    <string name="nabla_scheduling_appointment_item_join_cta">Participar da chamada</string>
+    <string name="nabla_scheduling_appointment_item_return_cta">Retornar à chamada</string>
+    <string name="nabla_scheduling_appointment_item_cancel_action">Cancelar consulta</string>
+    <string name="nabla_scheduling_appointment_item_full_date_pattern">d MMMM yyyy \'às\' HH:mm</string>
+    <plurals name="nabla_scheduling_appointment_item_relative_future_minutes_pattern">
+        <item quantity="one">Em %d minuto</item>
+        <item quantity="other">Em %1$d minutos</item>
+    </plurals>
+    <plurals name="nabla_scheduling_appointment_item_relative_past_minutes_pattern">
+        <item quantity="one">Há %d minuto</item>
+        <item quantity="other">Há %1$d minutos</item>
+    </plurals>
+    <plurals name="nabla_scheduling_time_slot_count">
+        <item quantity="one">%1$d disponibilidade</item>
+        <item quantity="other">%1$d disponibilidades</item>
+    </plurals>
+    <string name="nabla_scheduling_time_slot_pagination_error">Ocorreu um erro ao carregar as disponibilidades.</string>
+
+    <string name="nabla_scheduling_default_date_format_today">Hoje às %1s</string>
+    <string name="nabla_scheduling_default_date_format_future">%1s às %2s</string>
+    <string name="nabla_scheduling_time_format">HH\'h\'mm</string>
+    <string name="nabla_scheduling_date_pill_format_date">d MMM</string>
+
+    <string name="nabla_scheduling_appointment_details_title">Consulta</string>
+
+    <string name="nabla_scheduling_payment_error">Falha no pagamento, tente novamente.</string>
+</resources>

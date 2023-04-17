@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_conversation_composer_placeholder_default">Digite sua mensagem</string>
+
+    <string name="nabla_conversation_list_view_unread_indicator_content_description">Mensagens não lidas</string>
+
+    <string name="nabla_conversation_message_copy_label">Mensagem copiada</string>
+
+    <string name="nabla_conversation_message_sending_status">Envio em progresso…</string>
+    <string name="nabla_conversation_message_sent_status">Enviada</string>
+    <string name="nabla_conversation_message_error_status">Falha no envio, digite para tentar novamente…</string>
+
+    <string name="nabla_conversation_no_pdf_third_party_app_info_title">Instalar o Google Drive para abrir o PDF?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_message">Nenhum leitor de PDF foi encontrado em seu telefone. Deseja instalar o Google Drive para abrir o PDF?</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_positive">Instalar</string>
+    <string name="nabla_conversation_no_pdf_third_party_app_info_negative">Cancelar</string>
+
+    <string name="nabla_error_message_conversations_loading_more">Ocorreu um erro ao carregar as conversas, tente novamente.</string>
+    <string name="nabla_error_message_conversation_loading_more">Ocorreu um erro ao carregar as mensagens, tente novamente.</string>
+    <string name="nabla_error_message_conversation_attachment_media_picker">Ocorreu um erro ao abrir o seletor de mídia, tente novamente.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_capturing">Ocorreu um erro ao capturar a foto, tente novamente.</string>
+    <string name="nabla_error_message_conversation_attachment_camera_opening">Ocorreu um erro ao abrir a câmera, tente novamente.</string>
+    <string name="nabla_error_message_conversation_attachment_library_opening">Ocorreu um erro ao abrir a biblioteca, tente novamente.</string>
+    <string name="nabla_error_message_conversation_link_opening">Ocorreu um erro ao abrir o link, tente novamente.</string>
+    <string name="nabla_error_message_conversation_deleting_message">Ocorreu um erro ao excluir a mensagem, tente novamente.</string>
+    <string name="nabla_error_message_conversation_clicked_url_parsing">Um erro ocorreu durante o processamento do link, tente novamente.</string>
+
+    <string name="nabla_conversation_message_action_reply">Responder</string>
+    <string name="nabla_conversation_message_action_copy">Copiar</string>
+    <string name="nabla_conversation_message_action_delete">Excluir</string>
+    <string name="nabla_conversation_full_screen_media_close_content_description">Fechar</string>
+    <string name="nabla_conversation_full_screen_media_share_content_description">Compartilhar</string>
+    <string name="nabla_conversation_attachment_media_picker_camera_photo">Tirar uma foto</string>
+    <string name="nabla_conversation_attachment_media_picker_camera_video">Fazer um vídeo</string>
+    <string name="nabla_conversation_attachment_media_picker_photos_library">Biblioteca de fotos e vídeos</string>
+    <string name="nabla_conversation_attachment_media_picker_documents">Arquivos</string>
+    <string name="nabla_conversation_attachment_media_picker_document_scanner">Digitalizar um documento</string>
+
+    <string name="nabla_conversation_deleted_message_placeholder">Menssagem excluída</string>
+    <string name="nabla_conversation_file_message_content_description">Mensagem de arquivo</string>
+    <string name="nabla_conversation_typing_indicator_content_description">está escrevendo</string>
+    <string name="nabla_conversation_message_author_unknown_title">Autor não reconhecido</string>
+    <string name="nabla_conversation_composer_remove_attachment_content_description">Remover anexo</string>
+    <string name="nabla_conversation_composer_add_attachment_content_description">Adicionar anexo</string>
+    <string name="nabla_conversation_composer_send_content_description">Enviar</string>
+    <string name="nabla_conversation_composer_cancel_reply_content_description">Cancelar resposta</string>
+    <string name="nabla_conversation_composer_replying_to_title_author">Responder para %1s</string>
+    <string name="nabla_conversation_video_message_thumbnail_content_description">Assistir o vídeo</string>
+    <string name="nabla_conversation_header_loading">Carregando</string>
+    <string name="nabla_conversation_header_error">Erro</string>
+    <string name="nabla_conversation_full_screen_image_sharing_chooser_title">Compartilhar</string>
+    <string name="nabla_conversation_conversation_activity_provider_joined">%1s entrou na conversa</string>
+    <string name="nabla_conversation_conversation_activity_deleted_provider_joined">Um profissional entrou na conversa</string>
+
+    <string name="nabla_conversation_audio_message_player_title">Mensagem de voz</string>
+    <string name="nabla_conversation_audio_message_play_pause_content_description">Iniciar/Pausar</string>
+    <string name="nabla_conversation_button_record_audio_message_content_description">Começar a gravar a mensagem de voz</string>
+    <string name="nabla_conversation_button_cancel_audio_message_content_description">Parar de gravar a mensagem de voz</string>
+    <string name="nabla_conversation_error_recording_voice_message">Ocorreu um erro durante a gravação do áudio</string>
+    <string name="nabla_conversation_voice_message_audio_permission_rational_title">Permissão para usar o microfone</string>
+    <string name="nabla_conversation_voice_message_audio_permission_rational_description">Para gravar uma mensagem de voz, precisamos da sua permissão para usar o microfone.</string>
+    <string name="nabla_conversation_document_scan_failure">Ocorreu um erro ao anexar o documento</string>
+
+    <string name="nabla_conversation_replied_to_message_author_patient">Você</string>
+    <string name="nabla_conversation_replied_to_message_description_deleted">Mensagem excluída</string>
+    <string name="nabla_conversation_replied_to_message_description_voice">🔊 Mensagem de voz</string>
+    <string name="nabla_conversation_replied_to_message_description_document">📁 Documento</string>
+    <string name="nabla_conversation_replied_to_message_description_photo">📷 Foto</string>
+    <string name="nabla_conversation_replied_to_message_description_video">📹 Vídeo</string>
+
+    <string name="nabla_conversation_list_toolbar_title">Bate-papo médico</string>
+    <string name="nabla_conversation_list_create_cta_text">Iniciar uma conversa</string>
+    <string name="nabla_conversation_list_empty_state_text">Nenhuma conversa</string>
+
+    <string name="nabla_conversation_video_consultation">Consulta de vídeo</string>
+    <string name="nabla_conversation_video_consultation_icon_content_description">Ícone de consulta de vídeo</string>
+    <string name="nabla_conversation_video_consultation_join">Participar da chamada</string>
+    <string name="nabla_conversation_video_consultation_return_to_call">Retornar à chamada</string>
+    <string name="nabla_conversation_video_consultation_ended">Fim</string>
+
+</resources>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="nabla_video_call_activity_label">Chamada de vídeo</string>
+    <string name="nabla_video_call_controls_content_description_mic_on">Microfone ativado - Clique para desativar</string>
+    <string name="nabla_video_call_controls_content_description_mic_off">Microfone desativado - Clique para ativar</string>
+    <string name="nabla_video_call_controls_content_description_camera_on">Câmera ativada - Clique para desativar</string>
+    <string name="nabla_video_call_controls_content_description_camera_off">Câmera desativada - Clique para ativar</string>
+    <string name="nabla_video_call_controls_content_description_flip_camera">Virar a câmera</string>
+    <string name="nabla_video_call_controls_content_description_hang_up">Desligar</string>
+    <string name="nabla_video_call_back_button_content_description">Voltar</string>
+    <string name="nabla_video_call_banner_connecting">Conectando…</string>
+    <string name="nabla_video_call_banner_reconnecting">Reconectando…</string>
+    <string name="nabla_video_call_content_description_mic_off">Microfone desativado</string>
+    <string name="nabla_video_call_ended">Chamada encerrada</string>
+    <string name="nabla_video_call_error_permission_refused">Aceite as permissões de Microfone, Câmera e Bluetooth para entrar na chamada.</string>
+    <string name="nabla_video_call_error_failed_to_join">Não foi possível entrar na chamada. Verifique sua conexão e tente novamente.</string>
+</resources>

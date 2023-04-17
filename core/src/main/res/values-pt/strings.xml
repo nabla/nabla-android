@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nabla_conversation_camera_picture_permission_rational_title">Permissão para usar a câmera</string>
+    <string name="nabla_conversation_camera_picture_permission_rational_description">Para tirar uma foto, precisamos da sua permissão para usar a câmera.</string>
+    <string name="nabla_conversation_camera_video_permission_rational_title">Permissão para usar a câmera</string>
+    <string name="nabla_conversation_camera_video_permission_rational_description">Para gravar um vídeo, precisamos da sua permissão para usar a câmera e o microfone.</string>
+    <string name="nabla_permission_rational_default_accept">Aceitar</string>
+    <string name="nabla_permission_rational_default_decline">Recusar</string>
+
+    <string name="nabla_error_message_network_title">Ocorreu um erro de rede</string>
+    <string name="nabla_error_message_network_body">Por favor verifique sua conexão com a internet e tente novamente.</string>
+    <string name="nabla_error_message_generic_title">Ocorreu um erro</string>
+    <string name="nabla_error_message_generic_body">Por favor, tente novamente mais tarde.</string>
+    <string name="nabla_error_retry_cta">Tentar novamente</string>
+
+    <string name="nabla_avatar_state_description_placeholder">Avatar sem foto</string>
+    <string name="nabla_avatar_state_description_no_placeholder">Avatar com foto</string>
+</resources>
