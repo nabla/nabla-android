@@ -25,7 +25,7 @@ internal class VideoCallContainer(
         applicationContext = context,
         okHttpClient = okHttpClient,
         repoScope = backgroundScope,
-        videoCallRepositoryReporterHelper = VideoCallRepositoryReporterHelper(errorReporter)
+        videoCallRepositoryReporterHelper = VideoCallRepositoryReporterHelper(errorReporter),
     )
 
     val cameraService: CameraService = CameraServiceImpl(logger, context.applicationContext)

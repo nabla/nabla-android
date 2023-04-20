@@ -76,7 +76,7 @@ internal class VideoCallViewModel(
         .combine(
             mutableActiveSpeakersFlow
                 // We don't want empty lists (except at the very beginning) as we want to keep the last active speaker.
-                .filter { it.isNotEmpty() }.onStart { emit(emptyList()) }
+                .filter { it.isNotEmpty() }.onStart { emit(emptyList()) },
         ) { tracks, speakers ->
             tracks.lastOrNull { track ->
                 // take last (in order of subscription) track belonging to any of the current speakers
@@ -104,10 +104,14 @@ internal class VideoCallViewModel(
             else -> when (activeRemoteTrack) {
                 null -> if (cameraEnabled) {
                     VideoState.SelfOnly(localTrack, isSelfMirror)
-                } else VideoState.None
+                } else {
+                    VideoState.None
+                }
                 else -> if (cameraEnabled && !pictureInPictureEnabled) {
                     VideoState.Both(localTrack, activeRemoteTrack, isSelfMirror)
-                } else VideoState.RemoteOnly(activeRemoteTrack)
+                } else {
+                    VideoState.RemoteOnly(activeRemoteTrack)
+                }
             }
         }.also { videoCallPrivateClient.logger.debug("new video state: $it", domain = VIDEO_CALL_DOMAIN) }
     }
@@ -134,7 +138,7 @@ internal class VideoCallViewModel(
                 room::state.flow.collect { roomState ->
                     videoCallPrivateClient.logger.debug(
                         "new state for room ${room.name}: $roomState",
-                        domain = VIDEO_CALL_DOMAIN
+                        domain = VIDEO_CALL_DOMAIN,
                     )
                     when (roomState) {
                         Room.State.CONNECTING -> {
@@ -157,7 +161,7 @@ internal class VideoCallViewModel(
                 room.events.collect { event ->
                     videoCallPrivateClient.logger.debug(
                         "new event in room ${room.name}: ${event.javaClass.simpleName}",
-                        domain = VIDEO_CALL_DOMAIN
+                        domain = VIDEO_CALL_DOMAIN,
                     )
                     when (event) {
                         is RoomEvent.TrackSubscribed -> onTrackSubscribed(event)

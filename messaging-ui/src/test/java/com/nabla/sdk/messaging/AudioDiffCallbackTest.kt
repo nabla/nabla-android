@@ -19,7 +19,7 @@ class AudioDiffCallbackTest {
         val newItem = oldItem.copy(
             content = (oldItem.content as TimelineItem.Message.Audio).copy(
                 uri = UriFaker.remote(),
-            )
+            ),
         )
 
         assertEquals(true, ConversationDiffCallback.areItemsTheSame(oldItem, newItem))
@@ -34,7 +34,7 @@ class AudioDiffCallbackTest {
                 actions = newItem.actions,
                 itemForCallback = newItem,
             ),
-            ConversationDiffCallback.getChangePayload(oldItem, newItem)
+            ConversationDiffCallback.getChangePayload(oldItem, newItem),
         )
     }
 
@@ -45,7 +45,7 @@ class AudioDiffCallbackTest {
             content = (oldItem.content as TimelineItem.Message.Audio).copy(
                 progress = PlaybackProgress(currentPositionMillis = 1_000, totalDurationMillis = 5_000),
                 isPlaying = true,
-            )
+            ),
         )
 
         assertEquals(true, ConversationDiffCallback.areItemsTheSame(oldItem, newItem))
@@ -60,7 +60,7 @@ class AudioDiffCallbackTest {
                 actions = newItem.actions,
                 itemForCallback = newItem,
             ),
-            ConversationDiffCallback.getChangePayload(oldItem, newItem)
+            ConversationDiffCallback.getChangePayload(oldItem, newItem),
         )
     }
 }

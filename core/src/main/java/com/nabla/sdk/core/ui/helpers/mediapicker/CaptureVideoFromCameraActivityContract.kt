@@ -57,7 +57,9 @@ public class CaptureVideoFromCameraActivityContract(
             val fileWithExtension = File(
                 file.path + if (mimeType !is MimeType.Video.Other) {
                     ".${mimeType.subtype}"
-                } else ""
+                } else {
+                    ""
+                },
             )
             file.renameTo(fileWithExtension)
 
@@ -66,7 +68,7 @@ public class CaptureVideoFromCameraActivityContract(
                     fileWithExtension.toURI(),
                     generateFileName(extension = mimeType.subtype),
                     mimeType,
-                )
+                ),
             )
         } catch (error: Exception) {
             return MediaPickingResult.Failure(error)

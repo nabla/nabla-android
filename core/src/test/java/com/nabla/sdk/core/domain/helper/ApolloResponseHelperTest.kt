@@ -121,7 +121,7 @@ class ApolloResponseHelperTest : BaseCoroutineTest() {
         return ApolloResponse.Builder(
             operation = fakeOperation,
             requestUuid = Uuid.randomUUID(),
-            data = object : Query.Data {}
+            data = object : Query.Data {},
         )
             .isLast(isLast)
             .addExecutionContext(CacheInfo.Builder().cacheHit(isFromCache).build())

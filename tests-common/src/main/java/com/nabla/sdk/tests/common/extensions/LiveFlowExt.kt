@@ -7,6 +7,6 @@ suspend fun <T> LiveFlow<T>.collectToFlow(collectorFlow: MutableSharedFlow<T>) {
     collect(
         object : LiveFlow.BaseLiveFlowCollector<T>() {
             override suspend fun emit(value: T) = collectorFlow.emit(value)
-        }
+        },
     )
 }

@@ -28,7 +28,7 @@ internal class MediaToSendAdapter(
                 R.layout.nabla_conversation_timeline_item_media_to_send,
                 parent,
                 false,
-            )
+            ),
         )
     }
 
@@ -80,7 +80,7 @@ internal class MediaToSendAdapter(
                     },
                     onError = { _, error ->
                         onErrorLoadingThumbnail(error.throwable)
-                    }
+                    },
                 )
             }
         }

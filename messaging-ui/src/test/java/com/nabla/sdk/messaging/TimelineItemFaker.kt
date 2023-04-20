@@ -18,7 +18,7 @@ internal fun TimelineItem.Message.Companion.fake(
     author: TimelineItem.Message.Author = TimelineItem.Message.Author.CurrentPatient,
     showAuthorAvatar: Boolean = false,
     showAuthorName: Boolean = false,
-    content: TimelineItem.Message.Content
+    content: TimelineItem.Message.Content,
 ) = TimelineItem.Message(
     id = id,
     author = author,
@@ -34,7 +34,7 @@ internal fun TimelineItem.Message.Companion.fake(
 internal fun TimelineItem.Message.Audio.Companion.fake() = TimelineItem.Message.Audio(
     uri = UriFaker.remote(),
     progress = PlaybackProgress.UNKNOWN,
-    isPlaying = false
+    isPlaying = false,
 )
 
 internal fun TimelineItem.Message.Text.Companion.fake() = TimelineItem.Message.Text(
@@ -43,9 +43,9 @@ internal fun TimelineItem.Message.Text.Companion.fake() = TimelineItem.Message.T
 )
 
 internal fun TimelineItem.Message.Image.Companion.fake() = TimelineItem.Message.Image(
-    uri = UriFaker.remote()
+    uri = UriFaker.remote(),
 )
 
 internal fun TimelineItem.Message.Video.Companion.fake() = TimelineItem.Message.Video(
-    uri = UriFaker.remote()
+    uri = UriFaker.remote(),
 )

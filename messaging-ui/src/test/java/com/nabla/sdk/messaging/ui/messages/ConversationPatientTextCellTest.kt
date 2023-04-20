@@ -233,7 +233,7 @@ internal class ConversationPatientTextCellTest : BaseCoroutineTest() {
     private fun makeRepliedProviderDocumentMessage() = makeRepliedProviderMessage(
         RepliedMessage.Content.Document(
             uri = Uri("https://google.com"),
-            thumbnailUri = Uri("https://google.com")
+            thumbnailUri = Uri("https://google.com"),
         ),
     )
 
@@ -278,7 +278,7 @@ internal class ConversationPatientTextCellTest : BaseCoroutineTest() {
         val providerAuthor = TimelineItem.Message.Author.Provider(
             provider = Provider.fake(
                 firstName = "Mario",
-                lastName = "Bros"
+                lastName = "Bros",
             ),
         )
     }

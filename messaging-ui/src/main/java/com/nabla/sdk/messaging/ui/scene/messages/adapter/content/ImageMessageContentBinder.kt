@@ -46,7 +46,7 @@ internal class ImageMessageContentBinder(
         ): ImageMessageContentBinder {
             return ImageMessageContentBinder(
                 contentTextAppearanceAttr = contentTextAppearanceAttr,
-                binding = NablaConversationTimelineItemImageMessageBinding.inflate(inflater, parent, true)
+                binding = NablaConversationTimelineItemImageMessageBinding.inflate(inflater, parent, true),
             )
         }
     }

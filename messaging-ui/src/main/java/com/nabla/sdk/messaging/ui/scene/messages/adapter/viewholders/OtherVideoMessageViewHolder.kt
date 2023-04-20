@@ -28,7 +28,7 @@ internal class OtherVideoMessageViewHolder(
                         parent = contentParent,
                         onErrorFetchingVideoThumbnail = onErrorFetchingVideoThumbnail,
                     )
-                }
+                },
             )
         }
     }

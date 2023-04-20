@@ -30,7 +30,7 @@ internal class SchedulingContainer(coreContainer: CoreContainer) {
     )
     private val gqlAppointmentConfirmConsentsDataSource = GqlAppointmentConfirmConsentsDataSource(
         coreContainer.apolloClient,
-        gqlMapper
+        gqlMapper,
     )
     private val gqlAppointmentLocationDataSource = GqlAppointmentLocationDataSource(
         coreContainer.apolloClient,

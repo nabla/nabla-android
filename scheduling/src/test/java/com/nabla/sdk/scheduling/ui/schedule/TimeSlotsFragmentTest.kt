@@ -124,7 +124,7 @@ class TimeSlotsFragmentTest : BaseCoroutineTest() {
         val binding = NablaSchedulingFragmentTimeSlotsBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
-            false
+            false,
         )
 
         binding.recyclerView.addItemDecoration(VerticalOffsetsItemDecoration())
@@ -181,7 +181,7 @@ class TimeSlotsFragmentTest : BaseCoroutineTest() {
                             startAt = distantDate,
                             isSelected = false,
                         ),
-                    )
+                    ),
                 ),
             ),
             TimeSlotsUiItem.DaySlots(

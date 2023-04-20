@@ -133,7 +133,7 @@ internal class DaySlotsViewHolder(
                 NablaSchedulingItemDaySlotsBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
+                    false,
                 ),
                 singleSlotViewPool,
                 onDaySlotsClicked,
@@ -154,8 +154,8 @@ internal class LoadingViewHolder(
                 NablaSchedulingItemLoadingBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
-                )
+                    false,
+                ),
             )
         }
     }
@@ -166,12 +166,12 @@ internal fun formatDate(localDate: LocalDate, context: Context): String {
         localDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds(),
         Clock.System.now().toEpochMilliseconds(),
         DateUtils.DAY_IN_MILLIS,
-        DateUtils.FORMAT_SHOW_DATE
+        DateUtils.FORMAT_SHOW_DATE,
     ).toString()
     val date = DateUtils.formatDateTime(
         context,
         localDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds(),
-        DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_SHOW_DATE
+        DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_SHOW_DATE,
     )
     return if (localDate.atStartOfDayIn(TimeZone.currentSystemDefault()) - Clock.System.now() > 1.days) {
         date.capitalize()

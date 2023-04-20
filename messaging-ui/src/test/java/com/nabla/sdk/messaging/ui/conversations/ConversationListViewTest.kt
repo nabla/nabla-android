@@ -39,7 +39,7 @@ internal class ConversationListViewTest : BaseCoroutineTest() {
                     spacingBetweenItemsPx = view.context.dpToPx(12),
                     firstItemTopPaddingPx = view.context.dpToPx(12),
                     lastItemBottomPaddingPx = view.context.dpToPx(92),
-                )
+                ),
             )
             view.recyclerView.isVisible = true
             view.errorView.root.isVisible = false
@@ -48,7 +48,7 @@ internal class ConversationListViewTest : BaseCoroutineTest() {
                     id = UUID.fromString("6cf6bdbf-a0ea-437c-b668-2236e02f1a07"),
                     lastName = "Cayol",
                     avatar = null,
-                )
+                ),
             )
             adapter.submitList(
                 List(20) { index ->
@@ -58,9 +58,9 @@ internal class ConversationListViewTest : BaseCoroutineTest() {
                         providersInConversation = listOf(providerInConversation),
                         patientUnreadMessageCount = index % 2,
                         // Use distant past to make sure the date is displayed as full date
-                        lastModified = LocalDate(2020, 1, 1).atStartOfDayIn(TimeZone.UTC)
+                        lastModified = LocalDate(2020, 1, 1).atStartOfDayIn(TimeZone.UTC),
                     ).toUiModel()
-                }
+                },
             )
 
             return@snapshotDayNightMultiDevices view

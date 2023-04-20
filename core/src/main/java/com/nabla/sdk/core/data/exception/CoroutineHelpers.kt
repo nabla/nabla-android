@@ -15,7 +15,7 @@ public object CoroutineHelpers {
     public fun <T> Result<T>.mapFailure(exceptionMapper: (Throwable) -> Throwable): Result<T> {
         return fold(
             onFailure = { Result.failure(exceptionMapper(it)) },
-            onSuccess = { Result.success(it) }
+            onSuccess = { Result.success(it) },
         )
     }
 

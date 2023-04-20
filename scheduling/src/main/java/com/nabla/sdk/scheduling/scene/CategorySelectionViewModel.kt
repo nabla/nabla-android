@@ -29,7 +29,7 @@ internal class CategorySelectionViewModel(private val nablaClient: NablaClient) 
         nablaClient.coreContainer.logger.warn(
             message = "failed to get appointment categories",
             error = cause,
-            domain = Logger.SCHEDULING_DOMAIN.UI
+            domain = Logger.SCHEDULING_DOMAIN.UI,
         )
         emit(State.Error(cause.asNetworkOrGeneric))
         retryTriggerFlow.first()

@@ -87,7 +87,7 @@ internal class GqlConversationDataSource constructor(
 
             val newItem = ConversationsQuery.Conversation(
                 com.nabla.sdk.graphql.type.Conversation.type.name,
-                conversation
+                conversation,
             )
             val mergedConversations = listOf(newItem) + cachedQueryData.conversations.conversations
             val mergedQueryData = cachedQueryData.modify(mergedConversations)
@@ -137,7 +137,7 @@ internal class GqlConversationDataSource constructor(
                 return@map Response(
                     isDataFresh = response.isDataFresh,
                     refreshingState = response.refreshingState,
-                    data = PaginatedList(items, response.data.conversations.hasMore)
+                    data = PaginatedList(items, response.data.conversations.hasMore),
                 )
             }
         return flowOf(conversationsEventsFlow, dataFlow)
@@ -160,11 +160,11 @@ internal class GqlConversationDataSource constructor(
                 title = Optional.presentIfNotNull(title),
                 providerIds = Optional.presentIfNotNull(providerIds),
                 initialMessage = Optional.presentIfNotNull(initialMessage),
-            )
+            ),
         ).execute().dataOrThrowOnError
 
         onSuccessSideEffect?.invoke(
-            data.createConversation.conversation.conversationFragment.id
+            data.createConversation.conversation.conversationFragment.id,
         )
 
         return mapper.mapToConversation(data.createConversation.conversation.conversationFragment)
@@ -183,7 +183,7 @@ internal class GqlConversationDataSource constructor(
                 Response(
                     isDataFresh = response.isDataFresh,
                     refreshingState = response.refreshingState,
-                    data = mapper.mapToConversation(response.data.conversation.conversation.conversationFragment)
+                    data = mapper.mapToConversation(response.data.conversation.conversation.conversationFragment),
                 )
             }
 
@@ -198,7 +198,7 @@ internal class GqlConversationDataSource constructor(
             OpaqueCursorPage(
                 cursor = Optional.presentIfNotNull(pageCursor),
                 numberOfItems = Optional.Present(50),
-            )
+            ),
         )
     }
 }

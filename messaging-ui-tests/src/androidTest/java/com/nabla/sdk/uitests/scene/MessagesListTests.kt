@@ -37,8 +37,8 @@ class MessagesListTests {
         // scroll till pagination trigger
         onView(first(withId(SdkR.id.conversationRecyclerView))).perform(
             RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(
-                withId(SdkR.id.nablaConversationTimelineLoadingMoreRoot)
-            )
+                withId(SdkR.id.nablaConversationTimelineLoadingMoreRoot),
+            ),
         )
 
         // TODO find a way to make Espresso wait for recycler‘s adapter submitList.

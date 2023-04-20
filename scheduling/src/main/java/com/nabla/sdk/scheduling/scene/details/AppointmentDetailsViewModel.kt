@@ -49,7 +49,7 @@ internal class AppointmentDetailsViewModel(
         nablaClient.coreContainer.logger.warn(
             message = "failed to get appointment details",
             error = cause,
-            domain = Logger.SCHEDULING_DOMAIN.UI
+            domain = Logger.SCHEDULING_DOMAIN.UI,
         )
         emit(State.Error(cause.asNetworkOrGeneric))
         retryTriggerFlow.first()
@@ -69,13 +69,13 @@ internal class AppointmentDetailsViewModel(
                     nablaClient.coreContainer.logger.warn(
                         "failed cancelling appointment",
                         throwable,
-                        domain = Logger.SCHEDULING_DOMAIN.UI
+                        domain = Logger.SCHEDULING_DOMAIN.UI,
                     )
 
                     eventsMutableFlow.emit(
                         Event.FailedCancelling(
-                            throwable.asNetworkOrGeneric.title
-                        )
+                            throwable.asNetworkOrGeneric.title,
+                        ),
                     )
                 }.onSuccess {
                     eventsMutableFlow.emit(Event.AppointmentCancelled)

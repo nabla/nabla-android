@@ -24,7 +24,6 @@ internal class TimelineBuilder {
         currentVideoCall: VideoCall? = null,
         logger: Logger = LogcatLogger(),
     ): List<TimelineItem> {
-
         // First generates items containing messages, conversation activity and action request.
         // In this first pass, we don't show the status and the author (will do in a second pass)
         val allMessageItems = items.mapNotNull { item ->
@@ -85,13 +84,17 @@ internal class TimelineBuilder {
                     firstMessage !is TimelineItem.Message
                 TimelineItem.ProviderTypingIndicator(
                     provider = typingProvider.provider,
-                    showProviderName = showProviderName
+                    showProviderName = showProviderName,
                 )
             }
 
-        val loadMoreItems = if (hasMore) listOf(
-            TimelineItem.LoadingMore
-        ) else emptyList()
+        val loadMoreItems = if (hasMore) {
+            listOf(
+                TimelineItem.LoadingMore,
+            )
+        } else {
+            emptyList()
+        }
 
         return typingIndicators + allItemsWithDates + loadMoreItems
     }

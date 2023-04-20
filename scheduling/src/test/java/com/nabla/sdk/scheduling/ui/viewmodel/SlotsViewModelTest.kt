@@ -54,7 +54,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
                         TimeSlotsUiItem.DaySlots.Slot(referenceInstant, false),
                         TimeSlotsUiItem.DaySlots.Slot(referenceInstant + 15.minutes, false),
                         TimeSlotsUiItem.DaySlots.Slot(referenceInstant + 30.minutes, false),
-                    )
+                    ),
                 ),
             ),
             TimeSlotsUiItem.DaySlots(
@@ -71,7 +71,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
                         TimeSlotsUiItem.DaySlots.Slot(referenceInstant, false),
                         TimeSlotsUiItem.DaySlots.Slot(referenceInstant + 15.minutes, false),
                         TimeSlotsUiItem.DaySlots.Slot(referenceInstant + 30.minutes, false),
-                    )
+                    ),
                 ),
             ),
             TimeSlotsUiItem.DaySlots(
@@ -91,7 +91,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
             object : SchedulingPrivateClientAdapter() {
                 override fun watchAvailabilitySlots(
                     locationType: AppointmentLocationType,
-                    categoryId: AppointmentCategoryId
+                    categoryId: AppointmentCategoryId,
                 ): Flow<PaginatedContent<List<AvailabilitySlot>>> {
                     return slotsDataFlow
                 }
@@ -104,7 +104,7 @@ class SlotsViewModelTest : BaseCoroutineTest() {
             loadMore = {
                 slotsDataFlow.emit(PaginatedContent(firstPage + secondPage, loadMore = null))
                 Result.success(Unit)
-            }
+            },
         )
 
         // The actual test scenario

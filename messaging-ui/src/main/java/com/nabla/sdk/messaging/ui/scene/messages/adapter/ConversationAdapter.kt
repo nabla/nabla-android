@@ -67,7 +67,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 ViewType.OTHER_IMAGE_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.OTHER_VIDEO_MESSAGE_VIEW_TYPE.ordinal,
                 ViewType.OTHER_TEXT_MESSAGE_VIEW_TYPE.ordinal,
-            )
+            ),
         ) { viewHolder ->
             val item = getItem(viewHolder.bindingAdapterPosition)
             if (item is TimelineItem.Message && item.status == SendStatus.Sent) {
@@ -140,7 +140,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 inflater,
                 parent,
                 callbacks::onProviderClicked,
-                callbacks::onJoinLivekitRoomClicked
+                callbacks::onJoinLivekitRoomClicked,
             )
             ViewType.PROVIDER_DELETED_MESSAGE_VIEW_TYPE -> ProviderDeletedMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
             ViewType.PROVIDER_FILE_MESSAGE_VIEW_TYPE -> ProviderFileMessageViewHolder.create(inflater, parent, callbacks::onProviderClicked)
@@ -155,7 +155,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 inflater,
                 parent,
                 callbacks::onProviderClicked,
-                callbacks::onToggleAudioMessagePlay
+                callbacks::onToggleAudioMessagePlay,
             )
             ViewType.PROVIDER_TEXT_MESSAGE_VIEW_TYPE -> ProviderTextMessageViewHolder.create(
                 inflater,
@@ -260,22 +260,22 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             is ProviderDeletedMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Provider,
-                item.content as TimelineItem.Message.Deleted
+                item.content as TimelineItem.Message.Deleted,
             )
             is ProviderFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Provider,
-                item.content as TimelineItem.Message.File
+                item.content as TimelineItem.Message.File,
             )
             is ProviderImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Provider,
-                item.content as TimelineItem.Message.Image
+                item.content as TimelineItem.Message.Image,
             )
             is ProviderVideoMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Provider,
-                item.content as TimelineItem.Message.Video
+                item.content as TimelineItem.Message.Video,
             )
             is ProviderAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
@@ -285,32 +285,32 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             is ProviderTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Provider,
-                item.content as TimelineItem.Message.Text
+                item.content as TimelineItem.Message.Text,
             )
             is ProviderLivekitRoomMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Provider,
-                item.content as TimelineItem.Message.LivekitRoom
+                item.content as TimelineItem.Message.LivekitRoom,
             )
             is PatientDeletedMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.CurrentPatient,
-                item.content as TimelineItem.Message.Deleted
+                item.content as TimelineItem.Message.Deleted,
             )
             is PatientFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.CurrentPatient,
-                item.content as TimelineItem.Message.File
+                item.content as TimelineItem.Message.File,
             )
             is PatientImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.CurrentPatient,
-                item.content as TimelineItem.Message.Image
+                item.content as TimelineItem.Message.Image,
             )
             is PatientVideoMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.CurrentPatient,
-                item.content as TimelineItem.Message.Video
+                item.content as TimelineItem.Message.Video,
             )
             is PatientAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
@@ -320,27 +320,27 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
             is PatientTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.CurrentPatient,
-                item.content as TimelineItem.Message.Text
+                item.content as TimelineItem.Message.Text,
             )
             is OtherTextMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Other,
-                item.content as TimelineItem.Message.Text
+                item.content as TimelineItem.Message.Text,
             )
             is OtherFileMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Other,
-                item.content as TimelineItem.Message.File
+                item.content as TimelineItem.Message.File,
             )
             is OtherImageMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Other,
-                item.content as TimelineItem.Message.Image
+                item.content as TimelineItem.Message.Image,
             )
             is OtherVideoMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
                 item.author as TimelineItem.Message.Author.Other,
-                item.content as TimelineItem.Message.Video
+                item.content as TimelineItem.Message.Video,
             )
             is OtherAudioMessageViewHolder -> holder.bind(
                 item as TimelineItem.Message,
@@ -353,7 +353,7 @@ internal class ConversationAdapter(private val callbacks: Callbacks) : ListAdapt
                 item.content as TimelineItem.Message.Deleted,
             )
             is ConversationActivityTextMessageViewHolder -> holder.bind(
-                item as TimelineItem.ConversationActivity
+                item as TimelineItem.ConversationActivity,
             )
         }
 

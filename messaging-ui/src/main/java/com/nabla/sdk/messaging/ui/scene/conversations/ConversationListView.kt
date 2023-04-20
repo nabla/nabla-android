@@ -30,7 +30,7 @@ public class ConversationListView : FrameLayout {
     ) : super(
         context.withNablaMessagingThemeOverlays(attrs),
         attrs,
-        defAttrRes
+        defAttrRes,
     ) {
         init(attrs)
     }

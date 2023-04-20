@@ -11,8 +11,8 @@ internal object GqlTypeHelper {
     ): ConversationsQuery.Data {
         return copy(
             conversations = this.conversations.copy(
-                conversations = conversations
-            )
+                conversations = conversations,
+            ),
         )
     }
 
@@ -24,11 +24,11 @@ internal object GqlTypeHelper {
                 conversation = conversation.conversation.copy(
                     conversationItemsPageFragment = conversation.conversation.conversationItemsPageFragment.copy(
                         items = conversation.conversation.conversationItemsPageFragment.items.copy(
-                            data = data
-                        )
-                    )
-                )
-            )
+                            data = data,
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 }

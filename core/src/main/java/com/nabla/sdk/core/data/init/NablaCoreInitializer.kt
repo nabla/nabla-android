@@ -20,7 +20,7 @@ public class NablaCoreInitializer : Initializer<Unit> {
             @Suppress("DEPRECATION")
             context.packageManager.getApplicationInfo(
                 context.packageName,
-                PackageManager.GET_META_DATA
+                PackageManager.GET_META_DATA,
             ).metaData
         }
         val publicApiKey = metaData?.getString("com.nabla.sdk.PUBLIC_API_KEY")

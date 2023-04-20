@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 internal object PictureInPictureCompat {
     fun enterPictureInPictureMode(
         activity: ComponentActivity,
-        pictureInPictureParamsFactory: () -> PictureInPictureParams
+        pictureInPictureParamsFactory: () -> PictureInPictureParams,
     ): Boolean {
         return when {
             Build.VERSION.SDK_INT >= 26 -> {

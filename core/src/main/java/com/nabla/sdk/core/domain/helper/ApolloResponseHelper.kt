@@ -62,9 +62,9 @@ public object ApolloResponseHelper {
                             emit(
                                 response.copy(
                                     refreshingState = RefreshingState.ErrorWhileRefreshing(
-                                        exceptionMapper.map(cause)
-                                    )
-                                )
+                                        exceptionMapper.map(cause),
+                                    ),
+                                ),
                             )
                         } else {
                             throw cause

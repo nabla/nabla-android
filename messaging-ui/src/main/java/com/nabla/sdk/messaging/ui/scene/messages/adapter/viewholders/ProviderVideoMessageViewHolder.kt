@@ -32,7 +32,7 @@ internal class ProviderVideoMessageViewHolder(
                         parent = contentParent,
                         onErrorFetchingVideoThumbnail = onErrorFetchingVideoThumbnail,
                     )
-                }
+                },
             )
         }
     }

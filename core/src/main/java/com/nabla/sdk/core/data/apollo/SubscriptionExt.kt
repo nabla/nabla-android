@@ -38,7 +38,7 @@ public object SubscriptionExt {
         .shareInWithMaterializedErrors(
             scope = coroutineScope,
             replay = 0,
-            started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0)
+            started = SharingStarted.WhileSubscribed(replayExpirationMillis = 0),
         )
 
     @OptIn(ExperimentalCoroutinesApi::class)

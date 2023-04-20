@@ -94,7 +94,7 @@ internal class GqlConversationContentDataSource(
     ) {
         logger.debug(
             domain = GQL_DOMAIN,
-            message = "Event ${event.__typename}"
+            message = "Event ${event.__typename}",
         )
         event.onSubscriptionReadinessEvent?.let {
             /* no-op */
@@ -124,13 +124,13 @@ internal class GqlConversationContentDataSource(
     ) {
         val query = conversationItemsQuery(
             ConversationId.Remote(
-                remoteId = newMessageFragment.messageSummaryFragment.conversation.id
-            )
+                remoteId = newMessageFragment.messageSummaryFragment.conversation.id,
+            ),
         )
         val newItem = ConversationItemsPageFragment.Data(
             Message.type.name,
             null,
-            newMessageFragment
+            newMessageFragment,
         )
         insertConversationItemToConversationCache(query, newItem) { messageFragment?.messageSummaryFragment?.id }
     }
@@ -140,13 +140,13 @@ internal class GqlConversationContentDataSource(
     ) {
         val query = conversationItemsQuery(
             ConversationId.Remote(
-                remoteId = newConversationActivityFragment.conversation.id
-            )
+                remoteId = newConversationActivityFragment.conversation.id,
+            ),
         )
         val newItem = ConversationItemsPageFragment.Data(
             ConversationActivity.type.name,
             newConversationActivityFragment,
-            null
+            null,
         )
         insertConversationItemToConversationCache(query, newItem) { conversationActivityFragment?.id }
     }
@@ -285,9 +285,9 @@ internal class GqlConversationContentDataSource(
                             onAudioMessageContent = null,
                             onLivekitRoomMessageContent = null,
                             onDeletedMessageContent = MessageContentFragment.OnDeletedMessageContent(
-                                empty = EmptyObject.EMPTY
+                                empty = EmptyObject.EMPTY,
                             ),
-                        )
+                        ),
                     ),
                     conversation = DeleteMessageMutation.Conversation(
                         __typename = Conversation.type.name,
@@ -297,10 +297,10 @@ internal class GqlConversationContentDataSource(
                             inboxPreviewTitle = cachedConversationFragment?.inboxPreviewTitle ?: "",
                             lastMessagePreview = cachedConversationFragment?.lastMessagePreview,
                             unreadMessageCount = cachedConversationFragment?.unreadMessageCount ?: 0,
-                        )
-                    )
-                )
-            )
+                        ),
+                    ),
+                ),
+            ),
         )
 
         apolloClient.mutation(mutation)

@@ -12,12 +12,13 @@ import io.sentry.SentryOptions
 import io.sentry.protocol.Message
 
 internal class SentryErrorReporter(
-    private val logger: Logger
+    private val logger: Logger,
 ) : ErrorReporter {
     /**
      * Map to save tags to reuse them if [hub] instance changes
      */
     private val tags = mutableMapOf<String, String>()
+
     /**
      * Map to save extras to reuse them if [hub] instance changes
      */
@@ -81,7 +82,7 @@ internal class SentryErrorReporter(
             hub.captureEvent(
                 SentryEvent(throwable).apply {
                     level = SentryLevel.WARNING
-                }
+                },
             )
         } else {
             hub.captureMessage(message, SentryLevel.WARNING)
@@ -95,7 +96,7 @@ internal class SentryErrorReporter(
             hub.captureEvent(
                 SentryEvent(throwable).apply {
                     level = SentryLevel.ERROR
-                }
+                },
             )
         } else {
             hub.captureMessage(message, SentryLevel.ERROR)
@@ -110,7 +111,7 @@ internal class SentryErrorReporter(
                 this.message = message
                 domain?.let { category = domain }
                 metadata?.let { data.putAll(metadata) }
-            }
+            },
         )
     }
 

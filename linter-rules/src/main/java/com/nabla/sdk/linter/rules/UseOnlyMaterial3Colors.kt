@@ -50,8 +50,8 @@ internal val USE_ONLY_MATERIAL3_COLORS = Issue.create(
     severity = Severity.WARNING,
     implementation = Implementation(
         UseOnlyMaterial3Colors::class.java,
-        EnumSet.of(Scope.RESOURCE_FILE)
-    )
+        EnumSet.of(Scope.RESOURCE_FILE),
+    ),
 )
 
 private val MATERIAL3_COLORS_LIST = listOf(

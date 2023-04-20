@@ -19,7 +19,7 @@ internal class SwipeToReplyCallback(
     private val onSwiped: (viewHolder: RecyclerView.ViewHolder) -> Unit,
 ) : ItemTouchHelper.SimpleCallback(
     /*dragDirections*/ DIRECTION_DISABLED,
-    /*swipeDirections*/ DIRECTION_DISABLED
+    /*swipeDirections*/ DIRECTION_DISABLED,
 ) {
     private val icon = ContextCompat.getDrawable(context, R.drawable.nabla_ic_reply)
     private val iconSize = context.dpToPx(24)

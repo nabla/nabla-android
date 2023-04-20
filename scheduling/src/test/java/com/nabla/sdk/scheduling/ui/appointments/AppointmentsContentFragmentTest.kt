@@ -89,7 +89,7 @@ class AppointmentsContentFragmentTest : BaseCoroutineTest() {
                         provider = provider,
                         scheduledAt = Instant.DISTANT_PAST,
                     ),
-                )
+                ),
             )
 
             return@snapshotDayNightDefaultDevice parent
@@ -102,7 +102,7 @@ class AppointmentsContentFragmentTest : BaseCoroutineTest() {
         val binding = NablaSchedulingFragmentAppointmentsContentBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
-            false
+            false,
         )
 
         parent.addView(binding.root)
@@ -124,7 +124,7 @@ class AppointmentsContentFragmentTest : BaseCoroutineTest() {
             status = VideoCallRoomStatus.Open(
                 url = "https://www.google.com",
                 token = "token",
-            )
+            ),
         )
     }
 }

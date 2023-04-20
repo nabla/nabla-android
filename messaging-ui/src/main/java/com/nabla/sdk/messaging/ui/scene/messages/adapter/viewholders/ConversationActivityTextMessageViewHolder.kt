@@ -24,7 +24,7 @@ internal class ConversationActivityTextMessageViewHolder(private val binding: Na
                 }
                 binding.context.getString(
                     R.string.nabla_conversation_conversation_activity_provider_joined,
-                    providerText
+                    providerText,
                 )
             }
         }
@@ -37,7 +37,7 @@ internal class ConversationActivityTextMessageViewHolder(private val binding: Na
                 inflater,
                 parent,
                 false,
-            )
+            ),
         )
     }
 }

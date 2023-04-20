@@ -25,9 +25,9 @@ internal class ProviderFileMessageViewHolder(
                         contentTextAppearanceAttr = R.attr.nablaMessaging_conversationProviderMessageAppearance,
                         surfaceColorAttr = R.attr.nablaMessaging_providerMessageBackgroundColor,
                         inflater,
-                        content
+                        content,
                     )
-                }
+                },
             )
         }
     }

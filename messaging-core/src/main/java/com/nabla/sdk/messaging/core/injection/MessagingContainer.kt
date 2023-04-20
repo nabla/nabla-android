@@ -62,7 +62,7 @@ internal class MessagingContainer(
         clock = clock,
         uuidGenerator = uuidGenerator,
         logger = logger,
-        gqlConversationContentDataSource = gqlConversationContentDataSource
+        gqlConversationContentDataSource = gqlConversationContentDataSource,
     )
     private val sendMessageOrchestrator = SendMessageOrchestrator(
         localConversationDataSource = localConversationDataSource,

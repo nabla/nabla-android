@@ -43,7 +43,7 @@ internal class GqlMapper(
             state.onUpcomingAppointment != null -> AppointmentState.Scheduled
             state.onFinalizedAppointment != null -> AppointmentState.Finalized
             state.onPendingAppointment != null -> AppointmentState.Pending(
-                requiredPrice = state.onPendingAppointment.schedulingPaymentRequirement?.price?.priceFragment?.let(::mapPrice)
+                requiredPrice = state.onPendingAppointment.schedulingPaymentRequirement?.price?.priceFragment?.let(::mapPrice),
             )
             else -> {
                 logger.error("Unknown appointment state $state — considering it as Scheduled")
@@ -62,7 +62,7 @@ internal class GqlMapper(
             return remote.externalCallUrl?.let { stringUrl ->
                 AppointmentLocation.Remote.External(Uri(stringUrl))
             } ?: AppointmentLocation.Remote.Nabla(
-                remote.livekitRoom?.livekitRoomFragment?.let { coreGqlMapper.mapToVideoCallRoom(it) }
+                remote.livekitRoom?.livekitRoomFragment?.let { coreGqlMapper.mapToVideoCallRoom(it) },
             )
         }
         logger.error("Unknown appointment location mapping for $location")
@@ -76,7 +76,7 @@ internal class GqlMapper(
             city = addressFragment.city,
             state = addressFragment.state,
             country = addressFragment.country,
-            extraDetails = addressFragment.extraDetails
+            extraDetails = addressFragment.extraDetails,
         )
     }
 

@@ -59,8 +59,10 @@ internal class DeviceRepositoryImpl(
                             runCatchingCancellable {
                                 registerOrUpdateDeviceOp(installId = null, deviceInput)
                             }
-                        } else Result.failure(throwable)
-                    }
+                        } else {
+                            Result.failure(throwable)
+                        }
+                    },
                 )
                 .onSuccess {
                     with(it.registerOrUpdateDevice) {
@@ -93,7 +95,7 @@ internal class DeviceRepositoryImpl(
             RegisterOrUpdateDeviceMutation(
                 deviceId = Optional.presentIfNotNull(installId),
                 device = deviceInput,
-            )
+            ),
         ).execute().dataOrThrowOnError
     }
 

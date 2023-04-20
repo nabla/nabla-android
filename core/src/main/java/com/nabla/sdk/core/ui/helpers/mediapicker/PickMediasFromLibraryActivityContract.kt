@@ -36,7 +36,9 @@ public class PickMediasFromLibraryActivityContract(private val context: Context)
 
             val singleMimeTypeOrNull = if (intent?.clipData?.description?.mimeTypeCount == 1) {
                 intent.clipData?.description?.getMimeType(0)
-            } else null
+            } else {
+                null
+            }
 
             intent?.clipData?.let { clipData ->
                 val urisWithMimeTypes = mutableListOf<Pair<Uri, String?>>()

@@ -48,7 +48,7 @@ private fun ConversationListView.setupRecyclerAdapter(
                         viewModel.onListReachedBottom()
                     }
                 }
-            }
+            },
         )
     }
     return conversationAdapter
@@ -121,7 +121,7 @@ internal class DefaultOffsetsItemDecoration(
             0,
             topOffset,
             0,
-            bottomOffset
+            bottomOffset,
         )
     }
 }

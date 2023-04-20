@@ -26,7 +26,7 @@ internal open class SchedulingPrivateClientAdapter : SchedulingPrivateClient {
 
     override fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ): Flow<PaginatedContent<List<AvailabilitySlot>>> =
         error("Not mocked")
 
@@ -46,7 +46,7 @@ internal open class SchedulingPrivateClientAdapter : SchedulingPrivateClient {
         locationType: AppointmentLocationType,
         categoryId: AppointmentCategoryId,
         providerId: UUID,
-        slot: Instant
+        slot: Instant,
     ): Result<Appointment> {
         error("Not mocked")
     }

@@ -44,7 +44,7 @@ internal class ConversationPatientMediaCellTest : BaseCoroutineTest() {
         parent.addView(viewHolder.itemView)
 
         val content = TimelineItem.Message.Image(
-            uri = Uri("https://google.com/")
+            uri = Uri("https://google.com/"),
         )
 
         viewHolder.bindContent(content)
@@ -65,7 +65,7 @@ internal class ConversationPatientMediaCellTest : BaseCoroutineTest() {
         parent.addView(viewHolder.itemView)
 
         val content = TimelineItem.Message.Video(
-            uri = Uri("https://google.com/")
+            uri = Uri("https://google.com/"),
         )
 
         viewHolder.bindContent(content)

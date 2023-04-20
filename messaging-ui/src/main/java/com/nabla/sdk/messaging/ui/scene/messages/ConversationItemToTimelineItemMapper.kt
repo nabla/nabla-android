@@ -20,18 +20,23 @@ internal fun Message.toTimelineItem(
     currentVideoCall: VideoCall?,
 ): TimelineItem {
     val copyActionOrNull = MessageAction.Copy.takeIf { this is Message.Text }
-    val actions: Set<MessageAction> = if (this is Message.Deleted) emptySet() else {
+    val actions: Set<MessageAction> = if (this is Message.Deleted) {
+        emptySet()
+    } else {
         when (author) {
             is MessageAuthor.Patient.Current -> {
                 if (sendStatus == SendStatus.Sent) {
                     setOfNotNull(copyActionOrNull, MessageAction.Delete, MessageAction.Reply)
-                } else setOfNotNull(copyActionOrNull)
+                } else {
+                    setOfNotNull(copyActionOrNull)
+                }
             }
             is MessageAuthor.Provider,
             is MessageAuthor.System,
             is MessageAuthor.Patient.Other,
             is MessageAuthor.DeletedProvider,
-            is MessageAuthor.Unknown -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
+            is MessageAuthor.Unknown,
+            -> setOfNotNull(copyActionOrNull, MessageAction.Reply)
         }
     }
     return TimelineItem.Message(
@@ -147,7 +152,7 @@ internal fun ConversationActivity.toTimelineItem(logger: Logger): TimelineItem.C
         is ConversationActivityContent.ProviderJoinedConversation -> {
             TimelineItem.ConversationActivity(
                 createdAt,
-                TimelineItem.ConversationActivity.ProviderJoinedConversation(content.maybeProvider)
+                TimelineItem.ConversationActivity.ProviderJoinedConversation(content.maybeProvider),
             )
         }
         else -> {

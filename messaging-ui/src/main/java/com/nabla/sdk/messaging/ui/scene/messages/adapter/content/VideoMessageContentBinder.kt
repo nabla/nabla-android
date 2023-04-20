@@ -46,7 +46,7 @@ internal class VideoMessageContentBinder(
                 },
                 onError = { _, error ->
                     onErrorFetchingVideoThumbnail(error.throwable)
-                }
+                },
             )
         }
     }
@@ -61,7 +61,7 @@ internal class VideoMessageContentBinder(
             return VideoMessageContentBinder(
                 contentTextAppearanceAttr = contentTextAppearanceAttr,
                 binding = NablaConversationTimelineItemVideoMessageBinding.inflate(inflater, parent, true),
-                onErrorFetchingVideoThumbnail = onErrorFetchingVideoThumbnail
+                onErrorFetchingVideoThumbnail = onErrorFetchingVideoThumbnail,
             )
         }
     }

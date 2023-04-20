@@ -42,7 +42,7 @@ public object KotlinExt {
             }.shareIn(
                 scope = coroutineScope,
                 started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 0, replayExpirationMillis = 0),
-                replay = 1
+                replay = 1,
             )
 
             override suspend fun await(): R {
@@ -54,14 +54,16 @@ public object KotlinExt {
     internal fun <T> Flow<T>.shareInWithMaterializedErrors(
         scope: CoroutineScope,
         started: SharingStarted,
-        replay: Int = 0
+        replay: Int = 0,
     ): Flow<T> {
         return map {
             Result.success(it)
         }.catch {
             emit(Result.failure(it))
         }.shareIn(
-            scope, started, replay
+            scope,
+            started,
+            replay,
         ).map {
             it.getOrThrow()
         }
@@ -75,7 +77,7 @@ public object KotlinExt {
         flow4: Flow<T4>,
         flow5: Flow<T5>,
         flow6: Flow<T6>,
-        transform: suspend (T1, T2, T3, T4, T5, T6) -> R
+        transform: suspend (T1, T2, T3, T4, T5, T6) -> R,
     ): Flow<R> {
         val tripleFlow1 = combine(flow, flow2, flow3, ::Triple)
         val tripleFlow2 = combine(flow4, flow5, flow6, ::Triple)
@@ -86,7 +88,7 @@ public object KotlinExt {
                 triple1.third,
                 triple2.first,
                 triple2.second,
-                triple2.third
+                triple2.third,
             )
         }
     }

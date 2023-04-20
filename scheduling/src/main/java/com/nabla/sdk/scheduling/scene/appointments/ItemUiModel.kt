@@ -78,7 +78,7 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
                             when (currentCallId) {
                                 null -> CallButtonStatus.ForVideoCall.AsJoin(location.videoCallRoom)
                                 location.videoCallRoom.id -> CallButtonStatus.ForVideoCall.AsGoBack(
-                                    location.videoCallRoom
+                                    location.videoCallRoom,
                                 )
                                 else -> {
                                     // there's a current call but it's not this one — don't show a join until the current call has ended.
@@ -92,7 +92,7 @@ internal fun Appointment.toUiModel(clock: Clock, currentCallId: Uuid?) = when (t
                     }
                 }
                 is AppointmentLocation.Remote.External -> CallButtonStatus.ForExternalUrl(location.url)
-            }
+            },
         )
     } else {
         ItemUiModel.AppointmentUiModel.Upcoming(

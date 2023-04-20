@@ -51,7 +51,7 @@ internal class DocumentEdgePickerFragment : DocumentScanBaseFragment() {
                 generateResultBundle(
                     localImageUri,
                     binding.documentCropView.normalizedCorners?.toNormalizedCorners(),
-                )
+                ),
             )
             hostActivity().onBackPressedDispatcher.onBackPressed()
         }

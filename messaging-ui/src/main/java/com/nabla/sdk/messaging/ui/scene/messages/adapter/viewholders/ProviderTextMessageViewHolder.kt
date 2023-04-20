@@ -30,7 +30,7 @@ internal class ProviderTextMessageViewHolder(
                 inflateProviderMessageContentCard(inflater, binding.chatProviderMessageContentContainer) { content ->
                     TextMessageContentBinder
                         .create(R.attr.nablaMessaging_conversationProviderMessageAppearance, inflater, content, onUrlClicked, onRepliedMessageClicked)
-                }
+                },
             )
         }
     }

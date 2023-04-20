@@ -36,7 +36,7 @@ internal class AndroidDocumentDetector(
             bitmap,
             INPUT_SIZE,
             INPUT_SIZE,
-            false
+            false,
         )
         resizedBitmap.getPixels(
             pixels,
@@ -45,7 +45,7 @@ internal class AndroidDocumentDetector(
             0,
             0,
             INPUT_SIZE,
-            INPUT_SIZE
+            INPUT_SIZE,
         )
         val pixelsCount = INPUT_SIZE * INPUT_SIZE
         for (i in 0 until pixelsCount) {
@@ -68,7 +68,7 @@ internal class AndroidDocumentDetector(
                 topLeft = Point(corners[0], corners[1]),
                 topRight = Point(corners[2], corners[3]),
                 bottomRight = Point(corners[4], corners[5]),
-                bottomLeft = Point(corners[6], corners[7])
+                bottomLeft = Point(corners[6], corners[7]),
             )
         } else {
             null

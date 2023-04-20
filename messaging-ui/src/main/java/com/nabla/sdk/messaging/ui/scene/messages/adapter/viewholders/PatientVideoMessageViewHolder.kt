@@ -28,7 +28,7 @@ internal class PatientVideoMessageViewHolder(
                         parent = contentParent,
                         onErrorFetchingVideoThumbnail = onErrorFetchingVideoThumbnail,
                     )
-                }
+                },
             )
         }
     }

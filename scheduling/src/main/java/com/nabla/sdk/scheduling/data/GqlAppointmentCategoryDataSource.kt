@@ -34,7 +34,7 @@ internal class GqlAppointmentCategoryDataSource(
 
     fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ): Flow<PaginatedList<AvailabilitySlot>> {
         return apolloClient.query(availabilitySlotsPageQuery(locationType, categoryId))
             .fetchPolicy(FetchPolicy.NetworkFirst)
@@ -52,7 +52,7 @@ internal class GqlAppointmentCategoryDataSource(
 
     suspend fun loadMoreAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ) {
         apolloClient.updateCache(availabilitySlotsPageQuery(locationType, categoryId)) { cachedQueryData ->
             val cachedPages = cachedQueryData?.appointmentCategory?.category?.availableSlotsV2?.availabilitySlotsPageFragment
@@ -72,12 +72,12 @@ internal class GqlAppointmentCategoryDataSource(
                         category = freshQueryData.appointmentCategory.category.copy(
                             availableSlotsV2 = freshQueryData.appointmentCategory.category.availableSlotsV2.copy(
                                 availabilitySlotsPageFragment = newPage.copy(
-                                    slots = cachedPages.slots + newPage.slots
-                                )
-                            )
-                        )
-                    )
-                )
+                                    slots = cachedPages.slots + newPage.slots,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
             )
         }
     }
@@ -92,11 +92,11 @@ internal class GqlAppointmentCategoryDataSource(
         private fun availabilitySlotsPageQuery(
             locationType: AppointmentLocationType,
             categoryId: AppointmentCategoryId,
-            cursorPage: String? = null
+            cursorPage: String? = null,
         ) = AvailabilitySlotsQuery(
             categoryId = categoryId.value,
             isPhysical = locationType == AppointmentLocationType.PHYSICAL,
-            page = OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(100))
+            page = OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(100)),
         )
     }
 }

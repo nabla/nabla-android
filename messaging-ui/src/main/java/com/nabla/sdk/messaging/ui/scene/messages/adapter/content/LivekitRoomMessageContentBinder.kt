@@ -45,7 +45,7 @@ internal class LivekitRoomMessageContentBinder(
                     onJoinLivekitRoomClicked(
                         item.roomStatus.url,
                         item.roomId.toString(),
-                        item.roomStatus.token
+                        item.roomStatus.token,
                     )
                 }
                 binding.join.text = if (item.roomStatus.isCurrentVideoCall) {

@@ -91,7 +91,7 @@ internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>()
                     status = newItem.status,
                     showStatus = newItem.showStatus,
                     actions = newItem.actions,
-                    itemForCallback = newItem
+                    itemForCallback = newItem,
                 )
             }
             else -> null
@@ -111,7 +111,7 @@ internal object ConversationDiffCallback : DiffUtil.ItemCallback<TimelineItem>()
                 showStatus = newItem.showStatus,
                 status = newItem.status,
                 actions = newItem.actions,
-                itemForCallback = newItem
+                itemForCallback = newItem,
             )
             else -> null
         }

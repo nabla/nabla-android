@@ -20,7 +20,7 @@ internal class DocumentAdapter : ListAdapter<DocumentScanBuilderViewModel.Proces
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocumentViewHolder {
         return DocumentViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.nabla_item_processed_document, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.nabla_item_processed_document, parent, false),
         )
     }
 

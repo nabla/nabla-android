@@ -31,11 +31,11 @@ public object ViewExtension {
                     info.addAction(
                         AccessibilityNodeInfoCompat.AccessibilityActionCompat(
                             AccessibilityNodeInfoCompat.ACTION_CLICK,
-                            host.context.getString(stringRes, *args)
-                        )
+                            host.context.getString(stringRes, *args),
+                        ),
                     )
                 }
-            }
+            },
         )
     }
 }

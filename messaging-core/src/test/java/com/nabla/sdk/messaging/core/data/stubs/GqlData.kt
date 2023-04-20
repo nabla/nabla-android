@@ -34,7 +34,7 @@ internal object GqlData {
                     conversations = listOf(
                         conversation {
                             lastMessage = null
-                        }
+                        },
                     )
                     block()
                 }
@@ -66,7 +66,7 @@ internal object GqlData {
                             messageData {
                                 messageContent = textMessageContentMessageContent { }
                                 replyTo = null
-                            }
+                            },
                         )
                         block()
                     }
@@ -93,7 +93,7 @@ internal object GqlData {
         }
 
         fun conversationCreated(conversationId: ConversationId? = null) = ConversationsEventsSubscription.Data(
-            CustomTestResolver()
+            CustomTestResolver(),
         ) {
             conversations = conversations {
                 event = conversationCreatedEventEvent {
@@ -123,7 +123,7 @@ internal object GqlData {
                                 provider = provider {
                                     id = providerId.toString()
                                 }
-                            }
+                            },
                         )
                     }
                 }

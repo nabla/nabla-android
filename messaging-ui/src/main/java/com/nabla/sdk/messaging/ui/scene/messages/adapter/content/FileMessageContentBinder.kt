@@ -65,7 +65,7 @@ internal class FileMessageContentBinder(
             return FileMessageContentBinder(
                 contentTextAppearanceAttr = contentTextAppearanceAttr,
                 surfaceColorAttr = surfaceColorAttr,
-                binding = NablaConversationTimelineItemFileMessageBinding.inflate(inflater, parent, true)
+                binding = NablaConversationTimelineItemFileMessageBinding.inflate(inflater, parent, true),
             )
         }
     }

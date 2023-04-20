@@ -24,7 +24,8 @@ public object DateFormattingExtension {
                     DateUtils.FORMAT_SHOW_WEEKDAY or
                     DateUtils.FORMAT_ABBREV_MONTH or
                     DateUtils.FORMAT_SHOW_TIME or
-                    @Suppress("DEPRECATION") DateUtils.FORMAT_24HOUR,
+                    @Suppress("DEPRECATION")
+                    DateUtils.FORMAT_24HOUR,
             )
         } else {
             DateUtils.getRelativeDateTimeString(
@@ -32,7 +33,7 @@ public object DateFormattingExtension {
                 time,
                 DAY_IN_MILLIS,
                 DAY_IN_MILLIS * 2,
-                DateUtils.FORMAT_SHOW_DATE
+                DateUtils.FORMAT_SHOW_DATE,
             ).toString()
         }.capitalize(Locale.getDefault())
     }
@@ -45,7 +46,7 @@ public object DateFormattingExtension {
         return DateUtils.formatDateTime(
             context,
             time,
-            DateUtils.FORMAT_NUMERIC_DATE
+            DateUtils.FORMAT_NUMERIC_DATE,
         )
     }
 
@@ -71,7 +72,7 @@ public object DateFormattingExtension {
         return DateUtils.formatDateTime(
             context,
             time,
-            DateUtils.FORMAT_SHOW_TIME
+            DateUtils.FORMAT_SHOW_TIME,
         )
     }
 
@@ -84,7 +85,7 @@ public object DateFormattingExtension {
             context,
             time,
             DateUtils.FORMAT_SHOW_WEEKDAY or
-                DateUtils.FORMAT_ABBREV_WEEKDAY
+                DateUtils.FORMAT_ABBREV_WEEKDAY,
         ).capitalize(Locale.getDefault())
     }
 }

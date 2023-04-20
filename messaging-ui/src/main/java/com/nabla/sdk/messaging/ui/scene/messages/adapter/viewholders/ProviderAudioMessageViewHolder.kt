@@ -36,7 +36,7 @@ internal class ProviderAudioMessageViewHolder(
                         parent = contentParent,
                         onToggleAudioMessagePlay = onToggleAudioMessagePlay,
                     )
-                }
+                },
             )
         }
     }

@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal class RestRefreshToken(
-    val refresh_token: String
+    val refresh_token: String,
 )

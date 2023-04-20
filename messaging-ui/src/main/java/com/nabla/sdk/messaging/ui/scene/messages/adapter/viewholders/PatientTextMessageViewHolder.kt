@@ -31,7 +31,7 @@ internal class PatientTextMessageViewHolder(
                         onUrlClicked,
                         onRepliedMessageClicked,
                     )
-                }
+                },
             )
         }
     }

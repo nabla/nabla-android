@@ -91,7 +91,7 @@ internal class ConnectionStateAwareWebsocketEngine(
                     onWebsocketDisconnected()
                     messageChannel.close()
                 }
-            }
+            },
         )
 
         webSocketOpenResult.await()
@@ -133,8 +133,8 @@ internal class ConnectionStateAwareWebsocketEngine(
         "Use open(String, List<HttpHeader>) instead.",
         replaceWith = ReplaceWith(
             "open(url, headers.map { HttpHeader(it.key, it.value })",
-            "com.apollographql.apollo3.api.http.HttpHeader"
-        )
+            "com.apollographql.apollo3.api.http.HttpHeader",
+        ),
     )
     override suspend fun open(url: String, headers: Map<String, String>): WebSocketConnection {
         return open(url, headers.map { HttpHeader(it.key, it.value) })

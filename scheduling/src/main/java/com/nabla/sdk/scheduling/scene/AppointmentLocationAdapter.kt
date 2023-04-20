@@ -11,7 +11,7 @@ import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemAppointmentLocati
 import com.nabla.sdk.scheduling.domain.entity.AppointmentLocationType
 
 internal class AppointmentLocationAdapter(
-    private val onClickAppointmentLocationTypeListener: (AppointmentLocationType) -> Unit
+    private val onClickAppointmentLocationTypeListener: (AppointmentLocationType) -> Unit,
 ) : ListAdapter<AppointmentLocationType, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -32,7 +32,7 @@ private class AppointmentLocationViewHolder(
             when (locationType) {
                 AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_location_physical
                 AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_location_remote
-            }
+            },
         )
         val startIconRes = when (locationType) {
             AppointmentLocationType.PHYSICAL -> R.drawable.nabla_ic_home_24
@@ -54,9 +54,9 @@ private class AppointmentLocationViewHolder(
                 NablaSchedulingItemAppointmentLocationBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
+                    false,
                 ),
-                onClickAppointmentLocationTypeListener
+                onClickAppointmentLocationTypeListener,
             )
         }
     }
@@ -65,11 +65,11 @@ private class AppointmentLocationViewHolder(
 private val diffCallback = object : DiffUtil.ItemCallback<AppointmentLocationType>() {
     override fun areItemsTheSame(
         oldItem: AppointmentLocationType,
-        newItem: AppointmentLocationType
+        newItem: AppointmentLocationType,
     ): Boolean = oldItem == newItem
 
     override fun areContentsTheSame(
         oldItem: AppointmentLocationType,
-        newItem: AppointmentLocationType
+        newItem: AppointmentLocationType,
     ): Boolean = oldItem == newItem
 }

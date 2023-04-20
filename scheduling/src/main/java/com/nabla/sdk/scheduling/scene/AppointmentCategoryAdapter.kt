@@ -9,7 +9,7 @@ import com.nabla.sdk.scheduling.databinding.NablaSchedulingItemAppointmentCatego
 import com.nabla.sdk.scheduling.domain.entity.AppointmentCategory
 
 internal class AppointmentCategoryAdapter(
-    private val onClickAppointmentCategoryListener: (AppointmentCategory) -> Unit
+    private val onClickAppointmentCategoryListener: (AppointmentCategory) -> Unit,
 ) : ListAdapter<AppointmentCategory, RecyclerView.ViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -41,9 +41,9 @@ private class AppointmentCategoryViewHolder(
                 NablaSchedulingItemAppointmentCategoryBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
+                    false,
                 ),
-                onClickAppointmentCategoryListener
+                onClickAppointmentCategoryListener,
             )
         }
     }
@@ -52,11 +52,11 @@ private class AppointmentCategoryViewHolder(
 private val diffCallback = object : DiffUtil.ItemCallback<AppointmentCategory>() {
     override fun areItemsTheSame(
         oldItem: AppointmentCategory,
-        newItem: AppointmentCategory
+        newItem: AppointmentCategory,
     ): Boolean = oldItem.id == newItem.id
 
     override fun areContentsTheSame(
         oldItem: AppointmentCategory,
-        newItem: AppointmentCategory
+        newItem: AppointmentCategory,
     ): Boolean = oldItem == newItem
 }

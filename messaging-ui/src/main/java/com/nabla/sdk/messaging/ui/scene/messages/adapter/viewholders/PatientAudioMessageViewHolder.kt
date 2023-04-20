@@ -32,7 +32,7 @@ internal class PatientAudioMessageViewHolder(
                         parent = contentParent,
                         onToggleAudioMessagePlay = onToggleAudioMessagePlay,
                     )
-                }
+                },
             )
         }
     }

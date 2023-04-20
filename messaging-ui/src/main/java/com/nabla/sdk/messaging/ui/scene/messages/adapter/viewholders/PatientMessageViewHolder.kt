@@ -26,7 +26,7 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
     override val popUpMenu: PopupMenu = PopupMenu(
         binding.context,
         binding.chatPatientMessageContentContainer,
-        Gravity.BOTTOM
+        Gravity.BOTTOM,
     ).apply {
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
@@ -45,15 +45,15 @@ internal sealed class PatientMessageViewHolder<ContentType : TimelineItem.Messag
                     SendStatus.Sending -> R.string.nabla_conversation_message_sending_status
                     SendStatus.Sent -> R.string.nabla_conversation_message_sent_status
                     SendStatus.ErrorSending -> R.string.nabla_conversation_message_error_status
-                }
+                },
             )
             binding.chatPatientMessageContentStatusTextView.setTextColor(
                 binding.context.getThemeColor(
                     when (status) {
                         SendStatus.ErrorSending -> MaterialR.attr.colorError
                         else -> MaterialR.attr.colorOnSurface
-                    }
-                )
+                    },
+                ),
             )
         }
         showStatus(showStatus)

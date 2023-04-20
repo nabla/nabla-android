@@ -99,7 +99,7 @@ internal class GqlAppointmentDataSource(
                 providerId = providerId,
                 isPhysical = location == AppointmentLocationType.PHYSICAL,
                 startAt = slot,
-            )
+            ),
         ).execute()
             .dataOrThrowOnError
             .createPendingAppointment.appointment.appointmentFragment
@@ -112,7 +112,7 @@ internal class GqlAppointmentDataSource(
         return apolloClient.mutation(
             SchedulePendingAppointmentMutation(
                 appointmentId = appointmentId.uuid,
-            )
+            ),
         ).execute()
             .dataOrThrowOnError
             .schedulePendingAppointment.appointment.appointmentFragment
@@ -143,7 +143,7 @@ internal class GqlAppointmentDataSource(
                 Response(
                     isDataFresh = response.isDataFresh,
                     refreshingState = response.refreshingState,
-                    data = PaginatedList(items, response.data.upcomingAppointments.appointmentsPageFragment.hasMore)
+                    data = PaginatedList(items, response.data.upcomingAppointments.appointmentsPageFragment.hasMore),
                 )
             }
 
@@ -165,7 +165,7 @@ internal class GqlAppointmentDataSource(
                 Response(
                     isDataFresh = response.isDataFresh,
                     refreshingState = response.refreshingState,
-                    data = PaginatedList(items, page.hasMore)
+                    data = PaginatedList(items, page.hasMore),
                 )
             }
 
@@ -176,7 +176,9 @@ internal class GqlAppointmentDataSource(
 
     suspend fun loadMoreUpcomingAppointments() {
         updateUpcomingAppointmentsCache { cachedPages ->
-            if (!cachedPages.hasMore) null else {
+            if (!cachedPages.hasMore) {
+                null
+            } else {
                 val updatedQuery = upcomingAppointmentsQuery(cachedPages.nextCursor)
 
                 val freshQueryData = apolloClient.query(updatedQuery)
@@ -194,7 +196,9 @@ internal class GqlAppointmentDataSource(
 
     suspend fun loadMorePastAppointments() {
         updatePastAppointmentsCache { cachedPages ->
-            if (!cachedPages.hasMore) null else {
+            if (!cachedPages.hasMore) {
+                null
+            } else {
                 val updatedQuery = pastAppointmentsQuery(cachedPages.nextCursor)
 
                 val freshQueryData = apolloClient.query(updatedQuery)
@@ -244,7 +248,7 @@ internal class GqlAppointmentDataSource(
                 data = cachedPages.data
                     .plus(AppointmentsPageFragment.Data(AppointmentsPage.type.name, appointment))
                     .sortedBy { it.appointmentFragment.scheduledAt }
-                    .distinctBy { it.appointmentFragment.id }
+                    .distinctBy { it.appointmentFragment.id },
             )
     }
 
@@ -253,7 +257,7 @@ internal class GqlAppointmentDataSource(
             .takeIf { cachedPages.data.any { it.appointmentFragment.id == appointmentId } }
             ?.copy(
                 data = cachedPages.data
-                    .filter { it.appointmentFragment.id != appointmentId }
+                    .filter { it.appointmentFragment.id != appointmentId },
             )
     }
 
@@ -283,10 +287,10 @@ internal class GqlAppointmentDataSource(
 
     companion object {
         private fun upcomingAppointmentsQuery(cursorPage: String? = null) = UpcomingAppointmentsQuery(
-            OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(50))
+            OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(50)),
         )
         private fun pastAppointmentsQuery(cursorPage: String? = null) = PastAppointmentsQuery(
-            OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(50))
+            OpaqueCursorPage(cursor = Optional.presentIfNotNull(cursorPage), numberOfItems = Optional.Present(50)),
         )
     }
 }

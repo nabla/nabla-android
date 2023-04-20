@@ -9,6 +9,6 @@ internal fun Context.withNablaSchedulingThemeOverlays(): Context {
         hasValidOverlaysAttr = R.attr.nablaHasValidSchedulingOverlays,
         themeOverlayAttr = R.attr.nablaSchedulingThemeOverlay,
         styleOverlay = null,
-        defaultThemeOverlay = R.style.Nabla_ThemeOverlay_Scheduling
+        defaultThemeOverlay = R.style.Nabla_ThemeOverlay_Scheduling,
     )
 }

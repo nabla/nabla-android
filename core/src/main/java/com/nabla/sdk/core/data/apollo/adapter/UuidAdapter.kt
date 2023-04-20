@@ -16,7 +16,7 @@ public object UuidAdapter : Adapter<Uuid> {
     override fun toJson(
         writer: JsonWriter,
         customScalarAdapters: CustomScalarAdapters,
-        value: Uuid
+        value: Uuid,
     ) {
         writer.value(value.toString())
     }

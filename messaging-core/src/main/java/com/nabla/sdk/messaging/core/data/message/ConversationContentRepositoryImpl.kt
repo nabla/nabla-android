@@ -53,7 +53,7 @@ internal class ConversationContentRepositoryImpl(
                                         data = PaginatedList(
                                             items = it.toList(),
                                             hasMore = false,
-                                        )
+                                        ),
                                     )
                                 }
                         }
@@ -75,8 +75,8 @@ internal class ConversationContentRepositoryImpl(
             data = paginatedConversationResponse.data.copy(
                 items = paginatedConversationResponse.data.items.filter {
                     it !is Message.VideoCallRoom || isVideoCallModuleActive
-                }
-            )
+                },
+            ),
         )
     }
 
@@ -129,8 +129,8 @@ internal class ConversationContentRepositoryImpl(
             return gqlMessage.modify(
                 mediaSource = FileSource.Uploaded(
                     fileLocal = localMessageMediaSource.fileLocal,
-                    fileUpload = gqlMessageMediaSource.fileUpload
-                )
+                    fileUpload = gqlMessageMediaSource.fileUpload,
+                ),
             )
         }
         return null
@@ -140,7 +140,7 @@ internal class ConversationContentRepositoryImpl(
         when (conversationId) {
             is ConversationId.Local -> {
                 loadMoreRemoteMessages(
-                    localConversationDataSource.waitConversationCreated(conversationId)
+                    localConversationDataSource.waitConversationCreated(conversationId),
                 )
             }
             is ConversationId.Remote -> loadMoreRemoteMessages(conversationId)
@@ -172,7 +172,7 @@ internal class ConversationContentRepositoryImpl(
         if (localMessage != null) {
             sendMessageOrchestrator.sendMessage(
                 localMessage,
-                conversationId
+                conversationId,
             )
         } else {
             throw MessageNotFoundException(conversationId, localMessageId)

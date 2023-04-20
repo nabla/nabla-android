@@ -55,7 +55,7 @@ public object ThemeOverlayExtension {
         if (styleOverlay != null) {
             val themeOverlayApplierInAttrs = obtainStyledAttributes(
                 styleOverlay.attrs,
-                styleOverlay.themeOverlayStyle
+                styleOverlay.themeOverlayStyle,
             )
             val nablaOverlayInAttrs = themeOverlayApplierInAttrs.getResourceId(0, -1)
 
@@ -69,7 +69,7 @@ public object ThemeOverlayExtension {
         // Neither theme nor attrs do specify Nabla overlays. Fallback to defaults.
         return ContextThemeWrapper(
             this,
-            defaultThemeOverlay
+            defaultThemeOverlay,
         )
     }
 }

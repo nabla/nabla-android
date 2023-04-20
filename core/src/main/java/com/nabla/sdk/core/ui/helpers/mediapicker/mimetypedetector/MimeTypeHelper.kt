@@ -21,6 +21,6 @@ internal class MimeTypeHelper private constructor(context: Context) {
 
     @Throws(Exception::class)
     fun getFileMediaMimeType(file: File): MimeType = MimeType.fromStringRepresentation(
-        detector.detectMimeType(file)
+        detector.detectMimeType(file),
     )
 }

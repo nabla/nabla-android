@@ -10,8 +10,8 @@ internal object GqlTypeHelper {
     ): UpcomingAppointmentsQuery.Data {
         return copy(
             upcomingAppointments = this.upcomingAppointments.copy(
-                appointmentsPageFragment = appointmentsPage
-            )
+                appointmentsPageFragment = appointmentsPage,
+            ),
         )
     }
 
@@ -20,8 +20,8 @@ internal object GqlTypeHelper {
     ): PastAppointmentsQuery.Data {
         return copy(
             pastAppointments = this.pastAppointments.copy(
-                appointmentsPageFragment = appointmentsPage
-            )
+                appointmentsPageFragment = appointmentsPage,
+            ),
         )
     }
 }

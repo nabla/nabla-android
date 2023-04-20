@@ -22,9 +22,9 @@ internal class PatientFileMessageViewHolder(
                         contentTextAppearanceAttr = R.attr.nablaMessaging_conversationPatientMessageAppearance,
                         surfaceColorAttr = R.attr.nablaMessaging_patientMessageBackgroundColor,
                         inflater,
-                        contentParent
+                        contentParent,
                     )
-                }
+                },
             )
         }
     }

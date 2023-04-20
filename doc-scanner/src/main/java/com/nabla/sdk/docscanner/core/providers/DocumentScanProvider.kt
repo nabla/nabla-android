@@ -13,7 +13,7 @@ internal class DocumentScanProvider : FileProvider() {
             return getUriForFile(
                 context,
                 authority(context),
-                file
+                file,
             )
         }
 

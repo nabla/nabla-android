@@ -16,7 +16,7 @@ public object MessageAuthorExtensions {
             context.getString(
                 R.string.nabla_display_name_initials_format,
                 firstName,
-                lastName
+                lastName,
             )
         }
     }
@@ -37,7 +37,9 @@ public object MessageAuthorExtensions {
         val prefix = prefix
         return if (prefix != null && prefix.isNotBlank()) {
             context.getString(R.string.nabla_display_name_full_name_and_prefix, prefix, fullName)
-        } else fullName
+        } else {
+            fullName
+        }
     }
 
     // For a provider with prefix it's Prefix + Last Name (e.g.: Dr Cayol)
@@ -50,7 +52,7 @@ public object MessageAuthorExtensions {
             context.getString(
                 R.string.nabla_display_name_full_name_and_prefix,
                 prefix,
-                lastName
+                lastName,
             )
         } else {
             fullName(context)

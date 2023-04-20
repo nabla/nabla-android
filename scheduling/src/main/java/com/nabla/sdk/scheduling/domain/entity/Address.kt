@@ -11,7 +11,7 @@ public data class Address(
     val city: String,
     val state: String?,
     val country: String?,
-    val extraDetails: String?
+    val extraDetails: String?,
 ) : Parcelable {
     @VisibleForTesting
     public companion object

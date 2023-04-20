@@ -28,7 +28,7 @@ public class CoreGqlMapper(private val logger: Logger) {
         fragment.onLivekitRoomOpenStatus?.let {
             return VideoCallRoomStatus.Open(
                 url = it.url,
-                token = it.token
+                token = it.token,
             )
         }
         fragment.onLivekitRoomClosedStatus?.let {
@@ -51,16 +51,20 @@ public class CoreGqlMapper(private val logger: Logger) {
     }
 
     public fun mapToPatient(patientFragment: PatientFragment): Patient {
-        return if (patientFragment.isMe) Patient.Current else Patient.Other(
-            id = patientFragment.id,
-            displayName = patientFragment.displayName,
-        )
+        return if (patientFragment.isMe) {
+            Patient.Current
+        } else {
+            Patient.Other(
+                id = patientFragment.id,
+                displayName = patientFragment.displayName,
+            )
+        }
     }
 
     public fun mapToEphemeralUrl(ephemeralUrlFragment: EphemeralUrlFragment): EphemeralUrl {
         return EphemeralUrl(
             expiresAt = ephemeralUrlFragment.expiresAt,
-            url = Uri(ephemeralUrlFragment.url)
+            url = Uri(ephemeralUrlFragment.url),
         )
     }
 }

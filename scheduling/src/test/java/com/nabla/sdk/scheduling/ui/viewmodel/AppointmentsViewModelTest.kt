@@ -100,7 +100,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
 
                 viewModel.onJoinClicked(
                     nextAppointment.callButtonStatus.videoCallRoom,
-                    nextAppointment.callButtonStatus.videoCallRoom.status as VideoCallRoomStatus.Open
+                    nextAppointment.callButtonStatus.videoCallRoom.status as VideoCallRoomStatus.Open,
                 )
             }
 
@@ -162,7 +162,7 @@ class AppointmentsViewModelTest : BaseCoroutineTest() {
 
             viewModel.onCancelClicked(
                 (viewModel.stateFlow.value as AppointmentsContentViewModel.State.Loaded)
-                    .items.first() as AppointmentUiModel.Upcoming
+                    .items.first() as AppointmentUiModel.Upcoming,
             )
             assertIs<AppointmentsContentViewModel.Event.FailedCancelling>(awaitItem())
 

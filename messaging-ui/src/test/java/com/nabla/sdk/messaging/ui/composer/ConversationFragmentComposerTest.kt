@@ -251,27 +251,27 @@ class ConversationFragmentComposerTest : BaseCoroutineTest() {
 
     private fun makeRepliedProviderImageMessage() = makeRepliedProviderMessage(
         RepliedMessage.Content.Image(
-            Uri("https://google.com")
-        )
+            Uri("https://google.com"),
+        ),
     )
 
     private fun makeRepliedProviderVideoMessage() = makeRepliedProviderMessage(
         RepliedMessage.Content.Video(
-            Uri("https://google.com")
-        )
+            Uri("https://google.com"),
+        ),
     )
 
     private fun makeRepliedProviderDocumentMessage() = makeRepliedProviderMessage(
         RepliedMessage.Content.Document(
             uri = Uri("https://google.com"),
-            thumbnailUri = Uri("https://google.com")
+            thumbnailUri = Uri("https://google.com"),
         ),
     )
 
     private fun makeRepliedProviderAudioMessage() = makeRepliedProviderMessage(
         RepliedMessage.Content.Audio(
-            Uri("https://google.com")
-        )
+            Uri("https://google.com"),
+        ),
     )
 
     private fun makeRepliedProviderMessage(content: RepliedMessage.Content) = RepliedMessage(
@@ -302,7 +302,7 @@ class ConversationFragmentComposerTest : BaseCoroutineTest() {
         val providerAuthor = TimelineItem.Message.Author.Provider(
             provider = Provider.fake(
                 firstName = "Mario",
-                lastName = "Bros"
+                lastName = "Bros",
             ),
         )
     }

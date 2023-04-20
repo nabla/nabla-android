@@ -69,7 +69,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
         every { patientRepository.getPatientId() } returns patientId
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
-            authTokens
+            authTokens,
         )
 
         assertTrue {
@@ -127,7 +127,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
             every { tokenLocalDataSource.getAuthTokens() } returns AuthTokens(AccessToken(accessToken), RefreshToken(refreshToken))
             every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
             coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
-                newSessionTokens
+                newSessionTokens,
             )
             assertTrue {
                 sessionClient.getFreshAccessToken(false) == newSessionTokens.accessToken.token
@@ -200,7 +200,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
         )
         every { patientRepository.getPatientId() } returns patientId
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
-            authTokens_1
+            authTokens_1,
         ) andThen Result.success(authTokens_2)
         every { tokenLocalDataSource.getAuthTokens() } returns null
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
@@ -219,7 +219,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
         )
         every { patientRepository.getPatientId() } returns patientId
         coEvery { sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value) } returns Result.success(
-            expiredAuthTokens
+            expiredAuthTokens,
         )
         every { tokenLocalDataSource.getAuthTokens() } returns null
         every { tokenLocalDataSource.setAuthTokens(any()) } just Runs
@@ -296,7 +296,7 @@ class SessionClientImplTest : BaseCoroutineTest() {
                 JwtFaker.expiredIn2050,
                 JwtFaker.expiredIn2050_2,
                 JwtFaker.expiredIn2050_3,
-                JwtFaker.expiredIn2020
+                JwtFaker.expiredIn2020,
             )
             assertTrue { jwts.distinct().size == jwts.size }
         }

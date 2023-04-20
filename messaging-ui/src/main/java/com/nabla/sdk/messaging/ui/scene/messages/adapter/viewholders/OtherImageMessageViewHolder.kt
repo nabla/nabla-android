@@ -23,7 +23,7 @@ internal class OtherImageMessageViewHolder(
                 binding,
                 inflateOtherMessageContentCard(inflater, binding.chatOtherMessageContentContainer) { contentParent ->
                     ImageMessageContentBinder.create(R.attr.nablaMessaging_conversationOtherMessageAppearance, inflater, contentParent)
-                }
+                },
             )
         }
     }

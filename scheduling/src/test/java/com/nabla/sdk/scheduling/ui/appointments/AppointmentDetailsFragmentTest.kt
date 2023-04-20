@@ -73,8 +73,8 @@ class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
                     errorUiModel = ErrorUiModel(
                         title = "Error".asStringOrRes(),
                         body = "Something went wrong".asStringOrRes(),
-                    )
-                )
+                    ),
+                ),
             )
 
             return@snapshotDayNightDefaultDevice parent
@@ -86,7 +86,7 @@ class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
         val binding = NablaSchedulingFragmentAppointmentDetailsBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
-            false
+            false,
         )
 
         parent.addView(binding.root)
@@ -115,7 +115,7 @@ class AppointmentDetailsFragmentTest : BaseCoroutineTest() {
                     address = "123 Main Street",
                     extraDetails = "Apt 1",
                     zipCode = "12345",
-                )
+                ),
             ),
             price = Price(BigDecimal(50), "USD"),
         )

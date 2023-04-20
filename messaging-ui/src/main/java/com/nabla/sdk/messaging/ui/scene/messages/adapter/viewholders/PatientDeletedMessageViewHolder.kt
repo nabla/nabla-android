@@ -17,7 +17,7 @@ internal class PatientDeletedMessageViewHolder(
             return PatientDeletedMessageViewHolder(
                 binding,
                 DeletedMessageContentBinder
-                    .create(R.attr.nablaMessaging_conversationDeletedMessageAppearance, inflater, binding.chatPatientMessageContentContainer)
+                    .create(R.attr.nablaMessaging_conversationDeletedMessageAppearance, inflater, binding.chatPatientMessageContentContainer),
             )
         }
     }

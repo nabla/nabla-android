@@ -20,7 +20,7 @@ internal class VideoCallRepositoryReporterHelper(private val errorReporter: Erro
                 errorReporter.log(
                     "RoomState=${state.name}",
                     mapOf("roomdId" to (room.name ?: "null")),
-                    ErrorReporter.VIDEO_CALL_DOMAIN
+                    ErrorReporter.VIDEO_CALL_DOMAIN,
                 )
             }
         }
@@ -29,7 +29,7 @@ internal class VideoCallRepositoryReporterHelper(private val errorReporter: Erro
                 errorReporter.log(
                     mapMessage(event),
                     mapOf("roomdId" to (room.name ?: "null")),
-                    ErrorReporter.VIDEO_CALL_DOMAIN
+                    ErrorReporter.VIDEO_CALL_DOMAIN,
                 )
                 when (event) {
                     is RoomEvent.Disconnected -> {

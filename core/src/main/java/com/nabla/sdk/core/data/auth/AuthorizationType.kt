@@ -4,7 +4,8 @@ import okhttp3.Request
 
 internal enum class AuthorizationType {
     ACCESS_TOKEN,
-    NONE;
+    NONE,
+    ;
 
     companion object {
         fun fromRequest(request: Request): AuthorizationType {

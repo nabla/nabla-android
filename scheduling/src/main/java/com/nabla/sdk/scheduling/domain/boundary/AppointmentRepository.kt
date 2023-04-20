@@ -24,7 +24,7 @@ internal interface AppointmentRepository {
 
     fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ): Flow<PaginatedList<AvailabilitySlot>>
     suspend fun loadMoreAvailabilitySlots(locationType: AppointmentLocationType, categoryId: AppointmentCategoryId)
 

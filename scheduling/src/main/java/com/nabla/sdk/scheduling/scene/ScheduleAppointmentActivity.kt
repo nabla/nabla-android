@@ -37,14 +37,14 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         pushFragment(
             CategorySelectionFragment.newInstance(locationType = locationType, showLocationHint = singleLocation, intent.requireSdkName()),
             popBackStack = singleLocation,
-            addToBackStack = !singleLocation
+            addToBackStack = !singleLocation,
         )
     }
 
     internal fun goToTimeSlots(locationType: AppointmentLocationType, categoryId: AppointmentCategoryId) {
         pushFragment(
             TimeSlotsFragment.newInstance(locationType, categoryId, intent.requireSdkName()),
-            addToBackStack = true
+            addToBackStack = true,
         )
     }
 
@@ -56,9 +56,9 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
             AppointmentConfirmationFragment.newInstance(
                 locationType = locationType,
                 pendingAppointmentId = pendingAppointmentId,
-                sdkName = intent.requireSdkName()
+                sdkName = intent.requireSdkName(),
             ),
-            addToBackStack = true
+            addToBackStack = true,
         )
     }
 
@@ -73,7 +73,7 @@ public class ScheduleAppointmentActivity : AppCompatActivity() {
         fragment: Fragment,
         isFirstScreen: Boolean = false,
         addToBackStack: Boolean = false,
-        popBackStack: Boolean = false
+        popBackStack: Boolean = false,
     ) {
         if (popBackStack) {
             supportFragmentManager.popBackStack(null, POP_BACK_STACK_INCLUSIVE)

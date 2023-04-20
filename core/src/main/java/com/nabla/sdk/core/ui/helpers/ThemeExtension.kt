@@ -18,7 +18,9 @@ public object ThemeExtension {
             // resourceId is used when the final value is ColorStateList
             if (typedValue.resourceId != 0) {
                 ColorStateListWrapper(typedValue.resourceId)
-            } else ColorIntWrapper(typedValue.data)
+            } else {
+                ColorIntWrapper(typedValue.data)
+            }
         } else {
             // failed to resolve, returning the flashiest color.
             ColorIntWrapper(Color.MAGENTA)

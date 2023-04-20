@@ -65,7 +65,7 @@ internal class ExoPlayersCoordinator internal constructor(private val contentTyp
                                 pauseAllExcept(uri)
                             }
                         }
-                    }
+                    },
                 )
             }
 

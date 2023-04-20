@@ -33,7 +33,7 @@ class TimelineBuilderTest {
             items = messages,
             selectedMessageId = message1.id,
             hasMore = false,
-            providersInConversation = emptyList()
+            providersInConversation = emptyList(),
         ).filterIsInstance<TimelineItem.Message>()
 
         assertTrue(outputMessages.first { it.id == message1.id }.showStatus, "expected selected message to show status")
@@ -50,7 +50,7 @@ class TimelineBuilderTest {
         val outputMessages = TimelineBuilder().buildTimeline(
             items = messages,
             hasMore = false,
-            providersInConversation = emptyList()
+            providersInConversation = emptyList(),
         ).filterIsInstance<TimelineItem.Message>()
 
         assertTrue(outputMessages.last().showAuthorAvatar, "expected oldest message to show avatar")
@@ -68,7 +68,7 @@ class TimelineBuilderTest {
         val outputMessages = TimelineBuilder().buildTimeline(
             items = messages,
             hasMore = false,
-            providersInConversation = listOf(providerInConversation)
+            providersInConversation = listOf(providerInConversation),
         )
         val outputFirstMessage = outputMessages.first()
 
@@ -84,19 +84,19 @@ class TimelineBuilderTest {
         val provider = Provider.fake()
         val providerInConversation = ProviderInConversation.fake(
             provider = provider,
-            typingAt = Clock.System.now().minus(TYPING_TIME_WINDOW.plus(1.seconds))
+            typingAt = Clock.System.now().minus(TYPING_TIME_WINDOW.plus(1.seconds)),
         )
 
         val outputMessages = TimelineBuilder().buildTimeline(
             items = messages,
             hasMore = false,
-            providersInConversation = listOf(providerInConversation)
+            providersInConversation = listOf(providerInConversation),
         )
         val outputFirstMessage = outputMessages.first()
 
         assertTrue(
             outputFirstMessage !is TimelineItem.ProviderTypingIndicator,
-            "expected no typing indicator"
+            "expected no typing indicator",
         )
     }
 
@@ -107,7 +107,7 @@ class TimelineBuilderTest {
         val outputMessages = TimelineBuilder().buildTimeline(
             items = messages,
             hasMore = true,
-            providersInConversation = emptyList()
+            providersInConversation = emptyList(),
         )
         val outputLastMessage = outputMessages.last()
 
@@ -123,14 +123,14 @@ class TimelineBuilderTest {
             items = listOf(audioMessage),
             hasMore = false,
             providersInConversation = emptyList(),
-            audioPlaybackProgressMap = mapOf(audioMessage.stableUri to progress)
+            audioPlaybackProgressMap = mapOf(audioMessage.stableUri to progress),
         )
         val outputContent = outputMessages.filterIsInstance<TimelineItem.Message>().first().content as TimelineItem.Message.Audio
 
         assertEquals(
             progress,
             outputContent.progress,
-            "expected audio message item to have progress from the map"
+            "expected audio message item to have progress from the map",
         )
     }
 
@@ -149,7 +149,7 @@ class TimelineBuilderTest {
         assertEquals(
             PlaybackProgress(currentPositionMillis = 0, audioMessage.durationMs),
             outputContent.progress,
-            "expected audio message progress to reflect estimation duration"
+            "expected audio message progress to reflect estimation duration",
         )
     }
 
@@ -186,7 +186,7 @@ class TimelineBuilderTest {
         assertEquals(
             setOf(MessageAction.Copy, MessageAction.Delete, MessageAction.Reply),
             outputMessage.actions,
-            "wrong actions on message"
+            "wrong actions on message",
         )
     }
 
@@ -194,7 +194,7 @@ class TimelineBuilderTest {
     fun `Provider message has Copy and Reply actions`() {
         val outputMessage = TimelineBuilder().buildTimeline(
             items = listOf(
-                Message.Text.fake(author = MessageAuthor.Provider(Provider.fake()))
+                Message.Text.fake(author = MessageAuthor.Provider(Provider.fake())),
             ),
             hasMore = false,
             providersInConversation = emptyList(),
@@ -207,7 +207,7 @@ class TimelineBuilderTest {
     fun `System message has Copy and Reply actions`() {
         val outputMessage = TimelineBuilder().buildTimeline(
             items = listOf(
-                Message.Text.fake(author = MessageAuthor.System(SystemUser.fake()))
+                Message.Text.fake(author = MessageAuthor.System(SystemUser.fake())),
             ),
             hasMore = false,
             providersInConversation = emptyList(),

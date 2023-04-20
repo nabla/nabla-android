@@ -29,7 +29,7 @@ public class AppointmentDetailsActivity : AppCompatActivity() {
                     R.id.fragmentContainer,
                     AppointmentDetailsFragment.newInstance(
                         intent.requireAppointmentId(),
-                        intent.requireSdkName()
+                        intent.requireSdkName(),
                     ),
                 )
             }

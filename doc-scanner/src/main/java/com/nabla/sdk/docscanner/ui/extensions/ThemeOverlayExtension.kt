@@ -9,6 +9,6 @@ internal fun Context.withNablaDocScannerThemeOverlays(): Context {
         hasValidOverlaysAttr = R.attr.nablaHasValidDocScannerOverlays,
         themeOverlayAttr = R.attr.nablaDocScannerThemeOverlay,
         styleOverlay = null,
-        defaultThemeOverlay = R.style.Nabla_ThemeOverlay_DocScanner
+        defaultThemeOverlay = R.style.Nabla_ThemeOverlay_DocScanner,
     )
 }

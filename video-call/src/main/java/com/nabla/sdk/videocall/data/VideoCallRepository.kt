@@ -32,7 +32,7 @@ internal class VideoCallRepository(
     private val applicationContext: Context,
     private val okHttpClient: OkHttpClient,
     private val repoScope: CoroutineScope,
-    private val videoCallRepositoryReporterHelper: VideoCallRepositoryReporterHelper
+    private val videoCallRepositoryReporterHelper: VideoCallRepositoryReporterHelper,
 ) {
 
     private val mutableCurrentRoomFlow = MutableStateFlow<Room?>(null)
@@ -77,7 +77,7 @@ internal class VideoCallRepository(
                         AudioDevice.Speakerphone::class.java,
                         AudioDevice.Earpiece::class.java,
                     )
-                }
+                },
             ),
             options = RoomOptions(
                 adaptiveStream = true,

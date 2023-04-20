@@ -66,7 +66,7 @@ public class VideoCallActivity : AppCompatActivity() {
         checkPermissions()
 
         binding = NablaActivityVideoCallBinding.inflate(
-            layoutInflater.cloneInContext(withNablaVideoCallThemeOverlays())
+            layoutInflater.cloneInContext(withNablaVideoCallThemeOverlays()),
         )
         setContentView(binding.root)
 
@@ -86,12 +86,12 @@ public class VideoCallActivity : AppCompatActivity() {
                 VideoCallViewModel.FinishReason.PermissionsRefused -> Toast.makeText(
                     this,
                     R.string.nabla_video_call_error_permission_refused,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
                 VideoCallViewModel.FinishReason.UnableToConnect -> Toast.makeText(
                     this,
                     R.string.nabla_video_call_error_failed_to_join,
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
             }
 
@@ -154,11 +154,11 @@ public class VideoCallActivity : AppCompatActivity() {
                 is Both -> {
                     bindSelfTrack(
                         state,
-                        renderer = binding.floatingVideoRenderer
+                        renderer = binding.floatingVideoRenderer,
                     )
                     bindRemoteTrack(
                         state,
-                        renderer = binding.fullScreenVideoRenderer
+                        renderer = binding.fullScreenVideoRenderer,
                     )
                 }
                 None -> {
@@ -169,14 +169,14 @@ public class VideoCallActivity : AppCompatActivity() {
                     removeSelfTrackRenderer()
                     bindRemoteTrack(
                         state,
-                        renderer = binding.fullScreenVideoRenderer
+                        renderer = binding.fullScreenVideoRenderer,
                     )
                 }
                 is SelfOnly -> {
                     removeRemoteTrackRenderer()
                     bindSelfTrack(
                         state,
-                        renderer = binding.fullScreenVideoRenderer
+                        renderer = binding.fullScreenVideoRenderer,
                     )
                 }
             }
@@ -192,7 +192,7 @@ public class VideoCallActivity : AppCompatActivity() {
                         finish()
                     }
                 }
-            }
+            },
         )
     }
 
@@ -248,7 +248,7 @@ public class VideoCallActivity : AppCompatActivity() {
             rational = PermissionRational(
                 title = CoreR.string.nabla_conversation_camera_video_permission_rational_title,
                 description = CoreR.string.nabla_conversation_camera_video_permission_rational_description,
-            )
+            ),
         ) { grants ->
             if (grants.values.all { it }) {
                 viewModel.onPermissionsGranted()

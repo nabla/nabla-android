@@ -36,9 +36,9 @@ internal class FileUploadRepositoryImpl constructor(
                     .addFormDataPart(
                         "file",
                         fileName ?: uuidGenerator.generate().toString(),
-                        buildUploadRequestBody(inputStream, mimeType.stringRepresentation)
+                        buildUploadRequestBody(inputStream, mimeType.stringRepresentation),
                     )
-                    .build()
+                    .build(),
             )
             return response.first().asUuid()
         }

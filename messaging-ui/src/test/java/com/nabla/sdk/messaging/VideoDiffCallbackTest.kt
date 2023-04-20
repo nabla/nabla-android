@@ -19,7 +19,7 @@ class VideoDiffCallbackTest {
         val newItem = oldItem.copy(
             content = (oldItem.content as TimelineItem.Message.Video).copy(
                 uri = Uri("${oldItem.content.uri}_new"),
-            )
+            ),
         )
 
         assertEquals(true, ConversationDiffCallback.areItemsTheSame(oldItem, newItem))
@@ -33,7 +33,7 @@ class VideoDiffCallbackTest {
                 actions = newItem.actions,
                 itemForCallback = newItem,
             ),
-            ConversationDiffCallback.getChangePayload(oldItem, newItem)
+            ConversationDiffCallback.getChangePayload(oldItem, newItem),
         )
     }
 }

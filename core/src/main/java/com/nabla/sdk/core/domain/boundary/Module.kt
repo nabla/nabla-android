@@ -12,6 +12,7 @@ public interface Module<InternalClient> {
     public interface Factory<M : Module<*>> {
         @NablaInternal
         public fun create(coreContainer: CoreContainer): M
+
         @NablaInternal
         public fun type(): ModuleType
     }

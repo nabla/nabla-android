@@ -4,7 +4,7 @@ import com.nabla.sdk.core.domain.entity.NablaException
 import com.nabla.sdk.core.domain.entity.ServerException
 
 public class MessageNotFoundException(conversationId: ConversationId, localMessageId: MessageId.Local) : NablaException(
-    message = "Unable to find message in cache. localMessageId: $localMessageId, conversationId: $conversationId"
+    message = "Unable to find message in cache. localMessageId: $localMessageId, conversationId: $conversationId",
 )
 
 public class InvalidMessageException(message: String) : NablaException(message = message)

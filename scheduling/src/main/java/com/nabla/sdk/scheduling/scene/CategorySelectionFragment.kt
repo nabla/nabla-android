@@ -63,7 +63,7 @@ internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.
             when (locationType) {
                 AppointmentLocationType.REMOTE -> R.string.nabla_scheduling_remote_location_hint
                 AppointmentLocationType.PHYSICAL -> R.string.nabla_scheduling_physical_location_hint
-            }
+            },
         )
     }
 
@@ -82,7 +82,7 @@ internal class CategorySelectionFragment : BookAppointmentBaseFragment(R.layout.
         fun newInstance(
             locationType: AppointmentLocationType,
             showLocationHint: Boolean,
-            sdkName: String
+            sdkName: String,
         ) = CategorySelectionFragment().apply {
             arguments = bundleOf(ARG_SHOW_LOCATION_HINT to showLocationHint)
             setAppointmentLocationType(locationType)

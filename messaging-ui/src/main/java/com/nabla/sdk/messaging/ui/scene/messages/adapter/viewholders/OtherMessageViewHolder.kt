@@ -25,7 +25,7 @@ internal sealed class OtherMessageViewHolder<ContentType : TimelineItem.Message.
     override val popUpMenu: PopupMenu = PopupMenu(
         binding.context,
         binding.chatOtherMessageContentContainer,
-        Gravity.BOTTOM
+        Gravity.BOTTOM,
     ).apply {
         menuInflater.inflate(R.menu.nabla_message_actions, menu)
     }
@@ -41,8 +41,10 @@ internal sealed class OtherMessageViewHolder<ContentType : TimelineItem.Message.
         if (message.showAuthorAvatar) {
             binding.chatOtherMessageAvatarView.loadAvatar(
                 avatarUrl = author.avatar?.url,
-                placeholderText = author.displayName.firstOrNull()?.toString()
+                placeholderText = author.displayName.firstOrNull()?.toString(),
             )
-        } else binding.chatOtherMessageAvatarView.displayUnicolorPlaceholder()
+        } else {
+            binding.chatOtherMessageAvatarView.displayUnicolorPlaceholder()
+        }
     }
 }

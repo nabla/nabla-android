@@ -34,7 +34,7 @@ import kotlin.time.Duration.Companion.minutes
 
 fun PaginatedList.Companion.fakeConversationsItems(
     messages: List<Message> = ((5 downTo 1).map { Message.Text.fake(sentAt = nowMinus(it.minutes)) }),
-    hasMore: Boolean = false
+    hasMore: Boolean = false,
 ): PaginatedList<ConversationItem> = PaginatedList(items = messages, hasMore = hasMore)
 
 fun Message.Text.Companion.fake(
@@ -116,7 +116,7 @@ fun FileLocal.Image.Companion.fake(
 ) = FileLocal.Image(
     uri = uri,
     fileName = "image.png",
-    mimeType = MimeType.Image.Jpeg
+    mimeType = MimeType.Image.Jpeg,
 )
 
 fun FileUpload.Image.Companion.fake(
@@ -130,7 +130,7 @@ fun FileUpload.Image.Companion.fake(
         url = ephemeralUrl,
         mimeType = mimeType,
         fileName = fileName,
-    )
+    ),
 )
 
 fun FileUpload.Audio.Companion.fake(
@@ -146,7 +146,7 @@ fun FileUpload.Audio.Companion.fake(
         url = ephemeralUrl,
         mimeType = mimeType,
         fileName = fileName,
-    )
+    ),
 )
 
 fun Message.Media.Document.Companion.fake(
@@ -175,14 +175,14 @@ fun Message.Media.Document.Companion.fake(
                 mimeType = mimeType,
                 fileName = fileName,
             ),
-            thumbnail = thumbnail
+            thumbnail = thumbnail,
         ),
     ),
 )
 
 fun SystemUser.Companion.fake() = SystemUser(
     name = randomText(),
-    avatar = EphemeralUrl.fake()
+    avatar = EphemeralUrl.fake(),
 )
 
 fun ProviderInConversation.Companion.fake(
@@ -243,8 +243,8 @@ fun ConversationActivity.Companion.fakeProviderJoined() = ConversationActivity(
     createdAt = Clock.System.now(),
     activityTime = Clock.System.now(),
     content = ConversationActivityContent.ProviderJoinedConversation(
-        maybeProvider = Provider.fake()
-    )
+        maybeProvider = Provider.fake(),
+    ),
 )
 
 private fun nowMinus(duration: Duration): Instant = Clock.System.now().minus(duration)

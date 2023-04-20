@@ -35,7 +35,7 @@ import com.nabla.sdk.scheduling.scene.AppointmentConfirmationViewModel.State
 import com.nabla.sdk.scheduling.schedulingPrivateClient
 
 internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
-    R.layout.nabla_scheduling_fragment_appointment_confirmation
+    R.layout.nabla_scheduling_fragment_appointment_confirmation,
 ) {
     private val nablaClient = getNablaInstanceByName()
     private val paymentActivityContract = nablaClient.schedulingPrivateClient.paymentActivityContract
@@ -80,7 +80,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
                     )
 
                     binding.nablaConfirmAppointmentButton.setText(
-                        if (state.requiresPayment) R.string.nabla_scheduling_go_payment_cta else R.string.nabla_scheduling_confirm_cta
+                        if (state.requiresPayment) R.string.nabla_scheduling_go_payment_cta else R.string.nabla_scheduling_confirm_cta,
                     )
 
                     binding.nablaConsentsContainer.removeAllViews()
@@ -136,7 +136,7 @@ internal class AppointmentConfirmationFragment : BookAppointmentBaseFragment(
         }
 
         private fun Bundle.getPendingAppointmentIdOrNull() = AppointmentId(
-            Uuid.fromString(getString(ARG_PENDING_APPOINTMENT_UUID) ?: throwNablaInternalException("Missing pending appointment id"))
+            Uuid.fromString(getString(ARG_PENDING_APPOINTMENT_UUID) ?: throwNablaInternalException("Missing pending appointment id")),
         )
 
         @VisibleForTesting

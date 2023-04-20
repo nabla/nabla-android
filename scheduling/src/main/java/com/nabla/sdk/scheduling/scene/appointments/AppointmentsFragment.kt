@@ -23,7 +23,7 @@ import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.coroutines.launch
 
 public class AppointmentsFragment : SchedulingBaseFragment(
-    R.layout.nabla_scheduling_fragment_appointments
+    R.layout.nabla_scheduling_fragment_appointments,
 ) {
     private val nablaClient: NablaClient = getNablaInstanceByName()
 

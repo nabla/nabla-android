@@ -60,8 +60,8 @@ internal class ConversationContentRepositoryStub(
                     refreshingState = RefreshingState.Refreshed,
                     data = PaginatedList.fakeConversationsItems(
                         messages = messages.sortedByDescending { it.baseMessage.createdAt },
-                        hasMore = !isNewlyCreated
-                    )
+                        hasMore = !isNewlyCreated,
+                    ),
                 )
             }
             .onStart {
@@ -153,8 +153,10 @@ internal class ConversationContentRepositoryStub(
             conversationsFlow.value.items.map {
                 if (it.id.stableId == conversation.id.stableId) {
                     it.copy(providersInConversation = listOf(provider))
-                } else it
-            }
+                } else {
+                    it
+                }
+            },
         )
     }
 
@@ -163,7 +165,9 @@ internal class ConversationContentRepositoryStub(
             messagesFlowPerConversation[conversationId.stableId]!!.value = messagesOf(conversationId).map {
                 if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.ErrorSending) {
                     it.modify(SendStatus.Sending)
-                } else it
+                } else {
+                    it
+                }
             }
         }
         delayWithIdlingRes(idlingRes, 100.milliseconds)
@@ -171,7 +175,9 @@ internal class ConversationContentRepositoryStub(
             messagesFlowPerConversation[conversationId.stableId]!!.value = messagesOf(conversationId).map {
                 if (it.baseMessage.id == localMessageId && it.baseMessage.sendStatus == SendStatus.Sending) {
                     it.modify(SendStatus.Sent)
-                } else it
+                } else {
+                    it
+                }
             }
         }
     }
@@ -185,7 +191,9 @@ internal class ConversationContentRepositoryStub(
             messagesFlowPerConversation[conversationId.stableId]!!.value = messagesOf(conversationId).map {
                 if (it.baseMessage.id == messageId) {
                     Message.Deleted(it.baseMessage)
-                } else it
+                } else {
+                    it
+                }
             }
         }
     }
@@ -198,7 +206,7 @@ internal class ConversationContentRepositoryStub(
             if (prepopulate) {
                 val firstMessage = Message.Text.fake(
                     sentAt = Clock.System.now().minus(2.days),
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
                 )
                 add(firstMessage)
                 addAll((9 downTo 5).map { Message.Text.fake(sentAt = Clock.System.now().minus(it.minutes)) })
@@ -215,13 +223,13 @@ internal class ConversationContentRepositoryStub(
                         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
                         sentAt = Clock.System.now().minus(2.minutes + 30.seconds),
                         replyTo = providerReply,
-                    )
+                    ),
                 )
 
                 add(Message.Media.Image.fake(sentAt = Clock.System.now().minus(2.minutes)))
                 add(Message.Media.Document.fake(author = MessageAuthor.Provider(provider), sentAt = Clock.System.now().minus(1.minutes)))
             }
-        }
+        },
     )
 
     companion object {

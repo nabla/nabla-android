@@ -213,7 +213,7 @@ public open class ConversationFragment : Fragment() {
             rational = PermissionRational(
                 title = CoreR.string.nabla_conversation_camera_picture_permission_rational_title,
                 description = CoreR.string.nabla_conversation_camera_picture_permission_rational_description,
-            )
+            ),
         ) { isGranted ->
             if (isGranted) {
                 viewModel.onMediaSourceCameraPictureSelectedAndPermissionsGranted()
@@ -225,7 +225,7 @@ public open class ConversationFragment : Fragment() {
             rational = PermissionRational(
                 title = CoreR.string.nabla_conversation_camera_video_permission_rational_title,
                 description = CoreR.string.nabla_conversation_camera_video_permission_rational_description,
-            )
+            ),
         ) { grants ->
             if (grants.values.all { it }) {
                 viewModel.onMediaSourceCameraVideoSelectedAndPermissionsGranted()
@@ -237,7 +237,7 @@ public open class ConversationFragment : Fragment() {
             rational = PermissionRational(
                 title = R.string.nabla_conversation_voice_message_audio_permission_rational_title,
                 description = R.string.nabla_conversation_voice_message_audio_permission_rational_description,
-            )
+            ),
         ) { permissionsGranted ->
             val context = context ?: return@registerForPermissionsResult
 
@@ -291,7 +291,7 @@ public open class ConversationFragment : Fragment() {
                 DocScannerActivityContract.Result.Cancelled -> Unit // No-op
                 is DocScannerActivityContract.Result.Failed -> viewModel.onDocumentScanFailed(result.error)
                 is DocScannerActivityContract.Result.Document -> viewModel.onDocumentScanResult(
-                    LocalMedia.Document(result.uri.toJvmURI(), result.uri.lastPathSegment, MimeType.Application.Pdf)
+                    LocalMedia.Document(result.uri.toJvmURI(), result.uri.lastPathSegment, MimeType.Application.Pdf),
                 )
             }
         }
@@ -498,7 +498,7 @@ public open class ConversationFragment : Fragment() {
                             viewModel.onTimelineReachedTop()
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -550,7 +550,7 @@ public open class ConversationFragment : Fragment() {
             context?.apply {
                 copyNewPlainText(
                     label = getString(R.string.nabla_conversation_message_copy_label),
-                    text = item.text
+                    text = item.text,
                 )
             }
         }
@@ -580,7 +580,7 @@ public open class ConversationFragment : Fragment() {
                 requireActivity(),
                 url,
                 roomId,
-                accessToken
+                accessToken,
             )
         }
     }
@@ -684,7 +684,7 @@ public open class ConversationFragment : Fragment() {
                 AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
                     .setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
                     .setOnAudioFocusChangeListener { if (it == AudioManager.AUDIOFOCUS_LOSS) viewModel.onLostAudioFocus() }
-                    .build()
+                    .build(),
             )
         } // else no-op
     }
@@ -714,7 +714,7 @@ public open class ConversationFragment : Fragment() {
             voiceMessageUri = uri,
             position = player.currentPosition,
             totalDuration = player.duration
-                .let { if (it == C.TIME_UNSET) null else it }
+                .let { if (it == C.TIME_UNSET) null else it },
         )
     }
 

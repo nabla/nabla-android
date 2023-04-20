@@ -155,7 +155,7 @@ internal class GqlMapper(
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
                     fileUpload = mapToFileUploadDocument(it.documentFileUpload.documentFileUploadFragment),
-                )
+                ),
             )
         }
         summaryFragment.messageContent.messageContentFragment.onAudioMessageContent?.audioMessageContentFragment?.let {
@@ -164,7 +164,7 @@ internal class GqlMapper(
                 mediaSource = FileSource.Uploaded(
                     fileLocal = null,
                     fileUpload = mapToFileUploadAudio(it.audioFileUpload.audioFileUploadFragment),
-                )
+                ),
             )
         }
 
@@ -191,7 +191,7 @@ internal class GqlMapper(
         return BaseMessage(
             id = MessageId.Remote(
                 clientId = summaryFragment.clientId,
-                remoteId = summaryFragment.id
+                remoteId = summaryFragment.id,
             ),
             createdAt = summaryFragment.createdAt,
             author = author,
@@ -202,7 +202,7 @@ internal class GqlMapper(
                     sendStatus = SendStatus.Sent,
                     replyTo = null,
                 )
-            }
+            },
         )
     }
 
@@ -241,8 +241,8 @@ internal class GqlMapper(
                 id = imageFileUploadFragment.id,
                 url = coreGqlMapper.mapToEphemeralUrl(imageFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = imageFileUploadFragment.fileName,
-                mimeType = mapToMimeType(imageFileUploadFragment.mimeType)
-            )
+                mimeType = mapToMimeType(imageFileUploadFragment.mimeType),
+            ),
         )
     }
 
@@ -256,8 +256,8 @@ internal class GqlMapper(
                 id = videoFileUploadFragment.id,
                 url = coreGqlMapper.mapToEphemeralUrl(videoFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = videoFileUploadFragment.fileName,
-                mimeType = mapToMimeType(videoFileUploadFragment.mimeType)
-            )
+                mimeType = mapToMimeType(videoFileUploadFragment.mimeType),
+            ),
         )
     }
 
@@ -280,8 +280,8 @@ internal class GqlMapper(
                 id = documentFileUploadFragment.id,
                 url = coreGqlMapper.mapToEphemeralUrl(documentFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = documentFileUploadFragment.fileName,
-                mimeType = mapToMimeType(documentFileUploadFragment.mimeType)
-            )
+                mimeType = mapToMimeType(documentFileUploadFragment.mimeType),
+            ),
         )
     }
 
@@ -294,8 +294,8 @@ internal class GqlMapper(
                 id = audioFileUploadFragment.id,
                 url = coreGqlMapper.mapToEphemeralUrl(audioFileUploadFragment.url.ephemeralUrlFragment),
                 fileName = audioFileUploadFragment.fileName,
-                mimeType = mapToMimeType(audioFileUploadFragment.mimeType)
-            )
+                mimeType = mapToMimeType(audioFileUploadFragment.mimeType),
+            ),
         )
     }
 }

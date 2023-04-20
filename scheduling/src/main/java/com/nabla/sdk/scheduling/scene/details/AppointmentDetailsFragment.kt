@@ -26,7 +26,7 @@ import com.nabla.sdk.scheduling.scene.requireAppointmentId
 import com.nabla.sdk.scheduling.scene.setAppointmentId
 
 internal class AppointmentDetailsFragment : SchedulingBaseFragment(
-    R.layout.nabla_scheduling_fragment_appointment_details
+    R.layout.nabla_scheduling_fragment_appointment_details,
 ) {
     private val binding by viewBinding(NablaSchedulingFragmentAppointmentDetailsBinding::bind)
     private val viewModel: AppointmentDetailsViewModel by viewModels {

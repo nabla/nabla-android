@@ -36,9 +36,9 @@ internal class ProviderLivekitRoomMessageViewHolder(
                         surfaceColorAttr = R.attr.nablaMessaging_providerMessageBackgroundColor,
                         inflater,
                         contentParent,
-                        onJoinLivekitRoomClicked
+                        onJoinLivekitRoomClicked,
                     )
-                }
+                },
             )
         }
     }

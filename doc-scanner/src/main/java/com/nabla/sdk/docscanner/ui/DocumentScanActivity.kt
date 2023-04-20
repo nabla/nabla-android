@@ -41,7 +41,7 @@ public class DocumentScanActivity : AppCompatActivity() {
                 localImageUri,
                 normalizedCorners,
                 intent.requireSdkName(),
-            )
+            ),
         )
     }
 

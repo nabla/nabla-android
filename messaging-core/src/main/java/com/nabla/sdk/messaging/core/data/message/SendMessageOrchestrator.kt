@@ -44,7 +44,9 @@ internal class SendMessageOrchestrator constructor(
 
             val localConversation = if (conversationId is ConversationId.Local) {
                 localConversationDataSource.watch(conversationId).first()
-            } else null
+            } else {
+                null
+            }
 
             when (val creationState = localConversation?.creationState) {
                 null -> {
@@ -91,8 +93,8 @@ internal class SendMessageOrchestrator constructor(
         runCatching {
             localConversationDataSource.update(
                 localConversation.copy(
-                    creationState = LocalConversation.CreationState.Creating
-                )
+                    creationState = LocalConversation.CreationState.Creating,
+                ),
             )
             creatingStatusLock.unlock()
 
@@ -111,9 +113,9 @@ internal class SendMessageOrchestrator constructor(
                 localConversationDataSource.update(
                     localConversation.copy(
                         creationState = LocalConversation.CreationState.Created(
-                            newId
+                            newId,
                         ),
-                    )
+                    ),
                 )
             }
         }.onFailure { throwable ->
@@ -124,8 +126,8 @@ internal class SendMessageOrchestrator constructor(
                 else -> {
                     localConversationDataSource.update(
                         localConversation.copy(
-                            creationState = LocalConversation.CreationState.ErrorCreating(throwable)
-                        )
+                            creationState = LocalConversation.CreationState.ErrorCreating(throwable),
+                        ),
                     )
                 }
             }
@@ -172,7 +174,7 @@ internal class SendMessageOrchestrator constructor(
             remoteConversationId,
             messageMapper.messageToGqlSendMessageInput(message) {
                 messageFileUploader.uploadFile(this)
-            }
+            },
         )
     }
 }

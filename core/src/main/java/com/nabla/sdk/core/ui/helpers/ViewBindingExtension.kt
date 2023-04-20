@@ -36,7 +36,7 @@ public object ViewBindingExtension {
      */
     @NablaInternal
     public fun <ViewBindingT : ViewBinding> viewBinding(
-        bind: (View) -> ViewBindingT
+        bind: (View) -> ViewBindingT,
     ): ReadOnlyProperty<Fragment, ViewBindingT> {
         return FragmentViewBindingDelegate(bind)
     }
@@ -45,9 +45,10 @@ public object ViewBindingExtension {
     internal fun Fragment.requireViewOrThrow(): View {
         return runCatching { requireView() }.mapFailure { it.asNablaInternal() }.getOrThrow()
     }
+
     @NablaInternal
     public fun <ViewBindingT : ViewBinding> Activity.viewBinding(
-        bindingInflater: (LayoutInflater) -> ViewBindingT
+        bindingInflater: (LayoutInflater) -> ViewBindingT,
     ): Lazy<ViewBindingT> = lazy { bindingInflater(layoutInflater) }
 
     @NablaInternal
@@ -56,7 +57,7 @@ public object ViewBindingExtension {
 }
 
 private class FragmentViewBindingDelegate<out ViewBindingT : ViewBinding>(
-    private val bind: (View) -> ViewBindingT
+    private val bind: (View) -> ViewBindingT,
 ) : ReadOnlyProperty<Fragment, ViewBindingT> {
     override fun getValue(thisRef: Fragment, property: KProperty<*>): ViewBindingT {
         return thisRef.requireViewOrThrow().getOrPutBinding(R.id.nabla_view_binding_tag)

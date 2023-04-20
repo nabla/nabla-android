@@ -14,7 +14,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 internal fun <D> Flow<D>.notifyTypingUpdates(
     clock: Clock = Clock.System,
     context: CoroutineContext = EmptyCoroutineContext,
-    providersSelector: (D) -> List<ProviderInConversation>
+    providersSelector: (D) -> List<ProviderInConversation>,
 ): Flow<D> {
     return transformLatest { data ->
         emit(data)

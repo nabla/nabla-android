@@ -40,6 +40,7 @@ public class NablaAvatarView : ConstraintLayout {
     private lateinit var binding: NablaComponentAvatarViewBinding
 
     private var useSingleLetterInPlaceHolder: Boolean = false
+
     @ColorInt
     private var defaultBackgroundColor: Int = 0
     private lateinit var defaultAvatarDrawable: Drawable
@@ -110,7 +111,7 @@ public class NablaAvatarView : ConstraintLayout {
                 },
                 onError = { _, _ ->
                     showPlaceholder(placeholderText, placeholderBackgroundColor)
-                }
+                },
             )
         }
     }

@@ -90,7 +90,7 @@ internal class AudioMessageContentBinder(
                 surfaceColorAttr = surfaceColorAttr,
                 progressBackgroundDrawableRes = progressBackgroundDrawableRes,
                 binding = NablaConversationTimelineItemAudioMessageBinding.inflate(inflater, parent, true),
-                onToggleAudioMessagePlay = onToggleAudioMessagePlay
+                onToggleAudioMessagePlay = onToggleAudioMessagePlay,
             )
         }
     }

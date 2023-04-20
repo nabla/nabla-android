@@ -19,7 +19,9 @@ object StringFaker {
                                 1 -> ". ${word.capitalize()}"
                                 else -> " $word"
                             }
-                        } else word.capitalize()
+                        } else {
+                            word.capitalize()
+                        }
                     }.joinToString(separator = "")
                 } else {
                     this.joinToString(separator = " ")

@@ -45,7 +45,7 @@ internal class AppointmentRepositoryImpl(
 
     override fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ): Flow<PaginatedList<AvailabilitySlot>> {
         return gqlAppointmentCategoryDataSource.watchAvailabilitySlots(locationType, categoryId)
     }
@@ -53,7 +53,7 @@ internal class AppointmentRepositoryImpl(
     private val loadMoreAvailabilitySlotsSharedSingleMap = mutableMapOf<Pair<AppointmentLocationType, AppointmentCategoryId>, SharedSingle<Unit, Result<Unit>>>()
     override suspend fun loadMoreAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ) = loadMoreAvailabilitySlotsSharedSingleMap.getOrPut(locationType to categoryId) {
         sharedSingleIn(repoScope) {
             gqlAppointmentCategoryDataSource.loadMoreAvailabilitySlots(locationType, categoryId)
@@ -62,7 +62,7 @@ internal class AppointmentRepositoryImpl(
         .await()
 
     override suspend fun getAppointmentConfirmationConsents(
-        locationType: AppointmentLocationType
+        locationType: AppointmentLocationType,
     ): AppointmentConfirmationConsents {
         return gqlAppointmentConfirmConsentsDataSource.getConfirmConsents(locationType)
     }

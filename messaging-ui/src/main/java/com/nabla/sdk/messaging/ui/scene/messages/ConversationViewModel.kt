@@ -112,7 +112,7 @@ internal class ConversationViewModel(
                 .handleConversationDataSideEffects(),
             messagingClient
                 .watchConversationItems(conversationId)
-                .handleConversationMessagesSideEffects()
+                .handleConversationMessagesSideEffects(),
         )
 
         editorStateFlow = combine(
@@ -140,7 +140,7 @@ internal class ConversationViewModel(
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            initialValue = EditorState.EditingText(canSubmit = false, replyingTo = null)
+            initialValue = EditorState.EditingText(canSubmit = false, replyingTo = null),
         )
     }
 
@@ -148,7 +148,6 @@ internal class ConversationViewModel(
         conversationDataFlow: Flow<Response<Conversation>>,
         conversationItemsFlow: Flow<Response<PaginatedContent<List<ConversationItem>>>>,
     ): StateFlow<State> {
-
         val currentCallFlow = nablaClient.coreContainer.videoCallModule?.internalClient?.watchCurrentVideoCall() ?: flowOf(null)
 
         return combine(
@@ -164,13 +163,13 @@ internal class ConversationViewModel(
                 messagingClient.logger.warn(
                     domain = LOGGING_DOMAIN,
                     message = "Failed to fetch conversation messages",
-                    error = throwable
+                    error = throwable,
                 )
 
                 emit(
                     State.Error(
-                        if (throwable is NetworkException) ErrorUiModel.Network else ErrorUiModel.Generic
-                    )
+                        if (throwable is NetworkException) ErrorUiModel.Network else ErrorUiModel.Generic,
+                    ),
                 )
 
                 retryAfterErrorTriggerFlow.first()
@@ -222,7 +221,7 @@ internal class ConversationViewModel(
     fun onImageAndVideoSourceLibrarySelected() {
         navigationEventMutableFlow.emitIn(
             viewModelScope,
-            NavigationEvent.OpenMediaLibrary(listOf(MimeType.Image.Jpeg, MimeType.Image.Png, MimeType.Video.Mp4))
+            NavigationEvent.OpenMediaLibrary(listOf(MimeType.Image.Jpeg, MimeType.Image.Png, MimeType.Video.Mp4)),
         )
     }
 
@@ -262,7 +261,7 @@ internal class ConversationViewModel(
                 if (media.mimeType == MimeType.Application.Pdf) {
                     navigationEventMutableFlow.emitIn(
                         viewModelScope,
-                        NavigationEvent.OpenFullScreenPdf(media.uri)
+                        NavigationEvent.OpenFullScreenPdf(media.uri),
                     )
                 } else {
                     navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenUriExternally(media.uri))
@@ -372,13 +371,12 @@ internal class ConversationViewModel(
                                 fileName = "voice_message_${Clock.System.now()}",
                                 mimeType = MimeType.Audio.Mp3,
                                 estimatedDurationMs = voiceMessage.secondsSoFar * 1_000L,
-                            )
-                        )
+                            ),
+                        ),
                     ),
                     conversationId,
                 ).onFailure { messagingClient.logger.error("failed to send voice message", it) }
             } else {
-
                 mediasToSendMutableFlow.value = emptyList()
 
                 val mediaSendingJobs = mediaMessages.map { mediaToSend ->
@@ -391,17 +389,17 @@ internal class ConversationViewModel(
                                             uri = Uri(mediaToSend.uri.toString()),
                                             fileName = mediaToSend.name,
                                             mimeType = mediaToSend.mimeType,
-                                        )
-                                    )
+                                        ),
+                                    ),
                                 )
                                 is LocalMedia.Document -> MessageInput.Media.Document(
                                     mediaSource = FileSource.Local(
                                         FileLocal.Document(
                                             Uri(mediaToSend.uri.toString()),
                                             mediaToSend.name,
-                                            mediaToSend.mimeType
-                                        )
-                                    )
+                                            mediaToSend.mimeType,
+                                        ),
+                                    ),
                                 )
                                 is LocalMedia.Video -> MessageInput.Media.Video(
                                     mediaSource = FileSource.Local(
@@ -409,8 +407,8 @@ internal class ConversationViewModel(
                                             Uri(mediaToSend.uri.toString()),
                                             mediaToSend.name,
                                             mediaToSend.mimeType,
-                                        )
-                                    )
+                                        ),
+                                    ),
                                 )
                             },
                             conversationId = conversationId,
@@ -512,7 +510,8 @@ internal class ConversationViewModel(
                 val fileContent = item.content
                 when (fileContent.mimeType) {
                     MimeType.Application.Pdf -> navigationEventMutableFlow.emitIn(
-                        viewModelScope, NavigationEvent.OpenFullScreenPdf(fileContent.uri.toJvmUri())
+                        viewModelScope,
+                        NavigationEvent.OpenFullScreenPdf(fileContent.uri.toJvmUri()),
                     )
                     is MimeType.Image -> {
                         navigationEventMutableFlow.emitIn(viewModelScope, NavigationEvent.OpenFullScreenImage(fileContent.uri.toJvmUri()))

@@ -22,9 +22,9 @@ internal class MessagingSampleApp : Application() {
                     AuthTokens(
                         AccessToken("dummy-access-token"),
                         RefreshToken("dummy-refresh-token"),
-                    )
+                    ),
                 )
-            }
+            },
         )
 
         try {

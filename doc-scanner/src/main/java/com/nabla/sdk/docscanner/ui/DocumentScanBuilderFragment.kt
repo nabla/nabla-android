@@ -77,7 +77,7 @@ internal class DocumentScanBuilderFragment : DocumentScanBaseFragment() {
             rational = PermissionRational(
                 title = R.string.nabla_document_scan_camera_picture_permission_rational_title,
                 description = R.string.nabla_document_scan_camera_picture_permission_rational_description,
-            )
+            ),
         ) { isGranted ->
             if (isGranted) {
                 try {
@@ -177,7 +177,9 @@ internal class DocumentScanBuilderFragment : DocumentScanBaseFragment() {
                 }
                 counterText = if (state.images.isNotEmpty()) {
                     "${currentImageIndex + 1}/${state.images.size}"
-                } else null
+                } else {
+                    null
+                }
                 isNextVisible = state.images.isNotEmpty()
             } else {
                 counterText = null

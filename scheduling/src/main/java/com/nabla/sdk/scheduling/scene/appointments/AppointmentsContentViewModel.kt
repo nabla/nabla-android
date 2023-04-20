@@ -68,7 +68,9 @@ internal class AppointmentsContentViewModel(
 
             if (items.isEmpty()) {
                 State.Empty(appointmentType.emptyStateRes)
-            } else State.Loaded(items)
+            } else {
+                State.Loaded(items)
+            }
         }
         .retryWhen { cause, _ ->
             logger.warn(
@@ -97,8 +99,8 @@ internal class AppointmentsContentViewModel(
                                 throwable.serverMessage.asStringOrRes()
                             } else {
                                 throwable.asNetworkOrGeneric.title
-                            }
-                        )
+                            },
+                        ),
                     )
                 }
         }

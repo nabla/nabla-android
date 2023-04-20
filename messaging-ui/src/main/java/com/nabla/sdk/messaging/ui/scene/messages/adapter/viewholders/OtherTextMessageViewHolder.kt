@@ -29,9 +29,9 @@ internal class OtherTextMessageViewHolder(
                         inflater,
                         contentParent,
                         onUrlClicked,
-                        onRepliedMessageClicked
+                        onRepliedMessageClicked,
                     )
-                }
+                },
             )
         }
     }

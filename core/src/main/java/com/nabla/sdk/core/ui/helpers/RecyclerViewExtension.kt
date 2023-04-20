@@ -15,6 +15,7 @@ public object RecyclerViewExtension {
 
     @NablaInternal
     public fun RecyclerView.canScrollUp(): Boolean = canScrollVertically(SCROLL_DIRECTION_TOP)
+
     @NablaInternal
     public fun RecyclerView.canScrollDown(): Boolean = canScrollVertically(SCROLL_DIRECTION_BOTTOM)
 

@@ -29,7 +29,7 @@ internal class LocationSelectionViewModel(private val nablaClient: NablaClient) 
         nablaClient.coreContainer.logger.warn(
             message = "failed to get appointment locations",
             error = cause,
-            domain = Logger.SCHEDULING_DOMAIN.UI
+            domain = Logger.SCHEDULING_DOMAIN.UI,
         )
         emit(State.Error(cause.asNetworkOrGeneric))
         retryTriggerFlow.first()

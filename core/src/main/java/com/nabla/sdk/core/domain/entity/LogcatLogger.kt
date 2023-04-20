@@ -60,7 +60,7 @@ public class LogcatLogger(
          * An unexpected error occurred and the SDK will not handle it. You might try to update
          * the SDK to a newer version or contact the support team if that happens.
          */
-        ERROR(3)
+        ERROR(3),
     }
 
     private companion object {

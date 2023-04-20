@@ -30,7 +30,7 @@ public class ConversationActivity : AppCompatActivity() {
             supportFragmentManager.commit {
                 replace(
                     R.id.fragmentContainer,
-                    ConversationFragment.newInstance(conversationId, intent.requireSdkName())
+                    ConversationFragment.newInstance(conversationId, intent.requireSdkName()),
                 )
             }
         }

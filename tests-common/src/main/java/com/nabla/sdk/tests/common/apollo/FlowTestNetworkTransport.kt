@@ -34,7 +34,7 @@ class FlowTestNetworkTransport : NetworkTransport {
             ApolloResponse.Builder(
                 operation = operation,
                 requestUuid = uuid4(),
-                data = it
+                data = it,
             ).isLast(true).build()
         }
     }

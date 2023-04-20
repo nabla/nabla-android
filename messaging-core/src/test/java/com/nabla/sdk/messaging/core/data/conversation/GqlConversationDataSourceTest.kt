@@ -39,13 +39,13 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
 
         testNetworkTransport.register(
             GqlConversationDataSource.conversationsQuery(),
-            GqlData.Conversations.empty()
+            GqlData.Conversations.empty(),
         )
         val conversationsEventsSubscriptionResponseFlow =
             MutableStateFlow<ConversationsEventsSubscription.Data?>(null)
         testNetworkTransport.register(
             ConversationsEventsSubscription(),
-            conversationsEventsSubscriptionResponseFlow.filterNotNull()
+            conversationsEventsSubscriptionResponseFlow.filterNotNull(),
         )
 
         // It was flacky on CI so the timeout is a little bigger than default here (1s by default)
@@ -71,18 +71,18 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
             GqlData.Conversations.single {
                 nextCursor = cursor
                 hasMore = true
-            }
+            },
         )
         testNetworkTransport.register(
             GqlConversationDataSource.conversationsQuery(cursor),
             GqlData.Conversations.single {
                 nextCursor = null
                 hasMore = false
-            }
+            },
         )
         testNetworkTransport.register(
             ConversationsEventsSubscription(),
-            emptyFlow()
+            emptyFlow(),
         )
         gqlConversationDataSource.watchConversations().test {
             var paginatedConversationsResponse = awaitItem()
@@ -108,7 +108,7 @@ internal class GqlConversationDataSourceTest : BaseCoroutineTest() {
         testScope: TestScope,
     ): GqlConversationDataSource {
         val apolloClient = ApolloFactory.configureBuilder(
-            normalizedCacheFactory = MemoryCacheFactory()
+            normalizedCacheFactory = MemoryCacheFactory(),
         ).networkTransport(testNetworkTransport)
             .build()
         val logger: Logger = mockk(relaxed = true)

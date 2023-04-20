@@ -94,7 +94,7 @@ class LocationSelectionFragmentTest : BaseCoroutineTest() {
         val binding = NablaSchedulingFragmentLocationsBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
-            false
+            false,
         )
 
         binding.recyclerView.addItemDecoration(VerticalOffsetsItemDecoration())

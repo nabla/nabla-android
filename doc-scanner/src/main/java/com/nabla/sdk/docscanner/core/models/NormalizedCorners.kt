@@ -22,7 +22,7 @@ internal data class NormalizedCorners(val topLeft: Point, val topRight: Point, v
                 topLeft = normalizedCorners[0],
                 topRight = normalizedCorners[1],
                 bottomRight = normalizedCorners[2],
-                bottomLeft = normalizedCorners[3]
+                bottomLeft = normalizedCorners[3],
             )
         }
     }

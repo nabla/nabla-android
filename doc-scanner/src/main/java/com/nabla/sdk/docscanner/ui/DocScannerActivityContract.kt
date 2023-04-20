@@ -39,8 +39,10 @@ public class DocScannerActivityContract :
     public sealed interface Result {
         @NablaInternal
         public object Cancelled : Result
+
         @NablaInternal
         public data class Failed(val error: Throwable) : Result
+
         @NablaInternal
         public data class Document(val uri: Uri) : Result
     }

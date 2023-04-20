@@ -68,7 +68,7 @@ internal class MessagingModuleImpl internal constructor(
     override suspend fun createConversationWithMessage(
         message: MessageInput,
         title: String?,
-        providerIds: List<Uuid>?
+        providerIds: List<Uuid>?,
     ): Result<Conversation> {
         return runCatchingCancellable {
             messagingContainer.sessionClient.authenticatableOrThrow()
@@ -81,7 +81,9 @@ internal class MessagingModuleImpl internal constructor(
                         ProviderMissingPermissionException.ERROR_CODE -> ProviderMissingPermissionException(cause = error)
                         else -> error
                     }
-                } else error
+                } else {
+                    error
+                }
             }
     }
 

@@ -100,7 +100,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             println(
                 "If you want to record new integration test, please create a" +
                     " $TEST_CONFIG_OVERRIDE_PATH file with a valid `baseUrl`, `accessToken`" +
-                    " and `refreshToken`"
+                    " and `refreshToken`",
             )
             TapeMode.READ_ONLY
         }
@@ -121,8 +121,8 @@ internal class IntegrationTest : BaseCoroutineTest() {
             .defaultMatchRules(
                 MatchRules.method,
                 MatchRules.path,
-                MatchRules.body
-            ).build()
+                MatchRules.body,
+            ).build(),
     )
 
     @Test
@@ -135,7 +135,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationsEventsSubscription(),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         nablaMessagingClient.watchConversations().test {
@@ -150,7 +150,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             val expectedContentOfUpdatedPageOfConversations = listOf(createdConversation) + firstPageOfConversationResponse.data.content
             assertEquals(
                 expectedContentOfUpdatedPageOfConversations.map { it.id },
-                updatedPageOfConversationsResponse.data.content.map { it.id }
+                updatedPageOfConversationsResponse.data.content.map { it.id },
             )
             cancelAndIgnoreRemainingEvents()
         }
@@ -199,7 +199,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationEventsSubscription(createdConversation.id.stableId),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
@@ -236,7 +236,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 GqlData.ConversationEvents.MessageCreated.patientTextMessage(
                     conversationId = createdConversation.id,
                     localMessageId = message2.id,
-                )
+                ),
             )
 
             val lastEmit = awaitItem()
@@ -269,7 +269,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationEventsSubscription(createdConversation.id.stableId),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
@@ -287,12 +287,12 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     uri = uri,
                     fileName = null,
                     mimeType = MimeType.Image.Jpeg,
-                )
+                ),
             )
 
             nablaMessagingClient.sendMessage(
                 MessageInput.Media.Image(mediaSource),
-                createdConversation.id
+                createdConversation.id,
             ).getOrThrow()
 
             val secondEmit = awaitItem()
@@ -321,7 +321,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 GqlData.ConversationEvents.MessageCreated.patientImageMessage(
                     conversationId = createdConversation.id,
                     localMessageId = message2.id,
-                )
+                ),
             )
 
             val lastEmit = awaitItem()
@@ -354,7 +354,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationEventsSubscription(createdConversation.id.stableId),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
@@ -374,12 +374,12 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     uri = uri,
                     fileName = docName,
                     mimeType = mimeType,
-                )
+                ),
             )
 
             nablaMessagingClient.sendMessage(
                 MessageInput.Media.Document(mediaSource),
-                createdConversation.id
+                createdConversation.id,
             ).getOrThrow()
 
             val secondEmit = awaitItem()
@@ -412,7 +412,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 GqlData.ConversationEvents.MessageCreated.patientDocumentMessage(
                     conversationId = createdConversation.id,
                     localMessageId = message2.id,
-                )
+                ),
             )
 
             val lastEmit = awaitItem()
@@ -481,7 +481,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val conversationsReplayEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationsEventsSubscription(),
-            conversationsReplayEmitter
+            conversationsReplayEmitter,
         )
 
         val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
@@ -496,7 +496,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 GqlData.ConversationsEvents.providerJoinsConversation(
                     conversationId = createdConversation.id,
                     providerId = providerId,
-                )
+                ),
             )
 
             val secondEmit = awaitItem()
@@ -506,7 +506,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             conversationsReplayEmitter.emit(
                 GqlData.ConversationsEvents.providersLeaveConversation(
                     conversationId = createdConversation.id,
-                )
+                ),
             )
 
             val thirdEmit = awaitItem()
@@ -531,7 +531,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationEventsSubscription(createdConversation.id.stableId),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
@@ -545,7 +545,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 GqlData.ConversationEvents.Activity.existingProviderJoinedActivity(
                     conversationId = createdConversation.id,
                     providerId = providerId,
-                )
+                ),
             )
 
             val secondEmit = awaitItem()
@@ -573,7 +573,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val conversationsReplayEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationsEventsSubscription(),
-            conversationsReplayEmitter
+            conversationsReplayEmitter,
         )
 
         val messageToSend = MessageInput.Text("Hello")
@@ -587,7 +587,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 GqlData.ConversationsEvents.conversationUpdatedForPatientUnreadMessageCount(
                     conversationId = createdConversation.id,
                     patientUnreadMessageCount = 1,
-                )
+                ),
             )
 
             assertEquals(1, awaitItem().data.patientUnreadMessageCount)
@@ -615,7 +615,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val conversationsReplayEmitter = MutableSharedFlow<ConversationsEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationsEventsSubscription(),
-            conversationsReplayEmitter
+            conversationsReplayEmitter,
         )
 
         val messageToSend = MessageInput.Text("Hello")
@@ -624,7 +624,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationEventsSubscription(createdConversation.id.stableId),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         val conversationUpdatesFlow = nablaMessagingClient.watchConversation(createdConversation.id)
@@ -641,7 +641,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     providerInConversationId = providerInConversationId,
                     providerId = providerId,
                     providerIsTypingAt = null,
-                )
+                ),
             )
 
             assertFalse(awaitItem().data.providersInConversation.first().isTyping(clock))
@@ -651,7 +651,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     providerId = providerId,
                     providerInConversationId = providerInConversationId,
                     typingAtInstant = now.minus(1.seconds),
-                )
+                ),
             )
 
             assertTrue(awaitItem().data.providersInConversation.first().isTyping(clock))
@@ -662,7 +662,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     providerId = providerId,
                     providerInConversationId = providerInConversationId,
                     typingAtInstant = now.minus(TYPING_TIME_WINDOW),
-                )
+                ),
             )
 
             assertFalse(awaitItem().data.providersInConversation.first().isTyping(clock))
@@ -673,7 +673,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                     providerId = providerId,
                     providerInConversationId = providerInConversationId,
                     typingAtInstant = null,
-                )
+                ),
             )
 
             assertFalse(awaitItem().data.providersInConversation.first().isTyping(clock))
@@ -697,7 +697,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
         val replayEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
         replaySubscriptionNetworkTransport.register(
             ConversationEventsSubscription(createdConversation.id.stableId),
-            replayEventEmitter
+            replayEventEmitter,
         )
 
         val messagesFlow = nablaMessagingClient.watchConversationItems(createdConversation.id)
@@ -709,7 +709,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
             replayEventEmitter.emit(
                 GqlData.ConversationEvents.Activity.deletedProviderJoinedActivity(
                     conversationId = createdConversation.id,
-                )
+                ),
             )
 
             val secondEmit = awaitItem()
@@ -744,36 +744,36 @@ internal class IntegrationTest : BaseCoroutineTest() {
 
         assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.createConversationWithMessage(message = MessageInput.Text("Hello"))
-                .exceptionOrNull()
+                .exceptionOrNull(),
         )
         assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.deleteMessage(
                 ConversationId.Remote(remoteId = uuid4()),
                 MessageId.Local(uuid4()),
-            ).exceptionOrNull()
+            ).exceptionOrNull(),
         )
         assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.markConversationAsRead(
-                ConversationId.Remote(remoteId = uuid4())
-            ).exceptionOrNull()
+                ConversationId.Remote(remoteId = uuid4()),
+            ).exceptionOrNull(),
         )
         assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.retrySendingMessage(
                 MessageId.Local(uuid4()),
                 ConversationId.Remote(remoteId = uuid4()),
-            ).exceptionOrNull()
+            ).exceptionOrNull(),
         )
         assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.setTyping(
                 ConversationId.Remote(remoteId = uuid4()),
                 isTyping = true,
-            ).exceptionOrNull()
+            ).exceptionOrNull(),
         )
         assertIs<AuthenticationException.UserIdNotSet>(
             nablaMessagingClient.sendMessage(
                 MessageInput.Text(""),
                 ConversationId.Remote(remoteId = uuid4()),
-            ).exceptionOrNull()
+            ).exceptionOrNull(),
         )
     }
 
@@ -814,7 +814,7 @@ internal class IntegrationTest : BaseCoroutineTest() {
                 AuthTokens(
                     AccessToken(accessToken),
                     RefreshToken(refreshToken),
-                )
+                ),
             )
         }
 

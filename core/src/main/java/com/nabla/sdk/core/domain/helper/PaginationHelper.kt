@@ -29,7 +29,9 @@ public object PaginationHelper {
                     content = paginatedList.items,
                     loadMore = if (paginatedList.hasMore) {
                         adaptedLoadMoreBlock
-                    } else null
+                    } else {
+                        null
+                    },
                 )
             }.catchAndRethrowAsNablaException(nablaExceptionMapper)
     }
@@ -53,8 +55,10 @@ public object PaginationHelper {
                         content = response.data.items,
                         loadMore = if (response.data.hasMore) {
                             adaptedLoadMoreBlock
-                        } else null
-                    )
+                        } else {
+                            null
+                        },
+                    ),
                 )
             }.catchAndRethrowAsNablaException(nablaExceptionMapper)
     }

@@ -64,7 +64,7 @@ internal class ConversationRepositoryImpl(
                             isDataFresh = true,
                             refreshingState = RefreshingState.Refreshed,
                             data = localConversation.asConversation(),
-                        )
+                        ),
                     )
                     is LocalConversation.CreationState.Created -> {
                         watchRemoteConversation(localConversation.creationState.remoteId)
@@ -77,11 +77,11 @@ internal class ConversationRepositoryImpl(
 
     @OptIn(FlowPreview::class)
     private fun watchRemoteConversation(
-        conversationId: ConversationId.Remote
+        conversationId: ConversationId.Remote,
     ): Flow<Response<Conversation>> {
         return flowOf(
             gqlConversationContentDataSource.conversationEventsFlow(conversationId),
-            gqlConversationDataSource.watchConversation(conversationId)
+            gqlConversationDataSource.watchConversation(conversationId),
         )
             .flattenMerge()
             .filterIsInstance()

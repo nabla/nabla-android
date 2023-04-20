@@ -19,7 +19,7 @@ internal class ConversationListAdapter(
             oldItem: ItemUiModel,
             newItem: ItemUiModel,
         ) = oldItem == newItem
-    }
+    },
 ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

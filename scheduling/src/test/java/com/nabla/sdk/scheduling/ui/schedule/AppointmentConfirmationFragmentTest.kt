@@ -114,14 +114,14 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
             provider = provider,
             slot = Instant.parse("2028-01-01T10:20:00Z"),
             location = AppointmentLocation.Remote.Nabla(null),
-            price = Price(BigDecimal(60.5), "USD")
+            price = Price(BigDecimal(60.5), "USD"),
         )
 
         consents.htmlConsents.forEachIndexed { _, html ->
             val consentView = NablaSchedulingItemConsentBinding.inflate(
                 layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
                 nablaConsentsContainer,
-                false
+                false,
             )
             consentView.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = context.dpToPx(8)
@@ -138,7 +138,7 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
         val binding = NablaSchedulingFragmentAppointmentConfirmationBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
-            false
+            false,
         )
 
         parent.addView(binding.root)
@@ -159,7 +159,7 @@ class AppointmentConfirmationFragmentTest : BaseCoroutineTest() {
             htmlConsents = listOf(
                 "<p>This is an html string with a <a href='https://www.google.com'>link</a>.</p>",
                 "<p>This is a consent that is normal, without any html, but just long enough to be more than 1 line long.</p>",
-            )
+            ),
         )
     }
 }

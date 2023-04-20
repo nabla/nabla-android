@@ -51,7 +51,7 @@ public object TextViewExtension {
                         span,
                         0,
                         end.coerceAtMost(spannable.length),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
                     )
                     text = spannable
                 }

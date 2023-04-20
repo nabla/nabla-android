@@ -36,7 +36,7 @@ internal class ProviderTypingIndicatorViewHolder(private val binding: NablaConve
 
     companion object {
         fun create(inflater: LayoutInflater, parent: ViewGroup) = ProviderTypingIndicatorViewHolder(
-            NablaConversationTimelineItemProviderMessageBinding.inflate(inflater, parent, false)
+            NablaConversationTimelineItemProviderMessageBinding.inflate(inflater, parent, false),
         )
     }
 }

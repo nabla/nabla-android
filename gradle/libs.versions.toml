@@ -5,7 +5,7 @@ androidxlifecycle = "2.5.1"
 okhttp = "4.10.0"
 apollo = "3.7.4"
 coil = "2.2.2"
-ktlint = "0.45.1"
+ktlint = "0.48.2"
 espresso = "3.5.1"
 okreplay = "1.6.0"
 tensorflow = "0.4.3"
@@ -48,7 +48,7 @@ kotlin-serialization-pluginGradle = { module = "org.jetbrains.kotlin:kotlin-seri
 kotlin-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.4.0"
 kotlin-binaryCompatibilityValidator-pluginGradle = 'org.jetbrains.kotlinx:binary-compatibility-validator:0.12.1'
 
-ktlint-pluginGradle = "org.jlleitschuh.gradle:ktlint-gradle:11.0.0"
+ktlint-pluginGradle = "org.jlleitschuh.gradle:ktlint-gradle:11.3.1"
 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }

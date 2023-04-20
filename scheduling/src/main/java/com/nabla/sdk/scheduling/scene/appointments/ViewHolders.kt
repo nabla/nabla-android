@@ -41,7 +41,7 @@ internal class LoadingMoreViewHolder(val binding: NablaSchedulingAppointmentItem
         fun create(parent: ViewGroup): LoadingMoreViewHolder {
             return LoadingMoreViewHolder(
                 NablaSchedulingAppointmentItemLoadingMoreBinding
-                    .inflate(LayoutInflater.from(parent.context), parent, false)
+                    .inflate(LayoutInflater.from(parent.context), parent, false),
             )
         }
     }
@@ -70,11 +70,14 @@ internal class AppointmentViewHolder(
                 binding.context.getString(
                     when (uiModel.callButtonStatus) {
                         is ForExternalUrl,
-                        is ForVideoCall.AsJoin -> R.string.nabla_scheduling_appointment_item_join_cta
+                        is ForVideoCall.AsJoin,
+                        -> R.string.nabla_scheduling_appointment_item_join_cta
                         is ForVideoCall.AsGoBack -> R.string.nabla_scheduling_appointment_item_return_cta
-                    }
+                    },
                 )
-            } else null
+            } else {
+                null
+            },
         )
         val alpha = if (uiModel is Finalized) .50f else 1f
         binding.appointmentTitle.alpha = alpha
@@ -132,7 +135,9 @@ internal class AppointmentViewHolder(
                     context.resources.getQuantityString(
                         if (minutesFromNow >= 0) {
                             R.plurals.nabla_scheduling_appointment_item_relative_future_minutes_pattern
-                        } else R.plurals.nabla_scheduling_appointment_item_relative_past_minutes_pattern,
+                        } else {
+                            R.plurals.nabla_scheduling_appointment_item_relative_past_minutes_pattern
+                        },
                         minutesFromNow.absoluteValue,
                         minutesFromNow.absoluteValue,
                     )
@@ -164,7 +169,7 @@ internal class AppointmentViewHolder(
                 binding,
                 onJoinClicked,
                 onJoinExternalClicked,
-                onDetailsClicked
+                onDetailsClicked,
             )
         }
     }

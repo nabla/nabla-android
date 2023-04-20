@@ -174,7 +174,7 @@ public class NablaClient private constructor(
                         .warn(
                             "NablaClient.initialize() should only be called once per instance name. " +
                                 "Ignoring this call and using the previously created shared instance. " +
-                                "Use getInstance(name) to get the previously created instance"
+                                "Use getInstance(name) to get the previously created instance",
                         )
 
                     alreadyInitializedInstance

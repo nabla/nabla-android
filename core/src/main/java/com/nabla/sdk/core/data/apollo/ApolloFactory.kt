@@ -9,10 +9,10 @@ import com.apollographql.apollo3.cache.normalized.normalizedCache
 public object ApolloFactory {
     @VisibleForTesting
     public fun configureBuilder(
-        normalizedCacheFactory: NormalizedCacheFactory
+        normalizedCacheFactory: NormalizedCacheFactory,
     ): ApolloClient.Builder = ApolloClient.Builder()
         .normalizedCache(
             normalizedCacheFactory = normalizedCacheFactory,
-            cacheKeyGenerator = TypeAndUuidCacheKeyGenerator
+            cacheKeyGenerator = TypeAndUuidCacheKeyGenerator,
         )
 }

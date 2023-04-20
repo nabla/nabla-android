@@ -122,6 +122,7 @@ public sealed interface MessageId {
 public sealed class Message : ConversationItem {
     @NablaInternal
     public abstract val baseMessage: BaseMessage
+
     @NablaInternal
     public abstract fun modify(status: SendStatus): Message
 

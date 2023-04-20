@@ -29,7 +29,7 @@ internal class DeletedMessageContentBinder(
         ): DeletedMessageContentBinder {
             return DeletedMessageContentBinder(
                 contentTextAppearanceAttr = contentTextAppearanceAttr,
-                binding = NablaConversationTimelineItemDeletedMessageBinding.inflate(inflater, parent, true)
+                binding = NablaConversationTimelineItemDeletedMessageBinding.inflate(inflater, parent, true),
             )
         }
     }

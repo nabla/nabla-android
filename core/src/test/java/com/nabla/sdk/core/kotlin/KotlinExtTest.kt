@@ -61,8 +61,8 @@ internal class KotlinExtTest : BaseCoroutineTest() {
         job.cancel()
     }
 
-    @Test
     // this level of precision requires an EmptyCoroutineContext
+    @Test
     fun `sharedSingleIn join new request if it occurs when computation completes`() = kotlinx.coroutines.test.runTest(EmptyCoroutineContext) {
         val job = Job()
         val sharedSingleIn = sharedSingleIn(this + job) {

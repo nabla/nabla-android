@@ -8,6 +8,6 @@ internal fun Context.withNablaVideoCallThemeOverlays(): Context {
         hasValidOverlaysAttr = R.attr.nablaHasValidVideoCallOverlays,
         themeOverlayAttr = R.attr.nablaVideoCallThemeOverlay,
         styleOverlay = null,
-        defaultThemeOverlay = R.style.Nabla_ThemeOverlay_VideoCall
+        defaultThemeOverlay = R.style.Nabla_ThemeOverlay_VideoCall,
     )
 }

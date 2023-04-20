@@ -32,7 +32,7 @@ internal class OtherAudioMessageViewHolder(
                         parent = contentParent,
                         onToggleAudioMessagePlay = onToggleAudioMessagePlay,
                     )
-                }
+                },
             )
         }
     }

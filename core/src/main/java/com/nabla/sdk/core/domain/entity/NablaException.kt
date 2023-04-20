@@ -32,7 +32,7 @@ public abstract class AuthenticationException private constructor(cause: Throwab
             cause = null,
             message = "You can't set a new current user when one is already set. " +
                 "Current user id: $currentUserId, new user id: $newUserId. " +
-                "You should call clearCurrentUser before calling setCurrentUserOrThrow again with another id."
+                "You should call clearCurrentUser before calling setCurrentUserOrThrow again with another id.",
         )
 }
 

@@ -18,7 +18,7 @@ internal interface SchedulingPrivateClient {
 
     fun watchAvailabilitySlots(
         locationType: AppointmentLocationType,
-        categoryId: AppointmentCategoryId
+        categoryId: AppointmentCategoryId,
     ): Flow<PaginatedContent<List<AvailabilitySlot>>>
 
     fun isRefreshingAppointments(): Flow<Boolean>
@@ -27,7 +27,7 @@ internal interface SchedulingPrivateClient {
     fun watchUpcomingAppointments(): Flow<Response<PaginatedContent<List<Appointment>>>>
 
     suspend fun getAppointmentConfirmationConsents(
-        locationType: AppointmentLocationType
+        locationType: AppointmentLocationType,
     ): Result<AppointmentConfirmationConsents>
 
     suspend fun createPendingAppointment(

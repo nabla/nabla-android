@@ -27,7 +27,7 @@ internal class ProviderImageMessageViewHolder(
                 onProviderClicked,
                 inflateProviderMessageContentCard(inflater, binding.chatProviderMessageContentContainer) { contentParent ->
                     ImageMessageContentBinder.create(R.attr.nablaMessaging_conversationProviderMessageAppearance, inflater, contentParent)
-                }
+                },
             )
         }
     }

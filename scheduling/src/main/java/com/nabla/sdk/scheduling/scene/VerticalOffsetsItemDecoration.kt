@@ -15,7 +15,7 @@ internal class VerticalOffsetsItemDecoration : RecyclerView.ItemDecoration() {
             0,
             topOffset,
             0,
-            0
+            0,
         )
     }
 }

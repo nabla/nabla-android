@@ -22,7 +22,7 @@ class DayNightPaparazziRule(
     defaultDeviceConfig: DeviceConfig = defaultDefaultDeviceConfig,
     largerDeviceConfig: DeviceConfig = defaultLargeDeviceConfig,
     renderingMode: SessionParams.RenderingMode = SessionParams.RenderingMode.NORMAL,
-    showSystemUi: Boolean = true
+    showSystemUi: Boolean = true,
 ) : TestRule {
     private val daySmallDevicePaparazzi = Paparazzi(
         deviceConfig = smallDeviceConfig.copy(

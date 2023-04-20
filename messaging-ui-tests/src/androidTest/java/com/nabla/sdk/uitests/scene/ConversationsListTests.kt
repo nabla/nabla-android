@@ -31,13 +31,13 @@ class ConversationsListTests {
             allOf(
                 withCousin(SdkR.id.conversationListViewItemRoot, withText("With Unreads")),
                 withId(SdkR.id.unreadDot),
-            )
+            ),
         ).check(matches(isDisplayed()))
         onView(
             allOf(
                 withCousin(SdkR.id.conversationListViewItemRoot, withText("Without Unreads")),
                 withId(SdkR.id.unreadDot),
-            )
+            ),
         ).check(matches(not(isDisplayed())))
 
         var varAdapter: RecyclerView.Adapter<*>? = null
@@ -49,8 +49,8 @@ class ConversationsListTests {
         val itemCountBeforeScroll = adapter.itemCount
         onView(first(withId(SdkR.id.conversationsRecyclerView))).perform(
             RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(
-                withId(SdkR.id.nablaConversationItemLoadingMoreRoot)
-            )
+                withId(SdkR.id.nablaConversationItemLoadingMoreRoot),
+            ),
         )
         // TODO find a way to make Espresso wait for recycler‘s adapter submitList.
         Thread.sleep(100)

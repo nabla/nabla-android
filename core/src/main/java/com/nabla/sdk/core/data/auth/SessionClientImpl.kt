@@ -54,7 +54,7 @@ internal class SessionClientImpl(
     }
 
     private suspend fun getFreshAccessTokenUnsafe(
-        forceRefreshAccessToken: Boolean
+        forceRefreshAccessToken: Boolean,
     ): String {
         logger.debug(
             domain = AUTH_DOMAIN,
@@ -87,7 +87,7 @@ internal class SessionClientImpl(
         }.also { freshTokens ->
             if (JWT(freshTokens.accessToken.token).isExpired()) {
                 throw AuthenticationException.UnableToGetFreshSessionToken(
-                    IllegalStateException("access token is expired")
+                    IllegalStateException("access token is expired"),
                 )
             }
         }.accessToken.token
@@ -99,7 +99,7 @@ internal class SessionClientImpl(
         return sessionTokenProvider.fetchNewSessionAuthTokens(patientId.value)
             .getOrElse { exception ->
                 throw AuthenticationException.UnableToGetFreshSessionToken(
-                    exceptionMapper.map(exception)
+                    exceptionMapper.map(exception),
                 )
             }
             .also {

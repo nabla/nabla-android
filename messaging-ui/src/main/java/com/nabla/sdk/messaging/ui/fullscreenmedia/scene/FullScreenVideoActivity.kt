@@ -31,7 +31,7 @@ internal class FullScreenVideoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = NablaActivityFullScreenVideoBinding.inflate(
-            layoutInflater.cloneInContext(withNablaMessagingThemeOverlays())
+            layoutInflater.cloneInContext(withNablaMessagingThemeOverlays()),
         )
         this.binding = binding
         setContentView(binding.root)

@@ -17,7 +17,7 @@ internal class ConversationListViewItemTest : BaseCoroutineTest() {
     fun `Display default state`() {
         paparazzi.snapshotDayNightMultiDevices { (_, layoutInflater) ->
             val binding = NablaConversationListViewItemBinding.bind(
-                layoutInflater.inflateWithWithNablaMessagingThemeOverlays<ConstraintLayout>(R.layout.nabla_conversation_list_view_item)
+                layoutInflater.inflateWithWithNablaMessagingThemeOverlays<ConstraintLayout>(R.layout.nabla_conversation_list_view_item),
             )
 
             binding.lastMessageDate.text = "last message date"

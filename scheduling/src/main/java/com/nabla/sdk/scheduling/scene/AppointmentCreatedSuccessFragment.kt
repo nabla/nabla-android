@@ -7,7 +7,7 @@ import com.nabla.sdk.scheduling.R
 import com.nabla.sdk.scheduling.databinding.NablaSchedulingFragmentAppointmentSuccessBinding
 
 internal class AppointmentCreatedSuccessFragment : BookAppointmentBaseFragment(
-    R.layout.nabla_scheduling_fragment_appointment_success
+    R.layout.nabla_scheduling_fragment_appointment_success,
 ) {
     private val binding by viewBinding(NablaSchedulingFragmentAppointmentSuccessBinding::bind)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

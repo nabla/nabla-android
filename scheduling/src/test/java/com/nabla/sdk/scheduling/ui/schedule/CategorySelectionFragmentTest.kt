@@ -59,7 +59,7 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
                         name = "Category 3 with a much longer name that takes way more than 1 line to be completely displayed even on a large screen !",
                         callDuration = 1.hours,
                     ),
-                )
+                ),
             )
 
             return@snapshotDayNightDefaultDevice parent
@@ -121,7 +121,7 @@ class CategorySelectionFragmentTest : BaseCoroutineTest() {
         val binding = NablaSchedulingFragmentCategoriesBinding.inflate(
             layoutInflater.cloneInContext(context.withNablaSchedulingThemeOverlays()),
             parent,
-            false
+            false,
         )
 
         binding.recyclerView.addItemDecoration(VerticalOffsetsItemDecoration())

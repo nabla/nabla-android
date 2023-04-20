@@ -56,7 +56,7 @@ public class CaptureImageFromCameraActivityContract(
                     file.toURI(),
                     generateFileName(extension = mimeType.subtype),
                     mimeType,
-                )
+                ),
             )
         } catch (error: Exception) {
             return MediaPickingResult.Failure(error)

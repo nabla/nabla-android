@@ -19,7 +19,7 @@ internal class PatientImageMessageViewHolder(
                 binding,
                 inflatePatientMessageContentCard(inflater, binding.chatPatientMessageContentContainer) { contentParent ->
                     ImageMessageContentBinder.create(R.attr.nablaMessaging_conversationPatientMessageAppearance, inflater, contentParent)
-                }
+                },
             )
         }
     }

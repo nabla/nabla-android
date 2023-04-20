@@ -32,52 +32,52 @@ class ConversationContentRepositoryImplTest : BaseCoroutineTest() {
 
         val localMessageToKeep = Message.Text.Companion.fake(
             id = MessageId.Local(
-                clientId = uuid4()
-            )
+                clientId = uuid4(),
+            ),
         )
         val localMessageToReplace = Message.Text.Companion.fake(
             id = MessageId.Local(
-                clientId = uuid4()
-            )
+                clientId = uuid4(),
+            ),
         )
         val localMessageToMergeMediaSource = FileSource.Local.fakeImage()
         val localMessageToMerge = Message.Media.Image.Companion.fake(
             id = MessageId.Local(
-                clientId = uuid4()
+                clientId = uuid4(),
             ),
-            mediaSource = localMessageToMergeMediaSource
+            mediaSource = localMessageToMergeMediaSource,
         )
         val localMessages = listOf(localMessageToKeep, localMessageToReplace, localMessageToMerge)
         val gqlMessageToKeep = Message.Text.Companion.fake(
             id = MessageId.Remote(
                 clientId = uuid4(),
-                remoteId = uuid4()
-            )
+                remoteId = uuid4(),
+            ),
         )
         val gqlMessageReplacingLocalMessage = Message.Text.Companion.fake(
             id = MessageId.Remote(
                 clientId = localMessageToReplace.id.clientId,
-                remoteId = uuid4()
-            )
+                remoteId = uuid4(),
+            ),
         )
         val gqlMessageToMergeDataSource = FileSource.Uploaded.fakeImage()
         val gqlMessageToMerge = Message.Media.Image.Companion.fake(
             id = MessageId.Remote(
                 clientId = localMessageToMerge.id.clientId,
-                remoteId = uuid4()
+                remoteId = uuid4(),
             ),
-            mediaSource = gqlMessageToMergeDataSource
+            mediaSource = gqlMessageToMergeDataSource,
         )
         val gqlConversationActivity = ConversationActivity.Companion.fakeProviderJoined()
         val conversationItems = listOf(
             gqlMessageToKeep,
             gqlMessageReplacingLocalMessage,
             gqlMessageToMerge,
-            gqlConversationActivity
+            gqlConversationActivity,
         )
         val paginatedConversationItems = PaginatedList(
             items = conversationItems,
-            hasMore = false
+            hasMore = false,
         )
 
         val localMessageDataSource = mockk<LocalMessageDataSource> {
@@ -89,15 +89,15 @@ class ConversationContentRepositoryImplTest : BaseCoroutineTest() {
                     isDataFresh = true,
                     refreshingState = RefreshingState.Refreshed,
                     data = paginatedConversationItems,
-                )
+                ),
             )
         }
 
         val mergedMessage = gqlMessageToMerge.modify(
             mediaSource = FileSource.Uploaded(
                 fileLocal = localMessageToMergeMediaSource.fileLocal,
-                fileUpload = gqlMessageToMergeDataSource.fileUpload
-            )
+                fileUpload = gqlMessageToMergeDataSource.fileUpload,
+            ),
         )
         val repo = ConversationContentRepositoryImpl(
             mockk(),

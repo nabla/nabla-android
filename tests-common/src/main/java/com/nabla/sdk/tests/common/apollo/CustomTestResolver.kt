@@ -8,11 +8,11 @@ import com.nabla.sdk.graphql.type.DateTime
 import com.nabla.sdk.graphql.type.UUID
 import kotlinx.datetime.Clock
 
-@OptIn(ApolloExperimental::class)
 /**
  * A wrapper around DefaultTestResolver that can generate custom scalar values.
  * See https://www.apollographql.com/docs/kotlin/essentials/custom-scalars
  */
+@OptIn(ApolloExperimental::class)
 class CustomTestResolver : DefaultTestResolver() {
     override fun <T> resolve(
         responseName: String,

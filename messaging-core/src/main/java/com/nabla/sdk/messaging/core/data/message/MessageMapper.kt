@@ -42,7 +42,9 @@ internal class MessageMapper constructor(
                 gqlConversationContentDataSource.findMessageInConversationCache(conversationId, replyTo).also { message ->
                     if (message == null) logger.warn("Reply to message not found in cache: $replyTo")
                 }
-            } else null,
+            } else {
+                null
+            },
         )
         val message = when (input) {
             is MessageInput.Media.Document -> Message.Media.Document(baseMessage, input.mediaSource)
@@ -95,7 +97,7 @@ internal class MessageMapper constructor(
                 )
                 is Message.Deleted -> throw InvalidMessageException("Can't send a deleted message")
                 is Message.VideoCallRoom -> throw InvalidMessageException("Can't send a livekit room message")
-            }
+            },
         )
     }
 }

@@ -31,7 +31,7 @@ import com.nabla.sdk.scheduling.schedulingPrivateClient
 import kotlinx.datetime.Clock
 
 internal class AppointmentsContentFragment : SchedulingBaseFragment(
-    R.layout.nabla_scheduling_fragment_appointments_content
+    R.layout.nabla_scheduling_fragment_appointments_content,
 ) {
 
     private val nablaClient: NablaClient = getNablaInstanceByName()
@@ -120,7 +120,7 @@ internal class AppointmentsContentFragment : SchedulingBaseFragment(
                             viewModel.onListReachedBottom()
                         }
                     }
-                }
+                },
             )
         }
     }

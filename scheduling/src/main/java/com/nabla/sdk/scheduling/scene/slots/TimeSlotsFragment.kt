@@ -30,7 +30,7 @@ import com.nabla.sdk.scheduling.scene.slots.TimeSlotsViewModel.State
 import com.nabla.sdk.scheduling.schedulingPrivateClient
 
 internal class TimeSlotsFragment : BookAppointmentBaseFragment(
-    R.layout.nabla_scheduling_fragment_time_slots
+    R.layout.nabla_scheduling_fragment_time_slots,
 ) {
     private val nablaClient: NablaClient = getNablaInstanceByName()
     private val binding by viewBinding(NablaSchedulingFragmentTimeSlotsBinding::bind)
@@ -49,7 +49,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
         TimeSlotsAdapter(
             onDaySlotsClicked = viewModel::onDaySlotsClicked,
             onSlotClicked = viewModel::onSlotClicked,
-            onBindLoading = { viewModel.onListReachedBottom() }
+            onBindLoading = { viewModel.onListReachedBottom() },
         )
     }
 
@@ -76,7 +76,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
                             viewModel.onListReachedBottom()
                         }
                     }
-                }
+                },
             )
         }
         viewLifecycleOwner.launchCollect(viewModel.eventsFlow) { event ->
@@ -120,7 +120,7 @@ internal class TimeSlotsFragment : BookAppointmentBaseFragment(
         internal fun newInstance(
             locationType: AppointmentLocationType,
             categoryId: AppointmentCategoryId,
-            sdkName: String
+            sdkName: String,
         ) = TimeSlotsFragment().apply {
             setAppointmentLocationType(locationType)
             setAppointmentCategoryId(categoryId)

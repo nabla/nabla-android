@@ -71,7 +71,7 @@ internal class AndroidPdfGenerator(
         )
         return applicationContext.getString(
             R.string.nabla_document_scan_new_document_name,
-            nameDateFormat.format(clock.now().toJavaDate())
+            nameDateFormat.format(clock.now().toJavaDate()),
         ) + ".pdf"
     }
 }

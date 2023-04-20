@@ -7,7 +7,7 @@ import com.apollographql.apollo3.cache.normalized.api.CacheKeyGeneratorContext
 internal object TypeAndUuidCacheKeyGenerator : CacheKeyGenerator {
     override fun cacheKeyForObject(
         obj: Map<String, Any?>,
-        context: CacheKeyGeneratorContext
+        context: CacheKeyGeneratorContext,
     ): CacheKey? {
         // Values provided here are scalar, as the json payload would be
         val typeName = obj["__typename"]

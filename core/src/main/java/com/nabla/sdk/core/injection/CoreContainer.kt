@@ -95,11 +95,13 @@ public class CoreContainer internal constructor(
     public val backgroundScope: CoroutineScope = CoroutineScope(SupervisorJob())
 
     private val scopedKvStorage = configuration.context.getSharedPreferences(
-        "nabla_kv_${name.hashCode()}.sp", Context.MODE_PRIVATE
+        "nabla_kv_${name.hashCode()}.sp",
+        Context.MODE_PRIVATE,
     )
 
     private val dangerouslyUnscopedKvStorage = configuration.context.getSharedPreferences(
-        "nabla_kv_global.sp", Context.MODE_PRIVATE
+        "nabla_kv_global.sp",
+        Context.MODE_PRIVATE,
     )
 
     public val exceptionMapper: NablaExceptionMapper = NablaExceptionMapper().apply {
@@ -151,8 +153,8 @@ public class CoreContainer internal constructor(
             .configureBuilder(
                 normalizedCacheFactory = SqlNormalizedCacheFactory(
                     configuration.context,
-                    "nabla_cache_apollo_$name.db"
-                )
+                    "nabla_cache_apollo_$name.db",
+                ),
             )
             .serverUrl(networkConfiguration.baseUrl + "v1/patient/graphql/sdk/authenticated")
             .httpEngine(DefaultHttpEngine(okHttpClient))
@@ -201,7 +203,7 @@ public class CoreContainer internal constructor(
     private val deviceDataSource = DeviceDataSource()
     private val installationDataSource = InstallationDataSource(
         unscopedSharedPreferences = dangerouslyUnscopedKvStorage,
-        legacyScopedStorage = scopedKvStorage
+        legacyScopedStorage = scopedKvStorage,
     )
     private val sdkApiVersionDataSource = SdkApiVersionDataSource()
     internal val deviceRepository: DeviceRepository by lazy {
@@ -212,7 +214,7 @@ public class CoreContainer internal constructor(
             apolloClient,
             logger,
             errorReporter,
-            backgroundScope
+            backgroundScope,
         )
     }
 
@@ -224,7 +226,7 @@ public class CoreContainer internal constructor(
                 sdkVersion = BuildConfig.VERSION_NAME,
                 phoneName = if (Build.MODEL.startsWith(Build.MANUFACTURER, ignoreCase = true)) { Build.MODEL } else { "${Build.MANUFACTURER} ${Build.MODEL}" },
                 androidApiLevel = Build.VERSION.SDK_INT,
-            )
+            ),
         )
     }
 

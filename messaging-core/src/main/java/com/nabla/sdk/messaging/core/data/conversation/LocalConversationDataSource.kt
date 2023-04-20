@@ -33,7 +33,7 @@ internal class LocalConversationDataSource {
             localId = ConversationId.Local(uuid4()),
             creationState = LocalConversation.CreationState.ToBeCreated,
             title = title,
-            providerIds = providerIds
+            providerIds = providerIds,
         )
         update(conversation)
         return conversation.localId
@@ -54,7 +54,7 @@ internal class LocalConversationDataSource {
         val localId = remoteIdToLocalId[remoteId]
         return ConversationId.Remote(
             clientId = localId,
-            remoteId = remoteId
+            remoteId = remoteId,
         )
     }
 }

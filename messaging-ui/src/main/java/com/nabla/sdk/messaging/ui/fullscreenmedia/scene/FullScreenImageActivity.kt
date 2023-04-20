@@ -36,7 +36,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = NablaActivityFullScreenImageBinding.inflate(
-            layoutInflater.cloneInContext(withNablaMessagingThemeOverlays())
+            layoutInflater.cloneInContext(withNablaMessagingThemeOverlays()),
         )
         this.binding = binding
         setContentView(binding.root)
@@ -89,7 +89,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
                                             .createSharableJpegImage(imageUri.hashCode().toString(), binding.context)
                                             .createSharingIntent("image/jpeg"),
                                         getString(R.string.nabla_conversation_full_screen_image_sharing_chooser_title),
-                                    )
+                                    ),
                                 )
                             } catch (_: Throwable) {
                                 // TODO handle error
@@ -110,7 +110,7 @@ internal class FullScreenImageActivity : AppCompatActivity() {
                         // TODO handle error
                     },
                 )
-                .build()
+                .build(),
         )
     }
 

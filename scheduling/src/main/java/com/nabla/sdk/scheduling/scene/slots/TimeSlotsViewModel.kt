@@ -111,9 +111,9 @@ internal class TimeSlotsViewModel(
                             )
                         } else {
                             TimeSlotsUiItem.DaySlots.ExpansionState.Collapsed(slotsCount = slots.size)
-                        }
+                        },
                     )
-                }
+                },
         )
 
         if (availabilitySlots.loadMore != null) {
@@ -121,7 +121,9 @@ internal class TimeSlotsViewModel(
         }
         return if (uiItems.isEmpty()) {
             State.Empty
-        } else State.Loaded(uiItems, canSubmit = selectedSlot != null)
+        } else {
+            State.Loaded(uiItems, canSubmit = selectedSlot != null)
+        }
     }
 
     fun onClickRetry() {
@@ -190,7 +192,7 @@ internal class TimeSlotsViewModel(
                     Event.GoToConfirmation(
                         locationType = locationType,
                         pendingAppointmentId = appointmentId,
-                    )
+                    ),
                 )
             }.onFailure { logAndShowErrorMessage(it, "failed creating/reusing pending appointment to open confirmation") }
             isSubmittingFlow.value = false
@@ -204,8 +206,10 @@ internal class TimeSlotsViewModel(
             Event.ShowMessage(
                 if (throwable is ServerException) {
                     throwable.serverMessage.asStringOrRes()
-                } else throwable.asNetworkOrGeneric.title
-            )
+                } else {
+                    throwable.asNetworkOrGeneric.title
+                },
+            ),
         )
     }
 

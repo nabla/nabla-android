@@ -24,7 +24,7 @@ internal class OtherFileMessageViewHolder(
                         inflater,
                         content,
                     )
-                }
+                },
             )
         }
     }

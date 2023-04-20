@@ -19,7 +19,7 @@ internal class DateSeparatorViewHolder(private val binding: NablaConversationTim
                 inflater,
                 parent,
                 false,
-            )
+            ),
         )
     }
 }

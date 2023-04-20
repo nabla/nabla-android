@@ -71,7 +71,9 @@ internal class AppointmentConfirmationViewModel(
         consentsGrantedFlow,
         isLoadingFlow,
     ) { consents, appointment, grants, isLoading ->
-        if (isLoading) State.Loading else {
+        if (isLoading) {
+            State.Loading
+        } else {
             State.Loaded(
                 appointment,
                 requiresPayment = (appointment.state as? AppointmentState.Pending)?.requiredPrice != null,
@@ -85,7 +87,7 @@ internal class AppointmentConfirmationViewModel(
             nablaClient.coreContainer.logger.warn(
                 message = "failed to get appointment details for confirmation",
                 error = cause,
-                domain = Logger.SCHEDULING_DOMAIN.UI
+                domain = Logger.SCHEDULING_DOMAIN.UI,
             )
             emit(State.Error(cause.asNetworkOrGeneric))
             retryTriggerFlow.first()
@@ -171,8 +173,8 @@ internal class AppointmentConfirmationViewModel(
                     throwable.serverMessage.asStringOrRes()
                 } else {
                     throwable.asNetworkOrGeneric.title
-                }
-            )
+                },
+            ),
         )
     }
 

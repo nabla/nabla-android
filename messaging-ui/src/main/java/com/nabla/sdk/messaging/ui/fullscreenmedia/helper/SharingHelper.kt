@@ -30,7 +30,7 @@ internal fun Bitmap.createSharableJpegImage(
     return FileProvider.getUriForFile(
         context,
         fileProviderAuthority(context),
-        tempFile
+        tempFile,
     )
 }
 
@@ -50,7 +50,7 @@ internal fun createSharableDocument(
     return FileProvider.getUriForFile(
         context,
         fileProviderAuthority(context),
-        tempFile
+        tempFile,
     )
 }
 
@@ -59,7 +59,7 @@ internal fun Uri.createSharingIntent(mimeType: String) = Intent().apply {
     clipData = ClipData(
         this@createSharingIntent.lastPathSegment,
         arrayOf(mimeType),
-        ClipData.Item(this@createSharingIntent)
+        ClipData.Item(this@createSharingIntent),
     )
     putExtra(Intent.EXTRA_STREAM, this@createSharingIntent)
     type = mimeType

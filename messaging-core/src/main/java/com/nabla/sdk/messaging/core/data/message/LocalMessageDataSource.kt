@@ -17,7 +17,7 @@ internal class LocalMessageDataSource {
     }
 
     private fun getLocalMessagesMutableFlow(
-        conversationId: ConversationId
+        conversationId: ConversationId,
     ): MutableStateFlow<Map<Uuid, Message>> {
         return synchronized(this) {
             conversationToLocalMessagesFlows.getOrPut(conversationId.stableId) {

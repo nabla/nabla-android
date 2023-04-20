@@ -42,7 +42,7 @@ internal class VideoCallModuleImpl internal constructor(
                 if (context !is Activity) {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
-            }
+            },
         )
     }
 

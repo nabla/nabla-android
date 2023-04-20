@@ -35,7 +35,7 @@ class FlowConnectionStateAwareHelperTest : BaseCoroutineTest() {
                     emit(EventsConnectionState.Connected)
                     emit(EventsConnectionState.Disconnected(since = Clock.System.now()))
                     emit(EventsConnectionState.Connected)
-                }
+                },
             )
             .test {
                 assertEquals(1, awaitItem())
@@ -58,7 +58,7 @@ class FlowConnectionStateAwareHelperTest : BaseCoroutineTest() {
                     emit(EventsConnectionState.Connected)
                     emit(EventsConnectionState.Connecting)
                     emit(EventsConnectionState.Connected)
-                }
+                },
             )
             .test {
                 assertEquals(1, awaitItem())

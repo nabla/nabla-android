@@ -41,9 +41,9 @@ class ConversationDiffCallbackTest {
         assertEquals(
             BindingPayload.Callbacks(
                 actions = newItem.actions,
-                itemForCallback = newItem
+                itemForCallback = newItem,
             ),
-            ConversationDiffCallback.getChangePayload(oldItem, newItem)
+            ConversationDiffCallback.getChangePayload(oldItem, newItem),
         )
     }
 
@@ -51,7 +51,7 @@ class ConversationDiffCallbackTest {
     fun `Change in status only triggers PatientMessageStatus payload`() {
         val oldItem = TimelineItem.Message.fake(
             showStatus = true,
-            content = TimelineItem.Message.Text.fake()
+            content = TimelineItem.Message.Text.fake(),
         )
         val newItem = oldItem.copy(showStatus = false)
 
@@ -62,9 +62,9 @@ class ConversationDiffCallbackTest {
                 status = newItem.status,
                 showStatus = newItem.showStatus,
                 actions = newItem.actions,
-                itemForCallback = newItem
+                itemForCallback = newItem,
             ),
-            ConversationDiffCallback.getChangePayload(oldItem, newItem)
+            ConversationDiffCallback.getChangePayload(oldItem, newItem),
         )
     }
 
@@ -72,10 +72,10 @@ class ConversationDiffCallbackTest {
     fun `Successful message sending only triggers PatientMessageStatus payload`() {
         val oldItem = TimelineItem.Message.fake(
             sendStatus = SendStatus.Sending,
-            content = TimelineItem.Message.Text.fake()
+            content = TimelineItem.Message.Text.fake(),
         )
         val newItem = oldItem.copy(
-            status = SendStatus.Sent
+            status = SendStatus.Sent,
         )
 
         assertEquals(true, ConversationDiffCallback.areItemsTheSame(oldItem, newItem))
@@ -85,9 +85,9 @@ class ConversationDiffCallbackTest {
                 status = newItem.status,
                 showStatus = newItem.showStatus,
                 actions = newItem.actions,
-                itemForCallback = newItem
+                itemForCallback = newItem,
             ),
-            ConversationDiffCallback.getChangePayload(oldItem, newItem)
+            ConversationDiffCallback.getChangePayload(oldItem, newItem),
         )
     }
 }

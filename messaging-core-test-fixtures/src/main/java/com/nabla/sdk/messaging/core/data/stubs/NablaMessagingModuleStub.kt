@@ -86,8 +86,10 @@ class NablaMessagingModuleStub(
                         content = paginatedConversationItemsResponse.data.items,
                         loadMore = if (paginatedConversationItemsResponse.data.hasMore) {
                             loadMoreCallback
-                        } else null
-                    )
+                        } else {
+                            null
+                        },
+                    ),
                 )
             }
     }

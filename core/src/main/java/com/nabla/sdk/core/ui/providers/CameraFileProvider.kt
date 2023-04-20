@@ -14,7 +14,7 @@ internal class CameraFileProvider : FileProvider() {
             return getUriForFile(
                 context,
                 authority(context),
-                file
+                file,
             )
         }
 

@@ -18,7 +18,9 @@ internal class SubscriptionExtKtTest : BaseCoroutineTest() {
     fun `notifyTypingUpdates() notifies typing updates`() = runTest {
         val clock = TestClock(this)
         val typingProvider = ProviderInConversation(
-            Provider.fake(), clock.now(), null
+            Provider.fake(),
+            clock.now(),
+            null,
         )
         val eventFlowWithProviders = flow {
             emit(typingProvider)

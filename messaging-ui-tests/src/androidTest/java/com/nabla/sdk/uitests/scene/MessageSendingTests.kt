@@ -81,8 +81,8 @@ class MessageSendingTests {
         onView(
             allOf(
                 withId(SdkR.id.chatPatientMessageContentStatusTextView),
-                withText(context.getString(SdkR.string.nabla_conversation_message_sending_status))
-            )
+                withText(context.getString(SdkR.string.nabla_conversation_message_sending_status)),
+            ),
         ).check(matches(not(isDisplayed())))
 
         // send a failing message
@@ -94,7 +94,7 @@ class MessageSendingTests {
             allOf(
                 withId(SdkR.id.chatPatientMessageContentStatusTextView),
                 withText(context.getString(SdkR.string.nabla_conversation_message_error_status)),
-            )
+            ),
         ).check(matches(isDisplayed()))
 
         // retry it
@@ -103,12 +103,12 @@ class MessageSendingTests {
             allOf(
                 withId(SdkR.id.chatTextMessageTextView),
                 withText(failingMessage),
-            )
+            ),
         ).check(
             matches(
                 // has a hidden status = was sent successfully
                 withCousin(SdkR.id.chatPatientMessageContentRoot, allOf(withId(SdkR.id.chatPatientMessageContentStatusTextView), not(isDisplayed()))),
-            )
+            ),
         )
 
         // delete it

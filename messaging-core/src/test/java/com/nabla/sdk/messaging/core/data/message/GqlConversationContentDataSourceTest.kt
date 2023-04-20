@@ -45,12 +45,12 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
         val conversationId = ConversationId.Remote(remoteId = uuid4())
         testNetworkTransport.register(
             GqlConversationContentDataSource.conversationItemsQuery(conversationId),
-            GqlData.ConversationItems.empty(conversationId)
+            GqlData.ConversationItems.empty(conversationId),
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
         testNetworkTransport.register(
             ConversationEventsSubscription(conversationId.remoteId),
-            gqlEventEmitter.filterNotNull()
+            gqlEventEmitter.filterNotNull(),
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
             var paginatedConversationsResponse = awaitItem()
@@ -74,7 +74,7 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = cursor
                 hasMore = true
-            }
+            },
         )
         testNetworkTransport.register(
             GqlConversationContentDataSource.conversationItemsQuery(
@@ -84,18 +84,18 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = null
                 hasMore = false
-            }
+            },
         )
         testNetworkTransport.register(
             ConversationEventsSubscription(conversationId.remoteId),
-            emptyFlow()
+            emptyFlow(),
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
             var paginatedItemsResponse = awaitItem()
             assertTrue(paginatedItemsResponse.data.items.size == 1)
             launch {
                 gqlConversationContentDataSource.loadMoreConversationItemsInCache(
-                    conversationId
+                    conversationId,
                 )
             }
             paginatedItemsResponse = awaitItem()
@@ -114,12 +114,12 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
             GqlData.ConversationItems.single(conversationId) {
                 nextCursor = uuid4().toString()
                 hasMore = false
-            }
+            },
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
         testNetworkTransport.register(
             ConversationEventsSubscription(conversationId.remoteId),
-            gqlEventEmitter.filterNotNull()
+            gqlEventEmitter.filterNotNull(),
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
             var paginatedConversationItemsResponse = awaitItem()
@@ -160,12 +160,12 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
                         replyTo = firstMessage
                     },
                 )
-            }
+            },
         )
         val gqlEventEmitter = MutableStateFlow<ConversationEventsSubscription.Data?>(null)
         testNetworkTransport.register(
             ConversationEventsSubscription(conversationId.remoteId),
-            gqlEventEmitter.filterNotNull()
+            gqlEventEmitter.filterNotNull(),
         )
         gqlConversationContentDataSource.watchConversationItems(conversationId).test {
             var paginatedConversationItemsResponse = awaitItem()
@@ -199,7 +199,7 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
                 nextCursor = uuid4().toString()
                 hasMore = false
                 data = emptyList()
-            }
+            },
         )
         val gqlEventEmitter = MutableSharedFlow<ConversationEventsSubscription.Data>()
 
@@ -244,7 +244,7 @@ class GqlConversationContentDataSourceTest : BaseCoroutineTest() {
         scope: CoroutineScope,
     ): GqlConversationContentDataSource {
         val apolloClient = ApolloFactory.configureBuilder(
-            normalizedCacheFactory = MemoryCacheFactory()
+            normalizedCacheFactory = MemoryCacheFactory(),
         ).networkTransport(testNetworkTransport)
             .build()
         val logger: Logger = mockk(relaxed = true)

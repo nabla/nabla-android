@@ -31,8 +31,8 @@ internal class ConversationRepositoryStub(private val idlingRes: CountingIdlingR
                 Conversation.fake(inboxPreviewTitle = "With Unreads", patientUnreadMessageCount = 1),
                 Conversation.fake(inboxPreviewTitle = "Without Unreads", patientUnreadMessageCount = 0),
             ) + (2..9).map { Conversation.randomFake() },
-            hasMore = true
-        )
+            hasMore = true,
+        ),
     )
 
     val newlyCreatedConversationIds = mutableSetOf<Uuid>()

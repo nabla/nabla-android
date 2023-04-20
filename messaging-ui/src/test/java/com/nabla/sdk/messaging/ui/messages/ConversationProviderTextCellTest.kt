@@ -233,7 +233,7 @@ internal class ConversationProviderTextCellTest : BaseCoroutineTest() {
     private fun makeRepliedPatientDocumentMessage() = makeRepliedPatientMessage(
         RepliedMessage.Content.Document(
             uri = Uri("https://google.com"),
-            thumbnailUri = Uri("https://google.com")
+            thumbnailUri = Uri("https://google.com"),
         ),
     )
 
