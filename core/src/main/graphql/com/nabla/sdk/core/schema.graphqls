@@ -301,6 +301,7 @@ enum QuestionsSetFormState @backendEnumClass(noMapping: true) {
 }
 
 type QuestionsSetForm {
+  id: UUID!
   answerFormUrl: String! @codegenAsAsyncFun
   state: QuestionsSetFormState! @codegenAsAsyncFun
 }
