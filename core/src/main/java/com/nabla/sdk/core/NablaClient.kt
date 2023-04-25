@@ -82,7 +82,7 @@ public class NablaClient private constructor(
     /**
      * Get the user currently used by this SDK instance.
      */
-    public val currentUserId: String? = coreContainer.patientRepository.getPatientId()?.value
+    public val currentUserId: String? get() = coreContainer.patientRepository.getPatientId()?.value
 
     /**
      * Watch the state of the events connection the SDK is using to receive live updates (new messages, new appointments etc...)
