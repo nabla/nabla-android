@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.1.1] - 2023-04-25
+
 ### Fixed
 - Core: Remove wrong caching of the value returned by `NablaClient.currentUserId`. It will now return the correct up-to-date value.
 
