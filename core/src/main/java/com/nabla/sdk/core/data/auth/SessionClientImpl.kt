@@ -14,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -34,7 +35,8 @@ internal class SessionClientImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun <T> authenticatableFlow(flow: Flow<T>): Flow<T> {
-        return patientRepository.getPatientIdFlow().distinctUntilChanged()
+        return patientRepository.getPatientIdFlow()
+            .distinctUntilChanged()
             .flatMapLatest { patientId ->
                 if (patientId == null) {
                     throw AuthenticationException.UserIdNotSet()

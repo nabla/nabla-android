@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Messaging UI: Fix a bug preventing `ConversationListView` from correctly binding itself to its ViewModel events in case of errors while fetching the data.
+- Core: Fix a bug leading to new messages and items not being fetched in real time when using `clearCurrentUser`.
 
 ## [1.1.1] - 2023-04-25
 

@@ -10,7 +10,6 @@ import com.nabla.sdk.core.domain.entity.ConfigurationException
 import com.nabla.sdk.core.domain.entity.EventsConnectionState
 import com.nabla.sdk.core.domain.entity.toId
 import com.nabla.sdk.core.injection.CoreContainer
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
@@ -75,8 +74,7 @@ public class NablaClient private constructor(
      * Clear the user currently used by this SDK instance alongside all its data.
      */
     public suspend fun clearCurrentUser() {
-        coreContainer.sessionLocalDataCleaner.cleanLocalSessionData()
-        coreContainer.backgroundScope.coroutineContext.cancelChildren()
+        coreContainer.logoutInteractor.logout()
     }
 
     /**

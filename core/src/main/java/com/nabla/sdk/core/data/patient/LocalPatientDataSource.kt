@@ -4,26 +4,15 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.nabla.sdk.core.domain.entity.StringId
 import com.nabla.sdk.core.domain.entity.toId
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 internal class LocalPatientDataSource(private val sharedPreferences: SharedPreferences) {
-
-    val patientIdFlow: Flow<StringId?> = callbackFlow {
-        val listener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                if (key == KEY_PATIENT_ID) {
-                    trySend(getPatient())
-                }
-            }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-        trySend(getPatient())
-        awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }
-    }.distinctUntilChanged()
+    private val patientIdMutableFlow = MutableStateFlow(getPatient())
+    val patientIdFlow: StateFlow<StringId?> = patientIdMutableFlow
 
     fun setPatient(patientId: StringId?) {
+        patientIdMutableFlow.value = patientId
         sharedPreferences.edit {
             putString(KEY_PATIENT_ID, patientId?.toString())
         }

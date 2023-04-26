@@ -60,6 +60,7 @@ public object PaginationHelper {
                         },
                     ),
                 )
-            }.catchAndRethrowAsNablaException(nablaExceptionMapper)
+            }
+            .catchAndRethrowAsNablaException(nablaExceptionMapper)
     }
 }

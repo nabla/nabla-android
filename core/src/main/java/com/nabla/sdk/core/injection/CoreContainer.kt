@@ -36,22 +36,22 @@ import com.nabla.sdk.core.data.logger.ErrorReporterLogger
 import com.nabla.sdk.core.data.logger.HttpLoggingInterceptorFactory
 import com.nabla.sdk.core.data.logger.MutableCompositeLogger
 import com.nabla.sdk.core.data.patient.LocalPatientDataSource
+import com.nabla.sdk.core.data.patient.LogoutInteractorImpl
 import com.nabla.sdk.core.data.patient.PatientRepositoryImpl
 import com.nabla.sdk.core.data.patient.ProviderRepositoryImpl
-import com.nabla.sdk.core.data.patient.SessionLocalDataCleanerImpl
 import com.nabla.sdk.core.data.reporter.NoOpErrorReporter
 import com.nabla.sdk.core.domain.boundary.DeviceRepository
 import com.nabla.sdk.core.domain.boundary.ErrorReporter
 import com.nabla.sdk.core.domain.boundary.ErrorReporter.Companion.reporterFactory
 import com.nabla.sdk.core.domain.boundary.FileUploadRepository
 import com.nabla.sdk.core.domain.boundary.Logger
+import com.nabla.sdk.core.domain.boundary.LogoutInteractor
 import com.nabla.sdk.core.domain.boundary.MessagingModule
 import com.nabla.sdk.core.domain.boundary.Module
 import com.nabla.sdk.core.domain.boundary.PatientRepository
 import com.nabla.sdk.core.domain.boundary.ProviderRepository
 import com.nabla.sdk.core.domain.boundary.SchedulingModule
 import com.nabla.sdk.core.domain.boundary.SessionClient
-import com.nabla.sdk.core.domain.boundary.SessionLocalDataCleaner
 import com.nabla.sdk.core.domain.boundary.SessionTokenProvider
 import com.nabla.sdk.core.domain.boundary.UuidGenerator
 import com.nabla.sdk.core.domain.boundary.VideoCallModule
@@ -194,7 +194,7 @@ public class CoreContainer internal constructor(
         ProviderRepositoryImpl(apolloClient, coreGqlMapper)
     }
 
-    internal val sessionLocalDataCleaner: SessionLocalDataCleaner = SessionLocalDataCleanerImpl(
+    internal val logoutInteractor: LogoutInteractor = LogoutInteractorImpl(
         apolloClient,
         localPatientDataSource,
         tokenLocalDataSource,

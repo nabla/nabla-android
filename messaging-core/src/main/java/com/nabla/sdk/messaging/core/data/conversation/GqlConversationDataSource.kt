@@ -37,7 +37,9 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.Clock
 
 internal class GqlConversationDataSource constructor(
@@ -51,6 +53,12 @@ internal class GqlConversationDataSource constructor(
     private val conversationsEventsFlow by lazy {
         apolloClient.subscription(ConversationsEventsSubscription())
             .toFlowAsRetryable()
+            .onStart {
+                logger.debug(domain = GQL_DOMAIN, message = "Starting ConversationsEventsSubscription")
+            }
+            .onCompletion {
+                logger.debug(domain = GQL_DOMAIN, message = "Ending ConversationsEventsSubscription")
+            }
             .retryOnNetworkErrorAndShareIn(coroutineScope).onEach { response ->
                 logger.debug(domain = GQL_DOMAIN, message = "Event ${response.data?.conversations?.event?.__typename}")
                 response.errors?.forEach {

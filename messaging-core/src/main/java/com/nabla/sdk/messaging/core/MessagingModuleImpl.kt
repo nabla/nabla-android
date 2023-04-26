@@ -60,7 +60,8 @@ internal class MessagingModuleImpl internal constructor(
             .wrapAsResponsePaginatedContent(
                 conversationRepository::loadMoreConversations,
                 messagingContainer.nablaExceptionMapper,
-            ).authenticatable(messagingContainer.sessionClient)
+            )
+            .authenticatable(messagingContainer.sessionClient)
             .restartWhenConnectionReconnects(messagingContainer.eventsConnectionStateFlow)
     }
 

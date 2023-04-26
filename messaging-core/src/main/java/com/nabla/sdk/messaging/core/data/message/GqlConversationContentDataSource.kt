@@ -52,7 +52,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.datetime.Clock
 import com.nabla.sdk.messaging.core.domain.entity.Message as DomainEntityMessage
 
@@ -79,6 +81,12 @@ internal class GqlConversationContentDataSource(
         val subscription = ConversationEventsSubscription(conversationId.remoteId)
         return apolloClient.subscription(subscription)
             .toFlowAsRetryable()
+            .onStart {
+                logger.debug(domain = GQL_DOMAIN, message = "Starting ConversationEventsSubscription(${conversationId.remoteId})")
+            }
+            .onCompletion {
+                logger.debug(domain = GQL_DOMAIN, message = "Ending ConversationEventsSubscription(${conversationId.remoteId})")
+            }
             .onEach { response ->
                 response.errors?.forEach {
                     logger.error(domain = GQL_DOMAIN, message = "error received in $subscription: ${it.message}")
