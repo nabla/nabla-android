@@ -32,6 +32,15 @@ public fun ConversationListView.bindViewModel(
     bindViewModelAlerts(viewModel)
 }
 
+internal fun ConversationListView.setItemDecorationIfNotSetYet(
+    itemDecoration: RecyclerView.ItemDecoration,
+) {
+    // Just to make sure we don't add it more than once
+    if (recyclerView.itemDecorationCount == 0) {
+        recyclerView.addItemDecoration(itemDecoration)
+    }
+}
+
 private fun ConversationListView.setupRecyclerAdapter(
     viewModel: ConversationListViewModel,
     onConversationClicked: (id: ConversationId) -> Unit,

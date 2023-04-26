@@ -98,11 +98,15 @@ public open class InboxFragment : Fragment() {
             inboxViewModel.createConversation()
         }
 
+        binding.conversationListView.bindViewModel(
+            listViewModel,
+            onConversationClicked = ::openConversationScreen,
+            itemDecoration = null,
+        )
+
         binding.createConversationCta.doOnNextLayout {
-            binding.conversationListView.bindViewModel(
-                listViewModel,
-                onConversationClicked = ::openConversationScreen,
-                itemDecoration = DefaultOffsetsItemDecoration(
+            binding.conversationListView.setItemDecorationIfNotSetYet(
+                DefaultOffsetsItemDecoration(
                     spacingBetweenItemsPx = binding.context.dpToPx(0),
                     firstItemTopPaddingPx = binding.context.dpToPx(12),
                     lastItemBottomPaddingPx = it.height + it.marginBottom + binding.context.dpToPx(8),
