@@ -11,13 +11,12 @@ internal object TypeAndUuidCacheKeyGenerator : CacheKeyGenerator {
     ): CacheKey? {
         // Values provided here are scalar, as the json payload would be
         val typeName = obj["__typename"]
-        val remoteId = obj["id"] ?: obj["uuid"]
-        val localId = obj["clientId"]
-        if (localId is String) {
-            return CacheKey("$typeName-$localId")
-        }
-        return when (remoteId) {
-            is String -> CacheKey("$typeName-$remoteId")
+        val remoteId = ((obj["id"] ?: obj["uuid"]) as? String)?.lowercase()
+        val localId = (obj["clientId"] as? String)?.lowercase()
+
+        return when {
+            localId != null -> CacheKey("$typeName-$localId")
+            remoteId != null -> CacheKey("$typeName-$remoteId")
             else -> null
         }
     }
