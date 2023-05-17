@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [1.1.3] - 2023-05-17
+
+Minor improvements to the caching implementation — no behaviour or API changes
+
 ## [1.1.2] - 2023-04-27
 
 ### Fixed
