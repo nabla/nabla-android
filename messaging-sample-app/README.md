@@ -14,7 +14,7 @@ the app.
 ## Setup
 
 1. Clone the repository
-2. Head to [https://`your_organisation_id`.pro.nabla.com/developers/sdk-setup-guide]()
+2. Head to [https://pro.nabla.com/developers/sdk-setup-guide]()
 3. Follow the setup guide to create a test patient and get your mobile SDK API key and temporary `access_token` and `refresh_token` to use with the sample app
 
 > At this stage, you should have a mobile SDK API key and 2 tokens
