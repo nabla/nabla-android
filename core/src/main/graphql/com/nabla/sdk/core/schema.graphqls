@@ -90,7 +90,10 @@ type Subscription {
 directive @codegenAsAsyncFun on FIELD_DEFINITION
 
 # See BackendEnumMapping class.
-directive @backendEnumClass(noMapping: Boolean, dbName: String, qualifiedName: String) on ENUM
+directive @backendEnumClass(
+  qualifiedName: String # Qualified name of the generated backend enum class. Defaults to a DB enum of the same name.
+  generatedMapping: String! = "from-and-to-gql" # Supports "no-mapping", "from-gql", "to-gql", "from-and-to-gql".
+) on ENUM
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Other types.
@@ -278,7 +281,7 @@ type AudioMessageContent {
   audioFileUpload: AudioFileUpload!
 }
 
-enum EmptyObject @backendEnumClass(noMapping: true) {
+enum EmptyObject @backendEnumClass(generatedMapping: "no-mapping") {
   EMPTY
 }
 
@@ -294,7 +297,7 @@ type QuestionsSetFormMessageContent {
   form: QuestionsSetForm!
 }
 
-enum QuestionsSetFormState @backendEnumClass(noMapping: true) {
+enum QuestionsSetFormState @backendEnumClass(generatedMapping: "no-mapping") {
   NOT_STARTED
   IN_PROGRESS
   ANSWERED
@@ -518,7 +521,7 @@ enum DeviceOs {
   WEB
 }
 
-enum SdkModule @backendEnumClass(dbName: "SdkModuleType") {
+enum SdkModule @backendEnumClass(qualifiedName: "ace.jooq.generated.regional.enums.SdkModuleType") {
   MESSAGING
   VIDEO_CALL
   VIDEO_CALL_SCHEDULING
