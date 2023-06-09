@@ -92,7 +92,10 @@ directive @codegenAsAsyncFun on FIELD_DEFINITION
 # See BackendEnumMapping class.
 directive @backendEnumClass(
   qualifiedName: String # Qualified name of the generated backend enum class. Defaults to a DB enum of the same name.
-  generatedMapping: String! = "from-and-to-gql" # Supports "no-mapping", "from-gql", "to-gql", "from-and-to-gql".
+  generateMappings: Boolean! = true
+  # The following params default to "strict" if generateMappings is true, "no-mapping" otherwise.
+  backendToGqlMapping: String # Supports: "no-mapping", "strict", "lenient".
+  gqlToBackendMapping: String # Supports: "no-mapping", "strict".
 ) on ENUM
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -281,7 +284,7 @@ type AudioMessageContent {
   audioFileUpload: AudioFileUpload!
 }
 
-enum EmptyObject @backendEnumClass(generatedMapping: "no-mapping") {
+enum EmptyObject @backendEnumClass(generateMappings: false) {
   EMPTY
 }
 
@@ -297,7 +300,7 @@ type QuestionsSetFormMessageContent {
   form: QuestionsSetForm!
 }
 
-enum QuestionsSetFormState @backendEnumClass(generatedMapping: "no-mapping") {
+enum QuestionsSetFormState @backendEnumClass(generateMappings: false) {
   NOT_STARTED
   IN_PROGRESS
   ANSWERED
