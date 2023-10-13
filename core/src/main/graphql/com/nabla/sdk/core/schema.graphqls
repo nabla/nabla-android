@@ -4,10 +4,10 @@ schema {
   subscription: Subscription
 }
 
-scalar DateTime
-scalar UUID
-scalar TimeZone
-scalar BigDecimal
+scalar DateTime @backendScalarClass(qualifiedName: "kotlinx.datetime.Instant")
+scalar UUID @backendScalarClass(qualifiedName: "java.util.UUID")
+scalar TimeZone @backendScalarClass(qualifiedName: "kotlinx.datetime.TimeZone")
+scalar BigDecimal @backendScalarClass(qualifiedName: "java.math.BigDecimal")
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Queries.
@@ -86,6 +86,9 @@ type Subscription {
 # ----------------------------------------------------------------------------------------------------------------------
 # Directives.
 
+# See codegen: Scalar.kt
+directive @backendScalarClass(qualifiedName: String!) on SCALAR
+
 # See FieldCodegenDirectives class.
 directive @codegenAsAsyncFun on FIELD_DEFINITION
 
@@ -131,7 +134,7 @@ type Provider {
 }
 
 type DeletedProvider {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 union MaybeProvider = Provider | DeletedProvider
@@ -289,7 +292,7 @@ enum EmptyObject @backendEnumClass(generateMappings: false) {
 }
 
 type DeletedMessageContent {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 type LivekitRoomMessageContent {
@@ -475,11 +478,11 @@ type ProviderJoinedConversation {
 }
 
 type ConversationClosed {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 type ConversationReopened {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 # --- LiveKit rooms.
@@ -497,7 +500,7 @@ type LivekitRoomOpenStatus {
 }
 
 type LivekitRoomClosedStatus {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 input DeviceInput {
@@ -596,7 +599,7 @@ type UpcomingAppointment {
 }
 
 type FinalizedAppointment {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 type PendingAppointment {
@@ -637,7 +640,7 @@ type PhysicalAvailabilitySlotLocation {
 }
 
 type RemoteAvailabilitySlotLocation {
-  _: EmptyObject!
+  _: EmptyObject
 }
 
 type AppointmentConfirmationConsentsOutput {
