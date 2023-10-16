@@ -86,6 +86,9 @@ type Subscription {
 # ----------------------------------------------------------------------------------------------------------------------
 # Directives.
 
+# See codegen: ScanUtils.kt
+directive @backendCodegenName(name: String!) on OBJECT
+
 # See codegen: Scalar.kt
 directive @backendScalarClass(qualifiedName: String!) on SCALAR
 
@@ -167,7 +170,7 @@ type ConversationActivity {
 
 union ConversationActivityContent = ProviderJoinedConversation | ConversationClosed | ConversationReopened
 
-type Conversation {
+type Conversation @backendCodegenName(name: "Experience") {
   id: UUID!
 
   title: String
