@@ -87,7 +87,7 @@ type Subscription {
 # Directives.
 
 # See codegen: ScanUtils.kt
-directive @backendCodegenName(name: String!) on OBJECT
+directive @backendCodegenName(name: String!) on OBJECT | UNION
 
 # See codegen: Scalar.kt
 directive @backendScalarClass(qualifiedName: String!) on SCALAR
@@ -125,7 +125,7 @@ type System {
   avatar: ImageFileUpload
 }
 
-type Provider {
+type Provider @backendCodegenName(name: "Doctor") {
   id: UUID!
 
   prefix: String
@@ -136,11 +136,11 @@ type Provider {
   avatarUrl: EphemeralUrl
 }
 
-type DeletedProvider {
+type DeletedProvider @backendCodegenName(name: "DeletedDoctor") {
   _: EmptyObject
 }
 
-union MaybeProvider = Provider | DeletedProvider
+union MaybeProvider @backendCodegenName(name: "MaybeDoctor") = Provider | DeletedProvider
 
 union MessageAuthor = System | Patient | Provider | DeletedProvider
 
@@ -157,7 +157,7 @@ type Message {
   replyTo: Message
 }
 
-type ConversationActivity {
+type ConversationActivity @backendCodegenName(name: "ExperienceEvent") {
   id: UUID!
 
   conversation: Conversation!
@@ -168,7 +168,10 @@ type ConversationActivity {
   content: ConversationActivityContent!
 }
 
-union ConversationActivityContent = ProviderJoinedConversation | ConversationClosed | ConversationReopened
+union ConversationActivityContent @backendCodegenName(name: "ExperienceEventContent") =
+    ProviderJoinedConversation
+  | ConversationClosed
+  | ConversationReopened
 
 type Conversation @backendCodegenName(name: "Experience") {
   id: UUID!
@@ -199,7 +202,7 @@ type ProviderInConversation {
   seenUntil: DateTime
 }
 
-union ConversationItem = Message | ConversationActivity
+union ConversationItem @backendCodegenName(name: "TimelineItem") = Message | ConversationActivity
 
 type ConversationItemsPage {
   data: [ConversationItem]!
@@ -280,7 +283,7 @@ type VideoMessageContent {
   videoFileUpload: VideoFileUpload!
 }
 
-type DocumentMessageContent {
+type DocumentMessageContent @backendCodegenName(name: "FileMessageContent") {
   documentFileUpload: DocumentFileUpload!
 
   title: String @codegenAsAsyncFun
@@ -442,7 +445,7 @@ type MessageCreatedEvent {
   message: Message!
 }
 
-type MessageUpdatedEvent {
+type MessageUpdatedEvent @backendCodegenName(name: "MessageContentUpdatedEvent") {
   message: Message!
 }
 
@@ -476,15 +479,15 @@ type AppointmentCancelledEvent {
 
 # --- Conversation Activity Contents
 
-type ProviderJoinedConversation {
+type ProviderJoinedConversation @backendCodegenName(name: "DoctorJoinedExperience") {
   provider: MaybeProvider!
 }
 
-type ConversationClosed {
+type ConversationClosed @backendCodegenName(name: "ExperienceClosed") {
   _: EmptyObject
 }
 
-type ConversationReopened {
+type ConversationReopened @backendCodegenName(name: "ExperienceReopened") {
   _: EmptyObject
 }
 
