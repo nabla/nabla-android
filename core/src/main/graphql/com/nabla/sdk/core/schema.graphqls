@@ -4,7 +4,7 @@ schema {
   subscription: Subscription
 }
 
-scalar DateTime @backendScalarClass(qualifiedName: "kotlinx.datetime.Instant")
+scalar DateTime @backendScalarClass(qualifiedName: "ace.utils.core.serialization.serializers.Instant")
 scalar UUID @backendScalarClass(qualifiedName: "ace.utils.core.serialization.serializers.UUID")
 scalar TimeZone @backendScalarClass(qualifiedName: "kotlinx.datetime.TimeZone")
 scalar BigDecimal @backendScalarClass(qualifiedName: "ace.utils.core.serialization.serializers.BigDecimal")
