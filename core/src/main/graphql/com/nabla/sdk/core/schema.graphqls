@@ -104,6 +104,9 @@ directive @backendEnumClass(
   gqlToBackendMapping: String # Supports: "no-mapping", "strict".
 ) on ENUM
 
+# See codegen: Object.kt
+directive @genSchemaSpecificConcreteClass on OBJECT
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Other types.
 
@@ -398,7 +401,7 @@ type CreateConversationOutput {
   conversation: Conversation!
 }
 
-type SubscriptionReadinessEvent {
+type SubscriptionReadinessEvent @backendCodegenName(name: "SubscriptionReadyEvent") {
   isReady: Boolean!
 }
 
@@ -449,7 +452,7 @@ type MessageUpdatedEvent @backendCodegenName(name: "MessageContentUpdatedEvent")
   message: Message!
 }
 
-type TypingEvent {
+type TypingEvent @backendCodegenName(name: "TypingEventSDK") {
   provider: ProviderInConversation!
 }
 
