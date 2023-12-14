@@ -1,3 +1,5 @@
+import com.github.jk1.license.render.CsvReportRenderer
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext.buildConfig = [
@@ -25,6 +27,12 @@ buildscript {
         classpath libs.paparazzi.pluginGradle
     }
 }
+
+plugins {
+    id 'com.github.jk1.dependency-license-report' version '2.5'
+}
+
+apply plugin: 'maven-publish'
 
 // binary-compatibility-validator configuration
 apply plugin: 'org.jetbrains.kotlinx.binary-compatibility-validator'
@@ -120,4 +128,9 @@ subprojects { project ->
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+licenseReport {
+    configurations = ALL
+    renderers = [new CsvReportRenderer()]
 }
